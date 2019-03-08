@@ -298,4 +298,22 @@ export class GroupService {
     public getTagSuggestions(term: string) {
         return this.http.get( this.groupV1 + '/tags/suggest?q=' + term + '&size=20', this.options)
     }
+
+    /**
+     * setZoomDetails - Use this method to ensures zoom details objects always
+     * contain correct types and are of type ZoomedDetails across components.
+     * @param zoom ZoomDetails object
+     * @returns returns an instance of ZoomDetails
+     */
+    public setZoomDetails(zoom: ZoomDetails): ZoomDetails {
+      return zoom
+    }
+}
+
+interface ZoomDetails {
+  viewerX: number
+  viewerY: number
+  pointWidth: number
+  pointHeight: number
+  index: number
 }

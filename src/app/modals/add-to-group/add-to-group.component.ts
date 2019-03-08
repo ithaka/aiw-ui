@@ -197,7 +197,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
         // Update a group with a zoomed details
         if(index === 0 && this.detailViewBounds['width']) {
 
-          let zoom: ZoomDetails = this.setZoomDetails({
+          let zoom = this._group.setZoomDetails({
             "viewerX": Math.round(this.detailViewBounds['x']),
             "viewerY": Math.round(this.detailViewBounds['y']),
             "pointWidth": Math.round(this.detailViewBounds['width']),
@@ -451,15 +451,4 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     })
   }
 
-  private setZoomDetails(zoom: ZoomDetails): ZoomDetails {
-    return zoom
-  }
-}
-
-interface ZoomDetails {
-  viewerX: number
-  viewerY: number
-  pointWidth: number
-  pointHeight: number
-  index: number
 }
