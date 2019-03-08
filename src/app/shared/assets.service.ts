@@ -854,7 +854,7 @@ export class AssetService {
      */
     private loadSearch(term: string): void {
         // Don't wait for previous subscription anymore
-        if (this.searchSubscription && this.searchSubscription.hasOwnProperty('unsubscribe')) {
+        if (this.searchSubscription && this.searchSubscription.unsubscribe) {
             this.searchSubscription.unsubscribe()
         }
 
