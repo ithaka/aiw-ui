@@ -198,7 +198,7 @@ export class AssetFilters {
 
         // The loggedd in user's institutional 'Collection Type' filter
         if (colType.name == '2' || colType.name == '4') {
-          filters['collectiontypes'][i]['count'] = filters['collectiontypes'][i].count
+          filters['collectiontypes'][i]['count'] = this.instFilterCount
         }
       }
 
