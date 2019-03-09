@@ -46,6 +46,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   public multiviewItemCount: number = 0
   public isMultiView: boolean = false
   public isDowngradedMedia: boolean = false
+  public isDetailView: boolean = false
 
   private constraints: any = {}
 
@@ -90,6 +91,11 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     // Set isDowngradedMedia
     if (this.isMultiView && this.thumbnail.media && this.thumbnail.media.format === 'null') {
       this.isDowngradedMedia = true
+    }
+
+    // Set isDetailView
+    if (this.thumbnail['zoom']) {
+      this.isDetailView = true
     }
   }
 

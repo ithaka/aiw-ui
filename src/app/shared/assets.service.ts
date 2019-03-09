@@ -379,7 +379,14 @@ export class AssetService {
                 let idsAsTerm: string = objectIdTerm + assetIds.slice(i, countEnd).join(objectIdTerm) // concat the query params
                 let url: string = this._auth.getHostname() + '/api/'
                 if (igId) {
-                    url += 'v1/group/' + igId + '/items?' + idsAsTerm
+                    // Handle Groups created via service version 1 vs: version 2
+                    // if(typeof(igId) === 'string') {
+                    //   url += 'v1/group/' + igId + '/items?' + idsAsTerm
+                    // }
+                    // else {
+                    //   url += 'v2/group/' + igId + '/items?' + idsAsTerm
+                    // }
+                  url += 'v2/group/' + igId + '/items?' + idsAsTerm
                 } else {
                     url += 'v2/items?' + idsAsTerm
                 }
@@ -759,6 +766,9 @@ export class AssetService {
      * @param igId Image group id for which to retrieve thumbnails
      */
     private loadIgAssets(igId: string) {
+
+        console.log('assets.service - loadIgAssets called: ', igId)
+
         // Reset No IG observable
         this.noIGSource.next(false)
         this.noAccessIGSource.next(false)
@@ -767,9 +777,10 @@ export class AssetService {
         let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1
 
         let requestString: string = [this._auth.getUrl(), 'imagegroup', igId, 'thumbnails', startIndex, this.urlParams.size, this.activeSort.index].join('/')
-        this._groups.get(igId, this.urlParams.featureFlag && this.urlParams.featureFlag === 'detailViews' ? true : false)
+        this._groups.get(igId)
             .toPromise()
             .then((data) => {
+
                 if (!Object.keys(data).length) {
                     throw new Error('No data in image group thumbnails response')
                 }
@@ -781,14 +792,13 @@ export class AssetService {
                     let pageStart = (this.urlParams.page - 1) * this.urlParams.size
                     let pageEnd = this.urlParams.page * this.urlParams.size
 
-                    let itemIdsArray: string[] = []
-                    if(this.urlParams.featureFlag && this.urlParams.featureFlag === 'detailViews') {
-                        itemIdsArray = data.items.map( (item) => {
-                            return item.id
-                        })
-                    } else {
-                        itemIdsArray = data.items
-                    }
+                    let itemIdsArray: any[]
+                    itemIdsArray = data.items
+
+                    // // Handle V1 vs V2 items array
+                    itemIdsArray = itemIdsArray.map(item => {
+                      return (typeof(item) === 'string') ? item : item.id
+                    })
 
                     // Maintain param string in a single place to avoid debugging thumbnails lost to a bad param
                     const ID_PARAM = 'object_ids='
@@ -803,8 +813,9 @@ export class AssetService {
 
                             // For multi-view items, make the thumbnail urls and update the array
                             data.thumbnails = data.thumbnails.map((thumbnail) => {
+
                               // Attach zoom object from items to the relevant thumbnail, to be used in asset grid
-                              for(let item of data.items){
+                              for(let item of data.items) {
                                 if(item['zoom'] && item['id'] === thumbnail['objectId']){
                                     thumbnail['zoom'] = item['zoom']
                                 }

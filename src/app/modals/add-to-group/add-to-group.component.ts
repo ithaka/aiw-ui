@@ -160,6 +160,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
    * @param form Values to update the group with
    */
   public submitGroupUpdate(form: NgForm) {
+
     // clear any service status
     this.serviceResponse = {}
     this.selectedGroupError = ''
@@ -170,65 +171,63 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
       return
     }
 
-    // Create object for new modified group
-    let putGroup: ImageGroup = Object.assign({}, this.selectedGroup)
     let multipleSelected: boolean = this.selectedAssets.length > 1
 
-    // assets come from different places and sometimes have id and sometimes objectId
-    this.selectedAssets.forEach((asset: any, index) => {
-      let assetId
-      if (!asset) {
-        console.error('Attempted selecting undefined asset')
-      } else {
-        // Find asset id
-        if (asset.artstorid) {
-          // Data returned from Solr uses "artstorid"
-          assetId = asset.artstorid
-        } else if (asset.objectId) {
-          // Data returned from Items service
-          assetId = asset.objectId
-        } else if (asset.id) {
-          // Asset has "id" when constructed via the Artstor Viewer (see type: Asset)
-          assetId = asset.id
-        } else {
-          console.error('Asset id not found when adding to group', asset)
-        }
-
-        // Update a group with a zoomed details
-        if(index === 0 && this.detailViewBounds['width']) {
-
-          let zoom = this._group.setZoomDetails({
-            "viewerX": this.detailViewBounds['x'],
-            "viewerY": this.detailViewBounds['y'],
-            "pointWidth": this.detailViewBounds['width'],
-            "pointHeight": this.detailViewBounds['height'],
-            "index": 0
-          })
-
-          putGroup.items.push({ "id": assetId, zoom })
-
-        } else {
-          // Add id to group if it's not already in the group
-          if (assetId && putGroup.items.indexOf(assetId) < 0) {
-            putGroup.items.push(assetId)
-          }
-        }
-
-      }
-    })
-
-    // throw an error if the image group is going to be larger than 1000 images
-    //  otherwise the server will do that when we call it
-    if (putGroup.items && putGroup.items.length > 1000) {
-      this.errorMsg = '<p>Sorry, that group would exceed 1000 assets. You will need to remove some before adding more.</p>'
-      return this.serviceResponse.tooManyAssets = true
-    }
 
     // go get the group from the server
     this._group.get(this.selectedGroup.id)
       .toPromise()
       .then((data) => {
-        data.items = putGroup.items
+
+        let putGroup = data
+        let zoom: {}
+
+        if (putGroup.items && putGroup.items.length > 1000) {
+          this.errorMsg = '<p>Sorry, that group would exceed 1000 assets. You will need to remove some before adding more.</p>'
+          return this.serviceResponse.tooManyAssets = true
+        }
+
+        this.selectedAssets.forEach((asset: any, index) => {
+          let assetId
+          if (!asset) {
+            console.error('Attempted selecting undefined asset')
+          } else {
+            // Find asset id
+            if (asset.artstorid) {
+              // Data returned from Solr uses "artstorid"
+              assetId = asset.artstorid
+            } else if (asset.objectId) {
+              // Data returned from Items service
+              assetId = asset.objectId
+            } else if (asset.id) {
+              // Asset has "id" when constructed via the Artstor Viewer (see type: Asset)
+              assetId = asset.id
+            } else {
+              console.error('Asset id not found when adding to group', asset)
+            }
+          }
+
+          // Update a group with a zoomed details
+          if (index === 0 && this.detailViewBounds['width']) {
+
+            zoom = this._group.setZoomDetails({
+              "viewerX": this.detailViewBounds['x'],
+              "viewerY": this.detailViewBounds['y'],
+              "pointWidth": this.detailViewBounds['width'],
+              "pointHeight": this.detailViewBounds['height'],
+              "index": 0
+            })
+
+            putGroup.items.push({ "id": assetId, zoom })
+
+          } else {
+            // Add id to group if it's not already in the group
+            if (assetId && putGroup.items.indexOf(assetId) < 0) {
+              putGroup.items.push({ "id": assetId })
+            }
+          }
+        })
+
         this._group.update(putGroup).pipe(
           take(1),
           map(
@@ -314,6 +313,12 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
       map(data => {
         let itemIds: string[] = []
         for(let group of data.groups) {
+
+        //@todo 1810 Handle items of objects
+        group.items = group.items.map(item => {
+          return !(typeof(item) === `string`) ? item.id : item
+        })
+
           if(group.items.length > 0) {
             itemIds.push(group.items[0])
           }

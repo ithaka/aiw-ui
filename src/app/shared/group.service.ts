@@ -143,7 +143,8 @@ export class GroupService {
      */
     public get(groupId: string, detailViewFlag?: boolean): Observable<any> {
         // Use v2 endpoint under the detailView feature flag
-      let url = detailViewFlag ? this.groupV2 + '/' + groupId : this.groupV1 + '/' + groupId
+      //let url = detailViewFlag ? this.groupV2 + '/' + groupId : this.groupV1 + '/' + groupId
+      let url = this.groupV2 + '/' + groupId
 
       return this.http.get(
           url, this.options
@@ -154,8 +155,15 @@ export class GroupService {
      * Create Group
      */
     public create(group: any): Observable<any> {
+
+        // @todo 1810 Need to be ab;e to create a new group with zoomed detail!!!
+        console.log('group: ', group)
+        group.items = group.items.map(item => {
+          return typeof(item) === 'string' ? { id: item } : item
+        })
+
         return this.http.post(
-            this.groupV1,
+            this.groupV2,
             group,
             this.options
         )
@@ -209,8 +217,9 @@ export class GroupService {
         for (let key in group) {
           if (updateProperties.indexOf(key) > -1) {
 
-            // Group V2 Endpoint 'items' is no longer an array of strings,
-            // it is an array of objects, with each a single key named 'id' and value of type string
+            // @TODO 1810 Cleanup
+            // // Group V2 Endpoint 'items' is no longer an array of strings,
+            // // it is an array of objects, with each a single key named 'id' and value of type string
             if (key === 'items') {
               group.items = group.items.map(item => {
                 return typeof(item) === 'string' ? { id: item } : item
