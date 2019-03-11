@@ -322,7 +322,7 @@ export class AssetService {
      */
     public getShareLink(assetId: string, externalAsset?: boolean) {
         //   Links in the clipboard need a protocol defined
-        return  `https://${this._app.clientHostname}/#/asset/${assetId}`
+        return  `https://${this._app.clientHostname}/#/asset/${ ( externalAsset ? 'external/' : '' ) + assetId }`
     }
 
     /**
@@ -852,7 +852,7 @@ export class AssetService {
      */
     private loadSearch(term: string): void {
         // Don't wait for previous subscription anymore
-        if (this.searchSubscription && this.searchSubscription.hasOwnProperty('unsubscribe')) {
+        if (this.searchSubscription && this.searchSubscription.unsubscribe) {
             this.searchSubscription.unsubscribe()
         }
 

@@ -220,7 +220,7 @@ export class AssetFilters {
       })
     }
     this.availableFilters = filters
-  
+
   } // assignFilters
   
 
