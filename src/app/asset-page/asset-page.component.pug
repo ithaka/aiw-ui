@@ -22,7 +22,7 @@
             [assetId]="assetId",
             [encrypted]="encryptedAccess",
             [groupId]="assetGroupId",
-            [zoom]="zoomParams",
+            [zoom]="indexZoomMap[i]",
             (assetMetadata)="handleLoadedMetadata($event, i)",
             [ngClass]="[ 'asset-viewer-' + assetIds.length ]",
             (fullscreenChange)="updateFullscreenVar($event)",

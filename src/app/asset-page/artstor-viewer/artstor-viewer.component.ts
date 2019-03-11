@@ -301,6 +301,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
             // defaultZoomLevel: 1.2, // We don't want the image to be covered on load
             // visibilityRatio: 0.2, // Determines percentage of background that has to be covered by the image while panning
             // debugMode: true,
+            preserveImageSizeOnResize: this.zoom && this.zoom.x ? true : false
         });
 
         // ---- Use handler in case other error crops up
@@ -313,6 +314,12 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         this.osdViewer.addHandler('pan', (value: any) => {
             // Save viewport pan for downloading the view
             this.asset.viewportDimensions.center = value.center
+        });
+
+        this.osdViewer.addHandler('resize', (value: any) => {
+            setTimeout( () => {
+                this.refreshZoomedView()
+            }, 250)
         });
 
         this.osdViewer.addHandler('page', (value: {page: number, eventSource: any, userData?: any}) => {
@@ -364,11 +371,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.multiViewArrowPressed = true
                 })
             }
-            // For detailed views set the viewport bouds based on the zoom params passed
-            if(this.zoom && this.zoom.x){
-                let bounds = this.osdViewer.viewport.imageToViewportRectangle(this.zoom.x, this.zoom.y, this.zoom.width, this.zoom.height)
-                this.osdViewer.viewport.fitBounds(bounds, true)
-            }
+            this.refreshZoomedView()
         })
 
         if (this.osdViewer && this.osdViewer.ButtonGroup) {
@@ -498,6 +501,16 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         this.fullscreenChange.emit(isFullscreen);
     }
 
+    /**
+     * Refresh zoomed view for saved details
+     */
+    private refreshZoomedView(): void{
+        // For detailed views set the viewport bouds based on the zoom params passed
+        if(this.zoom && this.zoom.x){
+            let bounds = this.osdViewer.viewport.imageToViewportRectangle(this.zoom.x, this.zoom.y, this.zoom.width, this.zoom.height)
+            this.osdViewer.viewport.fitBounds(bounds, true)
+        }
+    }
     /**
      * Setup the embedded Kaltura player
      */

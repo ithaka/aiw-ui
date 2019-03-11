@@ -5,11 +5,10 @@ import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 import { ArtstorViewerComponent } from './artstor-viewer/artstor-viewer.component'
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
 // Project Dependencies
-import { Asset } from '../shared'
+import { Asset, ImageZoomParams } from '../shared'
 import {
     AuthService,
     AssetService,
@@ -172,7 +171,8 @@ export class AssetPage implements OnInit, OnDestroy {
     // Flag for show/hide page tooltip
     private showPageToolTip: boolean = false
 
-    private zoomParams: any = {}
+    // Map for asset zoom values corresponding to the asset index in assets array
+    public indexZoomMap: ImageZoomParams[] = []
 
     constructor(
         public _appConfig: AppConfig,
@@ -292,17 +292,6 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.relatedResFlag = false
                 }
 
-                if (routeParams['x'] && routeParams['y'] && routeParams['w'] && routeParams['h']) {
-                    this.zoomParams = {
-                        x: parseInt(routeParams['x']),
-                        y: parseInt(routeParams['y']),
-                        width: parseInt(routeParams['w']),
-                        height: parseInt(routeParams['h'])
-                    }
-                } else {
-                    this.zoomParams = {}
-                }
-
                 if (routeParams['encryptedId']) {
                     this.encryptedAccess = true
                     this.assetIds[0] = routeParams['encryptedId']
@@ -329,6 +318,18 @@ export class AssetPage implements OnInit, OnDestroy {
                             this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
                         }
                     }
+                }
+
+                // If the current asset is a saved detail then save the zoom params in indexZoomMap
+                if (routeParams['x'] && routeParams['y'] && routeParams['w'] && routeParams['h']) {
+                    this.indexZoomMap[0] = {
+                        x: parseInt(routeParams['x']),
+                        y: parseInt(routeParams['y']),
+                        width: parseInt(routeParams['w']),
+                        height: parseInt(routeParams['h'])
+                    }
+                } else {
+                    this.indexZoomMap[0] = {}
                 }
 
                 // Set image share link
@@ -513,6 +514,7 @@ export class AssetPage implements OnInit, OnDestroy {
             // Reduce number of loaded assets to one
             this.assets = [this.assets[0]]
             this.assetIds = [this.assetIds[0]]
+            this.indexZoomMap = [this.indexZoomMap[0]]
         } else if (Array.isArray(this.assets[0].tileSource)){ // Log GA event for opening a multi view item in Fullscreen
             this.angulartics.eventTrack.next({ action: 'multiViewItemFullscreen', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
         }
@@ -794,6 +796,14 @@ export class AssetPage implements OnInit, OnDestroy {
                     queryParams['groupId'] = this.assetGroupId
                 }
 
+                // Add zoom query params for saved views
+                if(this.prevAssetResults.thumbnails[prevAssetIndex]['zoom']) {
+                    queryParams['x'] = this.prevAssetResults.thumbnails[prevAssetIndex]['zoom'].viewerX
+                    queryParams ['y'] = this.prevAssetResults.thumbnails[prevAssetIndex]['zoom'].viewerY
+                    queryParams['w'] = this.prevAssetResults.thumbnails[prevAssetIndex]['zoom'].pointWidth
+                    queryParams['h'] = this.prevAssetResults.thumbnails[prevAssetIndex]['zoom'].pointHeight
+                }
+
                 this._router.navigate(['/asset', this.prevAssetResults.thumbnails[prevAssetIndex][this.assetIdProperty], queryParams]);
             }
             else if (this.assetIndex == 0) {
@@ -819,6 +829,14 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
                 if (this.assetGroupId) {
                     queryParams['groupId'] = this.assetGroupId
+                }
+
+                // Add zoom query params for saved views
+                if(this.prevAssetResults.thumbnails[nextAssetIndex]['zoom']) {
+                    queryParams['x'] = this.prevAssetResults.thumbnails[nextAssetIndex]['zoom'].viewerX
+                    queryParams ['y'] = this.prevAssetResults.thumbnails[nextAssetIndex]['zoom'].viewerY
+                    queryParams['w'] = this.prevAssetResults.thumbnails[nextAssetIndex]['zoom'].pointWidth
+                    queryParams['h'] = this.prevAssetResults.thumbnails[nextAssetIndex]['zoom'].pointHeight
                 }
 
                 this._router.navigate(['/asset', this.prevAssetResults.thumbnails[nextAssetIndex][this.assetIdProperty], queryParams]);
@@ -903,15 +921,17 @@ export class AssetPage implements OnInit, OnDestroy {
         if (!asset.id || asset['artstorid']) {
             asset.id = asset['artstorid'] || asset['objectId']
         }
-        // remove from assetIds
+        // remove from assetIds (only if it contains more than one assetids)
         let assetIdIndex = this.assetIds.indexOf(asset.id)
         if (assetIdIndex > -1) {
-            this.assetIds.splice(assetIdIndex, 1)
+            if (this.assetIds.length > 1) {
+                this.assetIds.splice(assetIdIndex, 1)
+            }
             add = false
         }
-        // remove from assets
+        // remove from assets (only if it contains more than one asset)
         this.assets.forEach((viewAsset, i) => {
-            if ([viewAsset.id, viewAsset['artstorid'], viewAsset['objectId']].indexOf(asset.id) > -1) {
+            if ([viewAsset.id, viewAsset['artstorid'], viewAsset['objectId']].indexOf(asset.id) > -1 && this.assets.length > 1) {
                 asset.selected = false;
                 this.assets.splice(i, 1);
                 add = false;
@@ -927,6 +947,9 @@ export class AssetPage implements OnInit, OnDestroy {
                     this._router.navigate(['/asset', this.assetIds[0]]);
                 }
 
+                // Remove the zoom object for the asset
+                this.indexZoomMap.splice(i, 1)
+
             }
         })
         if (this.assets.length >= 10) {
@@ -936,6 +959,14 @@ export class AssetPage implements OnInit, OnDestroy {
         if (add == true) {
             asset.selected = true;
             this.assetIds.push(asset[this.assetIdProperty]);
+            // Push the zoom object for the asset
+            let zoomObj: ImageZoomParams = asset.zoom ? {
+                x: parseInt(asset.zoom['viewerX']),
+                y: parseInt(asset.zoom['viewerY']),
+                width: parseInt(asset.zoom['pointWidth']),
+                height: parseInt(asset.zoom['pointHeight'])
+            }  : {}
+            this.indexZoomMap.push(zoomObj)
 
             // Add GA tracking to select image to compare action
             this.angulartics.eventTrack.next({ action: 'Compare image', properties: { label: this.assetIds.length } })
@@ -1003,6 +1034,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
             this.assets.splice(1);
             this.assetIds.splice(1);
+            this.indexZoomMap.splice(1);
+
             for (let i = 0; i < this.prevAssetResults.thumbnails.length; i++) {
                 this.prevAssetResults.thumbnails[i].selected = false;
             }
