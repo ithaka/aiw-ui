@@ -156,7 +156,7 @@ export class GroupService {
      */
     public create(group: any): Observable<any> {
 
-        // @todo 1810 Need to be ab;e to create a new group with zoomed detail!!!
+        // @todo 1810 Need to be able to create a new group with zoomed detail!!!
         console.log('group: ', group)
         group.items = group.items.map(item => {
           return typeof(item) === 'string' ? { id: item } : item
