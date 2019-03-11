@@ -42,7 +42,11 @@
             // Active on Image Group Page
             button.dropdown-item([disabled]="!actionOptions.group", (click)="printImageGroupPage()", tabindex="1") {{ 'NAV_MENU.SHARE.PRINT_GROUP' | translate }}
             // Active on Image Group Page
-            button.dropdown-item(*ngIf="params['igId']", (click)="_ig.triggerIgDownload()", tabindex="1") {{ 'NAV_MENU.SHARE.DOWNLOAD_GROUP' | translate }}
+            button.dropdown-item(*ngIf="!exportReframeFlag && params['igId']", (click)="_ig.triggerIgDownload()", tabindex="1") {{ 'NAV_MENU.SHARE.DOWNLOAD_GROUP' | translate }}
+            // Active on Image Group Page
+            button.dropdown-item(*ngIf="exportReframeFlag && params['igId']", tabindex="1") {{ 'NAV_MENU.SHARE.EXPORT_TO_PPT' | translate }}
+            // Active on Image Group Page
+            button.dropdown-item(*ngIf="exportReframeFlag && params['igId']", tabindex="1") {{ 'NAV_MENU.SHARE.EXPORT_AS_ZIP' | translate }}
         .nav-item
           a#viewMenu.btn.btn-link(*ngIf="_auth.isPublicOnly()", href="//support.artstor.org/?article-category=05-public-access-to-artstor", target="_blank", tabindex="1", (focus)="closeNavMenuDropdowns()") Support
           a#viewMenu.btn.btn-link(*ngIf="!_auth.isPublicOnly()", href="//support.artstor.org", target="_blank", tabindex="1", (focus)="closeNavMenuDropdowns()") Support
