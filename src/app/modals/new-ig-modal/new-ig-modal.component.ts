@@ -256,8 +256,6 @@ export class NewIgModal implements OnInit {
       // create the group using the group service
       this._group.create(group).pipe(
         map(data => {
-
-          console.log('group create data:', data)
           this.isLoading = false
           this.newGroup = data
           this.serviceResponse.success = true

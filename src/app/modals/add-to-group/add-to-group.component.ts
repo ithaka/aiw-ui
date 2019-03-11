@@ -218,13 +218,10 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
               "index": 0
             })
 
-            putGroup.items.push({ "id": assetId, zoom })
+            putGroup.items.push({ id: assetId, zoom })
 
           } else {
-            // Add id to group if it's not already in the group
-            if (assetId && putGroup.items.indexOf(assetId) < 0) {
-              putGroup.items.push({ "id": assetId })
-            }
+            putGroup.items.push({ id: assetId })
           }
         })
 
@@ -314,7 +311,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
         let itemIds: string[] = []
         for(let group of data.groups) {
 
-        //@todo 1810 Handle items of objects
+        // Convert groups V1 response to items array of objects
         group.items = group.items.map(item => {
           return !(typeof(item) === `string`) ? item.id : item
         })

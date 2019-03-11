@@ -51,8 +51,6 @@ export class IgFormUtil {
       }
     )
 
-    console.log('items from prepare group, ', items)
-
     /** Group creation should be factored into a function */
     let group = {
       name: form.title,

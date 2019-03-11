@@ -344,7 +344,7 @@ export class AssetService {
 
           let options = { withCredentials: true }
 
-          this.http.get(this._auth.getHostname() + '/api/v2/items?object_id=' + idsAsTerm, options).pipe(
+          this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options).pipe(
             map(res => {
                 let results = res
                 ig.thumbnails = results['items']
@@ -379,14 +379,7 @@ export class AssetService {
                 let idsAsTerm: string = objectIdTerm + assetIds.slice(i, countEnd).join(objectIdTerm) // concat the query params
                 let url: string = this._auth.getHostname() + '/api/'
                 if (igId) {
-                    // Handle Groups created via service version 1 vs: version 2
-                    // if(typeof(igId) === 'string') {
-                    //   url += 'v1/group/' + igId + '/items?' + idsAsTerm
-                    // }
-                    // else {
-                    //   url += 'v2/group/' + igId + '/items?' + idsAsTerm
-                    // }
-                  url += 'v2/group/' + igId + '/items?' + idsAsTerm
+                  url += 'v1/group/' + igId + '/items?' + idsAsTerm
                 } else {
                     url += 'v2/items?' + idsAsTerm
                 }
@@ -767,8 +760,6 @@ export class AssetService {
      */
     private loadIgAssets(igId: string) {
 
-        console.log('assets.service - loadIgAssets called: ', igId)
-
         // Reset No IG observable
         this.noIGSource.next(false)
         this.noAccessIGSource.next(false)
@@ -795,7 +786,7 @@ export class AssetService {
                     let itemIdsArray: any[]
                     itemIdsArray = data.items
 
-                    // // Handle V1 vs V2 items array
+                    // itemsIdsArray needs to be an array strings for search call
                     itemIdsArray = itemIdsArray.map(item => {
                       return (typeof(item) === 'string') ? item : item.id
                     })
@@ -808,26 +799,31 @@ export class AssetService {
 
                     this.http.get(this._auth.getHostname() + '/api/v1/group/' + igId + '/items?' + ID_PARAM + idsAsTerm, options).pipe(
                       map((res) => {
-                            let results = res
-                            data.thumbnails = results['items']
+                        let results = res
+                        data.thumbnails = results['items'] // V1 ?items from search
+                        // For multi-view items, make the thumbnail urls and update the array
+                        data.thumbnails = data.items.map((item) => {
 
-                            // For multi-view items, make the thumbnail urls and update the array
-                            data.thumbnails = data.thumbnails.map((thumbnail) => {
+                          // Attach zoom object from items to the relevant thumbnail, to be used in asset grid
+                          for(let thumbnail of data.thumbnails) {
 
-                              // Attach zoom object from items to the relevant thumbnail, to be used in asset grid
-                              for(let item of data.items) {
-                                if(item['zoom'] && item['id'] === thumbnail['objectId']){
-                                    thumbnail['zoom'] = item['zoom']
-                                }
+                            thumbnail = Object.assign({}, thumbnail)  // Make copy to avoid modifying subsequent items
+
+                            if (item['id'] === thumbnail['objectId']) {
+                              if(item['zoom']){
+                                  thumbnail['zoom'] = item['zoom']
                               }
                               if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
                                 thumbnail.thumbnailImgUrl = this._auth.getThumbHostname(true) + thumbnail.thumbnailImgUrl
                               }
-                              return thumbnail
-                            })
 
-                            // Set the allResults object
-                            this.updateLocalResults(data)
+                              return thumbnail
+                            }
+                          }
+                        })
+
+                        // Set the allResults object
+                        this.updateLocalResults(data)
                       }, (error) => {
                         // Pass portion of the data we have
                         this.updateLocalResults(data)
@@ -841,7 +837,6 @@ export class AssetService {
 
             })
             .catch((error) => {
-                // console.error(error)
                 if (error.status === 404){
                     this.noIGSource.next(true)
                 }
@@ -892,32 +887,9 @@ export class AssetService {
                     console.error(error)
                     this.allResultsSource.next({'error': error})
             });
+
     }
 
-//     /**
-//      * Call to API which returns an asset, given an encrypted_id
-//      * @param token The encrypted token that you want to know the asset id for
-//      */
-//     public decryptToken(token: string, source?: string): Observable<any> {
-//         let header
-//         let options
-//         let query: HttpParams = new HttpParams()
-//         query.set('encrypted_id', token)
-//         source && query.set('source', source)
-
-//         header = new HttpHeaders({ withCredentials: 'true', fromKress : 'true' })
-
-//         options = { headers: header, params: query } // Create a request option
-
-//         return this.http.get(this._auth.getHostname() + "/api/v1/items/resolve?encrypted_id=" + token, options)
-//         .map((res) => {
-//             let jsonRes = res
-//             if (jsonRes && jsonRes['success'] && jsonRes['item']) {
-//                 return jsonRes
-//             }
-//             else { throw new Error("No success or item found on response object") }
-//         })
-//   }
 }
 
 export interface categoryName {

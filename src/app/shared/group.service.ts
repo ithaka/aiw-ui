@@ -156,17 +156,16 @@ export class GroupService {
      */
     public create(group: any): Observable<any> {
 
-        // @todo 1810 Need to be able to create a new group with zoomed detail!!!
-        console.log('group: ', group)
-        group.items = group.items.map(item => {
-          return typeof(item) === 'string' ? { id: item } : item
-        })
+      // Convert group V1 items to array of objects
+      group.items = group.items.map(item => {
+        return typeof(item) === 'string' ? { id: item } : item
+      })
 
-        return this.http.post(
-            this.groupV2,
-            group,
-            this.options
-        )
+      return this.http.post(
+          this.groupV2,
+          group,
+          this.options
+      )
     }
 
     /**
@@ -217,8 +216,7 @@ export class GroupService {
         for (let key in group) {
           if (updateProperties.indexOf(key) > -1) {
 
-            // @TODO 1810 Cleanup
-            // // Group V2 Endpoint 'items' is no longer an array of strings,
+            // Group V2 Endpoint 'items' is no longer an array of strings,
             // // it is an array of objects, with each a single key named 'id' and value of type string
             if (key === 'items') {
               group.items = group.items.map(item => {
