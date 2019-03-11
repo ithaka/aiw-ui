@@ -5,11 +5,10 @@ import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 import { ArtstorViewerComponent } from './artstor-viewer/artstor-viewer.component'
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
 // Project Dependencies
-import { Asset } from '../shared'
+import { Asset, ImageZoomParams } from '../shared'
 import {
     AuthService,
     AssetService,
@@ -173,7 +172,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private showPageToolTip: boolean = false
 
     // Map for asset zoom values corresponding to the asset index in assets array
-    public indexZoomMap: any[] = []
+    public indexZoomMap: ImageZoomParams[] = []
 
     constructor(
         public _appConfig: AppConfig,
@@ -961,7 +960,7 @@ export class AssetPage implements OnInit, OnDestroy {
             asset.selected = true;
             this.assetIds.push(asset[this.assetIdProperty]);
             // Push the zoom object for the asset
-            let zoomObj = asset.zoom ? {
+            let zoomObj: ImageZoomParams = asset.zoom ? {
                 x: parseInt(asset.zoom['viewerX']),
                 y: parseInt(asset.zoom['viewerY']),
                 width: parseInt(asset.zoom['pointWidth']),
