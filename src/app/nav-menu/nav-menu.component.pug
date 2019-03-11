@@ -42,7 +42,7 @@
             // Active on Image Group Page
             button.dropdown-item([disabled]="!actionOptions.group", (click)="printImageGroupPage()", tabindex="1") {{ 'NAV_MENU.SHARE.PRINT_GROUP' | translate }}
             // Active on Image Group Page
-            button.dropdown-item(*ngIf="params['igId']", (click)="_ig.triggerIgDownload()", tabindex="1") {{ 'NAV_MENU.SHARE.DOWNLOAD_GROUP' | translate }}
+            button.dropdown-item(*ngIf="!exportReframeFlag && params['igId']", (click)="_ig.triggerIgDownload()", tabindex="1") {{ 'NAV_MENU.SHARE.DOWNLOAD_GROUP' | translate }}
             // Active on Image Group Page
             button.dropdown-item(*ngIf="exportReframeFlag && params['igId']", tabindex="1") {{ 'NAV_MENU.SHARE.EXPORT_TO_PPT' | translate }}
             // Active on Image Group Page
