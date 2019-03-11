@@ -45,6 +45,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   // Keeps the track of multiViewItems count associated with the current asset
   public multiviewItemCount: number = 0
   public isMultiView: boolean = false
+  public isDowngradedMedia: boolean = false
 
   private constraints: any = {}
 
@@ -54,7 +55,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   // The alt message for a thumbnail, combined with thumbnail title and creator name
   private thumbnailAlt: string = ''
 
-  // Flag that controls the class for detail view icon / hover state 
+  // Flag that controls the class for detail view icon / hover state
   private mouseOverDetailIcon: boolean = false
 
   constructor(
@@ -85,6 +86,11 @@ export class ThumbnailComponent implements OnInit, OnChanges {
 
     this.thumbnailAlt = this.thumbnail['name'] ? 'Thumbnail of ' + this.thumbnail['name'] : 'Untitled'
     this.thumbnailAlt = this.thumbnail['agent'] ? this.thumbnailAlt + ' by ' + this.thumbnail['agent'] : this.thumbnailAlt + ' by Unknown'
+
+    // Set isDowngradedMedia
+    if (this.isMultiView && this.thumbnail.media && this.thumbnail.media.format === 'null') {
+      this.isDowngradedMedia = true
+    }
   }
 
   // Fires when the component input(s) (i.e largeThmbView) changes - Updates the thumbnailSize based on largeThmbView current value

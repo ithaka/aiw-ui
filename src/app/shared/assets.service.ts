@@ -818,7 +818,7 @@ export class AssetService {
                                 }
                               }
                               if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
-                                thumbnail.thumbnailImgUrl = this._auth.getThumbUrl(true) + thumbnail.thumbnailImgUrl
+                                thumbnail.thumbnailImgUrl = this._auth.getThumbHostname(true) + thumbnail.thumbnailImgUrl
                               }
                               return thumbnail
                             })
@@ -854,7 +854,7 @@ export class AssetService {
      */
     private loadSearch(term: string): void {
         // Don't wait for previous subscription anymore
-        if (this.searchSubscription && this.searchSubscription.hasOwnProperty('unsubscribe')) {
+        if (this.searchSubscription && this.searchSubscription.unsubscribe) {
             this.searchSubscription.unsubscribe()
         }
 

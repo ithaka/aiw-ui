@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53 (72520) - https://sketchapp.com -->
+    <title>icon-google-slides</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Working" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="2---image-group-page---export-options" transform="translate(-999.000000, -439.000000)" fill="#F7BE47">
+            <g id="export-dropdown" transform="translate(985.000000, 336.000000)">
+                <g id="google-slides" transform="translate(14.000000, 102.000000)">
+                    <g id="heading">
+                        <g id="icon/google-slides" transform="translate(0.000000, 1.000000)">
+                            <path d="M1.89000008,0 L14.1099999,0 C15.1538181,-1.91746296e-16 16,0.846181856 16,1.89000008 L16,14.1099999 C16,15.1538181 15.1538181,16 14.1099999,16 L1.89000008,16 C0.846181856,16 5.71920074e-16,15.1538181 4.4408921e-16,14.1099999 L0,1.89000008 C-1.27830864e-16,0.846181856 0.846181856,6.35835506e-16 1.89000008,4.4408921e-16 Z M2.54000002,4 C2.24176624,4 2,4.24176624 2,4.54000002 L2,11.8409524 C2,12.1391861 2.24176624,12.3809524 2.54000002,12.3809524 L13.46,12.3809524 C13.7582338,12.3809524 14,12.1391861 14,11.8409524 L14,4.54000002 C14,4.24176624 13.7582338,4 13.46,4 L2.54000002,4 Z" id="icon-google-slides"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -24,7 +24,9 @@ export interface Thumbnail {
   media: {
     adlObjectType: number
     thumbnailSizeOnePath: string
+    format?: string
   }
+  compound_media: any
   thumbnailImgUrl: string
   thumbnail1: any
   thumbnail2: any
