@@ -629,24 +629,24 @@
     },
     "ORGANIZE": {
       "TITLE": "Organize",
-      "SELECT_ALL": "Select All on Page",
-      "NEW_GROUP": "Save Selections to New Group",
-      "EXISTING_GROUP": "Save Selections to Existing Group",
-      "DELETE_SELECTIONS": "Delete Selections from Group",
-      "DESELECT": "Deselect All",
-      "EDIT": "Edit Group Info",
-      "SAVE": "Save Group as...",
-      "DELETE_GROUP": "Delete Group",
-      "ADD_IMGS_PC": "Upload Images to Personal Collection"
+      "SELECT_ALL": "Select all on page",
+      "NEW_GROUP": "Save selections to new group",
+      "EXISTING_GROUP": "Save selections to existing group",
+      "DELETE_SELECTIONS": "Delete selections from group",
+      "DESELECT": "Deselect all",
+      "EDIT": "Edit group info",
+      "SAVE": "Save group as...",
+      "DELETE_GROUP": "Delete group",
+      "ADD_IMGS_PC": "Upload images to Personal Collection"
     },
     "SHARE": {
       "TITLE": "Share",
-      "GENERATE_IMAGE_LINK": "Generate Image Link",
-      "GENERATE_GROUP_LINK": "Generate Group Link",
-      "PRINT_GROUP": "Print Group",
-      "DOWNLOAD_GROUP": "Download Group",
-      "EXPORT_TO_PPT": "Export Group to Powerpoint",
-      "EXPORT_AS_ZIP": "Export Group as a ZIP"
+      "GENERATE_IMAGE_LINK": "Generate image link",
+      "GENERATE_GROUP_LINK": "Generate group link",
+      "PRINT_GROUP": "Print group",
+      "DOWNLOAD_GROUP": "Download group",
+      "EXPORT_TO_PPT": "Export group to PowerPoint",
+      "EXPORT_AS_ZIP": "Export group as a ZIP"
     }
   },
   "SEARCH_ANNOUNCEMENT_BANNER": {
