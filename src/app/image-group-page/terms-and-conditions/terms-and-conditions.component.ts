@@ -55,7 +55,7 @@ export class TermsAndConditionsComponent implements OnInit, AfterViewInit {
   }
   // Set initial focus on the modal Title h4
   public startModalFocus() {
-    let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('ig-download-title');
+    let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('term-condition-title');
     htmlelement.focus()
 
     if (this.downloadTitleElement && this.downloadTitleElement.nativeElement){
