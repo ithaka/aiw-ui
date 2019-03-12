@@ -640,6 +640,11 @@ export class AssetGrid implements OnInit, OnDestroy {
       // Start loading
       this.isLoading = true;
 
+      // Map itemIds array of objects to array of strings for v1 items
+      this.itemIds = this.itemIds.map(item => {
+        return (typeof(item) === 'object') ? item['id'] : item
+      })
+
       this._assets.getAllThumbnails(this.itemIds)
         .then( allThumbnails => {
           this.isLoading = false;
