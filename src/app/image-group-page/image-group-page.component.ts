@@ -246,7 +246,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     // the template will not show the button if there is not an ig.igName and ig.igDownloadInfo
     // if the user is logged in and the download info is available
     if (this.user.isLoggedIn) {
-      // If we specify an export type, trigger terms and conditions modal if user havn't agreed
+      // If we specify an export type, trigger terms and conditions modal if user hasn't agreed
       if (exportType && exportType.length) {
         if (!this._storage.getSession('termAgreed')) {
           this.showTermsConditions = true;
