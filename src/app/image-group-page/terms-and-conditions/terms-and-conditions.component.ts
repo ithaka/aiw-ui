@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Angulartics2 } from 'angulartics2';
 
 import { AssetService, AuthService, ImageGroup, DomUtilityService } from './../../shared';
+import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/public_api';
 
 @Component({
   selector: 'ang-terms-and-conditions',
@@ -21,6 +22,8 @@ export class TermsAndConditionsComponent implements OnInit, AfterViewInit {
   public closeModal: EventEmitter<any> = new EventEmitter();
   @Input()
   public ig: ImageGroup;
+  @Input()
+  public exportType: string;
 
   @ViewChild("ig-download-title", {read: ElementRef}) downloadTitleElement: ElementRef;
 
@@ -41,6 +44,7 @@ export class TermsAndConditionsComponent implements OnInit, AfterViewInit {
     private _auth: AuthService,
     private _angulartics: Angulartics2,
     private _dom: DomUtilityService,
+    private _storage: ArtstorStorageService,
     private http: HttpClient,
   ) {}
 
@@ -62,6 +66,37 @@ export class TermsAndConditionsComponent implements OnInit, AfterViewInit {
 
   trackDownload(downloadType: string): void {
     this._angulartics.eventTrack.next({ action: 'downloadGroup' + downloadType, properties: { category: this._auth.getGACategory(), label: this.ig.id }})
+  }
+
+  /**
+   * When user click I agree, set session storage to make the modal appear once per session
+   * Then trigger download process
+   * @param event needed by hideModal()
+   */
+  private termAgreed(event: any) {
+    // Set session storage
+    this._storage.setSession('termAgreed', true)
+
+    // Trigger download
+    this.triggerDownload(event)
+  }
+
+  /**
+   * Trigger download when user clicks on I agree
+   * Decide whether it is PPT, ZIP, or Google Slides to trigger based on exportType
+   * @param event needed by hideModal()
+   */
+  private triggerDownload(event: any) {
+    if (this.exportType === 'PPT') {
+      this.getPPT()
+    }
+    else if (this.exportType === 'ZIP') {
+      this.getZip()
+    }
+    else if (this.exportType === 'GoogleSlides') {
+      // Google Slides option going here
+    }
+    this.hideModal(event)
   }
 
   private getPPT() {

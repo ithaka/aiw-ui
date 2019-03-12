@@ -28,7 +28,7 @@ export class ImageGroupService {
   private assetsSource = new BehaviorSubject<any>(this.assetsValue);
   public assets = this.assetsSource.asObservable();
 
-  public igDownloadTrigger: EventEmitter<any> = new EventEmitter();
+  public igDownloadTrigger: EventEmitter<string> = new EventEmitter();
 
   constructor(private _router: Router, private http: HttpClient, private _auth: AuthService ){
     this.baseUrl = this._auth.getUrl();
@@ -64,6 +64,18 @@ export class ImageGroupService {
 
   public triggerIgDownload(): void {
     this.igDownloadTrigger.emit();
+  }
+
+  public triggerPPTExport(): void {
+    this.igDownloadTrigger.emit('PPT');
+  }
+
+  public triggerZIPExport(): void {
+    this.igDownloadTrigger.emit('ZIP');
+  }
+
+  public triggerGoogleSlides(): void {
+    this.igDownloadTrigger.emit('GoogleSlides');
   }
 
   public triggerIgExport(): void {

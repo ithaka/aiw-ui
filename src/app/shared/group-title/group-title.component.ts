@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { ActivatedRoute } from '@angular/router'
-import { ImageGroup, FlagService } from './../'
+import { ImageGroup, FlagService, ImageGroupService } from './../'
 
 
 @Component({
@@ -25,6 +25,7 @@ import { ImageGroup, FlagService } from './../'
     private subscriptions: Subscription[] = []
 
     constructor(
+      private _ig: ImageGroupService,
       private route: ActivatedRoute,
       public _flags: FlagService
     ){ }

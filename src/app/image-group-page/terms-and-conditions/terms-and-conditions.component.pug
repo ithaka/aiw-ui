@@ -10,4 +10,4 @@
         .alert.alert-danger(*ngIf="!(isLoading || zipLoading || downloadLink || zipDownloadLink) && error && ig.total>100", style="margin:0;", [innerHtml]="'IMAGE_GROUP_PAGE.TERMS_AND_CONDITIONS.DOWNLOAD_ERROR_BIG' | translate")
         .alert.alert-danger(*ngIf="!(isLoading || zipLoading || downloadLink || zipDownloadLink) && error && ig.total<=100", style="margin:0;", [innerHtml]="'IMAGE_GROUP_PAGE.TERMS_AND_CONDITIONS.DOWNLOAD_ERROR_SMALL' | translate")
       .modal-footer
-        button#generatePowerpointLink.btn.btn-primary(*ngIf="!downloadLink  && !isLoading", (click)="hideModal($event)", aria-label="Request Powerpoint") I Agree
+        button#generatePowerpointLink.btn.btn-primary(*ngIf="!downloadLink  && !isLoading", (click)="termAgreed($event)", aria-label="Request Powerpoint") I Agree
