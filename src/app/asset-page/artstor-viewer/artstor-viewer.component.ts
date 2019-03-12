@@ -272,11 +272,11 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         // Handle hiding reference strip for >3 assets showing
         if (this.assetCompareCount > 3) {
             // Hide reference strip for >3
-            this.osdViewer.viewportMargins.bottom = 0
+            this.osdViewer.viewport.setMargins({bottom:0})
             this.osdViewer.removeReferenceStrip()
         } else {
             // Show reference strip for <4
-            this.osdViewer.viewportMargins.bottom = 190
+            this.osdViewer.viewport.setMargins({bottom:190})
             this.osdViewer.addReferenceStrip()
             this.osdViewer.nextButton.element.title = 'Next Item'
                 this.osdViewer.previousButton.element.title = 'Previous Item'
