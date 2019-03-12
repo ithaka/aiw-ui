@@ -112,22 +112,19 @@ export class NavMenu implements OnInit, OnDestroy {
           console.error(error)
         }
       )).subscribe(),
+      // Feature flag subscription
+      this._flags.flagUpdates.subscribe((flags) => {
+          this.exportReframeFlag = flags.exportReframe ? true : false
+          this.detailViewsFlag = flags.detailViews ? true : false
+      }),
       // Route params subscription
       this.route.params.subscribe((routeParams) => {
         this.params = routeParams
         if (routeParams['igId'] && !routeParams['page']){
           this.showImageGroupModal = false
         }
-
-        if (routeParams && routeParams['featureFlag']) {
-          this._flags[routeParams['featureFlag']] = true
-          this.detailViewsFlag = this._flags['detailViews'] ? true : false
-          this.exportReframeFlag = this._flags['exportReframe'] ? true : false
-
-        } else {
-            this.detailViewsFlag = false
-            this.exportReframeFlag = false
-        }
+        // Find feature flags applied on route
+        this._flags.readFlags(routeParams)
       }),
       // Institution Object subscription
       this._auth.getInstitution().pipe(

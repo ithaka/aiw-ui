@@ -281,17 +281,15 @@ export class AssetPage implements OnInit, OnDestroy {
         );
 
         this.subscriptions.push(
+            this._flags.flagUpdates.subscribe((flags) => {
+                this.relatedResFlag = flags.relatedResFlag ? true : false
+                this.detailViewsFlag = flags.detailViews ? true : false
+            }),
             this.route.params.subscribe((routeParams) => {
                 this.assetGroupId = routeParams['groupId']
                 // Find feature flags
-                if (routeParams && routeParams['featureFlag']) {
-                    this._flags[routeParams['featureFlag']] = true
-                    this.relatedResFlag = this._flags['related-res-hack'] ? true : false
-                    this.detailViewsFlag = this._flags['detailViews'] ? true : false
-                } else {
-                    this.relatedResFlag = false
-                }
-
+                this._flags.readFlags(routeParams)
+                
                 if (routeParams['encryptedId']) {
                     this.encryptedAccess = true
                     this.assetIds[0] = routeParams['encryptedId']
