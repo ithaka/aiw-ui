@@ -7,7 +7,7 @@ header.navbar.navbar-light
             img#logo.hidden-xs-down([attr.src]="logoUrl" alt="Artstor logo")
           .mobile--show
             img#logoMobile.hidden-sm-up(src="/assets/img/logo-square.png" alt="Artstor logo")
-        .btn.btn--icon
+        .btn.btn--icon(*ngIf="showAppliedFlags")
           .icon.icon-flag
           .tooltip.bs-tooltip-bottom.show-on-hover(role="tooltip")
             .arrow

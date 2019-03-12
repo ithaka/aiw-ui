@@ -63,9 +63,9 @@ export class FlagService {
    * @param params Route params
    */
   public readFlags(params: Params) : any {
-    if(params && params['secret']){
+    if(params && params['featureFlag']){
       this.flags.flagsAppliedByRoute = true
-      this.flags[params['secret']] = true
+      this.flags[params['featureFlag']] = true
     }
     // Emit switch update
     this.flagSource.next(this.flags)

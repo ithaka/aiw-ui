@@ -37,6 +37,7 @@ export class Nav implements OnInit, OnDestroy {
   private ipAuthed: boolean = false
 
   // Flag display (dev)
+  public showAppliedFlags: boolean = false
   public appliedFlags: string[] = []
 
   // TypeScript public modifiers
@@ -94,6 +95,9 @@ export class Nav implements OnInit, OnDestroy {
           })).subscribe(),
         // Feature flag subscription
         this._flags.flagUpdates.subscribe((flags) => {
+          // Trigger display of flags if URL flag is used
+          this.showAppliedFlags = flags.flagsAppliedByRoute
+          // Get applied flag keys for display while testing
           this.appliedFlags = []
           Object.keys(flags).forEach((flagKey) => {
             if (flags[flagKey]) {
