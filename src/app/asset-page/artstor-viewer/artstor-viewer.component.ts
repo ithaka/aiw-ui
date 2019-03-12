@@ -134,6 +134,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     public osdViewer: any
     public osdViewerId: string
     public isMultiView: boolean
+    private tilesLoaded: boolean = false
     public multiViewPage: number = 1
     public multiViewCount: number = 1
 
@@ -264,7 +265,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
      * OpenSeaDragon: Show reference strip for multi-view
      */
     private attemptShowReferenceStrip() : void {
-        if (!this.isMultiView || !this.osdViewer) {
+        if (!this.isMultiView || !this.osdViewer || !this.tilesLoaded) {
             // Only run if OSD has loaded AND is a Multi View asset
             return
         }
@@ -398,6 +399,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.osdViewer.addOnceHandler('tile-loaded', () => {
             console.info("Tiles are loaded")
+            this.tilesLoaded = true
             this.state = viewState.openSeaReady
             // Load Reference Strip once viewer is ready
             if (this.isMultiView) {
