@@ -100,7 +100,7 @@ export class Nav implements OnInit, OnDestroy {
           // Get applied flag keys for display while testing
           this.appliedFlags = []
           Object.keys(flags).forEach((flagKey) => {
-            if (flags[flagKey]) {
+            if (flags[flagKey] && ['flagsAppliedByRoute', 'bannerCopy'].indexOf(flagKey) < 0) {
               this.appliedFlags.push(flagKey)
             }
           })
