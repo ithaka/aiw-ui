@@ -76,7 +76,6 @@ export class AuthService implements CanActivate {
     private http: HttpClient,
     private location: Location,
     private _app: AppConfig,
-    private _flags: FlagService,
     private idle: Idle
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId)

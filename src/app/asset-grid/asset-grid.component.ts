@@ -193,7 +193,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     private _assets: AssetService,
     public _auth: AuthService,
     private _filters: AssetFiltersService,
-    private _flags: FlagService,
     private _groups: GroupService,
     private _ig: ImageGroupService,
     private _log: LogService,
@@ -239,10 +238,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.pipe(
       map((params: Params) => {
-        if (params && params['featureFlag']){
-          this._flags[params['featureFlag']] = true
-        }
-
         if (params['term']){
           this.searchTerm = params['term'];
           this.UrlParams.term = this.searchTerm;
