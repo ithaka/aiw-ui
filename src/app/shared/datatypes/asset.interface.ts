@@ -339,3 +339,13 @@ export interface MetadataResponse {
   }
 
   export interface FileProperty { [key: string]: string }
+
+/**
+ * IIIF Zoom parameters as passed by Group service and URL params
+ */
+export interface ImageZoomParams {
+    x?: number
+    y?: number
+    width?: number
+    height?: number
+}

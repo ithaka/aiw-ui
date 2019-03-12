@@ -322,7 +322,7 @@ export class AssetService {
      */
     public getShareLink(assetId: string, externalAsset?: boolean) {
         //   Links in the clipboard need a protocol defined
-        return  `https://${this._app.clientHostname}/#/asset/${assetId}`
+        return  `https://${this._app.clientHostname}/#/asset/${ ( externalAsset ? 'external/' : '' ) + assetId }`
     }
 
     /**
