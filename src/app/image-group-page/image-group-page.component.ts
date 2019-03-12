@@ -9,6 +9,7 @@ import { ImageGroup, ImageGroupDescription, ImageGroupService, GroupService } fr
 import { TitleService } from '../shared/title.service'
 import { AppConfig } from '../app.service'
 import { ScriptService } from '../shared/script.service'
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 
 @Component({
   selector: 'ang-image-group',
@@ -21,6 +22,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   /** controls when PPT agreement modal is or is not shown */
   public showPptModal: boolean = false;
+  /** controls the terms and condition modal, will replace ppt modal when all features implemented */
+  public showTermsConditions: boolean = false;
   /** controls the modal that tells a user he/she has met the download limit */
   public showDownloadLimitModal: boolean = false;
   /** controls the modal to tell the user to login */
@@ -33,6 +36,9 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   public showAccessDeniedModal: boolean = false;
   /** Enables / Disables the IG deletion based on user ownership */
   public allowIgUpdate: boolean = false;
+
+  /** Serve as an input to terms and condition modal, so that we know whether user wants to export ppt or zip or google slides */
+  public exportType: string = '';
 
   public genImgGrpLink: boolean = false;
 
@@ -63,6 +69,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     private _auth: AuthService,
     private route: ActivatedRoute,
     private _title: TitleService,
+    private _storage: ArtstorStorageService,
     private scriptService: ScriptService
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
@@ -174,7 +181,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       map(event => { // right now event will be undefined, it is just a dumb trigger
         // make sure we have the info we need
         if (id) {
-          this.showDownloadModal();
+          this.showDownloadModal(event);
         }
       })).subscribe()
     )
@@ -235,15 +242,29 @@ export class ImageGroupPage implements OnInit, OnDestroy {
    * - If the user is logged in but has met download limit -> download limit modal
    * - If the user is logged in and is allowed to download the image group -> download modal
    */
-  private showDownloadModal() {
+  private showDownloadModal(exportType: string) {
     // the template will not show the button if there is not an ig.igName and ig.igDownloadInfo
     // if the user is logged in and the download info is available
     if (this.user.isLoggedIn) {
-      // we will need a new way to know whether or not the user is authorized to download - for now, I will always enable them
-      if (this.ig.id) {
-        this.showPptModal = true;
-      } else {
-        this.showDownloadLimitModal = true;
+      // If we specify an export type, trigger terms and conditions modal if user havn't agreed
+      if (exportType && exportType.length) {
+        if (!this._storage.getSession('termAgreed')) {
+          this.showTermsConditions = true;
+          this.exportType = exportType;
+        }
+        else {
+          // TO DO: If user has agreed, we should trigger download directly
+        }
+      }
+
+      else {
+        // Keep this until terms and conditions modal completely replace show ppt modal
+        // we will need a new way to know whether or not the user is authorized to download - for now, I will always enable them
+        if (this.ig.id) {
+          this.showPptModal = true; 
+        } else {
+          this.showDownloadLimitModal = true;
+        }
       }
     } else if (!this.user.isLoggedIn) {
       // show login required modal if they're not logged in
