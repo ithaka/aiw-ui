@@ -16,7 +16,7 @@
           [attr.href]="downloadLink",
           [attr.download]="downloadTitle",
           (click)="trackDownload('PPT'); hideModal($event)",
-          aria-label="Download Powerpoint")
+          aria-label="Download PowerPoint")
           | Download PPT
         button.btn.btn-primary(*ngIf="isLoading", disabled)
           | Generating PPT
