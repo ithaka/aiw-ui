@@ -1,23 +1,23 @@
 import { Injectable } from '@angular/core'
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject, pipe } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { BehaviorSubject, Observable, Subject, pipe } from 'rxjs'
 import { catchError } from 'rxjs/operators'
-import { GroupList } from './datatypes';
+import { GroupList } from './datatypes'
 
 // Project Dependencies
-import { AuthService } from '.';
-import { environment } from 'environments/environment';
+import { AuthService } from '.'
+import { environment } from 'environments/environment'
 
 @Injectable()
 export class GroupService {
 
-    private groupUrl: string = ''
+    private groupUrl: string
     private options: {}
 
     constructor(
         private http: HttpClient
     ) {
-        this.groupUrl = environment.API_URL + '/api/v1/group'
+        this.groupUrl = environment.API_URL + '/api/v2/group'
         this.options = { withCredentials: true }
     }
 
@@ -141,10 +141,12 @@ export class GroupService {
      */
     public get(groupId: string, detailViewFlag?: boolean): Observable<any> {
         // Use v2 endpoint under the detailView feature flag
-        let url = detailViewFlag ? environment.API_URL + '/api/v2/group/' + groupId : this.groupUrl + '/' + groupId
-        return this.http.get(
-            url, this.options
-        )
+      //let url = detailViewFlag ? this.groupUrl + '/' + groupId : this.groupUrl + '/' + groupId
+      let url = this.groupUrl + '/' + groupId
+
+      return this.http.get(
+          url, this.options
+      )
     }
 
     /**
@@ -152,13 +154,16 @@ export class GroupService {
      */
     public create(group: any): Observable<any> {
 
-        console.log('OPTIONS: ', this.options)
+      // Convert group V1 items to array of objects
+      group.items = group.items.map(item => {
+        return typeof(item) === 'string' ? { id: item } : item
+      })
 
-        return this.http.post(
-            this.groupUrl,
-            group,
-            this.options
-        )
+      return this.http.post(
+          this.groupUrl,
+          group,
+          this.options
+      )
     }
 
     /**
@@ -202,14 +207,23 @@ export class GroupService {
         let putGroup = {}
         let reqUrl = this.groupUrl + '/' + id
         let updateProperties: string[] = [
-            'description', 'tags', 'sequence_number', 'update_date', 'name', 'creation_date', 'access', 'items'
+            'description', 'owner_name', 'tags', 'owner_id', 'sequence_number', 'update_date', 'name', 'creation_date', 'access', 'items'
         ]
 
         // Contruct putGroup object, based on expected properties on backend groups update call
-        for (let key in group){
-            if (updateProperties.indexOf(key) > -1) {
-                putGroup[key] = group[key]
+        for (let key in group) {
+          if (updateProperties.indexOf(key) > -1) {
+
+            // Group V2 Endpoint 'items' is no longer an array of strings,
+            // // it is an array of objects, with each a single key named 'id' and value of type string
+            if (key === 'items') {
+              group.items = group.items.map(item => {
+                return typeof(item) === 'string' ? { id: item } : item
+              })
             }
+
+            putGroup[key] = group[key]
+          }
         }
 
         if (!putGroup['tags'] || putGroup['tags'][0] == null) { putGroup['tags'] = [] }
@@ -289,4 +303,25 @@ export class GroupService {
     public getTagSuggestions(term: string) {
         return this.http.get( this.groupUrl + '/tags/suggest?q=' + term + '&size=20', this.options)
     }
+
+    /**
+     * setZoomDetails - Use this method to ensures zoom details objects always
+     * contain correct types and are of type ZoomedDetails across components.
+     * @param zoom ZoomDetails object
+     * @returns returns an instance of ZoomDetails
+     */
+    public setZoomDetails(zoom: ZoomDetails): ZoomDetails {
+      for (let prop in zoom) {
+        zoom[prop] = Math.round(zoom[prop])
+      }
+      return zoom
+    }
+}
+
+interface ZoomDetails {
+  viewerX: number
+  viewerY: number
+  pointWidth: number
+  pointHeight: number
+  index?: number
 }

@@ -199,6 +199,7 @@ export class NewIgModal implements OnInit {
     if (!this.newIgForm.valid) {
       return;
     }
+
     // Form is valid! Create Group object
     this.isLoading = true;
 
@@ -287,7 +288,7 @@ export class NewIgModal implements OnInit {
             // Add to Group GA event
             this._angulartics.eventTrack.next({ action: 'addToGroup', properties: { category: this._auth.getGACategory(), label: this.router.url }})
           }
-          
+
           this.closeModal.emit()
           this._toasts.sendToast({
             id: 'createNewGroup',

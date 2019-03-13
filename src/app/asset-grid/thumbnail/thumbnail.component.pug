@@ -1,7 +1,7 @@
 .card-block.card-text(tabindex="3", [attr.aria-label]="thumbnail.tombstone && thumbnail.tombstone.length > 0 ? thumbnail.tombstone.join(', ') : thumbnail.name + ', '  + thumbnail.agent + ', ' + thumbnail.date", [attr.id]="('item-' + itemIndex)", [ngClass]="{ 'reorder--asset' : arrowReorderMode }")
   .card-img-top
-    img(*ngIf="thumbnail.status != 'not-available' && thumbnail.zoom", id="{{thumbnail.artstorid}}", [class.disablePointerEvents]="reorderMode", [attr.src]="_search.makeDetailViewThmb(thumbnail)", (error)="thumbnailError()", [attr.alt]="thumbnailAlt", [attr.title]="thumbnailAlt", aria-role="image")
-    img(*ngIf="thumbnail.status != 'not-available' && !thumbnail.zoom", id="{{thumbnail.artstorid}}", [class.disablePointerEvents]="reorderMode", [attr.src]="isMultiView && !reorderMode ? thumbnail.thumbnailImgUrl : _search.makeThumbUrl(thumbnail, thumbnailSize)", (error)="thumbnailError()", [attr.alt]="thumbnailAlt", [attr.title]="thumbnailAlt", aria-role="image")
+    img(*ngIf="thumbnail.status != 'not-available' && isDetailView", id="{{thumbnail.artstorid}}", [class.disablePointerEvents]="reorderMode", [attr.src]="_search.makeDetailViewThmb(thumbnail)", (error)="thumbnailError()", [attr.alt]="thumbnailAlt", [attr.title]="thumbnailAlt", aria-role="image")
+    img(*ngIf="thumbnail.status != 'not-available' && !isDetailView", id="{{thumbnail.artstorid}}", [class.disablePointerEvents]="reorderMode", [attr.src]="isMultiView && !reorderMode ? thumbnail.thumbnailImgUrl : _search.makeThumbUrl(thumbnail, thumbnailSize)", (error)="thumbnailError()", [attr.alt]="thumbnailAlt", [attr.title]="thumbnailAlt", aria-role="image")
   .metadata-wrap
     //- New Asset display
     span.asset-title(*ngIf="thumbnail.name", title="{{ thumbnail.name }}", [innerHTML]="thumbnail.name", aria-hidden="true")
