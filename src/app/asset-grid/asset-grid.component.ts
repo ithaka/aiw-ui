@@ -239,9 +239,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.pipe(
       map((params: Params) => {
-        if (params && params['featureFlag']){
-          this._flags[params['featureFlag']] = true
-        }
+        // Find feature flags applied on route
+        this._flags.readFlags(params)
 
         if (params['term']){
           this.searchTerm = params['term'];
