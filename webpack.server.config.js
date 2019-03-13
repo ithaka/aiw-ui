@@ -8,7 +8,10 @@ module.exports = {
   // TO-DO: Enable "production" mode for going live with Universal
   mode: 'development',
   // this makes sure we include node_modules and other 3rd party libraries
-  externals: [/node_modules/],
+  externals: [
+    /node_modules/,
+    'appdynamics'
+  ],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[name].js'

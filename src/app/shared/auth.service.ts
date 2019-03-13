@@ -25,6 +25,7 @@ import { ArtstorStorageService } from '../../../projects/artstor-storage/src/pub
 @Injectable()
 export class AuthService implements CanActivate {
   public currentUser: Observable<any>
+  public currentAuthHeaders: AuthTriplet 
   // Track whether or not user object has been refreshed since app opened
   public userSessionFresh: boolean = false
   public showUserInactiveModal: Subject<boolean> = new Subject(); // Set up subject observable for showing inactive user modal
@@ -278,7 +279,8 @@ export class AuthService implements CanActivate {
 
       let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
       let options = { headers: header, withCredentials: true };
-
+      // Clear in-memory object
+      // delete this.currentAuthHeaders
       // Clear local user object, and other settings
       this._storage.clearLocalStorage()
       // Clear observables
@@ -456,6 +458,12 @@ export class AuthService implements CanActivate {
             clientIp = "65.128.116.207"
             console.log("JK! Hard-coded to: 65.128.116.207")
           }
+          // Set triplet headers if available
+          if (this.currentAuthHeaders) {
+            Object.keys(this.currentAuthHeaders).forEach(header => {
+              headers = headers.append(header, this.currentAuthHeaders[header])
+            })
+          }
           headers = headers.append("CLIENTIP", clientIp)
           headers = headers.append('Fastly-Client-Ip', clientIp)
           return headers
@@ -588,11 +596,15 @@ export class AuthService implements CanActivate {
    * @param triggerSessionExpModal Sometimes this is called after unsuccessful logins, and we don't want failovers to always trigger the modal, so it's an option
    */
   public getUserInfo(triggerSessionExpModal?: boolean): Observable<any> {
-    let options = { headers: this.getHeaders(), withCredentials: true };
-
     return this.http
-      .get(this.genUserInfoUrl(), options).pipe(
-      map((data)  => {
+      .get(this.genUserInfoUrl(), {
+        observe: 'response', 
+        headers: this.getHeaders(), 
+        withCredentials: true
+      }).pipe(
+      map((res)  => {
+          let data = res.body
+          let headers = res.headers
           let user = this.decorateValidUser(data)
           // Track whether or not user object has been refreshed since app opened
           this.userSessionFresh = true
@@ -605,6 +617,14 @@ export class AuthService implements CanActivate {
           } else {
             // Clear user session (local objects and cookies)
             this.logout()
+          }
+          // Save session values
+          if (headers['x-jstor-access-session']) {
+            this.currentAuthHeaders = {
+              'x-jstor-access-session': headers['x-jstor-access-session'],
+              'x-jstor-access-session-signature': headers['x-jstor-access-session-signature'],
+              'x-jstor-access-session-timed-signature': headers['x-jstor-access-session-timed-signature']
+            }
           }
           // If user session was downgraded/expired, notify
           if (triggerSessionExpModal && user.loggedInSessionLost) {
@@ -793,6 +813,12 @@ export class User {
     public username: string,
     public password: string,
   ) {}
+}
+
+interface AuthTriplet {
+  'x-jstor-access-session': string
+  'x-jstor-access-session-signature': string
+  'x-jstor-access-session-timed-signature': string
 }
 
 interface SSLoginResponse {
