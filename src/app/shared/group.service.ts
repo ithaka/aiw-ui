@@ -323,5 +323,5 @@ interface ZoomDetails {
   viewerY: number
   pointWidth: number
   pointHeight: number
-  index: number
+  index?: number
 }
