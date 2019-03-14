@@ -627,16 +627,19 @@ export class AssetService {
         /**
          * Include only availble assets to the resultsObj thumbnails array, set aside restricted assets
          */
-        if (resultObj.thumbnails){
+        if (resultObj.thumbnails) {
             // let thumbnailsOrignalLength: number = resultObj.thumbnails.length
             resultObj['restricted_thumbnails'] = []
             resultObj.thumbnails = resultObj.thumbnails.filter( thumbnail => {
-                if (thumbnail.status === 'not-available') {
-                    resultObj['restricted_thumbnails'].push(thumbnail)
-                    return false
-                } else {
-                    return true
-                }
+
+              if (typeof(thumbnail) === 'undefined') {
+                return false
+              } else if (thumbnail.status && thumbnail.status === 'not-available') {
+                resultObj['restricted_thumbnails'].push(thumbnail)
+                return false
+              } else {
+                return true
+              }
             })
         }
         // Update results thumbnail array

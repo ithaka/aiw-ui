@@ -592,6 +592,8 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   private constructNavigationCommands (thumbnail: Thumbnail) : any[] {
+    console.log('THUMBNAIL: ', thumbnail)
+
     let assetId = thumbnail.objectId ? thumbnail.objectId : thumbnail.artstorid
     let params: any = {
       prevRouteTS: this.prevRouteTS // for fetching previous route params from session storage, on asset page
