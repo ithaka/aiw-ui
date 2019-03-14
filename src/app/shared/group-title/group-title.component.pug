@@ -1,5 +1,5 @@
 .row.group-border(*ngIf="ig.name")
-    .col-9.btn-row
+    .col-lg-9.col-md-9.col-sm-9.btn-row
         .row.m-sm-0.pb-3(#titlerow="")
             h1.title {{ ig.name }}
         .row.m-sm-0.item-last-updated
@@ -7,7 +7,7 @@
             span(*ngIf="ig.total === 1") {{ ig.total }} item
             span.dot •
             span Last updated {{ ig.update_date | date:'MMMM dd, yyyy' }}
-    .col-3.btn-row.center-align
+    .col-lg-3.col-md-3.col-sm-9.btn-row.center-align
         //- button.btn.btn-secondary.ml-3 Export
         .dropdown.d-inline-block(*ngIf="exportReframeFlag", ngbDropdown, aria-haspopup="true", (openChange)="dropDownOpen = $event")
             button#exportDropdown.btn.btn-secondary((mouseover)="dropDownBtnHovered = true", (mouseout)="dropDownBtnHovered = false",(focus)="dropDownBtnFocused = true", (focusout)="dropDownBtnFocused = false", ngbDropdownToggle, tabindex="3", aria-label="Export group")

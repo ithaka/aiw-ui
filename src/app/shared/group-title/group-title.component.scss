@@ -37,6 +37,15 @@
   width: 300%;
   border-bottom: solid 1px $color-gray-3;
   z-index: 0;
+
+  @media (max-width: $tablet) {
+    min-height: 120px;
+  }
+  
+  @media (max-width: $phone) {
+    min-height: 40px;
+  }
+
 }
 
 .item-last-updated {
@@ -68,6 +77,10 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
+
+  @media (max-width: $phone) {
+    display: none;
+  }
 }
 
 
@@ -98,7 +111,7 @@
 .dropdown-menu {
   border: 1px solid $color-border-gray;
   margin-top: 11px;
-  left: 0 !important;
+  left: -130px !important;
   width: 275px;
   padding: 0;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2) !important;
@@ -113,7 +126,7 @@
     content: '';
     display: block;
     position: absolute;
-    left: 40%;
+    right: 5%;
     width: 0;
     height: 0;
     border-style: solid;
