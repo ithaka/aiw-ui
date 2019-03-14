@@ -1096,32 +1096,48 @@ export class AssetPage implements OnInit, OnDestroy {
         }
 
         if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
-            // Full source image size (max output possible)
-            let fullWidth = Math.floor(asset.viewportDimensions.contentSize.x)
-            let fullY = Math.floor(asset.viewportDimensions.contentSize.y)
-            // Zoom is a factor of the image's full width
-            let zoom = Math.floor(asset.viewportDimensions.zoom)
-            // Viewport dimensions (size of cropped image)
-            let viewX = Math.floor(asset.viewportDimensions.containerSize.x)
-            let viewY = Math.floor(asset.viewportDimensions.containerSize.y)
-            // Dimensions of the source size of the cropped image
-            let zoomX = Math.floor(fullWidth / zoom)
-            let zoomY = Math.floor(zoomX * (viewY / viewX))
-            // Make sure zoom area is not larger than source, or else error
-            if (zoomX > fullWidth) {
-                zoomX = fullWidth
-            }
-            if (zoomY > fullY) {
-                zoomY = fullY
-            }
-            // Positioning of the viewport's crop
-            let xOffset = Math.floor((asset.viewportDimensions.center.x * fullWidth) - (zoomX / 2))
-            let yOffset = Math.floor((asset.viewportDimensions.center.y * fullWidth) - (zoomY / 2))
+
+            // Get Bounds from OSD viewer for the saved detail
+            let bounds = this.assetViewer.osdViewer.viewport.viewportToImageRectangle(this.assetViewer.osdViewer.viewport.getBounds(true))
+            // Make sure the bounds are adjusted for the negative x and y values
+            bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
+            bounds['height'] = bounds['y'] < 0 ? bounds['height'] + bounds['y'] : bounds['height']
+            // Make sure the bounds are within the content size for the IIIF endpoint.
+            bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']                
+            bounds['height'] = bounds['height'] > this.assets[0].viewportDimensions.contentSize['y'] ? this.assets[0].viewportDimensions.contentSize['y'] : bounds['height']
+            
+            // this.assets[0]['detailViewBounds'] = bounds
+            // // Full source image size (max output possible)
+            // let fullWidth = Math.floor(asset.viewportDimensions.contentSize.x)
+            // let fullY = Math.floor(asset.viewportDimensions.contentSize.y)
+            // // Zoom is a factor of the image's full width
+            // let zoom = Math.floor(asset.viewportDimensions.zoom)
+            // // Viewport dimensions (size of cropped image)
+            // let viewX = Math.floor(asset.viewportDimensions.containerSize.x)
+            // let viewY = Math.floor(asset.viewportDimensions.containerSize.y)
+            // // Dimensions of the source size of the cropped image
+            // let zoomX = Math.floor(fullWidth / zoom)
+            // let zoomY = Math.floor(zoomX * (viewY / viewX))
+            // // Make sure zoom area is not larger than source, or else error
+            // if (zoomX > fullWidth) {
+            //     zoomX = fullWidth
+            // }
+            // if (zoomY > fullY) {
+            //     zoomY = fullY
+            // }
+            // // Positioning of the viewport's crop
+            // let xOffset = Math.floor((asset.viewportDimensions.center.x * fullWidth) - (zoomX / 2))
+            // let yOffset = Math.floor((asset.viewportDimensions.center.y * fullWidth) - (zoomY / 2))
+
+            // if(this.selectedAssets[0]['detailViewBounds'] && this.selectedAssets[0]['detailViewBounds']['width']){
+            //     this.detailViewBounds = this.selectedAssets[0]['detailViewBounds']
+            //     this.detailPreviewURL = this.selectedAssets[0].tileSource.replace('info.json', '') + Math.round( this.detailViewBounds['x'] ) + ',' + Math.round( this.detailViewBounds['y'] ) + ',' + Math.round( this.detailViewBounds['width'] ) + ',' + Math.round( this.detailViewBounds['height'] ) + '/352,/0/native.jpg'
+            // }
 
             // Generate the view url from tilemap service
             let tilesourceStr = Array.isArray(asset.tileSource) ? asset.tileSource[0] : asset.tileSource
             // Attach zoom parameters to tilesource
-            tilesourceStr = tilesourceStr.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
+            tilesourceStr = tilesourceStr.replace('info.json', '') + Math.round( bounds['x'] ) + ',' + Math.round( bounds['y'] ) + ',' + Math.round( bounds['width'] ) + ',' + Math.round( bounds['height'] ) + '/full/0/native.jpg'
             // Ensure iiif parameter is encoded correctly
             tilesourceStr = tilesourceStr.replace('.fcgi%3F', '.fcgi?')
             if (tilesourceStr.indexOf('//') == 0) {
