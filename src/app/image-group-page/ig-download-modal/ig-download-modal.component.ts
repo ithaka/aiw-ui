@@ -133,7 +133,6 @@ export class PptModalComponent implements OnInit, AfterViewInit {
     return this._assets.getAllThumbnails(group.items, group.id)
     .then((thumbnails) => {
       let imgDownloadStrings: string[] = []
-
       thumbnails.forEach((thumbnail, index) => {
         let imgStr: string = [(index + 1), thumbnail.objectId, '1024x1024'].join(':')
         thumbnail.status == 'available' && imgDownloadStrings.push(imgStr)
