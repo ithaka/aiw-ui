@@ -118,7 +118,6 @@ export class PptModalComponent implements OnInit, AfterViewInit {
     let url = this._auth.getHostname() + '/api/group/export'
     let format: string
     let data: any
-    let assetIds: string[] = []
 
     if (!zip) {
       format = 'pptx'
@@ -127,25 +126,11 @@ export class PptModalComponent implements OnInit, AfterViewInit {
     }
 
     /**
-     * 2019/3/14
-     * Check for new item format (object), and convert to strings for items service
-     */
-    if (group.items[0] && group.items[0].id) {
-      for (let i = 0; i < group.items.length; i++) {
-        if (group.items[i] && group.items[i].id) {
-          assetIds.push(group.items[i].id)
-        }
-      }
-    } else {
-      assetIds = group.items
-    }
-
-    /**
      * We're using this as an auth check - instead of simply using all of the group.items strings and calling for downloads,
      *  which was allowing restricted assets to be downloaded, we first ask for each assets' thumbnail, which will ensure
      *  that only assets which the user has access to are returned
      */
-    return this._assets.getAllThumbnails(assetIds, group.id)
+    return this._assets.getAllThumbnails(group.items, group.id)
     .then((thumbnails) => {
       let imgDownloadStrings: string[] = []
       thumbnails.forEach((thumbnail, index) => {
