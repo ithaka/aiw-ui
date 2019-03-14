@@ -174,14 +174,15 @@ export class GroupService {
 
     /**
      * Copy Group
+     * Unused as of 2019/03/14
      */
-    public copy(igId: string, copygroup: any): Observable<any> {
-        return this.http.post(
-            this.groupUrl + '/' + igId + '/copy',
-            copygroup,
-            this.options
-        )
-    }
+    // public copy(igId: string, copygroup: any): Observable<any> {
+    //     return this.http.post(
+    //         this.groupUrl + '/' + igId + '/copy',
+    //         copygroup,
+    //         this.options
+    //     )
+    // }
 
     /**
      * Remove Group
@@ -257,7 +258,7 @@ export class GroupService {
      */
     public generateToken(id: string, options: { access_type: number, expiration_time?: Date }): Observable<any> {
         return this.http.post(
-            [this.groupUrl, id, 'share'].join('/'),
+            [this.groupV1, id, 'share'].join('/'),
             {}, // this call does not have any options for a body
             this.options
         )
@@ -270,7 +271,7 @@ export class GroupService {
      */
     public redeemToken(token: string): Observable<{ success: boolean, group: any }> {
         return this.http.post<{ success: boolean, group: any }>(
-            [this.groupUrl, 'redeem', token].join('/'),
+            [this.groupV1, 'redeem', token].join('/'),
             {},
             this.options
         );
@@ -282,7 +283,7 @@ export class GroupService {
      * @returns Observable resolved with { success: boolean, message: string }
      */
     public updateIgPublic(igId: string, makePublic: boolean) {
-        let reqUrl = [this.groupUrl, igId, 'admin', 'public'].join('/')
+        let reqUrl = [this.groupV1, igId, 'admin', 'public'].join('/')
         let body = { public: makePublic }
 
         return this.http.put(
