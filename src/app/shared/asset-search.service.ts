@@ -47,20 +47,6 @@ export class AssetSearchService {
     this.showCollectionType = this._app.config.advSearch.showCollectionTypeFacet
   }
 
-  /**
-  * Download View from IIIF services as blob file
-  * @param url - Generated view url
-  */
-  public downloadViewBlob(url: string): Observable<any> {
-
-    let res: Observable<Blob>
-      res = this._http.get(url, {
-        responseType: 'blob'
-      })
-
-    return res
-  }
-
   private initQuery(keyword: string, pageSize, startIndex) {
 
     return {

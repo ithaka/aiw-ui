@@ -110,15 +110,12 @@ export class AssetPage implements OnInit, OnDestroy {
     private showCopyUrl: boolean = false
     private showEditDetails: boolean = false
     private generatedImgURL: string = ''
-    private generatedBlobURL: SafeUrl | string = '' // A Blob File
     public downloadViewLink: string = '' // IIIF View Link
-    public downloadViewAsBlob: boolean = false
     private generatedFullURL: string = ''
     // Used for agree modal input, changes based on selection
     private downloadUrl: any
     private downloadName: string
-    // Used for generated view blob url
-    private blobURL: string = ''
+    
     private prevRouteParams: any = []
 
     private quizMode: boolean = false;
@@ -555,7 +552,7 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadView(): void {
-        this.downloadUrl = (this.isMSAgent || !this.downloadViewAsBlob) ? this.downloadViewLink : this.generatedBlobURL
+        this.downloadUrl = this.downloadViewLink
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
     }
@@ -1050,36 +1047,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * runDownloadView handles the DownloadView results from AssetSearch.downloadViewBlob
-     * @param dlink String from generateDownloadView
-     */
-    private runDownloadView(dlink: string): Subscription {
-      // Download generated jpg as local blob file
-      return this._search.downloadViewBlob(dlink).pipe(
-            take(1)
-        ).subscribe(
-            (blob) => {
-                if (blob.size > 0) {
-                    this.blobURL = this.URL.createObjectURL(blob)
-                    this.generatedBlobURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
-                    this.downloadViewReady = true
-                    this.downloadLoading = false
-                }},
-            (err) => {
-                console.error("Download view failed", err)
-                this.downloadLoading = false
-                this.downloadViewReady = false
-            }
-
-        )
-    }
-
-    /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
-        and then sets generatedBlobUrl to this local reference. **/
-
     private genDownloadViewLink() {
-
         // Do nothing if this is not an image
         if (!this.assets[0].typeName || !this.assets[0].typeName.length) {
             return
@@ -1088,51 +1056,17 @@ export class AssetPage implements OnInit, OnDestroy {
         let asset = this.assets[0]
         this.downloadLoading = true // sets to false on success of runDownloadView
 
-        // Revoke the browser reference to a previous blob URL, needs 100ms pause
-        if (this.blobURL.length) {
-            setTimeout(() => {
-              this.URL.revokeObjectURL(this.blobURL)
-            }, 100);
-        }
-
         if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
-
             // Get Bounds from OSD viewer for the saved detail
             let bounds = this.assetViewer.osdViewer.viewport.viewportToImageRectangle(this.assetViewer.osdViewer.viewport.getBounds(true))
+            
             // Make sure the bounds are adjusted for the negative x and y values
             bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
             bounds['height'] = bounds['y'] < 0 ? bounds['height'] + bounds['y'] : bounds['height']
+            
             // Make sure the bounds are within the content size for the IIIF endpoint.
             bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']                
             bounds['height'] = bounds['height'] > this.assets[0].viewportDimensions.contentSize['y'] ? this.assets[0].viewportDimensions.contentSize['y'] : bounds['height']
-            
-            // this.assets[0]['detailViewBounds'] = bounds
-            // // Full source image size (max output possible)
-            // let fullWidth = Math.floor(asset.viewportDimensions.contentSize.x)
-            // let fullY = Math.floor(asset.viewportDimensions.contentSize.y)
-            // // Zoom is a factor of the image's full width
-            // let zoom = Math.floor(asset.viewportDimensions.zoom)
-            // // Viewport dimensions (size of cropped image)
-            // let viewX = Math.floor(asset.viewportDimensions.containerSize.x)
-            // let viewY = Math.floor(asset.viewportDimensions.containerSize.y)
-            // // Dimensions of the source size of the cropped image
-            // let zoomX = Math.floor(fullWidth / zoom)
-            // let zoomY = Math.floor(zoomX * (viewY / viewX))
-            // // Make sure zoom area is not larger than source, or else error
-            // if (zoomX > fullWidth) {
-            //     zoomX = fullWidth
-            // }
-            // if (zoomY > fullY) {
-            //     zoomY = fullY
-            // }
-            // // Positioning of the viewport's crop
-            // let xOffset = Math.floor((asset.viewportDimensions.center.x * fullWidth) - (zoomX / 2))
-            // let yOffset = Math.floor((asset.viewportDimensions.center.y * fullWidth) - (zoomY / 2))
-
-            // if(this.selectedAssets[0]['detailViewBounds'] && this.selectedAssets[0]['detailViewBounds']['width']){
-            //     this.detailViewBounds = this.selectedAssets[0]['detailViewBounds']
-            //     this.detailPreviewURL = this.selectedAssets[0].tileSource.replace('info.json', '') + Math.round( this.detailViewBounds['x'] ) + ',' + Math.round( this.detailViewBounds['y'] ) + ',' + Math.round( this.detailViewBounds['width'] ) + ',' + Math.round( this.detailViewBounds['height'] ) + '/352,/0/native.jpg'
-            // }
 
             // Generate the view url from tilemap service
             let tilesourceStr = Array.isArray(asset.tileSource) ? asset.tileSource[0] : asset.tileSource
@@ -1143,24 +1077,11 @@ export class AssetPage implements OnInit, OnDestroy {
             if (tilesourceStr.indexOf('//') == 0) {
                 tilesourceStr = 'https:' + tilesourceStr
             }
-            // If download link is pointing to "stor.*.artstor", use download service
-            if (tilesourceStr.indexOf('//stor.') >= 0) {
-                // Use download service
-                tilesourceStr = this._auth.getUrl() + "/download?imgid=" + asset.id + "&url=" + encodeURIComponent(tilesourceStr) + "&iiif=true"
-                this.downloadViewLink = tilesourceStr
-                this.downloadViewReady = true
-                this.downloadLoading = false
-                this.downloadViewAsBlob = false
-            } else {
-                this.downloadViewLink = tilesourceStr
-                // Disable download view link button until file is ready
-                this.downloadViewReady = false
-                this.downloadViewAsBlob = true
-                // Call runDownloadView after 1 sec, downloads local view image blob file to browser
-                setTimeout(() => {
-                    this.runDownloadView(this.downloadViewLink)
-                }, 1000);
-            }
+            
+            tilesourceStr = this._auth.getUrl() + "/download?imgid=" + asset.id + "&url=" + encodeURIComponent( encodeURI(tilesourceStr) ) + "&iiif=true"
+            this.downloadViewLink = tilesourceStr
+            this.downloadViewReady = true
+            this.downloadLoading = false
         }
         else {
             this.downloadLoading = false
