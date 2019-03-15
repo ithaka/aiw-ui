@@ -74,7 +74,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
       this.multiviewItemCount = this.thumbnail['compoundmediaCount']
     }
     // Compound 'multiview' assets use cleanedAsset.thumbnailUrls[0], assigned in asset-search
-    if (this.thumbnail['compound_media']) {
+    if (this.thumbnail['compound_media'] && typeof(this.thumbnail['compound_media']) === 'string' && this.thumbnail['compound_media'].length > 3) {
       this.isMultiView = true
       this.thumbnail.thumbnailImgUrl = this.thumbnail['thumbnailUrls'][0]
       this.multiviewItemCount = JSON.parse(this.thumbnail['compound_media']).objects.length
