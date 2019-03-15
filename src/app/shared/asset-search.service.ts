@@ -379,7 +379,7 @@ export class AssetSearchService {
         let cleanedResults: SearchAsset[] = res.results.map((item) => {
           let cleanedSSID: string = item.doi.substr(item.doi.lastIndexOf('.') + 1) // split the ssid off the doi
           let cleanedMedia: MediaObject
-          if (item.media && typeof item.media == 'string') { cleanedMedia = JSON.parse(item.media) }
+          if (item && item.media && typeof item.media == 'string') { cleanedMedia = JSON.parse(item.media) }
           let cleanedAsset: SearchAsset = Object.assign(
             {}, // assigning it to a new object
             item, // base is the raw item returned from search
@@ -391,7 +391,7 @@ export class AssetSearchService {
           )
 
           // Use the compound media thumbnail url where sequenceNum equals 1
-          if (cleanedAsset['compound_media']) {
+          if (cleanedAsset && cleanedAsset['compound_media'] && cleanedAsset['compund_media'].objects) {
             let compoundAsset = JSON.parse(cleanedAsset['compound_media']).objects.filter((item) => {
               return item['sequenceNum'] === 1
             })
