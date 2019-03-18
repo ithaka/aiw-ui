@@ -125,10 +125,10 @@ export class AppComponent {
           }
 
           // Show Ethnio survey on all but login and register
-          // if (event.url.indexOf('register/') < 0
-          //   && event.url.indexOf('login/') < 0){
-          //   this._script.loadScript('ethnio-survey')
-          // }
+          if (event.url.indexOf('register/') < 0
+            && event.url.indexOf('login/') < 0){
+            this._script.loadScript('ethnio-survey')
+          }
 
           // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
           if (this.showChatWidget(window.location.href) && this._app.config.showZendeskWidget) {
