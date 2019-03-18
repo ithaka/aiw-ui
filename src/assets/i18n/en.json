@@ -182,6 +182,12 @@
       "DOWNLOAD_ERROR_BIG": "We're sorry, we were unable to generate your file. The recommended group size is under 100 images.",
       "DOWNLOAD_ERROR_SMALL": "We're sorry, we were unable to generate your file. Please try again. If the problem persists, contact us at <a href=\"mailto:support@artstor.org\" class=\"link\" target=\"_blank\">support@artstor.org</a>"
     },
+    "TERMS_AND_CONDITIONS": {
+      "TITLE": "Exporting Terms and Conditions",
+      "TEXT": "<p>All logged in users may export/download up to 2000 images in a 120 day period.</p><p>For groups larger than 150, only the first 150 images are exported as presentation slides. Multimedia files are not exported to PowerPoint, ZIP files and Google Slides.</p> <p>By accepting this, you are agreeing to the <a href=\"http://www.artstor.org/terms\" class=\"link\" name=\"Terms and conditions of use\" target=\"_blank\">terms and conditions of use.</a></p>",
+      "DOWNLOAD_ERROR_BIG": "We're sorry, we were unable to generate your file. The recommended group size is under 100 images.",
+      "DOWNLOAD_ERROR_SMALL": "We're sorry, we were unable to generate your file. Please try again. If the problem persists, contact us at <a href=\"mailto:support@artstor.org\" class=\"link\" target=\"_blank\">support@artstor.org</a>"
+    },
     "DOWNLOAD_LIMIT_MODAL": {
       "TITLE": "Download Limit Reached",
       "CLOSE_BUTTON": "Ok",
