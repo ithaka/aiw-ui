@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, HostListener, ElementRef } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
-import { DomSanitizer, SafeUrl, Meta } from '@angular/platform-browser'
+import { Meta } from '@angular/platform-browser'
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
@@ -115,7 +115,7 @@ export class AssetPage implements OnInit, OnDestroy {
     // Used for agree modal input, changes based on selection
     private downloadUrl: any
     private downloadName: string
-    
+
     private prevRouteParams: any = []
 
     private quizMode: boolean = false;
@@ -187,7 +187,6 @@ export class AssetPage implements OnInit, OnDestroy {
         private angulartics: Angulartics2,
         private _title: TitleService,
         private scriptService: ScriptService,
-        private _sanitizer: DomSanitizer,
         _fb: FormBuilder,
         private _storage: ArtstorStorageService,
         private _dom: DomUtilityService,
@@ -286,7 +285,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.assetGroupId = routeParams['groupId']
                 // Find feature flags
                 this._flags.readFlags(routeParams)
-                
+
                 if (routeParams['encryptedId']) {
                     this.encryptedAccess = true
                     this.assetIds[0] = routeParams['encryptedId']
@@ -747,11 +746,11 @@ export class AssetPage implements OnInit, OnDestroy {
                 bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
                 bounds['height'] = bounds['y'] < 0 ? bounds['height'] + bounds['y'] : bounds['height']
                 // Make sure the bounds are within the content size for the IIIF endpoint.
-                bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']                
+                bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']
                 bounds['height'] = bounds['height'] > this.assets[0].viewportDimensions.contentSize['y'] ? this.assets[0].viewportDimensions.contentSize['y'] : bounds['height']
-                
+
                 this.assets[0]['detailViewBounds'] = bounds
-                
+
                 this.showAddModal = true
 
             } else {
@@ -1059,13 +1058,13 @@ export class AssetPage implements OnInit, OnDestroy {
         if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
             // Get Bounds from OSD viewer for the saved detail
             let bounds = this.assetViewer.osdViewer.viewport.viewportToImageRectangle(this.assetViewer.osdViewer.viewport.getBounds(true))
-            
+
             // Make sure the bounds are adjusted for the negative x and y values
             bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
             bounds['height'] = bounds['y'] < 0 ? bounds['height'] + bounds['y'] : bounds['height']
-            
+
             // Make sure the bounds are within the content size for the IIIF endpoint.
-            bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']                
+            bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']
             bounds['height'] = bounds['height'] > this.assets[0].viewportDimensions.contentSize['y'] ? this.assets[0].viewportDimensions.contentSize['y'] : bounds['height']
 
             // Generate the view url from tilemap service
@@ -1077,7 +1076,7 @@ export class AssetPage implements OnInit, OnDestroy {
             if (tilesourceStr.indexOf('//') == 0) {
                 tilesourceStr = 'https:' + tilesourceStr
             }
-            
+
             tilesourceStr = this._auth.getUrl() + "/download?imgid=" + asset.id + "&url=" + encodeURIComponent( encodeURI(tilesourceStr) ) + "&iiif=true"
             this.downloadViewLink = tilesourceStr
             this.downloadViewReady = true
