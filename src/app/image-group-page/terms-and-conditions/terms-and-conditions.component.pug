@@ -1,9 +1,9 @@
 .modal.fade-in(tabindex="0")
-  .modal-dialog(role="dialog", (keydown.esc)="hideModal($event)")
+  .modal-dialog(role="dialog", (keydown.esc)="hideModal()")
     .modal-content
       .modal-header
-        h4.modal-title#term-condition-title(tabindex="0", (keydown.shift.tab)="hideModal($event)") {{ 'IMAGE_GROUP_PAGE.TERMS_AND_CONDITIONS.TITLE' | translate }}
-        button.close#term-condition-close((click)="hideModal($event)", aria-label="Close")
+        h4.modal-title#term-condition-title(tabindex="0", (keydown.shift.tab)="hideModal()") {{ 'IMAGE_GROUP_PAGE.TERMS_AND_CONDITIONS.TITLE' | translate }}
+        button.close#term-condition-close((click)="hideModal()", aria-label="Close")
           span(aria-hidden="true") &times;
       .modal-body
         div([innerHtml]="'IMAGE_GROUP_PAGE.TERMS_AND_CONDITIONS.TEXT' | translate")
