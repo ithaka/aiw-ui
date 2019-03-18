@@ -60,6 +60,9 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   /** Reorder: Modifies the layout */
   private reorderMode: boolean = false
 
+  // For authentication with Google
+  private showGoogleAuth: boolean = false
+
   constructor(
     public _appConfig: AppConfig,
     private _ig: ImageGroupService, // this will be confusing for a bit. ImageGroupService deals with all the old image group service stuff, and some state management
@@ -254,10 +257,12 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         }
         else {
           // TO DO: If user has agreed, we should trigger download directly
+          this.showGoogleAuth = true
         }
       }
 
       else {
+        console.log('The export type is 222: ', exportType)
         // Keep this until terms and conditions modal completely replace show ppt modal
         // we will need a new way to know whether or not the user is authorized to download - for now, I will always enable them
         if (this.ig.id) {
@@ -270,6 +275,14 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       // show login required modal if they're not logged in
       this.showLoginModal = true;
     }
+  }
+
+  /**
+   * Handler for Google Auth modal closing
+   * - Maybe this is where we need to call the loading state after successful google authentication 
+   */
+  private closeGoogleAuth(event: any): void {
+    this.showGoogleAuth = false;
   }
 
   /**

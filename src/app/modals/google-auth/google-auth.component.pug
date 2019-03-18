@@ -1,0 +1,14 @@
+.modal.fade-in
+  .modal-dialog(role="dialog", (keydown.esc)="hideModal($event)")
+    .modal-content
+      .modal-body
+        .illustration
+          img(src="/assets/img/google-auth-illustration.png", alt="Google Auth Illustration", tabindex="0", aria-label="You can now export your Artstor image groups to Google Slides!", (keydown.shift.tab)="$event.stopPropagation(); $event.preventDefault(); focusLastElement()")
+        .info-text(tabindex="0")
+          div {{ 'IMAGE_GROUP_PAGE.GOOGLE_AUTH.INFO_TEXT' | translate }}
+        .auth-btn
+          .btn.btn-primary(tabindex="0", role="button") {{ 'IMAGE_GROUP_PAGE.GOOGLE_AUTH.BTN_TEXT' | translate }}
+        .permissions-info(tabindex="0", [innerHtml]="'IMAGE_GROUP_PAGE.GOOGLE_AUTH.PERMISSIONS_HTML' | translate")
+        button.close((click)="closeModal.emit($event)", tabindex="0", aria-label="Close", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()")
+          span(aria-hidden="true") &times;
+        
