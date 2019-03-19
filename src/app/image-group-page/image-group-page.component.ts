@@ -42,6 +42,9 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   public genImgGrpLink: boolean = false;
 
+  // For authentication with Google
+  public showGoogleAuth: boolean = false
+
   /** Options object passed to the asset-grid component */
   public actionOptions: any = {
     group: true,
@@ -59,9 +62,6 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private unaffiliatedUser: boolean = false
   /** Reorder: Modifies the layout */
   private reorderMode: boolean = false
-
-  // For authentication with Google
-  private showGoogleAuth: boolean = false
 
   constructor(
     public _appConfig: AppConfig,
@@ -240,6 +240,14 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   }
 
   /**
+   * Handler for Google Auth modal closing
+   * - Maybe this is where we need to call the loading state after successful google authentication
+   */
+  public closeGoogleAuth(event: any): void {
+    this.showGoogleAuth = false
+  }
+
+  /**
    * Decides which download modal should be shown
    * - If the user is not logged in -> login required modal
    * - If the user is logged in but has met download limit -> download limit modal
@@ -289,7 +297,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         // Keep this until terms and conditions modal completely replace show ppt modal
         // we will need a new way to know whether or not the user is authorized to download - for now, I will always enable them
         if (this.ig.id) {
-          this.showPptModal = true; 
+          this.showPptModal = true;
         } else {
           this.showDownloadLimitModal = true;
         }
@@ -298,14 +306,6 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       // show login required modal if they're not logged in
       this.showLoginModal = true;
     }
-  }
-
-  /**
-   * Handler for Google Auth modal closing
-   * - Maybe this is where we need to call the loading state after successful google authentication 
-   */
-  private closeGoogleAuth(event: any): void {
-    this.showGoogleAuth = false
   }
 
   private handleTCModalClose(event: any): void {

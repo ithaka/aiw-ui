@@ -15,7 +15,6 @@ export class GoogleAuthComponent implements OnInit, AfterViewInit {
   @Output()
   public closeModal: EventEmitter<any> = new EventEmitter();
 
-
   constructor(
     private _angulartics: Angulartics2,
     private _dom: DomUtilityService,

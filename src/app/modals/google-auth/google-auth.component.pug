@@ -1,5 +1,5 @@
 .modal.fade-in
-  .modal-dialog(role="dialog", (keydown.esc)="hideModal($event)")
+  .modal-dialog(role="dialog", (keydown.esc)="closeModal.emit($event)")
     .modal-content
       .modal-body
         .illustration
@@ -11,4 +11,3 @@
         .permissions-info(tabindex="0", [innerHtml]="'IMAGE_GROUP_PAGE.GOOGLE_AUTH.PERMISSIONS_HTML' | translate")
         button.close((click)="closeModal.emit($event)", tabindex="0", aria-label="Close", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()")
           span(aria-hidden="true") &times;
-        
