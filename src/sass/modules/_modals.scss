@@ -74,6 +74,10 @@
   .google-permissions-link {
     color: $color-gray-6;
     text-decoration: underline;
+
+    &:hover {
+      color: darken($color-gray-6, 30%);
+    }
   }
 }
 

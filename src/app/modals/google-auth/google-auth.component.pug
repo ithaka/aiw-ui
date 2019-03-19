@@ -8,6 +8,6 @@
           div {{ 'IMAGE_GROUP_PAGE.GOOGLE_AUTH.INFO_TEXT' | translate }}
         .auth-btn
           .btn.btn-primary(tabindex="0", role="button") {{ 'IMAGE_GROUP_PAGE.GOOGLE_AUTH.BTN_TEXT' | translate }}
-        .permissions-info(tabindex="0", [innerHtml]="'IMAGE_GROUP_PAGE.GOOGLE_AUTH.PERMISSIONS_HTML' | translate")
+        .permissions-info([innerHtml]="'IMAGE_GROUP_PAGE.GOOGLE_AUTH.PERMISSIONS_HTML' | translate")
         button.close((click)="closeModal.emit($event)", tabindex="0", aria-label="Close", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()")
           span(aria-hidden="true") &times;

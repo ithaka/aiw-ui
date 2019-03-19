@@ -31,12 +31,11 @@
             line-height: 1.4;
             margin: auto;
             text-align: center;
-            padding-bottom: 3em;
         }
 
         .auth-btn {
             text-align: center;
-            padding-bottom: 3em;
+            padding: 3em 0;
 
             .btn{
                 text-transform: uppercase;
@@ -56,6 +55,7 @@
             font-size: 12px;
             background-color: $color-gray-2;
             color: $color-gray-6;
+            border-top: 1px solid $color-gray-4;
             border-radius: 0px 0px 4px 4px;
         }
 
