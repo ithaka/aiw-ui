@@ -17,7 +17,6 @@ import { ROUTES } from './app.routes';
 // UI modules
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Angulartics2Module, Angulartics2Settings } from 'angulartics2'
-import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxTagInputModule } from 'ngx-tag-autocomplete';
