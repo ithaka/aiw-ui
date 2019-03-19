@@ -1,6 +1,6 @@
 {
   "name": "avatar",
-  "version": "1.12.48",
+  "version": "1.12.55",
   "description": "Front End for the Artstor Digital Library",
   "author": "Artstor Team Air",
   "license": "MIT",
@@ -17,6 +17,7 @@
     "dev": "ng serve",
     "dev:https": "ng serve --ssl true",
     "dev:ssl": "ng serve --ssl true",
+    "dev:ssl:custom": "ng serve --ssl --ssl-key ssl/private.key --ssl-cert ssl/private.crt",
     "sahara": "ng serve --host local.sahara.test.artstor.org",
     "deploy:test": "npm run bump:patch && git push test stage:master",
     "deploy:test:patch": "npm run bump:patch && git push test stage:master",

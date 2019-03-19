@@ -49,13 +49,11 @@
 }
 
 .item-last-updated {
-  width: 272px;
+  width: 100%;
   height: 15px;
   font-family: Verdana;
   font-size: 12px;
   font-weight: normal;
-  font-style: normal;
-  font-stretch: normal;
   line-height: normal;
   letter-spacing: normal;
   color: $color-gray-5;
@@ -190,7 +188,7 @@
         white-space: pre-wrap;
 
         label {
-          
+
           font-size: 14px;
           line-height: 14px;
           margin-bottom: 8px;

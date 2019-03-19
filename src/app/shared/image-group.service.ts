@@ -4,7 +4,7 @@ import { Router } from '@angular/router'
 
 import { Observable, BehaviorSubject } from 'rxjs'
 
-import { AuthService } from './../shared/auth.service'
+import { AuthService, AssetService, ImageGroup } from './../shared'
 import { ImageGroupDescription } from './../shared'
 
 /**
@@ -28,9 +28,9 @@ export class ImageGroupService {
   private assetsSource = new BehaviorSubject<any>(this.assetsValue);
   public assets = this.assetsSource.asObservable();
 
-  public igDownloadTrigger: EventEmitter<any> = new EventEmitter();
+  public igDownloadTrigger: EventEmitter<string> = new EventEmitter();
 
-  constructor(private _router: Router, private http: HttpClient, private _auth: AuthService ){
+  constructor(private _router: Router, private http: HttpClient, private _auth: AuthService, private _assets: AssetService ){
     this.baseUrl = this._auth.getUrl();
   }
 
@@ -66,7 +66,68 @@ export class ImageGroupService {
     this.igDownloadTrigger.emit();
   }
 
-  public triggerIgExport(): void {
-    console.log('triggerIgExport called!');
+  public triggerPPTExport(): void {
+    this.igDownloadTrigger.emit('PPT');
   }
+
+  public triggerZIPExport(): void {
+    this.igDownloadTrigger.emit('ZIP');
+  }
+
+  public triggerGoogleSlides(): void {
+    this.igDownloadTrigger.emit('GoogleSlides');
+  }
+
+  /** Gets the link at which the resource can be downloaded. Will be set to the "accept" button's download property */
+  public getDownloadLink(group: ImageGroup, zip ?: boolean): Promise<any> {
+    let header = new HttpHeaders().set('content-type', 'application/x-www-form-urlencoded')
+    let options = { headers: header, withCredentials: true }
+    let useLegacyMetadata: boolean = true
+    let url = this._auth.getHostname() + '/api/group/export'
+    let format: string
+    let data: any
+
+    if (!zip) {
+      format = 'pptx'
+    } else {
+      format = 'zip'
+    }
+
+    /**
+     * We're using this as an auth check - instead of simply using all of the group.items strings and calling for downloads,
+     *  which was allowing restricted assets to be downloaded, we first ask for each assets' thumbnail, which will ensure
+     *  that only assets which the user has access to are returned
+     */
+    return this._assets.getAllThumbnails(group.items, group.id)
+    .then((thumbnails) => {
+      let imgDownloadStrings: string[] = []
+
+      thumbnails.forEach((thumbnail, index) => {
+        let imgStr: string = [(index + 1), thumbnail.objectId, '1024x1024'].join(':')
+        thumbnail.status == 'available' && imgDownloadStrings.push(imgStr)
+      })
+
+      data = {
+          igName: group.name,
+          images: imgDownloadStrings.join(',')
+      }
+
+      return data
+    })
+    .then((data) => {
+      // Return request that provides file URL
+      return this.http
+        .post(url + '/' + format + '/' + group.id + '/' + useLegacyMetadata, this._auth.formEncode(data), options)
+        .toPromise()
+    })
+    .then((res) => {
+      // Make authorization call to increment download count after successful response is received
+      this.http
+      .get(url + '/auth/' + group.id + '/true', options)
+      .toPromise()
+
+      return res
+    })
+  }
+  
 }

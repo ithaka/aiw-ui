@@ -58,7 +58,7 @@ import { BrowsePage, LibraryComponent, AdlCollectionFilterPipe, IgGroupFilterPip
 import { AssetPage, AgreeModalComponent, ArtstorViewerComponent } from './asset-page'
 import { AccountPage } from './account-page'
 import { AssociatedPage } from './associated-page'
-import { ImageGroupPage, PptModalComponent } from './image-group-page'
+import { ImageGroupPage, PptModalComponent, TermsAndConditionsComponent } from './image-group-page'
 import { Login } from './login'
 import { NoContent } from './no-content'
 import { LinkPage } from './link-page'
@@ -83,7 +83,8 @@ import {
   ServerErrorModal,
   SessionExpireModal,
   ShareIgLinkModal,
-  ShareLinkModal
+  ShareLinkModal,
+  GoogleAuthComponent
 } from './modals'
 import { CollectionBadgeComponent } from './collection-badge'
 import { UploaderComponent } from './uploader/uploader.component'
@@ -228,9 +229,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     ShareIgLinkModal,
     GenerateCitation,
     ShareLinkModal,
+    GoogleAuthComponent,
     SkyBannerComponent,
     TagComponent,
     TagsListComponent,
+    TermsAndConditionsComponent,
     ThumbnailComponent,
     ToastComponent,
     PromptComponent,

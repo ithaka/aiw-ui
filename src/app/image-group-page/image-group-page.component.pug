@@ -13,6 +13,8 @@ div
           = " "
           | Unable to load the thumbnails for this group.
 
+ang-google-auth(*ngIf="showGoogleAuth", (closeModal)="closeGoogleAuth($event)")
+ang-terms-and-conditions(*ngIf="showTermsConditions", [exportType]="exportType", (closeModal)="handleTCModalClose($event)", [ig]="ig")
 ang-ig-download-modal(*ngIf="showPptModal", (closeModal)="showPptModal = false", [ig]="ig")
 ang-download-limit-modal(*ngIf="showDownloadLimitModal", (closeModal)="showDownloadLimitModal = false", [ig]="ig")
 ang-login-req-modal(*ngIf="showLoginModal", (closeModal)="showLoginModal = false")

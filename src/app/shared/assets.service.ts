@@ -364,8 +364,21 @@ export class AssetService {
      * @param assetIds the ids for which you need the thumbnails
      * @param igId passed if you are viewing an image group, which may contain pc assets and therefore access is checked against user's access to group
      */
-    public getAllThumbnails(assetIds: string[], igId?: string): Promise<Thumbnail[]> {
-
+    public getAllThumbnails(groupItems: any[], igId?: string): Promise<Thumbnail[]> {
+        let assetIds: string [] = []
+        /**
+         * 2019/3/14
+         * Check for new item format (object), and convert to strings for items service
+         */
+        if (groupItems[0] && groupItems[0].id) {
+            for (let i = 0; i < groupItems.length; i++) {
+            if (groupItems[i] && groupItems[i].id) {
+                assetIds.push(groupItems[i].id)
+            }
+            }
+        } else {
+            assetIds = groupItems
+        }
         // return new Promise
         let maxCount = 100
         return new Promise( (resolve, reject) => {
@@ -614,16 +627,19 @@ export class AssetService {
         /**
          * Include only availble assets to the resultsObj thumbnails array, set aside restricted assets
          */
-        if (resultObj.thumbnails){
+        if (resultObj.thumbnails) {
             // let thumbnailsOrignalLength: number = resultObj.thumbnails.length
             resultObj['restricted_thumbnails'] = []
             resultObj.thumbnails = resultObj.thumbnails.filter( thumbnail => {
-                if (thumbnail.status === 'not-available') {
-                    resultObj['restricted_thumbnails'].push(thumbnail)
-                    return false
-                } else {
-                    return true
-                }
+
+              if (typeof(thumbnail) === 'undefined') {
+                return false
+              } else if (thumbnail.status && thumbnail.status === 'not-available') {
+                resultObj['restricted_thumbnails'].push(thumbnail)
+                return false
+              } else {
+                return true
+              }
             })
         }
         // Update results thumbnail array

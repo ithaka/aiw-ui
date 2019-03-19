@@ -211,7 +211,8 @@ export class NavMenu implements OnInit, OnDestroy {
     putGroup.items = putGroup.items.filter((item) => {
       assetFound = false
       this._assets.getSelectedAssets().forEach((asset) => {
-        if (asset.objectId == item) {
+        // Support both legacy and new Group items format
+        if (asset.objectId === item || asset.objectId === item.id) {
           assetFound = true
           return
         }

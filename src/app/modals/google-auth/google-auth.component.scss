@@ -1,0 +1,66 @@
+@import '../../../sass/core/variables';
+
+.modal {
+    display: block;
+
+    .modal-body{
+        width: 600px;
+        border-radius: 4px;
+        background-color: #ffffff;
+        padding: 0;
+        position: relative;
+
+        .illustration {
+            padding: 3em 0px;
+            img {
+                display: block;
+                width: 318px;
+                margin: auto;
+            }
+        }
+
+        .info-text {
+            width: 444px;
+            font-family: Verdana;
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 1.4;
+            margin: auto;
+            text-align: center;
+            padding-bottom: 3em;
+        }
+
+        .auth-btn {
+            text-align: center;
+            padding-bottom: 3em;
+
+            .btn{
+                text-transform: uppercase;
+                width: 231px;
+                height: 39px;
+                line-height: 39px;
+                text-align: center;
+                padding: 0;
+            }
+        }
+
+        .permissions-info {
+            text-align: center;
+            height: 43px;
+            line-height: 43px;
+            font-family: Verdana;
+            font-size: 12px;
+            background-color: $color-gray-2;
+            color: $color-gray-6;
+            border-radius: 0px 0px 4px 4px;
+        }
+
+        .close {
+            position: absolute;
+            right: 1.4em;
+            top: 1.4em;
+            color: $color-gray-5;
+            opacity: 1;
+        }
+    }
+}
