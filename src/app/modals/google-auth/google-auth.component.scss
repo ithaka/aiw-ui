@@ -3,6 +3,10 @@
 .modal {
     display: block;
 
+    .modal-content {
+      margin-top: 10em;
+    }
+
     .modal-body{
         width: 600px;
         border-radius: 4px;
