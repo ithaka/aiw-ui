@@ -47,7 +47,7 @@ import { DomUtilityService } from '../../shared'
     // Initialize and start image group tour
     public startTour() {
       this.startModalShow = false
-      this._ga.eventTrack.next({ action: 'beginTour', properties: { category: this._auth.getGACategory(), label: 'imageGroupTour' } })
+      this._ga.eventTrack.next({ properties: { event: 'beginTour', category: this._auth.getGACategory(), label: 'imageGroupTour' } })
 
         if (this.isBrowser) {
           this.driver = new Driver({

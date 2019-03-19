@@ -587,7 +587,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       }
       this.selectedAssets.length ? this.editMode = true : this.editMode = false
     } else if (asset.compound_media){ // Log GA event for opening a multi view asset from grid
-      this.angulartics.eventTrack.next({ action: 'multiViewItemOpen', properties: { category: this._auth.getGACategory(), label: asset.artstorid } });
+      this.angulartics.eventTrack.next({ properties: { event: 'multiViewItemOpen', category: this._auth.getGACategory(), label: asset.artstorid } });
     }
   }
 
