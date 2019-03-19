@@ -68,8 +68,13 @@
 }
 
 .modal-body {
-	padding: $basePadding;
-    background-color: $color-white;
+  padding: $basePadding;
+  background-color: $color-white;
+
+  .google-permissions-link {
+    color: $color-gray-6;
+    text-decoration: underline;
+  }
 }
 
 .modal-footer {
@@ -219,3 +224,5 @@ ang-new-ig-modal .modal-content {
   }
 
 }
+
+

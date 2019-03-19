@@ -83,7 +83,8 @@ import {
   ServerErrorModal,
   SessionExpireModal,
   ShareIgLinkModal,
-  ShareLinkModal
+  ShareLinkModal,
+  GoogleAuthComponent
 } from './modals'
 import { CollectionBadgeComponent } from './collection-badge'
 import { UploaderComponent } from './uploader/uploader.component'
@@ -228,6 +229,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ShareIgLinkModal,
     GenerateCitation,
     ShareLinkModal,
+    GoogleAuthComponent,
     SkyBannerComponent,
     TagComponent,
     TagsListComponent,

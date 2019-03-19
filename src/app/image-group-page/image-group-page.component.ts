@@ -42,6 +42,9 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   public genImgGrpLink: boolean = false;
 
+  // For authentication with Google
+  public showGoogleAuth: boolean = false
+
   /** Options object passed to the asset-grid component */
   public actionOptions: any = {
     group: true,
@@ -237,6 +240,14 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   }
 
   /**
+   * Handler for Google Auth modal closing
+   * - Maybe this is where we need to call the loading state after successful google authentication
+   */
+  public closeGoogleAuth(event: any): void {
+    this.showGoogleAuth = false
+  }
+
+  /**
    * Decides which download modal should be shown
    * - If the user is not logged in -> login required modal
    * - If the user is logged in but has met download limit -> download limit modal
@@ -248,12 +259,37 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     if (this.user.isLoggedIn) {
       // If we specify an export type, trigger terms and conditions modal if user hasn't agreed
       if (exportType && exportType.length) {
+        this.exportType = exportType;
         if (!this._storage.getSession('termAgreed')) {
           this.showTermsConditions = true;
-          this.exportType = exportType;
         }
         else {
-          // TO DO: If user has agreed, we should trigger download directly
+          let downloadLink, zipDownloadLink = ''
+          // If user has agreed, we should trigger download directly
+          switch (exportType) {
+            case 'PPT': {
+              // Perform PPT download action
+              this.getPPT()
+              break
+            }
+            case 'GoogleSlides': {
+              if(this._storage.getSession('GAuthed')) {
+                // Export to GS and show loading state
+                console.log('Export to GS and show loading state')
+              } else {
+                this.showGoogleAuth = true
+              }
+              break
+            }
+            case 'ZIP': {
+              // Perform ZIP download action
+              this.getZIP()
+              break
+            }
+            default: {
+                break
+            }
+          }
         }
       }
 
@@ -261,7 +297,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         // Keep this until terms and conditions modal completely replace show ppt modal
         // we will need a new way to know whether or not the user is authorized to download - for now, I will always enable them
         if (this.ig.id) {
-          this.showPptModal = true; 
+          this.showPptModal = true;
         } else {
           this.showDownloadLimitModal = true;
         }
@@ -270,6 +306,63 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       // show login required modal if they're not logged in
       this.showLoginModal = true;
     }
+  }
+
+  private handleTCModalClose(event: any): void {
+    this.showTermsConditions = false
+
+    switch (event) {
+      case 'PPT': {
+        // Perform PPT download action
+        this.getPPT()
+        break
+      }
+      case 'GoogleSlides': {
+        if(this._storage.getSession('GAuthed')) {
+          // Export to GS and show loading state
+          console.log('Export to GS and show loading state')
+        } else {
+          this.showGoogleAuth = true
+        }
+        break
+      }
+      case 'ZIP': {
+        // Perform ZIP download action
+        this.getZIP()
+        break
+      }
+      default: {
+          break
+      }
+    }
+  }
+
+  private getPPT(): void{
+    console.log('get ppt called')
+    let downloadLink: string = ''
+    this._ig.getDownloadLink(this.ig)
+      .then( data => {
+        if (data.path) {
+          downloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/')
+        }
+      })
+      .catch( error => {
+        console.error(error)
+      })
+  }
+
+  private getZIP(): void{
+    console.log('get zip called')
+    let zipDownloadLink: string =''
+    this._ig.getDownloadLink(this.ig, true)
+      .then( data => {
+        if (data.path) {
+          zipDownloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/');
+        }
+      })
+      .catch( error => {
+        console.error(error)
+      })
   }
 
   /**
