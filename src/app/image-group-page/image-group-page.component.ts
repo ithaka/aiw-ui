@@ -1,15 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Subscription }   from 'rxjs'
 import { map, take } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetService, AuthService } from './../shared'
-import { ImageGroup, ImageGroupDescription, ImageGroupService, GroupService } from './../shared'
-import { TitleService } from '../shared/title.service'
 import { AppConfig } from '../app.service'
-import { ScriptService } from '../shared/script.service'
-import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
+import { AssetService, AuthService, SlidesService, TitleService, ScriptService,
+ImageGroup, ImageGroupDescription, ImageGroupService, GroupService } from './../shared'
 
 @Component({
   selector: 'ang-image-group',
@@ -17,7 +15,7 @@ import { ArtstorStorageService } from '../../../projects/artstor-storage/src/pub
   templateUrl: './image-group-page.component.pug'
 })
 
-export class ImageGroupPage implements OnInit, OnDestroy {
+export class ImageGroupPage implements OnInit, AfterViewInit, OnDestroy {
   public ig: ImageGroup = <ImageGroup>{};
 
   /** controls when PPT agreement modal is or is not shown */
@@ -73,12 +71,22 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private _title: TitleService,
     private _storage: ArtstorStorageService,
-    private scriptService: ScriptService
+    private scriptService: ScriptService,
+    public slides: SlidesService
+
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
 
+  ngAfterViewInit() {
+    // Load gapi script. On complete, initialize as an API client.
+    this.scriptService.load('gapi').then(() => {
+      this.slides.loadClientInit()
+    })
+  }
+
   ngOnInit() {
+
     if (this.unaffiliatedUser) {
       this.showAccessDeniedModal = true
       return

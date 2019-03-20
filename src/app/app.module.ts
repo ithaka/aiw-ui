@@ -104,7 +104,8 @@ import {
   TypeIdPipe,
   ScriptService,
   PersonalCollectionService,
-  AccountService
+  AccountService,
+  SlidesService
 } from './shared'
 import { MetadataService } from './_services'
 
@@ -139,6 +140,7 @@ const APP_PROVIDERS = [
   LogService,
   ImageGroupService,
   ScriptService,
+  SlidesService,
   AssetFiltersService,
   TagFiltersService,
   TagsService,
@@ -248,10 +250,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     Ng2CompleterModule,
     InfiniteScrollModule,
     FileUploadModule,
-    RouterModule.forRoot(ROUTES, { 
+    RouterModule.forRoot(ROUTES, {
         useHash: true,
         preloadingStrategy: PreloadAllModules,
-        initialNavigation: 'enabled' 
+        initialNavigation: 'enabled'
       }),
     DeviceDetectorModule.forRoot(),
     Angulartics2Module.forRoot(),

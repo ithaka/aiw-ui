@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, 
 import { Observable } from 'rxjs';
 import { Angulartics2 } from 'angulartics2';
 
-import { AssetService, AuthService, ImageGroup, DomUtilityService } from './../../shared';
+import { AssetService, AuthService, ImageGroup, DomUtilityService, SlidesService } from './../../shared';
 import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/public_api';
 
 @Component({
@@ -15,7 +15,11 @@ export class GoogleAuthComponent implements OnInit, AfterViewInit {
   @Output()
   public closeModal: EventEmitter<any> = new EventEmitter();
 
+  @Output()
+  public isSignedIn: boolean = false
+
   constructor(
+    public slides: SlidesService,
     private _angulartics: Angulartics2,
     private _dom: DomUtilityService,
     private _storage: ArtstorStorageService
@@ -33,6 +37,10 @@ export class GoogleAuthComponent implements OnInit, AfterViewInit {
   public focusLastElement() {
     let htmlelement: HTMLElement = <HTMLElement>this._dom.bySelector('.close')
     htmlelement.focus()
+  }
+
+  public signIn() {
+    this.slides.gAuthSignIn()
   }
 
 }
