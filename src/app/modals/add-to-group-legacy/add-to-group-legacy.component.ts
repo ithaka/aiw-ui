@@ -173,7 +173,7 @@ export class AddToGroupLegacyModal implements OnInit, OnDestroy {
               this.serviceResponse.success = true
               this._assets.clearSelectMode.next(true)
               // Add to Group GA event 
-              this._angulartics.eventTrack.next({ action: 'addToGroup', properties: { category: this._auth.getGACategory(), label: this.router.url }})
+              this._angulartics.eventTrack.next({ properties: { event: 'addToGroup', category: this._auth.getGACategory(), label: this.router.url }})
             },
             (err) => { 
               console.error(err); this.serviceResponse.failure = true;

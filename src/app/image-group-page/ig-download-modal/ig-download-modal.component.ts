@@ -60,7 +60,7 @@ export class PptModalComponent implements OnInit, AfterViewInit {
   }
 
   trackDownload(downloadType: string): void {
-    this._angulartics.eventTrack.next({ action: 'downloadGroup' + downloadType, properties: { category: this._auth.getGACategory(), label: this.ig.id }})
+    this._angulartics.eventTrack.next({ properties: { event: 'downloadGroup' + downloadType, category: this._auth.getGACategory(), label: this.ig.id }})
   }
 
   private getPPT() {
