@@ -70,13 +70,6 @@ export class LoginFormComponent implements OnInit {
 
   loadForUser(data: any) {
     if (data && data.user) {
-      data.user.hasOwnProperty('username') && this.angulartics.setUsername.next(data.user.username);
-      data.user.hasOwnProperty('institutionId') && this.angulartics.setUserProperties.next({ institutionId: data.user.institutionId });
-      data.user.hasOwnProperty('isLoggedIn') && this.angulartics.setUserProperties.next({ isLoggedIn: data.user.isLoggedIn });
-      data.user.hasOwnProperty('shibbolethUser') && this.angulartics.setUserProperties.next({ shibbolethUser: data.user.shibbolethUser });
-      data.user.hasOwnProperty('dept') && this.angulartics.setUserProperties.next({ dept: data.user.dept });
-      data.user.hasOwnProperty('ssEnabled') && this.angulartics.setUserProperties.next({ ssEnabled: data.user.ssEnabled })
-
       if (data.isRememberMe || data.remoteaccess) {
         data.user.isLoggedIn = true
       }
@@ -160,7 +153,7 @@ export class LoginFormComponent implements OnInit {
       this.loginCall = (user) => { return this._auth.linkSamlUser(user)}
     }
 
-    this.angulartics.eventTrack.next({ action: 'remoteLogin', properties: { category: this._auth.getGACategory(), label: 'attempt' }});
+    this.angulartics.eventTrack.next({ properties: { event: 'remoteLogin', category: this._auth.getGACategory(), label: 'attempt' }});
 
     this.loginCall(user)
       .then(
@@ -176,7 +169,7 @@ export class LoginFormComponent implements OnInit {
             // In some situations the service might return an ip auth object even tho login was unsuccessful
             this.errorMsg = 'There was an issue with your account, please contact support.';
           } else {
-            this.angulartics.eventTrack.next({ action: 'remoteLogin', properties: { category: this._auth.getGACategory(), label: 'success' }});
+            this.angulartics.eventTrack.next({ properties: { event: 'remoteLogin', category: this._auth.getGACategory(), label: 'success' }});
             this.loadForUser(data);
             this._auth.resetIdleWatcher() // Start Idle on login
           }
@@ -188,7 +181,7 @@ export class LoginFormComponent implements OnInit {
         this.errorMsg = this.getLoginErrorMsg(err)
         if (!this.errorMsg){
           this.getLoginError(user)
-          this.angulartics.eventTrack.next({ action: 'remoteLogin', properties: { category: this._auth.getGACategory(), label: 'failed' }});
+          this.angulartics.eventTrack.next({ properties: { event: 'remoteLogin', category: this._auth.getGACategory(), label: 'failed' }});
         }
         // Shibboleth linking error
         if (errObj && errObj.code) {

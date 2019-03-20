@@ -46,6 +46,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   public multiviewItemCount: number = 0
   public isMultiView: boolean = false
   public isDowngradedMedia: boolean = false
+  public isDetailView: boolean = false
 
   private constraints: any = {}
 
@@ -74,7 +75,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
       this.multiviewItemCount = this.thumbnail['compoundmediaCount']
     }
     // Compound 'multiview' assets use cleanedAsset.thumbnailUrls[0], assigned in asset-search
-    if (this.thumbnail['compound_media']) {
+    if (this.verifyCompoundMedia(this.thumbnail)) {
       this.isMultiView = true
       this.thumbnail.thumbnailImgUrl = this.thumbnail['thumbnailUrls'][0]
       this.multiviewItemCount = JSON.parse(this.thumbnail['compound_media']).objects.length
@@ -91,6 +92,11 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     if (this.isMultiView && this.thumbnail.media && this.thumbnail.media.format === 'null') {
       this.isDowngradedMedia = true
     }
+
+    // Set isDetailView
+    if (this.thumbnail['zoom']) {
+      this.isDetailView = true
+    }
   }
 
   // Fires when the component input(s) (i.e largeThmbView) changes - Updates the thumbnailSize based on largeThmbView current value
@@ -106,10 +112,10 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     event.stopPropagation()
 
     if (urlParams[0] === '/associated') {
-      this.angulartics.eventTrack.next({ action: 'view associated images', properties: { label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
+      this.angulartics.eventTrack.next({ properties: { event: 'view associated images', label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
     }
     if (urlParams[0] === '/cluster') {
-      this.angulartics.eventTrack.next({ action: 'view cluster', properties: { label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
+      this.angulartics.eventTrack.next({ properties: { event: 'view cluster', label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
     }
     this.router.navigate(urlParams)
   }
@@ -139,4 +145,22 @@ export class ThumbnailComponent implements OnInit, OnChanges {
       this.thumbnailSize--
     }
   }
+
+  /**
+   * verifyCompoundMedia checks for a valid thumbnail['compound_media'] value
+   * before deciding if the asset is truly a mutiview asset
+   * @param thumb accepts
+   */
+  private verifyCompoundMedia(thumb): boolean {
+    if (thumb['compound_media']) {
+
+      if ( (typeof(thumb['compound_media']) === 'string' && thumb['compound_media'].length > 3) ||
+        (typeof(thumb['compound_media']) === 'object' && thumb['compound_media']['objects'])) {
+          return true
+      }
+    } else {
+      return false
+    }
+  }
+
 }

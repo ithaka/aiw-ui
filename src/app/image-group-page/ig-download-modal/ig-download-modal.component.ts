@@ -60,7 +60,7 @@ export class PptModalComponent implements OnInit, AfterViewInit {
   }
 
   trackDownload(downloadType: string): void {
-    this._angulartics.eventTrack.next({ action: 'downloadGroup' + downloadType, properties: { category: this._auth.getGACategory(), label: this.ig.id }})
+    this._angulartics.eventTrack.next({ properties: { event: 'downloadGroup' + downloadType, category: this._auth.getGACategory(), label: this.ig.id }})
   }
 
   private getPPT() {
@@ -133,7 +133,6 @@ export class PptModalComponent implements OnInit, AfterViewInit {
     return this._assets.getAllThumbnails(group.items, group.id)
     .then((thumbnails) => {
       let imgDownloadStrings: string[] = []
-
       thumbnails.forEach((thumbnail, index) => {
         let imgStr: string = [(index + 1), thumbnail.objectId, '1024x1024'].join(':')
         thumbnail.status == 'available' && imgDownloadStrings.push(imgStr)

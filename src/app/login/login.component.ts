@@ -85,9 +85,8 @@ export class Login implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.pipe(
       map(params => {
-        if (params && params['featureFlag']) {
-          this._flags[params['featureFlag']] = true
-        }
+        // Find feature flags applied on route
+        this._flags.readFlags(params)
       })).subscribe()
     )
 

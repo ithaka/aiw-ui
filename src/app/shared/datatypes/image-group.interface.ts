@@ -1,14 +1,4 @@
-import { Thumbnail } from './thumbnail.interface';
-
-export interface ImageGroupItem {
-  artstorid: string,
-  zoom?: {
-    viewerX: number,
-    viewerY: number,
-    pointWidth: number,
-    pointHeight: number
-  }
-}
+import { Thumbnail } from './thumbnail.interface'
 
 export interface ImageGroup {
   id?: string; // new ig property

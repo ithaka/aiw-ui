@@ -33,14 +33,14 @@ import { ImageGroup, FlagService, ImageGroupService } from './../'
     ngOnInit() {
       // Subscribe to Route Params
       this.subscriptions.push(
+        // Feature flag subscription
+        this._flags.flagUpdates.subscribe((flags) => {
+            this.exportReframeFlag = flags.exportReframe ? true : false
+        }),
+        // Read params
         this.route.params.subscribe((routeParams) => {
-          if (routeParams && routeParams['featureFlag']) {
-            this._flags[routeParams['featureFlag']] = true
-            this.exportReframeFlag = this._flags['exportReframe'] ? true : false
-  
-          } else {
-              this.exportReframeFlag = false
-          }
+          // Find feature flags applied on route
+          this._flags.readFlags(routeParams)
         })
       )
   

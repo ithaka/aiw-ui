@@ -31,7 +31,7 @@
         <div [class.aiw-hidden]="!isMultiView" class="asset-viewer__edge-arrows" id="imagePageButtons-{{ osdViewerId }}">
         <button class="btn btn--icon btn--prev" id="previousButton-{{ osdViewerId}}"><i class="icon icon-prev--white"></i></button><button class="btn btn--icon btn--next" id="nextButton-{{ osdViewerId}}"><i class="icon icon-next--white"></i></button>
         </div>
-        <div *ngIf="isMultiView" class="asset-viewer_multi-view-info">
+        <div *ngIf="isMultiView && assetCompareCount < 4" class="asset-viewer_multi-view-info">
         <b>{{ multiViewPage }}</b> of <b>{{ multiViewCount }}</b>
         <button *ngIf="hasMultiViewHelp()" (click)="multiViewHelp.emit()" class="help-icon">?</button>
         </div>

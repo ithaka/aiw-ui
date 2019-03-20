@@ -127,6 +127,7 @@ export class AssetFilters {
 
     // Read filters from URL
     this.subscriptions.push(
+
       this.route.params.pipe(map(routeParams => {
         this.term = routeParams['term'];
 
@@ -137,10 +138,8 @@ export class AssetFilters {
         // When params are adjusted, applied filters need to be cleared
         // this._filters.clearApplied();
 
-        // Find feature flags
-        if (routeParams && routeParams['featureFlag']){
-            this._flags[routeParams['featureFlag']] = true
-        }
+        // Find feature flags applied on route
+        this._flags.readFlags(routeParams)
 
         for (let paramName in routeParams) {
             if (this._filters.isFilterGroup(paramName)) {
@@ -254,7 +253,7 @@ export class AssetFilters {
       }
     }
 
-    this.angulartics.eventTrack.next({ action: 'filteredSearch', properties: { category: this._auth.getGACategory(), label: filterType } })
+    this.angulartics.eventTrack.next({ properties: { event: 'filteredSearch', category: this._auth.getGACategory(), label: filterType } })
 
     if (params['page']){
       params['page'] = this.pagination.page

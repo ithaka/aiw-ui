@@ -344,7 +344,7 @@ export class AssetService {
 
           let options = { withCredentials: true }
 
-          this.http.get(this._auth.getHostname() + '/api/v2/items?object_id=' + idsAsTerm, options).pipe(
+          this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options).pipe(
             map(res => {
                 let results = res
                 ig.thumbnails = results['items']
@@ -364,8 +364,21 @@ export class AssetService {
      * @param assetIds the ids for which you need the thumbnails
      * @param igId passed if you are viewing an image group, which may contain pc assets and therefore access is checked against user's access to group
      */
-    public getAllThumbnails(assetIds: string[], igId?: string): Promise<Thumbnail[]> {
-
+    public getAllThumbnails(groupItems: any[], igId?: string): Promise<Thumbnail[]> {
+        let assetIds: string [] = []
+        /**
+         * 2019/3/14
+         * Check for new item format (object), and convert to strings for items service
+         */
+        if (groupItems[0] && groupItems[0].id) {
+            for (let i = 0; i < groupItems.length; i++) {
+            if (groupItems[i] && groupItems[i].id) {
+                assetIds.push(groupItems[i].id)
+            }
+            }
+        } else {
+            assetIds = groupItems
+        }
         // return new Promise
         let maxCount = 100
         return new Promise( (resolve, reject) => {
@@ -379,7 +392,7 @@ export class AssetService {
                 let idsAsTerm: string = objectIdTerm + assetIds.slice(i, countEnd).join(objectIdTerm) // concat the query params
                 let url: string = this._auth.getHostname() + '/api/'
                 if (igId) {
-                    url += 'v1/group/' + igId + '/items?' + idsAsTerm
+                  url += 'v1/group/' + igId + '/items?' + idsAsTerm
                 } else {
                     url += 'v2/items?' + idsAsTerm
                 }
@@ -523,12 +536,12 @@ export class AssetService {
      */
     public getCategoryInfo(catId: string) {
         let options = { withCredentials: true };
-        
+
         return this.http
             .get(this._auth.getUrl() + '/v1/categorydesc/' + catId, options)
             .toPromise();
     }
-    
+
     /**
      * Wrapper function for HTTP call to get collections. Used by home component
      * @param type Can either be 'ssc' or 'institution'
@@ -614,16 +627,19 @@ export class AssetService {
         /**
          * Include only availble assets to the resultsObj thumbnails array, set aside restricted assets
          */
-        if (resultObj.thumbnails){
+        if (resultObj.thumbnails) {
             // let thumbnailsOrignalLength: number = resultObj.thumbnails.length
             resultObj['restricted_thumbnails'] = []
             resultObj.thumbnails = resultObj.thumbnails.filter( thumbnail => {
-                if (thumbnail.status === 'not-available') {
-                    resultObj['restricted_thumbnails'].push(thumbnail)
-                    return false
-                } else {
-                    return true
-                }
+
+              if (typeof(thumbnail) === 'undefined') {
+                return false
+              } else if (thumbnail.status && thumbnail.status === 'not-available') {
+                resultObj['restricted_thumbnails'].push(thumbnail)
+                return false
+              } else {
+                return true
+              }
             })
         }
         // Update results thumbnail array
@@ -759,6 +775,7 @@ export class AssetService {
      * @param igId Image group id for which to retrieve thumbnails
      */
     private loadIgAssets(igId: string) {
+
         // Reset No IG observable
         this.noIGSource.next(false)
         this.noAccessIGSource.next(false)
@@ -767,13 +784,14 @@ export class AssetService {
         let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1
 
         let requestString: string = [this._auth.getUrl(), 'imagegroup', igId, 'thumbnails', startIndex, this.urlParams.size, this.activeSort.index].join('/')
-        this._groups.get(igId, this.urlParams.featureFlag && this.urlParams.featureFlag === 'detailViews' ? true : false)
+        this._groups.get(igId)
             .toPromise()
             .then((data) => {
+
                 if (!Object.keys(data).length) {
                     throw new Error('No data in image group thumbnails response')
                 }
-                
+
                 data.total = data.items.length
 
                 // Fetch the asset(s) via items call only if the IG has atleast one asset
@@ -781,14 +799,13 @@ export class AssetService {
                     let pageStart = (this.urlParams.page - 1) * this.urlParams.size
                     let pageEnd = this.urlParams.page * this.urlParams.size
 
-                    let itemIdsArray: string[] = []
-                    if(this.urlParams.featureFlag && this.urlParams.featureFlag === 'detailViews') {
-                        itemIdsArray = data.items.map( (item) => {
-                            return item.id
-                        })
-                    } else {
-                        itemIdsArray = data.items
-                    }
+                    let itemIdsArray: any[]
+                    itemIdsArray = data.items
+
+                    // itemsIdsArray needs to be an array strings for search call
+                    itemIdsArray = itemIdsArray.map(item => {
+                      return (typeof(item) === 'string') ? item : item.id
+                    })
 
                     // Maintain param string in a single place to avoid debugging thumbnails lost to a bad param
                     const ID_PARAM = 'object_ids='
@@ -798,33 +815,31 @@ export class AssetService {
 
                     this.http.get(this._auth.getHostname() + '/api/v1/group/' + igId + '/items?' + ID_PARAM + idsAsTerm, options).pipe(
                       map((res) => {
-                            let results = res
-                            data.thumbnails = results['items']
+                        let results = res
+                        data.thumbnails = results['items'] // V1 ?items from search
+                        // For multi-view items, make the thumbnail urls and update the array
+                        data.thumbnails = data.items.map((item) => {
 
-                            // For multi-view items, make the thumbnail urls and update the array
-                            data.thumbnails = data.thumbnails.map((thumbnail) => {
-                              // Attach zoom object from items to the relevant thumbnail, to be used in asset grid
-                              for(let item of data.items){
-                                if(item['zoom'] && item['id'] === thumbnail['objectId']){
-                                    thumbnail['zoom'] = item['zoom']
+                          // Attach zoom object from items to the relevant thumbnail, to be used in asset grid
+                          for(let thumbnail of data.thumbnails) {
 
-                                    // Setting dummy values untill we get correct values from the backend
-                                    // thumbnail['zoom'] = {
-                                    //     "viewerX": 0.49138915291172104,
-                                    //     "viewerY": 0.3638532628030086,
-                                    //     "pointWidth": 0.44454747774480715,
-                                    //     "pointHeight": 0.375
-                                    // }
-                                }
+                            thumbnail = Object.assign({}, thumbnail)  // Make copy to avoid modifying subsequent items
+
+                            if (item['id'] === thumbnail['objectId']) {
+                              if(item['zoom']){
+                                  thumbnail['zoom'] = item['zoom']
                               }
                               if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
                                 thumbnail.thumbnailImgUrl = this._auth.getThumbHostname(true) + thumbnail.thumbnailImgUrl
                               }
-                              return thumbnail
-                            })
 
-                            // Set the allResults object
-                            this.updateLocalResults(data)
+                              return thumbnail
+                            }
+                          }
+                        })
+
+                        // Set the allResults object
+                        this.updateLocalResults(data)
                       }, (error) => {
                         // Pass portion of the data we have
                         this.updateLocalResults(data)
@@ -838,7 +853,6 @@ export class AssetService {
 
             })
             .catch((error) => {
-                // console.error(error)
                 if (error.status === 404){
                     this.noIGSource.next(true)
                 }
@@ -889,32 +903,9 @@ export class AssetService {
                     console.error(error)
                     this.allResultsSource.next({'error': error})
             });
+
     }
 
-//     /**
-//      * Call to API which returns an asset, given an encrypted_id
-//      * @param token The encrypted token that you want to know the asset id for
-//      */
-//     public decryptToken(token: string, source?: string): Observable<any> {
-//         let header
-//         let options
-//         let query: HttpParams = new HttpParams()
-//         query.set('encrypted_id', token)
-//         source && query.set('source', source)
-
-//         header = new HttpHeaders({ withCredentials: 'true', fromKress : 'true' })
-
-//         options = { headers: header, params: query } // Create a request option
-
-//         return this.http.get(this._auth.getHostname() + "/api/v1/items/resolve?encrypted_id=" + token, options)
-//         .map((res) => {
-//             let jsonRes = res
-//             if (jsonRes && jsonRes['success'] && jsonRes['item']) {
-//                 return jsonRes
-//             }
-//             else { throw new Error("No success or item found on response object") }
-//         })
-//   }
 }
 
 export interface categoryName {

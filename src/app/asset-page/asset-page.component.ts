@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, HostListener, ElementRef } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
-import { DomSanitizer, SafeUrl, Meta } from '@angular/platform-browser'
+import { Meta } from '@angular/platform-browser'
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
@@ -110,15 +110,12 @@ export class AssetPage implements OnInit, OnDestroy {
     private showCopyUrl: boolean = false
     private showEditDetails: boolean = false
     private generatedImgURL: string = ''
-    private generatedBlobURL: SafeUrl | string = '' // A Blob File
     public downloadViewLink: string = '' // IIIF View Link
-    public downloadViewAsBlob: boolean = false
     private generatedFullURL: string = ''
     // Used for agree modal input, changes based on selection
     private downloadUrl: any
     private downloadName: string
-    // Used for generated view blob url
-    private blobURL: string = ''
+
     private prevRouteParams: any = []
 
     private quizMode: boolean = false;
@@ -190,7 +187,6 @@ export class AssetPage implements OnInit, OnDestroy {
         private angulartics: Angulartics2,
         private _title: TitleService,
         private scriptService: ScriptService,
-        private _sanitizer: DomSanitizer,
         _fb: FormBuilder,
         private _storage: ArtstorStorageService,
         private _dom: DomUtilityService,
@@ -281,16 +277,14 @@ export class AssetPage implements OnInit, OnDestroy {
         );
 
         this.subscriptions.push(
+            this._flags.flagUpdates.subscribe((flags) => {
+                this.relatedResFlag = flags.relatedResFlag ? true : false
+                this.detailViewsFlag = flags.detailViews ? true : false
+            }),
             this.route.params.subscribe((routeParams) => {
                 this.assetGroupId = routeParams['groupId']
                 // Find feature flags
-                if (routeParams && routeParams['featureFlag']) {
-                    this._flags[routeParams['featureFlag']] = true
-                    this.relatedResFlag = this._flags['related-res-hack'] ? true : false
-                    this.detailViewsFlag = this._flags['detailViews'] ? true : false
-                } else {
-                    this.relatedResFlag = false
-                }
+                this._flags.readFlags(routeParams)
 
                 if (routeParams['encryptedId']) {
                     this.encryptedAccess = true
@@ -516,13 +510,13 @@ export class AssetPage implements OnInit, OnDestroy {
             this.assetIds = [this.assetIds[0]]
             this.indexZoomMap = [this.indexZoomMap[0]]
         } else if (Array.isArray(this.assets[0].tileSource)){ // Log GA event for opening a multi view item in Fullscreen
-            this.angulartics.eventTrack.next({ action: 'multiViewItemFullscreen', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
+            this.angulartics.eventTrack.next({ properties: { event: 'multiViewItemFullscreen', category: this._auth.getGACategory(), label: this.assets[0].id } });
         }
         else {
             // Make sure we only send one ga event when going to fullscreen mode
             if (this.isFullscreen !== isFullscreen) {
                 // Add Google Analytics tracking to "fullscreen" button
-                this.angulartics.eventTrack.next({ action: 'Enter Fullscreen', properties: { label: this.assetIds[0] } })
+                this.angulartics.eventTrack.next({ properties: { event: 'Enter Fullscreen', label: this.assetIds[0] } })
             }
         }
         this.isFullscreen = isFullscreen
@@ -557,14 +551,14 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadView(): void {
-        this.downloadUrl = (this.isMSAgent || !this.downloadViewAsBlob) ? this.downloadViewLink : this.generatedBlobURL
+        this.downloadUrl = this.downloadViewLink
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
     }
 
     // Track download file
     trackDownloadImage(): void {
-        this.angulartics.eventTrack.next({ action: 'downloadAsset', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
+        this.angulartics.eventTrack.next({ properties: { event: 'downloadAsset', category: this._auth.getGACategory(), label: this.assets[0].id } });
     }
 
     // Track download view
@@ -573,12 +567,12 @@ export class AssetPage implements OnInit, OnDestroy {
             eventType: 'artstor_image_download_view',
             item_id: this.assets[0].id
         })
-        this.angulartics.eventTrack.next({ action: 'downloadView', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
+        this.angulartics.eventTrack.next({ properties: { event: 'downloadView', category: this._auth.getGACategory(), label: this.assets[0].id } });
     }
 
     // Track metadata collection link click
     trackCollectionLink(collectionName: string): void {
-      this.angulartics.eventTrack.next({ action: 'metadata_collection_link', properties: { category: this._auth.getGACategory(), label: collectionName } });
+      this.angulartics.eventTrack.next({ properties: { event: 'metadata_collection_link', category: this._auth.getGACategory(), label: collectionName } });
     }
 
     /**
@@ -752,11 +746,11 @@ export class AssetPage implements OnInit, OnDestroy {
                 bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
                 bounds['height'] = bounds['y'] < 0 ? bounds['height'] + bounds['y'] : bounds['height']
                 // Make sure the bounds are within the content size for the IIIF endpoint.
-                bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']                
+                bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']
                 bounds['height'] = bounds['height'] > this.assets[0].viewportDimensions.contentSize['y'] ? this.assets[0].viewportDimensions.contentSize['y'] : bounds['height']
-                
+
                 this.assets[0]['detailViewBounds'] = bounds
-                
+
                 this.showAddModal = true
 
             } else {
@@ -969,7 +963,7 @@ export class AssetPage implements OnInit, OnDestroy {
             this.indexZoomMap.push(zoomObj)
 
             // Add GA tracking to select image to compare action
-            this.angulartics.eventTrack.next({ action: 'Compare image', properties: { label: this.assetIds.length } })
+            this.angulartics.eventTrack.next({ properties: { event: 'Compare image', label: this.assetIds.length } })
         }
 
         // log compared assets
@@ -978,7 +972,7 @@ export class AssetPage implements OnInit, OnDestroy {
             item_id: asset.id,
             additional_fields: {
                 compared_assets: this.assetIds,
-                action: add ? 'add' : 'remove'
+                event: add ? 'add' : 'remove'
             }
         })
     }
@@ -1052,36 +1046,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * runDownloadView handles the DownloadView results from AssetSearch.downloadViewBlob
-     * @param dlink String from generateDownloadView
-     */
-    private runDownloadView(dlink: string): Subscription {
-      // Download generated jpg as local blob file
-      return this._search.downloadViewBlob(dlink).pipe(
-            take(1)
-        ).subscribe(
-            (blob) => {
-                if (blob.size > 0) {
-                    this.blobURL = this.URL.createObjectURL(blob)
-                    this.generatedBlobURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
-                    this.downloadViewReady = true
-                    this.downloadLoading = false
-                }},
-            (err) => {
-                console.error("Download view failed", err)
-                this.downloadLoading = false
-                this.downloadViewReady = false
-            }
-
-        )
-    }
-
-    /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
-        and then sets generatedBlobUrl to this local reference. **/
-
     private genDownloadViewLink() {
-
         // Do nothing if this is not an image
         if (!this.assets[0].typeName || !this.assets[0].typeName.length) {
             return
@@ -1090,63 +1055,32 @@ export class AssetPage implements OnInit, OnDestroy {
         let asset = this.assets[0]
         this.downloadLoading = true // sets to false on success of runDownloadView
 
-        // Revoke the browser reference to a previous blob URL, needs 100ms pause
-        if (this.blobURL.length) {
-            setTimeout(() => {
-              this.URL.revokeObjectURL(this.blobURL)
-            }, 100);
-        }
-
         if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
-            // Full source image size (max output possible)
-            let fullWidth = Math.floor(asset.viewportDimensions.contentSize.x)
-            let fullY = Math.floor(asset.viewportDimensions.contentSize.y)
-            // Zoom is a factor of the image's full width
-            let zoom = Math.floor(asset.viewportDimensions.zoom)
-            // Viewport dimensions (size of cropped image)
-            let viewX = Math.floor(asset.viewportDimensions.containerSize.x)
-            let viewY = Math.floor(asset.viewportDimensions.containerSize.y)
-            // Dimensions of the source size of the cropped image
-            let zoomX = Math.floor(fullWidth / zoom)
-            let zoomY = Math.floor(zoomX * (viewY / viewX))
-            // Make sure zoom area is not larger than source, or else error
-            if (zoomX > fullWidth) {
-                zoomX = fullWidth
-            }
-            if (zoomY > fullY) {
-                zoomY = fullY
-            }
-            // Positioning of the viewport's crop
-            let xOffset = Math.floor((asset.viewportDimensions.center.x * fullWidth) - (zoomX / 2))
-            let yOffset = Math.floor((asset.viewportDimensions.center.y * fullWidth) - (zoomY / 2))
+            // Get Bounds from OSD viewer for the saved detail
+            let bounds = this.assetViewer.osdViewer.viewport.viewportToImageRectangle(this.assetViewer.osdViewer.viewport.getBounds(true))
+
+            // Make sure the bounds are adjusted for the negative x and y values
+            bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
+            bounds['height'] = bounds['y'] < 0 ? bounds['height'] + bounds['y'] : bounds['height']
+
+            // Make sure the bounds are within the content size for the IIIF endpoint.
+            bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']
+            bounds['height'] = bounds['height'] > this.assets[0].viewportDimensions.contentSize['y'] ? this.assets[0].viewportDimensions.contentSize['y'] : bounds['height']
 
             // Generate the view url from tilemap service
             let tilesourceStr = Array.isArray(asset.tileSource) ? asset.tileSource[0] : asset.tileSource
             // Attach zoom parameters to tilesource
-            tilesourceStr = tilesourceStr.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
+            tilesourceStr = tilesourceStr.replace('info.json', '') + Math.round( bounds['x'] ) + ',' + Math.round( bounds['y'] ) + ',' + Math.round( bounds['width'] ) + ',' + Math.round( bounds['height'] ) + '/full/0/native.jpg'
             // Ensure iiif parameter is encoded correctly
             tilesourceStr = tilesourceStr.replace('.fcgi%3F', '.fcgi?')
             if (tilesourceStr.indexOf('//') == 0) {
                 tilesourceStr = 'https:' + tilesourceStr
             }
-            // If download link is pointing to "stor.*.artstor", use download service
-            if (tilesourceStr.indexOf('//stor.') >= 0) {
-                // Use download service
-                tilesourceStr = this._auth.getUrl() + "/download?imgid=" + asset.id + "&url=" + encodeURIComponent(tilesourceStr) + "&iiif=true"
-                this.downloadViewLink = tilesourceStr
-                this.downloadViewReady = true
-                this.downloadLoading = false
-                this.downloadViewAsBlob = false
-            } else {
-                this.downloadViewLink = tilesourceStr
-                // Disable download view link button until file is ready
-                this.downloadViewReady = false
-                this.downloadViewAsBlob = true
-                // Call runDownloadView after 1 sec, downloads local view image blob file to browser
-                setTimeout(() => {
-                    this.runDownloadView(this.downloadViewLink)
-                }, 1000);
-            }
+
+            tilesourceStr = this._auth.getUrl() + "/download?imgid=" + asset.id + "&url=" + encodeURIComponent( encodeURI(tilesourceStr) ) + "&iiif=true"
+            this.downloadViewLink = tilesourceStr
+            this.downloadViewReady = true
+            this.downloadLoading = false
         }
         else {
             this.downloadLoading = false
@@ -1174,7 +1108,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private toggleAssetDrawer(show: boolean) {
         this.showAssetDrawer = show
         if (Array.isArray(show && this.assets[0].tileSource)){ // Log GA event for comparing a multi view item in Fullscreen mode
-            this.angulartics.eventTrack.next({ action: 'multiViewItemCompare', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
+            this.angulartics.eventTrack.next({ properties: { event: 'multiViewItemCompare', category: this._auth.getGACategory(), label: this.assets[0].id } });
         }
     }
 
@@ -1432,17 +1366,17 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private multiViewPageViaArrow(): void{
         if (this.isFullscreen){
-            this.angulartics.eventTrack.next({ action: 'multiViewFullscreenPageViaArrow', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
+            this.angulartics.eventTrack.next({ properties: { event: 'multiViewFullscreenPageViaArrow', category: this._auth.getGACategory(), label: this.assets[0].id } })
         } else{
-            this.angulartics.eventTrack.next({ action: 'multiViewPageViaArrow', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
+            this.angulartics.eventTrack.next({ properties: { event: 'multiViewPageViaArrow', category: this._auth.getGACategory(), label: this.assets[0].id } })
         }
     }
 
     private multiViewPageViaThumbnail(): void{
         if (this.isFullscreen){
-            this.angulartics.eventTrack.next({ action: 'multiViewFullscreenPageViaThumbnail', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
+            this.angulartics.eventTrack.next({ properties: { event: 'multiViewFullscreenPageViaThumbnail', category: this._auth.getGACategory(), label: this.assets[0].id } })
         } else {
-            this.angulartics.eventTrack.next({ action: 'multiViewPageViaThumbnail', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
+            this.angulartics.eventTrack.next({ properties: { event: 'multiViewPageViaThumbnail', category: this._auth.getGACategory(), label: this.assets[0].id } })
         }
     }
 

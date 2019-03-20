@@ -239,9 +239,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.pipe(
       map((params: Params) => {
-        if (params && params['featureFlag']){
-          this._flags[params['featureFlag']] = true
-        }
+        // Find feature flags applied on route
+        this._flags.readFlags(params)
 
         if (params['term']){
           this.searchTerm = params['term'];
@@ -588,7 +587,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       }
       this.selectedAssets.length ? this.editMode = true : this.editMode = false
     } else if (asset.compound_media){ // Log GA event for opening a multi view asset from grid
-      this.angulartics.eventTrack.next({ action: 'multiViewItemOpen', properties: { category: this._auth.getGACategory(), label: asset.artstorid } });
+      this.angulartics.eventTrack.next({ properties: { event: 'multiViewItemOpen', category: this._auth.getGACategory(), label: asset.artstorid } });
     }
   }
 
@@ -639,6 +638,11 @@ export class AssetGrid implements OnInit, OnDestroy {
 
       // Start loading
       this.isLoading = true;
+
+      // Map itemIds array of objects to array of strings for v1 items
+      this.itemIds = this.itemIds.map(item => {
+        return (typeof(item) === 'object') ? item['id'] : item
+      })
 
       this._assets.getAllThumbnails(this.itemIds)
         .then( allThumbnails => {

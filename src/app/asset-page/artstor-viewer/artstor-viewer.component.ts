@@ -37,7 +37,6 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     // Optional Inputs
     @Input() groupId: string
     @Input() index: number
-    @Input() assetCompareCount: number
     @Input() assetGroupCount: number
     @Input() assetNumber: number
     @Input() assets: Asset[]
@@ -53,6 +52,19 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         y: number
         width: number
         height: number
+    }
+    private _assetCompareCount: number
+    @Input() set assetCompareCount(count: number) {
+        if (count > -1 && count !== this._assetCompareCount) {
+            this._assetCompareCount = count
+            if (this.isMultiView) {
+                // Hide or re-show Reference strip when in compare mode and count crosses >3
+                this.attemptShowReferenceStrip()
+            }
+        }
+    }
+    get assetCompareCount(): number {
+        return this._assetCompareCount
     }
 
     // Required Input
@@ -122,6 +134,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     public osdViewer: any
     public osdViewerId: string
     public isMultiView: boolean
+    private tilesLoaded: boolean = false
     public multiViewPage: number = 1
     public multiViewCount: number = 1
 
@@ -249,6 +262,35 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * OpenSeaDragon: Show reference strip for multi-view
+     */
+    private attemptShowReferenceStrip() : void {
+        if (!this.isMultiView || !this.osdViewer || !this.tilesLoaded) {
+            // Only run if OSD has loaded AND is a Multi View asset
+            return
+        }
+        // Handle hiding reference strip for >3 assets showing
+        if (this.assetCompareCount > 3) {
+            // Hide reference strip for >3
+            this.osdViewer.viewport.setMargins({bottom:0})
+            this.osdViewer.removeReferenceStrip()
+        } else {
+            // Show reference strip for <4
+            this.osdViewer.viewport.setMargins({bottom:190})
+            this.osdViewer.addReferenceStrip()
+            this.osdViewer.nextButton.element.title = 'Next Item'
+                this.osdViewer.previousButton.element.title = 'Previous Item'
+
+                this.osdViewer.previousButton.addHandler('press', () => {
+                    this.multiViewArrowPressed = true
+                })
+                this.osdViewer.nextButton.addHandler('press', () => {
+                    this.multiViewArrowPressed = true
+                })
+        }
+    }
+
+    /**
      * Loads the OpenSeaDragon on element at 'viewer-' + id
      * - Requires this.asset to have an id
      */
@@ -357,19 +399,11 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.osdViewer.addOnceHandler('tile-loaded', () => {
             console.info("Tiles are loaded")
+            this.tilesLoaded = true
             this.state = viewState.openSeaReady
             // Load Reference Strip once viewer is ready
             if (this.isMultiView) {
-                this.osdViewer.addReferenceStrip()
-                this.osdViewer.nextButton.element.title = 'Next Item'
-                this.osdViewer.previousButton.element.title = 'Previous Item'
-
-                this.osdViewer.previousButton.addHandler('press', () => {
-                    this.multiViewArrowPressed = true
-                })
-                this.osdViewer.nextButton.addHandler('press', () => {
-                    this.multiViewArrowPressed = true
-                })
+                this.attemptShowReferenceStrip()
             }
             this.refreshZoomedView()
         })

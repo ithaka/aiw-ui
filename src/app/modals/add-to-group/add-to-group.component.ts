@@ -77,7 +77,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     private _dom: DomUtilityService
       ) {}
 
-    ngOnInit() {    
+    ngOnInit() {
     if (this.selectedAssets.length < 1) { // if no assets were added when component was initialized, the component gets the current selection list
       // Subscribe to asset selection
       this.subscriptions.push(
@@ -160,6 +160,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
    * @param form Values to update the group with
    */
   public submitGroupUpdate(form: NgForm) {
+
     // clear any service status
     this.serviceResponse = {}
     this.selectedGroupError = ''
@@ -170,62 +171,61 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
       return
     }
 
-    // Create object for new modified group
-    let putGroup: ImageGroup = Object.assign({}, this.selectedGroup)
     let multipleSelected: boolean = this.selectedAssets.length > 1
 
-    // assets come from different places and sometimes have id and sometimes objectId
-    this.selectedAssets.forEach((asset: any, index) => {
-      let assetId: string
-      if (!asset) {
-        console.error('Attempted selecting undefined asset')
-      } else {
-        // Find asset id
-        if (asset.artstorid) {
-          // Data returned from Solr uses "artstorid"
-          assetId = asset.artstorid
-        } else if (asset.objectId) {
-          // Data returned from Items service
-          assetId = asset.objectId
-        } else if (asset.id) {
-          // Asset has "id" when constructed via the Artstor Viewer (see type: Asset)
-          assetId = asset.id
-        } else {
-          console.error('Asset id not found when adding to group', asset)
-        }
-        // Add id to group if it's not already in the group
-        if (assetId && putGroup.items.indexOf(assetId) < 0) {
-          if( index === 0 && this.detailViewBounds['width']){
-            putGroup.items.push({
-              "artstorid": assetId,
-              "zoom": {
-                "viewerX":this.detailViewBounds['x'],
-                "viewerY": this.detailViewBounds['y'],
-                "pointWidth": this.detailViewBounds['width'],
-                "pointHeight": this.detailViewBounds['height']
-              }
-            })
-          } else {
-            putGroup.items.push(assetId);
-          }
-        }
-      }
-    })
-
-    // throw an error if the image group is going to be larger than 1000 images
-    //  otherwise the server will do that when we call it
-    if (putGroup.items && putGroup.items.length > 1000) {
-      this.errorMsg = '<p>Sorry, that group would exceed 1000 assets. You will need to remove some before adding more.</p>'
-      return this.serviceResponse.tooManyAssets = true
-    }
 
     // go get the group from the server
     this._group.get(this.selectedGroup.id)
       .toPromise()
       .then((data) => {
-        data.items = putGroup.items
-        console.log('Update data from new modal:- ', data)
-        this._group.update(data).pipe(
+
+        let putGroup = data
+        let zoom: {}
+
+        if (putGroup.items && putGroup.items.length > 1000) {
+          this.errorMsg = '<p>Sorry, that group would exceed 1000 assets. You will need to remove some before adding more.</p>'
+          return this.serviceResponse.tooManyAssets = true
+        }
+
+        this.selectedAssets.forEach((asset: any, index) => {
+          let assetId
+          if (!asset) {
+            console.error('Attempted selecting undefined asset')
+          } else {
+            // Find asset id
+            if (asset.artstorid) {
+              // Data returned from Solr uses "artstorid"
+              assetId = asset.artstorid
+            } else if (asset.objectId) {
+              // Data returned from Items service
+              assetId = asset.objectId
+            } else if (asset.id) {
+              // Asset has "id" when constructed via the Artstor Viewer (see type: Asset)
+              assetId = asset.id
+            } else {
+              console.error('Asset id not found when adding to group', asset)
+            }
+          }
+
+          // Update a group with a zoomed details
+          if (index === 0 && this.detailViewBounds['width']) {
+
+            zoom = this._group.setZoomDetails({
+              "viewerX": this.detailViewBounds['x'],
+              "viewerY": this.detailViewBounds['y'],
+              "pointWidth": this.detailViewBounds['width'],
+              "pointHeight": this.detailViewBounds['height'],
+              "index": 0
+            })
+
+            putGroup.items.push({ id: assetId, zoom })
+
+          } else {
+            putGroup.items.push({ id: assetId })
+          }
+        })
+
+        this._group.update(putGroup).pipe(
           take(1),
           map(
             (res) => {
@@ -242,7 +242,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
                 }]
               })
               // Add to Group GA event
-              this._angulartics.eventTrack.next({ action: 'addToGroup', properties: { category: this._auth.getGACategory(), label: this.router.url }})
+              this._angulartics.eventTrack.next({ properties: { event: 'addToGroup', category: this._auth.getGACategory(), label: this.router.url }})
             },
             (err) => {
               console.error(err); this.serviceResponse.failure = true;
@@ -255,8 +255,6 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
           console.error(error);
           this.errorMsg = '<p>Sorry, we weren’t able to add the '+ (multipleSelected ? 'items' : 'item') +' at this time. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
       });
-
-
   }
 
   public loadMoreGroups(): void {
@@ -312,6 +310,12 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
       map(data => {
         let itemIds: string[] = []
         for(let group of data.groups) {
+
+        // Convert groups V1 response to items array of objects
+        group.items = group.items.map(item => {
+          return !(typeof(item) === `string`) ? item.id : item
+        })
+
           if(group.items.length > 0) {
             itemIds.push(group.items[0])
           }
@@ -330,14 +334,14 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
               }
               return thmbObj
             })
-            
+
             this.recentGroups = data.groups
             this.loading.recentGroups = false
           })
           .catch( error => {
             console.error(error)
           })
-        }  
+        }
       },
       (error) => {
         console.error(error)
@@ -376,7 +380,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
               }
               return thmbObj
             })
-            
+
             if(timeStamp === this.allGroupSearchTS) {
               this.allGroups = this.allGroups.concat(data.groups)
             }
@@ -448,4 +452,5 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
       return group
     })
   }
+
 }

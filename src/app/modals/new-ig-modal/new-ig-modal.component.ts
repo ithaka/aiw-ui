@@ -199,6 +199,7 @@ export class NewIgModal implements OnInit {
     if (!this.newIgForm.valid) {
       return;
     }
+
     // Form is valid! Create Group object
     this.isLoading = true;
 
@@ -219,7 +220,7 @@ export class NewIgModal implements OnInit {
 
     if (this.editIG) {
       // Editing group
-      this._angulartics.eventTrack.next({ action: 'editGroup', properties: { category: this._auth.getGACategory(), label: group.id }});
+      this._angulartics.eventTrack.next({ properties: { event: 'editGroup', category: this._auth.getGACategory(), label: group.id }});
 
       group.id = this.ig.id // need this for the update call
 
@@ -246,10 +247,10 @@ export class NewIgModal implements OnInit {
       // analytics events
       if (this.copyIG) {
         // Copying old group
-        this._angulartics.eventTrack.next({ action: 'copyGroup', properties: { category: this._auth.getGACategory(), label: group.id }})
+        this._angulartics.eventTrack.next({ properties: { event: 'copyGroup', category: this._auth.getGACategory(), label: group.id }})
       } else {
         // Create New Group
-        this._angulartics.eventTrack.next({ action: 'newGroup', properties: { category: this._auth.getGACategory() }})
+        this._angulartics.eventTrack.next({ properties: { event: 'newGroup', category: this._auth.getGACategory() }})
       }
 
       // create the group using the group service
@@ -285,9 +286,9 @@ export class NewIgModal implements OnInit {
             })
 
             // Add to Group GA event
-            this._angulartics.eventTrack.next({ action: 'addToGroup', properties: { category: this._auth.getGACategory(), label: this.router.url }})
+            this._angulartics.eventTrack.next({ properties: { event: 'addToGroup', category: this._auth.getGACategory(), label: this.router.url }})
           }
-          
+
           this.closeModal.emit()
           this._toasts.sendToast({
             id: 'createNewGroup',

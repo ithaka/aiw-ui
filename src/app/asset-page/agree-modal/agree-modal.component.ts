@@ -53,7 +53,7 @@ export class AgreeModalComponent implements OnInit {
   /**
    * Authorizes download and closes modal
    */
-  private agree(): void {
+  public agree(): void {
     this._auth.authorizeDownload()
     this.acceptedTerms.emit()
     this.closeModal.emit()
