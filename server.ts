@@ -1,15 +1,3 @@
-// AppDynamics monitoring
-require("appdynamics").profile({
-  controllerHostName: 'Ithaka.saas.appdynamics.com',
-  controllerPort: 443, 
-  controllerSslEnabled: true,  // Set to true if controllerPort is SSL
-  accountName: 'Ithaka', // Required for SaaS accounts
-  accountAccessKey: '8e51d6a16fb3', // Required for SaaS accounts
-  applicationName: 'Artstor_TEST',
-  tierName: 'artstor-ui-ssr', 
-  nodeName: 'artstor-ui-ssr-01'
- });
-
 // Prereq Dependencies (required first)
 import 'zone.js/dist/zone-node';
 import 'reflect-metadata';

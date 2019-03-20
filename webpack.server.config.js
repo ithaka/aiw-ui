@@ -9,8 +9,7 @@ module.exports = {
   mode: 'development',
   // this makes sure we include node_modules and other 3rd party libraries
   externals: [
-    /node_modules/,
-    /appdynamics/
+    /node_modules/
   ],
   output: {
     path: path.join(__dirname, 'dist'),
@@ -31,6 +30,23 @@ module.exports = {
       /(.+)?express(\\|\/)(.+)?/,
       path.join(__dirname, 'src'),
       {}
-    )
+    ),
+    // Attach AppDynamics code
+    new webpack.BannerPlugin({
+      raw: true,
+      entryOnly: true,
+      banner: `
+      require("appdynamics").profile({
+        controllerHostName: 'Ithaka.saas.appdynamics.com',
+        controllerPort: 443, 
+        controllerSslEnabled: true,  // Set to true if controllerPort is SSL
+        accountName: 'Ithaka', // Required for SaaS accounts
+        accountAccessKey: '8e51d6a16fb3', // Required for SaaS accounts
+        applicationName: 'Artstor_TEST',
+        tierName: 'artstor-ui-ssr', 
+        nodeName: 'artstor-ui-ssr-01'
+       });
+      `
+    })
   ]
 };
