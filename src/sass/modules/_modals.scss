@@ -64,7 +64,7 @@
 
 .modal-header {
 	padding: 2px 16px;
-    background: $color-white;
+  background: $color-white;
 }
 
 .modal-body {
@@ -74,6 +74,10 @@
   .google-permissions-link {
     color: $color-gray-6;
     text-decoration: underline;
+
+    &:hover {
+      color: darken($color-gray-6, 30%);
+    }
   }
 }
 
