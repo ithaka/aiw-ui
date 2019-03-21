@@ -2,8 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, 
 import { Observable } from 'rxjs';
 import { Angulartics2 } from 'angulartics2';
 
-import { AssetService, AuthService, ImageGroup, DomUtilityService, ScriptService } from './../../shared';
-import { SlidesService } from './../../_services'
+import { AssetService, AuthService, ImageGroup, DomUtilityService } from './../../shared';
 import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/public_api';
 
 @Component({
@@ -16,26 +15,13 @@ export class GoogleAuthComponent implements OnInit, AfterViewInit {
   @Output()
   public closeModal: EventEmitter<any> = new EventEmitter();
 
-  @Output()
-  public isSignedIn: boolean = false
-
-  public gapiLoaded: boolean = false
-
   constructor(
-    public _slides: SlidesService,
-    private _script: ScriptService,
     private _angulartics: Angulartics2,
     private _dom: DomUtilityService,
     private _storage: ArtstorStorageService
   ) {}
 
-  ngOnInit() {
-    // Load gapi script. On complete, initialize as an API client.
-    this._script.load('gapi').then(() => {
-      this._slides.loadClientInit()
-      this.gapiLoaded = true
-    })
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     this.startModalFocus()
@@ -47,10 +33,6 @@ export class GoogleAuthComponent implements OnInit, AfterViewInit {
   public focusLastElement() {
     let htmlelement: HTMLElement = <HTMLElement>this._dom.bySelector('.close')
     htmlelement.focus()
-  }
-
-  public signIn() {
-    this._slides.gAuthSignIn()
   }
 
 }

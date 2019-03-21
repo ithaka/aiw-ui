@@ -4,16 +4,12 @@ import { Subscription }   from 'rxjs'
 import { map, take } from 'rxjs/operators'
 
 // Internal Dependencies
+import { AssetService, AuthService } from './../shared'
+import { ImageGroup, ImageGroupDescription, ImageGroupService, GroupService } from './../shared'
+import { TitleService } from '../shared/title.service'
 import { AppConfig } from '../app.service'
-import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
-import { 
-  AssetService, 
-  AuthService, 
-  TitleService,
-  ImageGroup, 
-  ImageGroupService, 
-  GroupService 
-} from './../shared'
+import { ScriptService } from '../shared/script.service'
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 
 @Component({
   selector: 'ang-image-group',
@@ -76,14 +72,13 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     private _auth: AuthService,
     private route: ActivatedRoute,
     private _title: TitleService,
-    private _storage: ArtstorStorageService
-
+    private _storage: ArtstorStorageService,
+    private scriptService: ScriptService
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
 
   ngOnInit() {
-
     if (this.unaffiliatedUser) {
       this.showAccessDeniedModal = true
       return
