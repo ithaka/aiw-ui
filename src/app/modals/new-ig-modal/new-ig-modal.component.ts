@@ -93,7 +93,7 @@ export class NewIgModal implements OnInit {
   ngOnInit() {
     // Does user have any private groups yet?
     // Check local storage first, otherwise call group service
-    let hasPrivate = this._storage.getSession('hasPrivateGroups')
+    let hasPrivate = this._storage.getLocal('hasPrivateGroups')
 
     if (hasPrivate)  {
       this.hasPrivateGroups = true
@@ -104,7 +104,7 @@ export class NewIgModal implements OnInit {
         map(res => {
           if (res['total'] > 0) {
             this.hasPrivateGroups = true
-            this._storage.setSession('hasPrivateGroups', true)
+            this._storage.setLocal('hasPrivateGroups', true)
           }
         },
           (err) => {

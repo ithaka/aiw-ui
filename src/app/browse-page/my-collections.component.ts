@@ -87,7 +87,7 @@ export class MyCollectionsComponent implements OnInit {
           this.pcollections = this.pcollections.filter((col) => { return col.collectionid !== '37436' }) // filter out initial My PC object
           this.pcollections.unshift(tempMyCol) // prepend My PC object back to pcollections
 
-          this._storage.setSession('37436', this.pcollections[0])
+          this._storage.setLocal('37436', this.pcollections[0])
           this._storage.setLocal('pcollections', this.pcollections)
         })).subscribe()
     }
