@@ -104,10 +104,9 @@ import {
   TypeIdPipe,
   ScriptService,
   PersonalCollectionService,
-  AccountService,
-  SlidesService
+  AccountService
 } from './shared'
-import { MetadataService } from './_services'
+import { MetadataService, SlidesService } from './_services'
 
 import { LocalPCService } from './_local-pc-asset.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'

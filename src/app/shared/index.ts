@@ -23,4 +23,3 @@ export * from './group-title/group-title.component'
 // Components that rely on shared services
 export * from './tour/tour.component'
 export * from './search/search.component'
-export * from './gslides/slides.service'
