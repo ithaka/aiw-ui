@@ -16,6 +16,12 @@ $toastPad: 14px;
     transform: translateX(100%);
     -webkit-transform: translateX(100%);
 
+    @media (max-width: $phone) {
+        min-width: 280px;
+        max-width: 280px;
+        float: right;
+    }
+
     &.success {
         border-top-color: $green;
     }
@@ -77,6 +83,12 @@ $toastPad: 14px;
 
     .toast-message {
         display: inline-block;
+        word-wrap: break-word;
+        max-width: 88%;
+
+        @media (max-width: $phone) {
+            max-width: 82%;
+        }
     }
 
     .icon-close {

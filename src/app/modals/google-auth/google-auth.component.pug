@@ -7,7 +7,13 @@
         .info-text
           div {{ 'IMAGE_GROUP_PAGE.GOOGLE_AUTH.INFO_TEXT' | translate }}
         .auth-btn
-          .btn.btn-primary(tabindex="0", role="button", (keydown.shift.tab)="$event.stopPropagation(); $event.preventDefault(); focusLastElement()", aria-label="Authorize with Google, button. By selecting this option, a popup will appear to log in with your Google account to start exporting your Artstor groups to Google Slides.") {{ 'IMAGE_GROUP_PAGE.GOOGLE_AUTH.BTN_TEXT' | translate }}
+          .btn.btn-primary(
+            [class.loading]="!gapiLoaded",
+            tabindex="0", 
+            role="button", 
+            (keydown.shift.tab)="$event.stopPropagation(); $event.preventDefault(); focusLastElement()", 
+            aria-label="Authorize with Google, button. By selecting this option, a popup will appear to log in with your Google account to start exporting your Artstor groups to Google Slides."
+          ) {{ 'IMAGE_GROUP_PAGE.GOOGLE_AUTH.BTN_TEXT' | translate }}
         .permissions-info Why is Artstor asking for Google permissions? 
           a(href="http://www.artstor.org/artstor-terms", class="google-permissions-link", target="_blank", tabindex="0",  aria-label="Why is Artstor asking for Google permissions? Learn more") Learn more
         button.close((click)="closeModal.emit($event)", tabindex="0", aria-label="Close", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()")
