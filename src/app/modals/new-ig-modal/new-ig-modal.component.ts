@@ -285,6 +285,11 @@ export class NewIgModal implements OnInit {
               }
             })
 
+            // Add detail to group GA event
+            if (data.items[0].zoom && data.items[0].zoom.pointWidth) {
+              this._angulartics.eventTrack.next({ properties: { event: 'addDetail', category: this._auth.getGACategory(), label: 'new group' }})
+            }
+
             // Add to Group GA event
             this._angulartics.eventTrack.next({ properties: { event: 'addToGroup', category: this._auth.getGACategory(), label: this.router.url }})
           }
