@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core'
+import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Subscription }   from 'rxjs'
 import { map, take } from 'rxjs/operators'
@@ -6,8 +6,14 @@ import { map, take } from 'rxjs/operators'
 // Internal Dependencies
 import { AppConfig } from '../app.service'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
-import { AssetService, AuthService, SlidesService, TitleService, ScriptService,
-ImageGroup, ImageGroupDescription, ImageGroupService, GroupService } from './../shared'
+import { 
+  AssetService, 
+  AuthService, 
+  TitleService,
+  ImageGroup, 
+  ImageGroupService, 
+  GroupService 
+} from './../shared'
 
 @Component({
   selector: 'ang-image-group',
@@ -15,7 +21,7 @@ ImageGroup, ImageGroupDescription, ImageGroupService, GroupService } from './../
   templateUrl: './image-group-page.component.pug'
 })
 
-export class ImageGroupPage implements OnInit, AfterViewInit, OnDestroy {
+export class ImageGroupPage implements OnInit, OnDestroy {
   public ig: ImageGroup = <ImageGroup>{};
 
   /** controls when PPT agreement modal is or is not shown */
@@ -70,19 +76,10 @@ export class ImageGroupPage implements OnInit, AfterViewInit, OnDestroy {
     private _auth: AuthService,
     private route: ActivatedRoute,
     private _title: TitleService,
-    private _storage: ArtstorStorageService,
-    private scriptService: ScriptService,
-    public slides: SlidesService
+    private _storage: ArtstorStorageService
 
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
-  }
-
-  ngAfterViewInit() {
-    // Load gapi script. On complete, initialize as an API client.
-    this.scriptService.load('gapi').then(() => {
-      this.slides.loadClientInit()
-    })
   }
 
   ngOnInit() {
