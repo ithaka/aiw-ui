@@ -19,8 +19,7 @@ $toastPad: 14px;
     @media (max-width: $phone) {
         min-width: 280px;
         max-width: 280px;
-        position: absolute;
-        right: 0px;
+        float: right;
     }
 
     &.success {
