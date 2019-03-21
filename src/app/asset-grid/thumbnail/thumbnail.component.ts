@@ -75,13 +75,11 @@ export class ThumbnailComponent implements OnInit, OnChanges {
       this.multiviewItemCount = this.thumbnail['compoundmediaCount']
     }
     // Compound 'multiview' assets use cleanedAsset.thumbnailUrls[0], assigned in asset-search
-    if (this.verifyCompoundMedia(this.thumbnail)) {
+    if (this.thumbnail.compound_media_json && this.thumbnail.compound_media_json.objects) {
       this.isMultiView = true
       this.thumbnail.thumbnailImgUrl = this.thumbnail['thumbnailUrls'][0]
-      this.multiviewItemCount = JSON.parse(this.thumbnail['compound_media']).objects.length
-    }
-
-    else if (this.thumbnail['media']) {
+      this.multiviewItemCount = this.thumbnail.compound_media_json.objects.length
+    } else if (this.thumbnail['media']) {
       this.thumbnail.thumbnailImgUrl = this.thumbnail.media.thumbnailSizeOnePath
     }
 
@@ -145,22 +143,4 @@ export class ThumbnailComponent implements OnInit, OnChanges {
       this.thumbnailSize--
     }
   }
-
-  /**
-   * verifyCompoundMedia checks for a valid thumbnail['compound_media'] value
-   * before deciding if the asset is truly a mutiview asset
-   * @param thumb accepts
-   */
-  private verifyCompoundMedia(thumb): boolean {
-    if (thumb['compound_media']) {
-
-      if ( (typeof(thumb['compound_media']) === 'string' && thumb['compound_media'].length > 3) ||
-        (typeof(thumb['compound_media']) === 'object' && thumb['compound_media']['objects'])) {
-          return true
-      }
-    } else {
-      return false
-    }
-  }
-
 }

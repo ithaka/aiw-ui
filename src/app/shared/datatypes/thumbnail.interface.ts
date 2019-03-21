@@ -14,6 +14,10 @@ export interface Thumbnail {
   artstorid?: string
   collectionId: string
   collectionType: number
+  compound_media_json?: {
+    types?: string[],
+    objects?: any[]
+  }
   cfObjCount: number // number of associated assets
   cfObjectId: string // haven't seen any for which this is different than objectId
   count: number

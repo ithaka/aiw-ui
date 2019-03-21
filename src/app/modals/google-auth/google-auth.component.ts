@@ -41,7 +41,7 @@ export class GoogleAuthComponent implements OnInit, AfterViewInit {
     this.startModalFocus()
   }
   public startModalFocus() {
-    let htmlelement: HTMLElement = <HTMLElement>this._dom.bySelector('.illustration img')
+    let htmlelement: HTMLElement = <HTMLElement>this._dom.bySelector('.auth-btn .btn')
     htmlelement.focus()
   }
   public focusLastElement() {
