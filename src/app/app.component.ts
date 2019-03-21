@@ -44,6 +44,30 @@ export class AppComponent {
 
   public showSkyBanner: boolean = false
   public skyBannerCopy: string = ''
+  /**
+   * Google Tag Manager variables
+   * - In order of specificity 
+   */
+  private pageNameMap = {
+    '/home' : { name: 'home', section: 'home', type: 'home' },
+    '/account' : { name: 'settings', section: 'account', type: 'admin' },
+    '/browse/library;viewId=250' : { name: 'browse by classification', section: 'browse', type: 'browse' },
+    '/browse/library;viewId=260' : { name: 'browse by geography', section: 'browse', type: 'browse' },
+    '/browse/library' : { name: 'browse by collection', section: 'browse', type: 'browse' },
+    '/browse/groups' : { name: 'browse groups', section: 'groups', type: 'browse' },
+    '/search' : { name: 'search', section: 'search', type: 'search' },
+    '/assetprint' : { name: 'print preview item', section: 'content', type: 'content view' },
+    '/asset' : { name: 'item', section: 'content', type: 'content view' },
+    '/object' : { name: 'item', section: 'content', type: 'content view' },
+    '/category' : { name: 'collection', section: 'content', type: 'browse' },
+    '/collection' : { name: 'collection', section: 'content', type: 'browse' },
+    '/cluster' : { name: 'cluster', section: 'content', type: 'browse' },
+    '/group' : { name: 'group', section: 'content', type: 'browse' },
+    '/associated' : { name: 'associated images', section: 'content', type: 'browse' },
+    '/login' : { name: 'log in', section: 'log in', type: 'admin' },
+    '/register' : { name: 'register', section: 'register', type: 'admin' },
+    '/printpreview' : { name: 'print preview group', section: 'content', type: 'browse' },
+  }
 
   constructor(
     public _app: AppConfig,
@@ -116,6 +140,23 @@ export class AppComponent {
         if (isPlatformBrowser(this.platformId)) {
           let event_url_array = event.url.split('/')
           let zendeskElements = this._dom.bySelectorAll('.zopim')
+          let path = event.urlAfterRedirects
+          let pageGTM = {
+            name: '',
+            section: '',
+            type: ''
+          }
+
+          /**
+           * Angulartics/Google Tag Manager
+           * - Track page views with additional data in the data layer
+           */
+          Object.keys(this.pageNameMap).forEach( route => {
+            if (path.indexOf('route') === 0) {
+              pageGTM = this.pageNameMap[route]
+            }
+          })
+          
 
           // Reset OGP tags with default values for every route other than asset and collection pages
           if (event.url.indexOf('asset/') === -1
