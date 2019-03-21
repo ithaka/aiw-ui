@@ -380,7 +380,7 @@ export class AssetSearchService {
             cleanedAsset.compound_media_json = JSON.parse(cleanedAsset.compound_media)
           }
           // Use the compound media thumbnail url where sequenceNum equals 1
-          if (cleanedAsset && cleanedAsset.compound_media_json) {
+          if (cleanedAsset && cleanedAsset.compound_media_json && cleanedAsset.compound_media_json.objects) {
             let compoundAsset = cleanedAsset.compound_media_json.objects.filter((item) => {
               return item['sequenceNum'] === 1
             })
