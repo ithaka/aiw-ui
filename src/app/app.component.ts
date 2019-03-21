@@ -15,6 +15,7 @@ import { DomUtilityService } from 'app/shared';
 
 // Server only imports
 import * as enTranslation from '../assets/i18n/en.json'
+import { Angulartics2 } from 'angulartics2';
 
 /*
  * App Component
@@ -72,6 +73,7 @@ export class AppComponent {
   constructor(
     public _app: AppConfig,
     private _dom: DomUtilityService,
+    private _ga: Angulartics2,
     angulartics2GoogleTagManager: Angulartics2GoogleTagManager,
     private titleService: Title,
     private _script: ScriptService,
@@ -141,11 +143,7 @@ export class AppComponent {
           let event_url_array = event.url.split('/')
           let zendeskElements = this._dom.bySelectorAll('.zopim')
           let path = event.urlAfterRedirects
-          let pageGTM = {
-            name: '',
-            section: '',
-            type: ''
-          }
+          let pageGTM = {}
 
           /**
            * Angulartics/Google Tag Manager
@@ -153,10 +151,16 @@ export class AppComponent {
            */
           Object.keys(this.pageNameMap).forEach( route => {
             if (path.indexOf('route') === 0) {
-              pageGTM = this.pageNameMap[route]
+              let mapValues = this.pageNameMap[route]
+              pageGTM = {
+                'Page Name': mapValues.name,
+                'Site Section': mapValues.section,
+                'Page Type' : mapValues.type
+              }
             }
           })
-          
+          console.log("Page data", pageGTM)
+          this._ga.eventTrack.next({ properties: pageGTM });
 
           // Reset OGP tags with default values for every route other than asset and collection pages
           if (event.url.indexOf('asset/') === -1
