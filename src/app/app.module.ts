@@ -17,7 +17,6 @@ import { ROUTES } from './app.routes';
 // UI modules
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Angulartics2Module, Angulartics2Settings } from 'angulartics2'
-import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxTagInputModule } from 'ngx-tag-autocomplete';
@@ -107,7 +106,7 @@ import {
   PersonalCollectionService,
   AccountService
 } from './shared'
-import { MetadataService } from './_services'
+import { MetadataService, SlidesService } from './_services'
 
 import { LocalPCService } from './_local-pc-asset.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
@@ -140,6 +139,7 @@ const APP_PROVIDERS = [
   LogService,
   ImageGroupService,
   ScriptService,
+  SlidesService,
   AssetFiltersService,
   TagFiltersService,
   TagsService,
@@ -249,10 +249,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     Ng2CompleterModule,
     InfiniteScrollModule,
     FileUploadModule,
-    RouterModule.forRoot(ROUTES, { 
+    RouterModule.forRoot(ROUTES, {
         useHash: true,
         preloadingStrategy: PreloadAllModules,
-        initialNavigation: 'enabled' 
+        initialNavigation: 'enabled'
       }),
     DeviceDetectorModule.forRoot(),
     Angulartics2Module.forRoot(),

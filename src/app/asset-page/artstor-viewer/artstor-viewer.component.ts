@@ -384,6 +384,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
             this.asset.viewportDimensions.containerSize = this.osdViewer.viewport.containerSize
             this.asset.viewportDimensions.contentSize = this.osdViewer.viewport._contentSize
             this.asset.viewportDimensions.zoom = value.zoom
+
         })
 
         this.osdViewer.addOnceHandler('tile-load-failed', (e: Event) => {

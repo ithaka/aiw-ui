@@ -1,6 +1,6 @@
 {
   "name": "avatar",
-  "version": "1.12.55",
+  "version": "1.12.58",
   "description": "Front End for the Artstor Digital Library",
   "author": "Artstor Team Air",
   "license": "MIT",
@@ -112,6 +112,9 @@
     "@pact-foundation/karma-pact": "^2.1.9",
     "@pact-foundation/pact": "^5.9.1",
     "@pact-foundation/pact-web": "^5.9.1",
+    "@types/gapi": "^0.0.36",
+    "@types/gapi.auth2": "^0.0.50",
+    "@types/gapi.client.slides": "^1.0.1",
     "@types/hammerjs": "^2.0.36",
     "@types/jasmine": "3.3.0",
     "@types/jasminewd2": "~2.0.5",

@@ -16,9 +16,8 @@ import { AppConfig } from '../app.service'
 // For session timeout management
 import { IdleWatcherUtil } from './idle-watcher'
 import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
-import { FlagService } from './flag.service'
-import { error } from '@angular/compiler/src/util';
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
+import { Angulartics2 } from 'angulartics2';
 /**
  * Controls authorization through IP address and locally stored user object
  */
@@ -76,6 +75,7 @@ export class AuthService implements CanActivate {
     private http: HttpClient,
     private location: Location,
     private _app: AppConfig,
+    private angulartics: Angulartics2,
     private idle: Idle
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId)
@@ -432,6 +432,7 @@ export class AuthService implements CanActivate {
    * @param user The user should be an object to store in sessionstorage
    */
   public saveUser(user: any) {
+    this.updateAnalyticUserProperties(user)
     // Preserve user via localstorage
     this._storage.setLocal('user', user);
     // only do these things if the user is ip auth'd or logged in and the user has changed
@@ -471,25 +472,43 @@ export class AuthService implements CanActivate {
   }
 
   /**
+   * Update GA/GTM properties
+   */
+  updateAnalyticUserProperties(user: any): void {
+    // Properties to update
+    user.hasOwnProperty('baseProfileId') && this.angulartics.setUsername.next(user.baseProfileId);
+    user.hasOwnProperty('institutionId') && this.angulartics.setUserProperties.next({ institutionId: user.institutionId });
+    user.hasOwnProperty('isLoggedIn') && this.angulartics.setUserProperties.next({ isLoggedIn: user.isLoggedIn });
+    user.hasOwnProperty('shibbolethUser') && this.angulartics.setUserProperties.next({ shibbolethUser: user.shibbolethUser });
+    user.hasOwnProperty('dept') && this.angulartics.setUserProperties.next({ dept: user.dept });
+    user.hasOwnProperty('ssEnabled') && this.angulartics.setUserProperties.next({ ssEnabled: user.ssEnabled })
+  }
+
+  /**
    * Required by implementing CanActivate, and is called on routes which are protected by canActivate: [AuthService]
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     console.log("Running canActivate...")
     let options = { headers: this.userInfoHeader, withCredentials: true }
-
-    // TO-DO: Enable the server to call the user info call
+    /**
+     * @todo: Enable the server to call the user info call
+     */
     if (!this.isBrowser) {
       return new Observable(observer => {
         observer.next(true)
       })
     }
-
+    // Allow access to pages that don't require login/auth
     if ((route.params.samlTokenId || route.params.type == 'shibboleth') && state.url.includes('/register')) {
       // Shibboleth workflow is unique, should allow access to the register page
       return new Observable(observer => {
         observer.next(true)
       })
-    } else if (this.canUserAccess(this.getUser())) {
+    }
+    // Verify user is logged in
+    let user = this.getUser()
+    if (this.canUserAccess(user)) {
+      this.updateAnalyticUserProperties(user)
       // If user object already exists, we're done here
       return new Observable(observer => {
         observer.next(true)

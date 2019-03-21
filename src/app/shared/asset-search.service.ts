@@ -375,10 +375,13 @@ export class AssetSearchService {
               thumbnailUrls: [] // this is only the array init - we add the urls later
             }
           )
-
+          // Parse stringified compound media if available
+          if (cleanedAsset.compound_media) {
+            cleanedAsset.compound_media_json = JSON.parse(cleanedAsset.compound_media)
+          }
           // Use the compound media thumbnail url where sequenceNum equals 1
-          if (cleanedAsset && cleanedAsset['compound_media'] && cleanedAsset['compound_media'].objects) {
-            let compoundAsset = JSON.parse(cleanedAsset['compound_media']).objects.filter((item) => {
+          if (cleanedAsset && cleanedAsset.compound_media_json && cleanedAsset.compound_media_json.objects) {
+            let compoundAsset = cleanedAsset.compound_media_json.objects.filter((item) => {
               return item['sequenceNum'] === 1
             })
 
@@ -616,6 +619,12 @@ export interface SearchAsset {
   collections: string[] // array of collections this asset exists under
   collectiontypenameid: string[]
   collectiontypes: number[] // all of the collection types this asset fits
+  compound_media?: string // stringified of compound media object
+  compound_media_json?: {
+     // Client side added: parsed json of compound media
+     types?: string[]
+     objects?: any[]
+  }
   contributinginstitutionid: number // which institution added the asset
   date: string // a string entered by the user, not an actually useful date other than display
   doi: string // ex: "10.2307/artstor.16515779"

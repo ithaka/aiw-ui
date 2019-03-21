@@ -2,7 +2,7 @@
  * Angular 2 decorators and services
  */
 import { Component, ViewEncapsulation, PLATFORM_ID, Inject } from '@angular/core'
-import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
+import { Angulartics2GoogleTagManager } from 'angulartics2/gtm'
 import { Title, Meta } from '@angular/platform-browser'
 import { Router, NavigationStart, NavigationEnd } from '@angular/router'
 import { TranslateService } from '@ngx-translate/core'
@@ -48,7 +48,7 @@ export class AppComponent {
   constructor(
     public _app: AppConfig,
     private _dom: DomUtilityService,
-    angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics,
+    angulartics2GoogleTagManager: Angulartics2GoogleTagManager,
     private titleService: Title,
     private _script: ScriptService,
     private _flags: FlagService,
@@ -64,8 +64,8 @@ export class AppComponent {
       // Use the translate loader to pull translations client-side
       this.translate.use(langStr);
       this.translate.setDefaultLang(langStr);
-      // Start GA trackiong
-      angulartics2GoogleAnalytics.startTracking()
+      // Start GTM tracking
+      angulartics2GoogleTagManager.startTracking()
     }  else {
       // Reference translation json directly server-side
       // Must be set *before* setting default
