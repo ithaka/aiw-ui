@@ -84,6 +84,7 @@ $toastPad: 14px;
 
     .toast-message {
         display: inline-block;
+        word-wrap: break-word;
         max-width: 88%;
 
         @media (max-width: $phone) {
