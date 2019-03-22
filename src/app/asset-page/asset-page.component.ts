@@ -398,6 +398,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+        // Clear asset info from data layer
+        this.trackContentDataLayer(<Asset>{})
     }
 
 
