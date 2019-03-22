@@ -144,7 +144,7 @@ export class AppComponent {
           let zendeskElements = this._dom.bySelectorAll('.zopim')
           let path = event.urlAfterRedirects
           // Properties of "pageGTM" need to match vars set in Google Tag Manager
-          let pageGTM = {
+          let pageGTMVars = {
             'pageName' : '',
             'siteSection': '',
             'pageType' : ''
@@ -158,7 +158,7 @@ export class AppComponent {
             // Finding matching page values
             if (path.indexOf(route) >= 0) {
               let mapValues = this.pageNameMap[route]
-              pageGTM = {
+              pageGTMVars = {
                 'pageName': mapValues.name,
                 'siteSection': mapValues.section,
                 'pageType' : mapValues.type
@@ -168,7 +168,7 @@ export class AppComponent {
           // Push to GTM data layer
           this._ga.eventTrack.next( { properties : { 
             gtmCustom : {
-              "page" : pageGTM
+              "page" : pageGTMVars
             }
           } });
 
