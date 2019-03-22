@@ -478,6 +478,8 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.meta.updateTag({ property: 'og:description', content: asset.formattedMetadata['Description'] && asset.formattedMetadata['Description'][0] ? asset.formattedMetadata['Description'][0] : '' }, 'property="og:description"')
                 this.meta.updateTag({ property: 'og:url', content: this._assets.getShareLink(asset.id, this.encryptedAccess || this.fromOpenLibrary) }, 'property="og:url"')
                 this.meta.updateTag({ property: 'og:image', content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
+                // Update content info in GTM data layer
+                this.trackContentDataLayer(asset)
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
@@ -493,6 +495,30 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.isRightStatement(rightsField)
             }
         }
+    }
+
+    /**
+     * Push asset info into content data layer
+     */
+    trackContentDataLayer(asset: Asset) {
+        // Build content variables 
+        let contentGTMVars = {
+            'itemName': asset.title || '',
+            'itemID': asset.id || '',
+            'itemType': asset.typeName || '',
+            'viewCount': this.multiviewItems ? (asset.tileSource && asset.tileSource.length) : 1,
+            'collectionName': asset.collectionName || '',
+            'collectionType': asset.collectionType || '',
+            'classification': asset.formattedMetadata['Classification'] || '',
+            'geography': asset.formattedMetadata['Geography'] || '',
+        }
+        // Push content variables to GTM data layer, and fire "itemOpen" event
+        this.angulartics.eventTrack.next( { properties : { 
+            event: 'itemOpen',
+            gtmCustom : {
+              "content" : contentGTMVars
+            }
+          } });
     }
 
     /**
