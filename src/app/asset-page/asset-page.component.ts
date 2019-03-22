@@ -317,10 +317,11 @@ export class AssetPage implements OnInit, OnDestroy {
                 // If the current asset is a saved detail then save the zoom params in indexZoomMap
                 if (routeParams['x'] && routeParams['y'] && routeParams['w'] && routeParams['h']) {
                     this.indexZoomMap[0] = {
-                        x: parseInt(routeParams['x']),
-                        y: parseInt(routeParams['y']),
-                        width: parseInt(routeParams['w']),
-                        height: parseInt(routeParams['h'])
+                        viewerX: parseInt(routeParams['x']),
+                        viewerY: parseInt(routeParams['y']),
+                        pointWidth: parseInt(routeParams['w']),
+                        pointHeight: parseInt(routeParams['h']),
+                        index: 0
                     }
                 } else {
                     this.indexZoomMap[0] = {}
@@ -916,36 +917,64 @@ export class AssetPage implements OnInit, OnDestroy {
             asset.id = asset['artstorid'] || asset['objectId']
         }
         // remove from assetIds (only if it contains more than one assetids)
-        let assetIdIndex = this.assetIds.indexOf(asset.id)
+        // let assetIdIndex = this.assetIds.indexOf(asset.id)
+        let assetIdIndex = this.isSelectedAsset(asset)
+        console.log("Asset index is - ", assetIdIndex)
         if (assetIdIndex > -1) {
+            // If both the id and zoom values match and more than one assets are selected, then remove selected asset and corresponding zoom object
             if (this.assetIds.length > 1) {
+                this.prevAssetResults.thumbnails.forEach((thumbnail, i) => {
+                    if (asset.id == thumbnail.objectId) {
+                        let zoomMatched: boolean = true
+                        if(thumbnail.zoom){
+                            let assetZoomObj = asset.zoom ? asset.zoom : {}
+                            if(JSON.stringify(thumbnail.zoom) !== JSON.stringify(assetZoomObj)){
+                                zoomMatched = false
+                            }
+                        } else if (asset.zoom) {
+                            zoomMatched = false
+                        }
+
+                        if(zoomMatched) {
+                            thumbnail.selected = false
+                        }
+                    }
+                });
+                
                 this.assetIds.splice(assetIdIndex, 1)
+                this.assets.splice(assetIdIndex, 1)
+                this.indexZoomMap.splice(assetIdIndex, 1)
+
+                // Once the primary asset (assets[0]) is removed change the URL (navigate) to the new primary asset
+                if (assetIdIndex === 0) {
+                    this._router.navigate(['/asset', this.assetIds[0]]);
+                }
             }
             add = false
         }
         // remove from assets (only if it contains more than one asset)
-        this.assets.forEach((viewAsset, i) => {
-            if ([viewAsset.id, viewAsset['artstorid'], viewAsset['objectId']].indexOf(asset.id) > -1 && this.assets.length > 1) {
-                asset.selected = false;
-                this.assets.splice(i, 1);
-                add = false;
-                // Set 'selected' to 'false' for the asset in asset drawer
-                this.prevAssetResults.thumbnails.forEach((thumbnail, i) => {
-                    if (asset.id == thumbnail.id) {
-                        thumbnail.selected = false;
-                    }
-                });
+        // this.assets.forEach((viewAsset, i) => {
+        //     if ([viewAsset.id, viewAsset['artstorid'], viewAsset['objectId']].indexOf(asset.id) > -1 && this.assets.length > 1) {
+        //         asset.selected = false;
+        //         this.assets.splice(i, 1);
+        //         add = false;
+        //         // Set 'selected' to 'false' for the asset in asset drawer
+        //         this.prevAssetResults.thumbnails.forEach((thumbnail, i) => {
+        //             if (asset.id == thumbnail.id) {
+        //                 thumbnail.selected = false;
+        //             }
+        //         });
 
-                // Once the primary asset (assets[0]) is removed change the URL (navigate) to the new primary asset
-                if (i === 0) {
-                    this._router.navigate(['/asset', this.assetIds[0]]);
-                }
+        //         // Once the primary asset (assets[0]) is removed change the URL (navigate) to the new primary asset
+        //         // if (i === 0) {
+        //         //     this._router.navigate(['/asset', this.assetIds[0]]);
+        //         // }
 
-                // Remove the zoom object for the asset
-                this.indexZoomMap.splice(i, 1)
+        //         // Remove the zoom object for the asset
+        //         // this.indexZoomMap.splice(i, 1)
 
-            }
-        })
+        //     }
+        // })
         if (this.assets.length >= 10) {
             add = false;
             // TO-DO: Show Error message
@@ -955,16 +984,20 @@ export class AssetPage implements OnInit, OnDestroy {
             this.assetIds.push(asset[this.assetIdProperty]);
             // Push the zoom object for the asset
             let zoomObj: ImageZoomParams = asset.zoom ? {
-                x: parseInt(asset.zoom['viewerX']),
-                y: parseInt(asset.zoom['viewerY']),
-                width: parseInt(asset.zoom['pointWidth']),
-                height: parseInt(asset.zoom['pointHeight'])
+                viewerX: parseInt(asset.zoom['viewerX']),
+                viewerY: parseInt(asset.zoom['viewerY']),
+                pointWidth: parseInt(asset.zoom['pointWidth']),
+                pointHeight: parseInt(asset.zoom['pointHeight']),
+                index: 0
             }  : {}
             this.indexZoomMap.push(zoomObj)
 
             // Add GA tracking to select image to compare action
             this.angulartics.eventTrack.next({ properties: { event: 'Compare image', label: this.assetIds.length } })
         }
+
+        console.log("asset ids array - ", this.assetIds)
+        console.log("zoom map array - ", this.indexZoomMap)
 
         // log compared assets
         this._log.log({
@@ -1410,6 +1443,53 @@ export class AssetPage implements OnInit, OnDestroy {
 
     public closeToast(): void{
         setTimeout(()=>{ this.showToast = false }, 1000)
+    }
+
+    public isPrimaryAsset(asset: any): boolean{
+        let primaryAsset: boolean = true
+        let assetIdProperty =  asset['artstorid'] ? 'artstorid' : 'objectId'
+
+        if (this.assets[0].id === asset[assetIdProperty]){            
+            if(asset['zoom']){
+                let primaryAssetZoomObj = this.assets[0]['zoom'] ? this.assets[0]['zoom'] : {}
+                if(JSON.stringify(asset['zoom']) !== JSON.stringify(primaryAssetZoomObj)){
+                    primaryAsset = false
+                }
+            } else if (this.assets[0]['zoom']) {
+                primaryAsset = false
+            }
+        } else {
+            primaryAsset = false
+        }
+
+        return primaryAsset
+    }
+
+    private isSelectedAsset(asset: any): number{
+        let index: number = -1
+
+        for (let i = 0; i < this.assetIds.length; i++){
+          if (this.assetIds[i] === asset.id){
+            
+            // Also consider zoom detail for exact match on assets
+            let zoomMatched: boolean = true
+            if(this.indexZoomMap[i]){
+              let selectedAssetZoomObj = this.indexZoomMap[i]
+              let assetZoomObj = asset.zoom ? asset.zoom : {}
+              if(JSON.stringify(assetZoomObj) !== JSON.stringify(selectedAssetZoomObj)){
+                zoomMatched = false
+              }
+            } else if (asset.zoom) {
+              zoomMatched = false
+            }
+    
+            if(zoomMatched) {
+              index = i
+              break
+            }
+          }
+        }
+        return index
     }
 
 }

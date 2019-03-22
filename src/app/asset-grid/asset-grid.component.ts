@@ -575,6 +575,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   private selectAsset(asset, event?): void {
     if (this.editMode){
+      console.log("selected asset is", asset)
       event && event.preventDefault()
       let index: number = this.isSelectedAsset(asset)
       if (index > -1){
@@ -787,7 +788,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private isSelectedAsset(asset: any): number{
     let index: number = -1
     let assetIdProperty =  'artstorid'
-
+    
     // some services return assets with objectId instead of artstorid, so check the first one and use that
     if (this.selectedAssets[0] && !this.selectedAssets[0].hasOwnProperty('artstorid')) {
       assetIdProperty = 'objectId'
@@ -795,8 +796,22 @@ export class AssetGrid implements OnInit, OnDestroy {
     let len = this.selectedAssets.length
     for (let i = 0; i < len; i++){
       if (this.selectedAssets[i][assetIdProperty] === asset[assetIdProperty]){
-        index = i
-        break
+        
+        // Also consider zoom detail for exact match on assets
+        let zoomMatched: boolean = true
+        if(asset.zoom){
+          let selectedAssetZoomObj = this.selectedAssets[i].zoom ? this.selectedAssets[i].zoom : {}
+          if(JSON.stringify(asset.zoom) !== JSON.stringify(selectedAssetZoomObj)){
+            zoomMatched = false
+          }
+        } else if (this.selectedAssets[i].zoom) {
+          zoomMatched = false
+        }
+
+        if(zoomMatched) {
+          index = i
+          break
+        }
       }
     }
     return index

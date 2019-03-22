@@ -17,6 +17,7 @@ export class IgFormUtil {
    */
   public prepareGroup(form: IgFormValue, description: string, assets: any[], user: any, currentIg?: ImageGroup): ImageGroup {
     let assetIdProperty = 'artstorid'
+    console.log('assets while preping are: ', assets)
 
     /** format an array of asset ids out of the asset */
     let items = []
@@ -37,7 +38,7 @@ export class IgFormUtil {
           itemObj.id = item // sometimes though it's just an array of strings
         }
 
-        if (item.detailViewBounds && item.detailViewBounds.width) {
+        if (item.detailViewBounds && item.detailViewBounds.width) { // for detail selected from asset viewer
           itemObj.zoom = ({
             "viewerX": Math.round(item.detailViewBounds['x']),
             "viewerY": Math.round(item.detailViewBounds['y']),
@@ -45,6 +46,8 @@ export class IgFormUtil {
             "pointHeight": Math.round(item.detailViewBounds['height']),
             "index": 0
           })
+        } else if (item.zoom){ // for details selected from asset grid
+          itemObj.zoom = item.zoom
         }
 
         items.push(itemObj)

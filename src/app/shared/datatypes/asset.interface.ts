@@ -344,8 +344,9 @@ export interface MetadataResponse {
  * IIIF Zoom parameters as passed by Group service and URL params
  */
 export interface ImageZoomParams {
-    x?: number
-    y?: number
-    width?: number
-    height?: number
+    viewerX?: number
+    viewerY?: number
+    pointWidth?: number
+    pointHeight?: number
+    index?: number
 }
