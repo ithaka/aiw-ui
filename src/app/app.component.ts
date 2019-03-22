@@ -143,24 +143,34 @@ export class AppComponent {
           let event_url_array = event.url.split('/')
           let zendeskElements = this._dom.bySelectorAll('.zopim')
           let path = event.urlAfterRedirects
-          let pageGTM = {}
+          // Properties of "pageGTM" need to match vars set in Google Tag Manager
+          let pageGTM = {
+            'pageName' : '',
+            'siteSection': '',
+            'pageType' : ''
+          }
 
           /**
            * Angulartics/Google Tag Manager
-           * - Track page views with additional data in the data layer
+           * - Track page views with additional data in the GTM data layer
            */
           Object.keys(this.pageNameMap).forEach( route => {
-            if (path.indexOf('route') === 0) {
+            // Finding matching page values
+            if (path.indexOf(route) >= 0) {
               let mapValues = this.pageNameMap[route]
               pageGTM = {
-                'Page Name': mapValues.name,
-                'Site Section': mapValues.section,
-                'Page Type' : mapValues.type
+                'pageName': mapValues.name,
+                'siteSection': mapValues.section,
+                'pageType' : mapValues.type
               }
             }
           })
-          console.log("Page data", pageGTM)
-          this._ga.eventTrack.next({ properties: pageGTM });
+          // Push to GTM data layer
+          this._ga.eventTrack.next( { properties : { 
+            gtmCustom : {
+              "page" : pageGTM
+            }
+          } });
 
           // Reset OGP tags with default values for every route other than asset and collection pages
           if (event.url.indexOf('asset/') === -1
