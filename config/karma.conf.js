@@ -30,7 +30,7 @@ module.exports = function(config) {
       'karma-webpack',
       '@pact-foundation/karma-pact'
     ],
-    
+
     // list of files to exclude
     exclude: [ ],
 
@@ -69,32 +69,32 @@ module.exports = function(config) {
      */
     pact: [
       {
-        cors: true, 
+        cors: true,
         host: 'localhost',
-        port: 1201, 
+        port: 1201,
         dir: 'pacts/',
         consumer: 'aiw-ui',
         provider: 'binder-group'
       },
       {
-        cors: true, 
+        cors: true,
         host: 'localhost',
-        port: 1202, 
+        port: 1202,
         dir: 'pacts/',
         consumer: 'aiw-ui',
         provider: 'binder-metadata'
       },
       {
-        cors: true, 
+        cors: true,
         host: 'localhost',
-        port: 1203, 
+        port: 1203,
         dir: 'pacts/',
         consumer: 'aiw-ui',
         provider: 'artaa_service'
       }
-    ], 
+    ],
     // 4) here we can define proxies to redirect requests from our pact tests to the mock server
-    proxies: { 
+    proxies: {
       '/api/v1/group': 'http://localhost:1201/api/v1/group',
       '/api/v1/metadata': 'http://localhost:1202/api/v1/metadata',
       '/api/secure/user/': 'http://localhost:1203/api/secure/user/',
