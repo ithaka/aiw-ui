@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Subscription } from 'rxjs'
-import { map, take } from 'rxjs/operators'
+import { map, take, filter } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
 import { AssetService } from '../shared/assets.service'
@@ -219,9 +219,46 @@ export class AssetFilters {
       })
     }
     this.availableFilters = filters
-
+    // Push search changes to GTM data layer
+    this.trackSearchDataLayer(this.appliedFilters, this.availableFilters)
   } // assignFilters
   
+  /**
+   * Update search vars in GTM data layer
+   * @param appliedFilters 
+   * @param filters  available filters
+   */
+  private trackSearchDataLayer(appliedFilters, filters) {
+    if (!appliedFilters || !filters) {
+      return
+    }
+    let classification = ''
+    let geography = ''
+    let contributor = ''
+    for (let i = 0; i < appliedFilters.length; i++){
+      let filter = appliedFilters[i]
+      if (filter.filterGroup.indexOf('classification') >= 0) {
+        classification = (filters.artclassification_str && filters.artclassification_str[0]) ? filters.artclassification_str[0].name : ''
+      } else if (filter.filterGroup.indexOf('geography') >= 0) {
+        geography = (filters.geography && filters.geography[0]) ? filters.geography[0].name : ''
+      } else if (filter.filterGroup.indexOf('donating') >= 0){
+        contributor = (filters.donatinginstitutionids && filters.donatinginstitutionids[0]) ? filters.donatinginstitutionids[0].showingName : ''
+      }
+    }
+    // Track search filters in GTM data layer
+    let searchGTMVars = {
+      'searchTerm': this.term || '',
+      'selectedClassification': classification,
+      'selectedGeography': geography,
+      'selectedContributor': contributor
+    }
+    // Push to GTM data layer
+    this.angulartics.eventTrack.next( { properties : { 
+      gtmCustom : {
+        "search" : searchGTMVars
+      }
+    } });
+  }
 
   private loadRoute(filterType?: string) {
     let params = {};
