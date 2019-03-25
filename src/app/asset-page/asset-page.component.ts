@@ -947,14 +947,16 @@ export class AssetPage implements OnInit, OnDestroy {
                     if (asset.id == thumbnail.objectId) {
                         let zoomMatched: boolean = true
                         if(thumbnail.zoom){
-                            let assetZoomObj = asset.zoom ? asset.zoom : {}
+                            // Corresponding zoomObj for the toggled asset
+                            let assetZoomObj = this.indexZoomMap[assetIdIndex]
                             if(JSON.stringify(thumbnail.zoom) !== JSON.stringify(assetZoomObj)){
                                 zoomMatched = false
                             }
-                        } else if (asset.zoom) {
+                        } else if (this.indexZoomMap[assetIdIndex] && this.indexZoomMap[assetIdIndex].viewerX) {
                             zoomMatched = false
                         }
 
+                        // If the zoom values match after the ids match, then mark the thumbnail as deselected
                         if(zoomMatched) {
                             thumbnail.selected = false
                         }
@@ -1503,7 +1505,7 @@ export class AssetPage implements OnInit, OnDestroy {
             
             // Also consider zoom detail for exact match on assets
             let zoomMatched: boolean = true
-            if(this.indexZoomMap[i]){
+            if(this.indexZoomMap[i] && this.indexZoomMap[i].viewerX){
               let selectedAssetZoomObj = this.indexZoomMap[i]
               let assetZoomObj = asset.zoom ? asset.zoom : {}
               if(JSON.stringify(assetZoomObj) !== JSON.stringify(selectedAssetZoomObj)){
