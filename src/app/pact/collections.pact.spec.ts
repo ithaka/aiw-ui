@@ -34,7 +34,14 @@ import { CollectionPage } from '../collection-page'
   * Test collection id: 10374058879
   */
 
- const mockCategoryDescResp = {
+
+
+describe('Collections #pact #collections', () => {
+
+  let provider
+  let _collection = getTestBed().get(CollectionPage)
+
+  const mockCategoryDescResp = {
     blurbUrl: null,
     id: 10374058879,
     imageDesc: null,
@@ -42,15 +49,7 @@ import { CollectionPage } from '../collection-page'
     leadObjectId: null,
     name: "AP Art History",
     shortDescription: null
- }
-
-describe('Collections #pact #collections', () => {
-
-  let provider
-  let _collection = getTestBed().get(CollectionPage)
-
-  // Set up all tests
-  // ---------------------------------------------------------------------------------------------
+  }
 
   beforeAll(function (done) {
     provider = new PactWeb({ consumer: 'aiw-ui', provider: 'binder-collections', port: 1204 })
@@ -79,7 +78,7 @@ describe('Collections #pact #collections', () => {
   });
 
   // Indidual tests 'describe'
-  describe('GET /api/v1/categerydesc/{id}', () => {
+  describe('GET /api/v1/categerydesc', () => {
 
     beforeAll((done) => {
 
@@ -88,6 +87,7 @@ describe('Collections #pact #collections', () => {
         withRequest: {
           method: 'GET',
           path: '/api/v1/categerydesc/',
+          query: '10374058879'
         },
         willRespondWith: {
           status: 200,
@@ -106,7 +106,7 @@ describe('Collections #pact #collections', () => {
         })
     })
 
-    fit('should return a category description response',
+    it('should return a category description response',
       function (done) {
 
         _collection.get('10374058879')
@@ -126,6 +126,7 @@ describe('Collections #pact #collections', () => {
               'name',
               'shortDescription'
             ]
+            expect(res).toEqual(mockCategoryDescResp)
 
             // Test res.keys match expected keys
             expect(actualResKeys).toEqual(expectedResKeys)
@@ -140,90 +141,5 @@ describe('Collections #pact #collections', () => {
           )
       })
   })
-
-
-
-
-
-// -----------------------------------------------------------------------------------------------------------------------
-
-  //let _groupService; ig: => getTestBed().get(GroupService)
-
-  /**
-   * Mock and test a group/id enpoint (a single group)
-   */
-  // describe('GET /api/v1/collections/{id}', () => {
-  //   beforeAll((done) => {
-
-  //     provider.addInteraction({
-  //       uponReceiving: 'a request for an individual collection',
-  //       withRequest: {
-  //         method: 'GET',
-  //         path: '/api/v1/collection',
-  //       },
-  //       willRespondWith: {
-  //         status: 200,
-  //         headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-  //         body: mockTestCollectionResponse
-  //       }
-  //     })
-  //       .then(() => { done() }, (err) => { done.fail(err) })
-  //   })
-
-  //   afterEach((done) => {
-  //     provider.verify()
-  //       .then(function (a) {
-  //         done()
-  //       }, function (e) {
-  //         done.fail(e)
-  //       })
-  //   })
-
-  //   it('should return single collection data',
-  //     function (done) {
-
-  //       _groupService.get('ADD TEST COLLECTION ID')
-  //         .subscribe(res => {
-
-  //           let actualResKeys = Object.keys(res) // response object keys
-  //           let resAccessKeys = Object.keys(res.access[0]) // response 'access' object keys
-
-  //           let expectedResKeys = [
-  //             // 'description',
-  //             // 'owner_name',
-  //             // 'tags',
-  //             // 'owner_id',
-  //             // 'sequence_number',
-  //             // 'update_date',
-  //             // 'name',
-  //             // 'public',
-  //             // 'creation_date',
-  //             // 'id',
-  //             // 'access',
-  //             // 'items'
-  //           ]
-
-  //           let expectedAccessKeys = [
-  //             // 'entity_type',
-  //             // 'entity_identifier',
-  //             // 'access_type'
-  //           ]
-
-  //           // Test res.keys match expected keys
-  //           expect(actualResKeys).toEqual(expectedResKeys)
-
-  //           // Test res.access.keys
-  //           expect(resAccessKeys).toEqual(expectedAccessKeys)
-
-  //           // Test res.items length
-  //           expect(res.items.length).toBeGreaterThan(0)
-  //           done()
-  //         },
-  //           err => {
-  //             done.fail(err)
-  //           }
-  //         )
-  //     })
-  // })
 
 })
