@@ -35,7 +35,7 @@
             [showCaption]="showAssetCaption",
             [quizMode]="quizMode",
             [prevAssetResults]="prevAssetResults",
-            (removeAsset)="toggleAsset($event)",
+            (removeAsset)="toggleAsset($event, i)",
             (nextPage)="showNextAsset()",
             (prevPage)="showPrevAsset()",
             (multiViewPageViaArrow)="multiViewPageViaArrow()",

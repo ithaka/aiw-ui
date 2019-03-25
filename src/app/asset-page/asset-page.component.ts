@@ -929,7 +929,7 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     // Add or remove assets from Assets array for comparison in full screen
-    private toggleAsset(asset: any): void {
+    private toggleAsset(asset: any, index?: number): void {
         // ADD or REMOVE to assets and assetIds arrays
         let add = true;
         // Groups/items services use "objectid"
@@ -939,8 +939,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         // remove from assetIds (only if it contains more than one assetids)
         // let assetIdIndex = this.assetIds.indexOf(asset.id)
-        let assetIdIndex = this.isSelectedAsset(asset)
-        console.log("Asset index is - ", assetIdIndex)
+        let assetIdIndex = index ? index : this.isSelectedAsset(asset)
         if (assetIdIndex > -1) {
             // If both the id and zoom values match and more than one assets are selected, then remove selected asset and corresponding zoom object
             if (this.assetIds.length > 1) {
@@ -1029,10 +1028,6 @@ export class AssetPage implements OnInit, OnDestroy {
             // Add GA tracking to select image to compare action
             this.angulartics.eventTrack.next({ properties: { event: 'Compare image', label: this.assetIds.length } })
         }
-
-        console.log("asset ids array - ", this.assetIds)
-        console.log("zoom map array - ", this.indexZoomMap)
-        console.log("previous thumbnails - ", this.prevAssetResults.thumbnails)
 
         // log compared assets
         this._log.log({

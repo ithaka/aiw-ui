@@ -218,9 +218,9 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
                     asset.formattedMetadata['Date'][0] = asset.formattedMetadata['Date'][0].replace(/<br\s*[\/]?>/gi, ' ')
                 }
 
-                // if(this.zoom && this.zoom.viewerX){
-                //     asset['zoom'] = this.zoom
-                // }
+                if(this.zoom && this.zoom.viewerX){
+                    asset.zoom = this.zoom
+                }
 
                 this.asset = asset
                 this.assetMetadata.emit(asset)

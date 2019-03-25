@@ -35,6 +35,8 @@ export class Asset {
         center?: any
     } = {}
 
+    public zoom?: ImageZoomParams
+
 //   private dataLoadedSource = new BehaviorSubject<boolean>(false)
 //   public isDataLoaded = this.dataLoadedSource.asObservable()
 
