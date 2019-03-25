@@ -209,6 +209,93 @@ export class AssetPage implements OnInit, OnDestroy {
     ngOnInit() {
         this.user = this._auth.getUser();
 
+        this.subscriptions.push(
+            this._flags.flagUpdates.subscribe((flags) => {
+                this.relatedResFlag = flags.relatedResFlag ? true : false
+                this.detailViewsFlag = flags.detailViews ? true : false
+            }),
+            this.route.params.subscribe((routeParams) => {
+                this.assetGroupId = routeParams['groupId']
+                // Find feature flags
+                this._flags.readFlags(routeParams)
+
+                // If the current asset is a saved detail then save the zoom params in indexZoomMap
+                if (routeParams['x'] && routeParams['y'] && routeParams['w'] && routeParams['h']) {
+                    this.indexZoomMap[0] = {
+                        viewerX: parseInt(routeParams['x']),
+                        viewerY: parseInt(routeParams['y']),
+                        pointWidth: parseInt(routeParams['w']),
+                        pointHeight: parseInt(routeParams['h']),
+                        index: 0
+                    }
+                } else {
+                    this.indexZoomMap[0] = {}
+                }
+
+                if (routeParams['encryptedId']) {
+                    this.encryptedAccess = true
+                    this.assetIds[0] = routeParams['encryptedId']
+                } else if (routeParams['openLibId']) {
+                    this.fromOpenLibrary = true
+                    this.assetIds[0] = routeParams['openLibId']
+                } else if ( routeParams['encryptedOpenLibId']) {
+                    this.fromOpenLibrary = true
+                    this.encryptedAccess = true
+                    this.assetIds[0] = routeParams['encryptedOpenLibId']
+                } else {
+                    this.assetIds[0] = routeParams['assetId']
+
+                    if (this.prevAssetResults.thumbnails.length > 0) {
+                        let currentAssetIndex = this.currentAssetIndex();
+                        if (currentAssetIndex === -1){
+                            if ( this.assetIndex % 24 === 0 ) { // Browser back button pressed
+                                this._assets.loadPrevAssetPage();
+                            } else { // Browser next button pressed
+                                this._assets.loadNextAssetPage();
+                            }
+                        } else {
+                            this.assetIndex = currentAssetIndex;
+                            this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
+                        }
+                    }
+                }
+
+                // Set image share link
+                this.generateImgURL(this.assetIds[0], this.encryptedAccess || this.fromOpenLibrary)
+
+                // For "Back to Results" link and pagination, look for prevRouteTS to set prevRouteParams
+                if (routeParams['prevRouteTS']) {
+                    this.prevRouteTS = routeParams['prevRouteTS']
+                    // For "Go Back to Results"
+                    // Get map of previous search params
+                    let prevRoutesMap = this._storage.getSession('prevRouteParams')
+                    // Reference previous search params for the prevRouteTS
+                    let prevRouteParams = prevRoutesMap ? prevRoutesMap[this.prevRouteTS] : {}
+
+                    // Set previous route params if available, showing "Back to Results" link
+                    if (prevRoutesMap && prevRouteParams && (prevRouteParams.length > 0)) {
+                        this.prevRouteParams = prevRouteParams
+                    }
+                    // TotalAssets - for browsing between the assets
+                    let totalAssets = this._storage.getSession('totalAssets');
+                    if (totalAssets) {
+                        this.totalAssetCount = parseInt(totalAssets);
+                    }
+                    else {
+                        this.totalAssetCount = 1
+                    }
+                }
+                // If I go to the asset by replacing the url without opening a new tab, do not show the "Go Back to Results" link and pagination link
+                else {
+                    this.prevRouteParams = []
+                    this.totalAssetCount = 1
+                    this.assetNumber = 1
+                }
+            })
+        );
+
+
+
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
             this._auth.currentUser.subscribe((user) => {
@@ -272,91 +359,6 @@ export class AssetPage implements OnInit, OnDestroy {
                         this.assetIndex = this.currentAssetIndex();
                         this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
                     }
-                }
-            })
-        );
-
-        this.subscriptions.push(
-            this._flags.flagUpdates.subscribe((flags) => {
-                this.relatedResFlag = flags.relatedResFlag ? true : false
-                this.detailViewsFlag = flags.detailViews ? true : false
-            }),
-            this.route.params.subscribe((routeParams) => {
-                this.assetGroupId = routeParams['groupId']
-                // Find feature flags
-                this._flags.readFlags(routeParams)
-
-                if (routeParams['encryptedId']) {
-                    this.encryptedAccess = true
-                    this.assetIds[0] = routeParams['encryptedId']
-                } else if (routeParams['openLibId']) {
-                    this.fromOpenLibrary = true
-                    this.assetIds[0] = routeParams['openLibId']
-                } else if ( routeParams['encryptedOpenLibId']) {
-                    this.fromOpenLibrary = true
-                    this.encryptedAccess = true
-                    this.assetIds[0] = routeParams['encryptedOpenLibId']
-                } else {
-                    this.assetIds[0] = routeParams['assetId']
-
-                    if (this.prevAssetResults.thumbnails.length > 0) {
-                        let currentAssetIndex = this.currentAssetIndex();
-                        if (currentAssetIndex === -1){
-                            if ( this.assetIndex % 24 === 0 ) { // Browser back button pressed
-                                this._assets.loadPrevAssetPage();
-                            } else { // Browser next button pressed
-                                this._assets.loadNextAssetPage();
-                            }
-                        } else {
-                            this.assetIndex = currentAssetIndex;
-                            this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
-                        }
-                    }
-                }
-
-                // If the current asset is a saved detail then save the zoom params in indexZoomMap
-                if (routeParams['x'] && routeParams['y'] && routeParams['w'] && routeParams['h']) {
-                    this.indexZoomMap[0] = {
-                        viewerX: parseInt(routeParams['x']),
-                        viewerY: parseInt(routeParams['y']),
-                        pointWidth: parseInt(routeParams['w']),
-                        pointHeight: parseInt(routeParams['h']),
-                        index: 0
-                    }
-                } else {
-                    this.indexZoomMap[0] = {}
-                }
-
-                // Set image share link
-                this.generateImgURL(this.assetIds[0], this.encryptedAccess || this.fromOpenLibrary)
-
-                // For "Back to Results" link and pagination, look for prevRouteTS to set prevRouteParams
-                if (routeParams['prevRouteTS']) {
-                    this.prevRouteTS = routeParams['prevRouteTS']
-                    // For "Go Back to Results"
-                    // Get map of previous search params
-                    let prevRoutesMap = this._storage.getSession('prevRouteParams')
-                    // Reference previous search params for the prevRouteTS
-                    let prevRouteParams = prevRoutesMap ? prevRoutesMap[this.prevRouteTS] : {}
-
-                    // Set previous route params if available, showing "Back to Results" link
-                    if (prevRoutesMap && prevRouteParams && (prevRouteParams.length > 0)) {
-                        this.prevRouteParams = prevRouteParams
-                    }
-                    // TotalAssets - for browsing between the assets
-                    let totalAssets = this._storage.getSession('totalAssets');
-                    if (totalAssets) {
-                        this.totalAssetCount = parseInt(totalAssets);
-                    }
-                    else {
-                        this.totalAssetCount = 1
-                    }
-                }
-                // If I go to the asset by replacing the url without opening a new tab, do not show the "Go Back to Results" link and pagination link
-                else {
-                    this.prevRouteParams = []
-                    this.totalAssetCount = 1
-                    this.assetNumber = 1
                 }
             })
         );
@@ -723,14 +725,33 @@ export class AssetPage implements OnInit, OnDestroy {
         if (this.assetIds[0]) {
             for (let i = 0; i < this.prevAssetResults.thumbnails.length; i++) {
                 // Select the thumbnail if its arstor_id is in assetIds
-                if (this.assetIds.indexOf(this.prevAssetResults.thumbnails[i][this.assetIdProperty]) > -1) {
-                    this.prevAssetResults.thumbnails[i].selected = true
-                    assetIndex = i
-                    assetFound = true
+                let index: number = this.assetIds.indexOf(this.prevAssetResults.thumbnails[i][this.assetIdProperty])
+                if (index > -1) {
+                    let zoomMatched: boolean = true
+                    if(this.prevAssetResults.thumbnails[i].zoom){
+                        if(JSON.stringify(this.prevAssetResults.thumbnails[i].zoom) !== JSON.stringify(this.indexZoomMap[index])){
+                            zoomMatched = false
+                        }
+                    } else if (this.indexZoomMap[index] && this.indexZoomMap[index].viewerX) {
+                        zoomMatched = false
+                    }
+
+                    if(zoomMatched) {
+                        // this.prevAssetResults.thumbnails[i].selected = true
+                        assetIndex = i
+                        assetFound = true
+                    }
                 }
-                else {
-                    this.prevAssetResults.thumbnails[i].selected = false
-                }
+
+
+                // if (this.assetIds.indexOf(this.prevAssetResults.thumbnails[i][this.assetIdProperty]) > -1) {
+                //     this.prevAssetResults.thumbnails[i].selected = true
+                //     assetIndex = i
+                //     assetFound = true
+                // }
+                // else {
+                //     this.prevAssetResults.thumbnails[i].selected = false
+                // }
             }
         }
         assetIndex = assetFound ? assetIndex : -1
@@ -908,7 +929,7 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     // Add or remove assets from Assets array for comparison in full screen
-    private toggleAsset(asset: any): void {
+    private toggleAsset(asset: any, index?: number): void {
         // ADD or REMOVE to assets and assetIds arrays
         let add = true;
         // Groups/items services use "objectid"
@@ -942,12 +963,25 @@ export class AssetPage implements OnInit, OnDestroy {
                 });
                 
                 this.assetIds.splice(assetIdIndex, 1)
-                this.assets.splice(assetIdIndex, 1)
                 this.indexZoomMap.splice(assetIdIndex, 1)
+                this.assets.splice(assetIdIndex, 1)
 
                 // Once the primary asset (assets[0]) is removed change the URL (navigate) to the new primary asset
                 if (assetIdIndex === 0) {
-                    this._router.navigate(['/asset', this.assetIds[0]]);
+                    let queryParams = {}
+                    if (this.prevRouteTS) {
+                        queryParams['prevRouteTS'] = this.prevRouteTS
+                    }
+                    if (this.assetGroupId) {
+                        queryParams['groupId'] = this.assetGroupId
+                    }
+                    if(this.indexZoomMap[0] && this.indexZoomMap[0].viewerX){
+                        queryParams['x'] = this.indexZoomMap[0].viewerX
+                        queryParams['y'] = this.indexZoomMap[0].viewerY
+                        queryParams['w'] = this.indexZoomMap[0].pointWidth
+                        queryParams['h'] = this.indexZoomMap[0].pointHeight
+                    }
+                    this._router.navigate(['/asset', this.assetIds[0], queryParams]);
                 }
             }
             add = false
@@ -998,6 +1032,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         console.log("asset ids array - ", this.assetIds)
         console.log("zoom map array - ", this.indexZoomMap)
+        console.log("previous thumbnails - ", this.prevAssetResults.thumbnails)
 
         // log compared assets
         this._log.log({

@@ -2,6 +2,7 @@ import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Outpu
 import { Subscription, Observable, of } from 'rxjs'
 import { take, map, mergeMap } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { ActivatedRoute } from '@angular/router'
 import * as OpenSeadragon from 'openseadragon'
 
 // Internal Dependencies
@@ -137,7 +138,8 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         private _http: HttpClient, // TODO: move _http into a service
         private _metadata: MetadataService,
         private _auth: AuthService,
-        @Inject(PLATFORM_ID) private platformId: Object
+        @Inject(PLATFORM_ID) private platformId: Object,
+        private route: ActivatedRoute
     ) {
         if(!this.index) {
             this.index = 0
@@ -145,6 +147,16 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     ngOnInit() {
+        this.subscriptions.push(
+            this.route.params.subscribe((routeParams) => {
+                if(this.tilesLoaded) {
+                    setTimeout(() => {
+                        this.refreshZoomedView()
+
+                    }, 250)
+                }
+            })
+        )
         if (!isPlatformBrowser(this.platformId)) {
             // If rendered server-side, load thumbnail
             this.thumbnailMode = true
@@ -542,6 +554,9 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         if(this.zoom && this.zoom.viewerX){
             let bounds = this.osdViewer.viewport.imageToViewportRectangle(this.zoom.viewerX, this.zoom.viewerY, this.zoom.pointWidth, this.zoom.pointHeight)
             this.osdViewer.viewport.fitBounds(bounds, true)
+        } else {
+            this.osdViewer.viewport.fitVertically(true)
+            
         }
     }
     /**
