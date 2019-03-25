@@ -86,7 +86,7 @@ describe('Collections #pact #collections', () => {
   });
 
   // Indidual tests 'describe'
-  describe('GET /api/v1/categerydesc', () => {
+  describe('GET /api/v1/categorydesc', () => {
 
     beforeAll((done) => {
 
@@ -94,7 +94,7 @@ describe('Collections #pact #collections', () => {
         uponReceiving: 'a request for ADL category description for a collection',
         withRequest: {
           method: 'GET',
-          path: '/api/v1/categerydesc/',
+          path: '/api/v1/categorydesc/',
           query: '10374058879'
         },
         willRespondWith: {

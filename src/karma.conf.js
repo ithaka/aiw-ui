@@ -12,7 +12,7 @@ module.exports = function (config) {
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
       require('karma-mocha-reporter'),
-      require('karma-coverage-istanbul-reporter'), 
+      require('karma-coverage-istanbul-reporter'),
       require('@angular-devkit/build-angular/plugins/karma')
     ],
     client: {
@@ -75,7 +75,8 @@ module.exports = function (config) {
       '/api/v1/metadata': 'http://localhost:1202/api/v1/metadata',
       '/api/secure/user/': 'http://localhost:1203/api/secure/user/',
       '/api/secure/user/abcdefg': 'http://localhost:1203/api/secure/user/abcdefg',
-      '/api/v1/categorydesc/': 'http://localhost:1204/api/v1/categorydesc'
+      '/api/v1/categorydesc/': 'http://localhost:1204/api/v1/categorydesc',
+      '/api/v1/categorynames/': 'http://localhost:1204/api/v1/categorynames'
     }
 
   });

@@ -1,7 +1,7 @@
 // Unit testing build variables
 export const environment = {
   production: false,
-  API_URL: '//stage.artstor.org',
+  API_URL: '',
   FORUM_URL: 'http://test.forum.jstor.org',
   STOR_URL: '//stor.stage.artstor.org/stor',
   GAPI_TEST: [
