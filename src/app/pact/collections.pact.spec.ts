@@ -51,6 +51,14 @@ describe('Collections #pact #collections', () => {
     shortDescription: null
   }
 
+  const mockCategeoryNamesResp = [
+      { categoryid: "", categoryname: "" },
+      { categoryid: "", categoryname: "" },
+      { categoryid: "", categoryname: "" },
+      { categoryid: "", categoryname: "" },
+    ]
+
+
   beforeAll(function (done) {
     provider = new PactWeb({ consumer: 'aiw-ui', provider: 'binder-collections', port: 1204 })
     // Required for slower environments
