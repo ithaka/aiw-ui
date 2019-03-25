@@ -1486,11 +1486,11 @@ export class AssetPage implements OnInit, OnDestroy {
 
         if (this.assets[0].id === asset[assetIdProperty]){            
             if(asset['zoom']){
-                let primaryAssetZoomObj = this.assets[0]['zoom'] ? this.assets[0]['zoom'] : {}
+                let primaryAssetZoomObj = this.indexZoomMap[0]
                 if(JSON.stringify(asset['zoom']) !== JSON.stringify(primaryAssetZoomObj)){
                     primaryAsset = false
                 }
-            } else if (this.assets[0]['zoom']) {
+            } else if (this.indexZoomMap[0] && this.indexZoomMap[0].viewerX) {
                 primaryAsset = false
             }
         } else {

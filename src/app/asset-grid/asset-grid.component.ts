@@ -640,6 +640,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       // Start loading
       this.isLoading = true;
 
+      let itemObjs: any[] = this.itemIds.slice(0)
       // Map itemIds array of objects to array of strings for v1 items
       this.itemIds = this.itemIds.map(item => {
         return (typeof(item) === 'object') ? item['id'] : item
@@ -652,7 +653,23 @@ export class AssetGrid implements OnInit, OnDestroy {
           allThumbnails = allThumbnails.filter(thumbnail => {
             return thumbnail.status === 'available'
           })
-          this.allResults = allThumbnails
+
+          // Make sure the fetched thumbnail objects contain the zoom info as well
+          itemObjs = itemObjs.map(itemObj => {
+            let obj = {}
+            for(let thmb of allThumbnails){
+              if(thmb.objectId === itemObj['id']){
+                obj = Object.assign({}, thmb)
+                if(itemObj['zoom']){
+                  obj['zoom'] = itemObj['zoom']
+                }
+                break
+              }
+            }
+            return obj
+          })
+
+          this.allResults = itemObjs
           this.results = this.allResults.slice(0)
         })
         .catch( error => {
@@ -702,16 +719,19 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.isLoading = true;
     this.allResults = this.results
 
-    let newItemsArray = [];
-
+    let newItemsArray: any[] = [];
+    // Construct the updated array of item objects containing id and zoom if avilable
     for (let i = 0; i < this.allResults.length; i++) {
       if ('objectId' in this.allResults[i]) {
-        newItemsArray.push(this.allResults[i]['objectId'])
+        let itemObj = { id: this.allResults[i]['objectId'] }
+        if(this.allResults[i]['zoom']) {
+          itemObj['zoom'] = this.allResults[i]['zoom']
+        }
+        newItemsArray.push(itemObj)
       }
     };
 
     this.ig.items = newItemsArray;
-
     this._groups.update(this.ig).pipe(
       take(1),
       map(data => {
