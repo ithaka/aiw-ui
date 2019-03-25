@@ -929,7 +929,7 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     // Add or remove assets from Assets array for comparison in full screen
-    private toggleAsset(asset: any, index?: number): void {
+    private toggleAsset(asset: any): void {
         // ADD or REMOVE to assets and assetIds arrays
         let add = true;
         // Groups/items services use "objectid"

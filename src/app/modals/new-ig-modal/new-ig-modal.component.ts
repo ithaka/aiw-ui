@@ -94,7 +94,6 @@ export class NewIgModal implements OnInit {
     // Does user have any private groups yet?
     // Check local storage first, otherwise call group service
     let hasPrivate = this._storage.getLocal('hasPrivateGroups')
-    console.log('selected assets passed are: ', this.selectedAssets)
     if (hasPrivate)  {
       this.hasPrivateGroups = true
     }
@@ -139,7 +138,6 @@ export class NewIgModal implements OnInit {
         this._assets.selection.pipe(
         map(assets => {
           this.selectedAssets = assets
-          console.log('selected assets passed are: ', this.selectedAssets)
         },
         error => {
           console.error(error)

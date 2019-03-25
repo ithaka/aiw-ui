@@ -17,7 +17,6 @@ export class IgFormUtil {
    */
   public prepareGroup(form: IgFormValue, description: string, assets: any[], user: any, currentIg?: ImageGroup): ImageGroup {
     let assetIdProperty = 'artstorid'
-    console.log('assets while preping are: ', assets)
 
     /** format an array of asset ids out of the asset */
     let items = []

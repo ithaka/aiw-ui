@@ -274,7 +274,7 @@
           pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
         div.pt-1.pb-3(*ngIf="prevAssetResults.thumbnails.length < 1")
           .alert.alert-info {{ 'ASSET_PAGE.MESSAGES.NEEDASSETS' | translate}}
-        ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails; let i = index", [thumbnail]="asset", [ngClass]="{ 'selected' : asset.selected || isPrimaryAsset(asset), 'primary': isPrimaryAsset(asset) }", (click)="toggleAsset(asset, i)")
+        ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{ 'selected' : asset.selected || isPrimaryAsset(asset) }", (click)="toggleAsset(asset)")
         .text-center.pt-2
           pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
 ang-agree-modal(*ngIf="showAgreeModal", (closeModal)="showAgreeModal = false", (acceptedTerms)="acceptedTerms = true", [downloadUrl]="downloadUrl", [downloadName]="downloadName", [isMSAgent]="isMSAgent", [setDownloadView]="setDownloadView")

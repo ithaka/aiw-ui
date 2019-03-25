@@ -575,7 +575,6 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   private selectAsset(asset, event?): void {
     if (this.editMode){
-      console.log("selected asset is", asset)
       event && event.preventDefault()
       let index: number = this.isSelectedAsset(asset)
       if (index > -1){

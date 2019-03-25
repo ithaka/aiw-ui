@@ -152,7 +152,6 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
                 if(this.tilesLoaded) {
                     setTimeout(() => {
                         this.refreshZoomedView()
-
                     }, 250)
                 }
             })
