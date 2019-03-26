@@ -157,7 +157,9 @@ export class AppComponent {
            * Angulartics/Google Tag Manager
            * - Track page views with additional data in the GTM data layer
            */
-          Object.keys(this.pageNameMap).forEach( route => {
+          let routes = Object.keys(this.pageNameMap)
+          for (let i = 0; i < routes.length; i++) {
+            let route = routes[i]
             // Finding matching page values
             if (path.indexOf(route) >= 0) {
               let mapValues = this.pageNameMap[route]
@@ -166,9 +168,9 @@ export class AppComponent {
                 'siteSection': mapValues.section,
                 'pageType' : mapValues.type
               }
-              // break loop if found
+              break
             }
-          })
+          }
           // Push to GTM data layer
           this._ga.eventTrack.next( { properties : { 
             gtmCustom : {
