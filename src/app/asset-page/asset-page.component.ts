@@ -511,8 +511,8 @@ export class AssetPage implements OnInit, OnDestroy {
             'viewCount': this.multiviewItems ? (asset.tileSource && asset.tileSource.length) : 1,
             'collectionName': asset.collectionName || '',
             'collectionType': asset.collectionType || '',
-            'classification': asset.formattedMetadata['Classification'] || '',
-            'geography': asset.formattedMetadata['Geography'] || '',
+            'classification': (asset.formattedMetadata && asset.formattedMetadata['Classification']) || '',
+            'geography': (asset.formattedMetadata && asset.formattedMetadata['Geography']) || '',
         }
         // Push content variables to GTM data layer, and fire "itemOpen" event
         this.angulartics.eventTrack.next( { properties : { 

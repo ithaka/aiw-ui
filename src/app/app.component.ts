@@ -54,6 +54,9 @@ export class AppComponent {
     '/account' : { name: 'settings', section: 'account', type: 'admin' },
     '/browse/library;viewId=250' : { name: 'browse by classification', section: 'browse', type: 'browse' },
     '/browse/library;viewId=260' : { name: 'browse by geography', section: 'browse', type: 'browse' },
+    '/browse/institution' : { name: 'browse by institutional', section: 'browse', type: 'browse' },
+    '/browse/commons' : { name: 'browse by public', section: 'browse', type: 'browse' },
+    '/browse/mycollections' : { name: 'browse my collections', section: 'browse', type: 'browse' },
     '/browse/library' : { name: 'browse by collection', section: 'browse', type: 'browse' },
     '/browse/groups' : { name: 'browse groups', section: 'groups', type: 'browse' },
     '/search' : { name: 'search', section: 'search', type: 'search' },
@@ -163,6 +166,7 @@ export class AppComponent {
                 'siteSection': mapValues.section,
                 'pageType' : mapValues.type
               }
+              // break loop if found
             }
           })
           // Push to GTM data layer
