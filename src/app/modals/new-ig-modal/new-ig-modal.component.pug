@@ -9,7 +9,11 @@
           span(aria-hidden="true") &times;
       form#newIgForm([formGroup]="newIgForm", (ngSubmit)="igFormSubmit(newIgForm.value)")
         .modal-body
+<<<<<<< Updated upstream
           label.modal-label(*ngIf="!hasPrivateGroups") {{ 'NEW_GROUP_MODAL.FIRST_GROUP_MSG' | translate }}
+=======
+          p(*ngIf="!hasGroups") {{ 'NEW_GROUP_MODAL.FIRST_GROUP_MSG' | translate }}
+>>>>>>> Stashed changes
           .form-group
             label.modal-label(for="igTitleInput") {{ 'NEW_GROUP_MODAL.TITLE_FIELD_LABEL' | translate }}&#42;
             input#igTitleInput.form-control.placeholder-text(type="text", [formControl]="newIgForm.controls['title']", placeholder="Give your group a title...", spellcheck="false", tabindex="0")
