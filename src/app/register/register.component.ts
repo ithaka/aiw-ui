@@ -29,6 +29,7 @@ export class RegisterComponent implements OnInit {
   public serviceErrors: {
     duplicate?: boolean,
     hasJstor?: boolean,
+    hasGoogle?: boolean,
     server?: boolean,
     showShibbolethError?: boolean,
     shibbolethError?: string,
@@ -164,6 +165,9 @@ export class RegisterComponent implements OnInit {
     }
     else if (formSubmissionResponse['statusMessage'] === 'User already exists.' && formSubmissionResponse['statusCode'] === 1) {
       this.serviceErrors.duplicate = true
+    } 
+    else if (formSubmissionResponse['statusCode'] === 3 || formSubmissionResponse['statusMessage'].indexOf('registered with Google') >= 0) {
+      this.serviceErrors.hasGoogle = true
     }
     this.isLoading = false
   }

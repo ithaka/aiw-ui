@@ -59,6 +59,7 @@
       "EMAIL_MISMATCH": "Email confirmation does not match",
       "EMAIL_DUPLICATE": "Email address is already registered",
       "ALREADY_JSTOR": "A JSTOR account with this email address already exists. Please enter your JSTOR password to register (<a class=\"link\" href=\"https://www.jstor.org/action/resetPassword\">Forgot your password?</a>). If the password is correct, Artstor access will be added to your JSTOR account.",
+      "ALREADY_GOOGLE": "A JSTOR account was already created using your email address via Google sign-in. We are working to implement Google sign-in on Artstor, but for now you will need to use a different email address to register with Artstor. We apologize for the inconvenience.",
       "PASSWORD_REQUIRED": "Password must be 7-20 characters",
       "PASSWORD_MINLENGTH": "Password must be 7-20 characters",
       "PASSWORD_MISMATCH": "Password confirmation does not match",
