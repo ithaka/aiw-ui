@@ -54,6 +54,9 @@ export class AppComponent {
     '/account' : { name: 'settings', section: 'account', type: 'admin' },
     '/browse/library;viewId=250' : { name: 'browse by classification', section: 'browse', type: 'browse' },
     '/browse/library;viewId=260' : { name: 'browse by geography', section: 'browse', type: 'browse' },
+    '/browse/institution' : { name: 'browse by institutional', section: 'browse', type: 'browse' },
+    '/browse/commons' : { name: 'browse by public', section: 'browse', type: 'browse' },
+    '/browse/mycollections' : { name: 'browse my collections', section: 'browse', type: 'browse' },
     '/browse/library' : { name: 'browse by collection', section: 'browse', type: 'browse' },
     '/browse/groups' : { name: 'browse groups', section: 'groups', type: 'browse' },
     '/search' : { name: 'search', section: 'search', type: 'search' },
@@ -154,7 +157,9 @@ export class AppComponent {
            * Angulartics/Google Tag Manager
            * - Track page views with additional data in the GTM data layer
            */
-          Object.keys(this.pageNameMap).forEach( route => {
+          let routes = Object.keys(this.pageNameMap)
+          for (let i = 0; i < routes.length; i++) {
+            let route = routes[i]
             // Finding matching page values
             if (path.indexOf(route) >= 0) {
               let mapValues = this.pageNameMap[route]
@@ -163,8 +168,9 @@ export class AppComponent {
                 'siteSection': mapValues.section,
                 'pageType' : mapValues.type
               }
+              break
             }
-          })
+          }
           // Push to GTM data layer
           this._ga.eventTrack.next( { properties : { 
             gtmCustom : {

@@ -78,7 +78,7 @@ export class BrowseGroupsComponent implements OnInit {
         description: 'Filter the groups you want to view by type, tag, or owner. Make sure to log in to see all of the groups you\'ve created, all in one place.',
       },
       onNext: () => {
-        this._ga.eventTrack.next({ properties: { event: 'endTour', category: this._auth.getGACategory(), label: 'imageGroupTour' } })
+        this._ga.eventTrack.next({ properties: { event: 'endTour', category: 'groups', label: 'imageGroupTour' } })
       }
     },
     {
@@ -198,7 +198,7 @@ export class BrowseGroupsComponent implements OnInit {
 
   public changeSortOpt(label) {
     if ( this.activeSort.label != label){
-      this._ga.eventTrack.next({ properties: { event: 'sortGroup', category: this._auth.getGACategory(), label: 'cardviewSort' }});
+      this._ga.eventTrack.next({ properties: { event: 'sortGroup', category: 'groups', label: 'cardviewSort' }});
       this.activeSort.label = label;
       this.activeSort.name = name;
 
