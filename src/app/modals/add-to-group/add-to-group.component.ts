@@ -244,11 +244,11 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
 
               // Add detail to group GA event
               if (this.detailViewBounds && this.detailViewBounds['width']) {
-                this._angulartics.eventTrack.next({ properties: { event: 'addDetail', category: this._auth.getGACategory(), label: 'existing group' }})
+                this._angulartics.eventTrack.next({ properties: { event: 'addDetail', category: 'groups', label: 'existing group' }})
               }
 
               // Add to Group GA event
-              this._angulartics.eventTrack.next({ properties: { event: 'addToGroup', category: this._auth.getGACategory(), label: this.router.url }})
+              this._angulartics.eventTrack.next({ properties: { event: 'addToGroup', category: 'groups', label: this.router.url }})
             },
             (err) => {
               console.error(err); this.serviceResponse.failure = true;

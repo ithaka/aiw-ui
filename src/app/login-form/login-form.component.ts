@@ -153,7 +153,7 @@ export class LoginFormComponent implements OnInit {
       this.loginCall = (user) => { return this._auth.linkSamlUser(user)}
     }
 
-    this.angulartics.eventTrack.next({ properties: { event: 'remoteLogin', category: this._auth.getGACategory(), label: 'attempt' }});
+    this.angulartics.eventTrack.next({ properties: { event: 'remoteLogin', category: 'login', label: 'attempt' }});
 
     this.loginCall(user)
       .then(
@@ -169,7 +169,7 @@ export class LoginFormComponent implements OnInit {
             // In some situations the service might return an ip auth object even tho login was unsuccessful
             this.errorMsg = 'There was an issue with your account, please contact support.';
           } else {
-            this.angulartics.eventTrack.next({ properties: { event: 'remoteLogin', category: this._auth.getGACategory(), label: 'success' }});
+            this.angulartics.eventTrack.next({ properties: { event: 'remoteLogin', category: 'login', label: 'success' }});
             this.loadForUser(data);
             this._auth.resetIdleWatcher() // Start Idle on login
           }
@@ -181,7 +181,7 @@ export class LoginFormComponent implements OnInit {
         this.errorMsg = this.getLoginErrorMsg(err)
         if (!this.errorMsg){
           this.getLoginError(user)
-          this.angulartics.eventTrack.next({ properties: { event: 'remoteLogin', category: this._auth.getGACategory(), label: 'failed' }});
+          this.angulartics.eventTrack.next({ properties: { event: 'remoteLogin', category: 'login', label: 'failed' }});
         }
         // Shibboleth linking error
         if (errObj && errObj.code) {

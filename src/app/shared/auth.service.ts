@@ -691,21 +691,23 @@ export class AuthService implements CanActivate {
 
 
   /**
+   * Deprecated: User info is now tracked in the data layer
    * Return "category" to report to Google Analytics
    * - We use category to track the type of user the event is tied to
    */
-  public getGACategory(): string {
-    let category = 'unaffiliatedUser'
-    let user = this.getUser()
+  // public getGACategory(): string {
+  //   let category = 'unaffiliatedUser'
+  //   let user = this.getUser()
 
-    if (user.isLoggedIn) {
-      category = 'loggedInUser'
-    } else if (user.institutionId && user.institutionId.toString().length > 0) {
-      category = 'institutionalUser'
-    }
+  //   if (user.isLoggedIn) {
+  //     category = 'loggedInUser'
+  //   } else if (user.institutionId && user.institutionId.toString().length > 0) {
+  //     category = 'institutionalUser'
+  //   }
 
-    return category
-  }
+  //   return category
+  // }
+
   private genUserInfoUrl(): string {
     return this.getUrl(true) + '/userinfo?no-cache=' + new Date().valueOf()
   }

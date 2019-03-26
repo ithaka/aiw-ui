@@ -104,7 +104,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     this.angulartics.eventTrack.next({ properties: { 
       event: 'simpleSearch', 
-      category: this._auth.getGACategory(), 
+      category: 'search', 
       label: this.term,
       gtmCustom : {
         "search" : {
