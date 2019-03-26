@@ -473,15 +473,35 @@ export class AuthService implements CanActivate {
 
   /**
    * Update GA/GTM properties
+   * - Should run whenever the user object is modified locally
    */
   updateAnalyticUserProperties(user: any): void {
-    // Properties to update
-    user.hasOwnProperty('baseProfileId') && this.angulartics.setUsername.next(user.baseProfileId);
-    user.hasOwnProperty('institutionId') && this.angulartics.setUserProperties.next({ institutionId: user.institutionId });
-    user.hasOwnProperty('isLoggedIn') && this.angulartics.setUserProperties.next({ isLoggedIn: user.isLoggedIn });
-    user.hasOwnProperty('shibbolethUser') && this.angulartics.setUserProperties.next({ shibbolethUser: user.shibbolethUser });
-    user.hasOwnProperty('dept') && this.angulartics.setUserProperties.next({ dept: user.dept });
-    user.hasOwnProperty('ssEnabled') && this.angulartics.setUserProperties.next({ ssEnabled: user.ssEnabled })
+    let institution = this.institutionObjSource.value
+    // Push user vars to data layer
+    let authMethod = user.isLoggedIn ? 'personal' : (user.institutionId ? 'institutional' : 'unaffiliated')
+    let userGTMVars = {
+      'loggedIn' : user.isLoggedIn,
+      'userAuthentication' : authMethod,
+      'userInstitution' : institution.institutionName || '',
+      'institutionID' : user.institutionId || '',
+      'userID' : user.baseProfileId || '',
+      'userRole' : user.role || '',
+      'userDepartment' : user.dept || ''
+    }
+    // Push to GTM data layer
+    this.angulartics.eventTrack.next( { properties : { 
+      gtmCustom : {
+        "user" : userGTMVars
+      }
+    } });
+    // user : {}
+    // Set GA user properties
+    this.angulartics.setUsername.next((user.baseProfileId || ''));
+    this.angulartics.setUserProperties.next({ institutionId: (user.institutionId || '') });
+    this.angulartics.setUserProperties.next({ isLoggedIn: (user.isLoggedIn || false) });
+    this.angulartics.setUserProperties.next({ shibbolethUser: (user.shibbolethUser || false) });
+    this.angulartics.setUserProperties.next({ dept: (user.dept || '') });
+    this.angulartics.setUserProperties.next({ ssEnabled: (user.ssEnabled || false) }) 
   }
 
   /**
@@ -508,6 +528,7 @@ export class AuthService implements CanActivate {
     // Verify user is logged in
     let user = this.getUser()
     if (this.canUserAccess(user)) {
+      // Ensure GTM data layer is updated when user data is pulled from localStorage
       this.updateAnalyticUserProperties(user)
       // If user object already exists, we're done here
       return new Observable(observer => {
@@ -670,21 +691,23 @@ export class AuthService implements CanActivate {
 
 
   /**
+   * Deprecated: User info is now tracked in the data layer
    * Return "category" to report to Google Analytics
    * - We use category to track the type of user the event is tied to
    */
-  public getGACategory(): string {
-    let category = 'unaffiliatedUser'
-    let user = this.getUser()
+  // public getGACategory(): string {
+  //   let category = 'unaffiliatedUser'
+  //   let user = this.getUser()
 
-    if (user.isLoggedIn) {
-      category = 'loggedInUser'
-    } else if (user.institutionId && user.institutionId.toString().length > 0) {
-      category = 'institutionalUser'
-    }
+  //   if (user.isLoggedIn) {
+  //     category = 'loggedInUser'
+  //   } else if (user.institutionId && user.institutionId.toString().length > 0) {
+  //     category = 'institutionalUser'
+  //   }
 
-    return category
-  }
+  //   return category
+  // }
+
   private genUserInfoUrl(): string {
     return this.getUrl(true) + '/userinfo?no-cache=' + new Date().valueOf()
   }
@@ -738,7 +761,7 @@ export class AuthService implements CanActivate {
       // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
       let user = data['user']
       user.status = data['status']
-      if (data['isRememberMe'] || data['remoteaccess']) {
+      if (data['isRememberMe'] || (data.maxPeriod > 0 || data.dayRemain > 0)) {
         user.isLoggedIn = true
       }
 

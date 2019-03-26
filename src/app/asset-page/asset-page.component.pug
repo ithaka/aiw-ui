@@ -102,6 +102,7 @@
                 (click)="addAssetToIG(true)",
                 tabindex="2",
                 aria-label="Add View to Group",
+                [class.disabled]="assetViewer.state !== 1",
                 role="button")
                 i.icon.icon-add-detail
                 | &nbsp;Add detail view

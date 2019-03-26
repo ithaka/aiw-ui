@@ -29,6 +29,7 @@ export class RegisterComponent implements OnInit {
   public serviceErrors: {
     duplicate?: boolean,
     hasJstor?: boolean,
+    hasGoogle?: boolean,
     server?: boolean,
     showShibbolethError?: boolean,
     shibbolethError?: string,
@@ -155,7 +156,7 @@ export class RegisterComponent implements OnInit {
       // A user that just registered is obviously logged in as a user
       user.isLoggedIn = true
       this._auth.saveUser(formSubmissionResponse['user'])
-      this.angulartics.eventTrack.next({ properties: { event: 'remoteLogin', category: this._auth.getGACategory(), label: 'success' } })
+      this.angulartics.eventTrack.next({ properties: { event: 'remoteLogin', category: 'login', label: 'success' } })
       this.loadForUser(formSubmissionResponse)
     }
     else if (formSubmissionResponse['statusMessage'].includes('JSTOR account exists') && formSubmissionResponse['statusCode'] === 2) {
@@ -164,6 +165,9 @@ export class RegisterComponent implements OnInit {
     }
     else if (formSubmissionResponse['statusMessage'] === 'User already exists.' && formSubmissionResponse['statusCode'] === 1) {
       this.serviceErrors.duplicate = true
+    } 
+    else if (formSubmissionResponse['statusCode'] === 3 || formSubmissionResponse['statusMessage'].indexOf('registered with Google') >= 0) {
+      this.serviceErrors.hasGoogle = true
     }
     this.isLoading = false
   }

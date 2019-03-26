@@ -241,8 +241,14 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
                   label: 'Go to group'
                 }]
               })
+
+              // Add detail to group GA event
+              if (this.detailViewBounds && this.detailViewBounds['width']) {
+                this._angulartics.eventTrack.next({ properties: { event: 'addDetail', category: 'groups', label: 'existing group' }})
+              }
+
               // Add to Group GA event
-              this._angulartics.eventTrack.next({ properties: { event: 'addToGroup', category: this._auth.getGACategory(), label: this.router.url }})
+              this._angulartics.eventTrack.next({ properties: { event: 'addToGroup', category: 'groups', label: this.router.url }})
             },
             (err) => {
               console.error(err); this.serviceResponse.failure = true;
@@ -255,7 +261,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
           console.error(error);
           this.errorMsg = '<p>Sorry, we weren’t able to add the '+ (multipleSelected ? 'items' : 'item') +' at this time. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
       });
-  }
+  } // submitGroupUpdate
 
   public loadMoreGroups(): void {
     if (this.allGroups.length < this.totalGroups) {

@@ -102,7 +102,16 @@ export class SearchComponent implements OnInit, OnDestroy {
     // Pipes are reserved by Advanced Search
     term = term.replace('|', ' ')
 
-    this.angulartics.eventTrack.next({ properties: { event: 'simpleSearch', category: this._auth.getGACategory(), label: this.term }})
+    this.angulartics.eventTrack.next({ properties: { 
+      event: 'simpleSearch', 
+      category: 'search', 
+      label: this.term,
+      gtmCustom : {
+        "search" : {
+          "searchTerm" : this.term
+        }
+      }
+    }})
 
     let routeParams = this.route.snapshot.params;
     let params: Params = {

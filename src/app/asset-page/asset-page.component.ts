@@ -398,6 +398,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+        // Clear asset info from data layer
+        this.trackContentDataLayer(<Asset>{})
     }
 
 
@@ -478,6 +480,8 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.meta.updateTag({ property: 'og:description', content: asset.formattedMetadata['Description'] && asset.formattedMetadata['Description'][0] ? asset.formattedMetadata['Description'][0] : '' }, 'property="og:description"')
                 this.meta.updateTag({ property: 'og:url', content: this._assets.getShareLink(asset.id, this.encryptedAccess || this.fromOpenLibrary) }, 'property="og:url"')
                 this.meta.updateTag({ property: 'og:image', content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
+                // Update content info in GTM data layer
+                this.trackContentDataLayer(asset)
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
@@ -496,6 +500,30 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
+     * Push asset info into content data layer
+     */
+    trackContentDataLayer(asset: Asset) {
+        // Build content variables 
+        let contentGTMVars = {
+            'itemName': asset.title || '',
+            'itemID': asset.id || '',
+            'itemType': asset.typeName || '',
+            'viewCount': this.multiviewItems ? (asset.tileSource && asset.tileSource.length) : 1,
+            'collectionName': asset.collectionName || '',
+            'collectionType': asset.collectionType || '',
+            'classification': (asset.formattedMetadata && asset.formattedMetadata['Classification']) || '',
+            'geography': (asset.formattedMetadata && asset.formattedMetadata['Geography']) || '',
+        }
+        // Push content variables to GTM data layer, and fire "itemOpen" event
+        this.angulartics.eventTrack.next( { properties : { 
+            event: 'itemOpen',
+            gtmCustom : {
+              "content" : contentGTMVars
+            }
+          } });
+    }
+
+    /**
      * Maintains the isFullscreen variable, as set by child AssetViewers
      */
     updateFullscreenVar(isFullscreen: boolean): void {
@@ -510,7 +538,7 @@ export class AssetPage implements OnInit, OnDestroy {
             this.assetIds = [this.assetIds[0]]
             this.indexZoomMap = [this.indexZoomMap[0]]
         } else if (Array.isArray(this.assets[0].tileSource)){ // Log GA event for opening a multi view item in Fullscreen
-            this.angulartics.eventTrack.next({ properties: { event: 'multiViewItemFullscreen', category: this._auth.getGACategory(), label: this.assets[0].id } });
+            this.angulartics.eventTrack.next({ properties: { event: 'multiViewItemFullscreen', category: 'multiview', label: this.assets[0].id } });
         }
         else {
             // Make sure we only send one ga event when going to fullscreen mode
@@ -558,7 +586,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Track download file
     trackDownloadImage(): void {
-        this.angulartics.eventTrack.next({ properties: { event: 'downloadAsset', category: this._auth.getGACategory(), label: this.assets[0].id } });
+        this.angulartics.eventTrack.next({ properties: { event: 'downloadAsset', category: 'download', label: this.assets[0].id } });
     }
 
     // Track download view
@@ -567,12 +595,12 @@ export class AssetPage implements OnInit, OnDestroy {
             eventType: 'artstor_image_download_view',
             item_id: this.assets[0].id
         })
-        this.angulartics.eventTrack.next({ properties: { event: 'downloadView', category: this._auth.getGACategory(), label: this.assets[0].id } });
+        this.angulartics.eventTrack.next({ properties: { event: 'downloadView', category: 'download', label: this.assets[0].id } });
     }
 
     // Track metadata collection link click
     trackCollectionLink(collectionName: string): void {
-      this.angulartics.eventTrack.next({ properties: { event: 'metadata_collection_link', category: this._auth.getGACategory(), label: collectionName } });
+      this.angulartics.eventTrack.next({ properties: { event: 'metadata_collection_link', category: 'metadata', label: collectionName } });
     }
 
     /**
@@ -1108,7 +1136,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private toggleAssetDrawer(show: boolean) {
         this.showAssetDrawer = show
         if (Array.isArray(show && this.assets[0].tileSource)){ // Log GA event for comparing a multi view item in Fullscreen mode
-            this.angulartics.eventTrack.next({ properties: { event: 'multiViewItemCompare', category: this._auth.getGACategory(), label: this.assets[0].id } });
+            this.angulartics.eventTrack.next({ properties: { event: 'multiViewItemCompare', category: 'multiview', label: this.assets[0].id } });
         }
     }
 
@@ -1366,17 +1394,17 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private multiViewPageViaArrow(): void{
         if (this.isFullscreen){
-            this.angulartics.eventTrack.next({ properties: { event: 'multiViewFullscreenPageViaArrow', category: this._auth.getGACategory(), label: this.assets[0].id } })
+            this.angulartics.eventTrack.next({ properties: { event: 'multiViewFullscreenPageViaArrow', category: 'multiview', label: this.assets[0].id } })
         } else{
-            this.angulartics.eventTrack.next({ properties: { event: 'multiViewPageViaArrow', category: this._auth.getGACategory(), label: this.assets[0].id } })
+            this.angulartics.eventTrack.next({ properties: { event: 'multiViewPageViaArrow', category: 'multiview', label: this.assets[0].id } })
         }
     }
 
     private multiViewPageViaThumbnail(): void{
         if (this.isFullscreen){
-            this.angulartics.eventTrack.next({ properties: { event: 'multiViewFullscreenPageViaThumbnail', category: this._auth.getGACategory(), label: this.assets[0].id } })
+            this.angulartics.eventTrack.next({ properties: { event: 'multiViewFullscreenPageViaThumbnail', category: 'multiview', label: this.assets[0].id } })
         } else {
-            this.angulartics.eventTrack.next({ properties: { event: 'multiViewPageViaThumbnail', category: this._auth.getGACategory(), label: this.assets[0].id } })
+            this.angulartics.eventTrack.next({ properties: { event: 'multiViewPageViaThumbnail', category: 'multiview', label: this.assets[0].id } })
         }
     }
 
