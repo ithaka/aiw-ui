@@ -208,19 +208,24 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
           }
 
           // Update a group with a zoomed details
-          if (index === 0 && this.detailViewBounds['width']) {
-
-            zoom = this._group.setZoomDetails({
-              "viewerX": this.detailViewBounds['x'],
-              "viewerY": this.detailViewBounds['y'],
-              "pointWidth": this.detailViewBounds['width'],
-              "pointHeight": this.detailViewBounds['height'],
-              "index": 0
-            })
-
+          if(asset['zoom'] && asset['zoom']['viewerX']){
+            zoom = asset['zoom']
             putGroup.items.push({ id: assetId, zoom })
+          }
+          // if (index === 0 && this.detailViewBounds['width']) {
 
-          } else {
+          //   zoom = this._group.setZoomDetails({
+          //     "viewerX": this.detailViewBounds['x'],
+          //     "viewerY": this.detailViewBounds['y'],
+          //     "pointWidth": this.detailViewBounds['width'],
+          //     "pointHeight": this.detailViewBounds['height'],
+          //     "index": 0
+          //   })
+
+          //   putGroup.items.push({ id: assetId, zoom })
+
+          // } 
+          else {
             putGroup.items.push({ id: assetId })
           }
         })
