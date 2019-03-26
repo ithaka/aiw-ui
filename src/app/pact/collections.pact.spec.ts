@@ -64,7 +64,7 @@ describe('Collections #pact #collections', () => {
     // Required for slower environments
     setTimeout(function () { done() }, 2000)
     // Required if run with `singleRun: false` (see karma config)
-    provider.removeInteractions()
+    //provider.removeInteractions()
   })
 
   afterAll(function (done) {
@@ -81,8 +81,6 @@ describe('Collections #pact #collections', () => {
         HttpClientModule
       ]
     });
-
-    _collection = getTestBed().get(CollectionPage)
   });
 
   // Indidual tests 'describe'
