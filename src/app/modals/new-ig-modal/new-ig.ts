@@ -36,16 +36,8 @@ export class IgFormUtil {
         } else {
           itemObj.id = item // sometimes though it's just an array of strings
         }
-
-        if (item.detailViewBounds && item.detailViewBounds.width) { // for detail selected from asset viewer
-          itemObj.zoom = ({
-            "viewerX": Math.round(item.detailViewBounds['x']),
-            "viewerY": Math.round(item.detailViewBounds['y']),
-            "pointWidth": Math.round(item.detailViewBounds['width']),
-            "pointHeight": Math.round(item.detailViewBounds['height']),
-            "index": 0
-          })
-        } else if (item.zoom){ // for details selected from asset grid
+        
+        if (item.zoom && item.zoom['viewerX']){ // for details selected from asset grid
           itemObj.zoom = item.zoom
         }
 
