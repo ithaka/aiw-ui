@@ -215,7 +215,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
             putGroup.items.push({ id: assetId })
           }
         })
-        console.log('final put group prepared is: ', putGroup)
+
         this._group.update(putGroup).pipe(
           take(1),
           map(
