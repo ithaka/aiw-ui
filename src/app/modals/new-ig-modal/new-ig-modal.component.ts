@@ -94,7 +94,6 @@ export class NewIgModal implements OnInit {
     // Does user have any private groups yet?
     // Check local storage first, otherwise call group service
     let hasPrivate = this._storage.getLocal('hasPrivateGroups')
-
     if (hasPrivate)  {
       this.hasPrivateGroups = true
     }

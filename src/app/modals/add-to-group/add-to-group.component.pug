@@ -1,13 +1,13 @@
 .modal.fade.show(id="modal")
-  .modal-dialog(role="document", [ngClass]="{ 'large': detailViewBounds.width }")
+  .modal-dialog(role="document", [ngClass]="{ 'large': detailPreviewURL }")
     .modal-content
       .row.no-gutters
-        .col-lg-6.detail-preview(*ngIf="detailViewBounds.width")
+        .col-lg-6.detail-preview(*ngIf="detailPreviewURL")
           .preview-cntnr
             img([attr.src]="detailPreviewURL", tabindex="10", [attr.aria-label]="selectedAssets[0].title + ', ' + selectedAssets[0].creator + ', ' + selectedAssets[0].date + ' of image.'", role="image", (keydown.shift.tab)="focusLastElement($event)")
-        div([ngClass]="[ detailViewBounds.width ? 'col-lg-6' : 'col-lg-12' ]")
+        div([ngClass]="[ detailPreviewURL ? 'col-lg-6' : 'col-lg-12' ]")
           .modal-header
-            h4.modal-title(tabindex="10", (keydown.shift.tab)="detailViewBounds.width ? null : focusLastElement($event)") {{ detailViewBounds.width ? 'Add Detail to Group' : 'Add ' + ( selectedAssets.length > 1 ? selectedAssets.length + ' Items' : 'Item' ) + ' to Group' }}
+            h4.modal-title(tabindex="10", (keydown.shift.tab)="detailPreviewURL ? null : focusLastElement($event)") {{ detailPreviewURL ? 'Add Detail to Group' : 'Add ' + ( selectedAssets.length > 1 ? selectedAssets.length + ' Items' : 'Item' ) + ' to Group' }}
             button.close((click)="closeModal.emit()", type="button", data-dismiss="modal", tabindex="10", aria-label="Close")
               span(aria-hidden="true") &times;
           form(#igForm="ngForm", (ngSubmit)="submitGroupUpdate(igForm)")
