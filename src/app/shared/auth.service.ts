@@ -442,21 +442,19 @@ export class AuthService implements CanActivate {
   public getHeaders() : HttpHeaders {
       let headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json')
       if (!this.isBrowser) {
-          console.log("Get Headers, server-side")
           let req = this.injector.get('request');
           let clientIp: string = ''
           // Server rendered app needs to pass along the fastly IP
           if (req.headers['fastly-client-ip']) {
             clientIp = req.headers['fastly-client-ip']
-            console.log("fastly client ip: "+clientIp)
+            console.log("Fastly client ip: " + clientIp)
           } else if (req.headers['forwarded']) {
             clientIp = req.headers['forwarded']
-            console.log("Forwarded: "+clientIp)
+            console.log("Forwarded: " + clientIp)
           } else {
             clientIp = req.ip
-            console.log("Request ip: " + clientIp)
-            clientIp = "65.128.116.207"
-            console.log("JK! Hard-coded to: 65.128.116.207")
+            // Simple way of handling local request ip
+            // clientIp = "65.128.116.207" // Minneapolis IP
           }
           // Set triplet headers if available
           if (this.currentAuthHeaders) {
@@ -464,7 +462,9 @@ export class AuthService implements CanActivate {
               headers = headers.append(header, this.currentAuthHeaders[header])
             })
           }
+          // Value specifically used within Artstor apps-gateway rules
           headers = headers.append("CLIENTIP", clientIp)
+          // Expected Fastly ip header used by most services
           headers = headers.append('Fastly-Client-Ip', clientIp)
           return headers
       } else {
@@ -618,12 +618,12 @@ export class AuthService implements CanActivate {
             // Clear user session (local objects and cookies)
             this.logout()
           }
-          // Save session values
-          if (headers['x-jstor-access-session']) {
+          // Save session auth header values for attaching to subsequent requests
+          if (headers.get('x-jstor-access-session')) {
             this.currentAuthHeaders = {
-              'x-jstor-access-session': headers['x-jstor-access-session'],
-              'x-jstor-access-session-signature': headers['x-jstor-access-session-signature'],
-              'x-jstor-access-session-timed-signature': headers['x-jstor-access-session-timed-signature']
+              'x-jstor-access-session': headers.get('x-jstor-access-session'),
+              'x-jstor-access-session-signature': headers.get('x-jstor-access-session-signature'),
+              'x-jstor-access-session-timed-signature': headers.get('x-jstor-access-session-timed-signature')
             }
           }
           // If user session was downgraded/expired, notify
