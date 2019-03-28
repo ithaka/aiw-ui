@@ -2,7 +2,7 @@ form((ngSubmit)="login(user)")
   #mainContent.form-group
     label#emailLabel(for="inputLoginEmail")
       span([innerHtml]="'LOGIN.REG_LOGIN.EMAIL_LABEL' | translate")
-      input#inputLoginEmail.form-control([(ngModel)]="user.username" name="username" type="text" placeholder="Email address" aria-label="Email address, required" tabindex="1")
+      input#inputLoginEmail.form-control([(ngModel)]="user.username", (keyup)="userEmail.emit(user.username)" name="username" type="text" placeholder="Email address" aria-label="Email address, required" tabindex="1")
   .form-group
     label(for="inputLoginPassword")
       span([innerHtml]="'LOGIN.REG_LOGIN.PASSWORD_LABEL' | translate")

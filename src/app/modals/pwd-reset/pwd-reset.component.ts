@@ -1,5 +1,5 @@
 import { AuthService } from '../../shared';
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
@@ -8,6 +8,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
   templateUrl: 'pwd-reset.component.pug'
 })
 export class PwdResetModal implements OnInit {
+  @Input() username: string;
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
 
   public pwdResetForm: FormGroup;
@@ -21,13 +22,13 @@ export class PwdResetModal implements OnInit {
   constructor(
     private _auth: AuthService,
     private _fb: FormBuilder
-  ) {
-    this.pwdResetForm = _fb.group({
-      'email': ['', [Validators.required, Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]]
+  ) { }
+
+  ngOnInit() { 
+    this.pwdResetForm = this._fb.group({
+      'email': [this.username, [Validators.required, Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]]
     });
   }
-
-  ngOnInit() { }
 
 
   sendResetPwdRequest(){

@@ -12,7 +12,7 @@
             p Enter the email address that you used when registering.
             .form-group
               label(for="pwdresetEmailInput") Email Address:
-              input#pwdresetEmailInput.form-control(type="text", [formControl]="pwdResetForm.controls['email']", spellcheck="false", tabindex="0")
+              input#pwdresetEmailInput.form-control(type="text", [formControl]="pwdResetForm.controls['email']", (value)="username", spellcheck="false", tabindex="0")
           .has-danger(*ngIf="submitted && pwdResetForm.controls['email'].invalid && !errorMsgPwdRst && !successMsgPwdRst")
             p.form-control-feedback A valid email is required
           .form-control-feedback.has-danger(*ngIf="errorMsgPwdRst")
