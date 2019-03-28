@@ -11,6 +11,18 @@
     background-color: rgba(0, 0, 0, 0.55);
     z-index: 9000;
     overflow-y: auto;
+
+    // Currently reserved for the session expired modal
+    &.modal--priority-1 {
+      z-index: 9999;
+    }
+    // For specific cases where one modal should take priority over the other
+    &.modal--priority-2 {
+      z-index: 9900;
+    }
+    &.modal--priority-3 {
+      z-index: 9800;
+    }
 }
 
 .modal.show{
