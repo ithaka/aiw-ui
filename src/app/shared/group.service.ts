@@ -240,17 +240,27 @@ export class GroupService {
             putGroup,
             this.options
         )
-        .pipe(catchError(err =>
-            this.http.post(
-                // Backup POST call for PUT failures over Proxies
-                reqUrl,
-                putGroup,
-                {
-                  headers: new HttpHeaders({ 'Accept' : 'application/json', 'X-HTTP-Method-Override' : 'PUT' }),
-                  withCredentials: true
+        .pipe(
+            catchError(
+                err => {
+                    if (err.status === 403) {
+                        // Unauthorized/session expired - we assume expired since we don't allow modifying read-only groups
+                        // throw err
+                        return of(err)
+                    } else {
+                        return this.http.post(
+                            // Backup POST call for PUT failures over Proxies
+                            reqUrl,
+                            putGroup,
+                            {
+                            headers: new HttpHeaders({ 'Accept' : 'application/json', 'X-HTTP-Method-Override' : 'PUT' }),
+                            withCredentials: true
+                            }
+                        )
+                    }
                 }
             )
-        ))
+        )
     }
 
     /**

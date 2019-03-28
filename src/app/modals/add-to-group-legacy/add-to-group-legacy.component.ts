@@ -7,6 +7,7 @@ import { Angulartics2 } from 'angulartics2'
 import { Router } from '@angular/router'
 
 import { AssetService, GroupService, ImageGroup, AuthService } from './../../shared'
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'ang-add-to-group-legacy',
@@ -167,25 +168,36 @@ export class AddToGroupLegacyModal implements OnInit, OnDestroy {
         data.items = putGroup.items
         console.log('Update data from legacy modal:- ', data)
         this._group.update(data).pipe(
-          take(1),
-          map(
-            (res) => { 
-              this.serviceResponse.success = true
-              this._assets.clearSelectMode.next(true)
-              // Add to Group GA event 
-              this._angulartics.eventTrack.next({ properties: { event: 'addToGroup', category: 'groups', label: this.router.url }})
-            },
-            (err) => { 
-              console.error(err); this.serviceResponse.failure = true;
-            }
-        )).subscribe()
-
+          take(1)
+        )
+        .subscribe(
+          (res) => { 
+            this.serviceResponse.success = true
+            this._assets.clearSelectMode.next(true)
+            // Add to Group GA event 
+            this._angulartics.eventTrack.next({ properties: { event: 'addToGroup', category: 'groups', label: this.router.url }})
+          },
+          /**
+           * @todo Clean up nested PUT/POST calls in group service to avoid requiring TWO error handlers
+           */
+          (err) => {
+            this.handleUpdateError(err)
+          }
+        )
+      }).catch(err =>{
+        this.handleUpdateError(err)
       })
-      .catch((error) => {
-          console.error(error);
-      });
+  }
 
-
+  private handleUpdateError(err: HttpErrorResponse): void {
+    console.error(err)
+    if (err.status === 403) {
+      // Since we assume users can not attempt adding to a group they don't own, then a 403 is caused by an expired session
+      // Show expired session modal
+      this._auth.showUserInactiveModal.next(true)
+    } else {
+      this.serviceResponse.failure = true; 
+    }
   }
 
   private extractData(res: any) {
