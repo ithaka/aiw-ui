@@ -5,5 +5,5 @@
     div.toast-message
       div([innerHTML]="stringHTML")
       ng-container(*ngFor="let link of links")
-        a.toast-content-links.mr-1([routerLink]="link.routerLink", (click)="TrackgotogroupToast()") {{ link.label }}
+        a.toast-content-links.mr-1([routerLink]="link.routerLink", (click)="TrackGotoGroupToast()") {{ link.label }}
     i.icon.icon-close((click)="triggerDismiss()")

@@ -52,7 +52,7 @@ export class ToastComponent implements OnInit, OnDestroy {
   /**
    * Google Analytics for clicking "Go to group" lin from toast
    */
-  TrackgotogroupToast() {
+  TrackGotoGroupToast() {
     let fromWhich: string
     let toWhich: string
 
