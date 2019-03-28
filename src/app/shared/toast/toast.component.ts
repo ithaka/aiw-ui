@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core'
 
 import { Toast, ToastService } from 'app/_services';
+import { Router } from '@angular/router';
+import { Angulartics2 } from 'angulartics2';
 
 @Component({
   selector: 'ang-toast',
@@ -23,7 +25,11 @@ export class ToastComponent implements OnInit, OnDestroy {
   public hideToast: boolean
   public links: { routerLink: string[], label: string }[] = []
 
-  constructor(public _toasts: ToastService) {}
+  constructor(
+    private _angulartics: Angulartics2,
+    public _toasts: ToastService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     // Assign vars used in template
@@ -41,6 +47,31 @@ export class ToastComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this._toasts.dismissToast(this.toast.id, true)
     }, 500)
+  }
+
+  /**
+   * Google Analytics for clicking "Go to group" lin from toast
+   */
+  TrackgotogroupToast() {
+    let fromWhich: string
+    let toWhich: string
+
+    // Identify if user is adding image from asset page or browse page
+    if (this.router.url.indexOf('/asset/') > -1) {
+      fromWhich = 'asset'
+    } else {
+      fromWhich = 'browse'
+    }
+
+    // Identify if user is saving image to existing group or creating a new one
+    if (this.toast.id === 'addToGroup') {
+      toWhich = 'existing group'
+    } else {
+      toWhich = 'new group'
+    }
+    
+    this._angulartics.eventTrack.next({ properties: { event: 'gotogroupToast', category: 'groups', label: [fromWhich, toWhich] }})
+
   }
 
   ngOnDestroy() {
