@@ -50,7 +50,8 @@ export class ToastComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Google Analytics for clicking "Go to group" lin from toast
+   * Google Analytics for clicking "Go to group" link from toast
+   * @param routerLink property used to navigate for link being tracked
    */
   trackGoToLink(routerLink: RouterLink) {
     let fromWhich: string
