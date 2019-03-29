@@ -203,7 +203,7 @@
       "TITLE_DELETED": "Group was Deleted"
     },
     "GOOGLE_AUTH": {
-      "INFO_TEXT": "Log in with your account to start exporting your groups to Google Slides",
+      "INFO_TEXT": "Log in with your Google account to export your groups to Google Slides.",
       "BTN_TEXT": "Authorize with Google",
       "PERMISSIONS_HTML": "Why is Artstor asking for Google permissions? <a href=\"http://www.artstor.org/artstor-terms\" class=\"google-permissions-link\" target=\"_blank\" tabindex=\"0\"  aria-label=\"Why is Artstor asking for Google permissions? Learn more\">Learn more</a>"
     }
