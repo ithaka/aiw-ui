@@ -19,6 +19,9 @@
             p.form-control-feedback {{ errorMsgPwdRst }}
           .has-success(*ngIf="successMsgPwdRst")
             p.form-control-feedback {{ successMsgPwdRst }}
+          .form-group(*ngIf="systemRequest")
+            p.small 
+              | Need help logging in? <a href="mailto:support@artstor.org" class="link">Contact Support</a>
         .modal-footer
           .form-group(*ngIf="pwdReset")
             button.btn.btn-secondary(
