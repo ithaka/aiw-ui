@@ -203,6 +203,7 @@ export class LoginFormComponent implements OnInit {
     // Check for error code 422 for lost password
     // Maybe better to check by serverMsg later when the response message is decided by Auth
     if (err && err.status === 422) {
+      // Display lost password modal
       return 'LOGIN.LOST_PASSWORD'
     }
     else if (serverMsg) {

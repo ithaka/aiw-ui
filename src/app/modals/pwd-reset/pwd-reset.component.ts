@@ -8,8 +8,10 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
   templateUrl: 'pwd-reset.component.pug'
 })
 export class PwdResetModal implements OnInit {
-  @Input() username: string;
-  @Output() closeModal: EventEmitter<any> = new EventEmitter();
+  // Inputs that alter display behavior
+  @Input() systemRequest: boolean
+  @Input() username: string
+  @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
   public pwdResetForm: FormGroup;
 
@@ -18,11 +20,16 @@ export class PwdResetModal implements OnInit {
   public errorMsgPwdRst = '';
   public successMsgPwdRst = '';
   public submitted = false;
+  public copyKey = 'MODAL.PASSWORD.RESET'
 
   constructor(
     private _auth: AuthService,
     private _fb: FormBuilder
-  ) { }
+  ) {
+    if (this.systemRequest) {
+      this.copyKey = 'MODAL.PASSWORD.SYSTEM_REQUEST'
+    }
+  }
 
   ngOnInit() { 
     this.pwdResetForm = this._fb.group({

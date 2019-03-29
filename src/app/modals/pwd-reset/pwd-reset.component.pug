@@ -3,15 +3,15 @@
   .modal-dialog
     .modal-content
       .modal-header
-        h5 Password Reset
+        h5 {{ copyKey+'.HEADING' | translate }}
         button((click)="closeModal.emit()", type="button", class="close", data-dismiss="modal", aria-label="Close")
           span(aria-hidden="true") &times;
       form#pwdResetForm([formGroup]="pwdResetForm", (ngSubmit)="sendResetPwdRequest()")
         .modal-body
           div(*ngIf="pwdReset")
-            p Enter the email address that you used when registering.
+            p {{ copyKey+'.PROMPT' | translate }}
             .form-group
-              label(for="pwdresetEmailInput") Email Address:
+              label(for="pwdresetEmailInput") {{ copyKey+'.LABEL' | translate }}
               input#pwdresetEmailInput.form-control(type="text", [formControl]="pwdResetForm.controls['email']", (value)="username", spellcheck="false", tabindex="0")
           .has-danger(*ngIf="submitted && pwdResetForm.controls['email'].invalid && !errorMsgPwdRst && !successMsgPwdRst")
             p.form-control-feedback A valid email is required
@@ -21,7 +21,11 @@
             p.form-control-feedback {{ successMsgPwdRst }}
         .modal-footer
           .form-group(*ngIf="pwdReset")
-            button.btn.btn-secondary(type="button", (click)="closeModal.emit()") Cancel
+            button.btn.btn-secondary(
+                *ngIf="!systemRequest"
+                type="button", 
+                (click)="closeModal.emit()"
+              ) Cancel
             = " "
             button.btn.btn-primary(type="submit", [class.loading]="isLoading") Submit
           .form-group(*ngIf="successMsgPwdRst")
