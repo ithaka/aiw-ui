@@ -45,6 +45,8 @@ export class Login implements OnInit, OnDestroy {
   public showRegister: boolean = false
   public showHelpModal: boolean = false
 
+  public username: string = '';
+
   private loginInstName: string = '' /** Bound to the autocomplete field */
   private stashedRoute: string
   private dataService: LocalData

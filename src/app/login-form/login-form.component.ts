@@ -1,4 +1,4 @@
-import { OnInit, Input } from '@angular/core'
+import { OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { Component } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
@@ -35,6 +35,7 @@ export class LoginFormComponent implements OnInit {
   public loginInstitutions = [] /** Stores the institutions returned by the server */
 
   @Input() public copyModifier: string = 'DEFAULT'
+  @Output() public userEmail: EventEmitter<any> = new EventEmitter()
   public loginLoading = false
 
   private loginInstName: string = '' /** Bound to the autocomplete field */
