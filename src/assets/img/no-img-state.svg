@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="94px" height="125px" viewBox="0 0 94 125" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>no images state</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M27.4773699,77.9532055 L64.4489863,49.9746849" id="path-1"></path>
+        <filter x="-3.2%" y="-4.3%" width="106.5%" height="112.2%" filterUnits="objectBoundingBox" id="filter-2">
+            <feMorphology radius="0.499616438" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="1" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feMorphology radius="1" operator="erode" in="SourceAlpha" result="shadowInner"></feMorphology>
+            <feOffset dx="0" dy="1" in="shadowInner" result="shadowInner"></feOffset>
+            <feComposite in="shadowOffsetOuter1" in2="shadowInner" operator="out" result="shadowOffsetOuter1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.933333333   0 0 0 0 0.933333333   0 0 0 0 0.933333333  0 0 0 1 0" type="matrix" in="shadowOffsetOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="options" transform="translate(-34.000000, -55.000000)">
+            <g id="no-images-state" transform="translate(34.000000, 55.000000)">
+                <rect id="container" fill="#EEEEEE" fill-rule="nonzero" x="0" y="0" width="93.9278904" height="124.90411"></rect>
+                <g id="img-illustration" transform="translate(30.974685, 52.972384)">
+                    <rect id="Rectangle-6" stroke="#989898" stroke-width="0.999232877" x="0" y="2.99769863" width="25.9800548" height="19.9846575"></rect>
+                    <rect id="Rectangle-6" stroke="#989898" stroke-width="0.999232877" fill="#EEEEEE" fill-rule="nonzero" x="2.99769863" y="0" width="25.9800548" height="19.9846575"></rect>
+                    <circle id="Oval" fill="#989898" fill-rule="nonzero" cx="8.99309589" cy="5.99539726" r="1.99846575"></circle>
+                    <path d="M5.99539726,16.8931375 L10.4041519,10.4861502 C10.7169874,10.0315244 11.3391378,9.91658073 11.7937635,10.2294163 C11.870565,10.2822647 11.9395928,10.3456011 11.9988384,10.4175829 L13.8026483,12.6091591 C13.9780005,12.8222067 14.2928607,12.852765 14.5059083,12.6774129 C14.5471347,12.643481 14.5826551,12.6031598 14.611118,12.557984 L18.6335244,6.17366621 C18.9277022,5.70675067 19.5446901,5.56671902 20.0116056,5.86089673 C20.1599324,5.95434923 20.281062,6.0851808 20.3628318,6.24025461 L25.9800548,16.8931375 L5.99539726,16.8931375 Z" id="Path-4" fill="#989898" fill-rule="nonzero"></path>
+                </g>
+                <g id="strikeout" stroke-linecap="square">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use stroke="#989898" stroke-width="0.999232877" xlink:href="#path-1"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
