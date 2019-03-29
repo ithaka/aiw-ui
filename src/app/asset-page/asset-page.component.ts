@@ -520,6 +520,8 @@ export class AssetPage implements OnInit, OnDestroy {
         // Push content variables to GTM data layer, and fire "itemOpen" event
         this.angulartics.eventTrack.next( { properties : { 
             event: 'itemOpen',
+            category: this.multiviewItems ? 'multiview' : 'itemview',
+            label: asset.id || '',
             gtmCustom : {
               "content" : contentGTMVars
             }
