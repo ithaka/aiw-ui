@@ -818,7 +818,7 @@ export class AssetService {
                         let results = res
                         data.thumbnails = results['items'] // V1 ?items from search
                         // For multi-view items, make the thumbnail urls and update the array
-                        data.thumbnails = data.items.map((item) => {
+                        data.thumbnails = data.items.slice(pageStart, pageEnd).map((item) => {
 
                           // Attach zoom object from items to the relevant thumbnail, to be used in asset grid
                           for(let thumbnail of data.thumbnails) {
