@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core'
 
 import { Toast, ToastService } from 'app/_services';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Angulartics2 } from 'angulartics2';
 
 @Component({
@@ -52,26 +52,30 @@ export class ToastComponent implements OnInit, OnDestroy {
   /**
    * Google Analytics for clicking "Go to group" lin from toast
    */
-  TrackGotoGroupToast() {
+  trackGoToLink(routerLink: RouterLink) {
     let fromWhich: string
     let toWhich: string
-
     // Identify if user is adding image from asset page or browse page
     if (this.router.url.indexOf('/asset/') > -1) {
       fromWhich = 'asset'
     } else {
       fromWhich = 'browse'
     }
-
-    // Identify if user is saving image to existing group or creating a new one
-    if (this.toast.id === 'addToGroup') {
-      toWhich = 'existing group'
+    // Specific event tracking
+    if (routerLink[0].indexOf('/group') >= 0) {
+      // Track group events
+      // Identify if user is saving image to existing group or creating a new one
+      if (this.toast.id === 'addToGroup') {
+        toWhich = 'existing group'
+      } else {
+        toWhich = 'new group'
+      }
+      this._angulartics.eventTrack.next({ properties: { event: 'goToGroupToast', category: 'groups', label: [fromWhich, toWhich] }})
     } else {
-      toWhich = 'new group'
+      // Generic link event handling
+      toWhich = routerLink[0]
+      this._angulartics.eventTrack.next({ properties: { event: 'goToLinkToast', category: 'browse', label: [fromWhich, toWhich] }})
     }
-    
-    this._angulartics.eventTrack.next({ properties: { event: 'gotogroupToast', category: 'groups', label: [fromWhich, toWhich] }})
-
   }
 
   ngOnDestroy() {
