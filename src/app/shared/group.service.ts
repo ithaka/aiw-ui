@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { BehaviorSubject, Observable, Subject, pipe } from 'rxjs'
 import { catchError } from 'rxjs/operators'
-import { GroupList } from './datatypes'
+import { GroupList, ImageZoomParams } from './datatypes'
 
 // Project Dependencies
 import { AuthService } from '.'
@@ -317,18 +317,10 @@ export class GroupService {
      * @param zoom ZoomDetails object
      * @returns returns an instance of ZoomDetails
      */
-    public setZoomDetails(zoom: ZoomDetails): ZoomDetails {
+    public setZoomDetails(zoom: ImageZoomParams): ImageZoomParams {
       for (let prop in zoom) {
         zoom[prop] = Math.round(zoom[prop])
       }
       return zoom
     }
-}
-
-interface ZoomDetails {
-  viewerX: number
-  viewerY: number
-  pointWidth: number
-  pointHeight: number
-  index?: number
 }

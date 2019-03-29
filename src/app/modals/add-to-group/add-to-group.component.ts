@@ -6,7 +6,7 @@ import { CompleterService, CompleterData } from 'ng2-completer'
 import { Angulartics2 } from 'angulartics2'
 import { Router } from '@angular/router'
 
-import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService, DomUtilityService } from './../../shared'
+import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService, DomUtilityService, ImageZoomParams } from './../../shared'
 import { ToastService } from 'app/_services';
 
 @Component({
@@ -50,7 +50,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     allGroups: false
   }
 
-  public detailViewBounds: any = {}
+  public detailViewBounds: ImageZoomParams = {}
   public selectedGroup: any = {}
 
   private groupsPageSize: number = 30
@@ -234,7 +234,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
               })
 
               // Add detail to group GA event
-              if (this.detailViewBounds && this.detailViewBounds['width']) {
+              if (this.detailViewBounds && this.detailViewBounds.pointWidth) {
                 this._angulartics.eventTrack.next({ properties: { event: 'addDetail', category: 'groups', label: 'existing group' }})
               }
 
