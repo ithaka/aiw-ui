@@ -85,8 +85,8 @@
           //- * (mouseup) is a Firefox fix for firing the copy event
           button#assetpage-btn.btn.btn-secondary(*ngIf="user.isLoggedIn && assets[0].personalCollectionOwner === user['baseProfileId']", [class.active]="showEditDetails", (click)="loadEditDetailsForm()", tabindex="2", aria-label="Edit details for this item")
             | {{ 'ASSET_PAGE.BUTTONS.EDIT_DETAILS' | translate}}
-
-          .dropdown.d-inline-block(*ngIf="detailViewsFlag && assets[0].typeId === 10 && !multiviewItems", ngbDropdown, aria-haspopup="true")
+          //- the .driver-find-group-btn class is important for the tour to find it, be careful when removing or changing it
+          .dropdown.d-inline-block.driver-find-group-btn(*ngIf="detailViewsFlag && assets[0].typeId === 10 && !multiviewItems", ngbDropdown, aria-haspopup="true")
             button#addToGroupDropdown.btn.btn-primary(ngbDropdownToggle, tabindex="2", aria-label="Add to groups")
               | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate}}
               = " "
@@ -106,11 +106,6 @@
                 role="button")
                 i.icon.icon-add-detail
                 | &nbsp;Add detail view
-
-          //- the .driver-find-group-btn class is important for the tour to find it, be careful when removing or changing it
-          button#assetpage-btn.btn.btn-primary.driver-find-group-btn(*ngIf="!detailViewsFlag || assets[0].typeId !== 10 || multiviewItems", (click)="addAssetToIG()", (focus)="closeDropdowns()", (keydown.enter)="addAssetToIG()", tabindex="2", aria-label="Add this item to a group")
-            | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate }}
-            //- i.icon.icon-add-white(aria-hidden="true")
           //- Download dropdown options
           | {{downloadUrl}}
           .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess || assets[0].publicDownload)", ngbTooltip, [disableTooltip]="!multiviewItems", [ngbTooltip]="multiViewDownloadDisabled", triggers="focusin:focusout mouseenter:mouseleave", placement="bottom", aria-haspopup="true")
