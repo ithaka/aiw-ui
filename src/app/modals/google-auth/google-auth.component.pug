@@ -19,4 +19,4 @@
           a(href="http://www.artstor.org/artstor-terms", class="google-permissions-link", target="_blank", tabindex="0",  aria-label="Why is Artstor asking for Google permissions? Learn more") Learn more
         button.close((click)="closeModal.emit($event)", tabindex="0", aria-label="Close", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()")
           span(aria-hidden="true") &times;
-        button((click)="initPresentation()") New Pres
+        button((click)="initPresentation(ig)") New Pres

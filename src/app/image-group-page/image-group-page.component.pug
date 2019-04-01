@@ -5,7 +5,7 @@ div
       .col-md-5
         ang-search
     ang-group-title([ig]="ig")
-    .row 
+    .row
       .col-md-12
         ang-asset-grid([actionOptions]="actionOptions", (reordering)="toggleReorder($event)", [igMetaData]="ig")
         .alert.alert-warning(*ngIf!="ig.items && ig.items.length > 0 && !ig.thumbnails")
@@ -13,7 +13,7 @@ div
           = " "
           | Unable to load the thumbnails for this group.
 
-ang-google-auth(*ngIf="showGoogleAuth", (closeModal)="closeGoogleAuth($event)")
+ang-google-auth(*ngIf="showGoogleAuth", (closeModal)="closeGoogleAuth($event)", [ig]="ig")
 ang-terms-and-conditions(*ngIf="showTermsConditions", [exportType]="exportType", (closeModal)="handleTCModalClose($event)", [ig]="ig")
 ang-ig-download-modal(*ngIf="showPptModal", (closeModal)="showPptModal = false", [ig]="ig")
 ang-download-limit-modal(*ngIf="showDownloadLimitModal", (closeModal)="showDownloadLimitModal = false", [ig]="ig")

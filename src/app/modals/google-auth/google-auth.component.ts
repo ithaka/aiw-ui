@@ -13,6 +13,9 @@ import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/
 })
 export class GoogleAuthComponent implements OnInit, AfterViewInit {
 
+  @Input()
+  public ig: any = {}
+
   @Output()
   public closeModal: EventEmitter<any> = new EventEmitter();
 
@@ -35,6 +38,8 @@ export class GoogleAuthComponent implements OnInit, AfterViewInit {
       this._slides.loadClientInit()
       this.gapiLoaded = true
     })
+
+    console.log('Image Group from slides service: ', this.ig)
   }
 
   ngAfterViewInit() {
@@ -54,7 +59,7 @@ export class GoogleAuthComponent implements OnInit, AfterViewInit {
   }
 
   public initPresentation() {
-    this._slides.newPresentation('testing new slideshow')
+    this._slides.newPresentation(this.ig)
   }
 
 }
