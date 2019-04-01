@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="94px" height="125px" viewBox="0 0 94 125" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>loading state</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="options" transform="translate(-154.000000, -55.000000)">
+            <g id="loading-state" transform="translate(154.000000, 55.000000)">
+                <rect id="container" fill="#EEEEEE" fill-rule="nonzero" x="0" y="0" width="94" height="125"></rect>
+                <path d="M33,33 L51,33 L51,51 L33,51 L33,33 Z M33,52 L44,52 L44,61 L33,61 L33,52 Z M52,33 L60,33 L60,51 L52,51 L52,33 Z M45,52 L60,52 L60,61 L45,61 L45,52 Z" id="Combined-Shape" fill="#989898"></path>
+                <text id="Loading…" font-family="Verdana" font-size="12" font-weight="normal" fill="#989898">
+                    <tspan x="19.0849609" y="84">Loading…</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

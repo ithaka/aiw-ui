@@ -26,6 +26,8 @@ export class CardViewComponent implements OnInit {
   // Tracks whether to expand or collapse the tags exceeding 3 lines
   public tagsCollapsed: boolean = true
 
+  public dataLoaded: boolean = false
+
   constructor(
     private _auth: AuthService,
     private _search: AssetSearchService,
@@ -63,6 +65,7 @@ export class CardViewComponent implements OnInit {
     if (itemIds.length) {
       this._assets.getAllThumbnails(itemIds)
         .then( allThumbnails => {
+          this.thumbnails = allThumbnails
           this.thumbnails = allThumbnails.filter((thumbnail) => {
             return thumbnail.status === 'available'
           })
@@ -72,11 +75,15 @@ export class CardViewComponent implements OnInit {
               thumbnail.thumbnailImgUrl = thumbnail.media.thumbnailSizeOnePath
             }
           })
+          this.dataLoaded = true
         })
         .catch( error => {
+          this.dataLoaded = true
           console.error(error)
         })
-      }
+    } else {
+      this.dataLoaded = true
+    }
   }
 
   /**
@@ -163,5 +170,4 @@ export class CardViewComponent implements OnInit {
     Object.assign(queryParams, {'term': imageGroup.owner_name, 'id': imageGroup.owner_id})
     this._router.navigate(['/browse', 'groups'], { queryParams: queryParams })
   }
-
 }
