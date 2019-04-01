@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
-import { BehaviorSubject, Observable, Subject, pipe, of } from 'rxjs'
+import { BehaviorSubject, Observable, Subject, pipe } from 'rxjs'
 import { catchError } from 'rxjs/operators'
 import { GroupList, ImageZoomParams } from './datatypes'
 
@@ -240,27 +240,17 @@ export class GroupService {
             putGroup,
             this.options
         )
-        .pipe(
-            catchError(
-                err => {
-                    if (err.status === 403) {
-                        // Unauthorized/session expired - we assume expired since we don't allow modifying read-only groups
-                        // throw err
-                        return of(err)
-                    } else {
-                        return this.http.post(
-                            // Backup POST call for PUT failures over Proxies
-                            reqUrl,
-                            putGroup,
-                            {
-                            headers: new HttpHeaders({ 'Accept' : 'application/json', 'X-HTTP-Method-Override' : 'PUT' }),
-                            withCredentials: true
-                            }
-                        )
-                    }
+        .pipe(catchError(err =>
+            this.http.post(
+                // Backup POST call for PUT failures over Proxies
+                reqUrl,
+                putGroup,
+                {
+                  headers: new HttpHeaders({ 'Accept' : 'application/json', 'X-HTTP-Method-Override' : 'PUT' }),
+                  withCredentials: true
                 }
             )
-        )
+        ))
     }
 
     /**

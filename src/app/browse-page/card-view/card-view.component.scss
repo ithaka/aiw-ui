@@ -193,15 +193,21 @@ $tagLinkBg: #efefef;
 
 .icon {
     width: 5.5em;
-    height: 7em;    
+    height: 7em;
+    
+    &.img-state{
+        background-size: 98%;
+        position: absolute;
+        left: 1.5em;
+    }
+    &.no-img-placeholder{
+        background-image: url("/assets/img/no-img-state.svg");
+    }
+    &.loading-placeholder{
+        background-image: url("/assets/img/loading-img-state.svg");
+    }
 }
 
-.no-image-placeholder {
-    background-image: url("/assets/img/no-images.svg");
-    background-size: 98%;
-    position: absolute;
-    left: 1.5em;
-}
 
 .cardview-text {
     padding-left: 1em;

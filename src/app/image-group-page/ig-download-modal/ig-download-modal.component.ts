@@ -1,10 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Angulartics2 } from 'angulartics2';
 
 import { AssetService, AuthService, ImageGroup, DomUtilityService } from './../../shared';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'ang-ig-download-modal',
@@ -150,16 +149,6 @@ export class PptModalComponent implements OnInit, AfterViewInit {
       // Return request that provides file URL
       return this.http
         .post(url + '/' + format + '/' + group.id + '/' + useLegacyMetadata, this._auth.formEncode(data), options)
-        .pipe(map((res) => {
-          if (res === null || !res['path']) {
-            /**
-             * @todo: a null response is received when we should be getting a 401
-             * This handling should be removed once the service is updated and returns a 401
-             */
-            this._auth.showUserInactiveModal.next(true)
-            throw new Error("Invalid data response, assuming expired session")
-          }
-        }))
         .toPromise()
     })
     .then((res) => {
