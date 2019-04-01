@@ -79,7 +79,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Feature Flags
     public relatedResFlag: boolean = false
-    public detailViewsFlag: boolean = false
     private encryptedAccess: boolean = false
     private document = document
     private URL = URL
@@ -212,7 +211,6 @@ export class AssetPage implements OnInit, OnDestroy {
         this.subscriptions.push(
             this._flags.flagUpdates.subscribe((flags) => {
                 this.relatedResFlag = flags.relatedResFlag ? true : false
-                this.detailViewsFlag = flags.detailViews ? true : false
             }),
             this.route.params.subscribe((routeParams) => {
                 this.assetGroupId = routeParams['groupId']
@@ -790,45 +788,32 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private addAssetToIG(detailView?: boolean): void {
 
-        if (this.user && this.user.isLoggedIn) {
-            if(this.detailViewsFlag) {
-                if(detailView) {
-                    // Get Bounds from OSD viewer for the saved detail
-                    let bounds = this.assetViewer.osdViewer.viewport.viewportToImageRectangle(this.assetViewer.osdViewer.viewport.getBounds(true))
-                    // Make sure the bounds are adjusted for the negative x and y values
-                    bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
-                    bounds['height'] = bounds['y'] < 0 ? bounds['height'] + bounds['y'] : bounds['height']
-                    // Make sure the bounds are within the content size for the IIIF endpoint.
-                    bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']
-                    bounds['height'] = bounds['height'] > this.assets[0].viewportDimensions.contentSize['y'] ? this.assets[0].viewportDimensions.contentSize['y'] : bounds['height']
+        if (this.user && this.user.isLoggedIn) {            
+            if(detailView) {
+                // Get Bounds from OSD viewer for the saved detail
+                let bounds = this.assetViewer.osdViewer.viewport.viewportToImageRectangle(this.assetViewer.osdViewer.viewport.getBounds(true))
+                // Make sure the bounds are adjusted for the negative x and y values
+                bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
+                bounds['height'] = bounds['y'] < 0 ? bounds['height'] + bounds['y'] : bounds['height']
+                // Make sure the bounds are within the content size for the IIIF endpoint.
+                bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']
+                bounds['height'] = bounds['height'] > this.assets[0].viewportDimensions.contentSize['y'] ? this.assets[0].viewportDimensions.contentSize['y'] : bounds['height']
 
-                    let zoomObj = {
-                        'viewerX': bounds['x'],
-                        'viewerY': bounds['y'],
-                        'pointWidth': bounds['width'],
-                        'pointHeight': bounds['height'],
-                        'index': 0
-                    }
-                    
-                    this.assets[0]['zoom'] = this._group.setZoomDetails(zoomObj)
+                let zoomObj = {
+                    'viewerX': bounds['x'],
+                    'viewerY': bounds['y'],
+                    'pointWidth': bounds['width'],
+                    'pointHeight': bounds['height'],
+                    'index': 0
                 }
-
-                this.showAddModal = true
-
+                
+                this.assets[0]['zoom'] = this._group.setZoomDetails(zoomObj)
             } else {
-                // Check if the logged-in user has private image groups
-                this._group.getAll('created').pipe(
-                take(1),
-                map(res => {
-                    if (res.groups && (res.groups.length > 0)) {
-                        this.showAddModal = true;
-                    } else {
-                        this.showCreateGroupModal = true;
-                    }
-                },
-                (err) => { console.error(err); }
-                )).subscribe()
+                delete this.assets[0]['zoom']
             }
+
+            this.showAddModal = true
+            
         } else {
           this.showLoginModal = true;
         }
@@ -1562,6 +1547,10 @@ export class AssetPage implements OnInit, OnDestroy {
           }
         }
         return index
+    }
+
+    public updatePrimaryAssetZoom(): void{
+        this.assets[0].zoom = this.indexZoomMap[0]
     }
 
 }

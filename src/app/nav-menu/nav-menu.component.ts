@@ -67,8 +67,6 @@ export class NavMenu implements OnInit, OnDestroy {
   private copyIG: boolean = false
   private editIG: boolean = false
 
-  public detailViewsFlag: boolean = false
-
   // Toast Variables
   public toasts: Toast[] = []
 
@@ -114,8 +112,7 @@ export class NavMenu implements OnInit, OnDestroy {
       )).subscribe(),
       // Feature flag subscription
       this._flags.flagUpdates.subscribe((flags) => {
-          this.exportReframeFlag = flags.exportReframe ? true : false
-          this.detailViewsFlag = flags.detailViews ? true : false
+        this.exportReframeFlag = flags.exportReframe ? true : false
       }),
       // Route params subscription
       this.route.params.subscribe((routeParams) => {
