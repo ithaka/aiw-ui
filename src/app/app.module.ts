@@ -66,7 +66,6 @@ import { LoginFormComponent } from './login-form'
 import {
   AccessDeniedModal,
   AddToGroupModal,
-  AddToGroupLegacyModal,
   ChangePasswordModal,
   ConfirmModal,
   DeleteIgModal,
@@ -167,7 +166,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     AccountPage,
     EditPersonalCollectionModal,
     AddToGroupModal,
-    AddToGroupLegacyModal,
     AgreeModalComponent,
     AppComponent,
     AssetFilters,
