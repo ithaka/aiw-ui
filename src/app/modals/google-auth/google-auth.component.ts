@@ -53,4 +53,8 @@ export class GoogleAuthComponent implements OnInit, AfterViewInit {
     this._slides.gAuthSignIn()
   }
 
+  public initPresentation() {
+    this._slides.newPresentation('testing new slideshow')
+  }
+
 }

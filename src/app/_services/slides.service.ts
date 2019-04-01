@@ -2,6 +2,12 @@
 /// <reference types="@types/gapi.auth2" />
 /// <reference types="@types/gapi.client.slides" />
 
+//import { gapi } from '@types/gapi.client.slides'
+
+//gapi.slides
+
+import { presentations } from 'slides.presentations'
+
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment'
 
@@ -16,7 +22,7 @@ export class SlidesService {
    *  Called to init gapi client and auth2 library
    */
   public loadClientInit(): void | Error {
-    return gapi.load('client:auth2', this.initClient)
+    gapi.load('client:auth2:slides;', this.initClient)
   }
 
   /**
@@ -43,6 +49,22 @@ export class SlidesService {
       discoveryDocs: <string[]>environment.GAPI_TEST[2],
       scope: <string>environment.GAPI_TEST[3]
     })
+  }
+
+
+  /** GENERATE */
+
+  public newPresentation(title) {
+    console.log('!!!!!!!', gapi.client['slides'])
+  gapi.client['slides'].presentations.create({title: title}).then(function (response) {
+      var presentation = response.result;
+
+
+      console.log('Created presentation with ID: %s', presentation.presentationId);
+    }, function (response) {
+      console.log('Error: ' + response.result.error.message);
+    })
+
   }
 
 }

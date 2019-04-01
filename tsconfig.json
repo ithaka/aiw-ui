@@ -34,7 +34,10 @@
       "selenium-webdriver",
       "source-map",
       "uglify-js",
-      "webpack"
+      "webpack",
+      "gapi",
+      "gapi.client",
+      "gapi.client.slides"
     ]
   },
   "exclude": [
