@@ -66,15 +66,15 @@ export class CardViewComponent implements OnInit {
       this._assets.getAllThumbnails(itemIds)
         .then( allThumbnails => {
           this.thumbnails = allThumbnails
-          // this.thumbnails = allThumbnails.filter((thumbnail) => {
-          //   return thumbnail.status === 'available'
-          // })
+          this.thumbnails = allThumbnails.filter((thumbnail) => {
+            return thumbnail.status === 'available'
+          })
 
-          // this.thumbnails.forEach(thumbnail => {
-          //   if (thumbnail['media']) {
-          //     thumbnail.thumbnailImgUrl = thumbnail.media.thumbnailSizeOnePath
-          //   }
-          // })
+          this.thumbnails.forEach(thumbnail => {
+            if (thumbnail['media']) {
+              thumbnail.thumbnailImgUrl = thumbnail.media.thumbnailSizeOnePath
+            }
+          })
           this.dataLoaded = true
         })
         .catch( error => {
