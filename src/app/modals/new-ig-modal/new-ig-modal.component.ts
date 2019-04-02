@@ -218,10 +218,9 @@ export class NewIgModal implements OnInit {
     let multipleSelected: boolean = this.selectedAssets.length > 1
 
     if (this.editIG) {
+      group.id = this.ig.id // need this for the update call
       // Editing group
       this._angulartics.eventTrack.next({ properties: { event: 'editGroup', category: 'groups', label: group.id }});
-
-      group.id = this.ig.id // need this for the update call
 
       this._group.update(group).pipe(
         map(data => {
