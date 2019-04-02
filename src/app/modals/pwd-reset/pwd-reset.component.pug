@@ -1,9 +1,9 @@
 #pwd-modal.modal.fade.show
   //- Password Reset Modal
-  .modal-dialog
+  .modal-dialog((keydown.esc)="closeModal.emit()")
     .modal-content
-      .modal-header
-        h5 {{ copyKey+'.HEADING' | translate }}
+      .modal-header(tabindex="1", (keydown.shift.tab)="focusLastElement($event)")
+        h5(#pwdResetTitle, tabindex="1", (keydown.shift.tab)="closeModal.emit()") {{ copyKey+'.HEADING' | translate }}
         button((click)="closeModal.emit()", type="button", class="close", data-dismiss="modal", aria-label="Close")
           span(aria-hidden="true") &times;
       form#pwdResetForm([formGroup]="pwdResetForm", (ngSubmit)="sendResetPwdRequest()")
@@ -18,24 +18,33 @@
                 type="text", 
                 [formControl]="pwdResetForm.controls['email']", 
                 (value)="username", 
+                (keydown.tab)="focusElement(supportLink, $event)",
                 spellcheck="false", 
-                tabindex="0"
+                tabindex="1"
               )
               .invalid-feedback(*ngIf="submitted && pwdResetForm.controls['email'].invalid && !errorMsgPwdRst && !successMsgPwdRst") Please enter an email address
               .invalid-feedback(*ngIf="errorMsgPwdRst") {{ errorMsgPwdRst }}
           .form-group
             p.small 
-              | Need further help? <a href="mailto:support@artstor.org" class="link" tabindex="0">Contact Support</a>
+              | Need further help? <a #supportLink href="mailto:support@artstor.org" class="link" tabindex="1">Contact Support</a>
         .modal-body(*ngIf="successMsgPwdRst")
           p.modal-prompt {{ successMsgPwdRst | translate }}
         .modal-footer
           .form-group.mb-0(*ngIf="pwdReset")
             .btn-row
               button.btn.btn-secondary(
-                  *ngIf="!systemRequest"
-                  type="button", 
-                  (click)="closeModal.emit()"
-                ) Cancel
-              button.btn.btn-primary(type="submit", [class.loading]="isLoading") Submit
+                *ngIf="!systemRequest"
+                type="button", 
+                (click)="closeModal.emit()",
+                (keydown.tab)="focusElement(submitButton, $event)",
+                tabindex="1"
+              ) Cancel
+              button.btn.btn-primary(
+                #submitButton,
+                type="submit", 
+                [class.loading]="isLoading", 
+                tabindex="1",
+                (keydown.tab)="focusElement(pwdResetTitle, $event)"
+              ) Submit
           .form-group.mb-0(*ngIf="successMsgPwdRst")
             button.btn.btn-primary(type="button", (click)="closeModal.emit()") Close
