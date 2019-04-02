@@ -7,7 +7,10 @@
         .card-header
           h2.h1#loginHeading {{ copyBase + 'LOGIN.REG_LOGIN.HEADING' | translate }}
         .card-body
-          ang-login-form((userEmail)="username = $event")#mainContent
+          ang-login-form(
+            (userEmail)="username = $event", 
+            (resetPassword)="displaySystemPwdReset($event)"
+          )#mainContent
           a#linkLoginResetModal((click)="showPwdModal = true" tabindex="1" class="link" data-automation-component="artstor-pw-reset-link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
           br
           div(*ngIf="showRegister")
@@ -55,7 +58,12 @@
         .card-body
           .form-group
             | #[a#linkLoginSaharaSS.link(tabindex="1", [attr.href]="_auth.getEnv() === 'test' ? FORUM_TEST : FORUM_PROD", target="_blank", data-automation-component="ss-login-link") Log in] to JSTOR Forum
-ang-pwd-reset-modal(*ngIf="showPwdModal", [username]="username", (closeModal)="showPwdModal = false")
+ang-pwd-reset-modal(
+  *ngIf="showPwdModal", 
+  [username]="username", 
+  [systemRequest]="systemPwdReset", 
+  (closeModal)="systemPwdReset = false; showPwdModal = false"
+)
 #helpModal.modal([ngClass]="{'show': showHelpModal }")
   .modal-dialog
     .modal-content

@@ -1,28 +1,50 @@
 #pwd-modal.modal.fade.show
-  // Pwd Reset Modal
-  .modal-dialog
+  //- Password Reset Modal
+  .modal-dialog((keydown.esc)="closeModal.emit()")
     .modal-content
-      .modal-header
-        h5 Password Reset
+      .modal-header(tabindex="1", (keydown.shift.tab)="focusLastElement($event)")
+        h5(#pwdResetTitle, tabindex="1", (keydown.shift.tab)="closeModal.emit()") {{ copyKey+'.HEADING' | translate }}
         button((click)="closeModal.emit()", type="button", class="close", data-dismiss="modal", aria-label="Close")
           span(aria-hidden="true") &times;
       form#pwdResetForm([formGroup]="pwdResetForm", (ngSubmit)="sendResetPwdRequest()")
-        .modal-body
+        .modal-body(*ngIf="!successMsgPwdRst")
           div(*ngIf="pwdReset")
-            p Enter the email address that you used when registering.
+            p.modal-prompt {{ copyKey+'.PROMPT' | translate }}
             .form-group
-              label(for="pwdresetEmailInput") Email Address:
-              input#pwdresetEmailInput.form-control(type="text", [formControl]="pwdResetForm.controls['email']", (value)="username", spellcheck="false", tabindex="0")
-          .has-danger(*ngIf="submitted && pwdResetForm.controls['email'].invalid && !errorMsgPwdRst && !successMsgPwdRst")
-            p.form-control-feedback A valid email is required
-          .form-control-feedback.has-danger(*ngIf="errorMsgPwdRst")
-            p.form-control-feedback {{ errorMsgPwdRst }}
-          .has-success(*ngIf="successMsgPwdRst")
-            p.form-control-feedback {{ successMsgPwdRst }}
+              label(for="pwdresetEmailInput") {{ copyKey+'.LABEL' | translate }}
+              input#pwdresetEmailInput.form-control(
+                [class.is-invalid]="submitted && (pwdResetForm.controls['email'].invalid || errorMsgPwdRst)", 
+                [class.is-valid]="pwdResetForm.controls['email'].valid && !errorMsgPwdRst"
+                type="text", 
+                [formControl]="pwdResetForm.controls['email']", 
+                (value)="username", 
+                (keydown.tab)="focusElement(supportLink, $event)",
+                spellcheck="false", 
+                tabindex="1"
+              )
+              .invalid-feedback(*ngIf="submitted && pwdResetForm.controls['email'].invalid && !errorMsgPwdRst && !successMsgPwdRst") Please enter an email address
+              .invalid-feedback(*ngIf="errorMsgPwdRst") {{ errorMsgPwdRst }}
+          .form-group
+            p.small 
+              | Need further help? <a #supportLink href="mailto:support@artstor.org" class="link" tabindex="1">Contact Support</a>
+        .modal-body(*ngIf="successMsgPwdRst")
+          p.modal-prompt {{ successMsgPwdRst | translate }}
         .modal-footer
-          .form-group(*ngIf="pwdReset")
-            button.btn.btn-secondary(type="button", (click)="closeModal.emit()") Cancel
-            = " "
-            button.btn.btn-primary(type="submit", [class.loading]="isLoading") Submit
-          .form-group(*ngIf="successMsgPwdRst")
-            button.btn.btn-secondary(type="button", (click)="closeModal.emit()") Ok
+          .form-group.mb-0(*ngIf="pwdReset")
+            .btn-row
+              button.btn.btn-secondary(
+                *ngIf="!systemRequest"
+                type="button", 
+                (click)="closeModal.emit()",
+                (keydown.tab)="focusElement(submitButton, $event)",
+                tabindex="1"
+              ) Cancel
+              button.btn.btn-primary(
+                #submitButton,
+                type="submit", 
+                [class.loading]="isLoading", 
+                tabindex="1",
+                (keydown.tab)="focusElement(pwdResetTitle, $event)"
+              ) Submit
+          .form-group.mb-0(*ngIf="successMsgPwdRst")
+            button.btn.btn-primary(type="button", (click)="closeModal.emit()") Close

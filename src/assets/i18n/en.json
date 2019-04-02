@@ -353,6 +353,24 @@
     "PROMPT": "Please log in or <a href=\"/#/register\" class=\"link\">Register</a> to save images.",
     "PROMPT_NO_REGISTER": "Please log in to save images."
   },
+  "MODAL" :{
+    "PASSWORD" : {
+      "RESET" : {
+        "HEADING" : "Forgot your password?",
+        "PROMPT" : "We’re here to help! Provide your email address below and a new password will be sent to you.",
+        "LABEL" : "Enter the email address used when you registered"
+      },
+      "SYSTEM_REQUEST" : {
+        "HEADING" : "Please reset your password",
+        "PROMPT" : "We’ve updated our login experience. To access your account, please enter your email address below to reset your password. You only need to do this one time.",
+        "LABEL" : "Enter the email address used when you registered"
+      },
+      "SUCCESS" : {
+        "MESSAGE" : "An email has been sent with a new password and instructions for changing your password.",
+        "HEADING" : "Please check your inbox"
+      }
+    }
+  },
   "BROWSE": {
     "LIBRARY_COLLECTION" : {
       "HEADING" : "Artstor Collections",

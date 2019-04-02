@@ -265,3 +265,17 @@ ngx-tag-input > form > input {
     height: 40px !important;
     font-size: 16px;
 }
+
+// Form feedback
+$invalidRed: #e04a35;
+.form-control.is-invalid {
+    border-color: $invalidRed;
+}
+
+.valid-feedback, .invalid-feedback {
+    font-size: 14px;
+}
+
+.invalid-feedback {
+    color: $invalidRed;
+}
