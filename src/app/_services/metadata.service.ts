@@ -34,6 +34,10 @@ export class MetadataService {
                     assetData.fpxInfo = res
                     return assetData
                 }))
+                .catch((err) => {
+                  console.error("Imagefpx call failed for asset that was otherwise accessible", err)
+                  return of(assetData)
+                })
             default:
                 return of(assetData)
             }
