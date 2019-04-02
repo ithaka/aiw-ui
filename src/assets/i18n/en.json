@@ -363,7 +363,11 @@
       "SYSTEM_REQUEST" : {
         "HEADING" : "Please reset your password",
         "PROMPT" : "We’ve updated our login experience. To access your account, please enter your email address below to reset your password. You only need to do this one time.",
-        "LABEL" : "Enter the email address used when registering to reset your password"
+        "LABEL" : "Enter the email address used when you registered"
+      },
+      "SUCCESS" : {
+        "MESSAGE" : "An email has been sent with a new password and instructions for changing your password.",
+        "HEADING" : "Please check your inbox"
       }
     }
   },

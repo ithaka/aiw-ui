@@ -1,5 +1,5 @@
 #pwd-modal.modal.fade.show
-  // Pwd Reset Modal
+  //- Password Reset Modal
   .modal-dialog
     .modal-content
       .modal-header
@@ -7,23 +7,25 @@
         button((click)="closeModal.emit()", type="button", class="close", data-dismiss="modal", aria-label="Close")
           span(aria-hidden="true") &times;
       form#pwdResetForm([formGroup]="pwdResetForm", (ngSubmit)="sendResetPwdRequest()")
-        .modal-body
+        .modal-body(*ngIf="!successMsgPwdRst")
           div(*ngIf="pwdReset")
-            p {{ copyKey+'.PROMPT' | translate }}
+            p.modal-prompt {{ copyKey+'.PROMPT' | translate }}
             .form-group
               label(for="pwdresetEmailInput") {{ copyKey+'.LABEL' | translate }}
-              input#pwdresetEmailInput.form-control(type="text", [formControl]="pwdResetForm.controls['email']", (value)="username", spellcheck="false", tabindex="0")
-          .has-danger(*ngIf="submitted && pwdResetForm.controls['email'].invalid && !errorMsgPwdRst && !successMsgPwdRst")
-            p.form-control-feedback A valid email is required
-          .form-control-feedback.has-danger(*ngIf="errorMsgPwdRst")
-            p.form-control-feedback {{ errorMsgPwdRst }}
-          .has-success(*ngIf="successMsgPwdRst")
-            p.form-control-feedback {{ successMsgPwdRst }}
+              input#pwdresetEmailInput.form-control(
+                [class.is-invalid]="submitted && (pwdResetForm.controls['email'].invalid || errorMsgPwdRst)", 
+                [class.is-valid]="pwdResetForm.controls['email'].valid && !errorMsgPwdRst"
+                type="text", [formControl]="pwdResetForm.controls['email']", (value)="username", spellcheck="false", tabindex="0"
+              )
+              .invalid-feedback(*ngIf="submitted && pwdResetForm.controls['email'].invalid && !errorMsgPwdRst && !successMsgPwdRst") Please enter an email address
+              .invalid-feedback(*ngIf="errorMsgPwdRst") {{ errorMsgPwdRst }}
           .form-group(*ngIf="systemRequest")
             p.small 
               | Need help logging in? <a href="mailto:support@artstor.org" class="link">Contact Support</a>
+        .modal-body(*ngIf="successMsgPwdRst")
+          p.modal-prompt {{ successMsgPwdRst | translate }}
         .modal-footer
-          .form-group(*ngIf="pwdReset")
+          .form-group.mb-0(*ngIf="pwdReset")
             button.btn.btn-secondary(
                 *ngIf="!systemRequest"
                 type="button", 
@@ -31,5 +33,5 @@
               ) Cancel
             = " "
             button.btn.btn-primary(type="submit", [class.loading]="isLoading") Submit
-          .form-group(*ngIf="successMsgPwdRst")
-            button.btn.btn-secondary(type="button", (click)="closeModal.emit()") Ok
+          .form-group.mb-0(*ngIf="successMsgPwdRst")
+            button.btn.btn-primary(type="button", (click)="closeModal.emit()") Close

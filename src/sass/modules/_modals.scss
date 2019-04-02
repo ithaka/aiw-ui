@@ -69,8 +69,9 @@
         }
     }
 
-    & h1, & h2, & h3, & h4{
+    & h1, & h2, & h3, & h4, & h5 {
         position: static;
+        color: $color-gray-7;
     }
 }
 
@@ -83,6 +84,8 @@
   padding: $basePadding;
   background-color: $color-white;
 
+  & p
+
   .google-permissions-link {
     color: $color-gray-6;
     text-decoration: underline;
@@ -91,6 +94,10 @@
       color: darken($color-gray-6, 30%);
     }
   }
+}
+
+.modal-prompt {
+  color: $color-gray-7;
 }
 
 .modal-footer {

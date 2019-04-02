@@ -26,12 +26,13 @@ export class PwdResetModal implements OnInit {
     private _auth: AuthService,
     private _fb: FormBuilder
   ) {
-    if (this.systemRequest) {
-      this.copyKey = 'MODAL.PASSWORD.SYSTEM_REQUEST'
-    }
+    
   }
 
   ngOnInit() { 
+    if (this.systemRequest) {
+      this.copyKey = 'MODAL.PASSWORD.SYSTEM_REQUEST'
+    }
     this.pwdResetForm = this._fb.group({
       'email': [this.username, [Validators.required, Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]]
     });
@@ -50,18 +51,20 @@ export class PwdResetModal implements OnInit {
         (error) => { this.errorMsgPwdRst = <any>error }
       );
   }
+  
   loadPwdRstRes(res: any){
     if (!res.status || res.status === 'false'){
-      this.errorMsgPwdRst = 'Sorry! ' + this.pwdResetForm.value.email + ' is invalid for Artstor.';
+      this.errorMsgPwdRst = 'Sorry! An account for ' + this.pwdResetForm.value.email + ' was not found.'
       setTimeout(() => {
         this.errorMsgPwdRst = '';
-                }, 8000);
+        this.submitted = false
+      }, 8000);
       this.pwdResetForm.controls['email'].setValue('');
     }
     else{
       this.pwdReset = false;
-      this.successMsgPwdRst = 'Your password has been sent.';
+      this.copyKey = 'MODAL.PASSWORD.SUCCESS'
+      this.successMsgPwdRst = this.copyKey + '.MESSAGE'
     }
-    this.submitted = false;
   }
 }
