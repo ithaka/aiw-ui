@@ -356,9 +356,9 @@
   "MODAL" :{
     "PASSWORD" : {
       "RESET" : {
-        "HEADING" : "Password Reset",
-        "PROMPT" : "Enter the email address that you used when registering.",
-        "LABEL" : "Email Address"
+        "HEADING" : "Forgot your password?",
+        "PROMPT" : "We’re here to help! Provide your email address below and a new password will be sent to you.",
+        "LABEL" : "Enter the email address used when you registered"
       },
       "SYSTEM_REQUEST" : {
         "HEADING" : "Please reset your password",

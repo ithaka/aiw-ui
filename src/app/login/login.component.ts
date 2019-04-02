@@ -27,8 +27,7 @@ export class Login implements OnInit, OnDestroy {
   public errorMsg: string = ''
   public instErrorMsg: string = ''
   public showPwdModal = false
-  public pwdReset = false
-  public expirePwd = false
+  public systemPwdReset = false
   public pwdRstEmail = ''
   public errorMsgPwdRst = ''
   public forcePwdRst = false
@@ -262,4 +261,11 @@ export class Login implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Display reset password modal when required by system
+   */
+  displaySystemPwdReset(event): void {
+    this.systemPwdReset = true
+    this.showPwdModal = true
+  }
 }
