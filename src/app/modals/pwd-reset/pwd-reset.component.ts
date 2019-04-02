@@ -1,7 +1,8 @@
-import { AuthService } from '../../shared';
+import { AuthService, DomUtilityService } from '../../shared';
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'ang-pwd-reset-modal',
@@ -24,7 +25,8 @@ export class PwdResetModal implements OnInit {
 
   constructor(
     private _auth: AuthService,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    private _dom: DomUtilityService
   ) {
     
   }
@@ -36,6 +38,9 @@ export class PwdResetModal implements OnInit {
     this.pwdResetForm = this._fb.group({
       'email': [this.username, [Validators.required, Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]]
     });
+    // Set focus on load
+    let firstField = <HTMLElement>this._dom.bySelector('#pwdresetEmailInput')
+    firstField && firstField.focus()
   }
 
 
