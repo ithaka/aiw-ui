@@ -56,7 +56,7 @@
       //- Set the media type icon for downgraded media using media.adlObjectType
       i( *ngIf="isDowngradedMedia", class="icon icon-{{thumbnail.media.adlObjectType | typeIdPipe}}")
       //- Detail view icon
-      i.icon(*ngIf="thumbnail.zoom", [ngClass]="[ mouseOverDetailIcon ? 'icon-detail-hover' : 'icon-detail' ]", [ngbTooltip]="tipDetailView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", tabIndex="3", (mouseover)="mouseOverDetailIcon=true", (mouseout)="mouseOverDetailIcon=false")
+      i.icon(*ngIf="thumbnail.zoom", [ngClass]="[ mouseOverDetailIcon ? 'icon-detail-view-hover' : 'icon-detail-view' ]", [ngbTooltip]="tipDetailView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", tabIndex="3", (mouseover)="mouseOverDetailIcon=true", (mouseout)="mouseOverDetailIcon=false")
 
       .multiview-indicator(*ngIf="multiviewItemCount > 1", [ngbTooltip]="tipMultiView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", title="See multiview items button icon. Press enter to click this button", tabIndex="3", aria-role="button")
         i.icon.icon-multiview
