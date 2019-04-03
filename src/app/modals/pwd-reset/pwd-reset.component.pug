@@ -1,10 +1,10 @@
 #pwd-modal.modal.fade.show
   //- Password Reset Modal
-  .modal-dialog((keydown.esc)="closeModal.emit()")
+  .modal-dialog((keydown.esc)="!systemRequest && closeModal.emit()")
     .modal-content
       .modal-header(tabindex="1", (keydown.shift.tab)="focusElement(submitButton, $event)")
         h5(#pwdResetTitle, tabindex="1", (keydown.shift.tab)="closeModal.emit()") {{ copyKey+'.HEADING' | translate }}
-        button((click)="closeModal.emit()", type="button", class="close", data-dismiss="modal", aria-label="Close")
+        button(*ngIf="!systemRequest", (click)="closeModal.emit()", type="button", class="close", data-dismiss="modal", aria-label="Close")
           span(aria-hidden="true") &times;
       form#pwdResetForm([formGroup]="pwdResetForm", (ngSubmit)="sendResetPwdRequest()")
         .modal-body(*ngIf="!successMsgPwdRst")
