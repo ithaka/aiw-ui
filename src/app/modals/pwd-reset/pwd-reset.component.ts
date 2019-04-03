@@ -14,8 +14,6 @@ export class PwdResetModal implements OnInit, AfterViewInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
   @ViewChild("pwdResetTitle", {read: ElementRef}) titleElement: ElementRef
-  @ViewChild("submitButton", {read: HTMLElement}) submitButton: HTMLElement
-  @ViewChild("supportLink", {read: HTMLElement}) supportLink: HTMLElement
 
   public pwdResetForm: FormGroup;
 
@@ -25,6 +23,10 @@ export class PwdResetModal implements OnInit, AfterViewInit {
   public successMsgPwdRst = ''
   public submitted = false
   public copyKey = 'MODAL.PASSWORD.RESET'
+
+  // Element handles used in template
+  public submitButton: HTMLElement
+  public supportLink: HTMLElement
 
   constructor(
     private _auth: AuthService,
