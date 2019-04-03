@@ -14,6 +14,8 @@ export class PwdResetModal implements OnInit, AfterViewInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
   @ViewChild("pwdResetTitle", {read: ElementRef}) titleElement: ElementRef
+  @ViewChild("submitButton", {read: HTMLElement}) submitButton: HTMLElement
+  @ViewChild("supportLink", {read: HTMLElement}) supportLink: HTMLElement
 
   public pwdResetForm: FormGroup;
 
