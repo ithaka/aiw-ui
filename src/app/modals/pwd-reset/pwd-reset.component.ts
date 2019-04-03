@@ -78,10 +78,6 @@ export class PwdResetModal implements OnInit, AfterViewInit {
   loadPwdRstRes(res: any){
     if (!res.status || res.status === 'false'){
       this.errorMsgPwdRst = 'Sorry! An account for ' + this.pwdResetForm.value.email + ' was not found.'
-      setTimeout(() => {
-        this.errorMsgPwdRst = '';
-        this.submitted = false
-      }, 8000);
       this.pwdResetForm.controls['email'].setValue('');
     }
     else{
