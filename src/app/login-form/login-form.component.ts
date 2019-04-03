@@ -203,7 +203,7 @@ export class LoginFormComponent implements OnInit {
     let serverMsg = err.error && err.error.message
     // Check for error code 422 for lost password
     // Maybe better to check by serverMsg later when the response message is decided by Auth
-    if (err && (err.status === 422 || serverMsg.indexOf('password reset required'))) {
+    if (err && (err.status === 422 || serverMsg.includes('password reset required'))) {
       // Display lost password modal
       this.resetPassword.emit(true)
       return 'LOGIN.LOST_PASSWORD'
