@@ -293,7 +293,7 @@
       "PRIVATE": "Only me"
     },
     "TAGS_FIELD_LABEL": "Tags",
-    "SHOW_ADD_TO_IMAGE_GROUP": "Add item to existing group",
+    "SHOW_ADD_TO_IMAGE_GROUP": "Add to existing group",
     "CREATE_SUCCESS": "You've successfully created a group",
     "CREATE_FAILURE": "Oops, something went wrong and your group was not created. Please try again.",
     "EDIT_SUCCESS" : "You've successfully edited the group",
