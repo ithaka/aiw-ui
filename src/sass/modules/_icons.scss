@@ -117,15 +117,23 @@
 @include icon('add-white', 'svg');
 // Media type icons
 @include icon('pdf', 'svg');
+@include icon('pdf-hover', 'svg');
 @include icon('doc', 'svg');
+@include icon('doc-hover', 'svg');
 @include icon('xls', 'svg');
+@include icon('xls-hover', 'svg');
 @include icon('ppt', 'svg');
+@include icon('ppt-hover', 'svg');
 @include icon('video', 'svg');
+@include icon('video-hover', 'svg');
 @include icon('audio', 'svg');
+@include icon('audio-hover', 'svg');
 @include icon('3d', 'gif');
 @include icon('panorama', 'svg');
+@include icon('panorama-hover', 'svg');
 @include icon('cluster', 'svg');
 @include icon('multiview', 'svg');
+@include icon('multiview-hover', 'svg');
 // Social media icons
 @include icon('contact', 'png');
 @include icon('youtube', 'png');
@@ -205,13 +213,13 @@
     background-image: none !important;
 }
 
-a .icon {
-    opacity: 0.8;
+// a .icon {
+//     opacity: 0.8;
 
-    &:hover {
-        opacity: 1;
-    }
-}
+//     &:hover {
+//         opacity: 1;
+//     }
+// }
 
 .contextual-help{
     margin-left: 5px;
