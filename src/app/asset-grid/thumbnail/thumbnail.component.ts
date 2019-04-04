@@ -148,30 +148,4 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     }
   }
 
-  /**
-   * We need to transform type in ngClass, therefore we need a function instead of the pipe
-   * @param value the adlObjectType of the thumbnail
-   */
-  mapObjectType(value: any): string {
-    let objectTypeNames: { [key: number]: string } = {
-      1: 'specimen',
-      2: 'visual',
-      3: 'use',
-      6: 'publication',
-      7: 'synonyms',
-      8: 'people',
-      9: 'repository',
-      10: 'image',
-      11: 'panorama',
-      12: 'audio',
-      13: '3d', 
-      20: 'pdf', 
-      21: 'ppt',
-      22: 'doc',
-      23: 'xls',
-      24: 'video'
-    };
-    return objectTypeNames[value];
-  }
-  
 }

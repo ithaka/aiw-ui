@@ -43,9 +43,9 @@
       )
       i.icon.icon-collab(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", (click)="openLink($event, ['/associated', thumbnail.artstorid ? thumbnail.artstorid : thumbnail.objectId])", title="Others are also interested in button icon. Press enter to click this button", tabIndex="3", (keyup.enter)="openLink($event, ['/associated', thumbnail.artstorid])")
       //- ang-collection-badge([collectionType]="getCollectionType()", tabIndex="3")
-      
+
       i.icon(*ngIf="thumbnail.media && thumbnail.media.adlObjectType && (thumbnail.media.adlObjectType != 10) && (multiviewItemCount <= 1)",
-          [ngClass]="[ mouseOverMedia ? 'icon-' + mapObjectType(thumbnail.media.adlObjectType) + '-hover' : 'icon-' + mapObjectType(thumbnail.media.adlObjectType) ]",
+          [ngClass]="[ mouseOverMedia ? 'icon-' + (thumbnail.media.adlObjectType | typeIdPipe) + '-hover' : 'icon-' + (thumbnail.media.adlObjectType | typeIdPipe) ]",
           (mouseover)="mouseOverMedia=true",
           (mouseout)="mouseOverMedia=false",
           [ngbTooltip]="mediaTooltip",
@@ -55,14 +55,14 @@
         <ng-template #mediaTooltip>
           div {{thumbnail.media.adlObjectType | typeIdPipe:true }}
         </ng-template>
-      i.icon(*ngIf="!thumbnail.media && thumbnail.objectTypeId && thumbnail.objectTypeId != 10", 
-          [ngClass]="[ mouseOverNoMedia ? 'icon-' + mapObjectType(thumbnail.objectTypeId) + '-hover' : 'icon-' + mapObjectType(thumbnail.objectTypeId) ]",
+      i.icon(*ngIf="!thumbnail.media && thumbnail.objectTypeId && thumbnail.objectTypeId != 10",
+          [ngClass]="[ mouseOverNoMedia ? 'icon-' + (thumbnail.objectTypeId | typeIdPipe) + '-hover' : 'icon-' + (thumbnail.objectTypeId | typeIdPipe) ]",
           (mouseover)="mouseOverNoMedia=true",
           (mouseout)="mouseOverNoMedia=false")
 
       //- Set the media type icon for downgraded media using media.adlObjectType
       i.icon(*ngIf="isDowngradedMedia",
-          [ngClass]="[ mouseOverDowngradedMedia ? 'icon-' + mapObjectType(thumbnail.media.adlObjectType) + '-hover' : 'icon-' + mapObjectType(thumbnail.media.adlObjectType) ]",
+          [ngClass]="[ mouseOverDowngradedMedia ? 'icon-' + (thumbnail.media.adlObjectType | typeIdPipe) + '-hover' : 'icon-' + (thumbnail.media.adlObjectType | typeIdPipe) ]",
           (mouseover)="mouseOverDowngradedMedia=true",
           (mouseout)="mouseOverDowngradedMedia=false")
 
