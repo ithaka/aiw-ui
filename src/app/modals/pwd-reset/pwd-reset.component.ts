@@ -14,6 +14,8 @@ export class PwdResetModal implements OnInit, AfterViewInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
   @ViewChild("pwdResetTitle", {read: ElementRef}) titleElement: ElementRef
+  @ViewChild("submitButton", { read: ElementRef}) submitButton: ElementRef
+  @ViewChild("cancelButton", { read: ElementRef}) cancelButton: ElementRef
 
   public pwdResetForm: FormGroup;
 
@@ -25,8 +27,8 @@ export class PwdResetModal implements OnInit, AfterViewInit {
   public copyKey = 'MODAL.PASSWORD.RESET'
 
   // Element handles used in template
-  public submitButton: HTMLElement
-  public supportLink: HTMLElement
+  // public submitButton: HTMLElement
+  // public supportLink: HTMLElement
 
   constructor(
     private _auth: AuthService,
@@ -47,6 +49,10 @@ export class PwdResetModal implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     // Focus first element
     this.titleElement && this.focusElement(this.titleElement.nativeElement)
+
+    // Set view child element refs
+    this.submitButton = this.submitButton.nativeElement
+    this.cancelButton = this.cancelButton.nativeElement
   }
 
   /**
