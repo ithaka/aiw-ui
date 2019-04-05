@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="14px" viewBox="0 0 16 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>icon-download-detail-view</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Working" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="download---add-to-group" transform="translate(-1037.000000, -265.000000)" fill="#333333" fill-rule="nonzero">
+            <g id="download-selector---update" transform="translate(1024.000000, 211.000000)">
+                <path d="M20.8699952,62.7916667 L18.1432037,60.126709 L19.1101685,59.1296692 L20.2748557,60.1770174 L20.2748557,56.7916667 L21.6677128,56.7916667 L21.6677128,60.1770174 L22.733963,59.1296692 L23.7229919,60.126709 L21.0726313,62.7916667 L25.125,62.7916667 L25.125,64.2083333 L16.875,64.2083333 L16.875,62.7916667 L20.8699952,62.7916667 Z M18,54 L18,55.3 L14.3,55.3 L14.3,58 L13,58 L13,54 L18,54 Z M24,54 L29,54 L29,58 L27.7,58 L27.7,55.3 L24,55.3 L24,54 Z M29,64 L29,68 L24,68 L24,66.7 L27.7,66.7 L27.7,64 L29,64 Z M18,68 L13,68 L13,64 L14.3,64 L14.3,66.7 L18,66.7 L18,68 Z" id="icon-download-detail-view"></path>
+            </g>
+        </g>
+    </g>
+</svg>
