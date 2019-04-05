@@ -536,31 +536,31 @@
         "VIEW_PUBLIC_LINK": "View All Public Collections"
       },
       "COLLECTIONS": [{
-          "SUBHEADING": "The Museum of Fine Arts, Houston",
-          "DESCRIPTION": "Quilts from Gee's Bend",
-          "CAPTION": "America Irby. Quilt. 1970. Image and data provided by The Museum of Fine Arts, Houston.",
-          "LINK": "/#/category/1035295331 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/houston_quilt.jpg",
-          "LINK_TITLE": "The Museum of Fine Arts, Houston",
-          "ALT_TEXT": "The Museum of Fine Arts, Houston"
+          "SUBHEADING": "Panos Pictures",
+          "DESCRIPTION": "Wildlife revealed",
+          "CAPTION": "Ami Vitale. A brown bear takes a break. 2007. Photograph. © Ami Vitale. Image and data provided by Panos Pictures.",
+          "LINK": "/#/category/1035192960 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/bear_panos.jpg",
+          "LINK_TITLE": "Panos Pictures",
+          "ALT_TEXT": "Panos Pictures"
         },
         {
-          "SUBHEADING": "Berlin State Museums",
-          "DESCRIPTION": "African jewelry",
-          "CAPTION": "Nupe People, Nigeria. Glass bracelet. 19th century. Image and data provided by Berlin State Museums.",
-          "LINK": "/#/category/1034125175 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/berlin_bracelet.jpg",
-          "LINK_TITLE": "Berlin State Museums",
-          "ALT_TEXT": "Berlin State Museums"
+          "SUBHEADING": "Peabody Museum of Natural History (Yale University)",
+          "DESCRIPTION": "Specimens from the the Peabody Museum",
+          "CAPTION": "Asterope sapphira, butterfly. Collected 1936, Brazil. Image and data provided by the Peabody Museum of Natural History (Yale University).",
+          "LINK": "/#/category/1035093156 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/butterfly_yale.jpg",
+          "LINK_TITLE": "Peabody Museum of Natural History",
+          "ALT_TEXT": "Peabody Museum of Natural History"
         },
         {
-          "SUBHEADING": "The Minneapolis Institute of Art",
-          "DESCRIPTION": "Photography of the Harlem Renaissance",
-          "CAPTION": "James Van DerZee. Couple, Harlem. 1932. Gelatin silver print. Image and data provided by The Minneapolis Institute of Art.",
-          "LINK": "/#/category/1031896062 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/mia_couple.jpg",
-          "LINK_TITLE": "The Minneapolis Institute of Art",
-          "ALT_TEXT": "The Minneapolis Institute of Art"
+          "SUBHEADING": "Trinity College Watkinson Library: Enders Ornithology Lantern Slides",
+          "DESCRIPTION": "Hand tinted glass plates of birds and beasts",
+          "CAPTION": "Herbert Keightley Job. Red Fox, Kent, Connecticut. 1902. Lantern slide. Image and data provided by Trinity College Watkinson Library: Enders Ornithology Lantern Slides.",
+          "LINK": "/#/collection/87729997 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/fox_trinity.jpg",
+          "LINK_TITLE": "Trinity College Watkinson Library: Enders Ornithology Lantern Slides",
+          "ALT_TEXT": "Trinity College Watkinson Library: Enders Ornithology Lantern Slides"
         }
       ],
       "PUBLIC_COLLECTIONS": [
