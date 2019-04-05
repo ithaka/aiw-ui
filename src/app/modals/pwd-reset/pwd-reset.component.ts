@@ -26,10 +26,6 @@ export class PwdResetModal implements OnInit, AfterViewInit {
   public submitted = false
   public copyKey = 'MODAL.PASSWORD.RESET'
 
-  // Element handles used in template
-  // public submitButton: HTMLElement
-  // public supportLink: HTMLElement
-
   constructor(
     private _auth: AuthService,
     private _fb: FormBuilder
