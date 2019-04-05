@@ -2,9 +2,9 @@
   //- Password Reset Modal
   .modal-dialog((keydown.esc)="closeModal.emit()")
     .modal-content
-      .modal-header((keydown.shift.tab)="focusElement(submitButton, $event)")
-        h5(#pwdResetTitle, tabindex="1", (keydown.shift.tab)="closeModal.emit()") {{ copyKey+'.HEADING' | translate }}
-        button(tabindex="1", (click)="closeModal.emit()", type="button", class="close", data-dismiss="modal", aria-label="Close")
+      .modal-header
+        h5(#pwdResetTitle, (keydown.shift.tab)="focusElement(closeIcon, $event)", tabindex="1") {{ copyKey+'.HEADING' | translate }}
+        button(#closeIcon, (click)="closeModal.emit()", type="button", class="close", data-dismiss="modal", aria-label="Close")
           span(aria-hidden="true") &times;
       form#pwdResetForm([formGroup]="pwdResetForm", (ngSubmit)="sendResetPwdRequest()")
         .modal-body(*ngIf="!successMsgPwdRst")
@@ -19,6 +19,7 @@
                 [formControl]="pwdResetForm.controls['email']",
                 (value)="username",
                 (keydown.tab)="focusElement(submitButton, $event)",
+                (keydown.shift.tab)="focusElement(pwdResetTitle, $event)",
                 placeholder="Email address",
                 spellcheck="false",
                 tabindex="1",
@@ -29,17 +30,19 @@
           .form-group
             p.small
               | Need further help? <a #supportLink href="mailto:support@artstor.org" class="link" tabindex="1">Contact Support</a>
+        //- Success Messaging
         .modal-body(*ngIf="successMsgPwdRst")
           p.modal-prompt {{ successMsgPwdRst | translate }}
         .modal-footer
           .form-group.mb-0(*ngIf="pwdReset")
             .btn-row
               button.btn.btn-secondary(
-                *ngIf="!systemRequest"
+                #cancelButton,
+                *ngIf="!systemRequest",
                 type="button",
                 (click)="closeModal.emit()",
-                (keydown.tab)="focusElement(submitButton, $event)",
-                tabindex="1"
+                (keydown.tab)="focusElement(closeIcon, $event)",
+                (keydown.shift.tab)="focusElement(submitButton, $event)"
               ) Cancel
               button.btn.btn-primary(
                 #submitButton,
@@ -48,7 +51,7 @@
                 aria-label="submit",
                 [class.loading]="isLoading",
                 tabindex="1",
-                (keydown.tab)="focusElement(pwdResetTitle, $event)"
+                (keydown.tab)="focusElement(cancelButton, $event)"
               ) Submit
           .form-group.mb-0(*ngIf="successMsgPwdRst")
             button.btn.btn-primary(

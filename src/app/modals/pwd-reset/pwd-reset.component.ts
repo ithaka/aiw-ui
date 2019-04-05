@@ -32,10 +32,10 @@ export class PwdResetModal implements OnInit, AfterViewInit {
     private _auth: AuthService,
     private _fb: FormBuilder
   ) {
-    
+
   }
 
-  ngOnInit() { 
+  ngOnInit() {
     if (this.systemRequest) {
       this.copyKey = 'MODAL.PASSWORD.SYSTEM_REQUEST'
     }
@@ -74,7 +74,7 @@ export class PwdResetModal implements OnInit, AfterViewInit {
         (error) => { this.errorMsgPwdRst = <any>error }
       );
   }
-  
+
   loadPwdRstRes(res: any){
     if (!res.status || res.status === 'false'){
       this.errorMsgPwdRst = 'Sorry! An account for ' + this.pwdResetForm.value.email + ' was not found.'
