@@ -140,7 +140,7 @@
                 tabindex="2",
                 aria-label="Download item’s detail view",
                 role="button")
-                i.icon.icon-download-detail-view
+                i.icon.icon-download-detail-view([class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'")
                 | &nbsp;Download detail view
           //- False door button if user is not logged in
           button#assetpage-btn.btn.btn-secondary(*ngIf="assets[0].downloadLink && !(user.isLoggedIn || hasExternalAccess) && !assets[0].publicDownload", (click)="showLoginModal = true", (keydown.enter)="showLoginModal = true", tabindex="2", aria-label="Download")
