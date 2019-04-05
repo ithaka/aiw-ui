@@ -1,0 +1,95 @@
+@import '../../../sass/core/variables';
+
+.tooltip-container{
+  position: absolute;
+  font-size: 14px;
+  left: 0;
+  width: 295px;
+  // height: 195px;
+  background-color: $color-gray-7;
+  z-index: 1000;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2) !important;
+  margin-top: 4px;
+  padding: 24px;
+  color: $color-white;
+
+  &:before, &:after{
+    content: '';
+    display: block;
+    position: absolute;
+    left: 47%;
+    width: 0;
+    height: 0;
+    border-style: solid;
+  }
+
+  &:before{
+    top: -14px;
+    border-color: transparent transparent $color-gray-7 transparent;
+    border-width: 7px;
+  }
+
+  &:after{
+    top: -12px;
+    border-color: transparent transparent $color-gray-7 transparent;
+    border-width: 7px;
+  }
+
+  .new-badge {
+    display: inline-block;
+    vertical-align: top;
+    font-family: Verdana;
+    font-size: 8px;
+    font-weight: bold;
+    width: 37px;
+    height: 16px;
+    line-height: 16px;
+    border-radius: 2px;
+    margin-bottom: 14px;
+    text-align: center;
+    text-transform: uppercase;
+    border: 1px solid $color-white;
+  }
+
+  .heading {
+    font-family: Verdana;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    line-height: normal;
+  }
+
+  .body-text {
+    font-family: Verdana;
+    font-size: 1em;
+    font-weight: normal;
+    line-height: normal;
+    margin-bottom: 14px;
+  }
+
+  .links {
+    
+    a {
+      font-family: Verdana;
+      font-size: 14px;
+      font-weight: normal;
+      line-height: normal;
+      color: $color-gray-4;
+      text-decoration: underline;
+
+      &:hover {
+        color: $color-white;
+      }
+    }
+
+    span {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      margin: 0px 12px;
+      vertical-align: middle;
+      border-radius: 4px;
+      background-color: $color-white;
+    }
+  }
+}
