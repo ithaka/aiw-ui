@@ -572,8 +572,7 @@ $titleNavBg: #eee;
             &.icon-add-item, &.icon-add-detail-view, &.icon-download, &.icon-download-detail-view {
                 opacity: 1;
             }
-
-            &.icon-add-detail-view.disabled {
+            &.disabled {
               opacity: 0.3;
             }
         }
