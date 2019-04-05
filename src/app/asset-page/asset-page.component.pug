@@ -90,7 +90,7 @@
             button#addToGroupDropdown.btn.btn-primary(ngbDropdownToggle, tabindex="2", aria-label="Add to groups", (click)="closeAddGroupTooltip()", (keyup.enter)="closeAddGroupTooltip()")
               | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate}}
               = " "
-            ang-promo-tooltip(*ngIf="(assets[0].typeName && assets[0].typeName === 'image') && !addGrpTTDismissed", [options]="addGroupTooltipOpts", (close)="closeAddGroupTooltip()")
+            ang-promo-tooltip(*ngIf="(assets[0].typeName && assets[0].typeName === 'image') && !addGrpTTDismissed && (assetViewer.state === 1 || !multiviewItems)", [options]="addGroupTooltipOpts", (close)="closeAddGroupTooltip()")
             .dropdown-menu(ngbDropdownMenu)
               a#addItemToGroupLink.dropdown-item(
                 (click)="addAssetToIG()",
@@ -105,10 +105,10 @@
                 aria-label="Add View to Group",
                 [class.disabled]="assetViewer.state !== 1 || multiviewItems",
                 role="button")
-                i.icon.icon-add-detail-view
+                i.icon.icon-add-detail-view([class.disabled]="assetViewer.state !== 1 || multiviewItems")
                 | &nbsp;Add detail view
-            
-            
+
+
           //- Download dropdown options
           | {{downloadUrl}}
           .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess || assets[0].publicDownload)", ngbTooltip, [disableTooltip]="!multiviewItems", [ngbTooltip]="multiViewDownloadDisabled", triggers="focusin:focusout mouseenter:mouseleave", placement="bottom", aria-haspopup="true")
