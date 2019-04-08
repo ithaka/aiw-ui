@@ -179,9 +179,10 @@
   "IMAGE_GROUP_PAGE": {
     "IG_DOWNLOAD_MODAL": {
       "TITLE": "Export/Download Guidelines",
-      "TEXT": "<p>All logged in users may export/download up to <b>2000</b> images in a <b>120</b> day period.</p><p>For groups larger than 150, only the first 150 images are exported as presentation slides. Multimedia files are not exported to PPT or ZIP.</p> <p>Saved details are not exported to Powerpoint or zip files at this time. This functionality will be available soon!</p><p>By accepting this download, you are agreeing to the <a href=\"http://www.artstor.org/terms\" class=\"link\" name=\"Terms and conditions of use\" target=\"_blank\">terms and conditions of use.</a></p><p>Would you like to proceed?</p>",
+      "TEXT": "<p>All logged in users may export/download up to <b>2000</b> images in a <b>120</b> day period.</p><p>For groups larger than 150, only the first 150 images are exported as presentation slides. Multimedia files are not exported to PPT or ZIP.</p><p>By accepting this download, you are agreeing to the <a href=\"http://www.artstor.org/terms\" class=\"link\" name=\"Terms and conditions of use\" target=\"_blank\">terms and conditions of use.</a></p><p>Would you like to proceed?</p>",
       "DOWNLOAD_ERROR_BIG": "We're sorry, we were unable to generate your file. The recommended group size is under 100 images.",
-      "DOWNLOAD_ERROR_SMALL": "We're sorry, we were unable to generate your file. Please try again. If the problem persists, contact us at <a href=\"mailto:support@artstor.org\" class=\"link\" target=\"_blank\">support@artstor.org</a>"
+      "DOWNLOAD_ERROR_SMALL": "We're sorry, we were unable to generate your file. Please try again. If the problem persists, contact us at <a href=\"mailto:support@artstor.org\" class=\"link\" target=\"_blank\">support@artstor.org</a>",
+      "SAVE_DETAIL_DOWNLOAD_INFO": "Saved details are not exported to PowerPoint or ZIP files at this time. This functionality will be available soon!"
     },
     "TERMS_AND_CONDITIONS": {
       "TITLE": "Exporting Terms and Conditions",
