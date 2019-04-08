@@ -31,6 +31,8 @@ export class PptModalComponent implements OnInit, AfterViewInit {
   private downloadTitle: string = 'Image Group';
   private allowedDownloads: number = 0;
 
+  public igContainsDetailViews: boolean = false
+
   private header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
   private defaultOptions = { withCredentials: true};
   // private defaultOptions = new RequestOptions({ headers: this.header, withCredentials: true});
@@ -43,7 +45,12 @@ export class PptModalComponent implements OnInit, AfterViewInit {
     private http: HttpClient,
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    let detailItems = this.ig.items.filter((item) => {
+      return item.zoom
+    })
+    this.igContainsDetailViews = detailItems.length > 0
+  }
 
   ngAfterViewInit() {
     this.startModalFocus()
