@@ -15,6 +15,8 @@ import {
   GroupService 
 } from './../shared'
 
+import { LoadingStateOptions, LoadingState } from './../modals/export-loading-state/export-loading-state.component'
+
 @Component({
   selector: 'ang-image-group',
   styleUrls: [ './image-group-page.component.scss' ],
@@ -66,6 +68,10 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private unaffiliatedUser: boolean = false
   /** Reorder: Modifies the layout */
   private reorderMode: boolean = false
+
+  // For export loading states
+  private showExportLoadingState: boolean = false
+  private exportLoadingStateopts: LoadingStateOptions
 
   constructor(
     public _appConfig: AppConfig,
@@ -344,6 +350,33 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   private getPPT(): void{
     console.log('get ppt called')
+
+    this.exportLoadingStateopts = {
+      exportType: 'ppt',
+      state: LoadingState.loading,
+      progress: 0
+    }
+    this.showExportLoadingState = true
+
+    // Mimmic loading behaviour in intervals
+    let interval = setInterval(() => {
+      if(this.exportLoadingStateopts.progress < 100) {
+        this.exportLoadingStateopts = {
+          exportType: 'ppt',
+          state: LoadingState.loading,
+          progress: this.exportLoadingStateopts.progress + 10
+        }
+      } else {
+        this.exportLoadingStateopts = {
+          exportType: 'ppt',
+          state: LoadingState.completed,
+          progress: this.exportLoadingStateopts.progress
+        }
+        clearInterval(interval)
+      }
+    }, 1000)
+
+
     let downloadLink: string = ''
     this._ig.getDownloadLink(this.ig)
       .then( data => {
@@ -358,6 +391,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   private getZIP(): void{
     console.log('get zip called')
+
+
     let zipDownloadLink: string =''
     this._ig.getDownloadLink(this.ig, true)
       .then( data => {

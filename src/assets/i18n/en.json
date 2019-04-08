@@ -208,6 +208,13 @@
       "PERMISSIONS_HTML": "Why is Artstor asking for Google permissions? <a href=\"http://www.artstor.org/artstor-terms\" class=\"google-permissions-link\" target=\"_blank\" tabindex=\"0\"  aria-label=\"Why is Artstor asking for Google permissions? Learn more\">Learn more</a>"
     }
   },
+  "LOADING_STATE": {
+    "LOADING_MSG" : {
+      "PPT": "Exporting your group to PowerPoint…",
+      "GS": "Compressing your group as a ZIP file…",
+      "ZIP": "Exporting your group to Google Slides…"
+    }
+  },
   "UPLOAD_IMAGES_MODAL": {
     "TITLE": "Upload Images",
     "FORMAT_LBL": "JPEG File Format Required",

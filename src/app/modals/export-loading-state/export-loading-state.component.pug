@@ -1,0 +1,16 @@
+.modal.fade-in
+  .modal-dialog(role="dialog", (keydown.esc)="closeModal.emit($event)")
+    .modal-content
+      .modal-body
+        .export-type
+          i.icon([ngClass]="'icon-export-' + options.exportType")
+
+        .progress
+          .progress-bar.progress-bar-striped.progress-bar-animated([ngStyle]="{'width': options.progress + '%'}", role="progressbar", [attr.aria-valuenow]="options.progress", aria-valuemin="0", aria-valuemax="100")
+
+        .message
+          //- Loading
+          div(*ngIf="options.state === 0") {{ 'LOADING_STATE.LOADING_MSG.' + options.exportType.toUpperCase() | translate }}
+            
+        button.close((click)="closeModal.emit($event)", tabindex="0", aria-label="Close", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()", placement="bottom", ngbTooltip="Cancel export", [disableTooltip]="options.state != 0")
+          span(aria-hidden="true") &times;
