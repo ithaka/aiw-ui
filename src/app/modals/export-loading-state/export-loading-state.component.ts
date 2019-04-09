@@ -30,7 +30,7 @@ export class ExportLoadingStateComponent implements OnInit, AfterViewInit {
     this.startModalFocus()
   }
   public startModalFocus() {
-    let htmlelement: HTMLElement = <HTMLElement>this._dom.bySelector('.modal-dialog')
+    let htmlelement: HTMLElement = <HTMLElement>this._dom.bySelector('.progress')
     htmlelement.focus()
   }
   public focusLastElement() {

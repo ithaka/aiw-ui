@@ -363,14 +363,14 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       if(this.exportLoadingStateopts.progress < 100) {
         this.exportLoadingStateopts.progress += 10
       } else {
-        this.exportLoadingStateopts.state = LoadingState.completed
+        // this.exportLoadingStateopts.state = LoadingState.completed
         // On success fade out the component after 5 sec
-        setTimeout(() => {
-          this.closeExportLoadingState()
-        }, 5000)
+        // setTimeout(() => {
+        //   this.closeExportLoadingState()
+        // }, 5000)
 
-        // this.exportLoadingStateopts.state = LoadingState.error
-        // this.exportLoadingStateopts.errorType = 'server'
+        this.exportLoadingStateopts.state = LoadingState.error
+        this.exportLoadingStateopts.errorType = 'server'
 
         clearInterval(interval)
       }

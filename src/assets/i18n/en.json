@@ -220,7 +220,7 @@
       "ZIP": "<b>Done!</b> Your ZIP file will begin downloading soon…"
     },
     "ERROR_MSG" : {
-      "SERVER": "We’re sorry, something went wrong. Please try again or <a class='link' href='mailto:support@artstor.org'>contact support</a> if the issue continues.",
+      "SERVER": "We’re sorry, something went wrong. Please try again or <a class='link' href='mailto:support@artstor.org' tabindex='0'>contact support</a> if the issue continues.",
       "TOO_MANY_IMGS": "We’re sorry, we were unable to export your group. We recommend making groups under 100 images in size."
     },
     "LINKS" : {

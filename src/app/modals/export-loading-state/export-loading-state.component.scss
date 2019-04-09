@@ -4,7 +4,7 @@
     display: block;
 
     .modal-content {
-      margin-top: 10em;
+      margin-top: 18em;
     }
 
     .modal-body{
@@ -24,6 +24,7 @@
             margin: 14px 0px;
             height: 8px;
             border-radius: 0 !important;
+            outline: none;
 
             .progress-bar {
                 &.state-0 {
