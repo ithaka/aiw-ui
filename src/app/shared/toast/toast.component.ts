@@ -41,11 +41,6 @@ export class ToastComponent implements OnInit, OnDestroy {
     this.links = this.toast.links
     this.plainText = this.stringHTML.replace(/<(?:.|\n)*?>/gm, '')
 
-    // let toastEl = <HTMLElement>(this._dom.byClassName('icon-close')[0])
-    // if (toastEl) {
-    //   toastEl.focus()
-    // }
-
     // Assign text content for live region
     let toastLiveRegion = <HTMLElement>(this._dom.byId('toast-live-region'))
     toastLiveRegion.textContent= 'Notification: ' + this.plainText + ' Enter control + g to go to the group or control + x to dismiss.'
@@ -75,7 +70,7 @@ export class ToastComponent implements OnInit, OnDestroy {
     this.hideToast = true
     setTimeout(() => {
       this._toasts.dismissToast(this.toast.id, true)
-    }, 500)
+    }, 700)
   }
 
   /**
