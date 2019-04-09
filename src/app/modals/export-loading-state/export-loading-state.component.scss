@@ -26,7 +26,15 @@
             border-radius: 0 !important;
 
             .progress-bar {
-                background-color: $color-primary;
+                &.state-0 {
+                    background-color: $color-primary;
+                }
+                &.state-1 {
+                    background-color: $success;
+                }
+                &.state-2 {
+                    background-color: $error;
+                }
             }
         }
 
@@ -38,6 +46,18 @@
             line-height: normal;
             letter-spacing: normal;
             color: $color-gray-7;
+        }
+
+        .try-again-link {
+            margin-top: 14px;
+            font-family: Verdana;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: normal;
+            letter-spacing: normal;
+            color: $blue;
+            text-decoration: underline;
+            cursor: pointer;
         }
 
         .close {

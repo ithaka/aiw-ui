@@ -361,17 +361,17 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     // Mimmic loading behaviour in intervals
     let interval = setInterval(() => {
       if(this.exportLoadingStateopts.progress < 100) {
-        this.exportLoadingStateopts = {
-          exportType: 'ppt',
-          state: LoadingState.loading,
-          progress: this.exportLoadingStateopts.progress + 10
-        }
+        this.exportLoadingStateopts.progress += 10
       } else {
-        this.exportLoadingStateopts = {
-          exportType: 'ppt',
-          state: LoadingState.completed,
-          progress: this.exportLoadingStateopts.progress
-        }
+        this.exportLoadingStateopts.state = LoadingState.completed
+        // On success fade out the component after 5 sec
+        setTimeout(() => {
+          this.closeExportLoadingState()
+        }, 5000)
+
+        // this.exportLoadingStateopts.state = LoadingState.error
+        // this.exportLoadingStateopts.errorType = 'server'
+
         clearInterval(interval)
       }
     }, 1000)
@@ -392,6 +392,31 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private getZIP(): void{
     console.log('get zip called')
 
+    this.exportLoadingStateopts = {
+      exportType: 'zip',
+      state: LoadingState.loading,
+      progress: 0
+    }
+    this.showExportLoadingState = true
+
+    // Mimmic loading behaviour in intervals
+    let interval = setInterval(() => {
+      if(this.exportLoadingStateopts.progress < 100) {
+        this.exportLoadingStateopts.progress += 10
+      } else {
+        this.exportLoadingStateopts.state = LoadingState.completed
+        // On success fade out the component after 5 sec
+        setTimeout(() => {
+          this.closeExportLoadingState()
+        }, 5000)
+
+        // this.exportLoadingStateopts.state = LoadingState.error
+        // this.exportLoadingStateopts.errorType = 'server'
+
+        clearInterval(interval)
+      }
+    }, 1000)
+
 
     let zipDownloadLink: string =''
     this._ig.getDownloadLink(this.ig, true)
@@ -403,6 +428,13 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       .catch( error => {
         console.error(error)
       })
+  }
+
+  public closeExportLoadingState(event?: any): void {
+    this.showExportLoadingState = false
+    if(event && event['cancelExport']) {
+      console.log('Show cancel export toast!')
+    }
   }
 
   /**

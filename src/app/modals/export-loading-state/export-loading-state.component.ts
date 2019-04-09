@@ -27,15 +27,23 @@ export class ExportLoadingStateComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // this.startModalFocus()
+    this.startModalFocus()
   }
   public startModalFocus() {
-    let htmlelement: HTMLElement = <HTMLElement>this._dom.bySelector('.auth-btn .btn')
+    let htmlelement: HTMLElement = <HTMLElement>this._dom.bySelector('.modal-dialog')
     htmlelement.focus()
   }
   public focusLastElement() {
     let htmlelement: HTMLElement = <HTMLElement>this._dom.bySelector('.close')
     htmlelement.focus()
+  }
+
+  public close(): void {
+    let params: any = {}
+    if(this.options.state === LoadingState.loading) {
+      params['cancelExport'] = true
+    }
+    this.closeModal.emit(params)
   }
 
 }
@@ -44,7 +52,8 @@ export class ExportLoadingStateComponent implements OnInit, AfterViewInit {
 export interface LoadingStateOptions {
   exportType: string,
   state: LoadingState,
-  progress: number // percentage value 
+  progress?: number // percentage value 
+  errorType?: string
 }
 
 export enum LoadingState {

@@ -1,16 +1,27 @@
 .modal.fade-in
-  .modal-dialog(role="dialog", (keydown.esc)="closeModal.emit($event)")
+  .modal-dialog(tabindex="0", role="dialog", (keydown.esc)="closeModal.emit($event)")
     .modal-content
       .modal-body
         .export-type
-          i.icon([ngClass]="'icon-export-' + options.exportType")
+          //- Show export type icon once the state is `loading`
+          i.icon(*ngIf="options.state === 0", [ngClass]="'icon-export-' + options.exportType")
+          //- Show success icon once the state is `completed`
+          i.icon.icon-success(*ngIf="options.state === 1")
+          //- Show error icon once the state is `error`
+          i.icon.icon-error(*ngIf="options.state === 2")
 
         .progress
-          .progress-bar.progress-bar-striped.progress-bar-animated([ngStyle]="{'width': options.progress + '%'}", role="progressbar", [attr.aria-valuenow]="options.progress", aria-valuemin="0", aria-valuemax="100")
+          .progress-bar.progress-bar-animated([ngClass]="'state-' + options.state", [ngStyle]="{'width': options.progress + '%'}", role="progressbar", [attr.aria-valuenow]="options.progress", aria-valuemin="0", aria-valuemax="100")
 
         .message
           //- Loading
           div(*ngIf="options.state === 0") {{ 'LOADING_STATE.LOADING_MSG.' + options.exportType.toUpperCase() | translate }}
+          div(*ngIf="options.state === 1", [innerHTML]="'LOADING_STATE.COMPLETED_MSG.' + options.exportType.toUpperCase() | translate")
+          div(*ngIf="options.state === 2", [innerHTML]="'LOADING_STATE.ERROR_MSG.' + options.errorType.toUpperCase() | translate")
+
+        //- Let the user try again in case there was a `server` error
+        .try-again-link(*ngIf="options.state === 2 && options.errorType === 'server'")
+          span {{ 'LOADING_STATE.LINKS.TRY_AGAIN' | translate }}
             
-        button.close((click)="closeModal.emit($event)", tabindex="0", aria-label="Close", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()", placement="bottom", ngbTooltip="Cancel export", [disableTooltip]="options.state != 0")
+        button.close((click)="close()", tabindex="0", aria-label="Close", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()", placement="bottom", ngbTooltip="Cancel export", [disableTooltip]="options.state != 0")
           span(aria-hidden="true") &times;
