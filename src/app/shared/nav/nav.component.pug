@@ -35,6 +35,6 @@ header.navbar.navbar-light
                 span(*ngIf="_auth.isPublicOnly()") &nbsp;to access the core collections.
                 span(*ngIf="user.status && !user.isLoggedIn") &nbsp;to save images
 .toast-stack
-  ng-container(*ngFor="let toast of toasts")
+  div(*ngFor="let toast of toasts")
     ang-toast([toast]="toast", [dismiss]="toast.dismiss")
 ang-session-expire-modal(*ngIf="showinactiveUserLogoutModal && allowExpiredModal" "(closeModal)"="inactiveUsrLogOut()")
