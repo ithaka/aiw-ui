@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { Toast, ToastService } from 'app/_services';
 import { Router, RouterLink } from '@angular/router';
 import { Angulartics2 } from 'angulartics2';
+import { DomUtilityService } from 'app/shared';
 
 @Component({
   selector: 'ang-toast',
@@ -21,6 +22,7 @@ export class ToastComponent implements OnInit, OnDestroy {
   }
 
   public stringHTML: string
+  public plainText: string
   public type: string
   public hideToast: boolean
   public links: { routerLink: string[], label: string }[] = []
@@ -28,6 +30,7 @@ export class ToastComponent implements OnInit, OnDestroy {
   constructor(
     private _angulartics: Angulartics2,
     public _toasts: ToastService,
+    private _dom: DomUtilityService,
     private router: Router
   ) {}
 
@@ -36,6 +39,16 @@ export class ToastComponent implements OnInit, OnDestroy {
     this.stringHTML = this.toast.stringHTML
     this.type = this.toast.type
     this.links = this.toast.links
+    this.plainText = this.stringHTML.replace(/<(?:.|\n)*?>/gm, '')
+
+    // let toastEl = <HTMLElement>(this._dom.byClassName('icon-close')[0])
+    // if (toastEl) {
+    //   toastEl.focus()
+    // }
+
+    let toastLiveRegion = <HTMLElement>(this._dom.byId('toast-live-region'))
+    toastLiveRegion.textContent= 'Notification: ' + this.plainText + ' Enter control + g to go to the group or control + x to dismiss.'
+
   }
 
   triggerDismiss() {
@@ -77,6 +90,19 @@ export class ToastComponent implements OnInit, OnDestroy {
       toWhich = routerLink[0]
       this._angulartics.eventTrack.next({ properties: { event: 'goToLinkToast', category: 'browse', label: [fromWhich, toWhich] }})
     }
+  }
+
+  pauseTimer() {
+    this._toasts.cancelToastTimer(this.toast.id)
+  }
+
+  resumeTimer(event: any) {
+    // Set timeout so that the correct element receives focus before we make the check
+    setTimeout(() => {
+      if (document.activeElement.id === 'go-to-group-link' || document.activeElement.id === 'close-toast')
+        return
+      this.animateDismiss()
+    }, 100)
   }
 
   ngOnDestroy() {
