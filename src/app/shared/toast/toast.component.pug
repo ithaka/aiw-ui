@@ -5,5 +5,5 @@
     div.toast-message
       div#toast-text([innerHTML]="stringHTML")
       ng-container(*ngFor="let link of links")
-        a#go-to-group-link.toast-content-links.mr-1([routerLink]="link.routerLink", (click)="trackGoToLink(link.routerLink)", (focus)="pauseTimer()", (blur)="resumeTimer()") {{ link.label }}
+        a#toast-link.toast-content-links.mr-1([routerLink]="link.routerLink", (click)="trackGoToLink(link.routerLink)", (focus)="pauseTimer()", (blur)="resumeTimer()") {{ link.label }}
     button#close-toast.icon.icon-close((click)="triggerDismiss()", (focus)="pauseTimer()", (blur)="resumeTimer()")
