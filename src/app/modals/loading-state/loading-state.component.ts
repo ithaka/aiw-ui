@@ -2,16 +2,16 @@ import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, 
 // import { Observable } from 'rxjs';
 // import { Angulartics2 } from 'angulartics2';
 
-import { DomUtilityService } from './../../shared';
+import { DomUtilityService } from '../../shared';
 // import { SlidesService } from './../../_services'
 // import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/public_api';
 
 @Component({
-  selector: 'ang-export-loading-state',
-  templateUrl: './export-loading-state.component.pug',
-  styleUrls: ["./export-loading-state.component.scss"]
+  selector: 'ang-loading-state',
+  templateUrl: './loading-state.component.pug',
+  styleUrls: ["./loading-state.component.scss"]
 })
-export class ExportLoadingStateComponent implements OnInit, AfterViewInit {
+export class LoadingStateComponent implements OnInit, AfterViewInit {
 
   @Input()
   public options: LoadingStateOptions

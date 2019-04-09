@@ -15,7 +15,7 @@ import {
   GroupService 
 } from './../shared'
 
-import { LoadingStateOptions, LoadingState } from './../modals/export-loading-state/export-loading-state.component'
+import { LoadingStateOptions, LoadingState } from './../modals/loading-state/loading-state.component'
 
 @Component({
   selector: 'ang-image-group',
