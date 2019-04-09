@@ -6,4 +6,4 @@
       div#toast-text([innerHTML]="stringHTML")
       ng-container(*ngFor="let link of links")
         a#toast-link.toast-content-links.mr-1([routerLink]="link.routerLink", (click)="trackGoToLink(link.routerLink)", (focus)="pauseTimer()", (blur)="resumeTimer()") {{ link.label }}
-    button#close-toast.icon.icon-close((click)="triggerDismiss()", (focus)="pauseTimer()", (blur)="resumeTimer()")
+    button#close-toast.icon.icon-close((click)="triggerDismiss()", (focus)="pauseTimer()", (blur)="resumeTimer()", aria-label="Close notification")
