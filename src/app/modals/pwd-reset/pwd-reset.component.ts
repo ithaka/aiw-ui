@@ -13,7 +13,9 @@ export class PwdResetModal implements OnInit, AfterViewInit {
   @Input() username: string
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
-  @ViewChild("pwdResetTitle", {read: ElementRef}) titleElement: ElementRef
+  @ViewChild("pwdResetContent", {read: ElementRef}) pwdResetContent: ElementRef
+  @ViewChild("pwdResetEmailInput", {read: ElementRef}) pwdResetEmailInput: ElementRef
+  @ViewChild("pwdResetSupportLink", { read: ElementRef }) pwdResetSupportLink: ElementRef
   @ViewChild("submitButton", { read: ElementRef}) submitButton: ElementRef
   @ViewChild("cancelButton", { read: ElementRef}) cancelButton: ElementRef
 
@@ -44,11 +46,13 @@ export class PwdResetModal implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     // Focus first element
-    this.titleElement && this.focusElement(this.titleElement.nativeElement)
+    this.pwdResetContent && this.focusElement(this.pwdResetContent.nativeElement)
 
     // Set view child element refs
     this.submitButton = this.submitButton.nativeElement
     this.cancelButton = this.cancelButton.nativeElement
+    this.pwdResetEmailInput = this.pwdResetEmailInput.nativeElement
+    this.pwdResetSupportLink = this.pwdResetSupportLink.nativeElement
   }
 
   /**
