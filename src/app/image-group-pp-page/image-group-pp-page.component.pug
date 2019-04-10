@@ -2,15 +2,16 @@
   .ig-title {{ igName }}
   .ig-desc(*ngIf="igDesc", [innerHTML]="igDesc")
   .assets-cntnr
-    .assets-block.col-md-12(*ngFor="let asset of assets")
-      .row
-        .col-md-4
-          .thmbnail-cntnr
-            img(
-              [attr.src]="_search.makeThumbUrl(asset, 2)",
-              [attr.alt]="asset.title ? 'Thumbnail of ' + asset.title : 'No title available'"
-            )
-        .col-md-8
-          .meta-block(*ngFor="let metadata of asset.tombstone")
-            .label
-              .value([innerHTML]="metadata")
+    div(*ngFor="let asset of assets")
+      .assets-block.col-md-12(*ngIf="asset.status === 'available'")
+        .row
+          .col-md-4
+            .thmbnail-cntnr
+              img(
+                [attr.src]="_search.makeThumbUrl(asset, 2)",
+                [attr.alt]="asset.title ? 'Thumbnail of ' + asset.title : 'No title available'"
+              )
+          .col-md-8
+            .meta-block(*ngFor="let metadata of asset.tombstone")
+              .label
+                .value([innerHTML]="metadata")
