@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="12px" height="14px" viewBox="0 0 12 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 51.3 (57544) - http://www.bohemiancoding.com/sketch -->
-    <title>album icon</title>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>icons/light/multi-view</title>
     <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="working" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Artboard" transform="translate(-2.000000, -1.000000)" fill="#444444">
-            <path d="M2,6.37551703 L14,6.37551703 L14,15 L2,15 L2,6.37551703 Z M3.09090909,3.71055179 L12.9090909,3.71055179 L12.9090909,4.94262079 L3.09090909,4.94262079 L3.09090909,3.71055179 Z M4.18181818,1 L11.8181818,1 L11.8181818,2.232069 L4.18181818,2.232069 L4.18181818,1 Z" id="album-icon"></path>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="new-icons??-copy" transform="translate(-370.000000, -394.000000)">
+            <g id="icons/light/multi-view" transform="translate(370.000000, 394.000000)">
+                <g id="multi-view-copy">
+                    <g id="multi-view-copy-2">
+                        <rect id="Rectangle" stroke="#E3E3E3" stroke-width="0.857142857" x="0.428571429" y="0.428571429" width="15.1428571" height="15.1428571" rx="2"></rect>
+                        <path d="M3.42857143,6.93911316 L12.5714286,6.93911316 L12.5714286,12.5714286 L3.42857143,12.5714286 L3.42857143,6.93911316 Z M4.25974026,5.1987277 L11.7402597,5.1987277 L11.7402597,6.00334419 L4.25974026,6.00334419 L4.25974026,5.1987277 Z M5.09090909,3.54285714 L10.9090909,3.54285714 L10.9090909,4.34747363 L5.09090909,4.34747363 L5.09090909,3.54285714 Z" id="album-icon" fill="#333333"></path>
+                    </g>
+                </g>
+            </g>
         </g>
     </g>
 </svg>

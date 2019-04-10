@@ -1,4 +1,4 @@
-import { OnInit, Input } from '@angular/core'
+import { OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { Component } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
@@ -18,6 +18,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class LoginFormComponent implements OnInit {
 
   @Input() samlTokenId: string
+  @Output() resetPassword: EventEmitter<boolean> = new EventEmitter()
 
   public copyBase: string = ''
 
@@ -35,6 +36,7 @@ export class LoginFormComponent implements OnInit {
   public loginInstitutions = [] /** Stores the institutions returned by the server */
 
   @Input() public copyModifier: string = 'DEFAULT'
+  @Output() public userEmail: EventEmitter<any> = new EventEmitter()
   public loginLoading = false
 
   private loginInstName: string = '' /** Bound to the autocomplete field */
@@ -201,7 +203,9 @@ export class LoginFormComponent implements OnInit {
     let serverMsg = err.error && err.error.message
     // Check for error code 422 for lost password
     // Maybe better to check by serverMsg later when the response message is decided by Auth
-    if (err && err.status === 422) {
+    if (err && (err.status === 422 || serverMsg.includes('password reset required'))) {
+      // Display lost password modal
+      this.resetPassword.emit(true)
       return 'LOGIN.LOST_PASSWORD'
     }
     else if (serverMsg) {

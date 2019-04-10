@@ -6,7 +6,7 @@ import { CompleterService, CompleterData } from 'ng2-completer'
 import { Angulartics2 } from 'angulartics2'
 import { Router } from '@angular/router'
 
-import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService, DomUtilityService } from './../../shared'
+import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService, DomUtilityService, ImageZoomParams } from './../../shared'
 import { ToastService } from 'app/_services';
 
 @Component({
@@ -50,7 +50,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     allGroups: false
   }
 
-  public detailViewBounds: any = {}
+  public detailViewBounds: ImageZoomParams = {}
   public selectedGroup: any = {}
 
   private groupsPageSize: number = 30
@@ -97,9 +97,9 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     this.loadRecentGroups()
     this.loadMyGroups()
 
-    if(this.selectedAssets[0]['detailViewBounds'] && this.selectedAssets[0]['detailViewBounds']['width']){
-      this.detailViewBounds = this.selectedAssets[0]['detailViewBounds']
-      this.detailPreviewURL = this.selectedAssets[0].tileSource.replace('info.json', '') + Math.round( this.detailViewBounds['x'] ) + ',' + Math.round( this.detailViewBounds['y'] ) + ',' + Math.round( this.detailViewBounds['width'] ) + ',' + Math.round( this.detailViewBounds['height'] ) + '/352,/0/native.jpg'
+    if(this.selectedAssets[0]['zoom'] && this.selectedAssets[0]['zoom']['pointWidth']){
+      this.detailViewBounds = this.selectedAssets[0]['zoom']
+      this.detailPreviewURL = this.selectedAssets[0].tileSource ? this.selectedAssets[0].tileSource.replace('info.json', '') + this.detailViewBounds['viewerX'] + ',' + this.detailViewBounds['viewerY'] + ',' + this.detailViewBounds['pointWidth'] + ',' + this.detailViewBounds['pointHeight'] + '/352,/0/native.jpg' : ''
     }
 
     // Freeze background body scroll
@@ -119,7 +119,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
 
   // Set initial focus on the modal Title h1
   public startModalFocus() {
-    let elementSelector: string = this.detailViewBounds.width ? '.preview-cntnr img' : '.modal-title'
+    let elementSelector: string = this.detailPreviewURL ? '.preview-cntnr img' : '.modal-title'
     let modalStartFocus: HTMLElement = <HTMLElement>this._dom.bySelector(elementSelector)
     modalStartFocus.focus()
   }
@@ -208,18 +208,9 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
           }
 
           // Update a group with a zoomed details
-          if (index === 0 && this.detailViewBounds['width']) {
-
-            zoom = this._group.setZoomDetails({
-              "viewerX": this.detailViewBounds['x'],
-              "viewerY": this.detailViewBounds['y'],
-              "pointWidth": this.detailViewBounds['width'],
-              "pointHeight": this.detailViewBounds['height'],
-              "index": 0
-            })
-
+          if(asset['zoom'] && asset['zoom']['viewerX']){
+            zoom = asset['zoom']
             putGroup.items.push({ id: assetId, zoom })
-
           } else {
             putGroup.items.push({ id: assetId })
           }
@@ -243,7 +234,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
               })
 
               // Add detail to group GA event
-              if (this.detailViewBounds && this.detailViewBounds['width']) {
+              if (this.detailViewBounds && this.detailViewBounds.pointWidth) {
                 this._angulartics.eventTrack.next({ properties: { event: 'addDetail', category: 'groups', label: 'existing group' }})
               }
 

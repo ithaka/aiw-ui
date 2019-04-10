@@ -2,11 +2,12 @@ import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Outpu
 import { Subscription, Observable, of } from 'rxjs'
 import { take, map, mergeMap } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { ActivatedRoute } from '@angular/router'
 import * as OpenSeadragon from 'openseadragon'
 
 // Internal Dependencies
 // import '/krpano.js'
-import { Asset, AuthService } from 'app/shared';
+import { Asset, AuthService, ImageZoomParams } from 'app/shared';
 import { MetadataService } from 'app/_services'
 import { isPlatformBrowser } from '@angular/common';
 
@@ -47,12 +48,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     @Input() testEnv: boolean
     @Input() thumbnailMode: boolean
     @Input() encrypted: boolean
-    @Input() zoom: {
-        x: number
-        y: number
-        width: number
-        height: number
-    }
+    @Input() zoom: ImageZoomParams
     private _assetCompareCount: number
     @Input() set assetCompareCount(count: number) {
         if (count > -1 && count !== this._assetCompareCount) {
@@ -142,7 +138,8 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         private _http: HttpClient, // TODO: move _http into a service
         private _metadata: MetadataService,
         private _auth: AuthService,
-        @Inject(PLATFORM_ID) private platformId: Object
+        @Inject(PLATFORM_ID) private platformId: Object,
+        private route: ActivatedRoute
     ) {
         if(!this.index) {
             this.index = 0
@@ -150,6 +147,15 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     ngOnInit() {
+        this.subscriptions.push(
+            this.route.params.subscribe((routeParams) => {
+                if(this.tilesLoaded) {
+                    setTimeout(() => {
+                        this.refreshZoomedView()
+                    }, 250)
+                }
+            })
+        )
         if (!isPlatformBrowser(this.platformId)) {
             // If rendered server-side, load thumbnail
             this.thumbnailMode = true
@@ -210,6 +216,10 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
                 if(asset.formattedMetadata && asset.formattedMetadata['Date'] && asset.formattedMetadata['Date'][0]){
                     asset.formattedMetadata['Date'][0] = asset.formattedMetadata['Date'][0].replace(/<br\s*[\/]?>/gi, ' ')
+                }
+
+                if(this.zoom && this.zoom.viewerX){
+                    asset.zoom = this.zoom
                 }
 
                 this.asset = asset
@@ -343,7 +353,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
             // defaultZoomLevel: 1.2, // We don't want the image to be covered on load
             // visibilityRatio: 0.2, // Determines percentage of background that has to be covered by the image while panning
             // debugMode: true,
-            preserveImageSizeOnResize: this.zoom && this.zoom.x ? true : false
+            preserveImageSizeOnResize: this.zoom && this.zoom.viewerX ? true : false
         });
 
         // ---- Use handler in case other error crops up
@@ -541,9 +551,12 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private refreshZoomedView(): void{
         // For detailed views set the viewport bouds based on the zoom params passed
-        if(this.zoom && this.zoom.x){
-            let bounds = this.osdViewer.viewport.imageToViewportRectangle(this.zoom.x, this.zoom.y, this.zoom.width, this.zoom.height)
+        if(this.zoom && this.zoom.viewerX){
+            let bounds = this.osdViewer.viewport.imageToViewportRectangle(this.zoom.viewerX, this.zoom.viewerY, this.zoom.pointWidth, this.zoom.pointHeight)
             this.osdViewer.viewport.fitBounds(bounds, true)
+        } else {
+            this.osdViewer.viewport.fitVertically(true)
+            
         }
     }
     /**

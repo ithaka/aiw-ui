@@ -84,7 +84,7 @@
         pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
 
     .animating-width(*ngIf="igDisplay && !reorderMode", [ngClass]="[ showIgDescBool ? 'col-3' : 'col-2']")
-      .group-details-header(*ngIf="(igMetaData.tags && igMetaData.tags.length > 0) || igMetaData.description", (click)="toggleShowIgDesc()")
+      .group-details-header(*ngIf="(igMetaData.tags && igMetaData.tags.length > 0) || igMetaData.description", (click)="toggleShowIgDesc()", tabindex="4", (keyup.enter)="toggleShowIgDesc()", [attr.aria-label]="showIgDescBool ? 'This is the Group Details section. Hit the enter key to collapse this section.' : 'This is the Group Details section. Hit the enter key to expand this section.'")
         span Group Details
         i.icon.icon-down([ngClass]="{'collapsed' : showIgDescBool }")
       .group-details-header.no-details-available(*ngIf="(!igMetaData.tags || igMetaData.tags.length === 0) && !igMetaData.description")

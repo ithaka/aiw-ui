@@ -67,8 +67,6 @@ export class NavMenu implements OnInit, OnDestroy {
   private copyIG: boolean = false
   private editIG: boolean = false
 
-  public detailViewsFlag: boolean = false
-
   // Toast Variables
   public toasts: Toast[] = []
 
@@ -114,8 +112,7 @@ export class NavMenu implements OnInit, OnDestroy {
       )).subscribe(),
       // Feature flag subscription
       this._flags.flagUpdates.subscribe((flags) => {
-          this.exportReframeFlag = flags.exportReframe ? true : false
-          this.detailViewsFlag = flags.detailViews ? true : false
+        this.exportReframeFlag = flags.exportReframe ? true : false
       }),
       // Route params subscription
       this.route.params.subscribe((routeParams) => {
@@ -213,8 +210,19 @@ export class NavMenu implements OnInit, OnDestroy {
       this._assets.getSelectedAssets().forEach((asset) => {
         // Support both legacy and new Group items format
         if (asset.objectId === item || asset.objectId === item.id) {
-          assetFound = true
-          return
+          let zoomMatched: boolean = true
+          if(asset.zoom && asset.zoom.viewerX){
+            let itemZoomObj = item.zoom ? item.zoom : {}
+            if(JSON.stringify(asset.zoom) !== JSON.stringify(itemZoomObj)){
+              zoomMatched = false
+            }
+          } else if (item.zoom && item.zoom.viewerX) {
+            zoomMatched = false
+          }
+          if(zoomMatched) {
+            assetFound = true
+            return
+          }
         }
       })
       return !assetFound // if the asset was not found, we want to keep it

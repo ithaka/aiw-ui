@@ -639,6 +639,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       // Start loading
       this.isLoading = true;
 
+      let itemObjs: any[] = this.itemIds.slice(0)
       // Map itemIds array of objects to array of strings for v1 items
       this.itemIds = this.itemIds.map(item => {
         return (typeof(item) === 'object') ? item['id'] : item
@@ -651,7 +652,23 @@ export class AssetGrid implements OnInit, OnDestroy {
           allThumbnails = allThumbnails.filter(thumbnail => {
             return thumbnail.status === 'available'
           })
-          this.allResults = allThumbnails
+
+          // Make sure the fetched thumbnail objects contain the zoom info as well
+          itemObjs = itemObjs.map(itemObj => {
+            let obj = {}
+            for(let thmb of allThumbnails){
+              if(thmb.objectId === itemObj['id']){
+                obj = Object.assign({}, thmb)
+                if(itemObj['zoom']){
+                  obj['zoom'] = itemObj['zoom']
+                }
+                break
+              }
+            }
+            return obj
+          })
+
+          this.allResults = itemObjs
           this.results = this.allResults.slice(0)
         })
         .catch( error => {
@@ -701,16 +718,19 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.isLoading = true;
     this.allResults = this.results
 
-    let newItemsArray = [];
-
+    let newItemsArray: any[] = [];
+    // Construct the updated array of item objects containing id and zoom if avilable
     for (let i = 0; i < this.allResults.length; i++) {
       if ('objectId' in this.allResults[i]) {
-        newItemsArray.push(this.allResults[i]['objectId'])
+        let itemObj = { id: this.allResults[i]['objectId'] }
+        if(this.allResults[i]['zoom']) {
+          itemObj['zoom'] = this.allResults[i]['zoom']
+        }
+        newItemsArray.push(itemObj)
       }
     };
 
     this.ig.items = newItemsArray;
-
     this._groups.update(this.ig).pipe(
       take(1),
       map(data => {
@@ -787,7 +807,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private isSelectedAsset(asset: any): number{
     let index: number = -1
     let assetIdProperty =  'artstorid'
-
+    
     // some services return assets with objectId instead of artstorid, so check the first one and use that
     if (this.selectedAssets[0] && !this.selectedAssets[0].hasOwnProperty('artstorid')) {
       assetIdProperty = 'objectId'
@@ -795,8 +815,22 @@ export class AssetGrid implements OnInit, OnDestroy {
     let len = this.selectedAssets.length
     for (let i = 0; i < len; i++){
       if (this.selectedAssets[i][assetIdProperty] === asset[assetIdProperty]){
-        index = i
-        break
+        
+        // Also consider zoom detail for exact match on assets
+        let zoomMatched: boolean = true
+        if(asset.zoom){
+          let selectedAssetZoomObj = this.selectedAssets[i].zoom ? this.selectedAssets[i].zoom : {}
+          if(JSON.stringify(asset.zoom) !== JSON.stringify(selectedAssetZoomObj)){
+            zoomMatched = false
+          }
+        } else if (this.selectedAssets[i].zoom) {
+          zoomMatched = false
+        }
+
+        if(zoomMatched) {
+          index = i
+          break
+        }
       }
     }
     return index

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="94px" height="125px" viewBox="0 0 94 125" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>broken img state - 2</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="options" transform="translate(-393.000000, -55.000000)" fill-rule="nonzero">
+            <g id="broken-img-state---2" transform="translate(393.000000, 55.000000)">
+                <rect id="container" fill="#EEEEEE" x="0" y="0" width="94" height="125"></rect>
+                <path d="M36.5,58 C34.8431458,58 33.5,56.6568542 33.5,55 C33.5,53.3431458 34.8431458,52 36.5,52 C38.1568542,52 39.5,53.3431458 39.5,55 C39.5,56.6568542 38.1568542,58 36.5,58 Z M32,73.2921496 L38.6182089,63.6742905 C39.0878225,62.9918283 40.0217645,62.8192804 40.7042266,63.288894 C40.8195173,63.3682275 40.9231385,63.463305 41.0120752,63.5713606 L43.7198672,66.8612487 C43.9830974,67.1810655 44.4557503,67.226938 44.775567,66.963708 C44.837454,66.912771 44.8907756,66.8522428 44.9335027,66.7844271 L50.9717444,57.2005984 C51.4133498,56.4996874 52.3395422,56.2894787 53.0404532,56.731084 C53.2631141,56.8713704 53.444948,57.0677684 53.5676969,57.3005577 L62,73.2921496 L32,73.2921496 Z" id="img-icon" fill="#989898"></path>
+            </g>
+        </g>
+    </g>
+</svg>

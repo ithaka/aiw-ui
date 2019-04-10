@@ -38,7 +38,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { AppComponent } from './app.component'
 import { APP_RESOLVER_PROVIDERS } from './app.resolver'
 import { AppConfig } from './app.service'
-import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService, InstitutionsService, DomUtilityService, ToastComponent, GroupTitleComponent } from './shared'
+import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService, InstitutionsService, DomUtilityService, ToastComponent, GroupTitleComponent, PromoTooltipComponent } from './shared'
 import { GuideTourComponent } from './shared/tour/tour.component'
 import { NavMenu } from './nav-menu'
 import { AssetFilters } from './asset-filters'
@@ -66,7 +66,6 @@ import { LoginFormComponent } from './login-form'
 import {
   AccessDeniedModal,
   AddToGroupModal,
-  AddToGroupLegacyModal,
   ChangePasswordModal,
   ConfirmModal,
   DeleteIgModal,
@@ -167,7 +166,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     AccountPage,
     EditPersonalCollectionModal,
     AddToGroupModal,
-    AddToGroupLegacyModal,
     AgreeModalComponent,
     AppComponent,
     AssetFilters,
@@ -195,6 +193,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     Footer,
     GeneralSearchComponent,
     GroupTitleComponent,
+    PromoTooltipComponent,
     Home,
     ImageGroupPage,
     ImageGroupPPPage,
