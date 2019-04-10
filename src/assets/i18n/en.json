@@ -282,11 +282,7 @@
     "CREATE_TITLE": "Create New Group",
     "EDIT_TITLE": "Edit Group",
     "COPY_TITLE": "Copy Group",
-<<<<<<< Updated upstream
     "FIRST_GROUP_MSG": "You haven't created a group yet! Create your first group.",
-=======
-    "FIRST_GROUP_MSG": "You haven't created a group yet! Create your first group",
->>>>>>> Stashed changes
     "TITLE_FIELD_LABEL": "Title",
     "TITLE_REQUIRED_MSG": "Don't forget to add a title!",
     "DESCRIPTION_FIELD_LABEL": "Description",
@@ -306,11 +302,7 @@
       "RETURN_TO_RESULTS": "Return",
       "NAV_TO_GROUP": "Go to group",
       "CLOSE": "Close",
-<<<<<<< Updated upstream
       "SAVE_EDIT": "Create"
-=======
-      "SAVE_EDIT": "Save"
->>>>>>> Stashed changes
     }
   },
   "ADVANCED_SEARCH_MODAL": {
