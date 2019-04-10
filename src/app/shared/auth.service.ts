@@ -467,8 +467,11 @@ export class AuthService implements CanActivate {
             console.log("Forwarded: " + clientIp)
           } else {
             clientIp = req.ip
-            // Simple way of handling local request ip
-            // clientIp = "65.128.116.207" // Minneapolis IP
+            if(clientIp === '::1') {
+              // Local ipv6 requests
+              // Assign a regular, non-vpn address for local dev
+              clientIp = "65.128.116.207" // Minneapolis IP
+            }
           }
           // Set triplet headers if available
           if (this.currentAuthHeaders) {

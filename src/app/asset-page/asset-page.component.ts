@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, HostListener, ElementRef } from '@angular/core'
+import { Component, OnInit, OnDestroy, ViewChild, HostListener, ElementRef, PLATFORM_ID, Inject } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { Meta } from '@angular/platform-browser'
 import { Subscription } from 'rxjs'
@@ -30,6 +30,7 @@ import { AppConfig } from '../app.service'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 import { MetadataService } from 'app/_services';
 import { rights } from './rights.ts'
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'ang-asset-page',
@@ -173,6 +174,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
     public addGroupTooltipOpts: any = {}
     public addGrpTTDismissed: boolean = false
+    // Flag for server vs client rendering
+    public isBrowser: boolean = true
 
     constructor(
         public _appConfig: AppConfig,
@@ -194,7 +197,9 @@ export class AssetPage implements OnInit, OnDestroy {
         private _storage: ArtstorStorageService,
         private _dom: DomUtilityService,
         private meta: Meta,
+        @Inject(PLATFORM_ID) private platformId: Object
     ) {
+        this.isBrowser = isPlatformBrowser(this.platformId)
         this.editDetailsForm = _fb.group({
             creator: [null],
             title: [null, Validators.required],
@@ -205,8 +210,7 @@ export class AssetPage implements OnInit, OnDestroy {
             description: [null],
             subject: [null]
         })
-
-        console.log("Construct asset page...")
+        console.log("Constructing asset page...")
     }
 
     ngOnInit() {
@@ -294,14 +298,26 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.assetNumber = 1
                 }
             })
-        );
-
+        ); // subscriptions.push
+        // Server-side subscriptions
+        if (!this.isBrowser) {
+            this.subscriptions.push(
+                this._auth.getUserInfo().pipe(take(1)).subscribe(user => {
+                    /**
+                     * Server-side rendering requires an additional userinfo request after
+                     * the one triggered by the route guard
+                     * (it has to first get the headers, then get the user for the headers)
+                     * @todo have Auth return an appropriate user object for a cookie-less call
+                     */
+                    this.userSessionFresh = true
+                })
+            )
+        }
 
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
             this._auth.currentUser.subscribe((user) => {
-                // console.log("User subscription returned")
                 this.user = user
                 // userSessionFresh: Do not attempt to load asset until we know user object is fresh
                 if (!this.userSessionFresh && this._auth.userSessionFresh) {
