@@ -3,15 +3,15 @@ import { HttpClientModule } from '@angular/common/http'
 import { TestBed, getTestBed } from '@angular/core/testing'
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 
-import {  CollectionTypeHandler, PersonalCollectionService } from '../shared'
+import {  CollectionTypeHandler, PersonalCollectionService, AssetService } from '../shared'
 import { CollectionPage } from '../collection-page'
+import { NO_ERRORS_SCHEMA } from '@angular/compiler/src/core';
 
 /**
  *  Collections PACT
  *  Endpoints in this PACT:
  *
  *  DONT REALLY NEED TO PACTIFY THESE!
- *
  * /v1/collections/institutions?_method=allinstitutions
   /v1/collections/institutions?_method=allssinstitutions
   /v1/collections/institutions?_method=alldonatinginstitutions
@@ -26,20 +26,17 @@ import { CollectionPage } from '../collection-page'
 
   /v1/collections/COLLECTION_ID
  *
- *
  */
+
 
  /**
   * Mock and test v1/categorydesc/id collection
   * Test collection id: 10374058879
   */
-
-
-
 describe('Collections #pact #collections', () => {
 
   let provider
-  let _collection = getTestBed().get(CollectionPage)
+  let _collection
 
   const mockCategoryDescResp = {
     blurbUrl: null,
@@ -51,12 +48,12 @@ describe('Collections #pact #collections', () => {
     shortDescription: null
   }
 
-  const mockCategeoryNamesResp = [
-      { categoryid: "", categoryname: "" },
-      { categoryid: "", categoryname: "" },
-      { categoryid: "", categoryname: "" },
-      { categoryid: "", categoryname: "" },
-    ]
+  // const mockCategeoryNamesResp = [
+  //   { categoryid: "", categoryname: "" },
+  //   { categoryid: "", categoryname: "" },
+  //   { categoryid: "", categoryname: "" },
+  //   { categoryid: "", categoryname: "" },
+  // ]
 
 
   beforeAll(function (done) {
@@ -64,7 +61,7 @@ describe('Collections #pact #collections', () => {
     // Required for slower environments
     setTimeout(function () { done() }, 2000)
     // Required if run with `singleRun: false` (see karma config)
-    //provider.removeInteractions()
+    provider.removeInteractions()
   })
 
   afterAll(function (done) {
@@ -75,25 +72,29 @@ describe('Collections #pact #collections', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        CollectionPage
+        CollectionPage,
+        AssetService
       ],
       imports: [
         HttpClientModule
-      ]
+      ],
+      //schemas: [ NO_ERRORS_SCHEMA ]
     });
+
+    _collection = getTestBed().get(CollectionPage)
+
   });
 
   // Indidual tests 'describe'
   describe('GET /api/v1/categorydesc', () => {
-
     beforeAll((done) => {
 
       provider.addInteraction({
         uponReceiving: 'a request for ADL category description for a collection',
         withRequest: {
           method: 'GET',
-          path: '/api/v1/categorydesc/',
-          query: '10374058879'
+          path: '/api/v1/categorydesc/10374058879',
+          //query: '10374058879'
         },
         willRespondWith: {
           status: 200,
@@ -121,7 +122,7 @@ describe('Collections #pact #collections', () => {
             let actualResKeys = Object.keys(res) // response object keys
             let resAccessKeys = Object.keys(res.access[0]) // response 'access' object keys
 
-            console.log('!!!!!!!!!!!!!!!', actualResKeys)
+            console.log('Res Keys: ', actualResKeys)
 
             let expectedResKeys = [
               'blurbUrl',
