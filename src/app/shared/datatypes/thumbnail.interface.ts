@@ -14,6 +14,10 @@ export interface Thumbnail {
   artstorid?: string
   collectionId: string
   collectionType: number
+  compound_media_json?: {
+    types?: string[],
+    objects?: any[]
+  }
   cfObjCount: number // number of associated assets
   cfObjectId: string // haven't seen any for which this is different than objectId
   count: number
@@ -24,13 +28,22 @@ export interface Thumbnail {
   media: {
     adlObjectType: number
     thumbnailSizeOnePath: string
+    format?: string
   }
+  compound_media: any
   thumbnailImgUrl: string
   thumbnail1: any
   thumbnail2: any
   thumbnail3: any
   thumbnail4: any
   navigationCommands: any[] // added when thumbnail is constructed, allows proper navigation from search
+  zoom?: { // optional zoom params to be available only for detail view thumbnails
+    index: number
+    pointHeight: number
+    pointWidth: number
+    viewerX: number
+    viewerY: number
+  }
 }
 
 // export interface SearchThumbnail {

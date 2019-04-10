@@ -27,29 +27,65 @@ $list-group-border-radius: 3px;
  */
 $basePadding: 24px;
 
-/** @color Gray */
-$gray: #cdcdcd;
-$gray-1: #fAf8f8;
-/** @color Dark Gray */
-$dark-gray: #989898;
-/** @color Teal */
-$teal: rgb(225,232,225);
-$brightTeal: #45bfab;
+/** Primary Colors */
+
+/** @color Color Orange */
+$orange: #C9510D;
+$faint-orange: #ffece0;
+
+/** Color Grays */
+
+/** @color Color Gray 1 */
+$color-gray-1: #FAF8F8;
+/* @color Color Gray 2 **/
+$color-gray-2: #EEEEEE;
+/** @color Color Gray 3 */
+$color-gray-3: #E8E8E8;
+/** @color Color Gray 4 */
+$color-gray-4: #DDDDDD;
+/** $color Gray 5 */
+$color-gray-5: #989898;
+/** @color Color Gray 6 */
+$color-gray-6: #555555;
+/** @color Color Gray 7 */
+$color-gray-7: #333333;
+/** Border Gray */
+$color-border-gray: $color-gray-4;
+
+/** @color White */
+$color-white: #FFFFFF;
 
 /** @color Orange */
-$orange: #C9510D;
-/** @color Beige */
-$beige: #d4cd98;
+$color-orange: #C9510D;
+/** @color Orange Active */
+$color-orange-active: #993E0A;
 
+/** NOTE: These below will be replaced */
+
+/** @color Gray */
+$gray: #cdcdcd;
+
+/** @color Teal */
+$teal: rgb(225,232,225);
+
+/** Background Light Accent */
 $bgLightAccent: #f8faf8;
-$bgDefault: #fff;
+/** Background Default */
+$bgDefault: $color-white;
 
 /**
  Brand Colors from Public Site
  */
+
+ /** @color Blue */
  $blue: #0039c6;
- $green: #68ff66;
+ /** @color Green */
+ $green: #6EB032;
+ /** @color Red */
  $red: #e21c28;
+ /** @color Purple */
  $purple: #8300e0;
+ /** @color Dark Green */
  $darkGreen: #008d58;
+ /** @color Yellow */
  $yellow: #f2be19;

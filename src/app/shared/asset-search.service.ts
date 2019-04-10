@@ -13,6 +13,7 @@ import { AppConfig } from '../app.service'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { APP_CONST } from '../app.constants'
+import { Thumbnail, AssetData } from './datatypes';
 @Injectable()
 export class AssetSearchService {
 
@@ -44,20 +45,6 @@ export class AssetSearchService {
     private _app: AppConfig
   ) {
     this.showCollectionType = this._app.config.advSearch.showCollectionTypeFacet
-  }
-
-  /**
-  * Download View from IIIF services as blob file
-  * @param url - Generated view url
-  */
-  public downloadViewBlob(url: string): Observable<any> {
-
-    let res: Observable<Blob>
-      res = this._http.get(url, {
-        responseType: 'blob'
-      })
-
-    return res
   }
 
   private initQuery(keyword: string, pageSize, startIndex) {
@@ -378,7 +365,7 @@ export class AssetSearchService {
         let cleanedResults: SearchAsset[] = res.results.map((item) => {
           let cleanedSSID: string = item.doi.substr(item.doi.lastIndexOf('.') + 1) // split the ssid off the doi
           let cleanedMedia: MediaObject
-          if (item.media && typeof item.media == 'string') { cleanedMedia = JSON.parse(item.media) }
+          if (item && item.media && typeof item.media == 'string') { cleanedMedia = JSON.parse(item.media) }
           let cleanedAsset: SearchAsset = Object.assign(
             {}, // assigning it to a new object
             item, // base is the raw item returned from search
@@ -388,14 +375,19 @@ export class AssetSearchService {
               thumbnailUrls: [] // this is only the array init - we add the urls later
             }
           )
-
+          // Parse stringified compound media if available
+          if (cleanedAsset.compound_media) {
+            cleanedAsset.compound_media_json = JSON.parse(cleanedAsset.compound_media)
+          }
           // Use the compound media thumbnail url where sequenceNum equals 1
-          if (cleanedAsset['compound_media']) {
-            let compoundAsset = JSON.parse(cleanedAsset['compound_media']).objects.filter((item) => {
+          if (cleanedAsset && cleanedAsset.compound_media_json && cleanedAsset.compound_media_json.objects) {
+            let compoundAsset = cleanedAsset.compound_media_json.objects.filter((item) => {
               return item['sequenceNum'] === 1
             })
 
-            cleanedAsset.thumbnailUrls.push(this._auth.getThumbUrl(true) + compoundAsset[0].thumbnailSizeOnePath)
+            if (compoundAsset[0]) {
+              cleanedAsset.thumbnailUrls.push(this._auth.getThumbHostname(true) + compoundAsset[0].thumbnailSizeOnePath)
+            }
           }
           else { // make the thumbnail urls and add them to the array
             for (let i = 1; i <= 5; i++) {
@@ -485,10 +477,42 @@ export class AssetSearchService {
 
   /**
    * Generate Thumbnail URL
+   * @param thumbData: AssetData | Thumbnail - returned by search service, metadata service, or group service
+   * @param size: number - sizes 0 through 4 are acceptable
    */
-  public makeThumbUrl(imagePath: string, size: number, isCompound?: boolean): string {
-    if (isCompound) {
-      return this._auth.getThumbUrl(isCompound) + imagePath;
+  public makeThumbUrl(thumbData: any, size?: number): string {
+    let imagePath: string
+    let isMultiView: boolean
+    let isThumbnailImgUrl: boolean
+    let isDowngradedMultiView: boolean
+    // Set default size
+    if (!size) {
+      size = 1
+    }
+    // Handle variations of Multi Views
+    if (typeof(thumbData.tileSource) !== 'undefined' && thumbData.thumbnail_url === thumbData.tileSource) {
+      // Handle downgraded Multi View
+      isDowngradedMultiView = true
+    } else if (typeof(thumbData.tileSource) === 'object' && thumbData.tileSource.length) {
+      // Check if multi-view, when via search service
+      isMultiView = true
+    } else if (thumbData.compoundmediaCount) {
+      // Check if multi-view, when via group service
+      isMultiView = true
+    }
+    // Check thumbnail url source
+    if (thumbData.thumbnailImgUrl) {
+      isThumbnailImgUrl = true
+      imagePath = thumbData.thumbnailImgUrl
+    } else {
+      imagePath = thumbData.thumbnail_url
+    }
+    // Multiviews and downgraded views receive FULL URLS via "thumbnail_url"
+    if ((isMultiView || isDowngradedMultiView) && !isThumbnailImgUrl) {
+      return imagePath;
+    }
+    else if (isMultiView && isThumbnailImgUrl) {
+      return this._auth.getThumbHostname(isMultiView) + imagePath;
     }
     else if (imagePath) {
       if (size) {
@@ -509,8 +533,20 @@ export class AssetSearchService {
     } else {
       imagePath = '';
     }
-    // Ceanup
-    return this._auth.getThumbUrl() + imagePath;
+    // Determine if hostname should be appended
+    return this._auth.getThumbHostname() + imagePath;
+  }
+
+
+  /**
+   * Generate Thumbnail URL for detailed view using the zoom property of the thumbnail
+   */
+  public makeDetailViewThmb(thumbnailObj: any): string{
+    let thumbURL: string = ''
+    let tileSourceHostname = (this._auth.getEnv() == 'test') ? '//tsstage.artstor.org' : '//tsprod.artstor.org'
+    let imgURL = thumbnailObj['thumbnailImgUrl'].replace('/thumb/imgstor/size0', '').replace('.jpg', '.fpx')
+    thumbURL = tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgURL) + '/' + thumbnailObj['zoom']['viewerX'] + ',' + thumbnailObj['zoom']['viewerY'] + ',' + thumbnailObj['zoom']['pointWidth'] + ',' + thumbnailObj['zoom']['pointHeight'] + '/,115/0/native.jpg'
+    return thumbURL
   }
 }
 
@@ -583,6 +619,12 @@ export interface SearchAsset {
   collections: string[] // array of collections this asset exists under
   collectiontypenameid: string[]
   collectiontypes: number[] // all of the collection types this asset fits
+  compound_media?: string // stringified of compound media object
+  compound_media_json?: {
+     // Client side added: parsed json of compound media
+     types?: string[]
+     objects?: any[]
+  }
   contributinginstitutionid: number // which institution added the asset
   date: string // a string entered by the user, not an actually useful date other than display
   doi: string // ex: "10.2307/artstor.16515779"

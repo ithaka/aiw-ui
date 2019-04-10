@@ -7,6 +7,13 @@ header.navbar.navbar-light
             img#logo.hidden-xs-down([attr.src]="logoUrl" alt="Artstor logo")
           .mobile--show
             img#logoMobile.hidden-sm-up(src="/assets/img/logo-square.png" alt="Artstor logo")
+        .btn.btn--icon(*ngIf="showAppliedFlags")
+          .icon.icon-flag
+          .tooltip.bs-tooltip-bottom.show-on-hover(role="tooltip")
+            .arrow
+            .tooltip-inner 
+              | Applied Flags:<br/>
+              p(*ngFor="let flagKey of appliedFlags") {{ flagKey }}
       .col-4
         .login-panel(*ngIf="showLoginPanel")
           .vertical-center-wrap
@@ -27,4 +34,7 @@ header.navbar.navbar-light
                   a.link#nav-register((click)="navigateAndSaveRoute('/register')", tabindex="1") Register
                 span(*ngIf="_auth.isPublicOnly()") &nbsp;to access the core collections.
                 span(*ngIf="user.status && !user.isLoggedIn") &nbsp;to save images
+.toast-stack
+  ng-container(*ngFor="let toast of toasts")
+    ang-toast([toast]="toast", [dismiss]="toast.dismiss")
 ang-session-expire-modal(*ngIf="showinactiveUserLogoutModal && allowExpiredModal" "(closeModal)"="inactiveUsrLogOut()")

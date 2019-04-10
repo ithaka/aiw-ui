@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs'
 import { map, take, filter } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
-import { AssetService, AuthService, GroupService, ScriptService } from './../../shared'
+import { AuthService, GroupService } from './../../shared'
 import { Tag } from './../tag'
 import { TagFiltersService } from './tag-filters.service'
 import { TitleService } from '../../shared/title.service'
@@ -78,7 +78,7 @@ export class BrowseGroupsComponent implements OnInit {
         description: 'Filter the groups you want to view by type, tag, or owner. Make sure to log in to see all of the groups you\'ve created, all in one place.',
       },
       onNext: () => {
-        this._ga.eventTrack.next({ action: 'endTour', properties: { category: this._auth.getGACategory(), label: 'imageGroupTour' } })
+        this._ga.eventTrack.next({ properties: { event: 'endTour', category: 'groups', label: 'imageGroupTour' } })
       }
     },
     {
@@ -109,8 +109,7 @@ export class BrowseGroupsComponent implements OnInit {
     private _auth: AuthService,
     private _title: TitleService,
     private _ga: Angulartics2,
-    private route: ActivatedRoute,
-    private scriptService: ScriptService
+    private route: ActivatedRoute
   ) {
     let isLoggedIn = this._auth.getUser() && this._auth.getUser().isLoggedIn
     this.showArtstorCurated = _appConfig.config.showArtstorCurated
@@ -183,10 +182,6 @@ export class BrowseGroupsComponent implements OnInit {
     // set the title
     this._title.setSubtitle('Browse Groups')
 
-    // Load Ethnio survey
-    if (this._appConfig.config.siteID !== 'SAHARA') {
-      this.scriptService.loadScript('ethnio-survey')
-    }
   } // OnInit
 
   ngOnDestroy() {
@@ -203,7 +198,7 @@ export class BrowseGroupsComponent implements OnInit {
 
   public changeSortOpt(label) {
     if ( this.activeSort.label != label){
-      this._ga.eventTrack.next({ action: 'sortGroup', properties: { category: this._auth.getGACategory(), label: 'cardviewSort' }});
+      this._ga.eventTrack.next({ properties: { event: 'sortGroup', category: 'groups', label: 'cardviewSort' }});
       this.activeSort.label = label;
       this.activeSort.name = name;
 
@@ -514,7 +509,7 @@ export class BrowseGroupsComponent implements OnInit {
         if (data.total !== 0){
             this.numResultMsg = data.total + ' results for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>.'
         } else {
-          this.numResultMsg = '0 results for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>. Try checking your spelling, or browse our <a href=\'/browse/groups?level=public\' class=\'link\'><b>curated groups</b></a>.'
+          this.numResultMsg = '0 results for \"' + this.searchTerm + '\"' + ' from <i>' + groupLabel + '</i>. Try checking your spelling, or browse our <a href=\'/#/browse/groups?level=public\' class=\'link\'><b>curated groups</b></a>.'
           this.goToPage(1)
         }
 

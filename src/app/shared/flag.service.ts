@@ -1,29 +1,29 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
-import { Observable } from 'rxjs'
+import { Observable, BehaviorSubject } from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Project Dependencies
 import { environment } from 'environments/environment';
+import { Params } from '@angular/router';
 
 @Injectable()
 export class FlagService {
   /**
-   * all public properties here are intended to be feature flags which are read/write accessible from any
-   *  component or service which imports the FlagService
+   * Flags should be added to the interface below
    */
-  public pcUpload: boolean = false
-  public unaffiliated: boolean = false
-  public bannerShow: boolean = false
-  public bannerCopy: string = ''
-  public solrMetadata: boolean = false
+  public flags: FeatureFlags = {}
+  // Observable for receiving switch updates
+  private flagSource: BehaviorSubject<FeatureFlags> = new BehaviorSubject({})
+  public flagUpdates: Observable<FeatureFlags>
 
   constructor(
     private _http: HttpClient
   ) {
+    this.flagUpdates = this.flagSource.asObservable()
   }
 
-  public getFlagsFromService(): Observable<FlagServiceResponse> {
+  public getFlagsFromService(): Observable<FeatureFlags> {
     const flagUrl: string = environment.API_URL + '/api/v1/flags/aiw-ui.json'
 
     return this._http.get<FlagServiceResponse>(
@@ -48,19 +48,46 @@ export class FlagService {
        *  this.unaffiliated = true
        * }
        */
-      this.bannerShow = flags.bannerShow
-      this.bannerCopy = flags.bannerCopy
-      this.solrMetadata = flags.solrMetadata
+      this.flags.bannerShow = flags.bannerShow
+      this.flags.bannerCopy = flags.bannerCopy
 
-      // Solr Metadata rollout
-      if (flags.solrMetadataRollout.indexOf(userCountryCode) > -1) {
-        this.solrMetadata = true
-        document.cookie = 'featureflag=solrmetadata;'
-      }
-
-      return flags
+      // Push update to subscribers
+      this.flagSource.next(this.flags)
+      // Return 
+      return this.flags
     }))
   }
+
+  /**
+   * Read flags from route params, and update subscribers
+   * @param params Route params
+   */
+  public readFlags(params: Params) : any {
+    if(params && params['featureFlag']){
+      this.flags.flagsAppliedByRoute = true
+      this.flags[params['featureFlag']] = true
+    }
+    // Emit switch update
+    this.flagSource.next(this.flags)
+    // Return switches for immediate use
+    return this.flags
+  }
+}
+
+/**
+ * Feature Flag interface controls which flags are available to apply
+ * - To Add/Clean out a flag, update the FeatureFlags interface first
+ */
+export interface FeatureFlags {
+  flagsAppliedByRoute?: boolean,
+  pcUpload?: boolean,
+  unaffiliated?: boolean,
+  bannerShow?: boolean,
+  bannerCopy?: string,
+  solrMetadata?: boolean,
+  // detailViews?: boolean,
+  exportReframe?: boolean,
+  relatedResFlag?: boolean
 }
 
 interface FlagServiceResponse {
@@ -68,6 +95,4 @@ interface FlagServiceResponse {
   unaffiliatedAccessRollout: string[]
   bannerShow: boolean
   bannerCopy: string
-  solrMetadata: boolean
-  solrMetadataRollout: string[]
 }

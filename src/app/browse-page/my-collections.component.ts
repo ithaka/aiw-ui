@@ -26,7 +26,6 @@ export class MyCollectionsComponent implements OnInit {
 
   constructor(
     private _auth: AuthService,
-    private _flags: FlagService,
     private router: Router,
     private route: ActivatedRoute,
     private _search: AssetSearchService,

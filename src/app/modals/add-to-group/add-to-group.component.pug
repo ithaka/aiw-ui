@@ -1,34 +1,60 @@
-.modal.fade.show(id="modal", tabindex="-1")
-  .modal-dialog(role="document")
+.modal.fade.show(id="modal")
+  .modal-dialog(role="document", [ngClass]="{ 'large': detailPreviewURL }")
     .modal-content
-      .modal-header
-        h5.modal-title {{ copySelectionStr + '.TITLE' | translate }}
-        button.close((click)="closeModal.emit()", type="button", data-dismiss="modal", aria-label="Close")
-          span(aria-hidden="true") &times;
-      form(#igForm="ngForm", (ngSubmit)="submitGroupUpdate(igForm)")
-        .modal-body
-          .link(*ngIf="showCreateGroup", (click)="createGroup.emit()") {{ copySelectionStr + '.OPEN_CREATE_GROUP_MODAL' | translate }}
-          br
-          .form-group([class.has-success]="serviceResponse.success", [class.has-danger]="serviceResponse.failure")
-            label(for="selectImageGroup") {{ copySelectionStr + '.SELECT_PROMPT' | translate }}
-            ng2-completer.notranslate([(ngModel)]="selectedGroupName", name="imageGroup",
-              (keyup)="sortGroup($event, selectedGroupName)",
-              [datasource]="dataService",
-              [minSearchLength]="0",
-              [openOnFocus]="true",
-              [placeholder]="'Type to search...'",
-              [textSearching]="'Searching Groups...'",
-              [clearUnselected]="true")
-            #successMessage.form-text.text-success(*ngIf="serviceResponse.success") {{  copySelectionStr + '.ADD_SUCCESS' | translate}}
-            #errorMessageUpdateFailure.form-text.text-danger(*ngIf="serviceResponse.failure") {{  copySelectionStr + '.ADD_FAILURE' | translate}}
-            #errorMessageTooManyAssets.form-text.text-danger(*ngIf="serviceResponse.tooManyAssets") {{  copySelectionStr + '.TOO_MANY_ASSETS' | translate}}
-            .form-text.text-warning(*ngIf="selectedGroupError") {{ selectedGroupError | translate }}
-        .modal-footer
-          ng-container(*ngIf="!serviceResponse.success")
-            a.btn.btn-link.with-pad(href="http://support.artstor.org/?article=create-and-manage-image-groups", target="_blank") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.HELP' | translate }}
-            button.btn.btn-secondary((click)="closeModal.emit()", type="button", data-dismiss="modal") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.CLOSE' | translate}}
-            button.btn.btn-primary(type="submit") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.SAVE' | translate }}
-          ng-container(*ngIf="serviceResponse.success")
-            a.btn.btn-link.with-pad(href="http://support.artstor.org/?article=create-and-manage-image-groups", target="_blank") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.HELP' | translate}}
-            button.btn.btn-primary((click)="closeModal.emit()", [routerLink]="['/group', selectedIg.id]", type="button") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.NAV_TO_GROUP' | translate}}
-            button.btn.btn-secondary((click)="closeModal.emit()", type="button") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.RETURN_TO_RESULTS' | translate}}
+      .row.no-gutters
+        .col-lg-6.detail-preview(*ngIf="detailPreviewURL")
+          .preview-cntnr
+            img([attr.src]="detailPreviewURL", tabindex="10", [attr.aria-label]="selectedAssets[0].title + ', ' + selectedAssets[0].creator + ', ' + selectedAssets[0].date + ' of image.'", role="image", (keydown.shift.tab)="focusLastElement($event)")
+        div([ngClass]="[ detailPreviewURL ? 'col-lg-6' : 'col-lg-12' ]")
+          .modal-header
+            h4.modal-title(tabindex="10", (keydown.shift.tab)="detailPreviewURL ? null : focusLastElement($event)") {{ detailPreviewURL ? 'Add Detail to Group' : 'Add ' + ( selectedAssets.length > 1 ? selectedAssets.length + ' Items' : 'Item' ) + ' to Group' }}
+            button.close((click)="closeModal.emit()", type="button", data-dismiss="modal", tabindex="10", aria-label="Close")
+              span(aria-hidden="true") &times;
+          form(#igForm="ngForm", (ngSubmit)="submitGroupUpdate(igForm)")
+            .modal-body
+              .search-cntnr([ngClass]="{ 'shadow' : scrollCntnr.scrollTop > 50 }")
+                .input-group
+                  input#inputGroupSearchTerm.form-control.has-icon([(ngModel)]="groupSearchTerm", name="term", type="text", placeholder="Search groups by title or tag...", (keyup)="searchGroups()", tabindex="10")
+                  i#iconClearGroupSearch.icon.icon-clear.form-control__icon(*ngIf="groupSearchTerm", (click)="clearGroupSearch()", (keyup.enter)="clearGroupSearch()", placement="bottom", triggers="focusin:focusout mouseenter:mouseleave", ngbTooltip="Clear search", role="button", tabindex="10", aria-label="Clear search")
+                  i#iconGroupSearchSubmit.icon.icon-search.form-control__icon(*ngIf="!groupSearchTerm", (click)="searchGroups(true)", (keyup.enter)="searchGroups(true)", placement="bottom", triggers="focusin:focusout mouseenter:mouseleave", ngbTooltip="Submit search", role="button", tabindex="10", aria-label="Submit search")
+              .scroll-cntnr(#scrollCntnr, infiniteScroll, [scrollWindow]="false", [infiniteScrollDistance]="1", [infiniteScrollThrottle]="150", [infiniteScrollDisabled]="allGroups.length < totalGroups && !loading.allGroups ? false : true", (scrolled)="loadMoreGroups()")
+                .recent-groups(*ngIf="!groupSearchTerm")
+                  .hdr
+                    label(tabindex="10") Recent Groups
+                  .row.no-gutters(*ngFor="let recentGroup of recentGroups", [ngClass]="{ 'selectedGroup' : recentGroup.selected }", [attr.id]="recentGroup.id", (click)="selectGroup(recentGroup, 'recent');groupSelectKeyDown($event, recentGroup.selected)", (keydown.enter)="selectGroup(recentGroup, 'recent')", (keydown.space)="$event.stopPropagation(); $event.preventDefault(); selectGroup(recentGroup, 'recent')", (keydown)="groupSelectKeyDown($event, recentGroup.selected)", tabindex="10", [attr.aria-label]="recentGroup.name + ', ' + (recentGroup.selected ? 'selected' : 'unselected') + ', press enter or spacebar to ' + (recentGroup.selected ? 'unselect' : 'select') + ' this group'")
+                    .col-3
+                      .ig-thmbnail-wrapper
+                        img([ngClass]="{ 'loaded' : recentGroup.imgLoaded }", [attr.src]="_search.makeThumbUrl(recentGroup, 1)", [attr.alt]="recentGroup.name", (load)="recentGroup.imgLoaded = true", aria-role="image")
+                    .col-9
+                      .title {{ recentGroup.name }}
+                  .loading-dots(*ngIf="loading.recentGroups")
+                    .dot
+                    .dot
+                    .dot
+
+                .all-my-groups
+                  .hdr(*ngIf="!groupSearchTerm")
+                    label(tabindex="10") All My Groups
+                  .no-result-row(*ngIf="groupSearchTerm && totalGroups === 0")
+                    b.no-result-msg Sorry, we couldn’t find any groups related to your search. Please try a different search.
+                  .row.no-gutters(*ngFor="let group of allGroups", [ngClass]="{ 'selectedGroup' : group.selected }", [attr.id]="group.id", (click)="selectGroup(group, 'all');groupSelectKeyDown($event, group.selected)", (keydown.enter)="selectGroup(group, 'all')", (keydown.space)="$event.stopPropagation(); $event.preventDefault(); selectGroup(group, 'all')", (keydown)="groupSelectKeyDown($event, group.selected)", tabindex="10", [attr.aria-label]="group.name + ', ' + (group.selected ? 'selected' : 'unselected') + ', press enter or spacebar to ' + (group.selected ? 'unselect' : 'select') + ' this group'")
+                    .col-3
+                      .ig-thmbnail-wrapper
+                        img([ngClass]="{ 'loaded' : group.imgLoaded }", [attr.src]="_search.makeThumbUrl(group, 1)", [attr.alt]="group.name", (load)="group.imgLoaded = true", aria-role="image")
+                    .col-9
+                      .title {{ group.name }}
+                  .loading-dots(*ngIf="loading.allGroups && !groupSearchTerm")
+                    .dot
+                    .dot
+                    .dot
+            .alert.alert-danger.mx-2(*ngIf="errorMsg")
+              i.icon.icon-error
+              span([innerHtml]="errorMsg")
+            .modal-footer
+              ng-container(*ngIf="!serviceResponse.success")
+                .wrapper
+                  a.help-link.mr-2(href="http://support.artstor.org/?article=create-and-manage-image-groups", target="_blank", tabindex="13", aria-label="Learn more about groups", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()") ?
+                  .link(*ngIf="showCreateGroup", (click)="createGroup.emit()", (keyup.enter)="createGroup.emit()", tabindex="12", aria-label="Add to New Group", role="link") Create new group
+                .wrapper
+                  button.btn.btn-secondary.mr-2((click)="closeModal.emit()", type="button", data-dismiss="modal", tabindex="11", aria-label="Cancel") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.CANCEL' | translate}}
+                  button#addBtn.btn.btn-primary([ngClass]="{ 'disabled-btn' : !selectedGroup.id }", type="submit", [tabindex]="selectedGroup.id ? 10 : -1", [attr.aria-label]="'Add this item to ' + selectedGroup.name", (keydown.shift.tab)="$event.stopPropagation(); $event.preventDefault(); focusOnSelectedGroup()" ) {{ 'ADD_TO_GROUP_MODAL.CONTROLS.ADD' | translate }}

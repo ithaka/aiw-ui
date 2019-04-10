@@ -17,21 +17,19 @@ import { ROUTES } from './app.routes';
 // UI modules
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Angulartics2Module, Angulartics2Settings } from 'angulartics2'
-import { Angulartics2GoogleAnalytics } from 'angulartics2/ga'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxTagInputModule } from 'ngx-tag-autocomplete';
 import { Ng2CompleterModule } from 'ng2-completer';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 // Directives
 import { ClickOutsideDirective } from './_directives';
-//- TO-DO: Enable medium editor with Universal
-// import { MediumEditorDirective } from 'angular2-medium-editor';
+import { MediumEditorDirective } from 'angular2-medium-editor';
 
 // ng2-idle
-//- TO-DO: Enable NgIdle with Universal
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive'; // this includes the core NgIdleModule but includes keepalive providers for easy wireup
-// import { SortablejsModule } from 'angular-sortablejs'
+import { SortablejsModule } from 'angular-sortablejs'
 
 // File Uploader
 import { FileUploadModule } from 'ng2-file-upload';
@@ -40,7 +38,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { AppComponent } from './app.component'
 import { APP_RESOLVER_PROVIDERS } from './app.resolver'
 import { AppConfig } from './app.service'
-import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService, InstitutionsService, DomUtilityService } from './shared'
+import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService, InstitutionsService, DomUtilityService, ToastComponent, GroupTitleComponent, PromoTooltipComponent } from './shared'
 import { GuideTourComponent } from './shared/tour/tour.component'
 import { NavMenu } from './nav-menu'
 import { AssetFilters } from './asset-filters'
@@ -59,7 +57,7 @@ import { BrowsePage, LibraryComponent, AdlCollectionFilterPipe, IgGroupFilterPip
 import { AssetPage, AgreeModalComponent, ArtstorViewerComponent } from './asset-page'
 import { AccountPage } from './account-page'
 import { AssociatedPage } from './associated-page'
-import { ImageGroupPage, PptModalComponent } from './image-group-page'
+import { ImageGroupPage, PptModalComponent, TermsAndConditionsComponent } from './image-group-page'
 import { Login } from './login'
 import { NoContent } from './no-content'
 import { LinkPage } from './link-page'
@@ -83,7 +81,8 @@ import {
   ServerErrorModal,
   SessionExpireModal,
   ShareIgLinkModal,
-  ShareLinkModal
+  ShareLinkModal,
+  GoogleAuthComponent
 } from './modals'
 import { CollectionBadgeComponent } from './collection-badge'
 import { UploaderComponent } from './uploader/uploader.component'
@@ -106,7 +105,7 @@ import {
   PersonalCollectionService,
   AccountService
 } from './shared'
-import { MetadataService } from './_services'
+import { MetadataService, SlidesService } from './_services'
 
 import { LocalPCService } from './_local-pc-asset.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
@@ -139,6 +138,7 @@ const APP_PROVIDERS = [
   LogService,
   ImageGroupService,
   ScriptService,
+  SlidesService,
   AssetFiltersService,
   TagFiltersService,
   TagsService,
@@ -178,6 +178,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowseGroupsComponent,
     BrowseInstitutionComponent,
     BrowsePage,
+    CardViewComponent,
     CategoryPage,
     ChangePasswordModal,
     ClickOutsideDirective,
@@ -191,7 +192,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     FeaturedComponent,
     Footer,
     GeneralSearchComponent,
-    CardViewComponent,
+    GroupTitleComponent,
+    PromoTooltipComponent,
     Home,
     ImageGroupPage,
     ImageGroupPPPage,
@@ -204,8 +206,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     Login,
     LoginFormComponent,
     LoginReqModal,
-    //- TO-DO: Enable medium editor with Universal
-    // MediumEditorDirective,
+    MediumEditorDirective,
     MyCollectionsComponent,
     Nav,
     NavMenu,
@@ -227,10 +228,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     ShareIgLinkModal,
     GenerateCitation,
     ShareLinkModal,
+    GoogleAuthComponent,
     SkyBannerComponent,
     TagComponent,
     TagsListComponent,
+    TermsAndConditionsComponent,
     ThumbnailComponent,
+    ToastComponent,
     PromptComponent,
     TypeIdPipe,
     UploaderComponent
@@ -242,11 +246,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     NgxTagInputModule,
     Ng2CompleterModule,
+    InfiniteScrollModule,
     FileUploadModule,
-    RouterModule.forRoot(ROUTES, { 
+    RouterModule.forRoot(ROUTES, {
         useHash: true,
         preloadingStrategy: PreloadAllModules,
-        initialNavigation: 'enabled' 
+        initialNavigation: 'enabled'
       }),
     DeviceDetectorModule.forRoot(),
     Angulartics2Module.forRoot(),
@@ -258,9 +263,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     }),
     NgbModule.forRoot(), // Ng Bootstrap Import
-    //- TO-DO: Enable NgIdle with Universal
     NgIdleKeepaliveModule.forRoot(),
-    // SortablejsModule.forRoot({ animation: 150 })
+    SortablejsModule.forRoot({ animation: 150 })
   ],
   exports: [
     RouterModule

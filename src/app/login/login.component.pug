@@ -7,7 +7,10 @@
         .card-header
           h2.h1#loginHeading {{ copyBase + 'LOGIN.REG_LOGIN.HEADING' | translate }}
         .card-body
-          ang-login-form#mainContent
+          ang-login-form(
+            (userEmail)="username = $event", 
+            (resetPassword)="displaySystemPwdReset($event)"
+          )#mainContent
           a#linkLoginResetModal((click)="showPwdModal = true" tabindex="1" class="link" data-automation-component="artstor-pw-reset-link") {{ 'LOGIN.REG_LOGIN.FORGOT_PW_PROMPT' | translate }}
           br
           div(*ngIf="showRegister")
@@ -20,7 +23,12 @@
       .card.card--v-pad
         .card-header
           h2.h1#institutionHeading {{ 'LOGIN.INSTITUTION_LOGIN.HEADING' | translate }}
-        .card-body
+        .card-body(*ngIf="!samlAvailable")
+          .alert.alert-warning
+            b Institutional Login Unavailable
+            | Institution login is not available on this version of Artstor. If you require institutional login, please use 
+            a.link(href="https://library.artstor.org") library.artstor.org
+        .card-body(*ngIf="samlAvailable")
           .form-group
             label(for="completer") {{ 'LOGIN.INSTITUTION_LOGIN.SELECT_LABEL' | translate }}
             ng2-completer#completer(
@@ -50,7 +58,12 @@
         .card-body
           .form-group
             | #[a#linkLoginSaharaSS.link(tabindex="1", [attr.href]="_auth.getEnv() === 'test' ? FORUM_TEST : FORUM_PROD", target="_blank", data-automation-component="ss-login-link") Log in] to JSTOR Forum
-ang-pwd-reset-modal(*ngIf="showPwdModal", (closeModal)="showPwdModal = false")
+ang-pwd-reset-modal(
+  *ngIf="showPwdModal", 
+  [username]="username", 
+  [systemRequest]="systemPwdReset", 
+  (closeModal)="systemPwdReset = false; showPwdModal = false"
+)
 #helpModal.modal([ngClass]="{'show': showHelpModal }")
   .modal-dialog
     .modal-content

@@ -17,12 +17,13 @@ import {
   Thumbnail,
   ToolboxService,
   FlagService,
-  DomUtilityService
+  DomUtilityService,
+  ImageGroup
 } from '../shared'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { APP_CONST } from '../app.constants'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
-// import { SortablejsOptions } from 'angular-sortablejs';
+import { SortablejsOptions } from 'angular-sortablejs';
 
 @Component({
   selector: 'ang-asset-grid',
@@ -66,12 +67,36 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Value
   public totalAssets: number = 0;
 
+  // Group display
+  private _igMetaData: ImageGroup = {}
+  public igDisplay: boolean = false
+  public showIgDescBool: boolean = true
+  public animationFinished: boolean = true
+
+  // Passed in from groups page only
+  @Input()
+  set igMetaData(metadata: ImageGroup) {
+    this._igMetaData = metadata
+    if (metadata.id){
+      this.igDisplay = true
+      // Details Display state for groups with no tags and no description
+      if (!metadata.tags.length && !metadata.description) {
+        this.showIgDescBool = false
+      }
+    } else {
+      this.igDisplay = false
+    }
+  }
+  get igMetaData(): ImageGroup {
+    return this._igMetaData
+  }
+
   // @Input()
   // private allowSearchInRes:boolean;
 
   @Output() reordering: EventEmitter<boolean> = new EventEmitter();
 
-  dateFacet = {
+  public dateFacet = {
     earliest : {
       date : 1000,
       era : 'BCE'
@@ -83,18 +108,17 @@ export class AssetGrid implements OnInit, OnDestroy {
     modified : false
   };
 
-  activeSort = {
+  public activeSort = {
     index : '0',
     label : 'Relevance'
   };
-  sub;
 
   // Options for Sortablejs reordering of assets
-  // public sortableOptions: SortablejsOptions = {
-  //   onUpdate: (event) => {
-  //     this.orderChanged = true
-  //   }
-  // }
+  public sortableOptions: SortablejsOptions = {
+    onUpdate: (event) => {
+      this.orderChanged = true
+    }
+  }
   // Add user to decide whether to show the banner
   private user: any = this._auth.getUser();
 
@@ -157,7 +181,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   // Collection Id parameter
   private colId: string = '';
   // Image group
-  private ig: any = {};
+  private ig: any = {}
 
   // Used as a key to save the previous route params in session storage (incase of image group)
   private prevRouteTS: string = ''
@@ -215,9 +239,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.pipe(
       map((params: Params) => {
-        if (params && params['featureFlag']){
-          this._flags[params['featureFlag']] = true
-        }
+        // Find feature flags applied on route
+        this._flags.readFlags(params)
 
         if (params['term']){
           this.searchTerm = params['term'];
@@ -439,7 +462,8 @@ export class AssetGrid implements OnInit, OnDestroy {
           }
       })).subscribe()
     )
-  }
+
+  } // ngOninit
 
   ngOnDestroy() {
     // Kill subscriptions
@@ -563,7 +587,7 @@ export class AssetGrid implements OnInit, OnDestroy {
       }
       this.selectedAssets.length ? this.editMode = true : this.editMode = false
     } else if (asset.compound_media){ // Log GA event for opening a multi view asset from grid
-      this.angulartics.eventTrack.next({ action: 'multiViewItemOpen', properties: { category: this._auth.getGACategory(), label: asset.artstorid } });
+      this.angulartics.eventTrack.next({ properties: { event: 'multiViewItemOpen', category: 'multiview', label: asset.artstorid } });
     }
   }
 
@@ -571,6 +595,12 @@ export class AssetGrid implements OnInit, OnDestroy {
     let assetId = thumbnail.objectId ? thumbnail.objectId : thumbnail.artstorid
     let params: any = {
       prevRouteTS: this.prevRouteTS // for fetching previous route params from session storage, on asset page
+    }
+    if(thumbnail.zoom) {
+      params['x'] = thumbnail.zoom.viewerX
+      params ['y'] = thumbnail.zoom.viewerY
+      params['w'] = thumbnail.zoom.pointWidth
+      params['h'] = thumbnail.zoom.pointHeight
     }
     let url = []
     thumbnail.iap && (params.iap = 'true')
@@ -600,11 +630,20 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   private toggleReorderMode(): void {
     this.reorderMode = !this.reorderMode;
-    this.reordering.emit(this.reorderMode);
+    this.reordering.emit(this.reorderMode)
 
     if (this.reorderMode == true) {
+
+      this.showIgDescBool = false
+
       // Start loading
       this.isLoading = true;
+
+      let itemObjs: any[] = this.itemIds.slice(0)
+      // Map itemIds array of objects to array of strings for v1 items
+      this.itemIds = this.itemIds.map(item => {
+        return (typeof(item) === 'object') ? item['id'] : item
+      })
 
       this._assets.getAllThumbnails(this.itemIds)
         .then( allThumbnails => {
@@ -613,7 +652,23 @@ export class AssetGrid implements OnInit, OnDestroy {
           allThumbnails = allThumbnails.filter(thumbnail => {
             return thumbnail.status === 'available'
           })
-          this.allResults = allThumbnails
+
+          // Make sure the fetched thumbnail objects contain the zoom info as well
+          itemObjs = itemObjs.map(itemObj => {
+            let obj = {}
+            for(let thmb of allThumbnails){
+              if(thmb.objectId === itemObj['id']){
+                obj = Object.assign({}, thmb)
+                if(itemObj['zoom']){
+                  obj['zoom'] = itemObj['zoom']
+                }
+                break
+              }
+            }
+            return obj
+          })
+
+          this.allResults = itemObjs
           this.results = this.allResults.slice(0)
         })
         .catch( error => {
@@ -624,7 +679,9 @@ export class AssetGrid implements OnInit, OnDestroy {
       // Set focus on the first tumbnail in reorder mode
       setTimeout(() => {
         let el = this._dom.byId('item-0')
-        el.focus()
+        if (el) {
+          el.focus()
+        }
       }, 600)
 
     } else {
@@ -661,16 +718,19 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.isLoading = true;
     this.allResults = this.results
 
-    let newItemsArray = [];
-
+    let newItemsArray: any[] = [];
+    // Construct the updated array of item objects containing id and zoom if avilable
     for (let i = 0; i < this.allResults.length; i++) {
       if ('objectId' in this.allResults[i]) {
-        newItemsArray.push(this.allResults[i]['objectId'])
+        let itemObj = { id: this.allResults[i]['objectId'] }
+        if(this.allResults[i]['zoom']) {
+          itemObj['zoom'] = this.allResults[i]['zoom']
+        }
+        newItemsArray.push(itemObj)
       }
     };
 
     this.ig.items = newItemsArray;
-
     this._groups.update(this.ig).pipe(
       take(1),
       map(data => {
@@ -747,7 +807,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private isSelectedAsset(asset: any): number{
     let index: number = -1
     let assetIdProperty =  'artstorid'
-
+    
     // some services return assets with objectId instead of artstorid, so check the first one and use that
     if (this.selectedAssets[0] && !this.selectedAssets[0].hasOwnProperty('artstorid')) {
       assetIdProperty = 'objectId'
@@ -755,8 +815,22 @@ export class AssetGrid implements OnInit, OnDestroy {
     let len = this.selectedAssets.length
     for (let i = 0; i < len; i++){
       if (this.selectedAssets[i][assetIdProperty] === asset[assetIdProperty]){
-        index = i
-        break
+        
+        // Also consider zoom detail for exact match on assets
+        let zoomMatched: boolean = true
+        if(asset.zoom){
+          let selectedAssetZoomObj = this.selectedAssets[i].zoom ? this.selectedAssets[i].zoom : {}
+          if(JSON.stringify(asset.zoom) !== JSON.stringify(selectedAssetZoomObj)){
+            zoomMatched = false
+          }
+        } else if (this.selectedAssets[i].zoom) {
+          zoomMatched = false
+        }
+
+        if(zoomMatched) {
+          index = i
+          break
+        }
       }
     }
     return index
@@ -857,5 +931,35 @@ export class AssetGrid implements OnInit, OnDestroy {
       dropdownElement.children[0].setAttribute('aria-expanded', 'false')
       dropdownElement.children[1].classList.remove('show')
     }
+  }
+
+  /**
+   * Set showIgDescBool to be true when
+   * - A description exists
+   * - View hasn't changed to hide the description
+   * Set animationFinished 400ms after setting showIgDescBool to be true
+   * This is to make sure we display the details when animation is finished
+   */
+  public toggleShowIgDesc(noAnimation?: boolean): void {
+    if (!this.showIgDescBool && this.igDisplay && ((this.igMetaData.description && this.igMetaData.description.length > 0) || (this.igMetaData.tags && this.igMetaData.tags.length > 0)) && !this.reorderMode) {
+      this.showIgDescBool = true;
+      if (noAnimation) {
+        this.animationFinished = true
+      } else {
+        setTimeout(()=>{
+          this.animationFinished = true
+        }, 400)
+      }
+    } else {
+      this.showIgDescBool = false
+      this.animationFinished = false
+    }
+  }
+
+  /**
+   * Encode Tag: Encode the tag before using it for search
+   */
+  public encodeTag(tag) {
+    return encodeURIComponent(tag);
   }
 }

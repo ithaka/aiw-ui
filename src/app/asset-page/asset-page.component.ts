@@ -1,15 +1,14 @@
 import { Component, OnInit, OnDestroy, ViewChild, HostListener, ElementRef } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
-import { DomSanitizer, SafeUrl, Meta } from '@angular/platform-browser'
-import { Subscription, TimeInterval } from 'rxjs'
+import { Meta } from '@angular/platform-browser'
+import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 import { ArtstorViewerComponent } from './artstor-viewer/artstor-viewer.component'
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
 // Project Dependencies
-import { Asset } from './asset'
+import { Asset, ImageZoomParams } from '../shared'
 import {
     AuthService,
     AssetService,
@@ -26,7 +25,6 @@ import {
 import { TitleService } from '../shared/title.service'
 import { ScriptService } from '../shared/script.service'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
-import { TourStep } from '../shared/tour/tour.component'
 import { APP_CONST } from '../app.constants'
 import { AppConfig } from '../app.service'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
@@ -42,13 +40,16 @@ export class AssetPage implements OnInit, OnDestroy {
 
     @ViewChild(ArtstorViewerComponent) public assetViewer
 
-    @ViewChild("generatedImgURL", {read: ElementRef}) generatedImgURLElement: ElementRef
+  @ViewChild("copyUrlInput", {read: ElementRef}) generatedImgURLElement: ElementRef
 
-    
+
 
     public user: any
     public userSessionFresh: boolean = false
     public assetIds: string[] = []
+
+    // Whether user accepted download terms
+    public acceptedTerms: boolean = false
 
     /** controls whether or not the modals are visible */
     public showAgreeModal: boolean = false
@@ -67,13 +68,17 @@ export class AssetPage implements OnInit, OnDestroy {
     public rightsLink: string = ''
     public rightsImg: string = ''
 
+    // Toast Variables
+    public showToast: boolean = false
+    public toastType: string = ''
+    public toastHTML: string = ''
+
     // Variables related to how we call for metadata
     public assetIdProperty: string = 'artstorid'
     public fromOpenLibrary: boolean = false
 
     // Feature Flags
     public relatedResFlag: boolean = false
-    public solrMetadataFlag: boolean = false
     private encryptedAccess: boolean = false
     private document = document
     private URL = URL
@@ -104,14 +109,12 @@ export class AssetPage implements OnInit, OnDestroy {
     private showCopyUrl: boolean = false
     private showEditDetails: boolean = false
     private generatedImgURL: string = ''
-    private generatedBlobURL: SafeUrl | string = '' // A Blob File
-    private downloadViewLink: string = '' // IIIF View Link
+    public downloadViewLink: string = '' // IIIF View Link
     private generatedFullURL: string = ''
     // Used for agree modal input, changes based on selection
     private downloadUrl: any
     private downloadName: string
-    // Used for generated view blob url
-    private blobURL: string = ''
+
     private prevRouteParams: any = []
 
     private quizMode: boolean = false;
@@ -158,55 +161,6 @@ export class AssetPage implements OnInit, OnDestroy {
         saveFailure?: boolean
     } = {}
 
-    private steps: TourStep[] = [
-        {
-            step: 1,
-            element: ['.btn--zoomIn'],
-            popover: {
-                position: 'bottom',
-                title: '<p>1 OF 5</p><b>Zoom and pan</b>',
-                description: 'You can zoom in with this button.',
-            }
-        },
-        {
-            step: 2,
-            element: ['.btn--zoomOut'],
-            popover: {
-                position: 'bottom',
-                title: '<p>2 OF 5</p><b>Zoom and pan</b>',
-                description: 'You can zoom out with this button.',
-            }
-        },
-        {
-            step: 3,
-            element: ['.btn--zoomFit'],
-            popover: {
-                position: 'bottom',
-                title: '<p>3 OF 5</p><b>Zoom and pan</b>',
-                description: 'You can fit the image with this button.',
-            }
-        },
-        {
-            step: 4,
-            element: ['.btn--fullScreen'],
-            popover: {
-                position: 'bottom',
-                title: '<p>4 OF 5</p><b>View full image and compare</b>',
-                description: 'If you came to this page from search or a group, you can enter fullscreen mode to see it side-by-side with others.'
-            }
-        },
-        {
-            step: 5,
-            element: ['.driver-find-group-btn'],
-            popover: {
-                position: 'bottom',
-                title: '<p>5 OF 5</p><b>Save the image for later</b>',
-                description: 'If you want to save the iamge for later, click this button.',
-            }
-        }
-    ]
-    private showTour: boolean = false
-
     // Flag for multiview items, true if the asset contains multiview items
     private multiviewItems: boolean = false
 
@@ -214,6 +168,11 @@ export class AssetPage implements OnInit, OnDestroy {
     private showPageToolTip: boolean = false
 
     private waitForFreshUser: any
+    // Map for asset zoom values corresponding to the asset index in assets array
+    public indexZoomMap: ImageZoomParams[] = []
+
+    public addGroupTooltipOpts: any = {}
+    public addGrpTTDismissed: boolean = false
 
     constructor(
         public _appConfig: AppConfig,
@@ -231,7 +190,6 @@ export class AssetPage implements OnInit, OnDestroy {
         private angulartics: Angulartics2,
         private _title: TitleService,
         private scriptService: ScriptService,
-        private _sanitizer: DomSanitizer,
         _fb: FormBuilder,
         private _storage: ArtstorStorageService,
         private _dom: DomUtilityService,
@@ -253,99 +211,27 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.user = this._auth.getUser();
-        this.solrMetadataFlag = this._flags.solrMetadata
-
-        // // Trigger userinfo call
-        this._auth.getUserInfo().pipe(take(1)).subscribe(user => {
-            // Manual user info call returned
-            this.user = user
-            console.log("Manually refreshed user received! Status: " + user.status)
-            this.userSessionFresh = true
-        })
-
-        // sets up subscription to allResults, which is the service providing thumbnails
+        this.addGrpTTDismissed = this._storage.getLocal('addGrpTTDismissed') ? this._storage.getLocal('addGrpTTDismissed') : false
         this.subscriptions.push(
-            this._auth.currentUser.subscribe((user) => {
-                this.user = user
-                console.log("Current User subscription returned! Status: " + user.status)
-                // userSessionFresh: Do not attempt to load asset until we know user object is fresh
-                if (!this.userSessionFresh && this._auth.userSessionFresh) {
-                    this.userSessionFresh = true
-                }
+            this._flags.flagUpdates.subscribe((flags) => {
+                this.relatedResFlag = flags.relatedResFlag ? true : false
             }),
-            this._assets.allResults.subscribe((allResults) => {
-                console.log("allResults subscription returned")
-                if (allResults.thumbnails) {
-                    // Set asset id property to reference
-                    this.assetIdProperty = (allResults.thumbnails[0] && allResults.thumbnails[0].objectId) ? 'objectId' : 'artstorid'
-
-                    this.prevAssetResults.thumbnails = allResults.thumbnails
-                    this.restrictedAssetsCount = allResults.restricted_thumbnails.length
-                    if (this.loadArrayFirstAsset) {
-                        this.loadArrayFirstAsset = false;
-                        if ((this.prevAssetResults) && (this.prevAssetResults.thumbnails.length > 0)) {
-                            /***
-                             * If current asset is not present in prevAssetResults page,
-                             * load next asset page and evaluate current asset index
-                             */
-                            this.assetIndex = this.currentAssetIndex();
-                            this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
-
-                            let queryParams = {}
-                            if (this.prevRouteTS) {
-                                queryParams['prevRouteTS'] = this.prevRouteTS
-                            }
-                            if (this.assetGroupId) {
-                                queryParams['groupId'] = this.assetGroupId
-                            }
-                            this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0][this.assetIdProperty], queryParams]);
-                        }
-                    }
-                    else if (this.loadArrayLastAsset) {
-                        this.loadArrayLastAsset = false;
-                        if ((this.prevAssetResults.thumbnails) && (this.prevAssetResults.thumbnails.length > 0)) {
-                            /***
-                             * If current asset is not present in prevAssetResults page,
-                             * load previous asset page and evaluate current asset index
-                             */
-                            this.assetIndex = this.currentAssetIndex();
-                            this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
-
-                            let queryParams = {}
-                            if (this.prevRouteTS) {
-                                queryParams['prevRouteTS'] = this.prevRouteTS
-                            }
-                            if (this.assetGroupId) {
-                                queryParams['groupId'] = this.assetGroupId
-                            }
-                            this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1][this.assetIdProperty], queryParams]);
-                        }
-                    }
-                    else {
-                        // this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
-                        this.assetIndex = this.currentAssetIndex();
-                        this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
-                    }
-                }
-            })
-        );
-
-        this.subscriptions.push(
             this.route.params.subscribe((routeParams) => {
                 this.assetGroupId = routeParams['groupId']
                 // Find feature flags
-                if (routeParams && routeParams['featureFlag']) {
-                    this._flags[routeParams['featureFlag']] = true
-                    this.relatedResFlag = this._flags['related-res-hack'] ? true : false
-                    if (routeParams['featureFlag'] === 'tour') {
-                        this.showTour = true
-                    }
-                    if (routeParams['featureFlag'] === 'solrMetadata') {
-                        this.solrMetadataFlag = true
-                    }
+                this._flags.readFlags(routeParams)
 
+                // If the current asset is a saved detail then save the zoom params in indexZoomMap
+                if (routeParams['x'] && routeParams['y'] && routeParams['w'] && routeParams['h']) {
+                    this.indexZoomMap[0] = {
+                        viewerX: parseInt(routeParams['x']),
+                        viewerY: parseInt(routeParams['y']),
+                        pointWidth: parseInt(routeParams['w']),
+                        pointHeight: parseInt(routeParams['h']),
+                        index: 0
+                    }
                 } else {
-                    this.relatedResFlag = false
+                    this.indexZoomMap[0] = {}
                 }
 
                 if (routeParams['encryptedId']) {
@@ -410,6 +296,75 @@ export class AssetPage implements OnInit, OnDestroy {
             })
         );
 
+
+
+        // sets up subscription to allResults, which is the service providing thumbnails
+        this.subscriptions.push(
+            this._auth.currentUser.subscribe((user) => {
+                // console.log("User subscription returned")
+                this.user = user
+                // userSessionFresh: Do not attempt to load asset until we know user object is fresh
+                if (!this.userSessionFresh && this._auth.userSessionFresh) {
+                    this.userSessionFresh = true
+                }
+            }),
+            this._assets.allResults.subscribe((allResults) => {
+                // console.log("allResults subscription returned")
+                if (allResults.thumbnails) {
+                    // Set asset id property to reference
+                    this.assetIdProperty = (allResults.thumbnails[0] && allResults.thumbnails[0].objectId) ? 'objectId' : 'artstorid'
+
+                    this.prevAssetResults.thumbnails = allResults.thumbnails
+                    this.restrictedAssetsCount = allResults.restricted_thumbnails.length
+                    if (this.loadArrayFirstAsset) {
+                        this.loadArrayFirstAsset = false;
+                        if ((this.prevAssetResults) && (this.prevAssetResults.thumbnails.length > 0)) {
+                            /***
+                             * If current asset is not present in prevAssetResults page,
+                             * load next asset page and evaluate current asset index
+                             */
+                            this.assetIndex = this.currentAssetIndex();
+                            this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
+
+                            let queryParams = {}
+                            if (this.prevRouteTS) {
+                                queryParams['prevRouteTS'] = this.prevRouteTS
+                            }
+                            if (this.assetGroupId) {
+                                queryParams['groupId'] = this.assetGroupId
+                            }
+                            this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0][this.assetIdProperty], queryParams]);
+                        }
+                    }
+                    else if (this.loadArrayLastAsset) {
+                        this.loadArrayLastAsset = false;
+                        if ((this.prevAssetResults.thumbnails) && (this.prevAssetResults.thumbnails.length > 0)) {
+                            /***
+                             * If current asset is not present in prevAssetResults page,
+                             * load previous asset page and evaluate current asset index
+                             */
+                            this.assetIndex = this.currentAssetIndex();
+                            this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
+
+                            let queryParams = {}
+                            if (this.prevRouteTS) {
+                                queryParams['prevRouteTS'] = this.prevRouteTS
+                            }
+                            if (this.assetGroupId) {
+                                queryParams['groupId'] = this.assetGroupId
+                            }
+                            this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1][this.assetIdProperty], queryParams]);
+                        }
+                    }
+                    else {
+                        // this.totalAssetCount = this.prevAssetResults.count ? this.prevAssetResults.count : this.prevAssetResults.thumbnails.length;
+                        this.assetIndex = this.currentAssetIndex();
+                        this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
+                    }
+                }
+            })
+        );
+
         // Get latest set of results with at least one asset
         this.prevAssetResults = this._assets.getRecentResults()
 
@@ -444,15 +399,19 @@ export class AssetPage implements OnInit, OnDestroy {
         // MS Browser Agent ?
         this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
 
-      // Load Ethnio survey
-      // if (this._appConfig.config.siteID !== 'SAHARA') {
-      //   this.scriptService.loadScript('ethnio-survey')
-      // }
-
+        // Set options for add to group tooltip component
+        this.addGroupTooltipOpts = {
+            new: true,
+            heading: 'Add details to groups',
+            bodyText: 'Zoom in on any image and add the detail to a group to refer back to later.',
+            learnMoreURL: 'https://support.artstor.org'
+        }
     } // OnInit
 
     ngOnDestroy() {
         this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+        // Clear asset info from data layer
+        this.trackContentDataLayer(<Asset>{})
     }
 
 
@@ -487,7 +446,8 @@ export class AssetPage implements OnInit, OnDestroy {
             this.assets[assetIndex] = asset
             if (assetIndex == 0) {
                 let tileSource: any = asset.tileSource
-                this.multiviewItems =  Array.isArray(tileSource) ? true : false
+                // We have "single view" items that were previously multiviews, so values are still in an array
+                this.multiviewItems =  (Array.isArray(tileSource) && tileSource.length > 1) ? true : false
                 this._title.setTitle(asset.title)
                 this.meta.updateTag({name: 'DC.type', content: 'Artwork'})
                 this.meta.updateTag({name: 'DC.title', content: asset.title})
@@ -530,25 +490,52 @@ export class AssetPage implements OnInit, OnDestroy {
 
                 // Update OGP meta tags
                 this.meta.updateTag({ property: 'og:title', content: asset.title }, 'property="og:title"')
-                this.meta.updateTag({ property: 'og:description', content: asset.formattedMetadata && asset.formattedMetadata['Description'] && asset.formattedMetadata['Description'][0] ? asset.formattedMetadata['Description'][0] : '' }, 'property="og:description"')
-                this.meta.updateTag({ property: 'og:url', content: this._assets.getShareLink(asset.id) }, 'property="og:url"')
+                this.meta.updateTag({ property: 'og:description', content: asset.formattedMetadata['Description'] && asset.formattedMetadata['Description'][0] ? asset.formattedMetadata['Description'][0] : '' }, 'property="og:description"')
+                this.meta.updateTag({ property: 'og:url', content: this._assets.getShareLink(asset.id, this.encryptedAccess || this.fromOpenLibrary) }, 'property="og:url"')
                 this.meta.updateTag({ property: 'og:image', content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
+                // Update content info in GTM data layer
+                this.trackContentDataLayer(asset)
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
             this.updateMetadataFromLocal(this._localPC.getAsset(parseInt(this.assets[0].SSID)))
-            // Set download link
-            this.setDownloadFull()
-            
-            if (this.assets[0].formattedMetadata && this.assets[0].formattedMetadata.Rights) {
-                // Loop over Rights fields and set rights statement values via isRightStatement
-                for (let i = 0; i < this.assets[0].formattedMetadata.Rights.length; i++) {
-                    let rightsField = this.assets[0].formattedMetadata.Rights[i]
-                    this.isRightStatement(rightsField)
-                }
-            }   
         }
-        
+        // Set download link
+        this.setDownloadFull()
+
+        if (this.assets[0] && this.assets[0].formattedMetadata && this.assets[0].formattedMetadata.Rights) {
+            // Loop over Rights fields and set rights statement values via isRightStatement
+            for (let i = 0; i < this.assets[0].formattedMetadata.Rights.length; i++) {
+                let rightsField = this.assets[0].formattedMetadata.Rights[i]
+                this.isRightStatement(rightsField)
+            }
+        }
+    }
+
+    /**
+     * Push asset info into content data layer
+     */
+    trackContentDataLayer(asset: Asset) {
+        // Build content variables 
+        let contentGTMVars = {
+            'itemName': asset.title || '',
+            'itemID': asset.id || '',
+            'itemType': asset.typeName || '',
+            'viewCount': this.multiviewItems ? (asset.tileSource && asset.tileSource.length) : 1,
+            'collectionName': asset.collectionName || '',
+            'collectionType': asset.collectionType || '',
+            'classification': (asset.formattedMetadata && asset.formattedMetadata['Classification']) || '',
+            'geography': (asset.formattedMetadata && asset.formattedMetadata['Geography']) || '',
+        }
+        // Push content variables to GTM data layer, and fire "itemOpen" event
+        this.angulartics.eventTrack.next( { properties : { 
+            event: 'itemOpen',
+            category: this.multiviewItems ? 'multiview' : 'itemview',
+            label: asset.id || '',
+            gtmCustom : {
+              "content" : contentGTMVars
+            }
+          } });
     }
 
     /**
@@ -561,16 +548,18 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.pagination.page = this.originPage
                 this._assets.loadAssetPage(this.pagination.page)
             }
-            // this.assets.splice(1)
-            // this.assetIds.splice(1)
+            // Reduce number of loaded assets to one
+            this.assets = [this.assets[0]]
+            this.assetIds = [this.assetIds[0]]
+            this.indexZoomMap = [this.indexZoomMap[0]]
         } else if (Array.isArray(this.assets[0].tileSource)){ // Log GA event for opening a multi view item in Fullscreen
-            this.angulartics.eventTrack.next({ action: 'multiViewItemFullscreen', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
+            this.angulartics.eventTrack.next({ properties: { event: 'multiViewItemFullscreen', category: 'multiview', label: this.assets[0].id } });
         }
         else {
             // Make sure we only send one ga event when going to fullscreen mode
             if (this.isFullscreen !== isFullscreen) {
                 // Add Google Analytics tracking to "fullscreen" button
-                this.angulartics.eventTrack.next({ action: 'Enter Fullscreen', properties: { label: this.assetIds[0] } })
+                this.angulartics.eventTrack.next({ properties: { event: 'Enter Fullscreen', label: this.assetIds[0] } })
             }
         }
         this.isFullscreen = isFullscreen
@@ -605,14 +594,14 @@ export class AssetPage implements OnInit, OnDestroy {
      * - sets url used by agree modal
      */
     setDownloadView(): void {
-        this.downloadUrl = this.isMSAgent ? this.downloadViewLink : this.generatedBlobURL
+        this.downloadUrl = this.downloadViewLink
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
     }
 
     // Track download file
     trackDownloadImage(): void {
-        this.angulartics.eventTrack.next({ action: 'downloadAsset', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
+        this.angulartics.eventTrack.next({ properties: { event: 'downloadAsset', category: 'download', label: this.assets[0].id } });
     }
 
     // Track download view
@@ -621,12 +610,12 @@ export class AssetPage implements OnInit, OnDestroy {
             eventType: 'artstor_image_download_view',
             item_id: this.assets[0].id
         })
-        this.angulartics.eventTrack.next({ action: 'downloadView', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
+        this.angulartics.eventTrack.next({ properties: { event: 'downloadView', category: 'download', label: this.assets[0].id } });
     }
 
     // Track metadata collection link click
     trackCollectionLink(collectionName: string): void {
-      this.angulartics.eventTrack.next({ action: 'metadata_collection_link', properties: { category: this._auth.getGACategory(), label: collectionName } });
+      this.angulartics.eventTrack.next({ properties: { event: 'metadata_collection_link', category: 'metadata', label: collectionName } });
     }
 
     /**
@@ -776,35 +765,67 @@ export class AssetPage implements OnInit, OnDestroy {
         if (this.assetIds[0]) {
             for (let i = 0; i < this.prevAssetResults.thumbnails.length; i++) {
                 // Select the thumbnail if its arstor_id is in assetIds
-                if (this.assetIds.indexOf(this.prevAssetResults.thumbnails[i][this.assetIdProperty]) > -1) {
-                    this.prevAssetResults.thumbnails[i].selected = true
-                    assetIndex = i
-                    assetFound = true
+                let index: number = this.assetIds.indexOf(this.prevAssetResults.thumbnails[i][this.assetIdProperty])
+                if (index > -1) {
+                    let zoomMatched: boolean = true
+                    if(this.prevAssetResults.thumbnails[i].zoom){
+                        if(JSON.stringify(this.prevAssetResults.thumbnails[i].zoom) !== JSON.stringify(this.indexZoomMap[index])){
+                            zoomMatched = false
+                        }
+                    } else if (this.indexZoomMap[index] && this.indexZoomMap[index].viewerX) {
+                        zoomMatched = false
+                    }
+
+                    if(zoomMatched) {
+                        // this.prevAssetResults.thumbnails[i].selected = true
+                        assetIndex = i
+                        assetFound = true
+                    }
                 }
-                else {
-                    this.prevAssetResults.thumbnails[i].selected = false
-                }
+
+
+                // if (this.assetIds.indexOf(this.prevAssetResults.thumbnails[i][this.assetIdProperty]) > -1) {
+                //     this.prevAssetResults.thumbnails[i].selected = true
+                //     assetIndex = i
+                //     assetFound = true
+                // }
+                // else {
+                //     this.prevAssetResults.thumbnails[i].selected = false
+                // }
             }
         }
         assetIndex = assetFound ? assetIndex : -1
         return assetIndex
     }
 
-    private addAssetToIG(): void {
+    private addAssetToIG(detailView?: boolean): void {
 
-        if (this.user && this.user.isLoggedIn) {
-            // Check if the logged-in user has private image groups
-            this._group.getAll('created').pipe(
-              take(1),
-              map(res => {
-                if (res.groups && (res.groups.length > 0)) {
-                    this.showAddModal = true;
-                } else {
-                    this.showCreateGroupModal = true;
+        if (this.user && this.user.isLoggedIn) {            
+            if(detailView) {
+                // Get Bounds from OSD viewer for the saved detail
+                let bounds = this.assetViewer.osdViewer.viewport.viewportToImageRectangle(this.assetViewer.osdViewer.viewport.getBounds(true))
+                // Make sure the bounds are adjusted for the negative x and y values
+                bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
+                bounds['height'] = bounds['y'] < 0 ? bounds['height'] + bounds['y'] : bounds['height']
+                // Make sure the bounds are within the content size for the IIIF endpoint.
+                bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']
+                bounds['height'] = bounds['height'] > this.assets[0].viewportDimensions.contentSize['y'] ? this.assets[0].viewportDimensions.contentSize['y'] : bounds['height']
+
+                let zoomObj = {
+                    'viewerX': bounds['x'],
+                    'viewerY': bounds['y'],
+                    'pointWidth': bounds['width'],
+                    'pointHeight': bounds['height'],
+                    'index': 0
                 }
-              },
-              (err) => { console.error(err); }
-            )).subscribe()
+                
+                this.assets[0]['zoom'] = this._group.setZoomDetails(zoomObj)
+            } else {
+                delete this.assets[0]['zoom']
+            }
+
+            this.showAddModal = true
+            
         } else {
           this.showLoginModal = true;
         }
@@ -826,6 +847,14 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
                 if (this.assetGroupId) {
                     queryParams['groupId'] = this.assetGroupId
+                }
+
+                // Add zoom query params for saved views
+                if(this.prevAssetResults.thumbnails[prevAssetIndex]['zoom']) {
+                    queryParams['x'] = this.prevAssetResults.thumbnails[prevAssetIndex]['zoom'].viewerX
+                    queryParams ['y'] = this.prevAssetResults.thumbnails[prevAssetIndex]['zoom'].viewerY
+                    queryParams['w'] = this.prevAssetResults.thumbnails[prevAssetIndex]['zoom'].pointWidth
+                    queryParams['h'] = this.prevAssetResults.thumbnails[prevAssetIndex]['zoom'].pointHeight
                 }
 
                 this._router.navigate(['/asset', this.prevAssetResults.thumbnails[prevAssetIndex][this.assetIdProperty], queryParams]);
@@ -853,6 +882,14 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
                 if (this.assetGroupId) {
                     queryParams['groupId'] = this.assetGroupId
+                }
+
+                // Add zoom query params for saved views
+                if(this.prevAssetResults.thumbnails[nextAssetIndex]['zoom']) {
+                    queryParams['x'] = this.prevAssetResults.thumbnails[nextAssetIndex]['zoom'].viewerX
+                    queryParams ['y'] = this.prevAssetResults.thumbnails[nextAssetIndex]['zoom'].viewerY
+                    queryParams['w'] = this.prevAssetResults.thumbnails[nextAssetIndex]['zoom'].pointWidth
+                    queryParams['h'] = this.prevAssetResults.thumbnails[nextAssetIndex]['zoom'].pointHeight
                 }
 
                 this._router.navigate(['/asset', this.prevAssetResults.thumbnails[nextAssetIndex][this.assetIdProperty], queryParams]);
@@ -894,15 +931,16 @@ export class AssetPage implements OnInit, OnDestroy {
 
     /**
      * Adds a link to the current asset page to the user's clipboard
+     * @requires browser
      */
     private copyGeneratedImgURL(): void {
-        // TO-DO: Only reference document client-side
+
         let statusMsg = '';
         let input: any;
         if (this.generatedImgURLElement && this.generatedImgURLElement.nativeElement){
             input = this.generatedImgURLElement.nativeElement
           }
-        // let input: any = this._dom.byId('generatedImgURL');
+
         let iOSuser: boolean = false;
 
         this.showCopyUrl = true;
@@ -914,21 +952,21 @@ export class AssetPage implements OnInit, OnDestroy {
             iOSuser = true
         }
 
-        // setTimeout(() => {
-        //     input.select();
-        //     if (document.queryCommandSupported('copy') && !iOSuser) {
-        //         document.execCommand('copy', false, null)
-        //         statusMsg = 'Image URL successfully copied to the clipboard!';
-        //     }
-        //     else {
-        //         statusMsg = 'Select the above link, and copy to share!';
-        //     }
-        //     this.copyURLStatusMsg = statusMsg;
-        // }, 50);
+        setTimeout(() => {
+            input.select();
+            if (document.queryCommandSupported('copy') && !iOSuser) {
+                document.execCommand('copy', false, null)
+                statusMsg = 'Image URL successfully copied to the clipboard!';
+            }
+            else {
+                statusMsg = 'Select the above link, and copy to share!';
+            }
+            this.copyURLStatusMsg = statusMsg;
+        }, 50);
     }
 
     // Add or remove assets from Assets array for comparison in full screen
-    private toggleAsset(asset: any): void {
+    private toggleAsset(asset: any, index?: number): void {
         // ADD or REMOVE to assets and assetIds arrays
         let add = true;
         // Groups/items services use "objectid"
@@ -936,32 +974,79 @@ export class AssetPage implements OnInit, OnDestroy {
         if (!asset.id || asset['artstorid']) {
             asset.id = asset['artstorid'] || asset['objectId']
         }
-        // remove from assetIds
-        let assetIdIndex = this.assetIds.indexOf(asset.id)
+        // remove from assetIds (only if it contains more than one assetids)
+        // let assetIdIndex = this.assetIds.indexOf(asset.id)
+        let assetIdIndex = index ? index : this.isSelectedAsset(asset)
         if (assetIdIndex > -1) {
-            this.assetIds.splice(assetIdIndex, 1)
-            add = false
-        }
-        // remove from assets
-        this.assets.forEach((viewAsset, i) => {
-            if ([viewAsset.id, viewAsset['artstorid'], viewAsset['objectId']].indexOf(asset.id) > -1) {
-                asset.selected = false;
-                this.assets.splice(i, 1);
-                add = false;
-                // Set 'selected' to 'false' for the asset in asset drawer
+            // If both the id and zoom values match and more than one assets are selected, then remove selected asset and corresponding zoom object
+            if (this.assetIds.length > 1) {
                 this.prevAssetResults.thumbnails.forEach((thumbnail, i) => {
-                    if (asset.id == thumbnail.id) {
-                        thumbnail.selected = false;
+                    if (asset.id == thumbnail.objectId) {
+                        let zoomMatched: boolean = true
+                        if(thumbnail.zoom){
+                            // Corresponding zoomObj for the toggled asset
+                            let assetZoomObj = this.indexZoomMap[assetIdIndex]
+                            if(JSON.stringify(thumbnail.zoom) !== JSON.stringify(assetZoomObj)){
+                                zoomMatched = false
+                            }
+                        } else if (this.indexZoomMap[assetIdIndex] && this.indexZoomMap[assetIdIndex].viewerX) {
+                            zoomMatched = false
+                        }
+
+                        // If the zoom values match after the ids match, then mark the thumbnail as deselected
+                        if(zoomMatched) {
+                            thumbnail.selected = false
+                        }
                     }
                 });
+                
+                this.assetIds.splice(assetIdIndex, 1)
+                this.indexZoomMap.splice(assetIdIndex, 1)
+                this.assets.splice(assetIdIndex, 1)
 
                 // Once the primary asset (assets[0]) is removed change the URL (navigate) to the new primary asset
-                if (i === 0) {
-                    this._router.navigate(['/asset', this.assetIds[0]]);
+                if (assetIdIndex === 0) {
+                    let queryParams = {}
+                    if (this.prevRouteTS) {
+                        queryParams['prevRouteTS'] = this.prevRouteTS
+                    }
+                    if (this.assetGroupId) {
+                        queryParams['groupId'] = this.assetGroupId
+                    }
+                    if(this.indexZoomMap[0] && this.indexZoomMap[0].viewerX){
+                        queryParams['x'] = this.indexZoomMap[0].viewerX
+                        queryParams['y'] = this.indexZoomMap[0].viewerY
+                        queryParams['w'] = this.indexZoomMap[0].pointWidth
+                        queryParams['h'] = this.indexZoomMap[0].pointHeight
+                    }
+                    this._router.navigate(['/asset', this.assetIds[0], queryParams]);
                 }
-
             }
-        })
+            add = false
+        }
+        // remove from assets (only if it contains more than one asset)
+        // this.assets.forEach((viewAsset, i) => {
+        //     if ([viewAsset.id, viewAsset['artstorid'], viewAsset['objectId']].indexOf(asset.id) > -1 && this.assets.length > 1) {
+        //         asset.selected = false;
+        //         this.assets.splice(i, 1);
+        //         add = false;
+        //         // Set 'selected' to 'false' for the asset in asset drawer
+        //         this.prevAssetResults.thumbnails.forEach((thumbnail, i) => {
+        //             if (asset.id == thumbnail.id) {
+        //                 thumbnail.selected = false;
+        //             }
+        //         });
+
+        //         // Once the primary asset (assets[0]) is removed change the URL (navigate) to the new primary asset
+        //         // if (i === 0) {
+        //         //     this._router.navigate(['/asset', this.assetIds[0]]);
+        //         // }
+
+        //         // Remove the zoom object for the asset
+        //         // this.indexZoomMap.splice(i, 1)
+
+        //     }
+        // })
         if (this.assets.length >= 10) {
             add = false;
             // TO-DO: Show Error message
@@ -969,9 +1054,18 @@ export class AssetPage implements OnInit, OnDestroy {
         if (add == true) {
             asset.selected = true;
             this.assetIds.push(asset[this.assetIdProperty]);
+            // Push the zoom object for the asset
+            let zoomObj: ImageZoomParams = asset.zoom ? {
+                viewerX: parseInt(asset.zoom['viewerX']),
+                viewerY: parseInt(asset.zoom['viewerY']),
+                pointWidth: parseInt(asset.zoom['pointWidth']),
+                pointHeight: parseInt(asset.zoom['pointHeight']),
+                index: 0
+            }  : {}
+            this.indexZoomMap.push(zoomObj)
 
             // Add GA tracking to select image to compare action
-            this.angulartics.eventTrack.next({ action: 'Compare image', properties: { label: this.assetIds.length } })
+            this.angulartics.eventTrack.next({ properties: { event: 'Compare image', label: this.assetIds.length } })
         }
 
         // log compared assets
@@ -980,7 +1074,7 @@ export class AssetPage implements OnInit, OnDestroy {
             item_id: asset.id,
             additional_fields: {
                 compared_assets: this.assetIds,
-                action: add ? 'add' : 'remove'
+                event: add ? 'add' : 'remove'
             }
         })
     }
@@ -1036,6 +1130,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
             this.assets.splice(1);
             this.assetIds.splice(1);
+            this.indexZoomMap.splice(1);
+
             for (let i = 0; i < this.prevAssetResults.thumbnails.length; i++) {
                 this.prevAssetResults.thumbnails[i].selected = false;
             }
@@ -1052,34 +1148,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * runDownloadView handles the DownloadView results from AssetSearch.downloadViewBlob
-     * @param dlink String from generateDownloadView
-     */
-    private runDownloadView(dlink: string): Subscription {
-      // Download generated jpg as local blob file
-      return this._search.downloadViewBlob(dlink).pipe(
-        take(1),
-        map(blob => {
-          if (blob.size > 0) {
-            this.blobURL = this.URL.createObjectURL(blob)
-            this.generatedBlobURL = this._sanitizer.bypassSecurityTrustUrl(this.blobURL)
-            this.downloadViewReady = true
-            this.downloadLoading = false
-          }},
-          (err) => {
-            this.downloadLoading = false
-            this.downloadViewReady = false
-            this.showServerErrorModal = true
-          }
-        )).subscribe()
-    }
-
-    /** Calls downloadViewBlob in AssetSearch service to retrieve blob file,
-        and then sets generatedBlobUrl to this local reference. **/
-
     private genDownloadViewLink() {
-
         // Do nothing if this is not an image
         if (!this.assets[0].typeName || !this.assets[0].typeName.length) {
             return
@@ -1088,46 +1157,32 @@ export class AssetPage implements OnInit, OnDestroy {
         let asset = this.assets[0]
         this.downloadLoading = true // sets to false on success of runDownloadView
 
-        // Revoke the browser reference to a previous blob URL, needs 100ms pause
-        if (this.blobURL.length) {
-            setTimeout(() => {
-              this.URL.revokeObjectURL(this.blobURL)
-            }, 100);
-        }
-
         if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
-            // Full source image size (max output possible)
-            let fullWidth = Math.floor(asset.viewportDimensions.contentSize.x)
-            let fullY = Math.floor(asset.viewportDimensions.contentSize.y)
-            // Zoom is a factor of the image's full width
-            let zoom = Math.floor(asset.viewportDimensions.zoom)
-            // Viewport dimensions (size of cropped image)
-            let viewX = Math.floor(asset.viewportDimensions.containerSize.x)
-            let viewY = Math.floor(asset.viewportDimensions.containerSize.y)
-            // Dimensions of the source size of the cropped image
-            let zoomX = Math.floor(fullWidth / zoom)
-            let zoomY = Math.floor(zoomX * (viewY / viewX))
-            // Make sure zoom area is not larger than source, or else error
-            if (zoomX > fullWidth) {
-                zoomX = fullWidth
-            }
-            if (zoomY > fullY) {
-                zoomY = fullY
-            }
-            // Positioning of the viewport's crop
-            let xOffset = Math.floor((asset.viewportDimensions.center.x * fullWidth) - (zoomX / 2))
-            let yOffset = Math.floor((asset.viewportDimensions.center.y * fullWidth) - (zoomY / 2))
+            // Get Bounds from OSD viewer for the saved detail
+            let bounds = this.assetViewer.osdViewer.viewport.viewportToImageRectangle(this.assetViewer.osdViewer.viewport.getBounds(true))
+
+            // Make sure the bounds are adjusted for the negative x and y values
+            bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
+            bounds['height'] = bounds['y'] < 0 ? bounds['height'] + bounds['y'] : bounds['height']
+
+            // Make sure the bounds are within the content size for the IIIF endpoint.
+            bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']
+            bounds['height'] = bounds['height'] > this.assets[0].viewportDimensions.contentSize['y'] ? this.assets[0].viewportDimensions.contentSize['y'] : bounds['height']
 
             // Generate the view url from tilemap service
-            this.downloadViewLink = asset.tileSource.replace('info.json', '') + xOffset + ',' + yOffset + ',' + zoomX + ',' + zoomY + '/' + viewX + ',' + viewY + '/0/native.jpg'
+            let tilesourceStr = Array.isArray(asset.tileSource) ? asset.tileSource[0] : asset.tileSource
+            // Attach zoom parameters to tilesource
+            tilesourceStr = tilesourceStr.replace('info.json', '') + Math.round( bounds['x'] ) + ',' + Math.round( bounds['y'] ) + ',' + Math.round( bounds['width'] ) + ',' + Math.round( bounds['height'] ) + '/full/0/native.jpg'
+            // Ensure iiif parameter is encoded correctly
+            tilesourceStr = tilesourceStr.replace('.fcgi%3F', '.fcgi?')
+            if (tilesourceStr.indexOf('//') == 0) {
+                tilesourceStr = 'https:' + tilesourceStr
+            }
 
-            // Disable download view link button until file is ready
-            this.downloadViewReady = false
-
-            // Call runDownloadView after 1 sec, downloads local view image blob file to browser
-            setTimeout(() => {
-              this.runDownloadView(this.downloadViewLink)
-            }, 1000);
+            tilesourceStr = this._auth.getUrl() + "/download?imgid=" + asset.id + "&url=" + encodeURIComponent( encodeURI(tilesourceStr) ) + "&iiif=true"
+            this.downloadViewLink = tilesourceStr
+            this.downloadViewReady = true
+            this.downloadLoading = false
         }
         else {
             this.downloadLoading = false
@@ -1155,7 +1210,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private toggleAssetDrawer(show: boolean) {
         this.showAssetDrawer = show
         if (Array.isArray(show && this.assets[0].tileSource)){ // Log GA event for comparing a multi view item in Fullscreen mode
-            this.angulartics.eventTrack.next({ action: 'multiViewItemCompare', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } });
+            this.angulartics.eventTrack.next({ properties: { event: 'multiViewItemCompare', category: 'multiview', label: this.assets[0].id } });
         }
     }
 
@@ -1413,17 +1468,17 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private multiViewPageViaArrow(): void{
         if (this.isFullscreen){
-            this.angulartics.eventTrack.next({ action: 'multiViewFullscreenPageViaArrow', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
+            this.angulartics.eventTrack.next({ properties: { event: 'multiViewFullscreenPageViaArrow', category: 'multiview', label: this.assets[0].id } })
         } else{
-            this.angulartics.eventTrack.next({ action: 'multiViewPageViaArrow', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
+            this.angulartics.eventTrack.next({ properties: { event: 'multiViewPageViaArrow', category: 'multiview', label: this.assets[0].id } })
         }
     }
 
     private multiViewPageViaThumbnail(): void{
         if (this.isFullscreen){
-            this.angulartics.eventTrack.next({ action: 'multiViewFullscreenPageViaThumbnail', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
+            this.angulartics.eventTrack.next({ properties: { event: 'multiViewFullscreenPageViaThumbnail', category: 'multiview', label: this.assets[0].id } })
         } else {
-            this.angulartics.eventTrack.next({ action: 'multiViewPageViaThumbnail', properties: { category: this._auth.getGACategory(), label: this.assets[0].id } })
+            this.angulartics.eventTrack.next({ properties: { event: 'multiViewPageViaThumbnail', category: 'multiview', label: this.assets[0].id } })
         }
     }
 
@@ -1447,6 +1502,75 @@ export class AssetPage implements OnInit, OnDestroy {
         let focusElementSelector = element.id === 'downloadViewLink' ? '#downloadAssetLink' : '#downloadAssetDropdown'
         let focusElement = <HTMLElement>(document.querySelector(focusElementSelector))
         focusElement.focus()
+    }
+
+    public handleToast(event: any): void{
+        this.toastType = event.type
+        this.toastHTML = event.stringHTML
+        this.showToast = true
+    }
+
+    public closeToast(): void{
+        setTimeout(()=>{ this.showToast = false }, 1000)
+    }
+
+    public isPrimaryAsset(asset: any): boolean{
+        let primaryAsset: boolean = true
+        let assetIdProperty =  asset['artstorid'] ? 'artstorid' : 'objectId'
+
+        if (this.assets[0].id === asset[assetIdProperty]){            
+            if(asset['zoom']){
+                let primaryAssetZoomObj = this.indexZoomMap[0]
+                if(JSON.stringify(asset['zoom']) !== JSON.stringify(primaryAssetZoomObj)){
+                    primaryAsset = false
+                }
+            } else if (this.indexZoomMap[0] && this.indexZoomMap[0].viewerX) {
+                primaryAsset = false
+            }
+        } else {
+            primaryAsset = false
+        }
+
+        return primaryAsset
+    }
+
+    private isSelectedAsset(asset: any): number{
+        let index: number = -1
+
+        for (let i = 0; i < this.assetIds.length; i++){
+          if (this.assetIds[i] === asset.id){
+            
+            // Also consider zoom detail for exact match on assets
+            let zoomMatched: boolean = true
+            if(this.indexZoomMap[i] && this.indexZoomMap[i].viewerX){
+              let selectedAssetZoomObj = this.indexZoomMap[i]
+              let assetZoomObj = asset.zoom ? asset.zoom : {}
+              if(JSON.stringify(assetZoomObj) !== JSON.stringify(selectedAssetZoomObj)){
+                zoomMatched = false
+              }
+            } else if (asset.zoom) {
+              zoomMatched = false
+            }
+    
+            if(zoomMatched) {
+              index = i
+              break
+            }
+          }
+        }
+        return index
+    }
+
+    public updatePrimaryAssetZoom(): void{
+        this.assets[0].zoom = this.indexZoomMap[0]
+    }
+
+    public closeAddGroupTooltip(): void{
+        this.addGrpTTDismissed = true
+        this._storage.setLocal('addGrpTTDismissed', this.addGrpTTDismissed)
+        
+        // Add Google Analytics tracking for "detailViewTooltipDismissed"
+        this.angulartics.eventTrack.next({ properties: { event: 'detailViewTooltipDismissed', label: this.assetIds[0] } })
     }
 
 }

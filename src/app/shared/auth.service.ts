@@ -16,8 +16,8 @@ import { AppConfig } from '../app.service'
 // For session timeout management
 import { IdleWatcherUtil } from './idle-watcher'
 import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
-import { FlagService } from './flag.service'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
+import { Angulartics2 } from 'angulartics2';
 /**
  * Controls authorization through IP address and locally stored user object
  */
@@ -30,6 +30,7 @@ export class AuthService implements CanActivate {
   public userSessionFresh: boolean = false
   public showUserInactiveModal: Subject<boolean> = new Subject(); // Set up subject observable for showing inactive user modal
   public clientHostname: string;
+  public samlAvailable: boolean = false
   private ENV: string;
   private baseUrl;
   private imageFpxUrl: string;
@@ -48,6 +49,8 @@ export class AuthService implements CanActivate {
   private currentInstitutionObj: Observable<any> = this.institutionObjSource.asObservable();
 
   private userSource: BehaviorSubject<any> = new BehaviorSubject({});
+  // private user: any = {}
+
 
   private idleState: string = 'Not started.';
 
@@ -68,14 +71,13 @@ export class AuthService implements CanActivate {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private _router: Router,
-    // private _login: LoginService,
     private _storage: ArtstorStorageService,
     private http: HttpClient,
     private location: Location,
     private _app: AppConfig,
-    private _flags: FlagService,
     private idle: Idle,
-    private injector: Injector
+    private injector: Injector,
+    private angulartics: Angulartics2
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId)
     // Set WLV and App Config variables
@@ -116,6 +118,13 @@ export class AuthService implements CanActivate {
       'sahara.artstor.org'
     ]
 
+    let samlHostnames = [
+      'library.artstor.org',
+      'stage.artstor.org',
+      'localhost',
+      'localhost:3000'
+    ]
+
     // Check domain
     if (  new RegExp(prodHostnames.join('|')).test(this.clientHostname)  ) {
       // Explicit live endpoints
@@ -144,7 +153,12 @@ export class AuthService implements CanActivate {
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
     }
-    
+
+    // Set Saml availability
+    if (new RegExp(samlHostnames.join('|')).test(this.clientHostname)) {
+      this.samlAvailable = true
+    }
+
     // Additional Local dev domains
     if (this.clientHostname.indexOf('local.sahara') > -1) {
       this.hostname = '//sahara.beta.stage.artstor.org'
@@ -205,14 +219,14 @@ export class AuthService implements CanActivate {
      this.idle.setIdle(IdleWatcherUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
      this.idle.setTimeout(IdleWatcherUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
      this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
- 
+
      this.idle.onIdleEnd.pipe(
        map(() => {
          this.idleState = 'No longer idle.';
          // We want to ensure a user is refreshed as soon as they return to the tab
          this.refreshUserSession(true)
        })).subscribe()
- 
+
      this.idle.onTimeout.pipe(
        map(() => {
          let user = this.getUser();
@@ -226,20 +240,20 @@ export class AuthService implements CanActivate {
            this.resetIdleWatcher()
          }
        })).subscribe()
- 
+
      this.idle.onIdleStart.pipe(
        map(() => {
          this.idleState = 'You\'ve gone idle!';
          let currentDateTime = new Date().toUTCString();
          this._storage.setLocal('userGoneIdleAt', currentDateTime);
        })).subscribe()
- 
+
     this.idle.onTimeoutWarning.pipe(
        map((countdown) => {
          this.idleState = 'You will time out in ' + countdown + ' seconds!'
          // console.log(this.idleState);
        })).subscribe()
- 
+
      // Init idle watcher (this will also run getUserInfo)
      this.resetIdleWatcher()
   }
@@ -422,7 +436,7 @@ export class AuthService implements CanActivate {
   /**
    * Our thumbnails come
    */
-  public getThumbUrl(compound?: boolean): string {
+  public getThumbHostname(compound?: boolean): string {
     if (compound) {
       return this.compoundUrl;
     }
@@ -477,7 +491,7 @@ export class AuthService implements CanActivate {
    * @param user The user should be an object to store in sessionstorage
    */
   public saveUser(user: any) {
-    console.log("User saved: ", user)
+    this.updateAnalyticUserProperties(user)
     // Preserve user via localstorage
     this._storage.setLocal('user', user);
     // only do these things if the user is ip auth'd or logged in and the user has changed
@@ -517,25 +531,64 @@ export class AuthService implements CanActivate {
   }
 
   /**
+   * Update GA/GTM properties
+   * - Should run whenever the user object is modified locally
+   */
+  updateAnalyticUserProperties(user: any): void {
+    let institution = this.institutionObjSource.value
+    // Push user vars to data layer
+    let authMethod = user.isLoggedIn ? 'personal' : (user.institutionId ? 'institutional' : 'unaffiliated')
+    let userGTMVars = {
+      'loggedIn' : user.isLoggedIn,
+      'userAuthentication' : authMethod,
+      'userInstitution' : institution.institutionName || '',
+      'institutionID' : user.institutionId || '',
+      'userID' : user.baseProfileId || '',
+      'userRole' : user.role || '',
+      'userDepartment' : user.dept || ''
+    }
+    // Push to GTM data layer
+    this.angulartics.eventTrack.next( { properties : { 
+      gtmCustom : {
+        "user" : userGTMVars
+      }
+    } });
+    // user : {}
+    // Set GA user properties
+    this.angulartics.setUsername.next((user.baseProfileId || ''));
+    this.angulartics.setUserProperties.next({ institutionId: (user.institutionId || '') });
+    this.angulartics.setUserProperties.next({ isLoggedIn: (user.isLoggedIn || false) });
+    this.angulartics.setUserProperties.next({ shibbolethUser: (user.shibbolethUser || false) });
+    this.angulartics.setUserProperties.next({ dept: (user.dept || '') });
+    this.angulartics.setUserProperties.next({ ssEnabled: (user.ssEnabled || false) }) 
+  }
+
+  /**
    * Required by implementing CanActivate, and is called on routes which are protected by canActivate: [AuthService]
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     console.log("Running canActivate for... " + state.url)
-    let options = { headers: this.getHeaders(), withCredentials: true }
-
-    // TO-DO: Enable the server to call the user info call
+    let options = { headers: this.userInfoHeader, withCredentials: true }
+    /**
+     * @todo: Enable the server to call the user info call
+     */
     if (!this.isBrowser) {
       return new Observable(observer => {
         observer.next(true)
       })
     }
-
+    // Allow access to pages that don't require login/auth
     if ((route.params.samlTokenId || route.params.type == 'shibboleth') && state.url.includes('/register')) {
       // Shibboleth workflow is unique, should allow access to the register page
       return new Observable(observer => {
         observer.next(true)
       })
-    } else if (this.canUserAccess(this.getUser())) {
+    }
+    // Verify user is logged in
+    let user = this.getUser()
+    if (this.canUserAccess(user)) {
+      // Ensure GTM data layer is updated when user data is pulled from localStorage
+      this.updateAnalyticUserProperties(user)
       // If user object already exists, we're done here
       return new Observable(observer => {
         observer.next(true)
@@ -701,27 +754,31 @@ export class AuthService implements CanActivate {
     )
   }
 
-  public isPublicOnly(): boolean{
-    return !(this.getUser() && this.getUser().status)
+  public isPublicOnly(): boolean {
+    let user = this.userSource.value
+    let userObj = user || this.getUser()
+    return !(userObj && userObj.status)
   }
 
 
   /**
+   * Deprecated: User info is now tracked in the data layer
    * Return "category" to report to Google Analytics
    * - We use category to track the type of user the event is tied to
    */
-  public getGACategory(): string {
-    let category = 'unaffiliatedUser'
-    let user = this.getUser()
+  // public getGACategory(): string {
+  //   let category = 'unaffiliatedUser'
+  //   let user = this.getUser()
 
-    if (user.isLoggedIn) {
-      category = 'loggedInUser'
-    } else if (user.institutionId && user.institutionId.toString().length > 0) {
-      category = 'institutionalUser'
-    }
+  //   if (user.isLoggedIn) {
+  //     category = 'loggedInUser'
+  //   } else if (user.institutionId && user.institutionId.toString().length > 0) {
+  //     category = 'institutionalUser'
+  //   }
 
-    return category
-  }
+  //   return category
+  // }
+
   private genUserInfoUrl(): string {
     return this.getUrl(true) + '/userinfo?no-cache=' + new Date().valueOf()
   }
@@ -765,7 +822,8 @@ export class AuthService implements CanActivate {
    * - Used to decorate the user object for saving
    */
   private decorateValidUser(data: any): any {
-    let currentUser = this.getUser()
+    let user = this.userSource.value
+    let currentUser = user.hasOwnProperty('status') ? user : this.getUser()
     let newUser = data['user'] ? data['user'] : {}
     let currentUsername = currentUser.username
     let loggedInSessionLost = currentUser.isLoggedIn ? (!newUser.username || currentUsername !== newUser.username) : false;
@@ -774,7 +832,7 @@ export class AuthService implements CanActivate {
       // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
       let user = data['user']
       user.status = data['status']
-      if (data['isRememberMe'] || data['remoteaccess']) {
+      if (data['isRememberMe'] || (data.maxPeriod > 0 || data.dayRemain > 0)) {
         user.isLoggedIn = true
       }
 

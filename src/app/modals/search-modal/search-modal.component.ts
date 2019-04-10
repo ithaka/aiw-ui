@@ -231,7 +231,7 @@ export class SearchModal implements OnInit, AfterViewInit {
     }
 
     // Track in angulartics
-    this.angulartics.eventTrack.next({ action: 'advSearch', properties: { category: this._auth.getGACategory(), label: advQuery } })
+    this.angulartics.eventTrack.next({ properties: { event: 'advSearch', category: 'search', label: advQuery } })
 
     // Maintain feature flags
     if (currentParams['featureFlag']) {

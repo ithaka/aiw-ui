@@ -6,9 +6,11 @@ import { Angulartics2 } from 'angulartics2'
 
 // Project dependencies
 import { AssetService, AuthService, GroupService, ImageGroup, LogService } from './../../shared'
+import { ToastService } from 'app/_services';
 import { IgFormValue, IgFormUtil } from './new-ig'
-import { isPlatformBrowser } from '@angular/common';
-import { Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common'
+import { Router } from '@angular/router'
+import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/public_api';
 
 @Component({
   selector: 'ang-new-ig-modal',
@@ -25,13 +27,16 @@ export class NewIgModal implements OnInit {
     success?: boolean,
     failure?: boolean
   } = {};
+  public errorMsg: string = ''
+
+  public hasPrivateGroups: boolean = false // If a user has at least one image group
 
   /** Switch for running logic to copy image group */
   @Input() private copyIG: boolean = false;
   /** The image group object */
   @Input() private ig: ImageGroup = <ImageGroup>{};
   /** Controls the user seeing the toggle to add images to group or create a new group */
-  @Input() private showAddToGroup: boolean = false;
+  @Input() private showAddToGroup: boolean = true
 
   @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef;
 
@@ -62,6 +67,9 @@ export class NewIgModal implements OnInit {
   private tagLastSearched: string = ''
   private tagDebouncing: boolean = false
 
+  private groupUrl
+  private options: any = {}
+
   constructor(
       private _assets: AssetService,
       private _auth: AuthService,
@@ -70,7 +78,10 @@ export class NewIgModal implements OnInit {
       private _log: LogService,
       private _angulartics: Angulartics2,
       private el: ElementRef,
-      private router: Router
+      private router: Router,
+      private _storage: ArtstorStorageService,
+      private _toasts: ToastService
+
   ) {
     this.newIgForm = _fb.group({
       title: [null, Validators.required],
@@ -80,6 +91,27 @@ export class NewIgModal implements OnInit {
   }
 
   ngOnInit() {
+    // Does user have any private groups yet?
+    // Check local storage first, otherwise call group service
+    let hasPrivate = this._storage.getLocal('hasPrivateGroups')
+    if (hasPrivate)  {
+      this.hasPrivateGroups = true
+    }
+    else {
+      this._group.hasPrivateGroups().pipe(
+        take(1),
+        map(res => {
+          if (res['total'] > 0) {
+            this.hasPrivateGroups = true
+            this._storage.setLocal('hasPrivateGroups', true)
+          }
+        },
+          (err) => {
+            console.error(err)
+          }
+        )).subscribe()
+    }
+
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
     // let htmlelement: HTMLElement = this.el.nativeElement
     // htmlelement.focus()
@@ -166,6 +198,7 @@ export class NewIgModal implements OnInit {
     if (!this.newIgForm.valid) {
       return;
     }
+
     // Form is valid! Create Group object
     this.isLoading = true;
 
@@ -182,12 +215,12 @@ export class NewIgModal implements OnInit {
       this._auth.getUser(),
       this.ig
     )
+    let multipleSelected: boolean = this.selectedAssets.length > 1
 
     if (this.editIG) {
-      // Editing group
-      this._angulartics.eventTrack.next({ action: 'editGroup', properties: { category: this._auth.getGACategory(), label: group.id }});
-
       group.id = this.ig.id // need this for the update call
+      // Editing group
+      this._angulartics.eventTrack.next({ properties: { event: 'editGroup', category: 'groups', label: group.id }});
 
       this._group.update(group).pipe(
         map(data => {
@@ -198,6 +231,7 @@ export class NewIgModal implements OnInit {
           },
           error => {
             console.error(error);
+            this.errorMsg = '<p>Sorry, we weren’t able create update this group. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
             this.serviceResponse.failure = true;
             this.isLoading = false;
           }
@@ -211,10 +245,10 @@ export class NewIgModal implements OnInit {
       // analytics events
       if (this.copyIG) {
         // Copying old group
-        this._angulartics.eventTrack.next({ action: 'copyGroup', properties: { category: this._auth.getGACategory(), label: group.id }})
+        this._angulartics.eventTrack.next({ properties: { event: 'copyGroup', category: 'groups', label: group.id }})
       } else {
         // Create New Group
-        this._angulartics.eventTrack.next({ action: 'newGroup', properties: { category: this._auth.getGACategory() }})
+        this._angulartics.eventTrack.next({ properties: { event: 'newGroup', category: 'groups' }})
       }
 
       // create the group using the group service
@@ -249,12 +283,29 @@ export class NewIgModal implements OnInit {
               }
             })
 
+            // Add detail to group GA event
+            if (data.items[0].zoom && data.items[0].zoom.pointWidth) {
+              this._angulartics.eventTrack.next({ properties: { event: 'addDetail', category: 'groups', label: 'new group' }})
+            }
+
             // Add to Group GA event
-            this._angulartics.eventTrack.next({ action: 'addToGroup', properties: { category: this._auth.getGACategory(), label: this.router.url }})
+            this._angulartics.eventTrack.next({ properties: { event: 'addToGroup', category: 'groups', label: this.router.url }})
           }
+
+          this.closeModal.emit()
+          this._toasts.sendToast({
+            id: 'createNewGroup',
+            type: 'success',
+            stringHTML: '<p>' + (multipleSelected ? 'The items were' : 'The item was') + ' added to your new group, <b>' + data.name + '</b>.</p>',
+            links: [{
+              routerLink: ['/group/'+ data.id],
+              label: 'Go to group'
+            }]
+          })
         },
         error => {
           console.error(error)
+          this.errorMsg = '<p>Sorry, we weren’t able create the new group or add the '+ (group.items.length > 1 ? 'items' : 'item') +' at this time. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
           this.serviceResponse.failure = true
           this.isLoading = false;
         }

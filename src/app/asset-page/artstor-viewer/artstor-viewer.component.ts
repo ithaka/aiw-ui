@@ -2,10 +2,12 @@ import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Outpu
 import { Subscription, Observable, of } from 'rxjs'
 import { take, map, mergeMap } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { ActivatedRoute } from '@angular/router'
+// import * as OpenSeadragon from 'openseadragon'
 
 // Internal Dependencies
 // import '/krpano.js'
-import { Asset, AuthService } from 'app/shared';
+import { Asset, AuthService, ImageZoomParams } from 'app/shared';
 import { MetadataService } from 'app/_services'
 import { isPlatformBrowser } from '@angular/common';
 
@@ -17,7 +19,7 @@ declare var OpenSeadragon: any
 export enum viewState {
   loading, // 0
   openSeaReady, // 1
-  kalturaReady, // 2 
+  kalturaReady, // 2
   krpanoReady, // 3
   thumbnailFallback, // 4
   audioFallback //5
@@ -37,7 +39,6 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     // Optional Inputs
     @Input() groupId: string
     @Input() index: number
-    @Input() assetCompareCount: number
     @Input() assetGroupCount: number
     @Input() assetNumber: number
     @Input() assets: Asset[]
@@ -48,6 +49,20 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     @Input() testEnv: boolean
     @Input() thumbnailMode: boolean
     @Input() encrypted: boolean
+    @Input() zoom: ImageZoomParams
+    private _assetCompareCount: number
+    @Input() set assetCompareCount(count: number) {
+        if (count > -1 && count !== this._assetCompareCount) {
+            this._assetCompareCount = count
+            if (this.isMultiView) {
+                // Hide or re-show Reference strip when in compare mode and count crosses >3
+                this.attemptShowReferenceStrip()
+            }
+        }
+    }
+    get assetCompareCount(): number {
+        return this._assetCompareCount
+    }
 
     // Required Input
     private _assetId: string = ''
@@ -116,6 +131,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     public osdViewer: any
     public osdViewerId: string
     public isMultiView: boolean
+    private tilesLoaded: boolean = false
     public multiViewPage: number = 1
     public multiViewCount: number = 1
 
@@ -123,14 +139,24 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         private _http: HttpClient, // TODO: move _http into a service
         private _metadata: MetadataService,
         private _auth: AuthService,
-        @Inject(PLATFORM_ID) private platformId: Object
-    ) { 
+        @Inject(PLATFORM_ID) private platformId: Object,
+        private route: ActivatedRoute
+    ) {
         if(!this.index) {
             this.index = 0
         }
     }
 
     ngOnInit() {
+        this.subscriptions.push(
+            this.route.params.subscribe((routeParams) => {
+                if(this.tilesLoaded) {
+                    setTimeout(() => {
+                        this.refreshZoomedView()
+                    }, 250)
+                }
+            })
+        )
         if (!isPlatformBrowser(this.platformId)) {
             // If rendered server-side, load thumbnail
             this.thumbnailMode = true
@@ -171,7 +197,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.osdViewer) {
             this.osdViewer.destroy()
         }
-        
+
         this.subscriptions.forEach((sub) => {
             sub.unsubscribe();
         });
@@ -189,8 +215,8 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         this.osdViewerId = 'osd-' + assetId + '-' + this.index
         // Set viewer to "loading"
         this.state = viewState.loading
-        
-        this._metadata.buildAsset(assetId, {groupId, legacyFlag: this.legacyFlag, openlib: this.openLibraryFlag })
+
+        this._metadata.buildAsset(assetId, {groupId, legacyFlag: this.legacyFlag, openlib: this.openLibraryFlag, encrypted: this.encrypted })
             .subscribe((asset) => {
                 // Replace <br/> tags from title, creator & date values with a space
                 asset.title = asset.title.replace(/<br\s*[\/]?>/gi, ' ')
@@ -199,6 +225,10 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
                 if(asset.formattedMetadata && asset.formattedMetadata['Date'] && asset.formattedMetadata['Date'][0]){
                     asset.formattedMetadata['Date'][0] = asset.formattedMetadata['Date'][0].replace(/<br\s*[\/]?>/gi, ' ')
+                }
+
+                if(this.zoom && this.zoom.viewerX){
+                    asset.zoom = this.zoom
                 }
 
                 this.asset = asset
@@ -251,11 +281,41 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * OpenSeaDragon: Show reference strip for multi-view
+     */
+    private attemptShowReferenceStrip() : void {
+        if (!this.isMultiView || !this.osdViewer || !this.tilesLoaded) {
+            // Only run if OSD has loaded AND is a Multi View asset
+            return
+        }
+        // Handle hiding reference strip for >3 assets showing
+        if (this.assetCompareCount > 3) {
+            // Hide reference strip for >3
+            this.osdViewer.viewport.setMargins({bottom:0})
+            this.osdViewer.removeReferenceStrip()
+        } else {
+            // Show reference strip for <4
+            this.osdViewer.viewport.setMargins({bottom:190})
+            this.osdViewer.addReferenceStrip()
+            this.osdViewer.nextButton.element.title = 'Next Item'
+                this.osdViewer.previousButton.element.title = 'Previous Item'
+
+                this.osdViewer.previousButton.addHandler('press', () => {
+                    this.multiViewArrowPressed = true
+                })
+                this.osdViewer.nextButton.addHandler('press', () => {
+                    this.multiViewArrowPressed = true
+                })
+        }
+    }
+
+    /**
      * Loads the OpenSeaDragon on element at 'viewer-' + id
      * - Requires this.asset to have an id
      */
     private loadOpenSea(): void {
-        this.isMultiView = Array.isArray(this.tileSource)
+        // Single view "multi views" are treated as single images
+        this.isMultiView = Array.isArray(this.tileSource) && this.tileSource.length > 1
         this.multiViewPage = 1
         this.multiViewCount = this.tileSource.length
         // Set state to IIIF/OpenSeaDragon
@@ -263,7 +323,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         // OpenSeaDragon Initializer
         this.osdViewer = new OpenSeadragon({
             id: this.osdViewerId,
-            // prefix for Icon Images
+            // prefix for Icon Images (full url needed for SSR)
             prefixUrl: this._auth.getUrl() + '/assets/img/osd/',
             tileSources: this.tileSource,
             // Trigger conditionally if tilesource is an array of multiple sources
@@ -273,7 +333,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
             referenceStripScroll: 'horizontal',
             /**
              * Workaround: Turn off "lazy loading" in reference strip
-             * OpenSeaDragon uses panelWidth to calc which reference images to load: 
+             * OpenSeaDragon uses panelWidth to calc which reference images to load:
              * https://github.com/openseadragon/openseadragon/blob/869a3f6a134cdd143347b215a5da7796f8a7356d/src/referencestrip.js#L410
              * This functionality is arguably broken, so by passing a small sizeRatio, OSD determines it should load ~100 thumbs at a time
              */
@@ -300,8 +360,9 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
             timeout: 60000,
             useCanvas: false,
             // defaultZoomLevel: 1.2, // We don't want the image to be covered on load
-            // visibilityRatio: 0.2, // Determines percentage of background that has to be covered by the image while panning 
+            // visibilityRatio: 0.2, // Determines percentage of background that has to be covered by the image while panning
             // debugMode: true,
+            preserveImageSizeOnResize: this.zoom && this.zoom.viewerX ? true : false
         });
 
         // ---- Use handler in case other error crops up
@@ -314,6 +375,12 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         this.osdViewer.addHandler('pan', (value: any) => {
             // Save viewport pan for downloading the view
             this.asset.viewportDimensions.center = value.center
+        });
+
+        this.osdViewer.addHandler('resize', (value: any) => {
+            setTimeout( () => {
+                this.refreshZoomedView()
+            }, 250)
         });
 
         this.osdViewer.addHandler('page', (value: {page: number, eventSource: any, userData?: any}) => {
@@ -336,6 +403,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
             this.asset.viewportDimensions.containerSize = this.osdViewer.viewport.containerSize
             this.asset.viewportDimensions.contentSize = this.osdViewer.viewport._contentSize
             this.asset.viewportDimensions.zoom = value.zoom
+
         })
 
         this.osdViewer.addOnceHandler('tile-load-failed', (e: Event) => {
@@ -351,21 +419,13 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.osdViewer.addOnceHandler('tile-loaded', () => {
             console.info("Tiles are loaded")
+            this.tilesLoaded = true
             this.state = viewState.openSeaReady
             // Load Reference Strip once viewer is ready
             if (this.isMultiView) {
-                this.osdViewer.addReferenceStrip()
-                
-                this.osdViewer.nextButton.element.title = 'Next Item'
-                this.osdViewer.previousButton.element.title = 'Previous Item'
-
-                this.osdViewer.previousButton.addHandler('press', () => {
-                    this.multiViewArrowPressed = true
-                })
-                this.osdViewer.nextButton.addHandler('press', () => {
-                    this.multiViewArrowPressed = true
-                })
+                this.attemptShowReferenceStrip()
             }
+            this.refreshZoomedView()
         })
 
         if (this.osdViewer && this.osdViewer.ButtonGroup) {
@@ -378,7 +438,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         if( this.asset.viewerData && this.asset.viewerData.panorama_xml ){
             let headers = new HttpHeaders({ 'Content-Type': 'text/xml' }).set('Accept', 'text/xml');
 
-            // Format pano_xml url incase it comes badly formatted from backend 
+            // Format pano_xml url incase it comes badly formatted from backend
             this.asset.viewerData.panorama_xml = this.asset.viewerData.panorama_xml.replace('stor//', 'stor/')
             // Ensure URL uses relative protocol
             this.asset.viewerData.panorama_xml = this.asset.viewerData.panorama_xml.replace('http://', '//')
@@ -410,11 +470,11 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     private embedKrpano() : void {
          // Run if Pano xml is accessible
         this.state = viewState.krpanoReady
-        embedpano({ 
+        embedpano({
             html5: "always",
             localfallback: "error",
-            xml: this.asset.viewerData.panorama_xml,  
-            target: "pano-" + this.index, 
+            xml: this.asset.viewerData.panorama_xml,
+            target: "pano-" + this.index,
             onready: (viewer) => {
                 console.log("KR Pano has loaded", viewer)
                 // See if there was an unreported error during final load
@@ -496,6 +556,19 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Refresh zoomed view for saved details
+     */
+    private refreshZoomedView(): void{
+        // For detailed views set the viewport bouds based on the zoom params passed
+        if(this.zoom && this.zoom.viewerX){
+            let bounds = this.osdViewer.viewport.imageToViewportRectangle(this.zoom.viewerX, this.zoom.viewerY, this.zoom.pointWidth, this.zoom.pointHeight)
+            this.osdViewer.viewport.fitBounds(bounds, true)
+        } else {
+            this.osdViewer.viewport.fitVertically(true)
+            
+        }
+    }
+    /**
      * Setup the embedded Kaltura player
      */
     private loadKaltura(): void {
@@ -557,5 +630,5 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     public hasMultiViewHelp(): boolean {
         return this.multiViewHelp.observers.length > 0
     }
-     
+
 }

@@ -42,7 +42,11 @@
             // Active on Image Group Page
             button.dropdown-item([disabled]="!actionOptions.group", (click)="printImageGroupPage()", tabindex="1") {{ 'NAV_MENU.SHARE.PRINT_GROUP' | translate }}
             // Active on Image Group Page
-            button.dropdown-item(*ngIf="params['igId']", (click)="_ig.triggerIgDownload()", tabindex="1") {{ 'NAV_MENU.SHARE.DOWNLOAD_GROUP' | translate }}
+            button.dropdown-item(*ngIf="!exportReframeFlag && params['igId']", (click)="_ig.triggerIgDownload()", tabindex="1") {{ 'NAV_MENU.SHARE.DOWNLOAD_GROUP' | translate }}
+            // Active on Image Group Page
+            button.dropdown-item(*ngIf="exportReframeFlag && params['igId']", (click)="_ig.triggerPPTExport()", tabindex="1") {{ 'NAV_MENU.SHARE.EXPORT_TO_PPT' | translate }}
+            // Active on Image Group Page
+            button.dropdown-item(*ngIf="exportReframeFlag && params['igId']", (click)="_ig.triggerZIPExport()", tabindex="1") {{ 'NAV_MENU.SHARE.EXPORT_AS_ZIP' | translate }}
         .nav-item
           a#viewMenu.btn.btn-link(*ngIf="_auth.isPublicOnly()", href="//support.artstor.org/?article-category=05-public-access-to-artstor", target="_blank", tabindex="1", (focus)="closeNavMenuDropdowns()") Support
           a#viewMenu.btn.btn-link(*ngIf="!_auth.isPublicOnly()", href="//support.artstor.org", target="_blank", tabindex="1", (focus)="closeNavMenuDropdowns()") Support
@@ -52,11 +56,11 @@
         .nav-item(*ngIf="!mobileCollapsed && institutionObj")
           | Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}
 ang-delete-ig-modal(*ngIf="showDeleteIgModal", (closeModal)="showDeleteIgModal = false", [ig]="ig", [igId]="route.snapshot.params.igId", [igName]="route.snapshot.params.name")
-ang-new-ig-modal(*ngIf="showImageGroupModal", [copyIG]="copyIG", [editIG]="editIG", [ig]="ig", (igReloadTriggered)="reloadIG()", (closeModal)="showImageGroupModal = false")
+ang-new-ig-modal(*ngIf="showImageGroupModal", [copyIG]="copyIG", [editIG]="editIG", [ig]="ig", (igReloadTriggered)="reloadIG()", (closeModal)="showImageGroupModal = false", (addToGroup)="showAddToGroupModal = true; showImageGroupModal = false;")
 ang-share-link-modal(*ngIf="showShareLinkModal", [asset]="selectedAssets[0]", (closeModal)="showShareLinkModal = false")
-ang-add-to-group(*ngIf="showAddToGroupModal", (closeModal)="showAddToGroupModal = false")
+ang-add-to-group(*ngIf="showAddToGroupModal", (closeModal)="showAddToGroupModal = false", (showToast)="handleToast($event)", (createGroup)="showImageGroupModal = true; showAddToGroupModal = false;")
 ang-share-ig-link(*ngIf="showShareIgModal", [ig]="ig", (closeModal)="showShareIgModal = false")
 ang-confirm-modal(*ngIf="showConfirmationModal", (closeModal)="closeConfirmationModal($event)", [title]="'Delete Selected Asset(s)'",
-  [description]="'Are you sure you want to delete ' + _assets.getSelectedAssets().length + ' selected image(s) from the group? <br><b>Image group name: ' +  ig.name + '</b>'",
+  [description]="'Are you sure you want to delete ' + _assets.getSelectedAssets().length + ' selected image(s) from the group? <br><b>Group name: ' +  ig.name + '</b>'",
   [dismiss]="'Cancel'",
   [primary]="'Yes'")

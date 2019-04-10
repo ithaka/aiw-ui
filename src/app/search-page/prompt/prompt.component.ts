@@ -19,7 +19,7 @@ export class PromptComponent implements OnInit {
 
 
   public trackUnaffiliatedInstLogin(): void{
-    this._angulartics.eventTrack.next({ action: 'unaffiliatedInstLogin', properties: { category: this._auth.getGACategory() }})
+    this._angulartics.eventTrack.next({ properties: { event: 'unaffiliatedInstLogin', category: 'login' }})
   }
 
 }

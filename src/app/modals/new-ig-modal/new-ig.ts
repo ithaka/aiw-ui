@@ -19,20 +19,29 @@ export class IgFormUtil {
     let assetIdProperty = 'artstorid'
 
     /** format an array of asset ids out of the asset */
-    let itemIds = []
+    let items = []
     assets.forEach(
       (item) => {
+
+        let itemObj: any = {}
+
         if (item[assetIdProperty]) {
-          itemIds.push(item[assetIdProperty]) // sometimes this is an array of real assets
+          itemObj.id = item[assetIdProperty] // sometimes this is an array of real assets
         }
         else if (item.objectId) {
-          itemIds.push(item.objectId) // sometimes assets are from legacy collection services
+          itemObj.id = item.objectId // sometimes assets are from legacy collection services
         }
         else if (item.id) {
-          itemIds.push(item.id) // sometimes this is an array of real assets
+          itemObj.id = item.id // sometimes this is an array of real assets
         } else {
-          itemIds.push(item) // sometimes though it's just an array of strings
+          itemObj.id = item // sometimes though it's just an array of strings
         }
+        
+        if (item.zoom && item.zoom['viewerX']){ // for details selected from asset grid
+          itemObj.zoom = item.zoom
+        }
+
+        items.push(itemObj)
       }
     )
 
@@ -47,7 +56,7 @@ export class IgFormUtil {
         'entity_identifier': user.baseProfileId.toString(),
         'access_type': 300
       } ],
-      items: itemIds,
+      items: items,
       tags: form.tags
     }
 

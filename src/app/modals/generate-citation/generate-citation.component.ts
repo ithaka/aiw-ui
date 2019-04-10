@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild  } from '@angular/core'
 import { DatePipe, Location } from '@angular/common'
 
-import { Asset } from '../../asset-page/asset'
+import { Asset } from '../../shared'
 import { LogService, DomUtilityService } from '../../shared'
-import { AppConfig } from 'app/app.service';
+import { AppConfig } from 'app/app.service'
 
 @Component({
   selector: 'ang-generate-citation',
@@ -65,10 +65,15 @@ export class GenerateCitation implements OnInit, AfterViewInit {
   private generateCitations(asset: Asset): void {
     // console.log(asset)
 
-    let assetPath = 'asset/'
+    let assetPath = '/asset/'
 
     // Note: The request protocol is added to ADA, and Chicago citations, but not MLA
-    let currentUrl = this._app.clientHostname + this.location.path(false) + assetPath + asset.id
+    let currentUrl = this._app.clientHostname + assetPath + asset.id
+
+    // Clear citation strings
+    this.apa_citation = ""
+    this.mla_citation = ""
+    this.chicago_citation = ""
 
     // APA Citation
     // [Creator]. [Date(in parentheses)]. [Title(italicized)]. [Work Type(in brackets)]. Retrieved from [asset page url].

@@ -5,8 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common'
 
 // Project Dependencies
-import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService } from '../shared'
+import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService, FlagService } from '../shared'
 import { AppConfig } from '../app.service'
+import { Toast, ToastService } from 'app/_services';
 
 @Component({
   selector: 'nav-menu',
@@ -46,6 +47,8 @@ export class NavMenu implements OnInit, OnDestroy {
   // Flag for confimation popup for deleting selected asset(s) from the IG
   public showConfirmationModal: boolean = false
 
+  public exportReframeFlag: boolean = false
+
   @Input()
   private disableIgDelete: boolean = false;
 
@@ -64,6 +67,13 @@ export class NavMenu implements OnInit, OnDestroy {
   private copyIG: boolean = false
   private editIG: boolean = false
 
+  // Toast Variables
+  public toasts: Toast[] = []
+
+  public showToast: boolean = false
+  public toastType: string = ''
+  public toastHTML: string = ''
+
   // TypeScript public modifiers
   constructor(
     public _appConfig: AppConfig,
@@ -75,6 +85,7 @@ export class NavMenu implements OnInit, OnDestroy {
     private _group: GroupService,
     private route: ActivatedRoute,
     public _auth: AuthService,
+    public _flags: FlagService
   ) {
     this.browseOpts = this._app.config.browseOptions
     this.siteID = this._appConfig.config.siteID
@@ -83,15 +94,14 @@ export class NavMenu implements OnInit, OnDestroy {
   ngOnInit() {
     // Subscribe to User object updates
     this.subscriptions.push(
+      // User data subscription
       this._auth.currentUser.pipe(
         map(userObj => {
           this.user = userObj
         },
         (err) => { console.error(err) }
-      )).subscribe()
-    )
-
-    this.subscriptions.push(
+      )).subscribe(),
+      // Asset selection subscription
       this._assets.selection.pipe(
         map(selectedAssets => {
           this.selectedAssets = selectedAssets
@@ -99,20 +109,21 @@ export class NavMenu implements OnInit, OnDestroy {
         error => {
           console.error(error)
         }
-      )).subscribe()
-    )
-
-    this.subscriptions.push(
-      this.route.params.pipe(
-      map(params => {
-        this.params = params
-        if (params['igId'] && !params['page']){
+      )).subscribe(),
+      // Feature flag subscription
+      this._flags.flagUpdates.subscribe((flags) => {
+        this.exportReframeFlag = flags.exportReframe ? true : false
+      }),
+      // Route params subscription
+      this.route.params.subscribe((routeParams) => {
+        this.params = routeParams
+        if (routeParams['igId'] && !routeParams['page']){
           this.showImageGroupModal = false
         }
-      })).subscribe()
-    )
-
-    this.subscriptions.push(
+        // Find feature flags applied on route
+        this._flags.readFlags(routeParams)
+      }),
+      // Institution Object subscription
       this._auth.getInstitution().pipe(
         map(institutionObj => {
           this.institutionObj = institutionObj;
@@ -197,9 +208,21 @@ export class NavMenu implements OnInit, OnDestroy {
     putGroup.items = putGroup.items.filter((item) => {
       assetFound = false
       this._assets.getSelectedAssets().forEach((asset) => {
-        if (asset.objectId == item) {
-          assetFound = true
-          return
+        // Support both legacy and new Group items format
+        if (asset.objectId === item || asset.objectId === item.id) {
+          let zoomMatched: boolean = true
+          if(asset.zoom && asset.zoom.viewerX){
+            let itemZoomObj = item.zoom ? item.zoom : {}
+            if(JSON.stringify(asset.zoom) !== JSON.stringify(itemZoomObj)){
+              zoomMatched = false
+            }
+          } else if (item.zoom && item.zoom.viewerX) {
+            zoomMatched = false
+          }
+          if(zoomMatched) {
+            assetFound = true
+            return
+          }
         }
       })
       return !assetFound // if the asset was not found, we want to keep it

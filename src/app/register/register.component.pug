@@ -4,10 +4,10 @@
     .row
       .col-sm-1
       .col-sm-10
-        .alert.alert-danger.mb-4(*ngIf="serviceErrors['shibbolethInst']") 
+        .alert.alert-danger.mb-4(*ngIf="serviceErrors['shibbolethInst']")
           b Error Linking&nbsp;
           | {{ 'SHIBBOLETH_ERRORS.INST404' | translate }}
-        .alert.alert-warning.mb-4(*ngIf="serviceErrors['user']") 
+        .alert.alert-warning.mb-4(*ngIf="serviceErrors['user']")
           b {{ 'SHIBBOLETH_ERRORS.USER404' | translate }}
         .text-right.mb-2(*ngIf="isShibbFlow")
           .btn.btn-secondary((click)="navigateToLogin()", [class.disabled]="!shibParameters.samlTokenId") {{ 'LINK_PAGE.LOGIN_OPTION' | translate }}
@@ -27,14 +27,14 @@
                 a.link((click)="showJstorModal = true", tabindex="0", style="float: right", aria-label="Use your JSTOR account to register") {{ 'REGISTER.EMAIL_HELP_TXT' | translate }}
                   i.icon.icon-info.align-icon
                 //- Currently Shibboleth params do not reliably provide email, avoid disabling control of the email field even if prefilled
-                input#emailInput.form-control(type="text", spellcheck="false", [formControl]="registerForm.controls['email']", tabindex="0")
+                input#emailInput.form-control(type="email", spellcheck="false", [formControl]="registerForm.controls['email']", tabindex="0")
                 .has-danger(*ngIf="submitted && registerForm.controls['email'].hasError('required')")
                   p#errEmailRequired.form-control-feedback {{ 'REGISTER.ERRORS.EMAIL_REQUIRED' | translate }}
                 .has-danger(*ngIf="submitted && registerForm.controls['email'].hasError('emailInvalid') && !registerForm.controls['email'].hasError('required')")
                   p#errEmailInvalid.form-control-feedback {{ 'REGISTER.ERRORS.EMAIL_INVALID' | translate }}
               .form-group
                 label(for="emailConfirmInput") Confirm Email Address
-                input#emailConfirmInput.form-control(type="text", spellcheck="false", [formControl]="registerForm.controls['emailConfirm']", tabindex="0")
+                input#emailConfirmInput.form-control(type="email", spellcheck="false", [formControl]="registerForm.controls['emailConfirm']", tabindex="0")
                 .has-danger(*ngIf="submitted && registerForm.hasError('emailMismatch')")
                   p#errEmailMismatch.form-control-feedback {{ 'REGISTER.ERRORS.EMAIL_MISMATCH' | translate }}
               .form-group
@@ -61,7 +61,7 @@
                   option(*ngFor="let dept of userDepts", [ngValue]="dept.id") {{ dept.desc }}
                 .has-danger(*ngIf="submitted && registerForm.controls['dept'].hasError('required')")
                   p#errDeptRequired.form-control-feedback {{ 'REGISTER.ERRORS.ACADEMIC_DEPT_REQUIRED' | translate }}
-              
+
               .form-group
                 .form-check
                   label.form-check-label
@@ -86,8 +86,10 @@
                 .has-danger(*ngIf="submitted")
                   p#errDuplicateUser.form-control-feedback(*ngIf="serviceErrors.duplicate", [innerHtml]="'REGISTER.ERRORS.EMAIL_DUPLICATE' | translate")
                   p#errJstorUser.form-control-feedback(*ngIf="serviceErrors.hasJstor", [innerHtml]="'REGISTER.ERRORS.ALREADY_JSTOR' | translate")
+                  p#errJstorUser.form-control-feedback(*ngIf="serviceErrors.hasGoogle", [innerHtml]="'REGISTER.ERRORS.ALREADY_GOOGLE' | translate")
                   p#errServerUser.form-control-feedback(*ngIf="serviceErrors.server", [innerHtml]="'REGISTER.ERRORS.SERVER_ERROR' | translate")
-                  p#errShibboleth.form-control-feedback(*ngIf="serviceErrors.shibboleth", [innerHtml]="'SHIBBOLETH_ERRORS.' + serviceErrors.shibboleth | translate")
+                  p#errShibboleth.form-control-feedback(*ngIf="serviceErrors.showShibbolethError", [innerHtml]="'SHIBBOLETH_ERRORS.' + serviceErrors.shibbolethError | translate")
+
             br
             p
               a.link(href="http://www.artstor.org/privacy-policy", tabindex="0") Privacy Policy

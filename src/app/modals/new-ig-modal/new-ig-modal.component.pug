@@ -2,43 +2,44 @@
   .modal-dialog(role="document")
     .modal-content(*ngIf="!serviceResponse.success")
       .modal-header
-        h5.modal-title(*ngIf="!copyIG && !editIG") {{ 'NEW_GROUP_MODAL.CREATE_TITLE' | translate }}
-        h5.modal-title(*ngIf="copyIG") {{ 'NEW_GROUP_MODAL.COPY_TITLE' | translate }}
-        h5.modal-title(*ngIf="editIG") {{ 'NEW_GROUP_MODAL.EDIT_TITLE' | translate }}
+        h4.modal-title(*ngIf="!copyIG && !editIG") {{ 'NEW_GROUP_MODAL.CREATE_TITLE' | translate }}
+        h4.modal-title(*ngIf="copyIG") {{ 'NEW_GROUP_MODAL.COPY_TITLE' | translate }}
+        h4.modal-title(*ngIf="editIG") {{ 'NEW_GROUP_MODAL.EDIT_TITLE' | translate }}
         button.close((click)="closeModal.emit()", type="button", aria-label="Close")
           span(aria-hidden="true") &times;
       form#newIgForm([formGroup]="newIgForm", (ngSubmit)="igFormSubmit(newIgForm.value)")
         .modal-body
+          label.modal-label(*ngIf="!hasPrivateGroups") {{ 'NEW_GROUP_MODAL.FIRST_GROUP_MSG' | translate }}
           .form-group
-            label(for="igTitleInput") {{ 'NEW_GROUP_MODAL.TITLE_FIELD_LABEL' | translate }}
-            input#igTitleInput.form-control(type="text", [formControl]="newIgForm.controls['title']", placeholder="Give your image group a title...", spellcheck="false", tabindex="0")
-            .has-danger(*ngIf="submitted && newIgForm.controls['title'].hasError('required')")
+            label.modal-label(for="igTitleInput") {{ 'NEW_GROUP_MODAL.TITLE_FIELD_LABEL' | translate }}&#42;
+            input#igTitleInput.form-control.placeholder-text(type="text", [formControl]="newIgForm.controls['title']", placeholder="Give your group a title...", spellcheck="false", tabindex="0")
+            .has-danger(*ngIf="(submitted && newIgForm.controls['title'].hasError('required')) || (newIgForm.controls['title'].dirty && newIgForm.controls['title'].invalid)" )
               p.form-control-feedback {{ 'NEW_GROUP_MODAL.TITLE_REQUIRED_MSG' | translate }}
           .form-group
-            label(for="igDescription") {{ 'NEW_GROUP_MODAL.DESCRIPTION_FIELD_LABEL' | translate }}
-            //- TO-DO: Enable medium editor with Universal
-            //- medium-editor(
-            //-   [(editorModel)]="igDescription",
-            //-   [editorOptions]="{ 'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}, 'autoLink': true}",
-            //-   [editorPlaceholder]="'Give your image group a description...'")
+            label.modal-label(for="igDescription") {{ 'NEW_GROUP_MODAL.DESCRIPTION_FIELD_LABEL' | translate }}
+            medium-editor(
+              [(editorModel)]="igDescription",
+              [editorOptions]="{ 'toolbar': {'buttons': ['bold', 'italic', 'underline', 'h1', 'h2', 'h3']}, 'autoLink': true}",
+              [editorPlaceholder]="'Give your group a description...'")
           //- Left this out of the div so that it remained left aligned...
-          label(for="artstorPermissionsGroup") {{ 'NEW_GROUP_MODAL.PERMISSION_FIELD_LABEL' | translate }}
-          .form-group.text-center
+          label.modal-label(for="artstorPermissionsGroup") {{ 'NEW_GROUP_MODAL.PERMISSION_FIELD_LABEL' | translate }}&#42;
+            span.placeholder-text#who-can-see &nbsp; {{ 'NEW_GROUP_MODAL.PERMISSION_FIELD_HELPER' | translate }}
+          .form-group
             #artstorPermissionsGroup.btn-group(ngbRadioGroup, name="permissions type", [formControl]="newIgForm.controls['artstorPermissions']")
-              label.btn.btn-secondary(ngbButtonLabel, *ngIf="isArtstorUser")
+              label.modal-label(ngbButtonLabel, *ngIf="isArtstorUser")
                 input#artstorPermissionsRadioGlobal(ngbButton, type="radio", name="options", autocomplete="off", value="global")
-                | {{ 'NEW_GROUP_MODAL.PERMISSIONS.GLOBAL' | translate }}
-              label.btn.btn-secondary(ngbButtonLabel)
+                | &nbsp; {{ 'NEW_GROUP_MODAL.PERMISSIONS.GLOBAL' | translate }}
+              label.modal-label(ngbButtonLabel)
                 input#artstorPermissionsRadioInstitution(ngbButton, type="radio", name="options", autocomplete="off", value="institution")
-                | {{ 'NEW_GROUP_MODAL.PERMISSIONS.INSTITUTIONAL' | translate }}
-              label.btn.btn-secondary(ngbButtonLabel)
+                | &nbsp; {{ 'NEW_GROUP_MODAL.PERMISSIONS.INSTITUTIONAL' | translate }}
+              label.modal-label(ngbButtonLabel)
                 input#artstorPermissionsRadioPrivate(ngbButton, type="radio", name="options", autocomplete="off", value="private")
-                | {{ 'NEW_GROUP_MODAL.PERMISSIONS.PRIVATE' | translate }}
+                | &nbsp; {{ 'NEW_GROUP_MODAL.PERMISSIONS.PRIVATE' | translate }}
           .form-group([class.has-danger]="serviceResponse.failure")
-            label(for="igTagInput") {{ 'NEW_GROUP_MODAL.TAGS_FIELD_LABEL' | translate }}
+            label.modal-label(for="igTagInput") {{ 'NEW_GROUP_MODAL.TAGS_FIELD_LABEL' | translate }}
             ngx-tag-input#igTagInput(
               [formControl]="newIgForm.controls['tags']",
-              placeholder="Add a tag...",
+              placeholder="+ Add tag",
               [addOnBlur]="true",
               [addOnEnter]="true",
               [autocompleteSelectFirstItem]="false",
@@ -46,14 +47,20 @@
               [autocompleteItems]="tagSuggestions",
               [autocompleteMustMatch]="false",
               (keyup)="getTagSuggestions($event)")
-            .form-control-feedback(*ngIf="serviceResponse.failure") {{ 'NEW_GROUP_MODAL.CREATE_FAILURE' | translate }}
-          .link(*ngIf="showAddToGroup", (click)="addToGroup.emit()") {{ 'NEW_GROUP_MODAL.SHOW_ADD_TO_IMAGE_GROUP' | translate }}
+          .alert.alert-danger(*ngIf="errorMsg")
+            i.icon.icon-error
+            span([innerHtml]="errorMsg")
         .modal-footer
-          button.btn.btn-secondary(type="button", (click)="closeModal.emit()") {{ 'NEW_GROUP_MODAL.CONTROLS.CLOSE' | translate }}
-          button.btn.btn-primary(type="submit", [class.loading]="isLoading") {{ 'NEW_GROUP_MODAL.CONTROLS.SAVE_EDIT' | translate }}
+          .wrapper
+            a.help-link.mr-2(href="http://support.artstor.org/?article=create-and-manage-image-groups", target="_blank") ?
+            .link.modal-footer-link-left(*ngIf="showAddToGroup && hasPrivateGroups", (click)="addToGroup.emit()") {{ 'NEW_GROUP_MODAL.SHOW_ADD_TO_IMAGE_GROUP' | translate }}
+          .wrapper
+            button.btn.btn-secondary.mr-2(type="button", (click)="closeModal.emit()") {{ 'NEW_GROUP_MODAL.CONTROLS.CLOSE' | translate }}
+            button.btn.btn-primary(type="submit", [class.loading]="isLoading",
+              [ngClass]="{ 'disabled-btn' : newIgForm.controls['title'].hasError('required') }") {{ 'NEW_GROUP_MODAL.CONTROLS.SAVE_EDIT' | translate }}
     .modal-content(*ngIf="serviceResponse.success && !editIG")
       .modal-header
-        h5.modal-title Image group created
+        h5.modal-title Group created
         button.close((click)="closeModal.emit()", type="button", aria-label="Close")
           span(aria-hidden="true") &times;
       .modal-body
@@ -65,7 +72,7 @@
         button.btn.btn-primary([routerLink]="['/group', newGroup.id]", type="button") {{ 'NEW_GROUP_MODAL.CONTROLS.NAV_TO_GROUP' | translate }}
     .modal-content(*ngIf="serviceResponse.success && editIG")
       .modal-header
-        h5.modal-title Image group saved
+        h5.modal-title Group saved
         button.close((click)="closeModal.emit()", type="button", aria-label="Close")
           span(aria-hidden="true") &times;
       .modal-body
@@ -74,4 +81,4 @@
           |  updated
       .modal-footer
         .form-group
-          button.btn.btn-primary((click)="refreshIG()", type="button") Refresh image group
+          button.btn.btn-primary((click)="refreshIG()", type="button") Refresh group

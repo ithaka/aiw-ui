@@ -27,13 +27,13 @@ export class Login implements OnInit, OnDestroy {
   public errorMsg: string = ''
   public instErrorMsg: string = ''
   public showPwdModal = false
-  public pwdReset = false
-  public expirePwd = false
+  public systemPwdReset = false
   public pwdRstEmail = ''
   public errorMsgPwdRst = ''
   public forcePwdRst = false
   public successMsgPwdRst = ''
   public loginInstitutions = [] /** Stores the institutions returned by the server */
+  public samlAvailable = false
 
   // Use environment for forum urls
   // This is temporary until stage deployment build is updated for env vars
@@ -43,6 +43,8 @@ export class Login implements OnInit, OnDestroy {
 
   public showRegister: boolean = false
   public showHelpModal: boolean = false
+
+  public username: string = '';
 
   private loginInstName: string = '' /** Bound to the autocomplete field */
   private stashedRoute: string
@@ -72,6 +74,7 @@ export class Login implements OnInit, OnDestroy {
     private _storage: ArtstorStorageService
   ) {
     // console.log("Constructing login component...")
+    this.samlAvailable = this._auth.samlAvailable
   }
 
   ngOnInit() {
@@ -83,9 +86,8 @@ export class Login implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.pipe(
       map(params => {
-        if (params && params['featureFlag']) {
-          this._flags[params['featureFlag']] = true
-        }
+        // Find feature flags applied on route
+        this._flags.readFlags(params)
       })).subscribe()
     )
 
@@ -259,4 +261,11 @@ export class Login implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Display reset password modal when required by system
+   */
+  displaySystemPwdReset(event): void {
+    this.systemPwdReset = true
+    this.showPwdModal = true
+  }
 }

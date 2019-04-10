@@ -3,10 +3,12 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Angulartics2 } from 'angulartics2'
-import { map, take } from 'rxjs/operators'
+import { throwError } from 'rxjs'
+import { map, take, catchError } from 'rxjs/operators'
 
 import { AuthService } from './../shared'
 import { USER_ROLES, USER_DEPTS, UserRolesAndDepts } from './user-roles'
+import { HttpErrorResponse } from '@angular/common/http'
 
 @Component({
   selector: 'ang-register-page',
@@ -27,10 +29,12 @@ export class RegisterComponent implements OnInit {
   public serviceErrors: {
     duplicate?: boolean,
     hasJstor?: boolean,
+    hasGoogle?: boolean,
     server?: boolean,
-    shibboleth?: string,
+    showShibbolethError?: boolean,
+    shibbolethError?: string,
     shibbolethInst?: boolean
-  } = {};
+  } = {}
 
   public showJstorModal: boolean = false
 
@@ -38,6 +42,11 @@ export class RegisterComponent implements OnInit {
     email: null,
     samlTokenId: null
   }
+
+  // Error codes for shibboleth messages
+  private shibErrorCodes: string[] = ['2010', '2020', '2030', '2040', '2050', '2060', '2070', '2080']
+
+  private registerCall: Function
 
   constructor(
     private _auth: AuthService,
@@ -49,17 +58,18 @@ export class RegisterComponent implements OnInit {
     this.registerForm = _fb.group({
       // The first value of this array is the initial value for the control, the second is the
       //  validator for the control. Validators.compose allows you to use multiple validators against a single field
-      email: [null, { updateOn: 'blur' }, Validators.compose([Validators.required, this.emailValidator])],
+      email: [null,  { validators: [Validators.required, Validators.email, this.emailValidator], updateOn: 'blur' }],
       emailConfirm: [null, Validators.required],
-      password: [null, Validators.compose([Validators.required, Validators.minLength(7)])],
+      password: [null, [Validators.required, Validators.minLength(7)]],
       passwordConfirm: [null, Validators.required],
       role: [null, Validators.required],
       dept: [null, Validators.required],
       terms: [false, Validators.requiredTrue],
       info: false,
       survey: false
-    }, { validator: Validators.compose([ this.passwordsEqual, this.emailsEqual ])});
-  }
+    }, { validator: [this.passwordsEqual, this.emailsEqual] },
+  )
+}
 
   ngOnInit() {
 
@@ -68,6 +78,7 @@ export class RegisterComponent implements OnInit {
     let type: string = this.route.snapshot.params.type
     this.serviceErrors['shibbolethInst'] = this.route.snapshot.params.error === 'INST404'
     this.serviceErrors['user'] = this.route.snapshot.params.error === 'USER404'
+
 
     if (samlTokenId || type === 'shibboleth') {
       email && this.registerForm.controls.email.setValue(email) // set the email
@@ -89,12 +100,12 @@ export class RegisterComponent implements OnInit {
 
   /** Gets called when the registration form is submitted */
   public registerSubmit(formValue: any) {
-    let registerCall: Function = (value) => { return this._auth.registerUser(value) }
-    this.serviceErrors = {};
-    this.submitted = true;
+    this.registerCall = (value) => { return this._auth.registerUser(value) }
+    this.serviceErrors = {}
+    this.submitted = true
 
-    if (!this.registerForm.valid) { return; }
-    this.isLoading = true;
+    if (!this.registerForm.valid) { return }
+    this.isLoading = true
 
     // this is the object that the service will receive
     let userInfo: any = {
@@ -110,61 +121,73 @@ export class RegisterComponent implements OnInit {
 
     if (this.shibParameters && this.shibParameters.samlTokenId && this.shibParameters.samlTokenId.length > 0) {
       userInfo.samlTokenId = this.shibParameters.samlTokenId
-      registerCall = (value) => { return this._auth.registerSamlUser(value) }
+      this.registerCall = (value) => { return this._auth.registerSamlUser(value) }
     }
 
-    registerCall(userInfo).pipe(
+    this.registerCall(userInfo).pipe(
+      catchError(this.handleError.bind(this)), // Component 'this' needs bound to handleError callback
       take(1),
       map(data => {
-        this.isLoading = false;
-        if (data['user']) {
-          let user: any = Object.assign({}, data['user']);
-          // A user that just registered is obviously logged in as a user
-          user.isLoggedIn = true;
-          this._auth.saveUser(data['user']);
-          this.angulartics.eventTrack.next({ action: 'remoteLogin', properties: { category: this._auth.getGACategory(), label: 'success' }});
-          this.loadForUser(data);
-        } else {
-          if (data['statusMessage'].includes('JSTOR account exists') && data['statusCode'] === 2) {
-            // Jstor account exists also returns a status code of 2
-            this.serviceErrors.hasJstor = true
-          } else if (data['statusMessage'] === 'User already exists.' && data['statusCode'] === 1) {
-            this.serviceErrors.duplicate = true
-          }
-        }
-      },
-      (res) => {
-        console.error(res);
-
-        this.isLoading = false;
-        if (res.status === 500) {
-          this.serviceErrors.server = true
-          console.error('Registration Server Error', userInfo, res)
-        }
-        if (res.error && res.error.code) {
-          this.serviceErrors.shibboleth = res.error.code
-        }
+        this.handleRegistrationResp(data)
       })).subscribe()
 
-    // if the call is unsuccessful, you will get a 200 w/o a user and with a field called 'statusMessage'
+  }
+
+  // Catch and handle Error responses from submitted register form
+  private handleError(err: any): any {
+
+    if (err.status === 500) {
+      this.serviceErrors.server = true
+    }
+    else if (err.status === 400) {
+      if (err.error.code && this.shibErrorCodes.indexOf(err.error.code.toString()) > -1) {
+        this.serviceErrors.shibbolethError = err.error.code.toString()
+        this.serviceErrors.showShibbolethError = true
+      }
+    }
+    this.isLoading = false
+    return throwError(err)
+  }
+
+  private handleRegistrationResp(formSubmissionResponse) {
+
+    if (formSubmissionResponse['user']) {
+      let user: any = Object.assign({}, formSubmissionResponse['user'])
+      // A user that just registered is obviously logged in as a user
+      user.isLoggedIn = true
+      this._auth.saveUser(formSubmissionResponse['user'])
+      this.angulartics.eventTrack.next({ properties: { event: 'remoteLogin', category: 'login', label: 'success' } })
+      this.loadForUser(formSubmissionResponse)
+    }
+    else if (formSubmissionResponse['statusMessage'].includes('JSTOR account exists') && formSubmissionResponse['statusCode'] === 2) {
+      // Jstor account exists also returns a status code of 2
+      this.serviceErrors.hasJstor = true
+    }
+    else if (formSubmissionResponse['statusMessage'] === 'User already exists.' && formSubmissionResponse['statusCode'] === 1) {
+      this.serviceErrors.duplicate = true
+    } 
+    else if (formSubmissionResponse['statusCode'] === 3 || formSubmissionResponse['statusMessage'].indexOf('registered with Google') >= 0) {
+      this.serviceErrors.hasGoogle = true
+    }
+    this.isLoading = false
   }
 
   loadForUser(data: any) {
     if (data && data.user) {
-      data.user.hasOwnProperty('username') && this.angulartics.setUsername.next(data.user.username);
-      data.user.hasOwnProperty('institutionId') && this.angulartics.setUserProperties.next({ institutionId: data.user.institutionId });
-      data.user.hasOwnProperty('isLoggedIn') && this.angulartics.setUserProperties.next({ isLoggedIn: data.user.isLoggedIn });
-      data.user.hasOwnProperty('shibbolethUser') && this.angulartics.setUserProperties.next({ shibbolethUser: data.user.shibbolethUser });
-      data.user.hasOwnProperty('dept') && this.angulartics.setUserProperties.next({ dept: data.user.dept });
+      data.user.hasOwnProperty('username') && this.angulartics.setUsername.next(data.user.username)
+      data.user.hasOwnProperty('institutionId') && this.angulartics.setUserProperties.next({ institutionId: data.user.institutionId })
+      data.user.hasOwnProperty('isLoggedIn') && this.angulartics.setUserProperties.next({ isLoggedIn: data.user.isLoggedIn })
+      data.user.hasOwnProperty('shibbolethUser') && this.angulartics.setUserProperties.next({ shibbolethUser: data.user.shibbolethUser })
+      data.user.hasOwnProperty('dept') && this.angulartics.setUserProperties.next({ dept: data.user.dept })
       data.user.hasOwnProperty('ssEnabled') && this.angulartics.setUserProperties.next({ ssEnabled: data.user.ssEnabled })
 
-      data.user.isLoggedIn = true;
-      this._auth.saveUser(data.user);
+      data.user.isLoggedIn = true
+      this._auth.saveUser(data.user)
       if (this._auth.getFromStorage('stashedRoute')) {
-        this._router.navigateByUrl(this._auth.getFromStorage('stashedRoute'));
-        this._auth.deleteFromStorage('stashedRoute');
+        this._router.navigateByUrl(this._auth.getFromStorage('stashedRoute'))
+        this._auth.deleteFromStorage('stashedRoute')
       } else {
-        this._router.navigate(['/home']);
+        this._router.navigate(['/home'])
       }
     }
   }
@@ -186,7 +209,7 @@ export class RegisterComponent implements OnInit {
    */
   private passwordsEqual(group: FormGroup): any {
     return group.get('password').value === group.get('passwordConfirm').value
-      ? null : { passwordMismatch: true };
+      ? null : { passwordMismatch: true }
   }
 
   /** Validates that the emails are equal and assigns error if not
@@ -194,15 +217,15 @@ export class RegisterComponent implements OnInit {
    */
   private emailsEqual(group: FormGroup): any {
     return group.get('email').value === group.get('emailConfirm').value
-      ? null : { emailMismatch: true };
+      ? null : { emailMismatch: true }
   }
 
   /** Validates email against the same regex used on the server
    * @returns error which should be assigned to the email input
    */
   private emailValidator(control: FormControl): any {
-    let emailRe: RegExp = /^\w+([\+\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,30})+$/;
-    return emailRe.test(control.value) ? null : { 'emailInvalid': true };
+    let emailRe: RegExp = /^\w+([\+\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,30})+$/
+    return emailRe.test(control.value) ? null : { emailInvalid: true }
   }
 
   /**
@@ -210,6 +233,6 @@ export class RegisterComponent implements OnInit {
    */
   private closeJstorModal(command) {
     // Hide modal
-    this.showJstorModal = false;
+    this.showJstorModal = false
   }
 }

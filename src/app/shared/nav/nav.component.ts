@@ -9,6 +9,8 @@ import { AuthService } from '../auth.service'
 import { AssetService } from '../assets.service'
 import { ToolboxService } from '../toolbox.service'
 import { AppConfig } from '../../app.service'
+import { Toast, ToastService } from 'app/_services';
+import { FlagService } from '../flag.service';
 
 @Component({
   selector: 'nav-bar',
@@ -21,6 +23,9 @@ export class Nav implements OnInit, OnDestroy {
 
   public showinactiveUserLogoutModal: boolean = false;
 
+  // Toasts display
+  public toasts: Toast[] = []
+
   // Display variables
   public logoUrl = ''
   private subscriptions: Subscription[] = [];
@@ -31,6 +36,10 @@ export class Nav implements OnInit, OnDestroy {
 
   private ipAuthed: boolean = false
 
+  // Flag display (dev)
+  public showAppliedFlags: boolean = false
+  public appliedFlags: string[] = []
+
   // TypeScript public modifiers
   constructor(
     public _app: AppConfig,
@@ -38,7 +47,9 @@ export class Nav implements OnInit, OnDestroy {
     private _assets: AssetService,
     private _router: Router,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private _toasts: ToastService,
+    private _flags: FlagService
   ) {
       // console.log("Constructing nav component...")
       this.logoUrl = this._app.config.logoUrl
@@ -74,17 +85,26 @@ export class Nav implements OnInit, OnDestroy {
               this.allowExpiredModal = false
             }
           }
-        })).subscribe()
-    );
-
-    // check every new user value to see if they're ip auth'd
-    this.subscriptions.push(
-      this._auth.currentUser.pipe(
-        map(user => {
-          if (user && user.ipAuthed == true) {
-            this.ipAuthed = true
-          }
-        })).subscribe()
+        })).subscribe(),
+        // Maintain user object
+        this._auth.currentUser.pipe(
+          map(user => {
+            if (user && user.ipAuthed == true) {
+              this.ipAuthed = true
+            }
+          })).subscribe(),
+        // Feature flag subscription
+        this._flags.flagUpdates.subscribe((flags) => {
+          // Trigger display of flags if URL flag is used
+          this.showAppliedFlags = flags.flagsAppliedByRoute
+          // Get applied flag keys for display while testing
+          this.appliedFlags = []
+          Object.keys(flags).forEach((flagKey) => {
+            if (flags[flagKey] && ['flagsAppliedByRoute', 'bannerCopy'].indexOf(flagKey) < 0) {
+              this.appliedFlags.push(flagKey)
+            }
+          })
+        })
     )
 
     // Subscribe to User object updates
@@ -113,11 +133,7 @@ export class Nav implements OnInit, OnDestroy {
       this._auth.showUserInactiveModal.pipe(
         map(value => {
           this.showinactiveUserLogoutModal = value;
-        })).subscribe()
-    )
-
-    // Subscribe to Institution object updates
-    this.subscriptions.push(
+        })).subscribe(),
       this._auth.getInstitution().pipe(
         map(
           (institutionObj) => {
@@ -126,7 +142,13 @@ export class Nav implements OnInit, OnDestroy {
           (err) => {
             console.error('Nav failed to load Institution information', err)
           }
-        )).subscribe()
+        )).subscribe(),
+      // Toast updates subscription
+      this._toasts.toastUpdates.subscribe(
+        toasts => {
+          this.toasts = toasts
+        }
+      )
     );
   }
 

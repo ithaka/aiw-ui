@@ -318,67 +318,11 @@ export class AssetService {
     }
 
     /**
-     * DEPRECATED
-     * Generates Image URL
-     * @param assetId: string Asset or object ID
-     */
-    public generateImageURL(assetId: string) {
-
-        return this.http
-            .get(this._auth.getUrl() + '/encrypt/' + assetId + '?_method=encrypt', this.defaultOptions)
-            .toPromise()
-    }
-
-    /**
      * Generate asset share link
      */
     public getShareLink(assetId: string, externalAsset?: boolean) {
         //   Links in the clipboard need a protocol defined
-        return  `https://${this._app.clientHostname}/#/asset/${assetId}`
-
-        // For Reference: Old service for generating share url:
-        // this._assets.genrateImageURL( this.assets[0].id )
-        //   .then((imgURLData) => {
-        //       this._assets.encryptuserId()
-        //         .then((userEncryptData) => {
-        //           var imgEncryptId = imgURLData.encryptId;
-        //           var usrEncryptId = userEncryptData.encryptId;
-        //         //   Links in the clipboard need a protocol defined
-        //             this.generatedImgURL =  'http:' + this._auth.getUrl() + '/ViewImages?id=' + imgEncryptId + '&userId=' + usrEncryptId + '&zoomparams=&fs=true';
-        //         })
-        //         .catch(function(err){
-        //           console.log('Unable to Encrypt userid');
-        //           console.error(err);
-        //         });
-        //   })
-        //   .catch(function(err) {
-        //       console.log('Unable to generate image URL');
-        //       console.error(err);
-        //   });
-    }
-
-    /**
-     * Encrypt User Id
-     */
-    public encryptuserId() {
-
-        return this.http
-            .get(this._auth.getUrl() + '/encrypt/?_method=encryptuserId', this.defaultOptions)
-            .toPromise()
-    }
-
-    /**
-     * Gets File Properties table for an asset
-     * @param assetId Id for an asset/object
-     */
-    public getFileProperties(assetId: string): Promise<any> {
-        return this.http
-            .get(this._auth.getUrl(true) + '/metadata/' + assetId + '?_method=FpHtml', this.defaultOptions)
-            .toPromise()
-            .then(data => {
-                // This call only returns Html!
-                return data['_body'].toString();
-            });
+        return  `https://${this._app.clientHostname}/#/asset/${ ( externalAsset ? 'external/' : '' ) + assetId }`
     }
 
     /**
@@ -400,7 +344,7 @@ export class AssetService {
 
           let options = { withCredentials: true }
 
-          this.http.get(this._auth.getHostname() + '/api/v2/items?object_id=' + idsAsTerm, options).pipe(
+          this.http.get(this._auth.getHostname() + '/api/v1/items?object_id=' + idsAsTerm, options).pipe(
             map(res => {
                 let results = res
                 ig.thumbnails = results['items']
@@ -420,8 +364,21 @@ export class AssetService {
      * @param assetIds the ids for which you need the thumbnails
      * @param igId passed if you are viewing an image group, which may contain pc assets and therefore access is checked against user's access to group
      */
-    public getAllThumbnails(assetIds: string[], igId?: string): Promise<Thumbnail[]> {
-
+    public getAllThumbnails(groupItems: any[], igId?: string): Promise<Thumbnail[]> {
+        let assetIds: string [] = []
+        /**
+         * 2019/3/14
+         * Check for new item format (object), and convert to strings for items service
+         */
+        if (groupItems[0] && groupItems[0].id) {
+            for (let i = 0; i < groupItems.length; i++) {
+            if (groupItems[i] && groupItems[i].id) {
+                assetIds.push(groupItems[i].id)
+            }
+            }
+        } else {
+            assetIds = groupItems
+        }
         // return new Promise
         let maxCount = 100
         return new Promise( (resolve, reject) => {
@@ -435,7 +392,7 @@ export class AssetService {
                 let idsAsTerm: string = objectIdTerm + assetIds.slice(i, countEnd).join(objectIdTerm) // concat the query params
                 let url: string = this._auth.getHostname() + '/api/'
                 if (igId) {
-                    url += 'v1/group/' + igId + '/items?' + idsAsTerm
+                  url += 'v1/group/' + igId + '/items?' + idsAsTerm
                 } else {
                     url += 'v2/items?' + idsAsTerm
                 }
@@ -579,55 +536,10 @@ export class AssetService {
      */
     public getCategoryInfo(catId: string) {
         let options = { withCredentials: true };
-        
+
         return this.http
             .get(this._auth.getUrl() + '/v1/categorydesc/' + catId, options)
             .toPromise();
-    }
-
-    nodeDesc(descId, widgetId){
-        let options = { withCredentials: true };
-
-        // Can be removed once region specific ids are no longer used
-        if (descId.indexOf('103') == 1) {
-            descId = descId.slice(1)
-        }
-
-        return this.http
-            .get(this._auth.getHostname() + '/api/v1/categorydesc/' + descId + '/' + widgetId, options)
-            .toPromise()
-    }
-
-    /**
-     * DEPRECATED - Get Collection
-     * @param colId id of collection to fetch
-     * @returns thumbnails of assets for a collection, and collection information
-     */
-    public getCollectionThumbs(colId: string, pageNo?: number, size?: number) {
-        let options = {withCredentials: true};
-        let imageSize = 0;
-
-        if (!pageNo) { pageNo = 1; }
-        if (!size) { size = 72; }
-
-        let requestString = [this._auth.getUrl(), 'collections', colId, 'thumbnails', pageNo, size, imageSize].join('/');
-
-        return this.http
-            .get(requestString, options)
-            .toPromise()
-    }
-
-    /**
-     * Wrapper function for HTTP call to get subImageGroups. Used by browse/groups component
-     * @param subImageGroup id
-     * @returns Chainable promise containing subImageGroups data
-     */
-    public subGroups(id: string){
-        let options = { withCredentials: true };
-
-        return this.http
-            .get(this._auth.getUrl() + '/folders/' + id + '/imagegroups?studWkFldrs=true&parentWritable=true', options)
-            .toPromise()
     }
 
     /**
@@ -661,16 +573,6 @@ export class AssetService {
                 }
               }
             ))
-    }
-
-    public getFolders() {
-        let options = { withCredentials: true };
-
-        let requestString = [this._auth.getUrl(), 'folders'].join('/');
-
-        return this.http
-            .get(requestString)
-            .toPromise()
     }
 
     public getBlogEntries(query ?: string) {
@@ -725,16 +627,19 @@ export class AssetService {
         /**
          * Include only availble assets to the resultsObj thumbnails array, set aside restricted assets
          */
-        if (resultObj.thumbnails){
+        if (resultObj.thumbnails) {
             // let thumbnailsOrignalLength: number = resultObj.thumbnails.length
             resultObj['restricted_thumbnails'] = []
             resultObj.thumbnails = resultObj.thumbnails.filter( thumbnail => {
-                if (thumbnail.status === 'not-available') {
-                    resultObj['restricted_thumbnails'].push(thumbnail)
-                    return false
-                } else {
-                    return true
-                }
+
+              if (typeof(thumbnail) === 'undefined') {
+                return false
+              } else if (thumbnail.status && thumbnail.status === 'not-available') {
+                resultObj['restricted_thumbnails'].push(thumbnail)
+                return false
+              } else {
+                return true
+              }
             })
         }
         // Update results thumbnail array
@@ -870,6 +775,7 @@ export class AssetService {
      * @param igId Image group id for which to retrieve thumbnails
      */
     private loadIgAssets(igId: string) {
+
         // Reset No IG observable
         this.noIGSource.next(false)
         this.noAccessIGSource.next(false)
@@ -878,10 +784,10 @@ export class AssetService {
         let startIndex = ((this.urlParams.page - 1) * this.urlParams.size) + 1
 
         let requestString: string = [this._auth.getUrl(), 'imagegroup', igId, 'thumbnails', startIndex, this.urlParams.size, this.activeSort.index].join('/')
-
         this._groups.get(igId)
             .toPromise()
             .then((data) => {
+
                 if (!Object.keys(data).length) {
                     throw new Error('No data in image group thumbnails response')
                 }
@@ -892,27 +798,48 @@ export class AssetService {
                 if (data.total > 0) {
                     let pageStart = (this.urlParams.page - 1) * this.urlParams.size
                     let pageEnd = this.urlParams.page * this.urlParams.size
+
+                    let itemIdsArray: any[]
+                    itemIdsArray = data.items
+
+                    // itemsIdsArray needs to be an array strings for search call
+                    itemIdsArray = itemIdsArray.map(item => {
+                      return (typeof(item) === 'string') ? item : item.id
+                    })
+
                     // Maintain param string in a single place to avoid debugging thumbnails lost to a bad param
                     const ID_PARAM = 'object_ids='
-                    let idsAsTerm: string =  data.items.slice(pageStart, pageEnd).join('&' + ID_PARAM)
+                    let idsAsTerm: string =  itemIdsArray.slice(pageStart, pageEnd).join('&' + ID_PARAM)
 
                     let options = { withCredentials: true }
 
                     this.http.get(this._auth.getHostname() + '/api/v1/group/' + igId + '/items?' + ID_PARAM + idsAsTerm, options).pipe(
                       map((res) => {
-                            let results = res
-                            data.thumbnails = results['items']
+                        let results = res
+                        data.thumbnails = results['items'] // V1 ?items from search
+                        // For multi-view items, make the thumbnail urls and update the array
+                        data.thumbnails = data.items.slice(pageStart, pageEnd).map((item) => {
 
-                            // For multi-view items, make the thumbnail urls and update the array
-                            data.thumbnails = data.thumbnails.map((thumbnail) => {
-                              if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
-                                thumbnail.thumbnailImgUrl = this._auth.getThumbUrl(true) + thumbnail.thumbnailImgUrl
+                          // Attach zoom object from items to the relevant thumbnail, to be used in asset grid
+                          for(let thumbnail of data.thumbnails) {
+
+                            thumbnail = Object.assign({}, thumbnail)  // Make copy to avoid modifying subsequent items
+
+                            if (item['id'] === thumbnail['objectId']) {
+                              if(item['zoom']){
+                                  thumbnail['zoom'] = item['zoom']
                               }
-                              return thumbnail
-                            })
+                              if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
+                                thumbnail.thumbnailImgUrl = this._auth.getThumbHostname(true) + thumbnail.thumbnailImgUrl
+                              }
 
-                            // Set the allResults object
-                            this.updateLocalResults(data)
+                              return thumbnail
+                            }
+                          }
+                        })
+
+                        // Set the allResults object
+                        this.updateLocalResults(data)
                       }, (error) => {
                         // Pass portion of the data we have
                         this.updateLocalResults(data)
@@ -926,7 +853,6 @@ export class AssetService {
 
             })
             .catch((error) => {
-                // console.error(error)
                 if (error.status === 404){
                     this.noIGSource.next(true)
                 }
@@ -942,7 +868,7 @@ export class AssetService {
      */
     private loadSearch(term: string): void {
         // Don't wait for previous subscription anymore
-        if (this.searchSubscription && this.searchSubscription.hasOwnProperty('unsubscribe')) {
+        if (this.searchSubscription && this.searchSubscription.unsubscribe) {
             this.searchSubscription.unsubscribe()
         }
 
@@ -977,32 +903,9 @@ export class AssetService {
                     console.error(error)
                     this.allResultsSource.next({'error': error})
             });
+
     }
 
-//     /**
-//      * Call to API which returns an asset, given an encrypted_id
-//      * @param token The encrypted token that you want to know the asset id for
-//      */
-//     public decryptToken(token: string, source?: string): Observable<any> {
-//         let header
-//         let options
-//         let query: HttpParams = new HttpParams()
-//         query.set('encrypted_id', token)
-//         source && query.set('source', source)
-
-//         header = new HttpHeaders({ withCredentials: 'true', fromKress : 'true' })
-
-//         options = { headers: header, params: query } // Create a request option
-
-//         return this.http.get(this._auth.getHostname() + "/api/v1/items/resolve?encrypted_id=" + token, options)
-//         .map((res) => {
-//             let jsonRes = res
-//             if (jsonRes && jsonRes['success'] && jsonRes['item']) {
-//                 return jsonRes
-//             }
-//             else { throw new Error("No success or item found on response object") }
-//         })
-//   }
 }
 
 export interface categoryName {

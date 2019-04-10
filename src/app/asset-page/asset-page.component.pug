@@ -1,5 +1,4 @@
 .container-fluid.asset-page(*ngIf="assetIds[0]", [class.fullscreen]="isFullscreen")
-  ang-guide-tour(*ngIf="showTour", [steps]="steps")
   .row
     //- View prev/next asset
     .title-nav-cntnr.col-md-12([class.hidden]="isFullscreen")
@@ -23,6 +22,7 @@
             [assetId]="assetId",
             [encrypted]="encryptedAccess",
             [groupId]="assetGroupId",
+            [zoom]="indexZoomMap[i]",
             (assetMetadata)="handleLoadedMetadata($event, i)",
             [ngClass]="[ 'asset-viewer-' + assetIds.length ]",
             (fullscreenChange)="updateFullscreenVar($event)",
@@ -35,7 +35,7 @@
             [showCaption]="showAssetCaption",
             [quizMode]="quizMode",
             [prevAssetResults]="prevAssetResults",
-            (removeAsset)="toggleAsset($event)",
+            (removeAsset)="toggleAsset($event, i)",
             (nextPage)="showNextAsset()",
             (prevPage)="showPrevAsset()",
             (multiViewPageViaArrow)="multiViewPageViaArrow()",
@@ -85,22 +85,41 @@
           //- * (mouseup) is a Firefox fix for firing the copy event
           button#assetpage-btn.btn.btn-secondary(*ngIf="user.isLoggedIn && assets[0].personalCollectionOwner === user['baseProfileId']", [class.active]="showEditDetails", (click)="loadEditDetailsForm()", tabindex="2", aria-label="Edit details for this item")
             | {{ 'ASSET_PAGE.BUTTONS.EDIT_DETAILS' | translate}}
-
           //- the .driver-find-group-btn class is important for the tour to find it, be careful when removing or changing it
-          button#assetpage-btn.btn.btn-primary.driver-find-group-btn((click)="addAssetToIG()", (focus)="closeDropdowns()", (keydown.enter)="addAssetToIG()", tabindex="2", aria-label="Add this item to a group")
-            | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate }}
-            //- i.icon.icon-add-white(aria-hidden="true")
+          .dropdown.d-inline-block.driver-find-group-btn(ngbDropdown, aria-haspopup="true")
+            button#addToGroupDropdown.btn.btn-primary(ngbDropdownToggle, tabindex="2", aria-label="Add to groups", (click)="closeAddGroupTooltip()", (keyup.enter)="closeAddGroupTooltip()")
+              | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate}}
+              = " "
+            ang-promo-tooltip(*ngIf="(user.isLoggedIn && assets[0].typeName && assets[0].typeName === 'image') && !addGrpTTDismissed && (assetViewer.state === 1 || !multiviewItems)", [options]="addGroupTooltipOpts", (close)="closeAddGroupTooltip()")
+            .dropdown-menu(ngbDropdownMenu)
+              a#addItemToGroupLink.dropdown-item(
+                (click)="addAssetToIG()",
+                tabindex="2",
+                aria-label="Add Item to Group",
+                role="button")
+                i.icon.icon-add-item
+                | &nbsp;Add item
+              a#addViewToGroupLink.dropdown-item(
+                (click)="addAssetToIG(true)",
+                tabindex="2",
+                aria-label="Add View to Group",
+                [class.disabled]="assetViewer.state !== 1 || multiviewItems",
+                role="button")
+                i.icon.icon-add-detail-view([class.disabled]="assetViewer.state !== 1 || multiviewItems")
+                | &nbsp;Add detail view
+
+
           //- Download dropdown options
           | {{downloadUrl}}
           .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess || assets[0].publicDownload)", ngbTooltip, [disableTooltip]="!multiviewItems", [ngbTooltip]="multiViewDownloadDisabled", triggers="focusin:focusout mouseenter:mouseleave", placement="bottom", aria-haspopup="true")
             button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="genDownloadViewLink()", (keydown.enter)="genDownloadViewLink()", (keyup.arrowdown)="downloadOptsArrowDown($event.target)", [disabled]="multiviewItems", tabindex="2", aria-label="Download")
               | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
               = " "
-            .dropdown-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
+            .dropdown-menu.download-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
               a#downloadAssetLink.dropdown-item(download,
-                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? generatedFullURL : null",
-                (click)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadImage() : setDownloadImage()",
-                (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadImage() : setDownloadImage()",
+                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? generatedFullURL : null",
+                (click)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadImage() : setDownloadImage()",
+                (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadImage() : setDownloadImage()",
                 (keyup.arrowdown)="downloadOptsArrowDown($event.target)",
                 (keyup.arrowup)="downloadOptsArrowUp($event.target)",
                 [class.disabled]="assets[0].disableDownload",
@@ -109,33 +128,20 @@
                 tabindex="2",
                 aria-label="Download item",
                 role="button")
-                i.icon.icon-download-black
-                | &nbsp;Download File
-              a#downloadViewLink.dropdown-item(*ngIf="isMSAgent",
-                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? downloadViewLink : null",
-                (click)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
-                (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
+                i.icon.icon-download
+                | &nbsp;Download item
+              a#downloadViewLink.dropdown-item(
+                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? downloadViewLink : null",
+                (click)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadView() : setDownloadView()",
+                (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadView() : setDownloadView()",
                 (keyup.arrowup)="downloadOptsArrowUp($event.target)",
                 [class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'",
                 target="_blank",
                 tabindex="2",
                 aria-label="Download item’s detail view",
                 role="button")
-                i.icon.icon-download-black
-                | &nbsp;Download View
-              a#downloadViewLink.dropdown-item(*ngIf="!isMSAgent" download="download.jpg",
-                type="image/jpeg",
-                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? generatedBlobURL : null",
-                (click)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
-                (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && downloadAuth()) ? trackDownloadView() : setDownloadView()",
-                (keyup.arrowup)="downloadOptsArrowUp($event.target)",
-                [class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'",
-                target="_self",
-                tabindex="2",
-                aria-label="Download item’s detail view",
-                role="button")
-                i.icon.icon-download-black
-                | &nbsp;Download View
+                i.icon.icon-download-detail-view([class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'")
+                | &nbsp;Download detail view
           //- False door button if user is not logged in
           button#assetpage-btn.btn.btn-secondary(*ngIf="assets[0].downloadLink && !(user.isLoggedIn || hasExternalAccess) && !assets[0].publicDownload", (click)="showLoginModal = true", (keydown.enter)="showLoginModal = true", tabindex="2", aria-label="Download")
             | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
@@ -155,7 +161,6 @@
           //-     //- i#genImgURLlink.icon.icon-share-white
 
           .form-group.pt-1([class.hidden]="!showCopyUrl")
-            //- label {{ 'ASSET_PAGE.HEADER_LABELS.SHR_LNK' | translate}}
             .alert.alert-info(*ngIf="copyURLStatusMsg") {{ copyURLStatusMsg }}
         //-------------------
         //- Metadata Display
@@ -268,13 +273,13 @@
           pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
         div.pt-1.pb-3(*ngIf="prevAssetResults.thumbnails.length < 1")
           .alert.alert-info {{ 'ASSET_PAGE.MESSAGES.NEEDASSETS' | translate}}
-        ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{'selected' : asset.selected || (assets[0].id == asset[assetIdProperty]), 'disabled': (asset.selected && assets.length === 1) }", (click)="toggleAsset(asset)")
+        ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{ 'selected' : asset.selected || isPrimaryAsset(asset) }", (click)="toggleAsset(asset)")
         .text-center.pt-2
           pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
-ang-agree-modal(*ngIf="showAgreeModal", (closeModal)="showAgreeModal = false", [downloadUrl]="downloadUrl", [downloadName]="downloadName", [isMSAgent]="isMSAgent", [setDownloadView]="setDownloadView")
+ang-agree-modal(*ngIf="showAgreeModal", (closeModal)="showAgreeModal = false", (acceptedTerms)="acceptedTerms = true", [downloadUrl]="downloadUrl", [downloadName]="downloadName", [isMSAgent]="isMSAgent", [setDownloadView]="setDownloadView")
 ang-login-req-modal(*ngIf="showLoginModal", (closeModal)="showLoginModal = false")
-ang-add-to-group(*ngIf="showAddModal", [selectedAssets]="[ assets[0] ]", [showCreateGroup]="true", [copySelectionStr]=" 'ADD_TO_GROUP_MODAL.FROM_ASSET' ", (createGroup)="showCreateGroupModal = true; showAddModal = false;", (closeModal)="showAddModal = false")
-ang-new-ig-modal(*ngIf="showCreateGroupModal", [selectedAssets]="[ assets[0] ]", [showAddToGroup]="true", (addToGroup)="showAddModal = true; showCreateGroupModal = false;", (closeModal)="showCreateGroupModal = false")
+ang-add-to-group(*ngIf="showAddModal", [selectedAssets]="[ assets[0] ]", [copySelectionStr]=" 'ADD_TO_GROUP_MODAL.FROM_ASSET' ", (createGroup)="showCreateGroupModal = true; showAddModal = false;", (closeModal)="updatePrimaryAssetZoom(); showAddModal = false", (showToast)="handleToast($event)")
+ang-new-ig-modal(*ngIf="showCreateGroupModal", [selectedAssets]="[ assets[0] ]", (addToGroup)="showAddModal = true; showCreateGroupModal = false;", (closeModal)="updatePrimaryAssetZoom(); showCreateGroupModal = false")
 ang-access-denied-modal(*ngIf="showAccessDeniedModal", [showSkipAsset]="isFullscreen && isAssetSkipable()", (skipAsset)="handleSkipAsset()", (exitFullScreen)="assetViewer.exitFullScreen(); assetViewer.setFullscreen(false)")
 ang-server-error-modal(*ngIf="showServerErrorModal", (exitFullScreen)="assetViewer.exitFullScreen(); assetViewer.setFullscreen(false)")
 ang-generate-citation(*ngIf="showGenerateCitation", [asset]="assets[0]", (closeModal)="showGenerateCitation = false")

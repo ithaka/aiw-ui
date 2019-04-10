@@ -1,5 +1,5 @@
 // Project Dependencies
-import { AssetData, MetadataField, FileProperty, CollectionValue } from '../../_services'
+import { AssetData, MetadataField, FileProperty, CollectionValue } from './asset.service'
 
 export class Asset {
     id: string
@@ -9,11 +9,10 @@ export class Asset {
     title: string
     thumbnail_url: string
     thumbnail_size: number = 2
-    image_compound_urls?: string[]
     kalturaUrl: string
     downloadLink: string
     downloadName: string
-    tileSource: string | string[]
+    tileSource: any
     collectionType: number
     contributinginstitutionid: number
     personalCollectionOwner: number
@@ -26,6 +25,8 @@ export class Asset {
     SSID: string
     fileName: string
     updated_on: string
+    publicDownload?: any
+    image_compound_urls?: string[]
 
     viewportDimensions: {
         contentSize?: any,
@@ -33,6 +34,8 @@ export class Asset {
         containerSize?: any,
         center?: any
     } = {}
+
+    public zoom?: ImageZoomParams
 
 //   private dataLoadedSource = new BehaviorSubject<boolean>(false)
 //   public isDataLoaded = this.dataLoadedSource.asObservable()
@@ -83,13 +86,21 @@ export class Asset {
             case 22:
             case 23:
                 // Non-image Download Link format: /media/ARTSTORID/TYPEID
-                downloadLink = [data.baseUrl + 'media', this.id, data.object_type_id].join("/")
+                downloadLink = [data.baseUrl, 'media', this.id, data.object_type_id].join("/")
                 break
             default:
-                if (data.image_url) { //this is a general fallback, but should work specifically for images and video thumbnails
-                    let imageServer = 'http://imgserver.artstor.net/' // TODO: check if this should be different for test
+                if (Array.isArray(this.tileSource) && this.tileSource.length >= 1) {
+                    // Handle Multi View downloads using IIIF
+                    let url = 'https:' + this.tileSource[0].replace('info.json', '') + 'full/full/0/default.jpg'
+                    // Pass IIIF url to Download Service for processing metadata
+                    // Include "iiif" param in this case
+                    downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url) + "&iiif=true"
+                } else if (data.image_url) {
+                    // Handle images and video thumbnails
+                    let imageServer = 'http://imgserver.artstor.net/'
+                    // Pass Image url to Download Service for processing metadata
                     let url = imageServer + data.image_url + "?cell=" + data.download_size + "&rgnn=0,0,1,1&cvt=JPEG"
-                    downloadLink = data.baseUrl + "api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url)
+                    downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url)
                 } else {
                     // nothing happens here because some assets are not allowed to be downloaded
                 }
@@ -138,7 +149,7 @@ export class Asset {
      * - Reports status via 'this.dataLoadedSource' observable
      */
     private initAssetProperties(data: AssetData, testEnv?: boolean): void {
-        let storUrl: string = testEnv ? '//stor.stage.artstor.org' : '//stor.artstor.org' 
+        let storUrl: string = testEnv ? '//stor.stage.artstor.org' : '//stor.artstor.org'
         // Set array of asset metadata fields to Asset, and format
         if (data.metadata_json) {
             this.formattedMetadata = this.formatMetadata(data.metadata_json)
@@ -159,6 +170,7 @@ export class Asset {
         this.thumbnail_url = this.replaceThumbnailSize(data.thumbnail_url, this.thumbnail_size)
         this.typeId = data.object_type_id
         this.typeName = this.initTypeName(data.object_type_id)
+        console.log("Download size: " + data.download_size)
         this.disableDownload =  data.download_size === '0,0'
         this.SSID = data.SSID
         // Set filename
@@ -174,7 +186,6 @@ export class Asset {
         // Set Download information
         let fileExt = this.fileName.substr(this.fileName.lastIndexOf('.'), this.fileName.length - 1)
         this.downloadName = this.title.replace(/\./g,'-') + '.' + fileExt
-        this.downloadLink = this.buildDownloadLink(data)
         data.viewer_data && (this.viewerData = data.viewer_data)
 
         // Save the Tile Source for IIIF
@@ -193,9 +204,17 @@ export class Asset {
                 data.image_compound_urls[i] = storUrl + '/fcgi-bin/iipsrv.fcgi?IIIF=' + path
             }
             this.tileSource = data.image_compound_urls
-        } else {
+
+        }
+        // Handle Downgraded from Multiview.
+        else if(data.image_compound_urls && data.image_compound_urls.length === 0) {
+          this.tileSource = this.thumbnail_url = storUrl + '/stor' + data.image_url
+        }
+        else {
             this.tileSource = data.tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgPath) + '/info.json'
         }
+        // Set download after tilesource determined
+        this.downloadLink = this.buildDownloadLink(data)
 
         // set up kaltura info if it exists
         if (data.fpxInfo) {
@@ -220,4 +239,116 @@ export class Asset {
 
 export interface FormattedMetadata {
     [fieldName: string]: string[]
+}
+
+// From asset.service
+
+export interface MetadataResponse {
+    metadata: AssetDataResponse[]
+    success: boolean
+    total: 1 // the total number of items returned
+  }
+
+  export interface AssetData {
+    groupId?: string
+    SSID?: string
+    category_id: string
+    category_name: string
+    collections: CollectionValue[]
+    collection_id: string
+    collection_name: string
+    collection_type: number
+    contributinginstitutionid: number
+    personalCollectionOwner: number
+    download_size: string
+    fileProperties: FileProperty[] // array of objects with a key/value pair
+    height: number
+    image_url: string
+    image_compound_urls?: string[],
+    metadata_json: MetadataField[]
+    object_id?: string
+    object_type_id?: number
+    resolution_x: number
+    resolution_y: number
+    thumbnail_url: string
+    tileSourceHostname: string
+    title: string
+    updated_on: string
+
+    viewer_data?: {
+        base_asset_url?: string,
+        panorama_xml?: string
+    }
+    width: number
+    baseUrl: string
+    fpxInfo?: ImageFPXResponse
+  }
+
+  export interface AssetDataResponse {
+    SSID?: string
+    category_id: string
+    category_name: string
+    collection_id: string
+    collection_name: string
+    collection_type: number
+    contributinginstitutionid: number
+    personalCollectionOwner: number
+    downloadSize?: string
+    download_size?: string
+    fileProperties: { [key: string]: string }[] // array of objects with a key/value pair
+    height: number
+    image_url: string
+    metadata_json: MetadataField[]
+    object_id: string
+    object_type_id: number
+    resolution_x: number
+    resolution_y: number
+    thumbnail_url: string
+    title: string
+    updated_on: string
+    viewer_data: {
+      base_asset_url?: string,
+      panorama_xml?: string
+    }
+    width: number
+  }
+
+  export interface MetadataField {
+    count: number // the number of fields with this name
+    fieldName: string
+    fieldValue: string
+    index: number
+    link?: string
+  }
+
+  export interface CollectionValue {
+    type: string
+    name: string
+    id: string
+  }
+
+  export interface ImageFPXResponse {
+    height: number
+    id: {
+      fileName: string
+      resolution: number
+    }
+    imageId: string
+    imageUrl: string
+    resolutionX: number
+    resolutionY: number
+    width: number
+  }
+
+  export interface FileProperty { [key: string]: string }
+
+/**
+ * IIIF Zoom parameters as passed by Group service and URL params
+ */
+export interface ImageZoomParams {
+    viewerX?: number
+    viewerY?: number
+    pointWidth?: number
+    pointHeight?: number
+    index?: number
 }

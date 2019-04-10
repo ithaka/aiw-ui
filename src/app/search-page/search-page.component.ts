@@ -75,10 +75,6 @@ export class SearchPage implements OnInit, OnDestroy {
       )
     );
 
-    // Load Ethnio survey
-    // if (this._appConfig.config.siteID !== 'SAHARA') {
-    //   this._script.loadScript('ethnio-survey')
-    // }
   } // OnInit
 
   ngOnDestroy() {
@@ -89,10 +85,9 @@ export class SearchPage implements OnInit, OnDestroy {
     this.route.params.subscribe( (routeParams) => {
       let params = Object.assign({}, routeParams);
 
-      // Find feature flags (needs to be checked before running queryAll)
-      if (params && params['featureFlag']){
-          this._flags[params['featureFlag']] = true;
-      }
+      // Find feature flags applied on route 
+      // - Needs to be checked before running queryAll)
+      this._flags.readFlags(routeParams)
 
       // If a page number isn't set, reset to page 1!
       if (!params['page']){

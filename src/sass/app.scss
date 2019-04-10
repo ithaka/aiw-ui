@@ -29,6 +29,7 @@
 // [II] Core Imports (Order of import matters)
 // ----------------------------------------------------
 
+@import './core/mixins';
 @import './core/reset';
 @import './core/helpers';
 @import './core/layout';
@@ -50,6 +51,7 @@
 @import './modules/medium-editor/themes/default';
 @import './modules/filters';
 @import './modules/styleguide';
+@import './modules/toasts';
 @import './modules/tour';
 @import './modules/viewer';
 
@@ -327,6 +329,18 @@ body body{
   }
 }
 
+.tooltip.bs-tooltip-bottom {
+  &.show-on-hover {
+    left: 50%;
+    transform: translateX(-50%);
+    top: 100%;
+    z-index: 9000;
+  }
+
+  & .arrow {
+    left: calc(50% - 0.4rem);
+  }
+}
 // No Javascript display message styles
 noscript #nojs-container {
   position: relative;

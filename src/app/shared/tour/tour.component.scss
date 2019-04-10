@@ -1,4 +1,6 @@
-$blue: #0039c6;
+@import '../../../sass/core/variables';
+
+
 .start-tour {
     margin-top: 0.5em;
     margin-left: -1em;
@@ -12,11 +14,11 @@ $blue: #0039c6;
     cursor: pointer;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 13px;
-    background-color: #C9510D;
+    background-color: $orange;
     color: #fff !important;
-  
+
     &:hover{
-      background: darken(#C9510D, 10%);
+      background: darken($orange, 10%);
       color: #fff !important;
     }
   }

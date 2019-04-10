@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="13px" viewBox="0 0 16 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>icons_add-detail-view-dropdown</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Working" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1-asset---add-to-group-selector" transform="translate(-862.000000, -266.000000)" fill="#333333">
+            <g id="add-to-group-dropdown" transform="translate(849.000000, 211.000000)">
+                <path d="M21.5233766,62.1168831 L21.5233766,64.5 L20.5233766,64.5 L20.5233766,62.1168831 L18,62.1168831 L18,61.1168831 L20.5233766,61.1168831 L20.5233766,58.5 L21.5233766,58.5 L21.5233766,61.1168831 L24,61.1168831 L24,62.1168831 L21.5233766,62.1168831 Z M14.0003357,55.9982452 L14.0003357,60 L13,60 L13,55 L18,55 L18,55.9982452 L14.0003357,55.9982452 Z M27.9996643,55.9982452 L24,55.9982452 L24,55 L29,55 L29,60 L27.9996643,60 L27.9996643,55.9982452 Z M14.0003357,67.0017548 L18,67.0017548 L18,68 L13,68 L13,63 L14.0003357,63 L14.0003357,67.0017548 Z M27.9996643,67.0017548 L27.9996643,63 L29,63 L29,68 L24,68 L24,67.0017548 L27.9996643,67.0017548 Z" id="icons_add-detail-view-dropdown"></path>
+            </g>
+        </g>
+    </g>
+</svg>

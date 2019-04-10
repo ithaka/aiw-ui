@@ -14,10 +14,10 @@ echo "Using package $PACKAGE_NAME and version ${VERSION}"
 cd $SRC_DIR
 
 # Grab a newer node.js
-wget https://nodejs.org/dist/v10.9.0/node-v10.9.0-linux-x64.tar.xz
-xz -dc node-v10.9.0-linux-x64.tar.xz | tar xf - -C /usr/local/
+wget https://nodejs.org/dist/v11.0.0/node-v11.0.0-linux-x64.tar.xz
+xz -dc node-v11.0.0-linux-x64.tar.xz | tar xf - -C /usr/local/
 
-export PATH=/usr/local/node-v10.9.0-linux-x64/bin:$PATH
+export PATH=/usr/local/node-v11.0.0-linux-x64/bin:$PATH
 
 # Get Yarn and use it for NPM dependencies
 npm install --global yarn
@@ -27,6 +27,8 @@ yarn global add webpack webpack-dev-server karma karma-cli protractor typescript
 
 # Install dependencies
 yarn install
+# Ensure Angular CLI commands are available
+npm link @angular/cli
 
 # Build the project! (uses Webpack)
 # - sleep acts as a failsafe for broken dependencies stalling builds
@@ -38,7 +40,7 @@ npm install --global nucleus-styleguide
 yarn styleguide
 
 # Collect our built files
-rsync -a ${SRC_DIR}/dist/avatar/* ${BUILD_DIR}/
+rsync -a ${SRC_DIR}/dist/browser/* ${BUILD_DIR}/
 
 # Package our built app
-tar -cvzf package.tgz ${SRC_DIR}/dist/avatar/
+tar -cvzf package.tgz ${SRC_DIR}/dist/browser/

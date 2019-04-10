@@ -1,0 +1,105 @@
+@import '../../../sass/core/variables';
+@import '../../../sass/core/mixins';
+
+$toastPad: 14px;
+
+.toast-cntnr {
+    min-width: 400px;
+    min-height: 50px;  
+    margin-bottom: $basePadding/2;
+    background-color: $bgDefault;
+    z-index: 10000;
+    border: 1px solid #CCCCCC;
+    box-shadow: 0 3px 9px 0 rgba(0,0,0,0.30);
+    border-top: 4px solid;
+    
+    transform: translateX(100%);
+    -webkit-transform: translateX(100%);
+
+    @media (max-width: $phone) {
+        min-width: 280px;
+        max-width: 280px;
+        float: right;
+    }
+
+    &.success {
+        border-top-color: $green;
+    }
+    &.error{
+        border-top-color: #ED3323;
+    }
+
+    &.slide-in {
+        animation: slide-in 0.5s forwards;
+        -webkit-animation: slide-in 0.5s forwards;
+    }
+    
+    &.slide-out {
+        min-height: 0px;
+        margin-right: 0px;
+        animation: slide-out 0.5s forwards;
+        -webkit-animation: slide-out 0.5s forwards;
+    }
+        
+    @include keyframes('slide-in') {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(0%); }
+    }
+        
+    @include keyframes('slide-out') {
+        0% { 
+            transform: translateX(0%); 
+            max-height: 120px;
+            margin-bottom: $basePadding/2;
+            opacity: 1;
+        }
+        50% {
+            max-height: 120px;
+            opacity: 0;
+        }
+        100% { 
+            transform: translateX(150%); 
+            max-height: 0px;
+            margin-bottom: 0px;
+        }
+    }
+
+    .toast-body{
+        display: block;
+        padding: $toastPad;
+        // Space for close icon
+        padding-right: ($toastPad*2 + 18px);
+
+        .icon {
+            font-size: 24px;
+            margin: auto;
+            display: block;
+
+            &.icon-close {
+                font-size: 18px !important;
+            }
+        }
+    }
+
+    .toast-message {
+        display: inline-block;
+        word-wrap: break-word;
+        max-width: 88%;
+
+        @media (max-width: $phone) {
+            max-width: 82%;
+        }
+    }
+
+    .icon-close {
+        position: absolute;
+        top: $toastPad;
+        right: $toastPad;
+    }
+}
+
+.toast-icon {
+    display: inline-block;
+    margin-right: $toastPad;
+    vertical-align: top;
+}

@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators'
 import { DeviceDetectorModule, DeviceDetectorService } from 'ngx-device-detector'
 import { isPlatformBrowser } from '@angular/common'
 
-import { AssetService, AuthService, ScriptService, DomUtilityService } from '../shared'
+import { AssetService, AuthService, DomUtilityService } from '../shared'
 import { AppConfig } from '../app.service'
 import { Featured } from './featured'
 import { TagsService } from '../browse-page/tags.service';
@@ -56,7 +56,6 @@ export class Home implements OnInit, OnDestroy {
     private _router: Router,
     public _auth: AuthService,
     private deviceService: DeviceDetectorService,
-    private _script: ScriptService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private _dom: DomUtilityService,
     private _tags: TagsService,
@@ -167,11 +166,6 @@ export class Home implements OnInit, OnDestroy {
       // Device info for contact form
       this.fetchDeviceInfo();
     }
-    
-    // Load Ethnio survey
-    // if (this.siteID !== 'SAHARA') {
-    //   this._script.loadScript('ethnio-survey')
-    // }
 
   } // OnInit
 
@@ -190,8 +184,8 @@ export class Home implements OnInit, OnDestroy {
     testAd.innerHTML = '&nbsp;';
     testAd.className = 'adsbox';
 
-    // let docBody = this._dom.byTagName('body')[0]
-    // this._dom.append(docBody, testAd);
+    let docBody = this._dom.byTagName('body')
+    this._dom.append(docBody, testAd)
 
     setTimeout(
       () => {

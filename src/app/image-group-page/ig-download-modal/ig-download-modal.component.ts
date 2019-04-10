@@ -31,6 +31,8 @@ export class PptModalComponent implements OnInit, AfterViewInit {
   private downloadTitle: string = 'Image Group';
   private allowedDownloads: number = 0;
 
+  public igContainsDetailViews: boolean = false
+
   private header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
   private defaultOptions = { withCredentials: true};
   // private defaultOptions = new RequestOptions({ headers: this.header, withCredentials: true});
@@ -43,16 +45,21 @@ export class PptModalComponent implements OnInit, AfterViewInit {
     private http: HttpClient,
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    let detailItems = this.ig.items.filter((item) => {
+      return item.zoom
+    })
+    this.igContainsDetailViews = detailItems.length > 0
+  }
 
   ngAfterViewInit() {
     this.startModalFocus()
   }
   // Set initial focus on the modal Title h4
   public startModalFocus() {
-    // TO-DO: Only reference document client-side
-    // let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('ig-download-title');
-    // htmlelement.focus()
+    let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('ig-download-title');
+    htmlelement.focus()
+
     if (this.downloadTitleElement && this.downloadTitleElement.nativeElement){
       this.downloadTitleElement.nativeElement.focus()
     }
@@ -60,7 +67,7 @@ export class PptModalComponent implements OnInit, AfterViewInit {
   }
 
   trackDownload(downloadType: string): void {
-    this._angulartics.eventTrack.next({ action: 'downloadGroup' + downloadType, properties: { category: this._auth.getGACategory(), label: this.ig.id }})
+    this._angulartics.eventTrack.next({ properties: { event: 'downloadGroup' + downloadType, category: 'download', label: this.ig.id }})
   }
 
   private getPPT() {
@@ -72,7 +79,7 @@ export class PptModalComponent implements OnInit, AfterViewInit {
       // Goal: A downlink that looks like:
       // http://mdxdv.artstor.org/thumb/imgstor/...
       if (data.path) {
-        this.downloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/', '/thumb/')
+        this.downloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/')
       }
     })
     .catch((err) => {
@@ -91,7 +98,7 @@ export class PptModalComponent implements OnInit, AfterViewInit {
       // Goal: A downlink that looks like:
       // http://mdxdv.artstor.org/thumb/imgstor/...
       if (data.path) {
-        this.zipDownloadLink = this._auth.getThumbUrl() + data.path.replace('/nas/', '/thumb/');
+        this.zipDownloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/');
       }
     })
     .catch((err) => {
@@ -133,7 +140,6 @@ export class PptModalComponent implements OnInit, AfterViewInit {
     return this._assets.getAllThumbnails(group.items, group.id)
     .then((thumbnails) => {
       let imgDownloadStrings: string[] = []
-
       thumbnails.forEach((thumbnail, index) => {
         let imgStr: string = [(index + 1), thumbnail.objectId, '1024x1024'].join(':')
         thumbnail.status == 'available' && imgDownloadStrings.push(imgStr)

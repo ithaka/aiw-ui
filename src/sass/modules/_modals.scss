@@ -11,6 +11,18 @@
     background-color: rgba(0, 0, 0, 0.55);
     z-index: 9000;
     overflow-y: auto;
+
+    // Currently reserved for the session expired modal
+    &.modal--priority-1 {
+      z-index: 9999;
+    }
+    // For specific cases where one modal should take priority over the other
+    &.modal--priority-2 {
+      z-index: 9900;
+    }
+    &.modal--priority-3 {
+      z-index: 9800;
+    }
 }
 
 .modal.show{
@@ -47,6 +59,7 @@
 
 .modal-header {
     padding: 15px !important;
+    border-bottom: 1px solid $color-border-gray;
 
     &  button.close {
         cursor: pointer;
@@ -56,25 +69,47 @@
         }
     }
 
-    & h1, & h2, & h3, & h4{
+    & h1, & h2, & h3, & h4, & h5 {
         position: static;
+        color: $color-gray-7;
     }
 }
 
 .modal-header {
 	padding: 2px 16px;
-    background: #fff;
-    border: none;
+  background: $color-white;
 }
 
 .modal-body {
-	padding: $basePadding;
-  background-color: $bgLightAccent;
+  padding: $basePadding;
+  background-color: $color-white;
+
+  & p
+
+  .google-permissions-link {
+    color: $color-gray-6;
+    text-decoration: underline;
+
+    &:hover {
+      color: darken($color-gray-6, 30%);
+    }
+  }
+}
+
+.modal-prompt {
+  color: $color-gray-7;
+  margin-bottom: $basePadding;
 }
 
 .modal-footer {
-    border: none;
-    background-color: $bgLightAccent;
+    background-color: $color-white;
+    border-top: 1px solid $color-border-gray;
+    border-bottom-right-radius: 0.3rem;
+    border-bottom-left-radius: 0.3rem;
+
+    &.border-none{
+        border: none;
+    }
 
     @media(max-width: $phone) {
         display: block !important;
@@ -109,3 +144,115 @@
   font-weight: bold;
   color: #4F5557;
 }
+
+/** Create Group Modal Specific Styles */
+ang-new-ig-modal .modal-content {
+    margin-top: 10em;
+}
+
+#newIgForm {
+
+  /** Override media editor placeholder */
+  .placeholder-text::placeholder, .me-editable.medium-editor-placeholder::after {
+    color: $color-gray-5 !important;
+  }
+
+  & .modal-label, .modal-label:hover {
+    color: $color-gray-6;
+    text-transform: none;
+  }
+
+  & .btn.modal-label {
+    font-weight: 400;
+  }
+
+  .form-group {
+    .btn-group {
+      & .modal-label {
+        padding-left: 0;
+        box-shadow: none; /** :focus :active override for radio buttons */
+      }
+    }
+
+    /** Add Tag style for user input, changes from default $orange in forms.scss */
+    & .ng2-tag-input-field:focus {
+      border: 1px dotted #cdcdcd !important;
+
+      &::-webkit-input-placeholder {
+      color: $color-gray-5 !important;
+      }
+      &::-moz-placeholder {
+      color: $color-gray-5 !important;
+      }
+      &::-moz-placeholder {
+      color: $color-gray-5 !important;
+      }
+      &::-ms-input-placeholder {
+      color: $color-gray-5 !important;
+      }
+    }
+
+  }
+
+  /** New IG Create button disabled style */
+  .disabled-btn {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .modal-footer {
+    justify-content: space-between !important;
+
+    .wrapper {
+      display: inline-flex;
+
+      /** Modal Footer link 'pulled left' */
+      .modal-footer-link-left {
+        margin-right: 40px;
+      }
+
+      .help-link {
+          border-radius: 50%;
+          width: 22px;
+          height: 22px;
+          line-height: 22px;
+          text-align: center;
+          vertical-align: middle;
+          display: inline-block;
+          cursor: pointer;
+          font-family: Arial, Helvetica, sans-serif;
+          font-size: 12px;
+          font-weight: 600;
+          color: $color-white !important;
+          background-color: #999;
+
+          &:hover {
+              background-color: #fafafa;
+              color: #999 !important;
+          }
+      }
+
+      .link {
+          font-family: Verdana;
+          font-size: 12px;
+          font-weight: 600;
+          line-height: 22px;
+      }
+    }
+  }
+
+
+
+  #who-can-see {
+    font-weight: 400;
+    color: $color-gray-5;
+  }
+
+  .modal-label.btn.active {
+    color: $orange;
+    font-weight: 900;
+  }
+
+}
+
+

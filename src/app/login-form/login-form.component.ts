@@ -1,4 +1,4 @@
-import { OnInit, Input } from '@angular/core'
+import { OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { Component } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
@@ -8,6 +8,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 
 import { AppConfig } from '../app.service'
 import { AuthService, User, AssetService } from './../shared'
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'ang-login-form',
@@ -17,6 +18,7 @@ import { AuthService, User, AssetService } from './../shared'
 export class LoginFormComponent implements OnInit {
 
   @Input() samlTokenId: string
+  @Output() resetPassword: EventEmitter<boolean> = new EventEmitter()
 
   public copyBase: string = ''
 
@@ -34,6 +36,7 @@ export class LoginFormComponent implements OnInit {
   public loginInstitutions = [] /** Stores the institutions returned by the server */
 
   @Input() public copyModifier: string = 'DEFAULT'
+  @Output() public userEmail: EventEmitter<any> = new EventEmitter()
   public loginLoading = false
 
   private loginInstName: string = '' /** Bound to the autocomplete field */
@@ -69,13 +72,6 @@ export class LoginFormComponent implements OnInit {
 
   loadForUser(data: any) {
     if (data && data.user) {
-      data.user.hasOwnProperty('username') && this.angulartics.setUsername.next(data.user.username);
-      data.user.hasOwnProperty('institutionId') && this.angulartics.setUserProperties.next({ institutionId: data.user.institutionId });
-      data.user.hasOwnProperty('isLoggedIn') && this.angulartics.setUserProperties.next({ isLoggedIn: data.user.isLoggedIn });
-      data.user.hasOwnProperty('shibbolethUser') && this.angulartics.setUserProperties.next({ shibbolethUser: data.user.shibbolethUser });
-      data.user.hasOwnProperty('dept') && this.angulartics.setUserProperties.next({ dept: data.user.dept });
-      data.user.hasOwnProperty('ssEnabled') && this.angulartics.setUserProperties.next({ ssEnabled: data.user.ssEnabled })
-
       if (data.isRememberMe || data.remoteaccess) {
         data.user.isLoggedIn = true
       }
@@ -129,7 +125,7 @@ export class LoginFormComponent implements OnInit {
         }
       })
       .catch((error) => {
-        this.errorMsg = this.getLoginErrorMsg(error.message);
+        this.errorMsg = this.getLoginErrorMsg(error);
       });
   }
 
@@ -159,7 +155,7 @@ export class LoginFormComponent implements OnInit {
       this.loginCall = (user) => { return this._auth.linkSamlUser(user)}
     }
 
-    this.angulartics.eventTrack.next({ action: 'remoteLogin', properties: { category: this._auth.getGACategory(), label: 'attempt' }});
+    this.angulartics.eventTrack.next({ properties: { event: 'remoteLogin', category: 'login', label: 'attempt' }});
 
     this.loginCall(user)
       .then(
@@ -170,12 +166,12 @@ export class LoginFormComponent implements OnInit {
               // Check if old bad-case password
               this.isBadCasePassword(user)
             }
-            this.errorMsg = this.getLoginErrorMsg(data.message)
+            this.errorMsg = this.keyForLoginError(data.message)
           } else if (!data.isRememberMe && !data.remoteaccess) {
             // In some situations the service might return an ip auth object even tho login was unsuccessful
             this.errorMsg = 'There was an issue with your account, please contact support.';
           } else {
-            this.angulartics.eventTrack.next({ action: 'remoteLogin', properties: { category: this._auth.getGACategory(), label: 'success' }});
+            this.angulartics.eventTrack.next({ properties: { event: 'remoteLogin', category: 'login', label: 'success' }});
             this.loadForUser(data);
             this._auth.resetIdleWatcher() // Start Idle on login
           }
@@ -184,10 +180,10 @@ export class LoginFormComponent implements OnInit {
       ).catch((err) => {
         this.loginLoading = false;
         let errObj = err.error
-        this.errorMsg = this.getLoginErrorMsg(errObj && errObj.message)
+        this.errorMsg = this.getLoginErrorMsg(err)
         if (!this.errorMsg){
           this.getLoginError(user)
-          this.angulartics.eventTrack.next({ action: 'remoteLogin', properties: { category: this._auth.getGACategory(), label: 'failed' }});
+          this.angulartics.eventTrack.next({ properties: { event: 'remoteLogin', category: 'login', label: 'failed' }});
         }
         // Shibboleth linking error
         if (errObj && errObj.code) {
@@ -198,19 +194,41 @@ export class LoginFormComponent implements OnInit {
       });
   }
 
-  getLoginErrorMsg(serverMsg: string): string {
-    if (serverMsg) {
-       if (serverMsg === 'loginFailed' || serverMsg === 'Invalid credentials'){
-        return 'LOGIN.WRONG_PASSWORD'
-      } else if (serverMsg === 'loginExpired' || serverMsg === 'Login Expired') {
-        return 'LOGIN.EXPIRED'
-      } else if (serverMsg === 'portalLoginFailed') {
-        return 'LOGIN.INCORRECT_PORTAL'
-      } else if (serverMsg.indexOf('disabled') > -1) {
-        return 'LOGIN.ARCHIVED_ERROR';
-      } else {
-        return 'LOGIN.SERVER_ERROR'
-      }
+  /**
+   * Handle Login error
+   * @param err Error Response from /login call
+   * @return translation key for error message 
+   */
+  getLoginErrorMsg(err: HttpErrorResponse): string {
+    let serverMsg = err.error && err.error.message
+    // Check for error code 422 for lost password
+    // Maybe better to check by serverMsg later when the response message is decided by Auth
+    if (err && (err.status === 422 || serverMsg.includes('password reset required'))) {
+      // Display lost password modal
+      this.resetPassword.emit(true)
+      return 'LOGIN.LOST_PASSWORD'
+    }
+    else if (serverMsg) {
+      return this.keyForLoginError(serverMsg)
+    } 
+    else {
+      return 'LOGIN.SERVER_ERROR'
+    }
+  }
+
+  /**
+   * Return the login error translation key 
+   * @param serverMsg error message from server
+   */
+  keyForLoginError(serverMsg: string): string {
+    if (serverMsg === 'loginFailed' || serverMsg === 'Invalid credentials'){
+      return 'LOGIN.WRONG_PASSWORD'
+    } else if (serverMsg === 'loginExpired' || serverMsg === 'Login Expired') {
+      return 'LOGIN.EXPIRED'
+    } else if (serverMsg === 'portalLoginFailed') {
+      return 'LOGIN.INCORRECT_PORTAL'
+    } else if (serverMsg.indexOf('disabled') > -1) {
+      return 'LOGIN.ARCHIVED_ERROR';
     } else {
       return 'LOGIN.SERVER_ERROR'
     }

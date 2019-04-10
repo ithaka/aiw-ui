@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>icon-multiview</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="new-icons??-copy" transform="translate(-370.000000, -419.000000)">
+            <g id="icons/dark/multi-view" transform="translate(370.000000, 419.000000)">
+                <g id="multi-view">
+                    <g>
+                        <rect id="Rectangle" fill="#333333" x="0" y="0" width="16" height="16" rx="2.28571429"></rect>
+                        <path d="M3.42857143,6.93911316 L12.5714286,6.93911316 L12.5714286,12.5714286 L3.42857143,12.5714286 L3.42857143,6.93911316 Z M4.25974026,5.1987277 L11.7402597,5.1987277 L11.7402597,6.00334419 L4.25974026,6.00334419 L4.25974026,5.1987277 Z M5.09090909,3.54285714 L10.9090909,3.54285714 L10.9090909,4.34747363 L5.09090909,4.34747363 L5.09090909,3.54285714 Z" id="album-icon" fill="#FFFFFF"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

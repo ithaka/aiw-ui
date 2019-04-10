@@ -45,6 +45,8 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   // Keeps the track of multiViewItems count associated with the current asset
   public multiviewItemCount: number = 0
   public isMultiView: boolean = false
+  public isDowngradedMedia: boolean = false
+  public isDetailView: boolean = false
 
   private constraints: any = {}
 
@@ -53,6 +55,13 @@ export class ThumbnailComponent implements OnInit, OnChanges {
 
   // The alt message for a thumbnail, combined with thumbnail title and creator name
   private thumbnailAlt: string = ''
+
+  // Flag that controls the class for detail view icon / hover state
+  private mouseOverDetailIcon: boolean = false
+  private mouseOverMedia: boolean = false
+  private mouseOverNoMedia: boolean = false
+  private mouseOverDowngradedMedia: boolean = false
+  private mouseOverMultiview: boolean = false
 
   constructor(
     private angulartics: Angulartics2,
@@ -70,18 +79,26 @@ export class ThumbnailComponent implements OnInit, OnChanges {
       this.multiviewItemCount = this.thumbnail['compoundmediaCount']
     }
     // Compound 'multiview' assets use cleanedAsset.thumbnailUrls[0], assigned in asset-search
-    if (this.thumbnail['compound_media']) {
+    if (this.thumbnail.compound_media_json && this.thumbnail.compound_media_json.objects) {
       this.isMultiView = true
       this.thumbnail.thumbnailImgUrl = this.thumbnail['thumbnailUrls'][0]
-      this.multiviewItemCount = JSON.parse(this.thumbnail['compound_media']).objects.length
-    }
-
-    else if (this.thumbnail['media']) {
+      this.multiviewItemCount = this.thumbnail.compound_media_json.objects.length
+    } else if (this.thumbnail['media']) {
       this.thumbnail.thumbnailImgUrl = this.thumbnail.media.thumbnailSizeOnePath
     }
 
     this.thumbnailAlt = this.thumbnail['name'] ? 'Thumbnail of ' + this.thumbnail['name'] : 'Untitled'
     this.thumbnailAlt = this.thumbnail['agent'] ? this.thumbnailAlt + ' by ' + this.thumbnail['agent'] : this.thumbnailAlt + ' by Unknown'
+
+    // Set isDowngradedMedia
+    if (this.isMultiView && this.thumbnail.media && this.thumbnail.media.format === 'null') {
+      this.isDowngradedMedia = true
+    }
+
+    // Set isDetailView
+    if (this.thumbnail['zoom']) {
+      this.isDetailView = true
+    }
   }
 
   // Fires when the component input(s) (i.e largeThmbView) changes - Updates the thumbnailSize based on largeThmbView current value
@@ -97,10 +114,10 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     event.stopPropagation()
 
     if (urlParams[0] === '/associated') {
-      this.angulartics.eventTrack.next({ action: 'view associated images', properties: { label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
+      this.angulartics.eventTrack.next({ properties: { event: 'view associated images', label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
     }
     if (urlParams[0] === '/cluster') {
-      this.angulartics.eventTrack.next({ action: 'view cluster', properties: { label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
+      this.angulartics.eventTrack.next({ properties: { event: 'view cluster', label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
     }
     this.router.navigate(urlParams)
   }
@@ -130,4 +147,5 @@ export class ThumbnailComponent implements OnInit, OnChanges {
       this.thumbnailSize--
     }
   }
+
 }

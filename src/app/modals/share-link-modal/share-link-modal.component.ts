@@ -29,6 +29,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
 
   ngOnInit() {
     if (this.asset) {
+      // External share links are not handled by this modal, since it is only called by Nav
       this.shareLink = this._assets.getShareLink(this.asset.objectId ? this.asset.objectId : this.asset.artstorid);
       // Clean Group item data
       if (this.asset['tombstone']) {
@@ -103,7 +104,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
     }
 
     // TODO SSR
-    // document.body.removeChild(textArea);
+    document.body.removeChild(textArea);
   }
 
   // Doesn't get called on SSR application
