@@ -16,6 +16,7 @@
           || initPath.indexOf('.org/library/#') > -1
           || initPath.indexOf('/openlibrary') > -1
           || initPath.indexOf('/asset/') > -1
+          || initPath.indexOf('/public/') > -1
           || initPath.indexOf('/object/') > -1
           || initPath.indexOf('/assetprint/') > -1
           || initPath.indexOf('/group/') > -1
@@ -123,32 +124,21 @@
         background-size: 50px 50px !important;
     }
   </style>
-
-  <!-- <noscript>
-    <style>
-      .page-overlay {
-        display: none;
-      }
-      noscript #nojs-container {
-        position: relative;
-        width: 100%;
-        text-align: center;
-      }
-      #nojs-logo {
-        margin: 4rem auto;
-      }
-    </style>
-  </noscript> -->
 </head>
 
 <body>
-  <!-- <noscript>
+  <noscript>
+      <style>
+        .page-overlay {
+          display: none;
+        }
+      </style>
     <div id="nojs-container">
         <img id="nojs-logo"src="/assets/img/logo-v1-1.png" alt="Artstor logo">
         <p>Javascript must be enabled to view this site.</p>
         <p><a id = "nojs-support-link" href="https://support.artstor.org/?article=system-requirements-2" target="_blank">Read our system requirements.</a></p>
     </div>
-  </noscript> -->
+  </noscript>
 
   <app-root>
     <div class="page-overlay">

@@ -520,7 +520,7 @@ export class AuthService implements CanActivate {
    * Required by implementing CanActivate, and is called on routes which are protected by canActivate: [AuthService]
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    console.log("Running canActivate...")
+    console.log("Running canActivate for... " + state.url)
     let options = { headers: this.getHeaders(), withCredentials: true }
 
     // TO-DO: Enable the server to call the user info call

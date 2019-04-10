@@ -326,3 +326,17 @@ body body{
     left: calc(50% - 0.4rem);
   }
 }
+
+// No Javascript display message styles
+noscript #nojs-container {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+#nojs-logo {
+  margin: 4rem auto;
+}
+// This is necessary for javascript-less server-rendered pages
+.no-script--hidden {
+  display: none !important;
+}
