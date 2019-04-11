@@ -1,77 +1,55 @@
 #pwd-modal.modal.fade.show
   //- Password Reset Modal
   .modal-dialog((keydown.esc)="closeModal.emit()")
-    .modal-content(#pwdResetContent, tabindex="1", (keydown.shift.tab)="focusElement(closeIcon, $event)",)
-      .modal-header
-        h5 {{ copyKey+'.HEADING' | translate }}
-        button(#closeIcon, (click)="closeModal.emit()",
-          (keydown.tab)="successMsgPwdRst ? null : focusElement(pwdResetEmailInput, $event)",
-          (keydown.shift.tab)="successMsgPwdRst ? focusElement(pwdResetContent, $event): focusElement(cancelButton, $event)",
-          tabindex="2",
-          type="button",
-          class="close",
-          data-dismiss="modal",
-          aria-label="Close")
+    .modal-content
+      .modal-header(tabindex="1", (keydown.shift.tab)="focusElement(submitButton, $event)")
+        h5(#pwdResetTitle, tabindex="1", (keydown.shift.tab)="closeModal.emit()") {{ copyKey+'.HEADING' | translate }}
+        button(tabindex="1", (click)="closeModal.emit()", type="button", class="close", data-dismiss="modal", aria-label="Close")
           span(aria-hidden="true") &times;
       form#pwdResetForm([formGroup]="pwdResetForm", (ngSubmit)="sendResetPwdRequest()")
         .modal-body(*ngIf="!successMsgPwdRst")
           div(*ngIf="pwdReset")
             p.modal-prompt {{ copyKey+'.PROMPT' | translate }}
             .form-group
-              label(for="pwdResetEmailInput") {{ copyKey+'.LABEL' | translate }}
-              input.form-control(#pwdResetEmailInput,
-                [class.is-invalid]="submitted && (pwdResetForm.controls['email'].invalid || errorMsgPwdRst)",
-                [class.is-valid]="pwdResetForm.controls['email'].valid && !errorMsgPwdRst",
-                type="text",
-                [formControl]="pwdResetForm.controls['email']",
-                (value)="username",
-                (keydown.tab)="focusElement(pwdResetSupportLink, $event)",
-                (keydown.shift.tab)="focusElement(closeIcon, $event)",
-                placeholder="Email address",
-                spellcheck="false",
-                tabindex="1",
-                [attr.aria-label]="copyKey+'.LABEL' | translate"
+              label(for="pwdresetEmailInput") {{ copyKey+'.LABEL' | translate }}
+              input#pwdresetEmailInput.form-control(
+                [class.is-invalid]="submitted && (pwdResetForm.controls['email'].invalid || errorMsgPwdRst)", 
+                [class.is-valid]="pwdResetForm.controls['email'].valid && !errorMsgPwdRst"
+                type="text", 
+                [formControl]="pwdResetForm.controls['email']", 
+                (value)="username", 
+                (keydown.tab)="focusElement(supportLink, $event)",
+                spellcheck="false", 
+                tabindex="1"
               )
               .invalid-feedback(*ngIf="submitted && pwdResetForm.controls['email'].invalid && !errorMsgPwdRst && !successMsgPwdRst") Please enter an email address
               .invalid-feedback(*ngIf="errorMsgPwdRst") {{ errorMsgPwdRst }}
           .form-group
-            p.small
-              ='Need further help? '
-              a#supportLink(
-              #pwdResetSupportLink,
-              (keydown.shift.tab)="focusElement(pwdResetEmailInput, $event)",
-              tabindex="1",
-              href="mailto:support@artstor.org",
-              class="link", ) Contact Support
-        //- Success Messaging
+            p.small 
+              | Need further help? <a #supportLink href="mailto:support@artstor.org" class="link" tabindex="1">Contact Support</a>
         .modal-body(*ngIf="successMsgPwdRst")
           p.modal-prompt {{ successMsgPwdRst | translate }}
         .modal-footer
           .form-group.mb-0(*ngIf="pwdReset")
             .btn-row
               button.btn.btn-secondary(
-                #cancelButton,
-                *ngIf="!systemRequest",
-                type="button",
+                *ngIf="!systemRequest"
+                type="button", 
                 (click)="closeModal.emit()",
-                (keydown.tab)="focusElement(closeIcon, $event)",
-                (keydown.shift.tab)="focusElement(submitButton, $event)"
+                (keydown.tab)="focusElement(submitButton, $event)",
+                tabindex="1"
               ) Cancel
               button.btn.btn-primary(
                 #submitButton,
-                type="submit",
-                role="button",
-                aria-label="submit",
-                [class.loading]="isLoading",
+                type="submit", 
+                [class.loading]="isLoading", 
                 tabindex="1",
-                (keydown.tab)="focusElement(cancelButton, $event)",
-                (keydown.shift.tab)="focusElement(pwdResetSupportLink, $event)"
+                (keydown.tab)="focusElement(pwdResetTitle, $event)"
               ) Submit
-          .form-group.mb-0(*ngIf="!pwdReset")
+          .form-group.mb-0(*ngIf="successMsgPwdRst")
             button.btn.btn-primary(
-              #closeButton,
-              type="button",
+              type="button", 
               (click)="closeModal.emit()",
-              tabindex="2",
-              (keydown.tab)="focusElement(closeIcon, $event)"
+              tabindex="1",
+              (keydown.tab)="focusElement(pwdResetTitle, $event)"
             ) Close

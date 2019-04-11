@@ -13,11 +13,7 @@ export class PwdResetModal implements OnInit, AfterViewInit {
   @Input() username: string
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
-  @ViewChild("pwdResetContent", {read: ElementRef}) pwdResetContent: ElementRef
-  @ViewChild("pwdResetEmailInput", {read: ElementRef}) pwdResetEmailInput: ElementRef
-  @ViewChild("pwdResetSupportLink", { read: ElementRef }) pwdResetSupportLink: ElementRef
-  @ViewChild("submitButton", { read: ElementRef}) submitButton: ElementRef
-  @ViewChild("cancelButton", { read: ElementRef}) cancelButton: ElementRef
+  @ViewChild("pwdResetTitle", {read: ElementRef}) titleElement: ElementRef
 
   public pwdResetForm: FormGroup;
 
@@ -28,14 +24,18 @@ export class PwdResetModal implements OnInit, AfterViewInit {
   public submitted = false
   public copyKey = 'MODAL.PASSWORD.RESET'
 
+  // Element handles used in template
+  public submitButton: HTMLElement
+  public supportLink: HTMLElement
+
   constructor(
     private _auth: AuthService,
     private _fb: FormBuilder
   ) {
-
+    
   }
 
-  ngOnInit() {
+  ngOnInit() { 
     if (this.systemRequest) {
       this.copyKey = 'MODAL.PASSWORD.SYSTEM_REQUEST'
     }
@@ -46,13 +46,7 @@ export class PwdResetModal implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     // Focus first element
-    this.pwdResetContent && this.focusElement(this.pwdResetContent.nativeElement)
-
-    // Set view child element refs
-    this.submitButton = this.submitButton.nativeElement
-    this.cancelButton = this.cancelButton.nativeElement
-    this.pwdResetEmailInput = this.pwdResetEmailInput.nativeElement
-    this.pwdResetSupportLink = this.pwdResetSupportLink.nativeElement
+    this.titleElement && this.focusElement(this.titleElement.nativeElement)
   }
 
   /**
@@ -80,7 +74,7 @@ export class PwdResetModal implements OnInit, AfterViewInit {
         (error) => { this.errorMsgPwdRst = <any>error }
       );
   }
-
+  
   loadPwdRstRes(res: any){
     if (!res.status || res.status === 'false'){
       this.errorMsgPwdRst = 'Sorry! An account for ' + this.pwdResetForm.value.email + ' was not found.'
