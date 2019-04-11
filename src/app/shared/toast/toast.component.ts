@@ -26,6 +26,7 @@ export class ToastComponent implements OnInit, OnDestroy {
   public type: string
   public hideToast: boolean
   public links: { routerLink: string[], label: string }[] = []
+  public toastLiveRegion: HTMLElement
 
   constructor(
     private _angulartics: Angulartics2,
@@ -42,8 +43,8 @@ export class ToastComponent implements OnInit, OnDestroy {
     this.plainText = this.stringHTML.replace(/<(?:.|\n)*?>/gm, '')
 
     // Assign text content for live region
-    let toastLiveRegion = <HTMLElement>(this._dom.byId('toast-live-region'))
-    toastLiveRegion.textContent= 'Notification: ' + this.plainText + ' Enter control + g to go to the group or control + x to dismiss.'
+    this.toastLiveRegion = <HTMLElement>(this._dom.byId('toast-live-region'))
+    this.toastLiveRegion.textContent = 'Notification: ' + this.plainText + ' Enter control + g to go to the group or control + x to dismiss.'
 
     // Assign keyboard shortcut
     this.onKeydown = this.onKeydown.bind(this)
@@ -63,10 +64,16 @@ export class ToastComponent implements OnInit, OnDestroy {
   }
 
   triggerDismiss() {
+    // Remove the live region when the toast is gone
+    this.toastLiveRegion.textContent = ''
+
     this._toasts.dismissToast(this.toast.id)
   }
 
   animateDismiss() {
+    // Remove the live region when the toast is gone
+    this.toastLiveRegion.textContent = ''
+
     this.hideToast = true
     setTimeout(() => {
       this._toasts.dismissToast(this.toast.id, true)
@@ -112,12 +119,18 @@ export class ToastComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       if (document.activeElement.id === 'toast-link' || document.activeElement.id === 'close-toast')
         return
+      // Set focus to Add to Group button
+      this._dom.byId("addToGroupDropdown").focus()
+      
       this.triggerDismiss()
-    }, 100)
+    }, 10)
   }
 
   ngOnDestroy() {
     // Remove keyboard short cut when the toast is gone
     window.removeEventListener("keydown", this.onKeydown, true)
+
+    // Set focus to Add to Group button
+    this._dom.byId("addToGroupDropdown").focus()
   }
 }
