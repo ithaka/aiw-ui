@@ -266,9 +266,6 @@ export class AssetPage implements OnInit, OnDestroy {
                     }
                 }
 
-                // Set image share link
-                this.generateImgURL(this.assetIds[0], this.encryptedAccess || this.fromOpenLibrary)
-
                 // For "Back to Results" link and pagination, look for prevRouteTS to set prevRouteParams
                 if (routeParams['prevRouteTS']) {
                     this.prevRouteTS = routeParams['prevRouteTS']
@@ -499,11 +496,12 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.assets[0].formattedMetadata['Collection'] = splitValues
                 }
 
+                // Set image share link
+                this.generateImgURL(this.assetIds[0], this.collectionType.type, this.encryptedAccess || this.fromOpenLibrary)
                 // Load related results from jstor
                 if (this.relatedResFlag) {
                     this.getJstorRelatedResults(asset)
                 }
-
                 // Update OGP meta tags
                 this.meta.updateTag({ property: 'og:title', content: asset.title }, 'property="og:title"')
                 this.meta.updateTag({ property: 'og:description', content: asset.formattedMetadata['Description'] && asset.formattedMetadata['Description'][0] ? asset.formattedMetadata['Description'][0] : '' }, 'property="og:description"')
@@ -941,8 +939,12 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    private generateImgURL(assetId: string, external?: boolean): void {
-        this.generatedImgURL = this._assets.getShareLink(assetId, external);
+    private generateImgURL(assetId: string, collectionType: number, external?: boolean): void {
+        let isPublic = false
+        if (collectionType == 5) {
+            isPublic = true
+        }
+        this.generatedImgURL = this._assets.getShareLink(assetId, isPublic,  external);
     }
 
     /**
