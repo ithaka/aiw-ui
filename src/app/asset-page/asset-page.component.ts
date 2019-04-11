@@ -403,7 +403,7 @@ export class AssetPage implements OnInit, OnDestroy {
             new: true,
             heading: 'Add details to groups',
             bodyText: 'Zoom in on any image and add the detail to a group to refer back to later.',
-            learnMoreURL: 'https://support.artstor.org'
+            learnMoreURL: 'https://support.artstor.org/?article=zooming-image-details'
         }
     } // OnInit
 
@@ -514,7 +514,7 @@ export class AssetPage implements OnInit, OnDestroy {
      * Push asset info into content data layer
      */
     trackContentDataLayer(asset: Asset) {
-        // Build content variables 
+        // Build content variables
         let contentGTMVars = {
             'itemName': asset.title || '',
             'itemID': asset.id || '',
@@ -526,7 +526,7 @@ export class AssetPage implements OnInit, OnDestroy {
             'geography': (asset.formattedMetadata && asset.formattedMetadata['Geography']) || '',
         }
         // Push content variables to GTM data layer, and fire "itemOpen" event
-        this.angulartics.eventTrack.next( { properties : { 
+        this.angulartics.eventTrack.next( { properties : {
             event: 'itemOpen',
             category: this.multiviewItems ? 'multiview' : 'itemview',
             label: asset.id || '',
@@ -798,7 +798,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private addAssetToIG(detailView?: boolean): void {
 
-        if (this.user && this.user.isLoggedIn) {            
+        if (this.user && this.user.isLoggedIn) {
             if(detailView) {
                 // Get Bounds from OSD viewer for the saved detail
                 let bounds = this.assetViewer.osdViewer.viewport.viewportToImageRectangle(this.assetViewer.osdViewer.viewport.getBounds(true))
@@ -816,14 +816,14 @@ export class AssetPage implements OnInit, OnDestroy {
                     'pointHeight': bounds['height'],
                     'index': 0
                 }
-                
+
                 this.assets[0]['zoom'] = this._group.setZoomDetails(zoomObj)
             } else {
                 delete this.assets[0]['zoom']
             }
 
             this.showAddModal = true
-            
+
         } else {
           this.showLoginModal = true;
         }
@@ -997,7 +997,7 @@ export class AssetPage implements OnInit, OnDestroy {
                         }
                     }
                 });
-                
+
                 this.assetIds.splice(assetIdIndex, 1)
                 this.indexZoomMap.splice(assetIdIndex, 1)
                 this.assets.splice(assetIdIndex, 1)
@@ -1516,7 +1516,7 @@ export class AssetPage implements OnInit, OnDestroy {
         let primaryAsset: boolean = true
         let assetIdProperty =  asset['artstorid'] ? 'artstorid' : 'objectId'
 
-        if (this.assets[0].id === asset[assetIdProperty]){            
+        if (this.assets[0].id === asset[assetIdProperty]){
             if(asset['zoom']){
                 let primaryAssetZoomObj = this.indexZoomMap[0]
                 if(JSON.stringify(asset['zoom']) !== JSON.stringify(primaryAssetZoomObj)){
@@ -1537,7 +1537,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         for (let i = 0; i < this.assetIds.length; i++){
           if (this.assetIds[i] === asset.id){
-            
+
             // Also consider zoom detail for exact match on assets
             let zoomMatched: boolean = true
             if(this.indexZoomMap[i] && this.indexZoomMap[i].viewerX){
@@ -1549,7 +1549,7 @@ export class AssetPage implements OnInit, OnDestroy {
             } else if (asset.zoom) {
               zoomMatched = false
             }
-    
+
             if(zoomMatched) {
               index = i
               break
@@ -1566,7 +1566,7 @@ export class AssetPage implements OnInit, OnDestroy {
     public closeAddGroupTooltip(): void{
         this.addGrpTTDismissed = true
         this._storage.setLocal('addGrpTTDismissed', this.addGrpTTDismissed)
-        
+
         // Add Google Analytics tracking for "detailViewTooltipDismissed"
         this.angulartics.eventTrack.next({ properties: { event: 'detailViewTooltipDismissed', label: this.assetIds[0] } })
     }
