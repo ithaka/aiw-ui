@@ -115,6 +115,9 @@
 @include icon('compare', 'svg');
 @include icon--hover('icon-slideshow', 'gif');
 @include icon('add-white', 'svg');
+@include icon('export-ppt', 'svg');
+@include icon('export-google-slides', 'svg');
+@include icon('export-zip', 'svg');
 // Media type icons
 @include icon('pdf', 'svg');
 @include icon('pdf-hover', 'svg');

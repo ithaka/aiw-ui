@@ -90,7 +90,7 @@
             button#addToGroupDropdown.btn.btn-primary(ngbDropdownToggle, tabindex="2", aria-label="Add to groups", (click)="closeAddGroupTooltip()", (keyup.enter)="closeAddGroupTooltip()")
               | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate}}
               = " "
-            ang-promo-tooltip(*ngIf="(user.isLoggedIn && assets[0].typeName && assets[0].typeName === 'image') && !addGrpTTDismissed && (assetViewer.state === 1 || !multiviewItems)", [options]="addGroupTooltipOpts", (close)="closeAddGroupTooltip()")
+            ang-promo-tooltip(*ngIf="user.isLoggedIn && assets[0].typeName && assets[0].typeName === 'image' && !addGrpTTDismissed && assetViewer.state === 1 && !multiviewItems", [options]="addGroupTooltipOpts", (close)="closeAddGroupTooltip()")
             .dropdown-menu(ngbDropdownMenu)
               a#addItemToGroupLink.dropdown-item(
                 (click)="addAssetToIG()",
