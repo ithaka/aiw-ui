@@ -109,7 +109,13 @@ app.get('/public/*', (req, res) => {
  *  Serve not server-rendered paths and static files from /browser
  *  - This is our "traditional" static app hosting
  */
-app.use(express.static(join(DIST_FOLDER, 'browser')));
+app.use('/assets/', express.static(join(DIST_FOLDER, 'browser')));
+app.use('/', express.static(join(DIST_FOLDER, 'browser')));
+// Pass all other/unspecified routes to the Angular static app
+app.get('*', (req, res) => {
+  // res.sendfile(join(DIST_FOLDER, 'browser/index.html'))
+  res.redirect('/#'+req.url)
+})
 // Start up the Node server
 app.listen(PORT, () => {
   console.log(`Node server listening on https://localhost:${PORT}`);
