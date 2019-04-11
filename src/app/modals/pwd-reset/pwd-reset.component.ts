@@ -18,6 +18,7 @@ export class PwdResetModal implements OnInit, AfterViewInit {
   @ViewChild("pwdResetSupportLink", { read: ElementRef }) pwdResetSupportLink: ElementRef
   @ViewChild("submitButton", { read: ElementRef}) submitButton: ElementRef
   @ViewChild("cancelButton", { read: ElementRef}) cancelButton: ElementRef
+  @ViewChild("closeIcon", { read: ElementRef}) closeIcon: ElementRef
 
   public pwdResetForm: FormGroup;
 
@@ -53,6 +54,7 @@ export class PwdResetModal implements OnInit, AfterViewInit {
     this.cancelButton = this.cancelButton.nativeElement
     this.pwdResetEmailInput = this.pwdResetEmailInput.nativeElement
     this.pwdResetSupportLink = this.pwdResetSupportLink.nativeElement
+    this.closeIcon = this.closeIcon.nativeElement
   }
 
   /**
@@ -60,7 +62,7 @@ export class PwdResetModal implements OnInit, AfterViewInit {
    * @param event keydown/click event
    * @param element element to focus
    */
-  public focusElement(element: HTMLElement, event?: Event) {
+  public focusElement(element, event?: Event) {
     if (event) {
       event.stopPropagation()
       event.preventDefault()
