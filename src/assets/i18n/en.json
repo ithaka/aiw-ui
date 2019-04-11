@@ -179,9 +179,10 @@
   "IMAGE_GROUP_PAGE": {
     "IG_DOWNLOAD_MODAL": {
       "TITLE": "Export/Download Guidelines",
-      "TEXT": "<p>All logged in users may export/download up to <b>2000</b> images in a <b>120</b> day period.</p><p>For groups larger than 150, only the first 150 images are exported as presentation slides. Multimedia files are not exported to PPT or ZIP.</p> <p>By accepting this download, you are agreeing to the <a href=\"http://www.artstor.org/terms\" class=\"link\" name=\"Terms and conditions of use\" target=\"_blank\">terms and conditions of use.</a></p><p>Would you like to proceed?</p>",
+      "TEXT": "<p>All logged in users may export/download up to <b>2000</b> images in a <b>120</b> day period.</p><p>For groups larger than 150, only the first 150 images are exported as presentation slides. Multimedia files are not exported to PPT or ZIP.</p><p>By accepting this download, you are agreeing to the <a href=\"http://www.artstor.org/terms\" class=\"link\" name=\"Terms and conditions of use\" target=\"_blank\">terms and conditions of use.</a></p><p>Would you like to proceed?</p>",
       "DOWNLOAD_ERROR_BIG": "We're sorry, we were unable to generate your file. The recommended group size is under 100 images.",
-      "DOWNLOAD_ERROR_SMALL": "We're sorry, we were unable to generate your file. Please try again. If the problem persists, contact us at <a href=\"mailto:support@artstor.org\" class=\"link\" target=\"_blank\">support@artstor.org</a>"
+      "DOWNLOAD_ERROR_SMALL": "We're sorry, we were unable to generate your file. Please try again. If the problem persists, contact us at <a href=\"mailto:support@artstor.org\" class=\"link\" target=\"_blank\">support@artstor.org</a>",
+      "SAVE_DETAIL_DOWNLOAD_INFO": "Saved details are not exported to PowerPoint or ZIP files at this time. This functionality will be available soon!"
     },
     "TERMS_AND_CONDITIONS": {
       "TITLE": "Exporting Terms and Conditions",
@@ -207,6 +208,25 @@
       "BTN_TEXT": "Authorize with Google",
       "PERMISSIONS_HTML": "Why is Artstor asking for Google permissions? <a href=\"http://www.artstor.org/artstor-terms\" class=\"google-permissions-link\" target=\"_blank\" tabindex=\"0\"  aria-label=\"Why is Artstor asking for Google permissions? Learn more\">Learn more</a>"
     }
+  },
+  "LOADING_STATE": {
+    "LOADING_MSG" : {
+      "PPT": "Exporting your group to PowerPoint…",
+      "GS": "Exporting your group to Google Slides…",
+      "ZIP": "Compressing your group as a ZIP file…"
+    },
+    "COMPLETED_MSG" : {
+      "PPT": "<b>Done!</b> Your Powerpoint file will begin downloading soon…",
+      "GS": "Your Google Slides presentation will open in a new tab…",
+      "ZIP": "<b>Done!</b> Your ZIP file will begin downloading soon…"
+    },
+    "ERROR_MSG" : {
+      "SERVER": "We’re sorry, something went wrong. Please try again or <a class='link' href='mailto:support@artstor.org' tabindex='0'>contact support</a> if the issue continues.",
+      "TOO_MANY_IMGS": "We’re sorry, we were unable to export your group. We recommend making groups under 100 images in size."
+    },
+    "LINKS" : {
+      "TRY_AGAIN": "Try again"
+    } 
   },
   "UPLOAD_IMAGES_MODAL": {
     "TITLE": "Upload Images",
@@ -293,7 +313,7 @@
       "PRIVATE": "Only me"
     },
     "TAGS_FIELD_LABEL": "Tags",
-    "SHOW_ADD_TO_IMAGE_GROUP": "Add item to existing group",
+    "SHOW_ADD_TO_IMAGE_GROUP": "Add to existing group",
     "CREATE_SUCCESS": "You've successfully created a group",
     "CREATE_FAILURE": "Oops, something went wrong and your group was not created. Please try again.",
     "EDIT_SUCCESS" : "You've successfully edited the group",
@@ -536,31 +556,31 @@
         "VIEW_PUBLIC_LINK": "View All Public Collections"
       },
       "COLLECTIONS": [{
-          "SUBHEADING": "The Museum of Fine Arts, Houston",
-          "DESCRIPTION": "Quilts from Gee's Bend",
-          "CAPTION": "America Irby. Quilt. 1970. Image and data provided by The Museum of Fine Arts, Houston.",
-          "LINK": "/#/category/1035295331 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/houston_quilt.jpg",
-          "LINK_TITLE": "The Museum of Fine Arts, Houston",
-          "ALT_TEXT": "The Museum of Fine Arts, Houston"
+          "SUBHEADING": "Panos Pictures",
+          "DESCRIPTION": "Wildlife revealed",
+          "CAPTION": "Ami Vitale. A brown bear takes a break. 2007. Photograph. © Ami Vitale. Image and data provided by Panos Pictures.",
+          "LINK": "/#/category/1035192960 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/bear_panos.jpg",
+          "LINK_TITLE": "Panos Pictures",
+          "ALT_TEXT": "Panos Pictures"
         },
         {
-          "SUBHEADING": "Berlin State Museums",
-          "DESCRIPTION": "African jewelry",
-          "CAPTION": "Nupe People, Nigeria. Glass bracelet. 19th century. Image and data provided by Berlin State Museums.",
-          "LINK": "/#/category/1034125175 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/berlin_bracelet.jpg",
-          "LINK_TITLE": "Berlin State Museums",
-          "ALT_TEXT": "Berlin State Museums"
+          "SUBHEADING": "Peabody Museum of Natural History (Yale University)",
+          "DESCRIPTION": "Specimens from the the Peabody Museum",
+          "CAPTION": "Asterope sapphira, butterfly. Collected 1936, Brazil. Image and data provided by the Peabody Museum of Natural History (Yale University).",
+          "LINK": "/#/category/1035093156 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/butterfly_yale.jpg",
+          "LINK_TITLE": "Peabody Museum of Natural History",
+          "ALT_TEXT": "Peabody Museum of Natural History"
         },
         {
-          "SUBHEADING": "The Minneapolis Institute of Art",
-          "DESCRIPTION": "Photography of the Harlem Renaissance",
-          "CAPTION": "James Van DerZee. Couple, Harlem. 1932. Gelatin silver print. Image and data provided by The Minneapolis Institute of Art.",
-          "LINK": "/#/category/1031896062 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/mia_couple.jpg",
-          "LINK_TITLE": "The Minneapolis Institute of Art",
-          "ALT_TEXT": "The Minneapolis Institute of Art"
+          "SUBHEADING": "Trinity College Watkinson Library: Enders Ornithology Lantern Slides",
+          "DESCRIPTION": "Hand tinted glass plates of birds and beasts",
+          "CAPTION": "Herbert Keightley Job. Red Fox, Kent, Connecticut. 1902. Lantern slide. Image and data provided by Trinity College Watkinson Library: Enders Ornithology Lantern Slides.",
+          "LINK": "/#/collection/87729997 ",
+          "IMG_SOURCE": "/assets/img/featured-collections/fox_trinity.jpg",
+          "LINK_TITLE": "Trinity College Watkinson Library: Enders Ornithology Lantern Slides",
+          "ALT_TEXT": "Trinity College Watkinson Library: Enders Ornithology Lantern Slides"
         }
       ],
       "PUBLIC_COLLECTIONS": [

@@ -308,7 +308,7 @@ export class GroupService {
      * Get a list of Tag suggestions
      */
     public getTagSuggestions(term: string) {
-        return this.http.get( this.groupUrl + '/tags/suggest?q=' + term + '&size=20', this.options)
+        return this.http.get( this.groupV1 + '/tags/suggest?q=' + term + '&size=20', this.options)
     }
 
     /**

@@ -568,6 +568,13 @@ $titleNavBg: #eee;
             font-size: 20px;
             font-weight: 600;
             margin-right: 5px;
+
+            &.icon-add-item, &.icon-add-detail-view, &.icon-download, &.icon-download-detail-view {
+                opacity: 1;
+            }
+            &.disabled {
+              opacity: 0.3;
+            }
         }
     }
 }

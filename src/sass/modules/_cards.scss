@@ -179,21 +179,17 @@ img.no-stretch {
 
         &.multiview-count{
             display: inline-block;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
             line-height: 12px;
-            padding-left: 4px;
+            padding-left: 3px;
+            padding-bottom: 2px;
         }
     }
 
     .multiview-indicator{
         color: #444444;
-        padding: 2px 0;
 
-        .icon{
-            font-size: 10px;
-            height: 12px;
-        }
         &:hover{
             color: #000000;
         }

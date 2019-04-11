@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
-    <title>video</title>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>icon-video</title>
     <desc>Created with Sketch.</desc>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="new-icons??" transform="translate(-403.000000, -201.000000)" fill="#444444">
-            <path d="M405,201 L415,201 C416.104569,201 417,201.895431 417,203 L417,213 C417,214.104569 416.104569,215 415,215 L405,215 C403.895431,215 403,214.104569 403,213 L403,203 C403,201.895431 403.895431,201 405,201 Z M413.145495,207.854505 L408.145495,204.854505 L408.145495,210.854505 L413.145495,207.854505 Z" id="video"></path>
+        <g id="new-icons??-copy" transform="translate(-283.000000, -394.000000)">
+            <g id="icons/light/video" transform="translate(283.000000, 394.000000)">
+                <g>
+                    <path d="M2.28571429,0.375 C1.23045592,0.375 0.375,1.23045592 0.375,2.28571429 L0.375,13.7142857 C0.375,14.7695441 1.23045592,15.625 2.28571429,15.625 L13.7142857,15.625 C14.7695441,15.625 15.625,14.7695441 15.625,13.7142857 L15.625,2.28571429 C15.625,1.23045592 14.7695441,0.375 13.7142857,0.375 L2.28571429,0.375 Z" id="video" stroke="#E3E3E3" stroke-width="0.75"></path>
+                    <polygon id="Path" fill="#444444" points="11.594851 7.83372048 5.88056524 4.40514905 5.88056524 11.2622919"></polygon>
+                </g>
+            </g>
         </g>
     </g>
 </svg>

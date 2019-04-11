@@ -93,8 +93,8 @@
 @include icon('zoom-out', 'svg');
 @include icon('large-view', 'svg');
 @include icon('small-view', 'svg');
-@include icon('detail', 'svg');
-@include icon('detail-hover', 'svg');
+@include icon('detail-view', 'svg');
+@include icon('detail-view-hover', 'svg');
 @include icon('detail-overlay', 'svg');
 @include icon('export-btn', 'svg');
 @include icon('export-btn-hover', 'svg');
@@ -103,8 +103,9 @@
 @include icon('zip', 'svg');
 @include icon('add-detail', 'svg');
 @include icon('add-item', 'svg');
-@include icon('download-detail', 'svg');
-@include icon('download-item', 'svg');
+@include icon('add-detail-view', 'svg');
+@include icon('download-detail-view', 'svg');
+@include icon('download', 'svg');
 @include icon('clear', 'svg');
 @include icon('success', 'svg');
 @include icon('error', 'svg');
@@ -114,17 +115,28 @@
 @include icon('compare', 'svg');
 @include icon--hover('icon-slideshow', 'gif');
 @include icon('add-white', 'svg');
+@include icon('export-ppt', 'svg');
+@include icon('export-google-slides', 'svg');
+@include icon('export-zip', 'svg');
 // Media type icons
 @include icon('pdf', 'svg');
+@include icon('pdf-hover', 'svg');
 @include icon('doc', 'svg');
+@include icon('doc-hover', 'svg');
 @include icon('xls', 'svg');
+@include icon('xls-hover', 'svg');
 @include icon('ppt', 'svg');
+@include icon('ppt-hover', 'svg');
 @include icon('video', 'svg');
+@include icon('video-hover', 'svg');
 @include icon('audio', 'svg');
+@include icon('audio-hover', 'svg');
 @include icon('3d', 'gif');
 @include icon('panorama', 'svg');
+@include icon('panorama-hover', 'svg');
 @include icon('cluster', 'svg');
 @include icon('multiview', 'svg');
+@include icon('multiview-hover', 'svg');
 // Social media icons
 @include icon('contact', 'png');
 @include icon('youtube', 'png');
@@ -202,14 +214,6 @@
 
 .icon-empty {
     background-image: none !important;
-}
-
-a .icon {
-    opacity: 0.8;
-
-    &:hover {
-        opacity: 1;
-    }
 }
 
 .contextual-help{

@@ -1,0 +1,8 @@
+.tooltip-container(tabindex="2")
+  .new-badge(*ngIf="options.new") New!
+  .heading {{ options.heading }}
+  .body-text {{ options.bodyText }}
+  .links
+    a(tabindex="2", aria-label="Got it! Hit enter or escape to close this tooltip.", (click)="close.emit()", (keyup.esc)="close.emit()", (keyup.enter)="close.emit()") Got it
+    span
+    a(tabindex="2", aria-label="Learn more. Hit enter to be open a new tab to an Artstor support page.", [href]="options.learnMoreURL", target="_blank", (click)="close.emit()", (keyup.enter)="close.emit()") Learn More

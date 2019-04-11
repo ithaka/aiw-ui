@@ -58,6 +58,10 @@ export class ThumbnailComponent implements OnInit, OnChanges {
 
   // Flag that controls the class for detail view icon / hover state
   private mouseOverDetailIcon: boolean = false
+  private mouseOverMedia: boolean = false
+  private mouseOverNoMedia: boolean = false
+  private mouseOverDowngradedMedia: boolean = false
+  private mouseOverMultiview: boolean = false
 
   constructor(
     private angulartics: Angulartics2,
@@ -143,4 +147,5 @@ export class ThumbnailComponent implements OnInit, OnChanges {
       this.thumbnailSize--
     }
   }
+
 }

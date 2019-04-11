@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>icon-video-hover</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="new-icons??-copy" transform="translate(-283.000000, -419.000000)" fill="#333333">
+            <g id="icons/dark/video" transform="translate(283.000000, 419.000000)">
+                <path d="M2.28571429,0 L13.7142857,0 C14.9766509,0 16,1.02334914 16,2.28571429 L16,13.7142857 C16,14.9766509 14.9766509,16 13.7142857,16 L2.28571429,16 C1.02334914,16 0,14.9766509 0,13.7142857 L0,2.28571429 C0,1.02334914 1.02334914,0 2.28571429,0 Z M11.594851,7.83372048 L5.88056524,4.40514905 L5.88056524,11.2622919 L11.594851,7.83372048 Z" id="video"></path>
+            </g>
+        </g>
+    </g>
+</svg>
