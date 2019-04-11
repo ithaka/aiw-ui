@@ -39,6 +39,7 @@ export const ROUTES: Routes = [
   { path: 'home',  component: Home, canActivate: [AuthService] },
   { path: 'search/', redirectTo: '/search/*', pathMatch: 'full', canActivate: [AuthService] },
   { path: 'asset/:assetId', component: AssetPage, pathMatch: 'full' },
+  { path: 'public/:assetId', component: AssetPage, pathMatch: 'full' },
   { path: 'object/:assetId', redirectTo: '/asset/openlibrary/:assetId', pathMatch: 'full' },
   { path: 'asset/external/:encryptedId', component: AssetPage, pathMatch: 'full' },
   { path: 'asset/openlibrary/:openLibId', component: AssetPage, pathMatch: 'full' },

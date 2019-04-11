@@ -320,9 +320,15 @@ export class AssetService {
     /**
      * Generate asset share link
      */
-    public getShareLink(assetId: string, externalAsset?: boolean) {
-        //   Links in the clipboard need a protocol defined
-        return  `https://${this._app.clientHostname}/#/asset/${ ( externalAsset ? 'external/' : '' ) + assetId }`
+    public getShareLink(assetId: string, isPublic: boolean, externalAsset?: boolean) {
+        // Links in the clipboard need a protocol defined
+        let baseUrl = `https://${this._app.clientHostname}/`
+        if (isPublic) {
+            // Public assets are linked without a hash, so the server-rendered page can provide rich previews
+            return  baseUrl + 'public/' + assetId 
+        } else {
+            return  baseUrl + '#/asset/' + ( externalAsset ? 'external/' : '' ) + assetId 
+        }
     }
 
     /**

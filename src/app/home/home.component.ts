@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core'
+import { Component, OnInit, OnDestroy, PLATFORM_ID, Inject, Injector } from '@angular/core'
 import { Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -58,7 +58,8 @@ export class Home implements OnInit, OnDestroy {
     private deviceService: DeviceDetectorService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private _dom: DomUtilityService,
-    private _tags: TagsService
+    private _tags: TagsService,
+    private injector: Injector
   ) {
     // console.log("Constructing home component...")
     // this makes the window always render scrolled to the top
@@ -79,14 +80,26 @@ export class Home implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Provide redirects for initPath detected in index.html from inital load
-    if (initPath) {
-      this._router.navigateByUrl(initPath, { replaceUrl: true })
-        .then(result => {
-          // Clear variable to prevent further redirects
-          initPath = null
-          console.log('Redirect to initial path attempt: ' + result)
-        })
+    if (isPlatformBrowser(this.platformId)) {
+      // Provide redirects for initPath detected in index.html from inital load
+      if (initPath) {
+        this._router.navigateByUrl(initPath, { replaceUrl: true })
+          .then(result => {
+            // Clear variable to prevent further redirects
+            initPath = null
+            console.log('Redirect to initial path attempt: ' + result)
+          })
+      }
+    } else {
+      // Handle /public clean urls to handover app using hash routing for the client
+      let req = this.injector.get('request');
+      if (req && req.url && req.url.indexOf('public') >= 0) {
+        let assetId = req.url.replace('/public/','')
+        this._router.navigate(['/public', assetId], { skipLocationChange: true })
+          .then(result => {
+            console.log('Handled /public route clean url complete: ' + result)
+          }) 
+      }
     }
 
     this.user = this._auth.getUser();

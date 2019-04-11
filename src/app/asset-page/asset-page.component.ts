@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, HostListener, ElementRef } from '@angular/core'
+import { Component, OnInit, OnDestroy, ViewChild, HostListener, ElementRef, PLATFORM_ID, Inject } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { Meta } from '@angular/platform-browser'
 import { Subscription } from 'rxjs'
@@ -30,6 +30,7 @@ import { AppConfig } from '../app.service'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 import { MetadataService } from 'app/_services';
 import { rights } from './rights.ts'
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'ang-asset-page',
@@ -167,11 +168,14 @@ export class AssetPage implements OnInit, OnDestroy {
     // Flag for show/hide page tooltip
     private showPageToolTip: boolean = false
 
+    private waitForFreshUser: any
     // Map for asset zoom values corresponding to the asset index in assets array
     public indexZoomMap: ImageZoomParams[] = []
 
     public addGroupTooltipOpts: any = {}
     public addGrpTTDismissed: boolean = false
+    // Flag for server vs client rendering
+    public isBrowser: boolean = true
 
     constructor(
         public _appConfig: AppConfig,
@@ -193,7 +197,9 @@ export class AssetPage implements OnInit, OnDestroy {
         private _storage: ArtstorStorageService,
         private _dom: DomUtilityService,
         private meta: Meta,
+        @Inject(PLATFORM_ID) private platformId: Object
     ) {
+        this.isBrowser = isPlatformBrowser(this.platformId)
         this.editDetailsForm = _fb.group({
             creator: [null],
             title: [null, Validators.required],
@@ -204,8 +210,7 @@ export class AssetPage implements OnInit, OnDestroy {
             description: [null],
             subject: [null]
         })
-
-        // console.log("CONSTRUCT ASSET PAGE")
+        console.log("Constructing asset page...")
     }
 
     ngOnInit() {
@@ -261,9 +266,6 @@ export class AssetPage implements OnInit, OnDestroy {
                     }
                 }
 
-                // Set image share link
-                this.generateImgURL(this.assetIds[0], this.encryptedAccess || this.fromOpenLibrary)
-
                 // For "Back to Results" link and pagination, look for prevRouteTS to set prevRouteParams
                 if (routeParams['prevRouteTS']) {
                     this.prevRouteTS = routeParams['prevRouteTS']
@@ -293,14 +295,26 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.assetNumber = 1
                 }
             })
-        );
-
+        ); // subscriptions.push
+        // Server-side subscriptions
+        if (!this.isBrowser) {
+            this.subscriptions.push(
+                this._auth.getUserInfo().pipe(take(1)).subscribe(user => {
+                    /**
+                     * Server-side rendering requires an additional userinfo request after
+                     * the one triggered by the route guard
+                     * (it has to first get the headers, then get the user for the headers)
+                     * @todo have Auth return an appropriate user object for a cookie-less call
+                     */
+                    this.userSessionFresh = true
+                })
+            )
+        }
 
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
             this._auth.currentUser.subscribe((user) => {
-                // console.log("User subscription returned")
                 this.user = user
                 // userSessionFresh: Do not attempt to load asset until we know user object is fresh
                 if (!this.userSessionFresh && this._auth.userSessionFresh) {
@@ -415,7 +429,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
 
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
-        // console.log("Handle loaded metadata for " + asset['objectId'])
+        console.log("Handle loaded metadata for " + asset['objectId'])
         // Reset modals if new data comes in
         this.showAccessDeniedModal = false
         this.showServerErrorModal = false
@@ -441,6 +455,7 @@ export class AssetPage implements OnInit, OnDestroy {
             if(!this.assets) {
                 this.assets = []
             }
+            
             this.assets[assetIndex] = asset
             if (assetIndex == 0) {
                 let tileSource: any = asset.tileSource
@@ -472,7 +487,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
 
                 // Split existing collection urls in the metadata so that urls can be linked separately
-                if (this.assets[assetIndex].formattedMetadata['Collection'] && this.assets[assetIndex].formattedMetadata['Collection'].join().indexOf('<br/>') > -1) {
+                if (this.assets[assetIndex].formattedMetadata && this.assets[assetIndex].formattedMetadata['Collection'] && this.assets[assetIndex].formattedMetadata['Collection'].join().indexOf('<br/>') > -1) {
                     let collections = this.assets[0].formattedMetadata['Collection']
                     let splitValues = []
                     for (let i = 0; i < collections.length; i++){
@@ -481,15 +496,16 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.assets[0].formattedMetadata['Collection'] = splitValues
                 }
 
+                // Set image share link
+                this.generateImgURL(this.assetIds[0], this.collectionType.type, this.encryptedAccess || this.fromOpenLibrary)
                 // Load related results from jstor
                 if (this.relatedResFlag) {
                     this.getJstorRelatedResults(asset)
                 }
-
                 // Update OGP meta tags
                 this.meta.updateTag({ property: 'og:title', content: asset.title }, 'property="og:title"')
                 this.meta.updateTag({ property: 'og:description', content: asset.formattedMetadata['Description'] && asset.formattedMetadata['Description'][0] ? asset.formattedMetadata['Description'][0] : '' }, 'property="og:description"')
-                this.meta.updateTag({ property: 'og:url', content: this._assets.getShareLink(asset.id, this.encryptedAccess || this.fromOpenLibrary) }, 'property="og:url"')
+                this.meta.updateTag({ property: 'og:url', content: this.generatedImgURL}, 'property="og:url"')
                 this.meta.updateTag({ property: 'og:image', content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
                 // Update content info in GTM data layer
                 this.trackContentDataLayer(asset)
@@ -645,7 +661,7 @@ export class AssetPage implements OnInit, OnDestroy {
     getIapFormUrl(asset: Asset): string {
         let baseUrl = 'http://www.artstor.org/form/iap-request-form'
         let name = asset.title
-        let collection = asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
+        let collection = asset.formattedMetadata && asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
         let id = asset.id
         let email = this.user.username
         let ssid = asset.SSID
@@ -660,12 +676,12 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     getErrorFormUrl(asset: Asset): string {
         let baseUrl = 'http://www.artstor.org/form/report-error'
-        let collection = asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
+        let collection = asset.formattedMetadata && asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
         let id = asset.id
         let email = this.user.username
         let title = asset.title
         let creator = asset.creator
-        let repo = (asset.formattedMetadata['Repository'] && asset.formattedMetadata['Repository'][0]) || ''
+        let repo = (asset.formattedMetadata && asset.formattedMetadata['Repository'] && asset.formattedMetadata['Repository'][0]) || ''
         let fileName = asset.fileName
         let ssid = asset.SSID
         return baseUrl + '?collectionName=' + collection + '&id=' + id + '&email=' + email + '&title=' + title + '&creator=' + creator + '&fileName=' + fileName + '&ssid=' + ssid + '&repository=' + repo
@@ -923,8 +939,12 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    private generateImgURL(assetId: string, external?: boolean): void {
-        this.generatedImgURL = this._assets.getShareLink(assetId, external);
+    private generateImgURL(assetId: string, collectionType: number, external?: boolean): void {
+        let isPublic = false
+        if (collectionType == 5) {
+            isPublic = true
+        }
+        this.generatedImgURL = this._assets.getShareLink(assetId, isPublic,  external);
     }
 
     /**
