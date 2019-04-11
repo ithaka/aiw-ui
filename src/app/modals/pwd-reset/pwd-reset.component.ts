@@ -13,12 +13,12 @@ export class PwdResetModal implements OnInit, AfterViewInit {
   @Input() username: string
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
 
-  @ViewChild("pwdResetContent", {read: ElementRef}) pwdResetContent: ElementRef
-  @ViewChild("pwdResetEmailInput", {read: ElementRef}) pwdResetEmailInput: ElementRef
+  @ViewChild("pwdResetContent", { read: ElementRef }) pwdResetContent: ElementRef
+  @ViewChild("pwdResetEmailInput", { read: ElementRef }) pwdResetEmailInput: ElementRef
   @ViewChild("pwdResetSupportLink", { read: ElementRef }) pwdResetSupportLink: ElementRef
-  @ViewChild("submitButton", { read: ElementRef}) submitButton: ElementRef
-  @ViewChild("cancelButton", { read: ElementRef}) cancelButton: ElementRef
-  @ViewChild("closeIcon", { read: ElementRef}) closeIcon: ElementRef
+  @ViewChild("submitButton", { read: ElementRef }) submitButton: ElementRef
+  @ViewChild("cancelButton", { read: ElementRef }) cancelButton: ElementRef
+  @ViewChild("closeIcon", { read: ElementRef }) closeIcon: ElementRef
 
   public pwdResetForm: FormGroup;
 
@@ -28,10 +28,6 @@ export class PwdResetModal implements OnInit, AfterViewInit {
   public successMsgPwdRst = ''
   public submitted = false
   public copyKey = 'MODAL.PASSWORD.RESET'
-
-  // Element handles used in template
-  public submitButton: HTMLElement
-  public supportLink: HTMLElement
 
   constructor(
     private _auth: AuthService,
@@ -56,9 +52,9 @@ export class PwdResetModal implements OnInit, AfterViewInit {
     // Set view child element refs
     this.submitButton = this.submitButton.nativeElement
     this.cancelButton = this.cancelButton.nativeElement
+    this.closeIcon = this.closeIcon.nativeElement
     this.pwdResetEmailInput = this.pwdResetEmailInput.nativeElement
     this.pwdResetSupportLink = this.pwdResetSupportLink.nativeElement
-    this.closeIcon = this.closeIcon.nativeElement
   }
 
   /**
@@ -74,7 +70,7 @@ export class PwdResetModal implements OnInit, AfterViewInit {
     element.focus()
   }
 
-  sendResetPwdRequest(){
+  sendResetPwdRequest() {
     this.submitted = true;
     // avoid making the service calls, but still trigger error display
     if (!this.pwdResetForm.valid) {
@@ -82,17 +78,17 @@ export class PwdResetModal implements OnInit, AfterViewInit {
     }
     this._auth.pwdReset(this.pwdResetForm.value.email)
       .then(
-        (data)  => { this.loadPwdRstRes(data) },
+        (data) => { this.loadPwdRstRes(data) },
         (error) => { this.errorMsgPwdRst = <any>error }
       );
   }
 
-  loadPwdRstRes(res: any){
-    if (!res.status || res.status === 'false'){
+  loadPwdRstRes(res: any) {
+    if (!res.status || res.status === 'false') {
       this.errorMsgPwdRst = 'Sorry! An account for ' + this.pwdResetForm.value.email + ' was not found.'
       this.pwdResetForm.controls['email'].setValue('');
     }
-    else{
+    else {
       this.pwdReset = false;
       this.copyKey = 'MODAL.PASSWORD.SUCCESS'
       this.successMsgPwdRst = this.copyKey + '.MESSAGE'
