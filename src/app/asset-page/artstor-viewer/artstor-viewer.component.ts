@@ -358,7 +358,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
                 bottom: this.isMultiView ? 190 : 0
             },
             timeout: 60000,
-            useCanvas: false,
+            useCanvas: true,
             // defaultZoomLevel: 1.2, // We don't want the image to be covered on load
             // visibilityRatio: 0.2, // Determines percentage of background that has to be covered by the image while panning
             // debugMode: true,
