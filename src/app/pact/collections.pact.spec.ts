@@ -1,9 +1,8 @@
-/*eslint-disable*/
 import { HttpClientModule } from '@angular/common/http'
 //import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
-import { TestBed, getTestBed } from '@angular/core/testing'
+import { TestBed, getTestBed, inject, async } from '@angular/core/testing'
 import { Router, ActivatedRoute } from '@angular/router'
-import { NO_ERRORS_SCHEMA } from '@angular/compiler/src/core'
+// import { NO_ERRORS_SCHEMA } from '@angular/compiler/src/core'
 
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 
@@ -14,6 +13,8 @@ AuthService, GroupService, ToolboxService, TitleService, ScriptService } from '.
 import { CollectionPage } from '../collection-page'
 
 import { AssetFiltersService } from '../asset-filters/asset-filters.service';
+
+import { MockRequests } from './mock-requests'
 
 /**
  *  Collections PACT
@@ -43,7 +44,7 @@ import { AssetFiltersService } from '../asset-filters/asset-filters.service';
   */
 fdescribe('Collections #pact #collections', () => {
 
-  let provider, _collection, _assetService, _getCategoryInfo
+  let provider, _collection,  _getCategoryInfo, _requests
 
   const mockCategoryDescResp = {
     blurbUrl: null,
@@ -76,8 +77,10 @@ fdescribe('Collections #pact #collections', () => {
       .then(function () { done() }, function (err) { done.fail(err) })
   })
 
+  let _assetService
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientModule],
       providers: [
         { provide: AppConfig, useValue: {} },
         { provide: Router, useValue: {} },
@@ -89,18 +92,19 @@ fdescribe('Collections #pact #collections', () => {
         { provide: ScriptService, useValue: {} },
         { provide: AssetSearchService, useValue: {} },
         { provide: AssetFiltersService, useValue: {} },
+        MockRequests,
         CollectionPage,
         AssetService
       ],
-      imports: [
-        HttpClientModule
-      ],
-      //schemas: [ NO_ERRORS_SCHEMA ]
-    });
+    })
+    const testbed = getTestBed()
+    _assetService = testbed.get(AssetService)
 
-    _collection = getTestBed().get(CollectionPage)
-    _assetService = getTestBed().get(AssetService)
-    _getCategoryInfo = getTestBed().get(_assetService.getCategoryInfo)
+    // _collection = getTestBed().get(CollectionPage)
+
+    // _getCategoryInfo = getTestBed().get(_assetService.getCategoryInfo)
+
+    //_requests = .get(MockRequests)
 
 
   });
@@ -109,22 +113,30 @@ fdescribe('Collections #pact #collections', () => {
   describe('GET /api/v1/categorydesc', () => {
     beforeAll((done) => {
 
-      provider.addInteraction({
-        uponReceiving: 'a request for ADL category description for a collection',
-        withRequest: {
-          method: 'GET',
-          path: '/api/v1/categorydesc/10374058879',
-          //query: '10374058879'
-        },
-        willRespondWith: {
-          status: 200,
-          headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-          body: mockCategoryDescResp
-        }
-      }).then(() => { done() }, (err) => { done.fail(err) })
+      let interactions = []
+
+      interactions.push(
+        provider.addInteraction({
+          uponReceiving: 'a request for ADL category description for a collection',
+          withRequest: {
+            method: 'GET',
+            path: '/api/v1/categorydesc/10374058879',
+            //query: '10374058879'
+          },
+          willRespondWith: {
+            status: 200,
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            body: mockCategoryDescResp
+          }
+        })
+      )
+
+      Promise.all(interactions)
+        .then(() => { done() })
+        .catch((err) => { done.fail(err) })
     })
 
-    afterEach((done) => {
+    afterAll((done) => {
       provider.verify()
         .then(function (a) {
           done()
