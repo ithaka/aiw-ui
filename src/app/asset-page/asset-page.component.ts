@@ -455,7 +455,7 @@ export class AssetPage implements OnInit, OnDestroy {
             if(!this.assets) {
                 this.assets = []
             }
-            
+
             this.assets[assetIndex] = asset
             if (assetIndex == 0) {
                 let tileSource: any = asset.tileSource
@@ -573,7 +573,7 @@ export class AssetPage implements OnInit, OnDestroy {
             // Make sure we only send one ga event when going to fullscreen mode
             if (this.isFullscreen !== isFullscreen) {
                 // Add Google Analytics tracking to "fullscreen" button
-                this.angulartics.eventTrack.next({ properties: { event: 'Enter Fullscreen', label: this.assetIds[0] } })
+                this.angulartics.eventTrack.next({ properties: { event: 'Enter Fullscreen', category: 'fullscreen', label: this.assetIds[0] } })
             }
         }
         this.isFullscreen = isFullscreen
@@ -1083,7 +1083,7 @@ export class AssetPage implements OnInit, OnDestroy {
             this.indexZoomMap.push(zoomObj)
 
             // Add GA tracking to select image to compare action
-            this.angulartics.eventTrack.next({ properties: { event: 'Compare image', label: this.assetIds.length } })
+            this.angulartics.eventTrack.next({ properties: { event: 'Compare image', category: 'compare', label: this.assetIds.length } })
         }
 
         // log compared assets
@@ -1588,7 +1588,7 @@ export class AssetPage implements OnInit, OnDestroy {
         this._storage.setLocal('addGrpTTDismissed', this.addGrpTTDismissed)
 
         // Add Google Analytics tracking for "detailViewTooltipDismissed"
-        this.angulartics.eventTrack.next({ properties: { event: 'detailViewTooltipDismissed', label: this.assetIds[0] } })
+        this.angulartics.eventTrack.next({ properties: { event: 'detailViewTooltipDismissed', category: 'promotion', label: this.assetIds[0] } })
     }
 
 }
