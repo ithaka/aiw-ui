@@ -70,7 +70,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private reorderMode: boolean = false
 
   // For export loading states
-  private showExportLoadingState: boolean = false
+  public showExportLoadingState: boolean = false
   private exportLoadingStateopts: LoadingStateOptions
 
   constructor(
