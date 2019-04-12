@@ -1,11 +1,19 @@
 /*eslint-disable*/
 import { HttpClientModule } from '@angular/common/http'
+//import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { TestBed, getTestBed } from '@angular/core/testing'
+import { Router, ActivatedRoute } from '@angular/router'
+import { NO_ERRORS_SCHEMA } from '@angular/compiler/src/core'
+
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 
-import {  CollectionTypeHandler, PersonalCollectionService, AssetService } from '../shared'
+import { AppConfig } from '../app.service'
+import {  CollectionTypeHandler, PersonalCollectionService, AssetService, AssetSearchService,
+AuthService, GroupService, ToolboxService, TitleService, ScriptService } from '../shared'
+
 import { CollectionPage } from '../collection-page'
-import { NO_ERRORS_SCHEMA } from '@angular/compiler/src/core';
+
+import { AssetFiltersService } from '../asset-filters/asset-filters.service';
 
 /**
  *  Collections PACT
@@ -33,10 +41,9 @@ import { NO_ERRORS_SCHEMA } from '@angular/compiler/src/core';
   * Mock and test v1/categorydesc/id collection
   * Test collection id: 10374058879
   */
-describe('Collections #pact #collections', () => {
+fdescribe('Collections #pact #collections', () => {
 
-  let provider
-  let _collection
+  let provider, _collection, _assetService, _getCategoryInfo
 
   const mockCategoryDescResp = {
     blurbUrl: null,
@@ -72,6 +79,16 @@ describe('Collections #pact #collections', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
+        { provide: AppConfig, useValue: {} },
+        { provide: Router, useValue: {} },
+        { provide: ActivatedRoute, useValue: {} },
+        { provide: AuthService, useValue: {} },
+        { provide: GroupService, useValue: {} },
+        { provide: ToolboxService, useValue: {} },
+        { provide: TitleService, useValue: {} },
+        { provide: ScriptService, useValue: {} },
+        { provide: AssetSearchService, useValue: {} },
+        { provide: AssetFiltersService, useValue: {} },
         CollectionPage,
         AssetService
       ],
@@ -82,6 +99,9 @@ describe('Collections #pact #collections', () => {
     });
 
     _collection = getTestBed().get(CollectionPage)
+    _assetService = getTestBed().get(AssetService)
+    _getCategoryInfo = getTestBed().get(_assetService.getCategoryInfo)
+
 
   });
 
@@ -116,7 +136,7 @@ describe('Collections #pact #collections', () => {
     it('should return a category description response',
       function (done) {
 
-        _collection.get('10374058879')
+        _assetService.getCategoryInfo('10374058879')
           .subscribe(res => {
 
             let actualResKeys = Object.keys(res) // response object keys
