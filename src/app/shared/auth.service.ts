@@ -1,4 +1,4 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core'
+import { Injectable, Inject, PLATFORM_ID, Injector } from '@angular/core'
 import { Location, isPlatformBrowser } from '@angular/common'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import {
@@ -25,6 +25,7 @@ import { Angulartics2 } from 'angulartics2';
 @Injectable()
 export class AuthService implements CanActivate {
   public currentUser: Observable<any>
+  public currentAuthHeaders: AuthTriplet 
   // Track whether or not user object has been refreshed since app opened
   public userSessionFresh: boolean = false
   public showUserInactiveModal: Subject<boolean> = new Subject(); // Set up subject observable for showing inactive user modal
@@ -70,18 +71,19 @@ export class AuthService implements CanActivate {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private _router: Router,
-    // private _login: LoginService,
     private _storage: ArtstorStorageService,
     private http: HttpClient,
     private location: Location,
     private _app: AppConfig,
-    private angulartics: Angulartics2,
-    private idle: Idle
+    private idle: Idle,
+    private injector: Injector,
+    private angulartics: Angulartics2
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId)
     // Set WLV and App Config variables
     this.isOpenAccess = this._app.config.isOpenAccess
     this.clientHostname = this._app.clientHostname
+    console.log("_auth start Client hostname: " + this.clientHostname)
     // Initialize observables
     this.currentUser = this.userSource.asObservable()
     // Default to relative or prod endpoints
@@ -101,6 +103,7 @@ export class AuthService implements CanActivate {
       'localhost:4000',
       'local.artstor.org',
       'stage.artstor.org',
+      'beta.stage.artstor.org',
       // test.artstor subdomain is used for WLVs
       'test.artstor.org',
       'test.cirrostratus.org'
@@ -162,6 +165,15 @@ export class AuthService implements CanActivate {
       this.ENV = 'test'
     }
 
+    // SSR routing WORKAROUND
+    if (this.clientHostname.indexOf('beta.stage.artstor.org') > -1) {
+      this.hostname = '//beta.stage.artstor.org'
+      this.ENV = 'test'
+    } else if (this.clientHostname.indexOf('beta.artstor.org') > -1) {
+      this.hostname = '//beta.artstor.org'
+      this.ENV = 'prod'
+    }
+
     // Sahara routing WORKAROUND
     if (this.clientHostname.indexOf('sahara.beta.stage.artstor.org') > -1) {
       this.hostname = '//sahara.beta.stage.artstor.org'
@@ -173,7 +185,7 @@ export class AuthService implements CanActivate {
 
     // Local routing should point to full URL
     // * This should NEVER apply when using a proxy, as it will break authorization
-    if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(this.clientHostname)) {
+    if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'beta.stage.artstor.org', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(this.clientHostname)) {
       this.baseUrl = this.hostname + '/api'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
     }
@@ -197,6 +209,9 @@ export class AuthService implements CanActivate {
     this.userSource.next(this.getUser())
     let institution = this._storage.getLocal('institution')
     if (institution) { this.institutionObjSource.next(institution) }
+
+    // SSR Logging
+    console.log("Auth service Base url: " + this.baseUrl + ", Hostname: " + this.hostname)
   }
 
   public initIdleWatcher(): void {
@@ -278,7 +293,8 @@ export class AuthService implements CanActivate {
 
       let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
       let options = { headers: header, withCredentials: true };
-
+      // Clear in-memory object
+      // delete this.currentAuthHeaders
       // Clear local user object, and other settings
       this._storage.clearLocalStorage()
       // Clear observables
@@ -383,7 +399,13 @@ export class AuthService implements CanActivate {
   public getUrl(secure?: boolean): string {
     let url: string = this.baseUrl
     if (!this.isBrowser){
-      url = 'https:' + url
+      if (url.indexOf('//') === 0) {
+        // append for local use, which is set to relative protocol
+        url = 'https:' + url
+      } else if (url.indexOf('http') < 0) {
+        // append for server when set by request host in app config (see app.service.ts)
+        url = 'https://' + url
+      }
     }
     if (secure) {
       url += '/secure'
@@ -428,6 +450,46 @@ export class AuthService implements CanActivate {
   }
 
   /**
+   * Get Headers
+   * - wraps logic for forwarding client ip on SSR
+   */
+  public getHeaders() : HttpHeaders {
+      let headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json')
+      if (!this.isBrowser) {
+          let req = this.injector.get('request');
+          let clientIp: string = ''
+          // Server rendered app needs to pass along the fastly IP
+          if (req.headers['fastly-client-ip']) {
+            clientIp = req.headers['fastly-client-ip']
+            console.log("Fastly client ip: " + clientIp)
+          } else if (req.headers['forwarded']) {
+            clientIp = req.headers['forwarded']
+            console.log("Forwarded: " + clientIp)
+          } else {
+            clientIp = req.ip
+            if(clientIp === '::1') {
+              // Local ipv6 requests
+              // Assign a regular, non-vpn address for local dev
+              clientIp = "65.128.116.207" // Minneapolis IP
+            }
+          }
+          // Set triplet headers if available
+          if (this.currentAuthHeaders) {
+            Object.keys(this.currentAuthHeaders).forEach(header => {
+              headers = headers.append(header, this.currentAuthHeaders[header])
+            })
+          }
+          // Value specifically used within Artstor apps-gateway rules
+          headers = headers.append("CLIENTIP", clientIp)
+          // Expected Fastly ip header used by most services
+          headers = headers.append('Fastly-Client-Ip', clientIp)
+          return headers
+      } else {
+          return headers
+      }
+  }
+
+  /**
    * Saves user to local storage
    * @param user The user should be an object to store in sessionstorage
    */
@@ -437,7 +499,7 @@ export class AuthService implements CanActivate {
     this._storage.setLocal('user', user);
     // only do these things if the user is ip auth'd or logged in and the user has changed
     let institution = this.institutionObjSource.getValue();
-    if (user.status && (!institution.institutionId || user.institutionId != institution.institutionId)) {
+    if (this.isBrowser && user.status && (!institution.institutionId || user.institutionId != institution.institutionId)) {
       // Refresh institution object
       this.refreshUserInstitution()
     }
@@ -508,7 +570,7 @@ export class AuthService implements CanActivate {
    * Required by implementing CanActivate, and is called on routes which are protected by canActivate: [AuthService]
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    console.log("Running canActivate...")
+    console.log("Running canActivate for... " + state.url)
     let options = { headers: this.userInfoHeader, withCredentials: true }
     /**
      * @todo: Enable the server to call the user info call
@@ -590,11 +652,15 @@ export class AuthService implements CanActivate {
    * @param triggerSessionExpModal Sometimes this is called after unsuccessful logins, and we don't want failovers to always trigger the modal, so it's an option
    */
   public getUserInfo(triggerSessionExpModal?: boolean): Observable<any> {
-    let options = { headers: this.userInfoHeader, withCredentials: true };
-
     return this.http
-      .get(this.genUserInfoUrl(), options).pipe(
-      map((data)  => {
+      .get(this.genUserInfoUrl(), {
+        observe: 'response', 
+        headers: this.getHeaders(), 
+        withCredentials: true
+      }).pipe(
+      map((res)  => {
+          let data = res.body
+          let headers = res.headers
           let user = this.decorateValidUser(data)
           // Track whether or not user object has been refreshed since app opened
           this.userSessionFresh = true
@@ -607,6 +673,14 @@ export class AuthService implements CanActivate {
           } else {
             // Clear user session (local objects and cookies)
             this.logout()
+          }
+          // Save session auth header values for attaching to subsequent requests
+          if (headers.get('x-jstor-access-session')) {
+            this.currentAuthHeaders = {
+              'x-jstor-access-session': headers.get('x-jstor-access-session'),
+              'x-jstor-access-session-signature': headers.get('x-jstor-access-session-signature'),
+              'x-jstor-access-session-timed-signature': headers.get('x-jstor-access-session-timed-signature')
+            }
           }
           // If user session was downgraded/expired, notify
           if (triggerSessionExpModal && user.loggedInSessionLost) {
@@ -800,6 +874,12 @@ export class User {
     public username: string,
     public password: string,
   ) {}
+}
+
+interface AuthTriplet {
+  'x-jstor-access-session': string
+  'x-jstor-access-session-signature': string
+  'x-jstor-access-session-timed-signature': string
 }
 
 interface SSLoginResponse {

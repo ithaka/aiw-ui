@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 
 // Project Dependencies
-import { AssetService, AssetSearchService, DomUtilityService } from '../../shared';
+import { AssetService, AssetSearchService, DomUtilityService, Thumbnail } from '../../shared';
 import { Asset } from '../../asset-page/asset';
 
 @Component({
@@ -29,8 +29,9 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
 
   ngOnInit() {
     if (this.asset) {
+      let isPublic = this.asset.collectiontypes ? this.asset.collectiontypes.indexOf(5) >= 0 : false
       // External share links are not handled by this modal, since it is only called by Nav
-      this.shareLink = this._assets.getShareLink(this.asset.objectId ? this.asset.objectId : this.asset.artstorid);
+      this.shareLink = this._assets.getShareLink(this.asset.objectId ? this.asset.objectId : this.asset.artstorid, isPublic);
       // Clean Group item data
       if (this.asset['tombstone']) {
         this.asset['name'] = this.asset['tombstone'][0]

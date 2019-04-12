@@ -3,7 +3,7 @@ services:
   app:
     build: .
     image: ${IMAGE}
-    container-name: docker-webapp
+    # container-name: docker-webapp
     restart: always
     ports:
     - "80:80"
