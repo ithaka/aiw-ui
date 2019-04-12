@@ -1292,43 +1292,43 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-"appdynamics-jre@https://packages.appdynamics.com/nodejs/4.5.12.0/appdynamics-jre.tgz":
-  version "4.5.12"
-  resolved "https://packages.appdynamics.com/nodejs/4.5.12.0/appdynamics-jre.tgz#b2826419acd43a5e3cb371dd6583ad0de3e315fa"
+"appdynamics-jre@https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-jre.tgz":
+  version "4.5.13"
+  resolved "https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-jre.tgz#addff96b74d9454df8bf2963d65440950d27d288"
 
-"appdynamics-libagent@https://cdn.appdynamics.com/packages/nodejs/4.5.12.0/appdynamics-libagent-node.tgz":
-  version "4.5.12"
-  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.12.0/appdynamics-libagent-node.tgz#cb8b9e9b3ec4cdd86ed1521c408ea7378fcd179c"
+"appdynamics-libagent@https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-libagent-node.tgz":
+  version "4.5.13"
+  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-libagent-node.tgz#8f5076d4149e2e0f006969300d427e4cadb6d921"
   optionalDependencies:
-    request "2.83.0"
+    request "2.88.0"
 
-"appdynamics-native@https://cdn.appdynamics.com/packages/nodejs/4.5.12.0/appdynamics-native-node.tgz":
-  version "4.5.12"
-  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.12.0/appdynamics-native-node.tgz#2f47e9cc26ed8a330bf41d5fff3a3432562c5573"
+"appdynamics-native@https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-native-node.tgz":
+  version "4.5.13"
+  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-native-node.tgz#058d86fee13d06e9490f9fbbbd9a32b2a98f87ce"
 
-"appdynamics-protobuf@https://cdn.appdynamics.com/packages/nodejs/4.5.12.0/appdynamics-protobuf-node.tgz":
-  version "4.5.12"
-  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.12.0/appdynamics-protobuf-node.tgz#7d51a2a5f58127ad5d9e9c696f6be87162adcccb"
+"appdynamics-protobuf@https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-protobuf-node.tgz":
+  version "4.5.13"
+  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-protobuf-node.tgz#2f19a94baaa2ddf1a08a6a05b6c5284d64d32cf3"
 
-"appdynamics-proxy@https://packages.appdynamics.com/nodejs/4.5.12.0/appdynamics-proxy.tgz":
-  version "4.5.12"
-  resolved "https://packages.appdynamics.com/nodejs/4.5.12.0/appdynamics-proxy.tgz#031bcfc8867c699a4d3b1b397e1f8013264b7005"
+"appdynamics-proxy@https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-proxy.tgz":
+  version "4.5.13"
+  resolved "https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-proxy.tgz#a56c17f6ec67474b61ef3b856934747d91dbefd6"
 
-"appdynamics-zmq@https://cdn.appdynamics.com/packages/nodejs/4.5.12.0/appdynamics-zmq-node.tgz":
-  version "4.5.12"
-  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.12.0/appdynamics-zmq-node.tgz#356355a3fe665db5a7261f7bfb331526accf299e"
+"appdynamics-zmq@https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-zmq-node.tgz":
+  version "4.5.13"
+  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-zmq-node.tgz#9054b840e6b13467506a22e93f44868d42e97455"
 
-appdynamics@4.5:
-  version "4.5.12"
-  resolved "https://registry.yarnpkg.com/appdynamics/-/appdynamics-4.5.12.tgz#66da6cc499021c3941e66de3539e6706981ceecf"
-  integrity sha512-DdYvnT6ZTMwwfnVFmjoZZ3fLtgaZPWunPMxzOgcDY6sixbfeLIWN6DsOiltH/HjEx0QAwGPHZx8q5RsCWz/kgw==
+appdynamics@4.5.13:
+  version "4.5.13"
+  resolved "https://registry.yarnpkg.com/appdynamics/-/appdynamics-4.5.13.tgz#ea9ecfdc10c61bf735e03b5c79648711db599239"
+  integrity sha512-9R1XHib4/XaEErSjACexhsihwIQ/A6tIsNZdNRHoCsUv1/Ve8nESk192Iss4dvc1AvPNsCSq0PTmxvvSw8+RAQ==
   dependencies:
-    appdynamics-jre "https://packages.appdynamics.com/nodejs/4.5.12.0/appdynamics-jre.tgz"
-    appdynamics-libagent "https://cdn.appdynamics.com/packages/nodejs/4.5.12.0/appdynamics-libagent-node.tgz"
-    appdynamics-native "https://cdn.appdynamics.com/packages/nodejs/4.5.12.0/appdynamics-native-node.tgz"
-    appdynamics-protobuf "https://cdn.appdynamics.com/packages/nodejs/4.5.12.0/appdynamics-protobuf-node.tgz"
-    appdynamics-proxy "https://packages.appdynamics.com/nodejs/4.5.12.0/appdynamics-proxy.tgz"
-    appdynamics-zmq "https://cdn.appdynamics.com/packages/nodejs/4.5.12.0/appdynamics-zmq-node.tgz"
+    appdynamics-jre "https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-jre.tgz"
+    appdynamics-libagent "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-libagent-node.tgz"
+    appdynamics-native "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-native-node.tgz"
+    appdynamics-protobuf "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-protobuf-node.tgz"
+    appdynamics-proxy "https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-proxy.tgz"
+    appdynamics-zmq "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-zmq-node.tgz"
     cls-hooked "^4.2.2"
     log4js "0.6.38"
     set-immediate "0.1.1"
@@ -1788,20 +1788,6 @@ boom@2.x.x:
   resolved "https://registry.yarnpkg.com/boom/-/boom-2.10.1.tgz#39c8918ceff5799f83f9492a848f625add0c766f"
   dependencies:
     hoek "2.x.x"
-
-boom@4.x.x:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/boom/-/boom-4.3.1.tgz#4f8a3005cb4a7e3889f749030fd25b96e01d2e31"
-  integrity sha1-T4owBctKfjiJ90kDD9JbluAdLjE=
-  dependencies:
-    hoek "4.x.x"
-
-boom@5.x.x:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/boom/-/boom-5.2.0.tgz#5dd9da6ee3a5f302077436290cb717d3f4a54e02"
-  integrity sha512-Z5BTk6ZRe4tXXQlkqftmsAUANpXmuwlsF5Oov8ThoMbQRzdGTA1ngYRW160GexgOgjsFOKJz0LYhoNi+2AMBUw==
-  dependencies:
-    hoek "4.x.x"
 
 bootstrap@^4.1.3:
   version "4.1.3"
@@ -2701,13 +2687,6 @@ cryptiles@2.x.x:
   resolved "https://registry.yarnpkg.com/cryptiles/-/cryptiles-2.0.5.tgz#3bdfecdc608147c1c67202fa291e7dca59eaa3b8"
   dependencies:
     boom "2.x.x"
-
-cryptiles@3.x.x:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/cryptiles/-/cryptiles-3.1.4.tgz#769a68c95612b56faadfcebf57ac86479cbe8322"
-  integrity sha512-8I1sgZHfVwcSOY6mSGpVU3lw/GSIZvusg8dD2+OGehCJpOhQRLNcH0qb9upQnOH4XhgxxFJSg6E2kx95deb1Tw==
-  dependencies:
-    boom "5.x.x"
 
 crypto-browserify@^3.11.0:
   version "3.12.0"
@@ -4464,16 +4443,6 @@ hawk@~3.1.0:
     hoek "2.x.x"
     sntp "1.x.x"
 
-hawk@~6.0.2:
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/hawk/-/hawk-6.0.2.tgz#af4d914eb065f9b5ce4d9d11c1cb2126eecc3038"
-  integrity sha512-miowhl2+U7Qle4vdLqDdPt9m09K6yZhkLDTWGoUiUzrQCn+mHHSmfJgAyGaLRZbPmTqfFFjRV1QWCW0VWUJBbQ==
-  dependencies:
-    boom "4.x.x"
-    cryptiles "3.x.x"
-    hoek "4.x.x"
-    sntp "2.x.x"
-
 he@1.2.x, he@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
@@ -4493,11 +4462,6 @@ hmac-drbg@^1.0.0:
 hoek@2.x.x:
   version "2.16.3"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-2.16.3.tgz#20bb7403d3cea398e91dc4710a8ff1b8274a25ed"
-
-hoek@4.x.x:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/hoek/-/hoek-4.2.1.tgz#9634502aa12c445dd5a7c5734b572bb8738aacbb"
-  integrity sha512-QLg82fGkfnJ/4iy1xZ81/9SIJiq1NGFUMGs6ParyjBZr6jW2Ufj/snDqTHixNlHdPNwN2RLVD0Pi3igeK9+JfA==
 
 hooker@~0.2.3:
   version "0.2.3"
@@ -7823,34 +7787,6 @@ request-progress@^2.0.1, request-progress@~2.0.1:
   dependencies:
     throttleit "^1.0.0"
 
-request@2.83.0:
-  version "2.83.0"
-  resolved "https://registry.yarnpkg.com/request/-/request-2.83.0.tgz#ca0b65da02ed62935887808e6f510381034e3356"
-  integrity sha512-lR3gD69osqm6EYLk9wB/G1W/laGWjzH90t1vEa2xuxHD5KUrSzp9pUSfTm+YC5Nxt2T8nMPEvKlhbQayU7bgFw==
-  dependencies:
-    aws-sign2 "~0.7.0"
-    aws4 "^1.6.0"
-    caseless "~0.12.0"
-    combined-stream "~1.0.5"
-    extend "~3.0.1"
-    forever-agent "~0.6.1"
-    form-data "~2.3.1"
-    har-validator "~5.0.3"
-    hawk "~6.0.2"
-    http-signature "~1.2.0"
-    is-typedarray "~1.0.0"
-    isstream "~0.1.2"
-    json-stringify-safe "~5.0.1"
-    mime-types "~2.1.17"
-    oauth-sign "~0.8.2"
-    performance-now "^2.1.0"
-    qs "~6.5.1"
-    safe-buffer "^5.1.1"
-    stringstream "~0.0.5"
-    tough-cookie "~2.3.3"
-    tunnel-agent "^0.6.0"
-    uuid "^3.1.0"
-
 request@2.87.0:
   version "2.87.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.87.0.tgz#32f00235cd08d482b4d0d68db93a829c0ed5756e"
@@ -7876,7 +7812,7 @@ request@2.87.0:
     tunnel-agent "^0.6.0"
     uuid "^3.1.0"
 
-request@^2.74.0, request@^2.81.0, request@^2.83.0, request@^2.87.0, request@^2.88.0:
+request@2.88.0, request@^2.74.0, request@^2.81.0, request@^2.83.0, request@^2.87.0, request@^2.88.0:
   version "2.88.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.0.tgz#9c2fca4f7d35b592efe57c7f0a55e81052124fef"
   dependencies:
@@ -8408,13 +8344,6 @@ sntp@1.x.x:
   dependencies:
     hoek "2.x.x"
 
-sntp@2.x.x:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/sntp/-/sntp-2.1.0.tgz#2c6cec14fedc2222739caf9b5c3d85d1cc5a2cc8"
-  integrity sha512-FL1b58BDrqS3A11lJ0zEdnJ3UOKqVxawAkF3k7F0CVN7VQ34aZrV+G8BZ1WC9ZL7NyrwsW0oviwsWDgRuVYtJg==
-  dependencies:
-    hoek "4.x.x"
-
 socket.io-adapter@~1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/socket.io-adapter/-/socket.io-adapter-1.1.1.tgz#2a805e8a14d6372124dd9159ad4502f8cb07f06b"
@@ -8784,7 +8713,7 @@ string_decoder@~0.10.x:
   version "0.10.31"
   resolved "https://registry.yarnpkg.com/string_decoder/-/string_decoder-0.10.31.tgz#62e203bc41766c6c28c9fc84301dab1c5310fa94"
 
-stringstream@~0.0.4, stringstream@~0.0.5:
+stringstream@~0.0.4:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/stringstream/-/stringstream-0.0.6.tgz#7880225b0d4ad10e30927d167a1d6f2fd3b33a72"
 
