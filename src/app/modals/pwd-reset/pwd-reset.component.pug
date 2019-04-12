@@ -19,7 +19,7 @@
             p.modal-prompt {{ copyKey+'.PROMPT' | translate }}
             .form-group
               label(for="pwdResetEmailInput") {{ copyKey+'.LABEL' | translate }}
-              input.form-control#pwdResetEmailInput(#pwdResetEmailInput
+              input.form-control#pwdResetEmailInput(#pwdResetEmailInput,
                 [class.is-invalid]="submitted && (pwdResetForm.controls['email'].invalid || errorMsgPwdRst)",
                 [class.is-valid]="pwdResetForm.controls['email'].valid && !errorMsgPwdRst",
                 type="text",
