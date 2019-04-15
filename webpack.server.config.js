@@ -1,5 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
+const sagokuEnv = JSON.stringify(process.env.SAGOKU_ENV || 'test')
+const appdynamicsName = (sagokuEnv == 'prod' ? 'Artstor_PROD' : 'Artstor_TEST')
 
 module.exports = {
   entry: { server: './server.ts' },
@@ -42,7 +44,7 @@ module.exports = {
         controllerSslEnabled: true,  // Set to true if controllerPort is SSL
         accountName: 'Ithaka', // Required for SaaS accounts
         accountAccessKey: '8e51d6a16fb3', // Required for SaaS accounts
-        applicationName: 'Artstor_TEST',
+        applicationName: '${appdynamicsName}',
         tierName: 'artstor-ui-ssr', 
         nodeName: 'artstor-ui-ssr-01'
        });
