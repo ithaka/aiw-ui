@@ -7,14 +7,13 @@ ENV SAGOKU=true
 # Build argument with default value "test"
 ARG SAGOKU_ENV="test"
 
-# Set node environment variables
-RUN set SAGOKU_ENV=${SAGOKU_ENV}
-
 # Create app directory
 WORKDIR /usr/src/app
 
 # Install app dependencies
 COPY package.json ./
+# Set node environment variables
+RUN set SAGOKU_ENV=${SAGOKU_ENV}
 RUN npm install
 
 # Bundle app source
