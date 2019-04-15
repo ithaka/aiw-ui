@@ -1501,10 +1501,6 @@ anymatch@^2.0.0:
   version "4.5.13"
   resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-protobuf-node.tgz#2f19a94baaa2ddf1a08a6a05b6c5284d64d32cf3"
 
-"appdynamics-proxy@https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-proxy.tgz":
-  version "4.5.13"
-  resolved "https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-proxy.tgz#a56c17f6ec67474b61ef3b856934747d91dbefd6"
-
 "appdynamics-zmq@https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-zmq-node.tgz":
   version "4.5.13"
   resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-zmq-node.tgz#9054b840e6b13467506a22e93f44868d42e97455"
