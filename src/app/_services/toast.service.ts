@@ -110,7 +110,8 @@ export interface Toast {
     stringHTML: string
     links?: {
         routerLink: string[],
-        label: string
+        label: string,
+        refresh?: boolean
     }[]
     dismiss?: boolean
     date?: Date

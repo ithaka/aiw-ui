@@ -134,8 +134,9 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           if (!params['page']) {
             params['page'] = 1
           }
+          let refreshGroup = params['refresh'] ? true : false
           if (id) {
-            this._assets.queryAll(params)
+            this._assets.queryAll(params, refreshGroup)
           }
       })).subscribe()
     );
