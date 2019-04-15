@@ -3,7 +3,7 @@ import { Location } from '@angular/common'
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
-import * as Raven from 'raven-js'
+import * as Sentry from '@sentry/browser';
 
 import { AuthService } from '../auth.service'
 import { AssetService } from '../assets.service'
@@ -115,11 +115,13 @@ export class Nav implements OnInit, OnDestroy {
 
             // Add user context to sentry.io errors
             if (this.user.username){
-              Raven.setUserContext({
-                  email: this.user.username
+              Sentry.configureScope((scope) => {
+                scope.setUser({email: this.user.username});
               })
             } else{
-              Raven.setUserContext()
+              Sentry.configureScope((scope) => {
+                scope.setUser({email: ''})
+              });
             }
           },
           (err) => {
