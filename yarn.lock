@@ -555,6 +555,16 @@
     semver "5.5.1"
     semver-intersect "1.4.0"
 
+"@sentry/browser@^5.0.8":
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-5.0.8.tgz#12350d1e1d0881eb4641f44ffa8ddcefb2b03217"
+  integrity sha512-hMV3mF8R3YZ0IhkjdYMSNdPfC2XbImCL88Mqxkc53KPGMes/8psPd40aWChRcMw0qJIovgezAdn41oxMH8XimQ==
+  dependencies:
+    "@sentry/core" "5.0.8"
+    "@sentry/types" "5.0.6"
+    "@sentry/utils" "5.0.8"
+    tslib "^1.9.3"
+
 "@sentry/core@4.6.6":
   version "4.6.6"
   resolved "https://registry.yarnpkg.com/@sentry/core/-/core-4.6.6.tgz#dea96a88533a3bdbdcc86ae18e35272c57e0fd20"
@@ -566,6 +576,17 @@
     "@sentry/utils" "4.6.5"
     tslib "^1.9.3"
 
+"@sentry/core@5.0.8":
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-5.0.8.tgz#8a05f1c024cda726b4cabeb2e56c5a6e3857e475"
+  integrity sha512-LGTPMx4PqSOCUiUjHZ45kwealcqAnHgUZonnIv8pcqd1NmY5oOUAhI/rO60Yj9Ij6TVaSHppWpYHI7Wt9Ot6kQ==
+  dependencies:
+    "@sentry/hub" "5.0.8"
+    "@sentry/minimal" "5.0.8"
+    "@sentry/types" "5.0.6"
+    "@sentry/utils" "5.0.8"
+    tslib "^1.9.3"
+
 "@sentry/hub@4.6.5":
   version "4.6.5"
   resolved "https://registry.yarnpkg.com/@sentry/hub/-/hub-4.6.5.tgz#451def7bc8d90d9cc007f58f364b3ce305c4701a"
@@ -575,6 +596,15 @@
     "@sentry/utils" "4.6.5"
     tslib "^1.9.3"
 
+"@sentry/hub@5.0.8":
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/@sentry/hub/-/hub-5.0.8.tgz#9a229c4afee0b59a238b7c804d20369e7d3346b2"
+  integrity sha512-a9+hnYO42Rpdk7lrxk3dhmZYfOGMDEq2WP2blNiKIU2efI6CQ3G9Ka/6WzVOXSgV3rY+4zx60vHUhNkQVgsbsg==
+  dependencies:
+    "@sentry/types" "5.0.6"
+    "@sentry/utils" "5.0.8"
+    tslib "^1.9.3"
+
 "@sentry/minimal@4.6.5":
   version "4.6.5"
   resolved "https://registry.yarnpkg.com/@sentry/minimal/-/minimal-4.6.5.tgz#64433d2c9fda69eedbb61855a7ff8905f7b19218"
@@ -582,6 +612,15 @@
   dependencies:
     "@sentry/hub" "4.6.5"
     "@sentry/types" "4.5.3"
+    tslib "^1.9.3"
+
+"@sentry/minimal@5.0.8":
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/@sentry/minimal/-/minimal-5.0.8.tgz#21a6521dfbc02d098ae604813e90d945fec6c820"
+  integrity sha512-MP5bFuqC0xMWT9LTkX0rkX1Xxlj3G4zKdhF8rxwM9YLZUUmS5vvNs/AiPGaEAlw8i9C+0TBTcvQt3va2qVVEHA==
+  dependencies:
+    "@sentry/hub" "5.0.8"
+    "@sentry/types" "5.0.6"
     tslib "^1.9.3"
 
 "@sentry/node@^4.5.4":
@@ -606,12 +645,25 @@
   resolved "https://registry.yarnpkg.com/@sentry/types/-/types-4.5.3.tgz#3350dce2b7f9b936a8c327891c12e3aef7bd8852"
   integrity sha512-7ll1PAFNjrBNX9rzy3P2qAQrpQwHaDO3uKj735qsnGw34OtAS8Xr8WYrjI14f9fMPa/XIeWvMPb4GMic28V/ag==
 
+"@sentry/types@5.0.6":
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-5.0.6.tgz#df1b318977e5308741049cc4f35986cf8255115f"
+  integrity sha512-EJYzjfnTfTQgqR3p6dSvIVZe0xe2Jz+tSmvuPABf7VoCmrFtEYkMCSf5IshMHeebmXUS5prrPSCAgVcIrJC+Bw==
+
 "@sentry/utils@4.6.5":
   version "4.6.5"
   resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-4.6.5.tgz#4c960524914311eb76bbd6ca7f80f4d98c04db7f"
   integrity sha512-rTISJtRRbWsd3UE+TkA3QG1C0VzPKPW8w74tieBwYhtTCGmOHNwz2nDC/MZGbGj4OgDmNKKl4CCyQr88EX08hA==
   dependencies:
     "@sentry/types" "4.5.3"
+    tslib "^1.9.3"
+
+"@sentry/utils@5.0.8":
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-5.0.8.tgz#3dcc95b84fef1a862236c9950c257322817bf0da"
+  integrity sha512-NZUVl3i2Rm5WKgPEb0DSPYTMQsCxdbZXOiOEq2/9Ee1bY29VTzmjM08KZTYI8+ZiUJwB2l3y/nvNGkqlEoXQCg==
+  dependencies:
+    "@sentry/types" "5.0.6"
     tslib "^1.9.3"
 
 "@types/anymatch@*":
@@ -1431,39 +1483,43 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-"appdynamics-jre@https://packages.appdynamics.com/nodejs/4.5.11.0/appdynamics-jre.tgz":
-  version "4.5.11"
-  resolved "https://packages.appdynamics.com/nodejs/4.5.11.0/appdynamics-jre.tgz#96530cd9cc6564d5d102ec30e71971584753b583"
+"appdynamics-jre@https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-jre.tgz":
+  version "4.5.13"
+  resolved "https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-jre.tgz#addff96b74d9454df8bf2963d65440950d27d288"
 
-"appdynamics-libagent@https://cdn.appdynamics.com/packages/nodejs/4.5.11.0/appdynamics-libagent-node.tgz":
-  version "4.5.11"
-  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.11.0/appdynamics-libagent-node.tgz#2268f7dcb0afabb7dcd7f5164a1e7069ab617c00"
+"appdynamics-libagent@https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-libagent-node.tgz":
+  version "4.5.13"
+  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-libagent-node.tgz#8f5076d4149e2e0f006969300d427e4cadb6d921"
   optionalDependencies:
-    request "2.83.0"
+    request "2.88.0"
 
-"appdynamics-native@https://cdn.appdynamics.com/packages/nodejs/4.5.11.0/appdynamics-native-node.tgz":
-  version "4.5.11"
-  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.11.0/appdynamics-native-node.tgz#62fa95dcaa008d953dcf07fc522efb02cde79228"
+"appdynamics-native@https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-native-node.tgz":
+  version "4.5.13"
+  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-native-node.tgz#058d86fee13d06e9490f9fbbbd9a32b2a98f87ce"
 
-"appdynamics-protobuf@https://cdn.appdynamics.com/packages/nodejs/4.5.11.0/appdynamics-protobuf-node.tgz":
-  version "4.5.11"
-  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.11.0/appdynamics-protobuf-node.tgz#255a1c03a71c8cae1482dd3b055f95ecb0e65c83"
+"appdynamics-protobuf@https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-protobuf-node.tgz":
+  version "4.5.13"
+  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-protobuf-node.tgz#2f19a94baaa2ddf1a08a6a05b6c5284d64d32cf3"
 
-"appdynamics-zmq@https://cdn.appdynamics.com/packages/nodejs/4.5.11.0/appdynamics-zmq-node.tgz":
-  version "4.5.11"
-  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.11.0/appdynamics-zmq-node.tgz#a2dc8e83b8d0ff91ff7e44545e36cfdec4e9d1c5"
+"appdynamics-proxy@https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-proxy.tgz":
+  version "4.5.13"
+  resolved "https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-proxy.tgz#a56c17f6ec67474b61ef3b856934747d91dbefd6"
 
-appdynamics@4.5.11:
-  version "4.5.11"
-  resolved "https://registry.yarnpkg.com/appdynamics/-/appdynamics-4.5.11.tgz#6f1580248fbc06e1818544e8a24eff625b098411"
-  integrity sha512-+HU7NcXpE1Tmmho5cCJ5eN7OCjVtwDfYAEIqQzxHWgR11YbbtzVe1TgZnwssSlTJbOtJrUmD5ZX0HmfG17D+hw==
+"appdynamics-zmq@https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-zmq-node.tgz":
+  version "4.5.13"
+  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-zmq-node.tgz#9054b840e6b13467506a22e93f44868d42e97455"
+
+appdynamics@4.5.13:
+  version "4.5.13"
+  resolved "https://registry.yarnpkg.com/appdynamics/-/appdynamics-4.5.13.tgz#ea9ecfdc10c61bf735e03b5c79648711db599239"
+  integrity sha512-9R1XHib4/XaEErSjACexhsihwIQ/A6tIsNZdNRHoCsUv1/Ve8nESk192Iss4dvc1AvPNsCSq0PTmxvvSw8+RAQ==
   dependencies:
-    appdynamics-jre "https://packages.appdynamics.com/nodejs/4.5.11.0/appdynamics-jre.tgz"
-    appdynamics-libagent "https://cdn.appdynamics.com/packages/nodejs/4.5.11.0/appdynamics-libagent-node.tgz"
-    appdynamics-native "https://cdn.appdynamics.com/packages/nodejs/4.5.11.0/appdynamics-native-node.tgz"
-    appdynamics-protobuf "https://cdn.appdynamics.com/packages/nodejs/4.5.11.0/appdynamics-protobuf-node.tgz"
-    appdynamics-proxy "https://packages.appdynamics.com/nodejs/4.5.11.0/appdynamics-proxy.tgz"
-    appdynamics-zmq "https://cdn.appdynamics.com/packages/nodejs/4.5.11.0/appdynamics-zmq-node.tgz"
+    appdynamics-jre "https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-jre.tgz"
+    appdynamics-libagent "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-libagent-node.tgz"
+    appdynamics-native "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-native-node.tgz"
+    appdynamics-protobuf "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-protobuf-node.tgz"
+    appdynamics-proxy "https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-proxy.tgz"
+    appdynamics-zmq "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-zmq-node.tgz"
     cls-hooked "^4.2.2"
     log4js "0.6.38"
     set-immediate "0.1.1"
@@ -1992,20 +2048,6 @@ boom@2.x.x:
   integrity sha1-OciRjO/1eZ+D+UkqhI9iWt0Mdm8=
   dependencies:
     hoek "2.x.x"
-
-boom@4.x.x:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/boom/-/boom-4.3.1.tgz#4f8a3005cb4a7e3889f749030fd25b96e01d2e31"
-  integrity sha1-T4owBctKfjiJ90kDD9JbluAdLjE=
-  dependencies:
-    hoek "4.x.x"
-
-boom@5.x.x:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/boom/-/boom-5.2.0.tgz#5dd9da6ee3a5f302077436290cb717d3f4a54e02"
-  integrity sha512-Z5BTk6ZRe4tXXQlkqftmsAUANpXmuwlsF5Oov8ThoMbQRzdGTA1ngYRW160GexgOgjsFOKJz0LYhoNi+2AMBUw==
-  dependencies:
-    hoek "4.x.x"
 
 bootstrap@^4.1.3:
   version "4.3.1"
@@ -3036,13 +3078,6 @@ cryptiles@2.x.x:
   integrity sha1-O9/s3GCBR8HGcgL6KR59ylnqo7g=
   dependencies:
     boom "2.x.x"
-
-cryptiles@3.x.x:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/cryptiles/-/cryptiles-3.1.4.tgz#769a68c95612b56faadfcebf57ac86479cbe8322"
-  integrity sha512-8I1sgZHfVwcSOY6mSGpVU3lw/GSIZvusg8dD2+OGehCJpOhQRLNcH0qb9upQnOH4XhgxxFJSg6E2kx95deb1Tw==
-  dependencies:
-    boom "5.x.x"
 
 crypto-browserify@^3.11.0:
   version "3.12.0"
@@ -5089,16 +5124,6 @@ hawk@~3.1.0:
     hoek "2.x.x"
     sntp "1.x.x"
 
-hawk@~6.0.2:
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/hawk/-/hawk-6.0.2.tgz#af4d914eb065f9b5ce4d9d11c1cb2126eecc3038"
-  integrity sha512-miowhl2+U7Qle4vdLqDdPt9m09K6yZhkLDTWGoUiUzrQCn+mHHSmfJgAyGaLRZbPmTqfFFjRV1QWCW0VWUJBbQ==
-  dependencies:
-    boom "4.x.x"
-    cryptiles "3.x.x"
-    hoek "4.x.x"
-    sntp "2.x.x"
-
 he@1.2.x, he@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
@@ -5122,11 +5147,6 @@ hoek@2.x.x:
   version "2.16.3"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-2.16.3.tgz#20bb7403d3cea398e91dc4710a8ff1b8274a25ed"
   integrity sha1-ILt0A9POo5jpHcRxCo/xuCdKJe0=
-
-hoek@4.x.x:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/hoek/-/hoek-4.2.1.tgz#9634502aa12c445dd5a7c5734b572bb8738aacbb"
-  integrity sha512-QLg82fGkfnJ/4iy1xZ81/9SIJiq1NGFUMGs6ParyjBZr6jW2Ufj/snDqTHixNlHdPNwN2RLVD0Pi3igeK9+JfA==
 
 homedir-polyfill@^1.0.1:
   version "1.0.3"
@@ -8685,11 +8705,6 @@ range-parser@^1.0.3, range-parser@^1.2.0, range-parser@~1.2.0:
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.0.tgz#f49be6b487894ddc40dcc94a322f611092e00d5e"
   integrity sha1-9JvmtIeJTdxA3MlKMi9hEJLgDV4=
 
-raven-js@^3.20.1:
-  version "3.27.0"
-  resolved "https://registry.yarnpkg.com/raven-js/-/raven-js-3.27.0.tgz#9f47c03e17933ce756e189f3669d49c441c1ba6e"
-  integrity sha512-vChdOL+yzecfnGA+B5EhEZkJ3kY3KlMzxEhShKh6Vdtooyl0yZfYNFQfYzgMf2v4pyQa+OTZ5esTxxgOOZDHqw==
-
 raw-body@2.3.3:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.3.3.tgz#1b324ece6b5706e153855bc1148c65bb7f6ea0c3"
@@ -8978,34 +8993,6 @@ request-progress@^2.0.1, request-progress@~2.0.1:
   dependencies:
     throttleit "^1.0.0"
 
-request@2.83.0:
-  version "2.83.0"
-  resolved "https://registry.yarnpkg.com/request/-/request-2.83.0.tgz#ca0b65da02ed62935887808e6f510381034e3356"
-  integrity sha512-lR3gD69osqm6EYLk9wB/G1W/laGWjzH90t1vEa2xuxHD5KUrSzp9pUSfTm+YC5Nxt2T8nMPEvKlhbQayU7bgFw==
-  dependencies:
-    aws-sign2 "~0.7.0"
-    aws4 "^1.6.0"
-    caseless "~0.12.0"
-    combined-stream "~1.0.5"
-    extend "~3.0.1"
-    forever-agent "~0.6.1"
-    form-data "~2.3.1"
-    har-validator "~5.0.3"
-    hawk "~6.0.2"
-    http-signature "~1.2.0"
-    is-typedarray "~1.0.0"
-    isstream "~0.1.2"
-    json-stringify-safe "~5.0.1"
-    mime-types "~2.1.17"
-    oauth-sign "~0.8.2"
-    performance-now "^2.1.0"
-    qs "~6.5.1"
-    safe-buffer "^5.1.1"
-    stringstream "~0.0.5"
-    tough-cookie "~2.3.3"
-    tunnel-agent "^0.6.0"
-    uuid "^3.1.0"
-
 request@2.87.0:
   version "2.87.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.87.0.tgz#32f00235cd08d482b4d0d68db93a829c0ed5756e"
@@ -9032,7 +9019,7 @@ request@2.87.0:
     tunnel-agent "^0.6.0"
     uuid "^3.1.0"
 
-request@^2.74.0, request@^2.81.0, request@^2.83.0, request@^2.87.0, request@^2.88.0:
+request@2.88.0, request@^2.74.0, request@^2.81.0, request@^2.83.0, request@^2.87.0, request@^2.88.0:
   version "2.88.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.0.tgz#9c2fca4f7d35b592efe57c7f0a55e81052124fef"
   integrity sha512-NAqBSrijGLZdM0WZNsInLJpkJokL72XYjUpnB0iwsRgxh7dB6COrHnTBNwN0E+lHDAJzu7kLAkDeY08z2/A0hg==
@@ -9668,13 +9655,6 @@ sntp@1.x.x:
   dependencies:
     hoek "2.x.x"
 
-sntp@2.x.x:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/sntp/-/sntp-2.1.0.tgz#2c6cec14fedc2222739caf9b5c3d85d1cc5a2cc8"
-  integrity sha512-FL1b58BDrqS3A11lJ0zEdnJ3UOKqVxawAkF3k7F0CVN7VQ34aZrV+G8BZ1WC9ZL7NyrwsW0oviwsWDgRuVYtJg==
-  dependencies:
-    hoek "4.x.x"
-
 socket.io-adapter@~1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/socket.io-adapter/-/socket.io-adapter-1.1.1.tgz#2a805e8a14d6372124dd9159ad4502f8cb07f06b"
@@ -10106,7 +10086,7 @@ string_decoder@~1.1.1:
   dependencies:
     safe-buffer "~5.1.0"
 
-stringstream@~0.0.4, stringstream@~0.0.5:
+stringstream@~0.0.4:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/stringstream/-/stringstream-0.0.6.tgz#7880225b0d4ad10e30927d167a1d6f2fd3b33a72"
   integrity sha512-87GEBAkegbBcweToUrdzf3eLhWNg06FJTebl4BVJz/JgWy8CvEr9dRtX5qWphiynMSQlxxi+QqN0z5T32SLlhA==
