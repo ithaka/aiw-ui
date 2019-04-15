@@ -1512,7 +1512,6 @@ anymatch@^2.0.0:
 appdynamics@4.5.13:
   version "4.5.13"
   resolved "https://registry.yarnpkg.com/appdynamics/-/appdynamics-4.5.13.tgz#ea9ecfdc10c61bf735e03b5c79648711db599239"
-  integrity sha512-9R1XHib4/XaEErSjACexhsihwIQ/A6tIsNZdNRHoCsUv1/Ve8nESk192Iss4dvc1AvPNsCSq0PTmxvvSw8+RAQ==
   dependencies:
     appdynamics-jre "https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-jre.tgz"
     appdynamics-libagent "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-libagent-node.tgz"
