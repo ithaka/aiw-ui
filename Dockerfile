@@ -4,6 +4,11 @@ FROM node:10
 # Add environment variables
 ENV PORT=80
 ENV SAGOKU=true
+# Build argument with default value "test"
+ARG SAGOKU_ENV="test"
+
+# Set node environment variables
+RUN set SAGOKU_ENV=${SAGOKU_ENV}
 
 # Create app directory
 WORKDIR /usr/src/app
