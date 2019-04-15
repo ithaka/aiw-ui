@@ -124,15 +124,17 @@ export class AuthService implements CanActivate {
       'localhost',
       'localhost:3000'
     ]
+    let isProdHostname = new RegExp(prodHostnames.join('|')).test(this.clientHostname) 
 
-    // Check domain
-    if (  new RegExp(prodHostnames.join('|')).test(this.clientHostname)  ) {
+    // Static app Prod handling
+    if (isProdHostname) {
       // Explicit live endpoints
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = '/api/search/v1.0/search'
       this.ENV = 'prod'
     }
-    else if ( this.clientHostname.indexOf('prod.cirrostratus.org') > -1 ) {
+    // Cirrostratus or server-side handling
+    if (this.clientHostname.indexOf('prod.cirrostratus.org') > -1 || (isProdHostname && !this.isBrowser)) {
       console.info('Using Prod Endpoints (Absolute)')
       // Prod/Lively endpoints
       this.hostname = '//library.artstor.org'
@@ -141,7 +143,7 @@ export class AuthService implements CanActivate {
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
       this.ENV = 'prod'
     } else if ( new RegExp(testHostnames.join('|')).test(this.clientHostname) ) {
-      console.info('Using Test Endpoints')
+      console.info('Using Test Endpoints (Absolute)')
       // Test Endpoints
       this.hostname = '//stage.artstor.org'
       this.subdomain = 'stage'
