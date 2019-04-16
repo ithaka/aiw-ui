@@ -11,7 +11,7 @@ import { DomUtilityService } from 'app/shared';
   styleUrls: [ './toast.component.scss' ]
 })
 export class ToastComponent implements OnInit, OnDestroy {
-  
+
   @Input() public toast: Toast
 
   // Dismiss: Watch for changes to dismiss property
@@ -114,7 +114,7 @@ export class ToastComponent implements OnInit, OnDestroy {
     this._toasts.cancelToastTimer(this.toast.id)
   }
 
-  resumeTimer(event: any) {
+  resumeTimer() {
     // Set timeout so that the correct element receives focus before we make the check
     setTimeout(() => {
       if (document.activeElement.id === 'toast-link' || document.activeElement.id === 'close-toast')
@@ -122,7 +122,7 @@ export class ToastComponent implements OnInit, OnDestroy {
       // Set focus to Add to Group button
       if (this._dom.byId("addToGroupDropdown"))
         this._dom.byId("addToGroupDropdown").focus()
-      
+
       this.triggerDismiss()
     }, 10)
   }
