@@ -20,7 +20,7 @@ let _decorateModuleRef = function identity<T>(value: T): T { return value; };
 
 // Sentry Raven reporter
 Sentry.init({ 
-  dsn: 'https://abcdee57ec1f4ae6ac3128bdcaef39bd@sentry.io/230749',
+  dsn: 'https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953',
   release: version
 });
 @Injectable()
