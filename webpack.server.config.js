@@ -2,6 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 const sagokuEnv = JSON.stringify(process.env.SAGOKU_ENV || 'test')
 const appdynamicsName = (sagokuEnv == 'prod' ? 'Artstor_PROD' : 'Artstor_TEST')
+// Log AppDynamics app name for verification
+console.log("AppDynamics applicationName used: " + appdynamicsName)
 
 module.exports = {
   entry: { server: './server.ts' },
