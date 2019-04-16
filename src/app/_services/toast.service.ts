@@ -100,7 +100,7 @@ const DEFAULT_DISPLAY_TIME: number = 6000
         if (this.toastTimers[toastId]) {
           clearTimeout(this.toastTimers[toastId])
         }
-    }
+      }
 
 }
 

@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { Toast, ToastService } from 'app/_services';
 import { Router, RouterLink } from '@angular/router';
 import { Angulartics2 } from 'angulartics2';
+import { DomUtilityService } from 'app/shared';
 
 @Component({
   selector: 'ang-toast',
@@ -21,13 +22,16 @@ export class ToastComponent implements OnInit, OnDestroy {
   }
 
   public stringHTML: string
+  public plainText: string
   public type: string
   public hideToast: boolean
   public links: { routerLink: string[], label: string }[] = []
+  public toastLiveRegion: HTMLElement
 
   constructor(
     private _angulartics: Angulartics2,
     public _toasts: ToastService,
+    private _dom: DomUtilityService,
     private router: Router
   ) {}
 
@@ -36,17 +40,44 @@ export class ToastComponent implements OnInit, OnDestroy {
     this.stringHTML = this.toast.stringHTML
     this.type = this.toast.type
     this.links = this.toast.links
+    this.plainText = this.stringHTML.replace(/<(?:.|\n)*?>/gm, '')
+
+    // Assign text content for live region
+    this.toastLiveRegion = <HTMLElement>(this._dom.byId('toast-live-region'))
+    this.toastLiveRegion.textContent = 'Notification: ' + this.plainText + ' Enter control + g to go to the group or control + x to dismiss.'
+
+    // Assign keyboard shortcut
+    this.onKeydown = this.onKeydown.bind(this)
+    window.addEventListener('keydown', this.onKeydown, true)
+  }
+
+  onKeydown(e: any) {
+    // If user hits Ctrl + x, dismiss the toast
+    if (e.key === 'x' && e.ctrlKey) {
+      this.triggerDismiss()
+    }
+    // If user hits Ctrl + g, go to the first link
+    else if (e.key === 'g' && e.ctrlKey) {
+      this.triggerDismiss()
+      this.router.navigate(this.links[0].routerLink)
+    }
   }
 
   triggerDismiss() {
+    // Remove the live region when the toast is gone
+    this.toastLiveRegion.textContent = ''
+
     this._toasts.dismissToast(this.toast.id)
   }
 
   animateDismiss() {
+    // Remove the live region when the toast is gone
+    this.toastLiveRegion.textContent = ''
+
     this.hideToast = true
     setTimeout(() => {
       this._toasts.dismissToast(this.toast.id, true)
-    }, 500)
+    }, 700)
   }
 
   /**
@@ -79,6 +110,29 @@ export class ToastComponent implements OnInit, OnDestroy {
     }
   }
 
+  pauseTimer() {
+    this._toasts.cancelToastTimer(this.toast.id)
+  }
+
+  resumeTimer(event: any) {
+    // Set timeout so that the correct element receives focus before we make the check
+    setTimeout(() => {
+      if (document.activeElement.id === 'toast-link' || document.activeElement.id === 'close-toast')
+        return
+      // Set focus to Add to Group button
+      if (this._dom.byId("addToGroupDropdown"))
+        this._dom.byId("addToGroupDropdown").focus()
+      
+      this.triggerDismiss()
+    }, 10)
+  }
+
   ngOnDestroy() {
+    // Remove keyboard short cut when the toast is gone
+    window.removeEventListener("keydown", this.onKeydown, true)
+
+    // Set focus to Add to Group button
+    if (this._dom.byId("addToGroupDropdown"))
+      this._dom.byId("addToGroupDropdown").focus()
   }
 }
