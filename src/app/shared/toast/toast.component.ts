@@ -120,7 +120,8 @@ export class ToastComponent implements OnInit, OnDestroy {
       if (document.activeElement.id === 'toast-link' || document.activeElement.id === 'close-toast')
         return
       // Set focus to Add to Group button
-      this._dom.byId("addToGroupDropdown").focus()
+      if (this._dom.byId("addToGroupDropdown"))
+        this._dom.byId("addToGroupDropdown").focus()
       
       this.triggerDismiss()
     }, 10)
@@ -131,6 +132,7 @@ export class ToastComponent implements OnInit, OnDestroy {
     window.removeEventListener("keydown", this.onKeydown, true)
 
     // Set focus to Add to Group button
-    this._dom.byId("addToGroupDropdown").focus()
+    if (this._dom.byId("addToGroupDropdown"))
+      this._dom.byId("addToGroupDropdown").focus()
   }
 }
