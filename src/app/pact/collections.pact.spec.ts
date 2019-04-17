@@ -94,6 +94,7 @@ fdescribe('Collections #pact #collections', () => {
         { provide: AssetFiltersService, useValue: {} },
         MockRequests,
         CollectionPage,
+        { provide: AssetService, useValue: {} },
         AssetService
       ],
     })
