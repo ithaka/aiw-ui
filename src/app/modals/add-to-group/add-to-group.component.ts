@@ -228,9 +228,8 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
                 type: 'success',
                 stringHTML: '<p>' + (multipleSelected ? 'The items were added' : 'The item was added') + ' to <b>' + data.name + '</b>.</p>',
                 links: [{
-                  routerLink: ['/group/'+ data.id],
+                  routerLink: ['/group/' + data.id, { 'refresh': true } ],
                   label: 'Go to group',
-                  refresh: true
                 }]
               })
 
