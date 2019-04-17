@@ -324,7 +324,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         this.osdViewer = new OpenSeadragon({
             id: this.osdViewerId,
             // prefix for Icon Images (full url needed for SSR)
-            prefixUrl: this._auth.getUrl() + '/assets/img/osd/',
+            prefixUrl: this._auth.getHostname() + '/assets/img/osd/',
             tileSources: this.tileSource,
             // Trigger conditionally if tilesource is an array of multiple sources
             sequenceMode: this.isMultiView,
@@ -565,7 +565,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
             this.osdViewer.viewport.fitBounds(bounds, true)
         } else {
             this.osdViewer.viewport.fitVertically(true)
-            
+
         }
     }
     /**

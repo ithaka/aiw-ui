@@ -190,13 +190,14 @@ filter, .filter {
 
 		a {
 			color: #000;
-			background-color: #efefef;
+			background-color: $color-gray-2;
 			padding: 4px 8px;
 			border-radius: 3px;
 			word-break: break-word;
 
 			&:hover {
-			background-color: #d6d6d6;
+				background-color: $color-gray-4;
+				text-decoration: none;
 			}
 		}
 

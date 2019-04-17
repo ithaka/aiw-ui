@@ -3,7 +3,7 @@
     .toast-icon
       i.icon([ngClass]="{ 'icon-success' : type == 'success', 'icon-error' : type == 'error' }")
     div.toast-message
-      div([innerHTML]="stringHTML")
+      div#toast-text([innerHTML]="stringHTML")
       ng-container(*ngFor="let link of links")
-        a.toast-content-links.mr-1([routerLink]="link.routerLink", (click)="trackGoToLink(link.routerLink)", [queryParams]="{'refresh': link.refresh }") {{ link.label }}
-    i.icon.icon-close((click)="triggerDismiss()")
+        a#toast-link.toast-content-links.mr-1([routerLink]="link.routerLink", (click)="trackGoToLink(link.routerLink)", [queryParams]="{'refresh': link.refresh }", (focus)="pauseTimer()", (blur)="resumeTimer()", tabindex="10") {{ link.label }}
+    button#close-toast.icon.icon-close((click)="triggerDismiss()", (focus)="pauseTimer()", (blur)="resumeTimer()", aria-label="Close notification", tabindex="10")
