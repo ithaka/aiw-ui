@@ -1,0 +1,77 @@
+@import '../../../sass/core/variables';
+
+.modal {
+    display: block;
+
+    .modal-content {
+      margin-top: 18em;
+    }
+
+    .modal-body{
+        width: 500px;
+        border-radius: 4px;
+        background-color: $color-white;
+        padding: 24px;
+        position: relative;
+
+        .export-type {            
+            .icon {
+                font-size: 32px;
+            }
+        }
+
+        .progress {
+            margin: 14px 0px;
+            height: 8px;
+            border-radius: 0 !important;
+            outline: none;
+
+            .progress-bar {
+                &.state-0 {
+                    background-color: $color-primary;
+                }
+                &.state-1 {
+                    background-color: $success;
+                }
+                &.state-2 {
+                    background-color: $error;
+                }
+            }
+        }
+
+        .message {
+            font-family: Verdana;
+            font-size: 14px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: $color-gray-7;
+        }
+
+        .try-again-link {
+            margin-top: 14px;
+            font-family: Verdana;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: normal;
+            letter-spacing: normal;
+            color: $blue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .close {
+            position: absolute;
+            right: 1em;
+            top: 0.8em;
+            font-weight: normal;
+            color: $color-gray-5;
+            opacity: 1;
+
+            &:hover {
+              color: $color-gray-6;
+            }
+        }
+    }
+}

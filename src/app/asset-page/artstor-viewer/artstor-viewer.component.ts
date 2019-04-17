@@ -3,17 +3,18 @@ import { Subscription, Observable, of } from 'rxjs'
 import { take, map, mergeMap } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { ActivatedRoute } from '@angular/router'
-import * as OpenSeadragon from 'openseadragon'
+// import * as OpenSeadragon from 'openseadragon'
 
 // Internal Dependencies
 // import '/krpano.js'
-import { Asset, AuthService, ImageZoomParams } from 'app/shared';
+import { Asset, AuthService, ImageZoomParams, LogService } from 'app/shared';
 import { MetadataService } from 'app/_services'
 import { isPlatformBrowser } from '@angular/common';
 
 // Browser API delcarations
 declare var ActiveXObject: any
 declare var embedpano: any
+declare var OpenSeadragon: any
 
 export enum viewState {
   loading, // 0
@@ -136,6 +137,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
 
     constructor(
         private _http: HttpClient, // TODO: move _http into a service
+        private _log: LogService,
         private _metadata: MetadataService,
         private _auth: AuthService,
         @Inject(PLATFORM_ID) private platformId: Object,
@@ -159,10 +161,18 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         if (!isPlatformBrowser(this.platformId)) {
             // If rendered server-side, load thumbnail
             this.thumbnailMode = true
+            this.initialized = true
+            this.loadAssetById(this.assetId, this.groupId)
+        } else {
+            // Load OpenSeadragon client -side
+            import('openseadragon')
+                .then((osd) => {
+                    OpenSeadragon = osd
+                    // Ensure component is initialized, and all inputs available, before first load of asset
+                    this.initialized = true
+                    this.loadAssetById(this.assetId, this.groupId)
+                });
         }
-        // Ensure component is initialized, and all inputs available, before first load of asset
-        this.initialized = true
-        this.loadAssetById(this.assetId, this.groupId)
         // Assets don't initialize with fullscreen variable
         // And assets beyond the first/primary only show in fullscreen
         if (this.index > 0) {
@@ -314,8 +324,8 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         // OpenSeaDragon Initializer
         this.osdViewer = new OpenSeadragon({
             id: this.osdViewerId,
-            // prefix for Icon Images
-            prefixUrl: '/assets/img/osd/',
+            // prefix for Icon Images (full url needed for SSR)
+            prefixUrl: this._auth.getHostname() + '/assets/img/osd/',
             tileSources: this.tileSource,
             // Trigger conditionally if tilesource is an array of multiple sources
             sequenceMode: this.isMultiView,
@@ -349,7 +359,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
                 bottom: this.isMultiView ? 190 : 0
             },
             timeout: 60000,
-            // useCanvas: false,
+            useCanvas: true,
             // defaultZoomLevel: 1.2, // We don't want the image to be covered on load
             // visibilityRatio: 0.2, // Determines percentage of background that has to be covered by the image while panning
             // debugMode: true,
@@ -531,6 +541,11 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         if (!this.isFullscreen) {
             this.requestFullScreen(elem);
             this.setFullscreen(true);
+
+            // Add Captain's log event for entering full screen mode
+            this._log.log({
+                eventType: 'artstor_enter_fullscreen'
+            })
         } else {
             this.exitFullScreen();
             this.setFullscreen(false);
@@ -556,7 +571,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
             this.osdViewer.viewport.fitBounds(bounds, true)
         } else {
             this.osdViewer.viewport.fitVertically(true)
-            
+
         }
     }
     /**

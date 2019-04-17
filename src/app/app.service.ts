@@ -25,7 +25,12 @@ export class AppConfig {
       this.clientHostname = window.location.hostname
     } else{
       let req = this.injector.get('request');
+      
       this.clientHostname = req ? req.get('host') : '';
+      console.log("Requested from", this.clientHostname)
+      this.clientHostname = this.clientHostname.replace(':4000','')
+      this.clientHostname = this.clientHostname.replace(':8080','')
+      this.clientHostname = this.clientHostname.replace(':80','')
     }
     // Generic debugging between server/client rendering
     console.log("Detected hostname: " + this.clientHostname)

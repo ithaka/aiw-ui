@@ -90,7 +90,7 @@
             button#addToGroupDropdown.btn.btn-primary(ngbDropdownToggle, tabindex="2", aria-label="Add to groups", (click)="closeAddGroupTooltip()", (keyup.enter)="closeAddGroupTooltip()")
               | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate}}
               = " "
-            ang-promo-tooltip(*ngIf="(user.isLoggedIn && assets[0].typeName && assets[0].typeName === 'image') && !addGrpTTDismissed && (assetViewer.state === 1 || !multiviewItems)", [options]="addGroupTooltipOpts", (close)="closeAddGroupTooltip()")
+            ang-promo-tooltip(*ngIf="user.isLoggedIn && assets[0].typeName && assets[0].typeName === 'image' && !addGrpTTDismissed && assetViewer.state === 1 && !multiviewItems", [options]="addGroupTooltipOpts", (close)="closeAddGroupTooltip()")
             .dropdown-menu(ngbDropdownMenu)
               a#addItemToGroupLink.dropdown-item(
                 (click)="addAssetToIG()",
@@ -154,7 +154,7 @@
 
           //- Copy URL
           //- * Do not show for Personal Collection assets
-          .btn-group#copy-link(*ngIf="!assets[0].personalCollectionOwner")
+          .btn-group#copy-link(*ngIf="isBrowser && !assets[0].personalCollectionOwner")
             input#generatedImgURL.form-control.form-control__copy(#copyUrlInput="", readonly, [ngModel]="generatedImgURL", (click)="copyUrlInput.select(); document.execCommand('copy', false, null);", tabindex="2", aria-label="Item URL")
             button#assetpage-btn.btn.btn-secondary([class.active]="showCopyUrl", (mousedown)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (mouseup)="copyUrlInput.select(); document.execCommand('copy', false, null);", (keydown.enter)="showCopyUrl ? showCopyUrl = false : copyGeneratedImgURL()", (keyup.enter)="copyUrlInput.select(); document.execCommand('copy', false, null);", tabindex="2", aria-label="Copy Item URL")
               | {{ 'ASSET_PAGE.BUTTONS.LINK' | translate}}

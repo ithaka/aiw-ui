@@ -44,7 +44,7 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
         if (err instanceof HttpErrorResponse) {
           // check if it's the droid we're looking for
           if (err.status === 401) {
-            console.log('caught you, you theif')
+            console.log('401 received for: ' + req.url)
             // the below works, which means we can reference the auth service, now we just need to trigger a modal...
             this._inj.get(AuthService).refreshUserSession(true)
           }

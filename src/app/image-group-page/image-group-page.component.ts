@@ -15,6 +15,8 @@ import {
   GroupService 
 } from './../shared'
 
+import { LoadingStateOptions, LoadingState } from './../modals/loading-state/loading-state.component'
+
 @Component({
   selector: 'ang-image-group',
   styleUrls: [ './image-group-page.component.scss' ],
@@ -66,6 +68,10 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private unaffiliatedUser: boolean = false
   /** Reorder: Modifies the layout */
   private reorderMode: boolean = false
+
+  // For export loading states
+  public showExportLoadingState: boolean = false
+  private exportLoadingStateopts: LoadingStateOptions
 
   constructor(
     public _appConfig: AppConfig,
@@ -128,8 +134,9 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           if (!params['page']) {
             params['page'] = 1
           }
+          let refreshGroup = params['refresh'] ? true : false
           if (id) {
-            this._assets.queryAll(params)
+            this._assets.queryAll(params, refreshGroup)
           }
       })).subscribe()
     );
@@ -344,6 +351,33 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   private getPPT(): void{
     console.log('get ppt called')
+
+    this.exportLoadingStateopts = {
+      exportType: 'ppt',
+      state: LoadingState.loading,
+      progress: 0
+    }
+    this.showExportLoadingState = true
+
+    // Mimmic loading behaviour in intervals
+    let interval = setInterval(() => {
+      if(this.exportLoadingStateopts.progress < 100) {
+        this.exportLoadingStateopts.progress += 10
+      } else {
+        // this.exportLoadingStateopts.state = LoadingState.completed
+        // On success fade out the component after 5 sec
+        // setTimeout(() => {
+        //   this.closeExportLoadingState()
+        // }, 5000)
+
+        this.exportLoadingStateopts.state = LoadingState.error
+        this.exportLoadingStateopts.errorType = 'server'
+
+        clearInterval(interval)
+      }
+    }, 1000)
+
+
     let downloadLink: string = ''
     this._ig.getDownloadLink(this.ig)
       .then( data => {
@@ -358,6 +392,33 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   private getZIP(): void{
     console.log('get zip called')
+
+    this.exportLoadingStateopts = {
+      exportType: 'zip',
+      state: LoadingState.loading,
+      progress: 0
+    }
+    this.showExportLoadingState = true
+
+    // Mimmic loading behaviour in intervals
+    let interval = setInterval(() => {
+      if(this.exportLoadingStateopts.progress < 100) {
+        this.exportLoadingStateopts.progress += 10
+      } else {
+        this.exportLoadingStateopts.state = LoadingState.completed
+        // On success fade out the component after 5 sec
+        setTimeout(() => {
+          this.closeExportLoadingState()
+        }, 5000)
+
+        // this.exportLoadingStateopts.state = LoadingState.error
+        // this.exportLoadingStateopts.errorType = 'server'
+
+        clearInterval(interval)
+      }
+    }, 1000)
+
+
     let zipDownloadLink: string =''
     this._ig.getDownloadLink(this.ig, true)
       .then( data => {
@@ -368,6 +429,13 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       .catch( error => {
         console.error(error)
       })
+  }
+
+  public closeExportLoadingState(event?: any): void {
+    this.showExportLoadingState = false
+    if(event && event['cancelExport']) {
+      console.log('Show cancel export toast!')
+    }
   }
 
   /**

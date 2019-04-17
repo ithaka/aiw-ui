@@ -206,8 +206,27 @@
     "GOOGLE_AUTH": {
       "INFO_TEXT": "Log in with your account to start exporting your groups to Google Slides",
       "BTN_TEXT": "Authorize with Google",
-      "PERMISSIONS_HTML": "Why is Artstor asking for Google permissions? <a href=\"http://www.artstor.org/artstor-terms\" class=\"google-permissions-link\" target=\"_blank\" tabindex=\"0\"  aria-label=\"Why is Artstor asking for Google permissions? Learn more\">Learn more</a>"
+      "PERMISSIONS_HTML": "Why is Artstor asking for Google permissions? <a href=\"http://www.artstor.org/artstor-terms\" class=\"link google-permissions-link\" target=\"_blank\" tabindex=\"0\"  aria-label=\"Why is Artstor asking for Google permissions? Learn more\">Learn more</a>"
     }
+  },
+  "LOADING_STATE": {
+    "LOADING_MSG" : {
+      "PPT": "Exporting your group to PowerPoint…",
+      "GS": "Exporting your group to Google Slides…",
+      "ZIP": "Compressing your group as a ZIP file…"
+    },
+    "COMPLETED_MSG" : {
+      "PPT": "<b>Done!</b> Your Powerpoint file will begin downloading soon…",
+      "GS": "Your Google Slides presentation will open in a new tab…",
+      "ZIP": "<b>Done!</b> Your ZIP file will begin downloading soon…"
+    },
+    "ERROR_MSG" : {
+      "SERVER": "We’re sorry, something went wrong. Please try again or <a class='link' href='mailto:support@artstor.org' tabindex='0'>contact support</a> if the issue continues.",
+      "TOO_MANY_IMGS": "We’re sorry, we were unable to export your group. We recommend making groups under 100 images in size."
+    },
+    "LINKS" : {
+      "TRY_AGAIN": "Try again"
+    } 
   },
   "UPLOAD_IMAGES_MODAL": {
     "TITLE": "Upload Images",

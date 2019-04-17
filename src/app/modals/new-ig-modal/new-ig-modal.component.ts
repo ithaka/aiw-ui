@@ -245,7 +245,7 @@ export class NewIgModal implements OnInit {
       // analytics events
       if (this.copyIG) {
         // Copying old group
-        this._angulartics.eventTrack.next({ properties: { event: 'copyGroup', category: 'groups', label: group.id }})
+        this._angulartics.eventTrack.next({ properties: { event: 'copyGroup', category: 'groups', label: this.ig.id }})
       } else {
         // Create New Group
         this._angulartics.eventTrack.next({ properties: { event: 'newGroup', category: 'groups' }})
