@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router'
 
 // Internal Dependencies
 // import '/krpano.js'
-import { Asset, AuthService, ImageZoomParams } from 'app/shared';
+import { Asset, AuthService, ImageZoomParams, LogService } from 'app/shared';
 import { MetadataService } from 'app/_services'
 import { isPlatformBrowser } from '@angular/common';
 
@@ -137,6 +137,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
 
     constructor(
         private _http: HttpClient, // TODO: move _http into a service
+        private _log: LogService,
         private _metadata: MetadataService,
         private _auth: AuthService,
         @Inject(PLATFORM_ID) private platformId: Object,
@@ -540,6 +541,11 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         if (!this.isFullscreen) {
             this.requestFullScreen(elem);
             this.setFullscreen(true);
+
+            // Add Captain's log event for entering full screen mode
+            this._log.log({
+                eventType: 'artstor_enter_fullscreen'
+            })
         } else {
             this.exitFullScreen();
             this.setFullscreen(false);
