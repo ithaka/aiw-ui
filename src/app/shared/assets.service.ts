@@ -9,7 +9,6 @@ import { Observable, BehaviorSubject, Subject } from 'rxjs'
 
 import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
-import { categoryName } from './datatypes/category.interface'
 
 // Project Dependencies
 import { AuthService } from '../shared'
@@ -433,20 +432,7 @@ export class AssetService {
     //         .toPromise()
     // }
 
-    public categoryNames(): Promise<categoryName[]> {
-        let options = { withCredentials: true }
 
-        return this.http
-            .get(this._auth.getHostname() + '/api/v1/collections/103/categorynames', options)
-            .toPromise()
-            .then(res => {
-                if (res && res[0]) {
-                    return <categoryName[]>res
-                } else {
-                    return <categoryName[]>[]
-                }
-            })
-    }
 
     public categoryByFacet(facetName: string, collectionType ?: number): Promise<SolrFacet[]> {
       let options = { withCredentials: true };
@@ -902,10 +888,6 @@ export class AssetService {
 
 }
 
-export interface categoryName {
-    categoryid: string,
-    categoryname: string
-}
 export interface SolrFacet {
     name: string,
     count: number,
