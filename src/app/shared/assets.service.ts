@@ -522,39 +522,6 @@ export class AssetService {
         })
     }
 
-    /**
-     * Wrapper function for HTTP call to get collections. Used by home component
-     * @param type Can either be 'ssc' or 'institution'
-     * @returns Chainable promise containing collection data
-     */
-    public getCollectionsList(type?: string) {
-        let options = { withCredentials: true };
-        // Returns all of the collections names
-        return this.http
-            .get(this._auth.getUrl() + '/v1/collections/', options).pipe(
-              map(res => {
-                if (type) {
-                    let data = res
-
-                    if (type == 'institution') {
-                        data['Collections'] = data['Collections'].filter((collection) => {
-                            return collection.collectionType == 2 || collection.collectionType == 4
-                        })
-                    }
-                    if (type == 'ssc') {
-                        data['Collections'] = data['Collections'].filter((collection) => {
-                            return collection.collectionType == 5
-                        })
-                    }
-
-                    return data
-                } else {
-                    return res
-                }
-              }
-            ))
-    }
-
     public getBlogEntries(query ?: string) {
         if (!query || query == '*') {
             // An asterisk query on the Wordpress API *LIMITS* results to those with an asterisk!

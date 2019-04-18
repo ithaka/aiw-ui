@@ -58,7 +58,7 @@ describe('Collections #pact #collections', () => {
   })
 
   /**
-  * Mock and test /v1/categorydesc/id collection
+  * Describes /v1/categorydesc/id
   * Test collection id: 10374058879
   */
   describe('GET /api/v1/categorydesc', () => {
@@ -124,7 +124,7 @@ describe('Collections #pact #collections', () => {
   })
 
   /**
-  * Mock and test api/v1/collections/103/categorynames
+  * Describes api/v1/collections/103/categorynames
   */
 
   fdescribe('GET /api/v1/collections/103/categorynames', () => {
@@ -179,6 +179,63 @@ describe('Collections #pact #collections', () => {
       done()
     })
   })
+
+
+  /**
+   * Describes /v1/collections/{id}
+   */
+
+  fdescribe('GET /api/v1/collections/{id}', () => {
+    beforeAll((done) => {
+
+      let interactions = []
+
+      interactions.push(
+        provider.addInteraction({
+          uponReceiving: 'a request for a collection',
+          withRequest: {
+            method: 'GET',
+            path: '/api/v1/collections/87730536',
+          },
+          willRespondWith: {
+            status: 200,
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            body: mockCategoryNamesResp
+          }
+        })
+      )
+
+      Promise.all(interactions)
+        .then(() => { done() })
+        .catch((err) => { done.fail(err) })
+    })
+
+    afterAll((done) => {
+      provider.verify()
+        .then(function (a) {
+          done()
+        }, function (e) {
+          done.fail(e)
+        })
+    })
+
+    it('should return a valid collection response', (done) => {
+
+      _collectionService.getCategoryNames()
+        .then(res => {
+
+
+
+        },
+          err => {
+            done.fail(err)
+          })
+
+      done()
+    })
+  })
+
+
 
 
 
