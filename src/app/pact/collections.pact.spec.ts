@@ -20,6 +20,13 @@ describe('Collections #pact #collections', () => {
     shortDescription: null
   }
 
+  const mockCategoryNamesResp = [
+    { "categoryid": 1031896055, "categoryname": "Historic American Sheet Music Covers (Minneapolis College of Art and Design)" },
+    { "categoryid": 1034136270, "categoryname": "Historic Illustrations of Art & Architecture (Minneapolis College of Art and Design)" },
+    { "categoryid": 1034458025, "categoryname": "Historic Campus Architecture Collection (HCAP) (Council of Independent Colleges)" },
+    { "categoryid": 1034347075, "categoryname": "Alexander Adducci: Historical Scenic Design" }
+  ]
+
   beforeAll(function (done) {
     provider = new PactWeb({ consumer: 'aiw-ui', provider: 'binder-collections', port: 1204 })
     setTimeout(function () { done() }, 2000)
@@ -36,7 +43,12 @@ describe('Collections #pact #collections', () => {
       imports: [HttpClientModule],
       providers: [
         // provides _auth.getUrl used in getCategoryInfo
-        { provide: AuthService, useValue: { getUrl: () => { return '' } } },
+        { provide: AuthService, useValue:
+          {
+            getUrl: () => { return '' },
+            getHostname: () => { return '' }
+          }
+        },
         CollectionService
       ],
     })
@@ -85,7 +97,7 @@ describe('Collections #pact #collections', () => {
 
     it('should return a category description response', (done) => {
 
-        _collectionService.getCategoryInfo('10374058879', true)
+        _collectionService.getCategoryInfo('10374058879')
           .then(res => {
 
             let actualResKeys = Object.keys(res)
@@ -110,5 +122,59 @@ describe('Collections #pact #collections', () => {
         done()
       })
   })
+
+  /**
+  * Mock and test api/v1/collections/103/categorynames
+  */
+
+  fdescribe('GET /api/v1/103/categorynames', () => {
+    beforeAll((done) => {
+
+      let interactions = []
+
+      interactions.push(
+        provider.addInteraction({
+          uponReceiving: 'a request for category data for ADL 103 collections',
+          withRequest: {
+            method: 'GET',
+            path: '/api/v1/collections/103/categorynames',
+          },
+          willRespondWith: {
+            status: 200,
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            body: mockCategoryNamesResp
+          }
+        })
+      )
+
+      Promise.all(interactions)
+        .then(() => { done() })
+        .catch((err) => { done.fail(err) })
+    })
+
+    afterAll((done) => {
+      provider.verify()
+        .then(function (a) {
+          done()
+        }, function (e) {
+          done.fail(e)
+        })
+    })
+
+    it('should return an array of ADL collection category data', (done) => {
+
+      _collectionService.getCategoryNames()
+        .then(res => {
+          expect(res.length).toEqual(292)
+        },
+          err => {
+            done.fail(err)
+          })
+
+      done()
+    })
+  })
+
+
 
 })
