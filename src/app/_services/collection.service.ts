@@ -7,7 +7,7 @@ import { AuthService } from '../shared';
 @Injectable({
   providedIn: 'root'
 })
-export class CollectionsService {
+export class CollectionService {
 
   constructor(
     private http: HttpClient,

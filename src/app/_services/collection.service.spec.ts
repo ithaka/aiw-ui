@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CollectionsService } from './collections.service';
+import { CollectionService } from './collection.service';
 
-describe('CollectionsService', () => {
+describe('CollectionService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: CollectionsService = TestBed.get(CollectionsService);
+    const service: CollectionService = TestBed.get(CollectionService);
     expect(service).toBeTruthy();
   });
 });
