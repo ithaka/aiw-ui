@@ -45,6 +45,7 @@ export class AppComponent {
 
   public showSkyBanner: boolean = false
   public skyBannerCopy: string = ''
+  public test: any = {}
   /**
    * Google Tag Manager variables
    * - In order of specificity 
@@ -87,6 +88,8 @@ export class AppComponent {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // console.info("Constructing app component")
+    this.test.thing = this.test.a.b
+    throw new Error("This is my fake error message")
     // Append timestamp param to dodge caching
     if (isPlatformBrowser(this.platformId)) {
       let langStr = 'en.json?no-cache=' + new Date().valueOf()
