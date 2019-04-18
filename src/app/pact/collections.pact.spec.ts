@@ -1,43 +1,12 @@
 import { HttpClientModule } from '@angular/common/http'
-import { Location, LocationStrategy } from '@angular/common'
 import { TestBed, getTestBed, inject, async } from '@angular/core/testing'
-import { Router, RouterModule } from '@angular/router'
-import { Idle } from '@ng-idle/core'
 
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 
-import { AppConfig } from '../app.service'
 import { AuthService } from '../shared'
 import { CollectionService } from '../_services'
-import { USE_VALUE } from '@angular/core/src/di/injector';
 
-/**
- *  Collections PACT
- *  Endpoints in this PACT:
- *
- *  DONT REALLY NEED TO PACTIFY THESE!
- * /v1/collections/institutions?_method=allinstitutions
-  /v1/collections/institutions?_method=allssinstitutions
-  /v1/collections/institutions?_method=alldonatinginstitutions
-
-  PACTIFY THESE
-  // Returns collections according to type for the user's level of access
-  /v1/collections?type?=institutional
-  /v1/collections?type?=private
-  /v1/collections?type?=public
-
-  /v1/collections/103/categorynames
-
-  /v1/collections/COLLECTION_ID
- *
- */
-
-
- /**
-  * Mock and test v1/categorydesc/id collection
-  * Test collection id: 10374058879
-  */
-fdescribe('Collections #pact #collections', () => {
+describe('Collections #pact #collections', () => {
 
   let provider, _collectionService
 
@@ -50,14 +19,6 @@ fdescribe('Collections #pact #collections', () => {
     name: "AP Art History",
     shortDescription: null
   }
-
-  // const mockCategeoryNamesResp = [
-  //   { categoryid: "", categoryname: "" },
-  //   { categoryid: "", categoryname: "" },
-  //   { categoryid: "", categoryname: "" },
-  //   { categoryid: "", categoryname: "" },
-  // ]
-
 
   beforeAll(function (done) {
     provider = new PactWeb({ consumer: 'aiw-ui', provider: 'binder-collections', port: 1204 })
@@ -74,6 +35,7 @@ fdescribe('Collections #pact #collections', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule],
       providers: [
+        // provides _auth.getUrl used in getCategoryInfo
         { provide: AuthService, useValue: { getUrl: () => { return '' } } },
         CollectionService
       ],
@@ -81,9 +43,12 @@ fdescribe('Collections #pact #collections', () => {
     const testbed = getTestBed()
     _collectionService = testbed.get(CollectionService)
 
-  });
+  })
 
-  // Indidual tests 'describe'
+  /**
+  * Mock and test /v1/categorydesc/id collection
+  * Test collection id: 10374058879
+  */
   describe('GET /api/v1/categorydesc', () => {
     beforeAll((done) => {
 

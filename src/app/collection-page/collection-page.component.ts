@@ -48,7 +48,7 @@ export class CollectionPage implements OnInit, OnDestroy {
     private _script: ScriptService,
     private meta: Meta
   ) {
-    //this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
+    this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
 
   ngOnInit() {
