@@ -4,9 +4,8 @@ import { Router, ActivatedRoute, Params } from '@angular/router'
 import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
-import { AssetService, AssetSearchService, AuthService, TitleService } from './../shared'
-import { CollectionService } from './../_services'
-
+import { AssetService, AssetSearchService, AuthService, TitleService } from '../shared'
+import { CollectionService } from '../_services'
 import { TagsService } from './tags.service'
 import { Tag } from './tag/tag.class'
 
