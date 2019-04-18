@@ -85,7 +85,7 @@ describe('Collections #pact #collections', () => {
 
     it('should return a category description response', (done) => {
 
-        _collectionService.getCategoryInfo('10374058879', true)
+        _collectionService.getCategoryInfo('10374058879')
           .then(res => {
 
             let actualResKeys = Object.keys(res)
