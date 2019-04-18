@@ -83,13 +83,12 @@ describe('Collections #pact #collections', () => {
         })
     })
 
-    it('should return a category description response',
-      function (done) {
+    it('should return a category description response', (done) => {
 
         _collectionService.getCategoryInfo('10374058879', true)
           .then(res => {
 
-            let actualResKeys = Object.keys(res) // response object keys
+            let actualResKeys = Object.keys(res)
 
             let expectedResKeys = [
               'blurbUrl',
@@ -104,10 +103,9 @@ describe('Collections #pact #collections', () => {
             expect(actualResKeys).toEqual(expectedResKeys)
             expect(res.name.length).toBeGreaterThan(0)
           },
-            err => {
-              done.fail(err)
-            }
-          )
+          err => {
+            done.fail(err)
+          })
 
         done()
       })
