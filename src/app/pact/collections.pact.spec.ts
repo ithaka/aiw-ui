@@ -127,7 +127,7 @@ describe('Collections #pact #collections', () => {
   * Mock and test api/v1/collections/103/categorynames
   */
 
-  fdescribe('GET /api/v1/103/categorynames', () => {
+  fdescribe('GET /api/v1/collections/103/categorynames', () => {
     beforeAll((done) => {
 
       let interactions = []
@@ -165,7 +165,12 @@ describe('Collections #pact #collections', () => {
 
       _collectionService.getCategoryNames()
         .then(res => {
-          expect(res.length).toEqual(292)
+
+          let expectedResKeys = ['categoryid', 'categoryname']
+
+          expect(res.length).toEqual(4)
+          //expect(res[0].categoryid).toEqual('1031896055')
+
         },
           err => {
             done.fail(err)

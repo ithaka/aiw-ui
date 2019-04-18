@@ -71,12 +71,19 @@ module.exports = function (config) {
     ],
     // 4) here we can define proxies to redirect requests from our pact tests to the mock server
     proxies: {
+      // Group Endpoints
       // '/api/v1/group': 'http://localhost:1201/api/v1/group',
+
+      // Metadata Endpoints
       '/api/v1/metadata': 'http://localhost:1202/api/v1/metadata',
+
+      // User Endpoints
       '/api/secure/user/': 'http://localhost:1203/api/secure/user/',
       '/api/secure/user/abcdefg': 'http://localhost:1203/api/secure/user/abcdefg',
+
+      // Collection Endpoints
       '/api/v1/categorydesc/10374058879': 'http://localhost:1204/api/v1/categorydesc/10374058879',
-      '/api/v1/categorynames/': 'http://localhost:1204/api/v1/categorynames'
+      '/api/v1/collections/103/categorynames': 'http://localhost:1204/api/v1/collections/103/categorynames'
     }
 
   });
