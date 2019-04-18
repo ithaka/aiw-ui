@@ -12,10 +12,10 @@ import { map } from 'rxjs/operators'
 import { categoryName } from './datatypes/category.interface'
 
 // Project Dependencies
-import { AuthService } from './auth.service'
-import { GroupService } from './group.service'
+import { AuthService } from '../shared'
+import { GroupService } from '../shared'
 import { AssetFiltersService } from './../asset-filters/asset-filters.service'
-import { ToolboxService } from './toolbox.service'
+import { ToolboxService } from '../shared'
 import { AssetSearchService, SearchResponse } from './asset-search.service'
 import { ImageGroup, Thumbnail } from '.'
 import { AppConfig } from 'app/app.service'
@@ -325,9 +325,9 @@ export class AssetService {
         let baseUrl = `https://${this._app.clientHostname}/`
         if (isPublic) {
             // Public assets are linked without a hash, so the server-rendered page can provide rich previews
-            return  baseUrl + 'public/' + assetId 
+            return  baseUrl + 'public/' + assetId
         } else {
-            return  baseUrl + '#/asset/' + ( externalAsset ? 'external/' : '' ) + assetId 
+            return  baseUrl + '#/asset/' + ( externalAsset ? 'external/' : '' ) + assetId
         }
     }
 
@@ -534,18 +534,6 @@ export class AssetService {
           }
           return <SolrFacet[]>res
         })
-    }
-
-    /**
-     * Get metadata about a Category
-     * @param catId The Category ID
-     */
-    public getCategoryInfo(catId: string) {
-        let options = { withCredentials: true };
-
-        return this.http
-            .get(this._auth.getUrl() + '/v1/categorydesc/' + catId, options)
-            .toPromise();
     }
 
     /**

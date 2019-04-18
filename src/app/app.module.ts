@@ -106,7 +106,7 @@ import {
   PersonalCollectionService,
   AccountService
 } from './shared'
-import { MetadataService, SlidesService } from './_services'
+import { MetadataService, SlidesService, CollectionService } from './_services'
 
 import { LocalPCService } from './_local-pc-asset.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
@@ -149,6 +149,7 @@ const APP_PROVIDERS = [
   Title,
   TitleService,
   MetadataService,
+  CollectionService,
   { provide: UrlSerializer, useClass: CustomUrlSerializer },
   { provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true }
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later

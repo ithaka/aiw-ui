@@ -1,20 +1,15 @@
 import { HttpClientModule } from '@angular/common/http'
-//import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
+import { Location, LocationStrategy } from '@angular/common'
 import { TestBed, getTestBed, inject, async } from '@angular/core/testing'
-import { Router, ActivatedRoute } from '@angular/router'
-// import { NO_ERRORS_SCHEMA } from '@angular/compiler/src/core'
+import { Router, RouterModule } from '@angular/router'
+import { Idle } from '@ng-idle/core'
 
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 
 import { AppConfig } from '../app.service'
-import {  CollectionTypeHandler, PersonalCollectionService, AssetService, AssetSearchService,
-AuthService, GroupService, ToolboxService, TitleService, ScriptService } from '../shared'
-
-import { CollectionPage } from '../collection-page'
-
-import { AssetFiltersService } from '../asset-filters/asset-filters.service';
-
-import { MockRequests } from './mock-requests'
+import { AuthService } from '../shared'
+import { CollectionService } from '../_services'
+import { USE_VALUE } from '@angular/core/src/di/injector';
 
 /**
  *  Collections PACT
@@ -44,7 +39,7 @@ import { MockRequests } from './mock-requests'
   */
 fdescribe('Collections #pact #collections', () => {
 
-  let provider, _collection,  _getCategoryInfo, _requests
+  let provider, _collectionService
 
   const mockCategoryDescResp = {
     blurbUrl: null,
@@ -66,10 +61,8 @@ fdescribe('Collections #pact #collections', () => {
 
   beforeAll(function (done) {
     provider = new PactWeb({ consumer: 'aiw-ui', provider: 'binder-collections', port: 1204 })
-    // Required for slower environments
     setTimeout(function () { done() }, 2000)
-    // Required if run with `singleRun: false` (see karma config)
-    provider.removeInteractions()
+      provider.removeInteractions()
   })
 
   afterAll(function (done) {
@@ -77,36 +70,16 @@ fdescribe('Collections #pact #collections', () => {
       .then(function () { done() }, function (err) { done.fail(err) })
   })
 
-  let _assetService
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule],
       providers: [
-        { provide: AppConfig, useValue: {} },
-        { provide: Router, useValue: {} },
-        { provide: ActivatedRoute, useValue: {} },
-        { provide: AuthService, useValue: {} },
-        { provide: GroupService, useValue: {} },
-        { provide: ToolboxService, useValue: {} },
-        { provide: TitleService, useValue: {} },
-        { provide: ScriptService, useValue: {} },
-        { provide: AssetSearchService, useValue: {} },
-        { provide: AssetFiltersService, useValue: {} },
-        MockRequests,
-        CollectionPage,
-        { provide: AssetService, useValue: {} },
-        AssetService
+        { provide: AuthService, useValue: { getUrl: () => { return '' } } },
+        CollectionService
       ],
     })
     const testbed = getTestBed()
-    _assetService = testbed.get(AssetService)
-
-    // _collection = getTestBed().get(CollectionPage)
-
-    // _getCategoryInfo = getTestBed().get(_assetService.getCategoryInfo)
-
-    //_requests = .get(MockRequests)
-
+    _collectionService = testbed.get(CollectionService)
 
   });
 
@@ -122,7 +95,6 @@ fdescribe('Collections #pact #collections', () => {
           withRequest: {
             method: 'GET',
             path: '/api/v1/categorydesc/10374058879',
-            //query: '10374058879'
           },
           willRespondWith: {
             status: 200,
@@ -149,13 +121,10 @@ fdescribe('Collections #pact #collections', () => {
     it('should return a category description response',
       function (done) {
 
-        _assetService.getCategoryInfo('10374058879')
-          .subscribe(res => {
+        _collectionService.getCategoryInfo('10374058879', true)
+          .then(res => {
 
             let actualResKeys = Object.keys(res) // response object keys
-            let resAccessKeys = Object.keys(res.access[0]) // response 'access' object keys
-
-            console.log('Res Keys: ', actualResKeys)
 
             let expectedResKeys = [
               'blurbUrl',
@@ -167,18 +136,15 @@ fdescribe('Collections #pact #collections', () => {
               'shortDescription'
             ]
             expect(res).toEqual(mockCategoryDescResp)
-
-            // Test res.keys match expected keys
             expect(actualResKeys).toEqual(expectedResKeys)
-
-            // Test res.items length
             expect(res.name.length).toBeGreaterThan(0)
-            done()
           },
             err => {
               done.fail(err)
             }
           )
+
+        done()
       })
   })
 

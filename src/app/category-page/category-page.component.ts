@@ -6,9 +6,8 @@ import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetService } from './../shared/assets.service'
-import { AuthService } from './../shared/auth.service'
-import { TitleService } from '../shared/title.service'
+import { AssetService, AuthService, TitleService } from '../shared'
+import { CollectionService } from '../_services'
 
 @Component({
   selector: 'ang-category-page',
@@ -37,6 +36,7 @@ export class CategoryPage implements OnInit, OnDestroy {
 
   constructor(
     private _assets: AssetService,
+    private _collectionService: CollectionService,
     private _auth: AuthService,
     private _router: Router,
     private route: ActivatedRoute,
@@ -78,7 +78,7 @@ export class CategoryPage implements OnInit, OnDestroy {
             this._assets.queryAll(params, refreshSearch);
 
             // Get Category metadata
-            this._assets.getCategoryInfo(this.catId)
+            this._collectionService.getCategoryInfo(this.catId)
               .then((data) => {
 
                 if (data) {
