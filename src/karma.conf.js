@@ -83,7 +83,8 @@ module.exports = function (config) {
 
       // Collection Endpoints
       '/api/v1/categorydesc/10374058879': 'http://localhost:1204/api/v1/categorydesc/10374058879',
-      '/api/v1/collections/103/categorynames': 'http://localhost:1204/api/v1/collections/103/categorynames'
+      '/api/v1/collections/103/categorynames': 'http://localhost:1204/api/v1/collections/103/categorynames',
+      '/api/v1/collections/87730176': 'http://localhost:1204/api/v1/collections/87730176'
     }
 
   });

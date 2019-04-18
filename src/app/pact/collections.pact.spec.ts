@@ -27,6 +27,27 @@ describe('Collections #pact #collections', () => {
     { "categoryid": 1034347075, "categoryname": "Alexander Adducci: Historical Scenic Design" }
   ]
 
+  const mockCollectionResp = {
+    bigimageurl: "http://mdxstage.artstor.org//thumb/imgstor/size10/CSshared-shelf-2.gif",
+    blurburl: "<p><a target=_blank  href=http://www.sscommons.org/openlibrary/welcome.html style=display:inline>Shared Shelf Commons</a> is a free, open-access library of images. Search and browse collections with tools to zoom, print, export, and share images. Public Collections are delivered via <a target=_blank href=http://www.artstor.org/jstorforum style=display:inline>JSTOR Forum</a>, a web-based software solution for creating, sharing, and preserving digital collections.</p> Images and media from Shared Shelf Commons can be viewed, downloaded, and shared with anyone on the open web. New open-access collections are added frequently, so check back often to see the latest.</p>",
+    catCount: 0,
+    collectionImageDesc: null,
+    collectionType: 5,
+    collectionid: "87730176",
+    collectionname: "Bowdoin College Museum of Art Historical Images",
+    fullDescription: null,
+    imageServer: "/thumb/",
+    imageurl: "shared-shelf-2.gif",
+    institutionId: 1000,
+    leadImageURL: null,
+    objCount: 9088,
+    seq: 7730176,
+    shortDescription: null,
+    spaceQuota: 0,
+    spaceUsed: 0,
+    thumbnails: []
+  }
+
   beforeAll(function (done) {
     provider = new PactWeb({ consumer: 'aiw-ui', provider: 'binder-collections', port: 1204 })
     setTimeout(function () { done() }, 2000)
@@ -127,7 +148,7 @@ describe('Collections #pact #collections', () => {
   * Describes api/v1/collections/103/categorynames
   */
 
-  fdescribe('GET /api/v1/collections/103/categorynames', () => {
+  describe('GET /api/v1/collections/103/categorynames', () => {
     beforeAll((done) => {
 
       let interactions = []
@@ -168,8 +189,8 @@ describe('Collections #pact #collections', () => {
 
           let expectedResKeys = ['categoryid', 'categoryname']
 
+          expect(res).toBeTruthy()
           expect(res.length).toEqual(4)
-          //expect(res[0].categoryid).toEqual('1031896055')
 
         },
           err => {
@@ -185,7 +206,7 @@ describe('Collections #pact #collections', () => {
    * Describes /v1/collections/{id}
    */
 
-  fdescribe('GET /api/v1/collections/{id}', () => {
+  fdescribe('GET /api/v1/collections', () => {
     beforeAll((done) => {
 
       let interactions = []
@@ -195,12 +216,12 @@ describe('Collections #pact #collections', () => {
           uponReceiving: 'a request for a collection',
           withRequest: {
             method: 'GET',
-            path: '/api/v1/collections/87730536',
+            path: '/api/v1/collections/87730176',
           },
           willRespondWith: {
             status: 200,
             headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-            body: mockCategoryNamesResp
+            body: mockCollectionResp
           }
         })
       )
@@ -221,11 +242,9 @@ describe('Collections #pact #collections', () => {
 
     it('should return a valid collection response', (done) => {
 
-      _collectionService.getCategoryNames()
+      _collectionService.getCollectionInfo('87730176')
         .then(res => {
-
-
-
+          expect(res.bigimageurl.length).toBeGreaterThan(0)
         },
           err => {
             done.fail(err)
@@ -234,9 +253,5 @@ describe('Collections #pact #collections', () => {
       done()
     })
   })
-
-
-
-
 
 })
