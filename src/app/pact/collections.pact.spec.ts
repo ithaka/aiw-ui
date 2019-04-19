@@ -4,7 +4,7 @@ import { TestBed, getTestBed, inject, async } from '@angular/core/testing'
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 
 import { AuthService } from '../shared'
-import { CollectionService } from '../_services'
+import { CollectionService, InstitutionService } from '../_services'
 
 // todo
 // /v1/collections / institutions ? _method = allinstitutions

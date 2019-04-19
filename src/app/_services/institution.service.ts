@@ -7,7 +7,7 @@ import { AuthService } from '../shared/auth.service'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 
 @Injectable()
-export class InstitutionsService {
+export class InstitutionService {
 
   constructor(
     private http: HttpClient,

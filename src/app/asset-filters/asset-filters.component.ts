@@ -4,10 +4,10 @@ import { Subscription } from 'rxjs'
 import { map, take, filter } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
-import { AssetService } from '../shared/assets.service'
+import { AuthService, FlagService, AssetService } from 'app/shared'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
-import { AuthService, FlagService, InstitutionsService } from 'app/shared'
-import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
+import { InstitutionService } from '../_services'
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
 
 declare var _satellite: any
 
@@ -78,7 +78,7 @@ export class AssetFilters {
     private angulartics: Angulartics2,
     private _auth: AuthService,
     private _flags: FlagService,
-    private _inst: InstitutionsService,
+    private _inst: InstitutionService,
     private _storage: ArtstorStorageService
   ) {
   }
@@ -118,7 +118,7 @@ export class AssetFilters {
           this.filters = filters
           if (this._storage.getSession('allInstitutions') !== 'undefined') {
             this.assignFilters(filters, this._storage.getSession('allInstitutions'))
-          } 
+          }
         }
       )).subscribe()
     )
@@ -222,10 +222,10 @@ export class AssetFilters {
     // Push search changes to GTM data layer
     this.trackSearchDataLayer(this.appliedFilters, this.availableFilters)
   } // assignFilters
-  
+
   /**
    * Update search vars in GTM data layer
-   * @param appliedFilters 
+   * @param appliedFilters
    * @param filters  available filters
    */
   private trackSearchDataLayer(appliedFilters, filters) {
@@ -253,7 +253,7 @@ export class AssetFilters {
       'selectedContributor': contributor
     }
     // Push to GTM data layer
-    this.angulartics.eventTrack.next( { properties : { 
+    this.angulartics.eventTrack.next( { properties : {
       gtmCustom : {
         "search" : searchGTMVars
       }
