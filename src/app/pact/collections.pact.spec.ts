@@ -31,7 +31,7 @@ describe('Collections #pact #collections', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule],
       providers: [
-        // provides _auth.getUrl and _auth.getHostname used in getCategoryInfo
+        // provides _auth.getUrl and _auth.getHostname used in getCategoryDescription
         { provide: AuthService, useValue:
           {
             getUrl: () => { return '' },
@@ -86,7 +86,7 @@ describe('Collections #pact #collections', () => {
 
     it('should return a category description response', (done) => {
 
-        _collectionService.getCategoryInfo('10374058879')
+        _collectionService.getCategoryDescription('10374058879')
           .then(res => {
 
             let actualResKeys = Object.keys(res)

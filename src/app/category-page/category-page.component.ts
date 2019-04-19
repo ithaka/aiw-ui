@@ -78,7 +78,7 @@ export class CategoryPage implements OnInit, OnDestroy {
             this._assets.queryAll(params, refreshSearch);
 
             // Get Category metadata
-            this._collectionService.getCategoryInfo(this.catId)
+            this._collectionService.getCategoryDescription(this.catId)
               .then((data) => {
 
                 if (data) {

@@ -32,10 +32,10 @@ export class CollectionService {
   }
 
   /**
-   * Get metadata about a Category
+   * Get description metadata about a Category
    * @param catId The Category ID
    */
-  public getCategoryInfo(catId: string) {
+  public getCategoryDescription(catId: string) {
     let options = { withCredentials: true };
 
     return this.http
