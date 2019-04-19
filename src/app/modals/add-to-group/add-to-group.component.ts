@@ -187,7 +187,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
           this._toasts.sendToast({
             id: 'addToGroupItemLimit',
             type: 'error',
-            stringHTML: '<p>This group has exceeded the 1000 items limit.</p>',
+            stringHTML: '<p>This group has exceeded the 1000 item limit.</p>',
             links: []
           })
 
