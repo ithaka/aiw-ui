@@ -85,12 +85,7 @@ describe('Collections #pact #collections', () => {
 
         _collectionService.getCategoryDescription('10374058879')
           .then(res => {
-
-            let actualResKeys = Object.keys(res)
-            let expectedResKeys = mockCategoryDescRespKeys
-
             expect(res).toEqual(mockCategoryDescResp)
-            expect(actualResKeys).toEqual(expectedResKeys)
             expect(res.name.length).toBeGreaterThan(0)
           },
           err => {
@@ -262,10 +257,8 @@ describe('Collections #pact #collections', () => {
         let expectedResKeys = mockInstitutionsRespKeys
 
         expect(res).toBeTruthy()
-        //expect(actualResKeys).toEqual(expectedResKeys)
+        expect(actualResKeys).toEqual(expectedResKeys)
         expect(res).toEqual(mockInstitutionsResp)
-          // expect(res.allInstitutions[0].institutionId).toEqual(mockInstitutionsResp[0].institutionId)
-          // expect(res.allInstitutions[0].institutionName).toEqual(mockInstitutionsResp[0].institutionName)
         },
         err => {
           done.fail(err)
@@ -288,16 +281,6 @@ const mockCategoryDescResp = {
   name: "AP Art History",
   shortDescription: null
 }
-
-const mockCategoryDescRespKeys = [
-  'blurbUrl',
-  'id',
-  'imageDesc',
-  'imageUrl',
-  'leadObjectId',
-  'name',
-  'shortDescription'
-]
 
 // Category Names - api/v1/collections/103/categorynames
 const mockCategoryNamesResp = [
@@ -367,4 +350,4 @@ const mockInstitutionsResp = {
 
 }
 
-const mockInstitutionsRespKeys = ['institutionId', 'institutionName']
+const mockInstitutionsRespKeys = ['allInstitutions', 'donatingInstitutions', 'ssInstitutions']
