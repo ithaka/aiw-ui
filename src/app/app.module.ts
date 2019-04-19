@@ -1,4 +1,4 @@
-import { ApplicationRef, NgModule, Inject, APP_ID, PLATFORM_ID } from '@angular/core';
+import { ApplicationRef, NgModule, Inject, APP_ID, PLATFORM_ID, Injectable, ErrorHandler } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -120,7 +120,28 @@ import { LinkifyPipe } from './shared/linkify.pipe'
 import { KeysPipe } from './shared/keys.pipe'
 import { CustomUrlSerializer } from './shared/custom-url-serializer'
 import { LOCAL_STORAGE , WINDOW} from '@ng-toolkit/universal'
-import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
+
+// Error tracking utility for sentry.io
+import * as Sentry from '@sentry/browser';
+// Project Dependencies
+import { version } from '../../package.json'
+
+// Sentry Raven reporter
+Sentry.init({ 
+  dsn: 'https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953',
+  release: version
+});
+@Injectable()
+export class SentryErrorHandler implements ErrorHandler {
+  constructor() {}
+  handleError(error) {
+    const eventId = Sentry.captureException(error.originalError || error);
+    // Report bug modal option
+    // Sentry.showReportDialog({ eventId });
+    // For additional debugging
+    // console.log("Sentry ID: " + eventId)
+  }
+}
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -151,7 +172,10 @@ const APP_PROVIDERS = [
   MetadataService,
   CollectionService,
   { provide: UrlSerializer, useClass: CustomUrlSerializer },
-  { provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true }
+  // 401/Unauthorized handler
+  { provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true },
+  // Sentry error reporting
+  { provide: ErrorHandler, useClass: SentryErrorHandler }
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
 
