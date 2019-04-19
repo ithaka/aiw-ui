@@ -27,7 +27,7 @@ export class CollectionService {
     let options = { withCredentials: true };
 
     return this.http
-      .get(this._auth.getUrl() + 'api/v1/collections/' + colId, options)
+      .get(this._auth.getUrl() + '/api/v1/collections/' + colId, options) // @TODO why is adding '/api/' needed for Pact call?
       .toPromise();
   }
 
@@ -39,7 +39,7 @@ export class CollectionService {
     let options = { withCredentials: true };
 
     return this.http
-      .get(this._auth.getUrl() + '/api/v1/categorydesc/' + catId, options)
+      .get(this._auth.getUrl() + '/api/v1/categorydesc/' + catId, options) // @TODO why is adding '/api/' needed for Pact call?
       .toPromise()
   }
 
