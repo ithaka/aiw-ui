@@ -91,7 +91,8 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     this.thumbnailAlt = this.thumbnail['agent'] ? this.thumbnailAlt + ' by ' + this.thumbnail['agent'] : this.thumbnailAlt + ' by Unknown'
 
     // Set isDowngradedMedia
-    if (this.isMultiView && this.thumbnail.media && this.thumbnail.media.format === 'null') {
+    if ( (this.isMultiView && this.thumbnail.media && this.thumbnail.media.format === 'null') ||
+        ( (this.isMultiView || this.isDetailView) && this.thumbnail['compoundmediaCount'] === 1)) {
       this.isDowngradedMedia = true
     }
 
