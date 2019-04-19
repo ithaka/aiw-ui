@@ -136,6 +136,7 @@ export class NavMenu implements OnInit, OnDestroy {
             this.editIG = true
             this.copyIG = false
             this.showImageGroupModal = true
+            this._ig.editGroupObservableSource.next(false)
           }
         })).subscribe()
     )
