@@ -218,69 +218,62 @@ describe('Collections #pact #collections', () => {
   })
 
   /**
-   * Describes /v1/collections/institutions?_method=
-  //  */
-  // describe('GET /api/v1/collections/institutions', () => {
-  //   beforeAll((done) => {
+   * Describes /v1/collections/institutions?_method=allinstitutions
+   */
+  describe('GET /api/v1/collections/institutions', () => {
+    beforeAll((done) => {
 
-  //     let interactions = []
+      let interactions = []
 
-  //     interactions.push(
-  //       provider.addInteraction({
-  //         uponReceiving: 'a request for list of all, donating, or shared shelf institutions',
-  //         withRequest: {
-  //           method: 'GET',
-  //           path: '/api/v1/collections/institutions',
-  //           query: 'method=allinstitutions',
-  //         },
-  //         willRespondWith: {
-  //           status: 200,
-  //           headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-  //           body: mockInstitutionsResp
-  //         }
-  //       })
-  //     )
+      interactions.push(
+        provider.addInteraction({
+          uponReceiving: 'a request for list of all, donating, or shared shelf institutions',
+          withRequest: {
+            method: 'GET',
+            path: '/api/v1/collections/institutions',
+            query: '_method=allinstitutions',
+          },
+          willRespondWith: {
+            status: 200,
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            body: mockInstitutionsResp
+          }
+        })
+      )
 
-  //     Promise.all(interactions)
-  //       .then(() => { done() })
-  //       .catch((err) => { done.fail(err) })
-  //   })
+      Promise.all(interactions)
+        .then(() => { done() })
+        .catch((err) => { done.fail(err) })
+    })
 
-  //   afterAll((done) => {
-  //     provider.verify()
-  //       .then(function (a) {
-  //         done()
-  //       }, function (e) {
-  //         done.fail(e)
-  //       })
-  //   })
+    afterAll((done) => {
+      provider.verify()
+        .then(function (a) {
+          done()
+        }, function (e) {
+          done.fail(e)
+        })
+    })
 
-  //   it('should return a valid institutions array', (done) => {
+    it('should return a valid institutions array', (done) => {
 
-  //     let data
+      _institutionService.getAllInstitutions().subscribe(res => {
+        let actualResKeys = Object.keys(res)
+        let expectedResKeys = mockInstitutionsRespKeys
 
-  //     _institutionService.getAllInstitutions().pipe(
+        expect(res).toBeTruthy()
+        //expect(actualResKeys).toEqual(expectedResKeys)
+        expect(res).toEqual(mockInstitutionsResp)
+          // expect(res.allInstitutions[0].institutionId).toEqual(mockInstitutionsResp[0].institutionId)
+          // expect(res.allInstitutions[0].institutionName).toEqual(mockInstitutionsResp[0].institutionName)
+        },
+        err => {
+          done.fail(err)
+        })
 
-  //       take(1),
-  //       map(res => {
-  //         data = res
-  //       },
-  //       err => {
-  //         done.fail(err)
-  //       })).subscribe(() => {
-  //         let actualResKeys = Object.keys(data)
-  //         let expectedResKeys = mockInstitutionsRespKeys
-
-  //         expect(data).toBeTruthy()
-  //         //expect(actualResKeys).toEqual(expectedResKeys)
-  //         expect(data).toEqual(mockInstitutionsResp)
-  //         // expect(res.allInstitutions[0].institutionId).toEqual(mockInstitutionsResp[0].institutionId)
-  //         // expect(res.allInstitutions[0].institutionName).toEqual(mockInstitutionsResp[0].institutionName)
-  //       }).then
-
-  //     done()
-  //   })
-  // })
+      done()
+    })
+  })
 
 })
 
