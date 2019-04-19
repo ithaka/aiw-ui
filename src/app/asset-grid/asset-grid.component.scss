@@ -239,3 +239,26 @@ input[type=number] {
   -webkit-transition: all 400ms ease;
   transition: all 400ms ease;
 }
+
+
+.group-details {
+    .label {
+        font-family: Verdana;
+        font-size: 12px;
+        font-weight: bold;
+        line-height: normal;
+        letter-spacing: normal;
+        color: $color-gray-6;
+        margin-bottom: 5px;
+    }
+    .edit-group-link {
+        font-family: Verdana;
+        font-size: 12px;
+        font-weight: bold;
+        line-height: 1.33;
+        letter-spacing: normal;
+        color: $orange;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}

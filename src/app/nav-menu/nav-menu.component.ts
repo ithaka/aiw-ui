@@ -127,7 +127,17 @@ export class NavMenu implements OnInit, OnDestroy {
       this._auth.getInstitution().pipe(
         map(institutionObj => {
           this.institutionObj = institutionObj;
-      })).subscribe()
+      })).subscribe(),
+
+      // Subscribe to edit group subject observable and show edit group modal once a `true` value is pushed to it.
+      this._ig.editGroupObservable.pipe(
+        map((editGroupFlag: boolean) => {
+          if(editGroupFlag) {
+            this.editIG = true
+            this.copyIG = false
+            this.showImageGroupModal = true
+          }
+        })).subscribe()
     )
 
   } // onInit

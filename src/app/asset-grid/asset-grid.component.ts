@@ -80,9 +80,9 @@ export class AssetGrid implements OnInit, OnDestroy {
     if (metadata.id){
       this.igDisplay = true
       // Details Display state for groups with no tags and no description
-      if (!metadata.tags.length && !metadata.description) {
-        this.showIgDescBool = false
-      }
+      // if (!metadata.tags.length && !metadata.description) {
+      //   this.showIgDescBool = false
+      // }
     } else {
       this.igDisplay = false
     }
@@ -941,7 +941,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    * This is to make sure we display the details when animation is finished
    */
   public toggleShowIgDesc(noAnimation?: boolean): void {
-    if (!this.showIgDescBool && this.igDisplay && ((this.igMetaData.description && this.igMetaData.description.length > 0) || (this.igMetaData.tags && this.igMetaData.tags.length > 0)) && !this.reorderMode) {
+    if (!this.showIgDescBool && this.igDisplay && !this.reorderMode) {
       this.showIgDescBool = true;
       if (noAnimation) {
         this.animationFinished = true
@@ -961,5 +961,9 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   public encodeTag(tag) {
     return encodeURIComponent(tag);
+  }
+
+  public showEditGroup(): void {
+    this._ig.editGroupObservableSource.next(true)
   }
 }

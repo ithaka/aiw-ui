@@ -84,11 +84,11 @@
         pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
 
     .animating-width(*ngIf="igDisplay && !reorderMode", [ngClass]="[ showIgDescBool ? 'col-3' : 'col-2']")
-      .group-details-header(*ngIf="(igMetaData.tags && igMetaData.tags.length > 0) || igMetaData.description", (click)="toggleShowIgDesc()", tabindex="4", (keyup.enter)="toggleShowIgDesc()", [attr.aria-label]="showIgDescBool ? 'This is the Group Details section. Hit the enter key to collapse this section.' : 'This is the Group Details section. Hit the enter key to expand this section.'")
+      .group-details-header(tabindex="4", (click)="toggleShowIgDesc()", (keyup.enter)="toggleShowIgDesc()", [attr.aria-label]="showIgDescBool ? 'This is the Group Details section. Hit the enter key to collapse this section.' : 'This is the Group Details section. Hit the enter key to expand this section.'")
         span Group Details
         i.icon.icon-down([ngClass]="{'collapsed' : showIgDescBool }")
-      .group-details-header.no-details-available(*ngIf="(!igMetaData.tags || igMetaData.tags.length === 0) && !igMetaData.description")
-        span No Group Details
+      //- .group-details-header.no-details-available(*ngIf="(!igMetaData.tags || igMetaData.tags.length === 0) && !igMetaData.description")
+      //-   span No Group Details
 
 
 
@@ -158,11 +158,16 @@
           ul.filter-list.pad-top(#groupTagsList="")
             li.filter-item(*ngFor="let tag of igMetaData.tags")
               a.font-weight-bold([routerLink]="['/browse', 'groups', 'search']", [queryParams]="{ 'level': 'all', 'tags' : encodeTag(tag), 'page' : '1' }") {{ tag }}
-        .meta-block(*ngIf="igMetaData.description && igMetaData.description.length > 0")
+        
+        .ig-tags.meta-block.mt-4(*ngIf="igMetaData.tags && igMetaData.tags.length === 0")
+          .label.pb-2 Tags
+          a.edit-group-link(tabindex="4", aria-label="Add tags to this group, clicking this will allow you to make edits to this group", (click)="showEditGroup()", (keyup.enter)="showEditGroup()") + Add tags
+          
+        .meta-block.mt-4
           .label Description
-        .desc-no-expand.meta-block(*ngIf="!igMetaData.description || igMetaData.description.length <= 0")
-          .label No Description
-        #pageDescription.page__description(*ngIf="igDisplay && igMetaData.description", [innerHTML]="igMetaData.description")
+          #pageDescription.page__description(*ngIf="igDisplay && igMetaData.description", [innerHTML]="igMetaData.description")
+          .desc-no-expand.meta-block(*ngIf="!igMetaData.description || igMetaData.description.length <= 0")
+            a.edit-group-link(tabindex="4", aria-label="Add description to this group, clicking this will allow you to make edits to this group", (click)="showEditGroup()", (keyup.enter)="showEditGroup()") + Add description
 
   .row
     div([ngClass]="[ (igDisplay && showIgDescBool) ? 'col-9' : 'col-12']")
