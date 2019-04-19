@@ -7,6 +7,7 @@ fi
 GIT_SHA=$(git rev-parse HEAD)
 export IMAGE=artifactory.acorn.cirrostratus.org/artstor-air-node:${GIT_SHA:0:8}
 
+echo ${ENVIRONMENT}
 # Update docker-compose with version
 rm -f docker-compose.yml temp.yml  
 ( echo "cat <<EOF >docker-compose.yml";
@@ -21,4 +22,4 @@ rm -f temp.yml
 docker build --build-arg SAGOKU_ENV=${ENVIRONMENT} -t ${IMAGE} .
 
 # Push image to Ithaka repository
-docker push ${IMAGE}
+# docker push ${IMAGE}

@@ -14,17 +14,23 @@ WORKDIR /usr/src/app
 COPY package.json ./
 # Set node environment variables
 RUN set SAGOKU_ENV=${SAGOKU_ENV}
-RUN npm install
-
+# Install heavier/unreliable dependencies independently to take advantage of cache
+# RUN npm install appdynamics
+# Add to image
+COPY ng-add-pug-loader.js ./
+# COPY assets ./
+# Install remaining dependencies
+# RUN npm install
+# Install dep, build app and remove dependencies
+# PASS APPD ENVIRONMENT IN TO BUILD SSR COMMAND!!! SOMEHOW???
+RUN npm install && npm run build:ssr && npm run postinstall && npm link @angular/cli && rm -rf node_module
+# # Compiled on first build, and avoid "missing command" issue in @angular cache
+# RUN npm run postinstall
+# RUN npm link @angular/cli
+# # Build app
+# RUN npm run build:ssr
 # Bundle app source
-COPY . .
-
-# Ensure pug is compiled on first build, and avoid "missing command" issue in @angular cache
-RUN npm run postinstall
-RUN npm link @angular/cli
-
-# Build app
-RUN npm run build:ssr
+COPY ./dist . 
 
 EXPOSE 80
 
