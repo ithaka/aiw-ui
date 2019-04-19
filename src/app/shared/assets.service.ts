@@ -11,10 +11,8 @@ import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService } from '../shared'
-import { GroupService } from '../shared'
+import { AuthService, GroupService, ToolboxService  } from '../shared'
 import { AssetFiltersService } from './../asset-filters/asset-filters.service'
-import { ToolboxService } from '../shared'
 import { AssetSearchService, SearchResponse } from './asset-search.service'
 import { ImageGroup, Thumbnail } from '.'
 import { AppConfig } from 'app/app.service'

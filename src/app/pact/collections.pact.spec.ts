@@ -29,7 +29,7 @@ describe('Collections #pact #collections', () => {
         // provides _auth.getUrl and _auth.getHostname used in getCategoryDescription
         { provide: AuthService, useValue:
           {
-            getUrl: () => { return '' },
+            getUrl: () => { return '/api' },
             getHostname: () => { return '' }
           }
         },
