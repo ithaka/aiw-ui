@@ -6,47 +6,15 @@ import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 import { AuthService } from '../shared'
 import { CollectionService } from '../_services'
 
+// todo
+// /v1/collections / institutions ? _method = allinstitutions
+//   / v1 / collections / institutions ? _method = allssinstitutions
+//     / v1 / collections / institutions ? _method = alldonatinginstitutions
+
+
 describe('Collections #pact #collections', () => {
 
   let provider, _collectionService
-
-  const mockCategoryDescResp = {
-    blurbUrl: null,
-    id: 10374058879,
-    imageDesc: null,
-    imageUrl: null,
-    leadObjectId: null,
-    name: "AP Art History",
-    shortDescription: null
-  }
-
-  const mockCategoryNamesResp = [
-    { "categoryid": 1031896055, "categoryname": "Historic American Sheet Music Covers (Minneapolis College of Art and Design)" },
-    { "categoryid": 1034136270, "categoryname": "Historic Illustrations of Art & Architecture (Minneapolis College of Art and Design)" },
-    { "categoryid": 1034458025, "categoryname": "Historic Campus Architecture Collection (HCAP) (Council of Independent Colleges)" },
-    { "categoryid": 1034347075, "categoryname": "Alexander Adducci: Historical Scenic Design" }
-  ]
-
-  const mockCollectionResp = {
-    bigimageurl: "http://mdxstage.artstor.org//thumb/imgstor/size10/CSshared-shelf-2.gif",
-    blurburl: "<p><a target=_blank  href=http://www.sscommons.org/openlibrary/welcome.html style=display:inline>Shared Shelf Commons</a> is a free, open-access library of images. Search and browse collections with tools to zoom, print, export, and share images. Public Collections are delivered via <a target=_blank href=http://www.artstor.org/jstorforum style=display:inline>JSTOR Forum</a>, a web-based software solution for creating, sharing, and preserving digital collections.</p> Images and media from Shared Shelf Commons can be viewed, downloaded, and shared with anyone on the open web. New open-access collections are added frequently, so check back often to see the latest.</p>",
-    catCount: 0,
-    collectionImageDesc: null,
-    collectionType: 5,
-    collectionid: "87730176",
-    collectionname: "Bowdoin College Museum of Art Historical Images",
-    fullDescription: null,
-    imageServer: "/thumb/",
-    imageurl: "shared-shelf-2.gif",
-    institutionId: 1000,
-    leadImageURL: null,
-    objCount: 9088,
-    seq: 7730176,
-    shortDescription: null,
-    spaceQuota: 0,
-    spaceUsed: 0,
-    thumbnails: []
-  }
 
   beforeAll(function (done) {
     provider = new PactWeb({ consumer: 'aiw-ui', provider: 'binder-collections', port: 1204 })
@@ -63,7 +31,7 @@ describe('Collections #pact #collections', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule],
       providers: [
-        // provides _auth.getUrl used in getCategoryInfo
+        // provides _auth.getUrl and _auth.getHostname used in getCategoryInfo
         { provide: AuthService, useValue:
           {
             getUrl: () => { return '' },
@@ -122,16 +90,8 @@ describe('Collections #pact #collections', () => {
           .then(res => {
 
             let actualResKeys = Object.keys(res)
+            let expectedResKeys = mockCategoryDescRespKeys
 
-            let expectedResKeys = [
-              'blurbUrl',
-              'id',
-              'imageDesc',
-              'imageUrl',
-              'leadObjectId',
-              'name',
-              'shortDescription'
-            ]
             expect(res).toEqual(mockCategoryDescResp)
             expect(actualResKeys).toEqual(expectedResKeys)
             expect(res.name.length).toBeGreaterThan(0)
@@ -187,9 +147,11 @@ describe('Collections #pact #collections', () => {
       _collectionService.getCategoryNames()
         .then(res => {
 
-          let expectedResKeys = ['categoryid', 'categoryname']
+          let actualResKeys = Object.keys(res)
+          let expectedResKeys = mockCategoryNamesRespKeys
 
           expect(res).toBeTruthy()
+          expect(actualResKeys).toEqual(expectedResKeys)
           expect(res.length).toEqual(4)
 
         },
@@ -244,6 +206,12 @@ describe('Collections #pact #collections', () => {
 
       _collectionService.getCollectionInfo('87730176')
         .then(res => {
+
+          let actualResKeys = Object.keys(res)
+          let expectedResKeys = mockCollectionRespKeys
+
+          expect(res).toBeTruthy()
+          expect(actualResKeys).toEqual(expectedResKeys)
           expect(res.bigimageurl.length).toBeGreaterThan(0)
         },
           err => {
@@ -255,3 +223,78 @@ describe('Collections #pact #collections', () => {
   })
 
 })
+
+
+// Category Description - /v1/categorydesc/id
+const mockCategoryDescResp = {
+  blurbUrl: null,
+  id: 10374058879,
+  imageDesc: null,
+  imageUrl: null,
+  leadObjectId: null,
+  name: "AP Art History",
+  shortDescription: null
+}
+
+const mockCategoryDescRespKeys = [
+  'blurbUrl',
+  'id',
+  'imageDesc',
+  'imageUrl',
+  'leadObjectId',
+  'name',
+  'shortDescription'
+]
+
+// Category Names - api/v1/collections/103/categorynames
+const mockCategoryNamesResp = [
+  { "categoryid": 1031896055, "categoryname": "Historic American Sheet Music Covers (Minneapolis College of Art and Design)" },
+  { "categoryid": 1034136270, "categoryname": "Historic Illustrations of Art & Architecture (Minneapolis College of Art and Design)" },
+  { "categoryid": 1034458025, "categoryname": "Historic Campus Architecture Collection (HCAP) (Council of Independent Colleges)" },
+  { "categoryid": 1034347075, "categoryname": "Alexander Adducci: Historical Scenic Design" }
+]
+
+const mockCategoryNamesRespKeys = ['categoryid', 'categoryname']
+
+// Collection - /v1/collections/id
+const mockCollectionResp = {
+  bigimageurl: "http://mdxstage.artstor.org//thumb/imgstor/size10/CSshared-shelf-2.gif",
+  blurburl: "<p><a target=_blank  href=http://www.sscommons.org/openlibrary/welcome.html style=display:inline>Shared Shelf Commons</a> is a free, open-access library of images. Search and browse collections with tools to zoom, print, export, and share images. Public Collections are delivered via <a target=_blank href=http://www.artstor.org/jstorforum style=display:inline>JSTOR Forum</a>, a web-based software solution for creating, sharing, and preserving digital collections.</p> Images and media from Shared Shelf Commons can be viewed, downloaded, and shared with anyone on the open web. New open-access collections are added frequently, so check back often to see the latest.</p>",
+  catCount: 0,
+  collectionImageDesc: null,
+  collectionType: 5,
+  collectionid: "87730176",
+  collectionname: "Bowdoin College Museum of Art Historical Images",
+  fullDescription: null,
+  imageServer: "/thumb/",
+  imageurl: "shared-shelf-2.gif",
+  institutionId: 1000,
+  leadImageURL: null,
+  objCount: 9088,
+  seq: 7730176,
+  shortDescription: null,
+  spaceQuota: 0,
+  spaceUsed: 0,
+  thumbnails: []
+}
+
+const mockCollectionRespKeys = [
+  'bigimageurl',
+  'blurburl',
+  'catCount',
+  'collectionImageDesc',
+  'collectionType',
+  'collectionid',
+  'collectionname',
+  'fullDescription',
+  'imageServer',
+  'imageurl',
+  'institutionId',
+  'leadImageURL',
+  'objCount',
+  'seq',
+  'shortDescription',
+  'spaceQuota',
+  'spaceUsed',
+  'thumbnails'
+]
