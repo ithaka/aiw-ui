@@ -182,8 +182,15 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
         let putGroup = data
         let zoom: {}
 
-        if (putGroup.items && putGroup.items.length > 1000) {
-          this.errorMsg = '<p>Sorry, that group would exceed 1000 assets. You will need to remove some before adding more.</p>'
+        if (putGroup.items && putGroup.items.length >= 1000) {
+          // this.errorMsg = '<p>Sorry, that group would exceed 1000 assets. You will need to remove some before adding more.</p>'
+          this._toasts.sendToast({
+            id: 'addToGroupItemLimit',
+            type: 'error',
+            stringHTML: '<p>This group has exceeded the 1000 item limit.</p>',
+            links: []
+          })
+
           return this.serviceResponse.tooManyAssets = true
         }
 
