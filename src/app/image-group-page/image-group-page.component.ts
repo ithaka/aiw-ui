@@ -12,7 +12,8 @@ import {
   TitleService,
   ImageGroup, 
   ImageGroupService, 
-  GroupService 
+  GroupService,
+  DomUtilityService
 } from './../shared'
 
 import { LoadingStateOptions, LoadingState } from './../modals/loading-state/loading-state.component'
@@ -82,7 +83,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     private _auth: AuthService,
     private route: ActivatedRoute,
     private _title: TitleService,
-    private _storage: ArtstorStorageService
+    private _storage: ArtstorStorageService,
+    private _dom: DomUtilityService
 
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
@@ -350,8 +352,6 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   }
 
   private getPPT(): void{
-    console.log('get ppt called')
-
     this.exportLoadingStateopts = {
       exportType: 'ppt',
       state: LoadingState.loading,
@@ -361,20 +361,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
     // Mimmic loading behaviour in intervals
     let interval = setInterval(() => {
-      if(this.exportLoadingStateopts.progress < 100) {
-        this.exportLoadingStateopts.progress += 10
-      } else {
-        // this.exportLoadingStateopts.state = LoadingState.completed
-        // On success fade out the component after 5 sec
-        // setTimeout(() => {
-        //   this.closeExportLoadingState()
-        // }, 5000)
-
-        this.exportLoadingStateopts.state = LoadingState.error
-        this.exportLoadingStateopts.errorType = 'server'
-
-        clearInterval(interval)
-      }
+      this.exportLoadingStateopts.progress += 10
     }, 1000)
 
 
@@ -383,16 +370,25 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       .then( data => {
         if (data.path) {
           downloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/')
+          clearInterval(interval)
+
+          this.exportLoadingStateopts.progress = 100
+          this.exportLoadingStateopts.state = LoadingState.completed
+          // On success fade out the component after 5 sec & begin download
+          setTimeout(() => {
+            this.closeExportLoadingState()
+            this.downLoadFile(this.ig.name, downloadLink)            
+          }, 5000)
         }
       })
       .catch( error => {
         console.error(error)
+        this.exportLoadingStateopts.state = LoadingState.error
+        this.exportLoadingStateopts.errorType = 'server'
       })
   }
 
   private getZIP(): void{
-    console.log('get zip called')
-
     this.exportLoadingStateopts = {
       exportType: 'zip',
       state: LoadingState.loading,
@@ -402,32 +398,30 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
     // Mimmic loading behaviour in intervals
     let interval = setInterval(() => {
-      if(this.exportLoadingStateopts.progress < 100) {
-        this.exportLoadingStateopts.progress += 10
-      } else {
-        this.exportLoadingStateopts.state = LoadingState.completed
-        // On success fade out the component after 5 sec
-        setTimeout(() => {
-          this.closeExportLoadingState()
-        }, 5000)
-
-        // this.exportLoadingStateopts.state = LoadingState.error
-        // this.exportLoadingStateopts.errorType = 'server'
-
-        clearInterval(interval)
-      }
+      this.exportLoadingStateopts.progress += 10
     }, 1000)
 
 
-    let zipDownloadLink: string =''
+    let zipDownloadLink: string = ''
     this._ig.getDownloadLink(this.ig, true)
       .then( data => {
         if (data.path) {
-          zipDownloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/');
+          zipDownloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/')
+          clearInterval(interval)
+
+          this.exportLoadingStateopts.progress = 100
+          this.exportLoadingStateopts.state = LoadingState.completed
+          // On success fade out the component after 5 sec & begin download
+          setTimeout(() => {
+            this.closeExportLoadingState()
+            this.downLoadFile(this.ig.name, zipDownloadLink)            
+          }, 5000)
         }
       })
       .catch( error => {
         console.error(error)
+        this.exportLoadingStateopts.state = LoadingState.error
+        this.exportLoadingStateopts.errorType = 'server'
       })
   }
 
@@ -443,6 +437,17 @@ export class ImageGroupPage implements OnInit, OnDestroy {
    */
   private encodeTag(tag) {
     return encodeURIComponent(tag);
+  }
+
+  /**
+   * Dynamically trigger file download having file name & file download URL
+   */
+  private downLoadFile(filename: string, fileURL: string): void{
+    let downloadLinkElement = this._dom.create('a')
+    downloadLinkElement.download = filename
+    downloadLinkElement.href = fileURL
+    downloadLinkElement.click()
+    downloadLinkElement.remove()
   }
 
 }
