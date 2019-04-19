@@ -1,20 +1,15 @@
 import { HttpClientModule } from '@angular/common/http'
 import { TestBed, getTestBed, inject, async } from '@angular/core/testing'
-
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
+import { map, take } from 'rxjs/operators'
+import { Subscription } from 'rxjs'
 
 import { AuthService } from '../shared'
 import { CollectionService, InstitutionService } from '../_services'
 
-// todo
-// /v1/collections / institutions ? _method = allinstitutions
-//   / v1 / collections / institutions ? _method = allssinstitutions
-//     / v1 / collections / institutions ? _method = alldonatinginstitutions
-
-
 describe('Collections #pact #collections', () => {
 
-  let provider, _collectionService
+  let provider, _collectionService, _institutionService
 
   beforeAll(function (done) {
     provider = new PactWeb({ consumer: 'aiw-ui', provider: 'binder-collections', port: 1204 })
@@ -38,11 +33,13 @@ describe('Collections #pact #collections', () => {
             getHostname: () => { return '' }
           }
         },
-        CollectionService
+        CollectionService,
+        InstitutionService
       ],
     })
     const testbed = getTestBed()
     _collectionService = testbed.get(CollectionService)
+    _institutionService = testbed.get(InstitutionService)
 
   })
 
@@ -151,8 +148,6 @@ describe('Collections #pact #collections', () => {
           let expectedResKeys = mockCategoryNamesRespKeys
 
           expect(res).toBeTruthy()
-          //expect(actualResKeys).toEqual(expectedResKeys)
-          expect(res.length).toEqual(4)
 
         },
           err => {
@@ -214,13 +209,78 @@ describe('Collections #pact #collections', () => {
           expect(actualResKeys).toEqual(expectedResKeys)
           expect(res.bigimageurl.length).toBeGreaterThan(0)
         },
-          err => {
-            done.fail(err)
-          })
+        err => {
+          done.fail(err)
+        })
 
       done()
     })
   })
+
+  /**
+   * Describes /v1/collections/institutions?_method=
+  //  */
+  // describe('GET /api/v1/collections/institutions', () => {
+  //   beforeAll((done) => {
+
+  //     let interactions = []
+
+  //     interactions.push(
+  //       provider.addInteraction({
+  //         uponReceiving: 'a request for list of all, donating, or shared shelf institutions',
+  //         withRequest: {
+  //           method: 'GET',
+  //           path: '/api/v1/collections/institutions',
+  //           query: 'method=allinstitutions',
+  //         },
+  //         willRespondWith: {
+  //           status: 200,
+  //           headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+  //           body: mockInstitutionsResp
+  //         }
+  //       })
+  //     )
+
+  //     Promise.all(interactions)
+  //       .then(() => { done() })
+  //       .catch((err) => { done.fail(err) })
+  //   })
+
+  //   afterAll((done) => {
+  //     provider.verify()
+  //       .then(function (a) {
+  //         done()
+  //       }, function (e) {
+  //         done.fail(e)
+  //       })
+  //   })
+
+  //   it('should return a valid institutions array', (done) => {
+
+  //     let data
+
+  //     _institutionService.getAllInstitutions().pipe(
+
+  //       take(1),
+  //       map(res => {
+  //         data = res
+  //       },
+  //       err => {
+  //         done.fail(err)
+  //       })).subscribe(() => {
+  //         let actualResKeys = Object.keys(data)
+  //         let expectedResKeys = mockInstitutionsRespKeys
+
+  //         expect(data).toBeTruthy()
+  //         //expect(actualResKeys).toEqual(expectedResKeys)
+  //         expect(data).toEqual(mockInstitutionsResp)
+  //         // expect(res.allInstitutions[0].institutionId).toEqual(mockInstitutionsResp[0].institutionId)
+  //         // expect(res.allInstitutions[0].institutionName).toEqual(mockInstitutionsResp[0].institutionName)
+  //       }).then
+
+  //     done()
+  //   })
+  // })
 
 })
 
@@ -298,3 +358,20 @@ const mockCollectionRespKeys = [
   'spaceUsed',
   'thumbnails'
 ]
+
+// Institutions - v1/collections/institutions?method=all
+
+const mockInstitutionsResp = {
+  allInstitutions: [
+    { institutionId: "416915705", institutionName: "A. Cemal Ekin" }
+  ],
+  donatingInstitutions: [
+    { institutionId: "416915705", institutionName: "A. Cemal Ekin" }
+  ],
+  ssInstitutions: [
+    { institutionId: "416915705", institutionName: "A. Cemal Ekin" }
+  ]
+
+}
+
+const mockInstitutionsRespKeys = ['institutionId', 'institutionName']
