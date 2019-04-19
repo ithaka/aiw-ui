@@ -7,6 +7,7 @@ import * as express from 'express';
 import * as fs from 'fs';
 import { join } from 'path';
 import * as https from 'https';
+const jsBundlePattern = new RegExp(/\w*\.\w*\.js$/g);
 // Set up Sentry configuration
 const Sentry = require('@sentry/node');
 Sentry.init({ 
@@ -105,6 +106,19 @@ app.get('/public/*', (req, res) => {
       }
   });
 });
+/**
+ * Apply Fastly Cache headers to anything but /index.html
+ */
+app.use('*', (req, res, next) => {
+  let url = req.originalUrl
+  // Select paths to add cache headers to
+  if (url.indexOf('/assets/') > -1 || jsBundlePattern.test(url)){
+    // Max age set to 86400 seconds, 24 hours
+    res.set('Surrogate-Control', 'public, max-age=86400') // higher priority value used by Fastly
+    res.set('Cache-Control', 'public, max-age=86400') // value used by clients/browsers
+  }
+  next()
+})
 /**
  *  Serve not server-rendered paths and static files from /browser
  *  - This is our "traditional" static app hosting
