@@ -234,7 +234,7 @@ export class NewIgModal implements OnInit {
             this._toasts.sendToast({
               id: 'updateGroup',
               type: 'success',
-              stringHTML: '<p>Your group was updated.</p>',
+              stringHTML: '<p><b>' + group.name + '</b> was updated.</p>',
               links: []
             })
           },

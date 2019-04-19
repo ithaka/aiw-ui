@@ -153,18 +153,19 @@
 
     .group-details.animating-width(*ngIf="igDisplay && showIgDescBool && animationFinished", [ngClass]="[ animationFinished && showIgDescBool ? 'col-3' : 'col-0'  ]")
       .group-details-wrapper([ngClass]="{ 'show' : showIgDescBool }")
-        .ig-tags.meta-block(*ngIf="igMetaData.tags && igMetaData.tags.length > 0")
-          .label.pb-2 Tags
+        .ig-tags.meta-block.mb-3(*ngIf="igMetaData.tags && igMetaData.tags.length > 0")
+          label Tags
           ul.filter-list.pad-top(#groupTagsList="")
             li.filter-item(*ngFor="let tag of igMetaData.tags")
               a.font-weight-bold([routerLink]="['/browse', 'groups', 'search']", [queryParams]="{ 'level': 'all', 'tags' : encodeTag(tag), 'page' : '1' }") {{ tag }}
         
-        .ig-tags.meta-block.mt-4(*ngIf="igMetaData.tags && igMetaData.tags.length === 0")
-          .label.pb-2 Tags
-          a.edit-group-link(tabindex="4", aria-label="Add tags to this group, clicking this will allow you to make edits to this group", (click)="showEditGroup()", (keyup.enter)="showEditGroup()") + Add tags
+        .ig-tags.meta-block.mb-3(*ngIf="igMetaData.tags && igMetaData.tags.length === 0")
+          label Tags
+          .meta-block
+            a.edit-group-link(tabindex="4", aria-label="Add tags to this group, clicking this will allow you to make edits to this group", (click)="showEditGroup()", (keyup.enter)="showEditGroup()") + Add tags
           
-        .meta-block.mt-4
-          .label Description
+        .meta-block.mb-3
+          label Description
           #pageDescription.page__description(*ngIf="igDisplay && igMetaData.description", [innerHTML]="igMetaData.description")
           .desc-no-expand.meta-block(*ngIf="!igMetaData.description || igMetaData.description.length <= 0")
             a.edit-group-link(tabindex="4", aria-label="Add description to this group, clicking this will allow you to make edits to this group", (click)="showEditGroup()", (keyup.enter)="showEditGroup()") + Add description

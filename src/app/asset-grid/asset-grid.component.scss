@@ -257,8 +257,13 @@ input[type=number] {
         font-weight: bold;
         line-height: 1.33;
         letter-spacing: normal;
-        color: $orange;
+        color: $color-primary;
         text-decoration: underline;
         cursor: pointer;
+        transition: all ease 0.2s;
+
+        &:hover {
+            color: $color-primary-active;
+        }
     }
 }
