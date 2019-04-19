@@ -266,4 +266,10 @@ input[type=number] {
             color: $color-primary-active;
         }
     }
+
+    .no-details {
+        font-style: italic;
+        color: #989898;
+        font-size: 12px;
+    }
 }

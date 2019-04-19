@@ -7,7 +7,7 @@ div
     ang-group-title([ig]="ig")
     .row 
       .col-md-12
-        ang-asset-grid([actionOptions]="actionOptions", (reordering)="toggleReorder($event)", [igMetaData]="ig")
+        ang-asset-grid([actionOptions]="actionOptions", (reordering)="toggleReorder($event)", [igMetaData]="ig", [allowIgUpdate]="allowIgUpdate")
         .alert.alert-warning(*ngIf!="ig.items && ig.items.length > 0 && !ig.thumbnails")
           b Error Loading
           = " "

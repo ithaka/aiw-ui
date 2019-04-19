@@ -149,6 +149,9 @@ export class AssetGrid implements OnInit, OnDestroy {
   @Input()
   private hasMaxAssetLimit: boolean = true
 
+  @Input()
+  private allowIgUpdate: boolean = false;
+
   // @Output() updateSearchInRes: EventEmitter<boolean> = new EventEmitter();
 
   private pagination: {
