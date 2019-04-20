@@ -91,21 +91,21 @@ app.get('/api/*', (req, res) => {
 /**
  * Handle server-rendered paths
  */
-app.get('/public/*', (req, res) => {
-  console.log('/public route request received')
-  res.render('index', { req, res }, 
-    (err, html) => {
-      if (err) {
-        console.log("Express Error", err)
-        return res.status(500).send(err)
-      } else {
-        // Hide no js messaging for server-rendered pages
-        html = html.replace('<noscript>', '<div class="no-script--hidden">')
-        html = html.replace('</noscript>', '</div>')
-        return res.send(html)
-      }
-  });
-});
+// app.get('/public/*', (req, res) => {
+//   console.log('/public route request received')
+//   res.render('index', { req, res }, 
+//     (err, html) => {
+//       if (err) {
+//         console.log("Express Error", err)
+//         return res.status(500).send(err)
+//       } else {
+//         // Hide no js messaging for server-rendered pages
+//         html = html.replace('<noscript>', '<div class="no-script--hidden">')
+//         html = html.replace('</noscript>', '</div>')
+//         return res.send(html)
+//       }
+//   });
+// });
 /**
  * Apply Fastly Cache headers to anything but /index.html
  */
