@@ -1,6 +1,6 @@
 {
   "name": "avatar",
-  "version": "2.0.6",
+  "version": "2.0.9",
   "description": "Front End for the Artstor Digital Library",
   "author": "Artstor Team Air",
   "license": "MIT",
@@ -79,7 +79,7 @@
     "@nguniversal/module-map-ngfactory-loader": "^7.1.0",
     "@ngx-translate/core": "^10.0.2",
     "@ngx-translate/http-loader": "^3.0.1",
-    "@sentry/browser": "^5.0.8",
+    "@sentry/browser": "^5.1.0",
     "@sentry/node": "^4.5.4",
     "@types/gapi": "^0.0.36",
     "@types/gapi.auth2": "^0.0.50",

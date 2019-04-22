@@ -2,11 +2,12 @@
 import 'zone.js/dist/zone-node'
 import 'reflect-metadata'
 // Dependencies
-import { enableProdMode } from '@angular/core'
-import * as express from 'express'
-import * as fs from 'fs'
-import { join } from 'path'
-import * as https from 'https'
+import { enableProdMode } from '@angular/core';
+import * as express from 'express';
+import * as fs from 'fs';
+import { join } from 'path';
+import * as https from 'https';
+const jsBundlePattern = new RegExp(/\w*\.\w*\.js$/g);
 // Set up Sentry configuration
 const Sentry = require('@sentry/node')
 Sentry.init({ 
@@ -92,20 +93,33 @@ app.get('/api/*', (req, res) => {
 /**
  * Handle server-rendered paths
  */
-app.get('/public/*', (req, res) => {
-  console.log('/public route request received')
-  res.render('index', { req, res }, 
-    (err, html) => {
-      if (err) {
-        console.log("Express Error", err)
-        return res.status(500).send(err)
-      } else {
-        // Hide no js messaging for server-rendered pages
-        html = html.replace('<noscript>', '<div class="no-script--hidden">')
-        html = html.replace('</noscript>', '</div>')
-        return res.send(html)
-      }
-  })
+// app.get('/public/*', (req, res) => {
+//   console.log('/public route request received')
+//   res.render('index', { req, res }, 
+//     (err, html) => {
+//       if (err) {
+//         console.log("Express Error", err)
+//         return res.status(500).send(err)
+//       } else {
+//         // Hide no js messaging for server-rendered pages
+//         html = html.replace('<noscript>', '<div class="no-script--hidden">')
+//         html = html.replace('</noscript>', '</div>')
+//         return res.send(html)
+//       }
+//   });
+// });
+/**
+ * Apply Fastly Cache headers to anything but /index.html
+ */
+app.use('*', (req, res, next) => {
+  let url = req.originalUrl
+  // Select paths to add cache headers to
+  if (url.indexOf('/assets/') > -1 || jsBundlePattern.test(url)){
+    // Max age set to 86400 seconds, 24 hours
+    res.set('Surrogate-Control', 'public, max-age=86400') // higher priority value used by Fastly
+    res.set('Cache-Control', 'public, max-age=86400') // value used by clients/browsers
+  }
+  next()
 })
 /**
  *  Serve not server-rendered paths and static files from /browser
