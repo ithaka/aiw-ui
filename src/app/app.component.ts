@@ -45,6 +45,7 @@ export class AppComponent {
 
   public showSkyBanner: boolean = false
   public skyBannerCopy: string = ''
+  public test: any = {}
   /**
    * Google Tag Manager variables
    * - In order of specificity 
