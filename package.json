@@ -48,7 +48,10 @@
     "build:ssr:prod": "npm run build:client-and-server-bundles && npm run webpack:server -- --env=prod",
     "serve:ssr": "node dist/server",
     "build:client-and-server-bundles": "ng build --prod && ng run avatar:server",
-    "webpack:server": "webpack --config webpack.server.config.js --progress --colors"
+    "webpack:server": "webpack --config ./webpack.server.config.js --progress --colors",
+    "webpack:server:test" : "npm run webpack:server -- --env=test",
+    "webpack:server:prod" : "npm run webpack:server -- --env=prod"
+
   },
   "dependencies": {
     "@angular/animations": "7.0.4",
@@ -133,7 +136,6 @@
     "bootstrap": "^4.1.3"
   },
   "devDependencies": {
-    "appdynamics": "4.5.13",
     "node-sass": "^4.9.0",
     "sass-loader": "^6.0.7",
     "@pact-foundation/karma-pact": "^2.1.9",
@@ -173,6 +175,9 @@
     "tslint": "~5.9.1",
     "tslint-loader": "^3.6.0",
     "typedoc": "^0.5.1"
+  },
+  "optionalDependencies": {
+    "appdynamics": "4.5.13"
   },
   "repository": {
     "type": "git",

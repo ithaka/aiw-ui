@@ -63,7 +63,7 @@ global['XMLHttpRequest'] = require('xmlhttprequest').XMLHttpRequest
  * Angular Universal init
  */
 // * NOTE :: leave this as require() since this file is built Dynamically from webpack
-const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./dist/server/main')
+const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('../dist/server/main')
 // Express Engine
 import { ngExpressEngine } from '@nguniversal/express-engine'
 // Import module map for lazy loading

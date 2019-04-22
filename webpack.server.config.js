@@ -2,11 +2,10 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = (env) => {
-  console.log("Env value: " + env)
   let appdynamicsName = (env == 'prod' ? 'Artstor_PROD' : 'Artstor_TEST')
   console.log("AppDynamics applicationName used: " + appdynamicsName)
   return {
-    entry: { server: './server.ts' },
+    entry: { server: './server/server.ts' },
     resolve: { extensions: ['.js', '.ts'] },
     target: 'node',
     // TO-DO: Enable "production" mode for going live with Universal

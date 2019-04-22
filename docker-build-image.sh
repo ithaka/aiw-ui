@@ -18,8 +18,12 @@ rm -f docker-compose.yml temp.yml
 cat docker-compose.yml
 rm -f temp.yml
 
+# Ensure dependencies are up to date
+yarn install && npm link @angular/cli
+# Build static app (locally, to be copied into image)
+yarn build:ssr:${ENVIRONMENT}
 # Build docker image
 docker build --build-arg SAGOKU_ENV=${ENVIRONMENT} -t ${IMAGE} .
 
 # Push image to Ithaka repository
-# docker push ${IMAGE}
+docker push ${IMAGE}
