@@ -61,7 +61,7 @@
           (mouseout)="mouseOverNoMedia=false")
 
       //- Set the media type icon for downgraded media using media.adlObjectType
-      i.icon(*ngIf="isDowngradedMedia && !isDetailView",
+      i.icon(*ngIf="isDowngradedMedia && !isDetailView && thumbnail.media",
           [ngClass]="[ mouseOverDowngradedMedia ? 'icon-' + (thumbnail.media.adlObjectType | typeIdPipe) + '-hover' : 'icon-' + (thumbnail.media.adlObjectType | typeIdPipe) ]",
           (mouseover)="mouseOverDowngradedMedia=true",
           (mouseout)="mouseOverDowngradedMedia=false")
