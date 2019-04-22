@@ -273,3 +273,18 @@ input[type=number] {
         font-size: 12px;
     }
 }
+
+.group-details {
+
+    .meta-block{
+        padding: 0px !important;
+
+        label {
+            margin: 24px 0px 14px 0px !important;
+        }
+
+        .page__description {
+            padding: 0px !important;
+        }
+    }
+}
