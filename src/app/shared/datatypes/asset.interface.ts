@@ -78,7 +78,7 @@ export class Asset {
         return formattedData
     }
 
-    private buildDownloadLink(data: AssetData): string {
+    private buildDownloadLink(data: AssetData, groupId?: string): string {
         let downloadLink: string
         switch (data.object_type_id) {
             case 20:
@@ -86,7 +86,9 @@ export class Asset {
             case 22:
             case 23:
                 // Non-image Download Link format: /media/ARTSTORID/TYPEID
+                let queryParam = '?groupid=' + groupId
                 downloadLink = [data.baseUrl, 'media', this.id, data.object_type_id].join("/")
+                downloadLink = groupId ?  downloadLink + queryParam : downloadLink
                 break
             default:
                 if (Array.isArray(this.tileSource) && this.tileSource.length >= 1) {
@@ -214,7 +216,7 @@ export class Asset {
             this.tileSource = data.tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgPath) + '/info.json'
         }
         // Set download after tilesource determined
-        this.downloadLink = this.buildDownloadLink(data)
+        this.downloadLink = this.buildDownloadLink(data, data.groupId)
 
         // set up kaltura info if it exists
         if (data.fpxInfo) {
