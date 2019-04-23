@@ -57,8 +57,7 @@
           .wrapper
             button.btn.btn-secondary.mr-2(type="button", (click)="closeModal.emit()") {{ 'NEW_GROUP_MODAL.CONTROLS.CLOSE' | translate }}
             button.btn.btn-primary(*ngIf="!copyIG && !editIG", [class.loading]="isLoading", [ngClass]="{ 'disabled-btn' : newIgForm.controls['title'].hasError('required') }") {{ 'NEW_GROUP_MODAL.CONTROLS.SAVE_CREATE' | translate }}
-            button.btn.btn-primary(*ngIf="editIG", [class.loading]="isLoading", [ngClass]="{ 'disabled-btn' : newIgForm.controls['title'].hasError('required') }") {{ 'NEW_GROUP_MODAL.CONTROLS.SAVE_EDIT' | translate }}
-            button.btn.btn-primary(*ngIf="copyIG", [class.loading]="isLoading", [ngClass]="{ 'disabled-btn' : newIgForm.controls['title'].hasError('required') }") {{ 'NEW_GROUP_MODAL.CONTROLS.SAVE_COPY' | translate }}
+            button.btn.btn-primary(*ngIf="editIG || copyIG", [class.loading]="isLoading", [ngClass]="{ 'disabled-btn' : newIgForm.controls['title'].hasError('required') }") {{ 'NEW_GROUP_MODAL.CONTROLS.SAVE_EDIT' | translate }}
     .modal-content(*ngIf="serviceResponse.success && !editIG")
       .modal-header
         h5.modal-title Group created

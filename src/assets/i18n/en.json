@@ -322,8 +322,7 @@
       "NAV_TO_GROUP": "Go to group",
       "CLOSE": "Close",
       "SAVE_CREATE": "Create",
-      "SAVE_EDIT": "Save changes",
-      "SAVE_COPY": "Copy"
+      "SAVE_EDIT": "Save"
     }
   },
   "ADVANCED_SEARCH_MODAL": {
