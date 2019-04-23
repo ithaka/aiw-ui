@@ -9,7 +9,7 @@
           span(aria-hidden="true") &times;
       form#newIgForm([formGroup]="newIgForm", (ngSubmit)="igFormSubmit(newIgForm.value)")
         .modal-body
-          label.modal-label(*ngIf="!hasPrivateGroups") {{ 'NEW_GROUP_MODAL.FIRST_GROUP_MSG' | translate }}
+          label.modal-label(*ngIf="!editIG && !copyIG && !hasPrivateGroups") {{ 'NEW_GROUP_MODAL.FIRST_GROUP_MSG' | translate }}
           .form-group
             label.modal-label(for="igTitleInput") {{ 'NEW_GROUP_MODAL.TITLE_FIELD_LABEL' | translate }}&#42;
             input#igTitleInput.form-control.placeholder-text(type="text", [formControl]="newIgForm.controls['title']", placeholder="Give your group a title...", spellcheck="false", tabindex="0")
@@ -53,11 +53,12 @@
         .modal-footer
           .wrapper
             a.help-link.mr-2(href="http://support.artstor.org/?article=create-and-manage-image-groups", target="_blank") ?
-            .link.modal-footer-link-left(*ngIf="showAddToGroup && hasPrivateGroups", (click)="addToGroup.emit()") {{ 'NEW_GROUP_MODAL.SHOW_ADD_TO_IMAGE_GROUP' | translate }}
+            .link.modal-footer-link-left(*ngIf="!editIG && !copyIG && showAddToGroup && hasPrivateGroups", (click)="addToGroup.emit()") {{ 'NEW_GROUP_MODAL.SHOW_ADD_TO_IMAGE_GROUP' | translate }}
           .wrapper
             button.btn.btn-secondary.mr-2(type="button", (click)="closeModal.emit()") {{ 'NEW_GROUP_MODAL.CONTROLS.CLOSE' | translate }}
-            button.btn.btn-primary(type="submit", [class.loading]="isLoading",
-              [ngClass]="{ 'disabled-btn' : newIgForm.controls['title'].hasError('required') }") {{ 'NEW_GROUP_MODAL.CONTROLS.SAVE_EDIT' | translate }}
+            button.btn.btn-primary(*ngIf="!copyIG && !editIG", [class.loading]="isLoading", [ngClass]="{ 'disabled-btn' : newIgForm.controls['title'].hasError('required') }") {{ 'NEW_GROUP_MODAL.CONTROLS.SAVE_CREATE' | translate }}
+            button.btn.btn-primary(*ngIf="editIG", [class.loading]="isLoading", [ngClass]="{ 'disabled-btn' : newIgForm.controls['title'].hasError('required') }") {{ 'NEW_GROUP_MODAL.CONTROLS.SAVE_EDIT' | translate }}
+            button.btn.btn-primary(*ngIf="copyIG", [class.loading]="isLoading", [ngClass]="{ 'disabled-btn' : newIgForm.controls['title'].hasError('required') }") {{ 'NEW_GROUP_MODAL.CONTROLS.SAVE_COPY' | translate }}
     .modal-content(*ngIf="serviceResponse.success && !editIG")
       .modal-header
         h5.modal-title Group created
