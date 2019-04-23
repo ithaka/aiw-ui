@@ -1,6 +1,12 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 if [ "$1" = "prod" ]; then
     ENVIRONMENT="prod"
+    # Verify on master for prod deploy
+    BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    if [[ "$BRANCH" != "master" ]]; then
+    echo '⚠️  Aborting script, must deploy from "master" to Prod!';
+    exit 1;
+    fi
 else
     ENVIRONMENT="test"
 fi
