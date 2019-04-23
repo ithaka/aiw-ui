@@ -378,9 +378,9 @@ export class AssetService {
          */
         if (groupItems[0] && groupItems[0].id) {
             for (let i = 0; i < groupItems.length; i++) {
-            if (groupItems[i] && groupItems[i].id) {
-                assetIds.push(groupItems[i].id)
-            }
+                if (groupItems[i] && groupItems[i].id) {
+                    assetIds.push(groupItems[i].id)
+                }
             }
         } else {
             assetIds = groupItems
