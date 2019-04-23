@@ -1,0 +1,18 @@
+{
+    "name": "artstor-ui-server",
+    "description": "Runtime commands and dependencies for AIW UI's Node.js server",
+    "scripts" : {
+      "serve:ssr": "node dist/server"
+    },
+    "dependencies": {
+      "appdynamics": "4.5.13"
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/ithaka/aiw-ui.git"
+    },
+    "engines": {
+      "node": ">= 8.11.1",
+      "npm": ">= 4"
+    }
+}

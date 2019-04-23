@@ -48,7 +48,7 @@ export class AppComponent {
   public test: any = {}
   /**
    * Google Tag Manager variables
-   * - In order of specificity 
+   * - In order of specificity
    */
   private pageNameMap = {
     '/home' : { name: 'home', section: 'home', type: 'home' },
@@ -88,8 +88,6 @@ export class AppComponent {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // console.info("Constructing app component")
-    // this.test.thing = this.test.a.b
-    // throw new Error("This is my fake error message")
     // Append timestamp param to dodge caching
     if (isPlatformBrowser(this.platformId)) {
       let langStr = 'en.json?no-cache=' + new Date().valueOf()
@@ -175,7 +173,7 @@ export class AppComponent {
             }
           }
           // Push to GTM data layer
-          this._ga.eventTrack.next( { properties : { 
+          this._ga.eventTrack.next( { properties : {
             gtmCustom : {
               "page" : pageGTMVars
             }
