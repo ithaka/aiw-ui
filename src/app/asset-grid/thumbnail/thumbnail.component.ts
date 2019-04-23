@@ -99,8 +99,8 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     // Set thumbnail URL
     this.thumbnail.img = this.getThumbnailImg(this.thumbnail)
     // Set alt text
-    this.thumbnailAlt = this.thumbnail['name'] && 'Thumbnail of ' + this.thumbnail['name'] : 'Untitled'
-    this.thumbnailAlt = this.thumbnail['agent'] && this.thumbnailAlt + ' by ' + this.thumbnail['agent'] : this.thumbnailAlt + ' by Unknown'
+    this.thumbnailAlt = this.thumbnail['name'] ? 'Thumbnail of ' + this.thumbnail['name'] : 'Untitled'
+    this.thumbnailAlt = this.thumbnail['agent'] ? this.thumbnailAlt + ' by ' + this.thumbnail['agent'] : this.thumbnailAlt + ' by Unknown'
   }
 
   // Fires when the component input(s) (i.e largeThmbView) changes - Updates the thumbnailSize based on largeThmbView current value

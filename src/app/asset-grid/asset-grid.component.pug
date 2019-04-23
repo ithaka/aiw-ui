@@ -144,7 +144,8 @@
             ng-container(*ngFor="let asset of results; let i = index")
               .col-sm-4.col-md-2.col-xl-1.col--reorder.draggable
                 .card.card--asset([ngClass]="{ 'lrgThmb': largeThmbView }")
-                  ang-thumbnail([thumbnail]="asset",
+                  ang-thumbnail(
+                    [thumbnail]="asset",
                     [itemIndex]="i",
                     [arrowReorderMode]="arrowReorderMode",
                     [reorderMode]="true",
@@ -152,7 +153,8 @@
                     [largeThmbView]="largeThmbView",
                     (click)="arrowReorderMode = false",
                     (keydown)="arrowReorder(i, $event)",
-                    [attr.aria-controls]="reorder-status")
+                    [attr.aria-controls]="reorder-status"
+                  )
             .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
               | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
 

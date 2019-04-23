@@ -645,7 +645,7 @@ export class AssetGrid implements OnInit, OnDestroy {
         return (typeof(item) === 'object') ? item['id'] : item
       })
 
-      this._assets.getAllThumbnails(this.itemIds)
+      this._assets.getAllThumbnails(this.itemIds, this.igDisplay ? this._igMetaData.id : null)
         .then( allThumbnails => {
           this.isLoading = false;
           // Make sure we are only reordering Available assets
