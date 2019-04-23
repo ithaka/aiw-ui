@@ -240,8 +240,7 @@ export class NewIgModal implements OnInit {
           },
           error => {
             console.error(error);
-            // this.errorMsg = '<p>Sorry, we weren’t able create update this group. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
-            // this.serviceResponse.failure = true;
+
             this._toasts.sendToast({
               id: 'updateGroup',
               type: 'error',
