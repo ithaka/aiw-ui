@@ -87,8 +87,10 @@ export class ThumbnailComponent implements OnInit, OnChanges {
       this.thumbnail.thumbnailImgUrl = this.thumbnail.media.thumbnailSizeOnePath
     }
 
-    this.thumbnailAlt = this.thumbnail['name'] ? 'Thumbnail of ' + this.thumbnail['name'] : 'Untitled'
-    this.thumbnailAlt = this.thumbnail['agent'] ? this.thumbnailAlt + ' by ' + this.thumbnail['agent'] : this.thumbnailAlt + ' by Unknown'
+    // Set isDetailView
+    if (this.thumbnail['zoom']) {
+      this.isDetailView = true
+    }
 
     // Set isDowngradedMedia
     if ( (this.isMultiView && this.thumbnail.media && this.thumbnail.media.format === 'null') ||
@@ -96,10 +98,8 @@ export class ThumbnailComponent implements OnInit, OnChanges {
       this.isDowngradedMedia = true
     }
 
-    // Set isDetailView
-    if (this.thumbnail['zoom']) {
-      this.isDetailView = true
-    }
+    this.thumbnailAlt = this.thumbnail['name'] ? 'Thumbnail of ' + this.thumbnail['name'] : 'Untitled'
+    this.thumbnailAlt = this.thumbnail['agent'] ? this.thumbnailAlt + ' by ' + this.thumbnail['agent'] : this.thumbnailAlt + ' by Unknown'
   }
 
   // Fires when the component input(s) (i.e largeThmbView) changes - Updates the thumbnailSize based on largeThmbView current value
