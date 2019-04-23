@@ -450,9 +450,9 @@ export class AssetSearchService {
    *
    * @param assetId The id of the desired asset
    */
-  public getAssetById(assetId: string): Observable<SearchAsset> {
+  public getAssetById(assetId: string, ssid?: boolean): Observable<SearchAsset> {
     let assetQuery: SearchRequest = {
-      query: assetId,
+      query: ssid ? 'ssid:' + assetId : assetId,
       content_types: ['art']
     }
 
@@ -464,7 +464,12 @@ export class AssetSearchService {
       map((res) => {
         // search through results and make sure the id's match
         let desiredAsset: SearchAsset = res.results.find((asset) => {
-          return asset.artstorid === assetId
+          if(ssid) {
+            // extract ssid from doi field value
+            return asset.doi.split('/')[1].replace('artstor.', '') === assetId
+          } else {
+            return asset.artstorid === assetId
+          }
         })
 
         if (desiredAsset) {

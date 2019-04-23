@@ -8,6 +8,7 @@ import { PCollectionPage } from './pcollection-page';
 import { CategoryPage } from './category-page'
 import { ImageGroupPPPage } from './image-group-pp-page'
 import { AssetPPPage } from './asset-pp-page'
+import { SsidMapping } from './ssid-mapping'
 import { ImageGroupPage } from './image-group-page'
 import { ClusterPage } from './cluster-page'
 import { BrowsePage } from './browse-page'
@@ -52,6 +53,7 @@ export const ROUTES: Routes = [
   { path: 'pcollection', component: PCollectionPage, canActivate: [AuthService] },
   { path: 'printpreview/:igId', component: ImageGroupPPPage, canActivate: [AuthService] },
   { path: 'assetprint/:assetId', component: AssetPPPage },
+  { path: 'ssid/:ssId', component: SsidMapping },
   { path: 'category/:catId', component: CategoryPage, canActivate: [AuthService] },
   { path: 'category', component: CategoryPage, canActivate: [AuthService] },
   { path: 'group/:igId', component: ImageGroupPage, canActivate: [AuthService] },

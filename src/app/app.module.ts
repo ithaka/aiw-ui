@@ -50,6 +50,7 @@ import { PCollectionPage } from './pcollection-page'
 import { CategoryPage } from './category-page'
 import { ImageGroupPPPage } from './image-group-pp-page'
 import { AssetPPPage } from './asset-pp-page'
+import { SsidMapping } from './ssid-mapping'
 import { ClusterPage } from './cluster-page'
 import { BrowsePage, LibraryComponent, AdlCollectionFilterPipe, IgGroupFilterPipe, BrowseCommonsComponent,
   MyCollectionsComponent, BrowseInstitutionComponent, BrowseGroupsComponent, TagComponent, CardViewComponent,
@@ -199,6 +200,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ArtstorViewerComponent,
     AssociatedPage,
     AssetPPPage,
+    SsidMapping,
     BrowseCommonsComponent,
     BrowseGroupsComponent,
     BrowseInstitutionComponent,
