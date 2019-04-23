@@ -226,7 +226,6 @@ export class NewIgModal implements OnInit {
         map(data => {
             this.isLoading = false;
             this.newGroup = data;
-            // this.serviceResponse.success = true;
             this._assets.clearSelectMode.next(true);
 
             this.closeModal.emit()
