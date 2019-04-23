@@ -77,3 +77,4 @@ src/app/shared/sso.service.ts
 
 # Local Docker/Deployment Files #
 docker-compose.yml
+docker-compose.yml
