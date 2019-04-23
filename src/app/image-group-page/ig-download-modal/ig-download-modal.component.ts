@@ -149,12 +149,12 @@ export class PptModalComponent implements OnInit, AfterViewInit {
       })
 
       let index: number = 0
-      group.items.forEach((item) => {
-        if (accessileIds.includes(item.id)) {
-          let imgStr: string = [(++index), item.id, '1024x1024'].join(':')
+      for (let i = 0; i < group.items.length; i++) {
+        if (accessileIds.includes(group.items[i])) {
+          let imgStr: string = [(++index), group.items[i], '1024x1024'].join(':')
           imgDownloadStrings.push(imgStr)
-        }
-      })
+        } 
+      }
 
       data = {
           igName: group.name,
