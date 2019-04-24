@@ -19,11 +19,9 @@ enableProdMode()
 // Express server
 const app = express()
 // Sentry handler must be the first middleware on the app
-app.use(Sentry.Handlers.requestHandler())
-// app.use(Sentry.Handlers.requestHandler() as express.RequestHandler)
+app.use(Sentry.Handlers.requestHandler() as express.RequestHandler)
 // The error handler must be before any other error middleware
-app.use(Sentry.Handlers.errorHandler())
-// app.use(Sentry.Handlers.errorHandler() as express.ErrorRequestHandler)
+app.use(Sentry.Handlers.errorHandler() as express.ErrorRequestHandler)
 // Only use HTTPS settings locally
 if (!process.env.SAGOKU) {
   console.log("Local Development: Setting SSL cert")
@@ -69,6 +67,7 @@ const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('../dist/server/ma
 import { ngExpressEngine } from '@nguniversal/express-engine'
 // Import module map for lazy loading
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader'
+
 // Configure Express rendering to use Angular Universal
 app.engine('html', (_, options, callback) => {
   let engine = ngExpressEngine({
@@ -93,21 +92,27 @@ app.get('/api/*', (req, res) => {
 /**
  * Handle server-rendered paths
  */
-// app.get('/public/*', (req, res) => {
-//   console.log('/public route request received')
-//   res.render('index', { req, res },
-//     (err, html) => {
-//       if (err) {
-//         console.log("Express Error", err)
-//         return res.status(500).send(err)
-//       } else {
-//         // Hide no js messaging for server-rendered pages
-//         html = html.replace('<noscript>', '<div class="no-script--hidden">')
-//         html = html.replace('</noscript>', '</div>')
-//         return res.send(html)
-//       }
-//   });
-// });
+app.get('/public/*', (req, res, next) => {
+  console.log('/public route request received')
+  try {
+    res.render('index', { req, res },
+      (err, html) => {
+        if (err) {
+          console.log("Express Error", err)
+          return res.status(500).send(err)
+        } else {
+          // Hide no js messaging for server-rendered pages
+          html = html.replace('<noscript>', '<div class="no-script--hidden">')
+          html = html.replace('</noscript>', '</div>')
+          return res.send(html)
+        }
+    });
+  } catch(err) {
+    // If render fails, notify Sentry and pass static pages to user
+    Sentry.captureException(err)
+    next()
+  }
+});
 /**
  * Apply Fastly Cache headers to anything but /index.html
  */
