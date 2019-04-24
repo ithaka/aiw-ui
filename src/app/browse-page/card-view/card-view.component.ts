@@ -62,7 +62,7 @@ export class CardViewComponent implements OnInit {
     // Get the first five images of the image group to show on the card view (5 incase there are unavailable assets amongst the first three)
     let itemIds: string[] = this.group.items.slice(0, 5)
     // Fetch thumbnails if there are items
-    if (itemIds.length) {
+    if (itemIds.length > 0) {
       this._assets.getAllThumbnails({ itemIds })
         .then( allThumbnails => {
           this.thumbnails = allThumbnails
