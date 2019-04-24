@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 
 import { Tag } from '../tag/tag.class'
-import { AssetService, AssetSearchService, AuthService } from '../../shared'
+import { AssetService, AssetSearchService, AuthService, GroupItem } from '../../shared'
 import { GroupQuery } from './../browse-groups/groups.component'
 
 @Component({
@@ -63,18 +63,9 @@ export class CardViewComponent implements OnInit {
     let itemIds: string[] = this.group.items.slice(0, 5)
 
     if (itemIds.length) {
-      this._assets.getAllThumbnails(itemIds)
+      this._assets.getAllThumbnails({ itemIds })
         .then( allThumbnails => {
           this.thumbnails = allThumbnails
-          this.thumbnails = allThumbnails.filter((thumbnail) => {
-            return thumbnail.status === 'available'
-          })
-
-          this.thumbnails.forEach(thumbnail => {
-            if (thumbnail['media']) {
-              thumbnail.thumbnailImgUrl = thumbnail.media.thumbnailSizeOnePath
-            }
-          })
           this.dataLoaded = true
         })
         .catch( error => {
