@@ -1,6 +1,6 @@
 {
   "name": "avatar",
-  "version": "2.0.12",
+  "version": "2.0.13",
   "description": "Front End for the Artstor Digital Library",
   "author": "Artstor Team Air",
   "license": "MIT",
@@ -45,7 +45,7 @@
     "build:ssr:prod": "npm run build:client-and-server-bundles && npm run webpack:server -- --env=prod",
     "serve:ssr": "node dist/server.js",
     "serve:ssr:start": "pm2 start dist/server.js",
-    "serve:ssr:stop" : "pm2 stop dist/server.js",
+    "serve:ssr:stop": "pm2 stop dist/server.js",
     "build:client-and-server-bundles": "ng build --prod && ng run avatar:server",
     "webpack:server": "webpack --config ./webpack.server.config.js --progress --colors",
     "webpack:server:test": "npm run webpack:server -- --env=test",
