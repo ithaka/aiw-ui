@@ -48,7 +48,7 @@ export class AppComponent {
   public test: any = {}
   /**
    * Google Tag Manager variables
-   * - In order of specificity 
+   * - In order of specificity
    */
   private pageNameMap = {
     '/home' : { name: 'home', section: 'home', type: 'home' },
@@ -173,7 +173,7 @@ export class AppComponent {
             }
           }
           // Push to GTM data layer
-          this._ga.eventTrack.next( { properties : { 
+          this._ga.eventTrack.next( { properties : {
             gtmCustom : {
               "page" : pageGTMVars
             }
