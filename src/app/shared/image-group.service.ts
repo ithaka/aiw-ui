@@ -98,7 +98,7 @@ export class ImageGroupService {
      *  which was allowing restricted assets to be downloaded, we first ask for each assets' thumbnail, which will ensure
      *  that only assets which the user has access to are returned
      */
-    return this._assets.getAllThumbnails(group.items, group.id)
+    return this._assets.getAllThumbnails({ itemObjs: group.items }, group.id)
     .then((thumbnails) => {
       let imgDownloadStrings: string[] = []
 

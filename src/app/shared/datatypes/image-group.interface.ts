@@ -25,6 +25,22 @@ export interface ImageGroup {
   update_date?: string
 }
 
+export interface GroupItem {
+  id: string,
+  zoom?: ImageZoomParams
+}
+
+/**
+ * IIIF Zoom parameters as passed by Group service and URL params
+ */
+export interface ImageZoomParams {
+  viewerX?: number
+  viewerY?: number
+  pointWidth?: number
+  pointHeight?: number
+  index?: number
+}
+
 export interface ImageGroupDescription {
   igId: string;
   igName: string;

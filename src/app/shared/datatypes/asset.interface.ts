@@ -1,5 +1,6 @@
 // Project Dependencies
 import { AssetData, MetadataField, FileProperty, CollectionValue } from './asset.service'
+import { ImageZoomParams } from './image-group.interface';
 
 export class Asset {
     id: string
@@ -341,14 +342,3 @@ export interface MetadataResponse {
   }
 
   export interface FileProperty { [key: string]: string }
-
-/**
- * IIIF Zoom parameters as passed by Group service and URL params
- */
-export interface ImageZoomParams {
-    viewerX?: number
-    viewerY?: number
-    pointWidth?: number
-    pointHeight?: number
-    index?: number
-}

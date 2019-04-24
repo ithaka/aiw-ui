@@ -91,13 +91,14 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     if (this.thumbnail['zoom']) {
       this.isDetailView = true
     }
-
     // Set isDowngradedMedia
     if ( (this.isMultiView && this.thumbnail.media && this.thumbnail.media.format === 'null') ||
         ( (this.isMultiView || this.isDetailView) && this.thumbnail['compoundmediaCount'] === 1)) {
       this.isDowngradedMedia = true
     }
-
+    // Set thumbnail URL
+    this.thumbnail.img = this.getThumbnailImg(this.thumbnail)
+    // Set alt text
     this.thumbnailAlt = this.thumbnail['name'] ? 'Thumbnail of ' + this.thumbnail['name'] : 'Untitled'
     this.thumbnailAlt = this.thumbnail['agent'] ? this.thumbnailAlt + ' by ' + this.thumbnail['agent'] : this.thumbnailAlt + ' by Unknown'
   }
@@ -106,6 +107,23 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.largeThmbView){
       this.thumbnailSize = changes.largeThmbView.currentValue ? 2 : 1
+    }
+  }
+
+  /**
+   * Get image url to set on thumbnail
+   */
+  getThumbnailImg(thumbnail: Thumbnail): string {
+    if (thumbnail.status != 'not-available' && this.isDetailView && !this.isDowngradedMedia) {
+      return this._search.makeDetailViewThmb(thumbnail)
+    } 
+    else if (this.isMultiView || (this.isDetailView && this.isDowngradedMedia)) {
+      return thumbnail.thumbnailImgUrl
+    } 
+    else if (thumbnail.status != 'not-available') {
+      return this._search.makeThumbUrl(thumbnail, this.thumbnailSize)
+    } else {
+      return
     }
   }
 
@@ -146,6 +164,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   thumbnailError(): void{
     if (this.thumbnailSize > 1) {
       this.thumbnailSize--
+      this.thumbnail.img = this.getThumbnailImg(this.thumbnail)
     }
   }
 

@@ -640,35 +640,11 @@ export class AssetGrid implements OnInit, OnDestroy {
       this.isLoading = true;
 
       let itemObjs: any[] = this.itemIds.slice(0)
-      // Map itemIds array of objects to array of strings for v1 items
-      this.itemIds = this.itemIds.map(item => {
-        return (typeof(item) === 'object') ? item['id'] : item
-      })
 
-      this._assets.getAllThumbnails(this.itemIds)
+      this._assets.getAllThumbnails({ itemObjs }, this.igDisplay ? this._igMetaData.id : null)
         .then( allThumbnails => {
           this.isLoading = false;
-          // Make sure we are only reordering Available assets
-          allThumbnails = allThumbnails.filter(thumbnail => {
-            return thumbnail.status === 'available'
-          })
-
-          // Make sure the fetched thumbnail objects contain the zoom info as well
-          itemObjs = itemObjs.map(itemObj => {
-            let obj = {}
-            for(let thmb of allThumbnails){
-              if(thmb.objectId === itemObj['id']){
-                obj = Object.assign({}, thmb)
-                if(itemObj['zoom']){
-                  obj['zoom'] = itemObj['zoom']
-                }
-                break
-              }
-            }
-            return obj
-          })
-
-          this.allResults = itemObjs
+          this.allResults = allThumbnails
           this.results = this.allResults.slice(0)
         })
         .catch( error => {
