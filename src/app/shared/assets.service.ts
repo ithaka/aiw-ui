@@ -912,7 +912,7 @@ export class AssetService {
             let newItem
             // Attach zoom object from items to the relevant thumbnail, to be used in asset grid
             for(let thumbnail of thumbnails) {
-                if (item['id'] === thumbnail['objectId'] && thumbnail.status === 'available') {
+                if (item['id'] === thumbnail['objectId']) {
                     newItem = Object.assign({}, thumbnail)  // Make copy to avoid modifying subsequent items
                     if(item['zoom']){
                         newItem['zoom'] = item['zoom']
