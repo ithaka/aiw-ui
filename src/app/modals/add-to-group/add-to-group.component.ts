@@ -360,7 +360,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
           }
         }
         // Check the length of itemIds to remove invalid call with object_id=null
-        if(itemIds.length > 0) {
+        if(itemIds.length > 0 && groups.length > 0) {
           this._assets.getAllThumbnails({ itemIds })
           .then( allThumbnails => {
             allThumbnails = allThumbnails.map( thmbObj => {
