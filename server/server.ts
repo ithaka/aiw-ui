@@ -10,7 +10,7 @@ import * as https from 'https';
 const jsBundlePattern = new RegExp(/\w*\.\w*\.js$/g);
 // Set up Sentry configuration
 const Sentry = require('@sentry/node')
-Sentry.init({ 
+Sentry.init({
   // environment: process.env,
   dsn: 'https://80481e6afe274aa49c671606ca054bec@sentry.io/1391720'
 })
@@ -95,7 +95,7 @@ app.get('/api/*', (req, res) => {
  */
 // app.get('/public/*', (req, res) => {
 //   console.log('/public route request received')
-//   res.render('index', { req, res }, 
+//   res.render('index', { req, res },
 //     (err, html) => {
 //       if (err) {
 //         console.log("Express Error", err)
@@ -131,6 +131,15 @@ app.use('/', express.static(join(DIST_FOLDER, 'browser')))
 app.get('*', (req, res) => {
   res.redirect('/#'+req.url)
 })
+
+app.post('*', (req, res) => {
+  res.status(405).send('Method not allowed')
+})
+
+app.put('*', (req, res) => {
+  res.status(405).send('Method not allowed')
+})
+
 // Start up the Node server
 app.listen(PORT, () => {
   console.log(`Node server listening on https://localhost:${PORT}`)
