@@ -2,9 +2,10 @@
     "name": "artstor-ui-server",
     "description": "Runtime commands and dependencies for AIW UI's Node.js server",
     "scripts" : {
-      "serve:ssr": "node dist/server"
+      "serve:ssr": "pm2 start dist/server.js"
     },
     "dependencies": {
+      "pm2": "^3.5.0",
       "appdynamics": "4.5.13"
     },
     "repository": {
