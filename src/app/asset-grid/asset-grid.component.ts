@@ -380,7 +380,6 @@ export class AssetGrid implements OnInit, OnDestroy {
             this.itemIds = allResults.items
             this.ig = allResults
           }
-          console.log("ALL", allResults)
           this.restricted_results = allResults.restricted_thumbnails
 
           if (this.results && this.results.length > 0) {
