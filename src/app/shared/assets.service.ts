@@ -901,24 +901,27 @@ export class AssetService {
 
     }
 
+    /**
+     * Build full group thumbnail array
+     * - Maps item objects to their appropriate thumbnail data
+     * @param items 
+     * @param thumbnails 
+     */
     private mapThumbnailsToItems(items: any[], thumbnails: any[]): any[] {
-        console.log(items, thumbnails)
         return items.reduce((newItems, item) => {
-            console.log("REDUCING")
             let newItem
             // Attach zoom object from items to the relevant thumbnail, to be used in asset grid
             for(let thumbnail of thumbnails) {
                 if (item['id'] === thumbnail['objectId'] && thumbnail.status === 'available') {
                     newItem = Object.assign({}, thumbnail)  // Make copy to avoid modifying subsequent items
-                    console.log("MATCH!")
                     if(item['zoom']){
                         newItem['zoom'] = item['zoom']
                     }
-                    if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
-                        newItem.thumbnailImgUrl = this._auth.getThumbHostname(true) + thumbnail.thumbnailImgUrl
-                    }
-                    if (thumbnail['media']) {
+                    // media takes priority over thumbnailImgUrl
+                    if (thumbnail['media'] && thumbnail.media.thumbnailSizeOnePath) {
                         newItem.thumbnailImgUrl = thumbnail.media.thumbnailSizeOnePath
+                    } else if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
+                        newItem.thumbnailImgUrl = this._auth.getThumbHostname(true) + thumbnail.thumbnailImgUrl
                     }
                     newItems.push(newItem)
                     break
