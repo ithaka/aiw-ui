@@ -10,7 +10,7 @@
           //- Show error icon once the state is `error`
           i.icon.icon-error(*ngIf="options.state === 2")
 
-        .progress(tabindex="0", (keydown.shift.tab)="$event.stopPropagation(); $event.preventDefault(); focusLastElement()")
+        .progress(*ngIf="options.state !== 2", tabindex="0", (keydown.shift.tab)="$event.stopPropagation(); $event.preventDefault(); focusLastElement()")
           .progress-bar.progress-bar-animated([ngClass]="'state-' + options.state", [ngStyle]="{'width': options.progress + '%'}", role="progressbar", [attr.aria-valuenow]="options.progress", aria-valuemin="0", aria-valuemax="100")
 
         .message
@@ -21,7 +21,7 @@
 
         //- Let the user try again in case there was a `server` error
         .try-again-link(*ngIf="options.state === 2 && options.errorType === 'server'")
-          span(tabindex="0", role="link") {{ 'LOADING_STATE.LINKS.TRY_AGAIN' | translate }}
-            
+          span((click)="tryAgain()", tabindex="0", role="link") {{ 'LOADING_STATE.LINKS.TRY_AGAIN' | translate }}
+
         button.close((click)="close()", tabindex="0", aria-label="Close", (keydown.tab)="$event.preventDefault(); startModalFocus()", placement="bottom", ngbTooltip="Cancel export", [disableTooltip]="options.state != 0")
           span(aria-hidden="true") &times;

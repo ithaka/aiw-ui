@@ -6,12 +6,12 @@ import { map, take } from 'rxjs/operators'
 // Internal Dependencies
 import { AppConfig } from '../app.service'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
-import { 
-  AssetService, 
-  AuthService, 
+import {
+  AssetService,
+  AuthService,
   TitleService,
-  ImageGroup, 
-  ImageGroupService, 
+  ImageGroup,
+  ImageGroupService,
   GroupService,
   DomUtilityService
 } from './../shared'
@@ -322,7 +322,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     }
   }
 
-  private handleTCModalClose(event: any): void {
+  private exportGroup(event: any): void {
     this.showTermsConditions = false
 
     switch (event) {
@@ -353,7 +353,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   private getPPT(): void{
     this.exportLoadingStateopts = {
-      exportType: 'ppt',
+      exportType: 'PPT',
       state: LoadingState.loading,
       progress: 0
     }
@@ -377,7 +377,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           // On success fade out the component after 5 sec & begin download
           setTimeout(() => {
             this.closeExportLoadingState()
-            this.downLoadFile(this.ig.name, downloadLink)            
+            this.downLoadFile(this.ig.name, downloadLink)
           }, 5000)
         }
       })
@@ -390,7 +390,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   private getZIP(): void{
     this.exportLoadingStateopts = {
-      exportType: 'zip',
+      exportType: 'ZIP',
       state: LoadingState.loading,
       progress: 0
     }
@@ -414,7 +414,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           // On success fade out the component after 5 sec & begin download
           setTimeout(() => {
             this.closeExportLoadingState()
-            this.downLoadFile(this.ig.name, zipDownloadLink)            
+            this.downLoadFile(this.ig.name, zipDownloadLink)
           }, 5000)
         }
       })
