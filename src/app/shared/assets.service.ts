@@ -21,6 +21,7 @@ import { ImageGroup, Thumbnail } from '.'
 import { AppConfig } from 'app/app.service'
 import { APP_CONST } from '../app.constants'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
+import { GroupItem } from './datatypes';
 
 @Injectable()
 export class AssetService {
@@ -367,23 +368,30 @@ export class AssetService {
 
     /**
      * Gets all of the thumbnails requested, assuming the user has access, and returns them in a promise resolved with an array
-     * @param assetIds the ids for which you need the thumbnails
+     * @param itemIds the ids for which you need the thumbnails
      * @param igId passed if you are viewing an image group, which may contain pc assets and therefore access is checked against user's access to group
      */
-    public getAllThumbnails(groupItems: any[], igId?: string): Promise<Thumbnail[]> {
-        let assetIds: string [] = []
+    public getAllThumbnails(group: { itemObjs?: GroupItem[], itemIds?: string[]}, igId?: string): Promise<Thumbnail[]> {
+        let itemIds: string[] = []
+        let itemObjs: GroupItem[] = []
         /**
          * 2019/3/14
          * Check for new item format (object), and convert to strings for items service
          */
-        if (groupItems[0] && groupItems[0].id) {
-            for (let i = 0; i < groupItems.length; i++) {
-            if (groupItems[i] && groupItems[i].id) {
-                assetIds.push(groupItems[i].id)
+        if (group.itemObjs && group.itemObjs[0] && group.itemObjs[0].id) {
+            itemObjs = group.itemObjs
+            for (let i = 0; i < group.itemObjs.length; i++) {
+                if (group.itemObjs[i] && group.itemObjs[i].id) {
+                    itemIds.push(group.itemObjs[i].id)
+                }
             }
+        } else if (group.itemIds && group.itemIds[0]) {
+            itemIds = group.itemIds
+            for (let i = 0; i < group.itemIds.length; i++) {
+                itemObjs.push({ id: itemIds[i] })
             }
         } else {
-            assetIds = groupItems
+            console.error("getAllThumbnails() called without itemObjs or itemIds")
         }
         // return new Promise
         let maxCount = 100
@@ -395,7 +403,7 @@ export class AssetService {
                 let countEnd = i + maxCount
                 let objectIdTerm: string = igId ? '&object_ids=' : '&object_id=' // the group version of the call takes object_ids instead of object_id
 
-                let idsAsTerm: string = objectIdTerm + assetIds.slice(i, countEnd).join(objectIdTerm) // concat the query params
+                let idsAsTerm: string = objectIdTerm + itemIds.slice(i, countEnd).join(objectIdTerm) // concat the query params
                 let url: string = this._auth.getHostname() + '/api/'
                 if (igId) {
                   url += 'v1/group/' + igId + '/items?' + idsAsTerm
@@ -407,8 +415,9 @@ export class AssetService {
                     .toPromise()
                     .then((res) => {
                         let results = res;
-                        allThumbnails = allThumbnails.concat(results['items']);
-                        if (countEnd >= assetIds.length) {
+                        let items = this.mapThumbnailsToItems(itemObjs.slice(i, countEnd), results['items'])
+                        allThumbnails = allThumbnails.concat(items);
+                        if (countEnd >= itemIds.length) {
                             resolve(allThumbnails);
                         } else {
                             loadBatch(countEnd)
@@ -822,28 +831,8 @@ export class AssetService {
                     this.http.get(this._auth.getHostname() + '/api/v1/group/' + igId + '/items?' + ID_PARAM + idsAsTerm, options).pipe(
                       map((res) => {
                         let results = res
-                        data.thumbnails = results['items'] // V1 ?items from search
                         // For multi-view items, make the thumbnail urls and update the array
-                        data.thumbnails = data.items.slice(pageStart, pageEnd).map((item) => {
-
-                          // Attach zoom object from items to the relevant thumbnail, to be used in asset grid
-                          for(let thumbnail of data.thumbnails) {
-
-                            thumbnail = Object.assign({}, thumbnail)  // Make copy to avoid modifying subsequent items
-
-                            if (item['id'] === thumbnail['objectId']) {
-                              if(item['zoom']){
-                                  thumbnail['zoom'] = item['zoom']
-                              }
-                              if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
-                                thumbnail.thumbnailImgUrl = this._auth.getThumbHostname(true) + thumbnail.thumbnailImgUrl
-                              }
-
-                              return thumbnail
-                            }
-                          }
-                        })
-
+                        data.thumbnails = this.mapThumbnailsToItems(data.items.slice(pageStart, pageEnd), results['items'])
                         // Set the allResults object
                         this.updateLocalResults(data)
                       }, (error) => {
@@ -910,6 +899,36 @@ export class AssetService {
                     this.allResultsSource.next({'error': error})
             });
 
+    }
+
+    /**
+     * Build full group thumbnail array
+     * - Maps item objects to their appropriate thumbnail data
+     * @param items 
+     * @param thumbnails 
+     */
+    private mapThumbnailsToItems(items: any[], thumbnails: any[]): any[] {
+        return items.reduce((newItems, item) => {
+            let newItem
+            // Attach zoom object from items to the relevant thumbnail, to be used in asset grid
+            for(let thumbnail of thumbnails) {
+                if (item['id'] === thumbnail['objectId']) {
+                    newItem = Object.assign({}, thumbnail)  // Make copy to avoid modifying subsequent items
+                    if(item['zoom']){
+                        newItem['zoom'] = item['zoom']
+                    }
+                    // media takes priority over thumbnailImgUrl
+                    if (thumbnail['media'] && thumbnail.media.thumbnailSizeOnePath) {
+                        newItem.thumbnailImgUrl = thumbnail.media.thumbnailSizeOnePath
+                    } else if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
+                        newItem.thumbnailImgUrl = this._auth.getThumbHostname(true) + thumbnail.thumbnailImgUrl
+                    }
+                    newItems.push(newItem)
+                    break
+                }
+            }
+            return newItems
+        }, [])
     }
 
 }

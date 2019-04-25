@@ -10,7 +10,7 @@ import * as https from 'https';
 const jsBundlePattern = new RegExp(/\w*\.\w*\.js$/g);
 // Set up Sentry configuration
 const Sentry = require('@sentry/node')
-Sentry.init({ 
+Sentry.init({
   // environment: process.env,
   dsn: 'https://80481e6afe274aa49c671606ca054bec@sentry.io/1391720'
 })
@@ -19,11 +19,9 @@ enableProdMode()
 // Express server
 const app = express()
 // Sentry handler must be the first middleware on the app
-app.use(Sentry.Handlers.requestHandler())
-// app.use(Sentry.Handlers.requestHandler() as express.RequestHandler)
+app.use(Sentry.Handlers.requestHandler() as express.RequestHandler)
 // The error handler must be before any other error middleware
-app.use(Sentry.Handlers.errorHandler())
-// app.use(Sentry.Handlers.errorHandler() as express.ErrorRequestHandler)
+app.use(Sentry.Handlers.errorHandler() as express.ErrorRequestHandler)
 // Only use HTTPS settings locally
 if (!process.env.SAGOKU) {
   console.log("Local Development: Setting SSL cert")
@@ -69,6 +67,7 @@ const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('../dist/server/ma
 import { ngExpressEngine } from '@nguniversal/express-engine'
 // Import module map for lazy loading
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader'
+
 // Configure Express rendering to use Angular Universal
 app.engine('html', (_, options, callback) => {
   let engine = ngExpressEngine({
@@ -93,21 +92,27 @@ app.get('/api/*', (req, res) => {
 /**
  * Handle server-rendered paths
  */
-// app.get('/public/*', (req, res) => {
-//   console.log('/public route request received')
-//   res.render('index', { req, res }, 
-//     (err, html) => {
-//       if (err) {
-//         console.log("Express Error", err)
-//         return res.status(500).send(err)
-//       } else {
-//         // Hide no js messaging for server-rendered pages
-//         html = html.replace('<noscript>', '<div class="no-script--hidden">')
-//         html = html.replace('</noscript>', '</div>')
-//         return res.send(html)
-//       }
-//   });
-// });
+app.get('/public/*', (req, res, next) => {
+  console.log('/public route request received')
+  try {
+    res.render('index', { req, res },
+      (err, html) => {
+        if (err) {
+          console.log("Express Error", err)
+          return res.status(500).send(err)
+        } else {
+          // Hide no js messaging for server-rendered pages
+          html = html.replace('<noscript>', '<div class="no-script--hidden">')
+          html = html.replace('</noscript>', '</div>')
+          return res.send(html)
+        }
+    });
+  } catch(err) {
+    // If render fails, notify Sentry and pass static pages to user
+    Sentry.captureException(err)
+    next()
+  }
+});
 /**
  * Apply Fastly Cache headers to anything but /index.html
  */
@@ -131,6 +136,15 @@ app.use('/', express.static(join(DIST_FOLDER, 'browser')))
 app.get('*', (req, res) => {
   res.redirect('/#'+req.url)
 })
+
+app.post('*', (req, res) => {
+  res.status(405).send('Method not allowed')
+})
+
+app.put('*', (req, res) => {
+  res.status(405).send('Method not allowed')
+})
+
 // Start up the Node server
 app.listen(PORT, () => {
   console.log(`Node server listening on https://localhost:${PORT}`)
