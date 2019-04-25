@@ -319,7 +319,7 @@
     "CONTROLS": {
       "RETURN_TO_RESULTS": "Return",
       "NAV_TO_GROUP": "Go to group",
-      "CLOSE": "Close",
+      "CLOSE": "Cancel",
       "SAVE_CREATE": "Create",
       "SAVE_EDIT": "Save"
     }
