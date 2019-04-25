@@ -15,7 +15,7 @@ import { MetadataService } from './../_services'
 })
 
 export class SsidMapping implements OnInit {
-  private ssId: string
+  private ssid: string
   private subscriptions: Subscription[] = []
   public errorMsg: string = ''
   public loading: boolean = false
@@ -33,8 +33,8 @@ export class SsidMapping implements OnInit {
     this.subscriptions.push(
       this.route.params.pipe(
         map(routeParams => {
-        this.ssId = routeParams['ssId']
-        if(this.ssId) {
+        this.ssid = routeParams['ssid']
+        if(this.ssid) {
           this.loading = true
           this.searchSsid()
         }
@@ -43,7 +43,7 @@ export class SsidMapping implements OnInit {
   }
 
   private searchSsid(): void {
-    this._search.getAssetById(this.ssId, true).subscribe( (res) => {
+    this._search.getAssetById(this.ssid, true).subscribe( (res) => {
       console.log(res, 'this is result')
       if(res.artstorid) {
         this.loading = false
