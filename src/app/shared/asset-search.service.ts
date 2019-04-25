@@ -485,6 +485,7 @@ export class AssetSearchService {
     let isMultiView: boolean
     let isThumbnailImgUrl: boolean
     let isDowngradedMultiView: boolean
+    let receivedFullUrl: boolean
     // Set default size
     if (!size) {
       size = 1
@@ -507,8 +508,11 @@ export class AssetSearchService {
     } else {
       imagePath = thumbData.thumbnail_url
     }
+    // Test for full url 
+    receivedFullUrl = /\/\/[\W\D]*(artstor.org)/.test(imagePath)
     // Multiviews and downgraded views receive FULL URLS via "thumbnail_url"
-    if ((isMultiView || isDowngradedMultiView) && !isThumbnailImgUrl) {
+    // Group list service returns full urls as thumbnailImgUrl
+    if ((isMultiView || isDowngradedMultiView) && receivedFullUrl) {
       return imagePath;
     }
     else if (isMultiView && isThumbnailImgUrl) {

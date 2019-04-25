@@ -112,12 +112,12 @@
 }
 
 .dropdown-menu {
-  border: 1px solid $color-border-gray;
+  border: 1px solid #ccc;
   margin-top: 11px;
   left: -130px !important;
   width: 275px;
   padding: 0;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 0px 7px 0 rgba(0,0,0,.15)!important;
 
   // display: block;
   // max-height: 0px;
@@ -145,7 +145,7 @@
 
   &:before{
     top: -20px;
-    border-color: transparent transparent $color-border-gray transparent;
+    border-color: transparent transparent #ccc transparent;
     border-width: 10px;
   }
 

@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 
 import { Tag } from '../tag/tag.class'
-import { AssetService, AssetSearchService, AuthService } from '../../shared'
+import { AssetService, AssetSearchService, AuthService, GroupItem } from '../../shared'
 import { GroupQuery } from './../browse-groups/groups.component'
 
 @Component({
@@ -17,7 +17,7 @@ export class CardViewComponent implements OnInit {
   @Input() public browseLevel: string
   @Input() public link: boolean
 
-  public linkRoute: string = ''
+  public linkRoute: string = '/group'
   private tags: any[] = []
   public thumbnails: any[] = []
   public groupType: string = '-'
@@ -44,37 +44,13 @@ export class CardViewComponent implements OnInit {
     // Decide the group type showed in the cardview
     this.groupType = this.decideGroupType(this.browseLevel, this.group)
 
-    if (this.tag.type) {
-      if (this.tag.type.label === 'collection') {
-        this.linkRoute = '/collection'
-      }
-      if (this.tag.type.label === 'pcollection' || this.tag.type.label === 'privateCollection') {
-        this.linkRoute = '/pcollection'
-      }
-      if (this.tag.type.label === 'group' && this.tag.type.folder !== true) {
-        this.linkRoute = '/group'
-      }
-      if (this.tag.type.label === 'category') {
-        this.linkRoute = '/category'
-      }
-    }
-
     // Get the first five images of the image group to show on the card view (5 incase there are unavailable assets amongst the first three)
     let itemIds: string[] = this.group.items.slice(0, 5)
-
-    if (itemIds.length) {
-      this._assets.getAllThumbnails(itemIds)
+    // Fetch thumbnails if there are items
+    if (itemIds.length > 0 && typeof(itemIds[0]) == 'string') {
+      this._assets.getAllThumbnails({ itemIds }, this.group.id)
         .then( allThumbnails => {
           this.thumbnails = allThumbnails
-          this.thumbnails = allThumbnails.filter((thumbnail) => {
-            return thumbnail.status === 'available'
-          })
-
-          this.thumbnails.forEach(thumbnail => {
-            if (thumbnail['media']) {
-              thumbnail.thumbnailImgUrl = thumbnail.media.thumbnailSizeOnePath
-            }
-          })
           this.dataLoaded = true
         })
         .catch( error => {

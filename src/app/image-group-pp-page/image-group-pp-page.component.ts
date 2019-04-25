@@ -59,12 +59,10 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._assets.allResults.pipe(
         map((results: any) => {
-          console.log(results);
-
           if (results.id) {
             this.igDesc = results.description;
 
-            this._assets.getAllThumbnails(results.items, this.igId)
+            this._assets.getAllThumbnails({ itemObjs: results.items}, this.igId)
               .then(allThumbnails => {
                 this.assets = allThumbnails;
               })
