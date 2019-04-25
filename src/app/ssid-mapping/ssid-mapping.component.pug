@@ -1,0 +1,11 @@
+nav-menu
+.container.main-content
+  .row.justify-content-center
+    .col-md-6
+      .alert.alert-danger(*ngIf="errorMsg")
+        b Unable to match SSID <br/>
+        | We were unable to locate an asset with the SSID "{{ssid}}"
+      .mt-1.text-right
+        a.link([routerLink]="['/home']") Go to Home
+  .row.has-icon-overlay(*ngIf="loading")
+    i.icon-lg.icon-overlay--top.icon-loading-large
