@@ -32,11 +32,11 @@ export class NewIgModal implements OnInit, AfterViewInit {
   public hasPrivateGroups: boolean = false // If a user has at least one image group
 
   /** Switch for running logic to copy image group */
-  @Input() private copyIG: boolean = false;
+  @Input() public copyIG: boolean = false;
   /** The image group object */
   @Input() private ig: ImageGroup = <ImageGroup>{};
   /** Controls the user seeing the toggle to add images to group or create a new group */
-  @Input() private showAddToGroup: boolean = true
+  @Input() public showAddToGroup: boolean = true
 
   @ViewChild("modalHeader", {read: ElementRef }) modalRef: ElementRef
   @ViewChild("firstField", { read: ElementRef }) firstFieldRef: ElementRef
@@ -44,26 +44,26 @@ export class NewIgModal implements OnInit, AfterViewInit {
   @ViewChild("confirmButton", { read: ElementRef }) cancelButtonRef: ElementRef
 
   /** The form */
-  private newIgForm: FormGroup;
+  public newIgForm: FormGroup;
   /** Gives artstor institution users the ability to curate image public image groups */
-  private isArtstorUser: boolean = false;
+  public isArtstorUser: boolean = false;
   // We need to seed the medium editor with an empty div to fix line return issues in Firefox!
-  private igDescription: string = '';
+  public igDescription: string = '';
   /** The list of assets which are currently selected from the asset grid */
   @Input() private selectedAssets: any[] = [];
 
   /** List of subscriptions to add to and then destroy ngOnDestroy */
   private subscriptions: Subscription[] = [];
   /** Controls display of loading symbol(s) */
-  private isLoading: boolean = false;
+  public isLoading: boolean = false;
   /** Set to true once the form is submitted */
-  private submitted: boolean = false;
+  public submitted: boolean = false;
   /** The new group created after it comes back from the service */
   private newGroup: ImageGroup;
 
   private util: IgFormUtil = new IgFormUtil()
 
-  private tagSuggestions: string[] = []
+  public tagSuggestions: string[] = []
 
   // There must be a more Angular way to handle this debounce
   private tagSuggestTerm: string = ''
@@ -172,7 +172,7 @@ export class NewIgModal implements OnInit, AfterViewInit {
     this.closeModal.emit()
   }
 
-  private getTagSuggestions(event: any): void  {
+  public getTagSuggestions(event: any): void  {
     this.tagSuggestTerm = event.target.value
 
     if (!this.tagDebouncing) {
@@ -207,7 +207,7 @@ export class NewIgModal implements OnInit, AfterViewInit {
    * Called on form submission
    *  contains almost all of the logic for creating/editing the image group
    */
-  private igFormSubmit(formValue: IgFormValue): void {
+  public igFormSubmit(formValue: IgFormValue): void {
 
     this.submitted = true;
     // avoid making the service calls, but still trigger error display
