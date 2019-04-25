@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output, ElementRef, Inject, PLATFORM_ID, ViewChild } from '@angular/core'
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, ElementRef, Inject, PLATFORM_ID, ViewChild, AfterViewInit, asNativeElements } from '@angular/core'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
@@ -16,7 +16,7 @@ import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/
   selector: 'ang-new-ig-modal',
   templateUrl: 'new-ig-modal.component.pug'
 })
-export class NewIgModal implements OnInit {
+export class NewIgModal implements OnInit, AfterViewInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   @Output() addToGroup: EventEmitter<any> = new EventEmitter();
   @Output() igReloadTriggered: EventEmitter<any> = new EventEmitter();
@@ -38,7 +38,10 @@ export class NewIgModal implements OnInit {
   /** Controls the user seeing the toggle to add images to group or create a new group */
   @Input() private showAddToGroup: boolean = true
 
-  @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef;
+  @ViewChild("modalHeader", {read: ElementRef }) modalRef: ElementRef
+  @ViewChild("firstField", { read: ElementRef }) firstFieldRef: ElementRef
+  @ViewChild("closeIcon", { read: ElementRef }) closeIconRef: ElementRef
+  @ViewChild("confirmButton", { read: ElementRef }) cancelButtonRef: ElementRef
 
   /** The form */
   private newIgForm: FormGroup;
@@ -111,17 +114,8 @@ export class NewIgModal implements OnInit {
           }
         )).subscribe()
     }
-
-    // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    // let htmlelement: HTMLElement = this.el.nativeElement
-    // htmlelement.focus()
-    if (this.modalElement && this.modalElement.nativeElement){
-      this.modalElement.nativeElement.focus()
-    }
-
     /** Set isArtstorUser to true if the user's institution is 1000. This will let them make global image groups */
     this.isArtstorUser = this._auth.getUser().institutionId == 1000;
-
     /**
      * Set the field values, depending on the image group that is input
      *  only set the field values if you are copying or editing - otherwise, you're trying to make a new image group
@@ -147,8 +141,30 @@ export class NewIgModal implements OnInit {
     }
   }
 
+  ngAfterViewInit() {
+    // Set focus to the modal to make the links in the modal first thing to tab for accessibility
+    this.focusElement(this.modalRef)
+  }
+
   ngOnDestroy() {
       this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+  }
+
+  /**
+   * Force focus upon a key event
+   * @param event keydown/click event
+   * @param element element to focus
+   */
+  public focusElement(element: { nativeElement?: HTMLElement, focus?: Function }, event?: Event) {
+    if (event) {
+      event.stopPropagation()
+      event.preventDefault()
+    }
+    if (element.nativeElement) {
+      element.nativeElement.focus()
+    } else if (element.focus) {
+      element.focus()
+    }
   }
 
   private refreshIG(): void{

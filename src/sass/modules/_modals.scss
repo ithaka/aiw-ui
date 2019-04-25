@@ -60,6 +60,12 @@
 .modal-header {
     padding: 15px !important;
     border-bottom: 1px solid $color-border-gray;
+    padding: 2px 16px;
+    background: $color-white;
+
+    &:focus {
+      outline: none;
+    }
 
     &  button.close {
         cursor: pointer;
@@ -73,11 +79,6 @@
         position: static;
         color: $color-gray-7;
     }
-}
-
-.modal-header {
-	padding: 2px 16px;
-  background: $color-white;
 }
 
 .modal-body {
