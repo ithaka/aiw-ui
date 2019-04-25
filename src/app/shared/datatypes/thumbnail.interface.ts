@@ -5,6 +5,7 @@ export interface Thumbnail {
   name?: string
   agent?: string
   date?: string
+  img?: string // Set locally in our app to be the image displayed
   tombstone?: string[]
   clustered?: number
   partofcluster?: boolean

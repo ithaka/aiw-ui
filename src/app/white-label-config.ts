@@ -47,7 +47,7 @@ export const WLV_ARTSTOR = {
     showHomeAd: true,
     showArtstorCurated: true,
     showInstitutionalLogin: true,
-    pwResetPortal: "ARTstor"
+    pwResetPortal: "artstor"
 }
 
 export const WLV_SAHARA = {

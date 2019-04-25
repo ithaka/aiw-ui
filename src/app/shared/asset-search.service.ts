@@ -450,9 +450,9 @@ export class AssetSearchService {
    *
    * @param assetId The id of the desired asset
    */
-  public getAssetById(assetId: string): Observable<SearchAsset> {
+  public getAssetById(assetId: string, ssid?: boolean): Observable<SearchAsset> {
     let assetQuery: SearchRequest = {
-      query: assetId,
+      query: ssid ? 'ssid:' + assetId : assetId,
       content_types: ['art']
     }
 
@@ -464,7 +464,12 @@ export class AssetSearchService {
       map((res) => {
         // search through results and make sure the id's match
         let desiredAsset: SearchAsset = res.results.find((asset) => {
-          return asset.artstorid === assetId
+          if(ssid) {
+            // extract ssid from doi field value
+            return asset.doi.split('/')[1].replace('artstor.', '') === assetId
+          } else {
+            return asset.artstorid === assetId
+          }
         })
 
         if (desiredAsset) {
@@ -485,6 +490,7 @@ export class AssetSearchService {
     let isMultiView: boolean
     let isThumbnailImgUrl: boolean
     let isDowngradedMultiView: boolean
+    let receivedFullUrl: boolean
     // Set default size
     if (!size) {
       size = 1
@@ -507,8 +513,11 @@ export class AssetSearchService {
     } else {
       imagePath = thumbData.thumbnail_url
     }
+    // Test for full url 
+    receivedFullUrl = /\/\/[\W\D]*(artstor.org)/.test(imagePath)
     // Multiviews and downgraded views receive FULL URLS via "thumbnail_url"
-    if ((isMultiView || isDowngradedMultiView) && !isThumbnailImgUrl) {
+    // Group list service returns full urls as thumbnailImgUrl
+    if ((isMultiView || isDowngradedMultiView) && receivedFullUrl) {
       return imagePath;
     }
     else if (isMultiView && isThumbnailImgUrl) {

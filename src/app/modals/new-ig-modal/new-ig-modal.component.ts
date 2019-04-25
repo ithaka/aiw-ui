@@ -226,13 +226,26 @@ export class NewIgModal implements OnInit {
         map(data => {
             this.isLoading = false;
             this.newGroup = data;
-            this.serviceResponse.success = true;
             this._assets.clearSelectMode.next(true);
+
+            this.closeModal.emit()
+            this.igReloadTriggered.emit()
+            this._toasts.sendToast({
+              id: 'updateGroup',
+              type: 'success',
+              stringHTML: '<p><b>' + group.name + '</b> was updated.</p>',
+              links: []
+            })
           },
           error => {
             console.error(error);
-            this.errorMsg = '<p>Sorry, we weren’t able create update this group. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
-            this.serviceResponse.failure = true;
+
+            this._toasts.sendToast({
+              id: 'updateGroup',
+              type: 'error',
+              stringHTML: '<p>Sorry, we weren’t able to update your group. Try again later or contact <a href="http://support.artstor.org/" target="_blank">support</a>.</p>',
+              links: []
+            })
             this.isLoading = false;
           }
         )).subscribe()

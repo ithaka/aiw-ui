@@ -225,7 +225,7 @@
     },
     "LINKS" : {
       "TRY_AGAIN": "Try again"
-    } 
+    }
   },
   "UPLOAD_IMAGES_MODAL": {
     "TITLE": "Upload Images",
@@ -320,7 +320,8 @@
       "RETURN_TO_RESULTS": "Return",
       "NAV_TO_GROUP": "Go to group",
       "CLOSE": "Close",
-      "SAVE_EDIT": "Create"
+      "SAVE_CREATE": "Create",
+      "SAVE_EDIT": "Save"
     }
   },
   "ADVANCED_SEARCH_MODAL": {

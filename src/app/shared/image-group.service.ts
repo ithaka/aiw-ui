@@ -30,8 +30,15 @@ export class ImageGroupService {
 
   public igDownloadTrigger: EventEmitter<string> = new EventEmitter();
 
+
+  public editGroupObservableSource: BehaviorSubject<boolean>;
+  public editGroupObservable: Observable<boolean>;
+
   constructor(private _router: Router, private http: HttpClient, private _auth: AuthService, private _assets: AssetService ){
     this.baseUrl = this._auth.getUrl();
+    
+    this.editGroupObservableSource = new BehaviorSubject(false)
+    this.editGroupObservable = this.editGroupObservableSource.asObservable()
   }
 
   /**
@@ -98,7 +105,7 @@ export class ImageGroupService {
      *  which was allowing restricted assets to be downloaded, we first ask for each assets' thumbnail, which will ensure
      *  that only assets which the user has access to are returned
      */
-    return this._assets.getAllThumbnails(group.items, group.id)
+    return this._assets.getAllThumbnails({ itemObjs: group.items }, group.id)
     .then((thumbnails) => {
       let imgDownloadStrings: string[] = []
 

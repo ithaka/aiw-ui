@@ -79,10 +79,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     this._igMetaData = metadata
     if (metadata.id){
       this.igDisplay = true
-      // Details Display state for groups with no tags and no description
-      if (!metadata.tags.length && !metadata.description) {
-        this.showIgDescBool = false
-      }
     } else {
       this.igDisplay = false
     }
@@ -148,6 +144,9 @@ export class AssetGrid implements OnInit, OnDestroy {
   // With most pages using Solr, we want to default assuming a max of 5000
   @Input()
   private hasMaxAssetLimit: boolean = true
+
+  @Input()
+  private allowIgUpdate: boolean = false;
 
   // @Output() updateSearchInRes: EventEmitter<boolean> = new EventEmitter();
 
@@ -640,35 +639,11 @@ export class AssetGrid implements OnInit, OnDestroy {
       this.isLoading = true;
 
       let itemObjs: any[] = this.itemIds.slice(0)
-      // Map itemIds array of objects to array of strings for v1 items
-      this.itemIds = this.itemIds.map(item => {
-        return (typeof(item) === 'object') ? item['id'] : item
-      })
 
-      this._assets.getAllThumbnails(this.itemIds)
+      this._assets.getAllThumbnails({ itemObjs }, this.igDisplay ? this._igMetaData.id : null)
         .then( allThumbnails => {
           this.isLoading = false;
-          // Make sure we are only reordering Available assets
-          allThumbnails = allThumbnails.filter(thumbnail => {
-            return thumbnail.status === 'available'
-          })
-
-          // Make sure the fetched thumbnail objects contain the zoom info as well
-          itemObjs = itemObjs.map(itemObj => {
-            let obj = {}
-            for(let thmb of allThumbnails){
-              if(thmb.objectId === itemObj['id']){
-                obj = Object.assign({}, thmb)
-                if(itemObj['zoom']){
-                  obj['zoom'] = itemObj['zoom']
-                }
-                break
-              }
-            }
-            return obj
-          })
-
-          this.allResults = itemObjs
+          this.allResults = allThumbnails
           this.results = this.allResults.slice(0)
         })
         .catch( error => {
@@ -807,7 +782,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private isSelectedAsset(asset: any): number{
     let index: number = -1
     let assetIdProperty =  'artstorid'
-    
+
     // some services return assets with objectId instead of artstorid, so check the first one and use that
     if (this.selectedAssets[0] && !this.selectedAssets[0].hasOwnProperty('artstorid')) {
       assetIdProperty = 'objectId'
@@ -815,7 +790,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     let len = this.selectedAssets.length
     for (let i = 0; i < len; i++){
       if (this.selectedAssets[i][assetIdProperty] === asset[assetIdProperty]){
-        
+
         // Also consider zoom detail for exact match on assets
         let zoomMatched: boolean = true
         if(asset.zoom){
@@ -941,7 +916,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    * This is to make sure we display the details when animation is finished
    */
   public toggleShowIgDesc(noAnimation?: boolean): void {
-    if (!this.showIgDescBool && this.igDisplay && ((this.igMetaData.description && this.igMetaData.description.length > 0) || (this.igMetaData.tags && this.igMetaData.tags.length > 0)) && !this.reorderMode) {
+    if (!this.showIgDescBool && this.igDisplay && !this.reorderMode) {
       this.showIgDescBool = true;
       if (noAnimation) {
         this.animationFinished = true
@@ -961,5 +936,9 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   public encodeTag(tag) {
     return encodeURIComponent(tag);
+  }
+
+  public showEditGroup(): void {
+    this._ig.editGroupObservableSource.next(true)
   }
 }

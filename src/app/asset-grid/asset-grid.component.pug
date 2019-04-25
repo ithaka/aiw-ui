@@ -84,11 +84,11 @@
         pagination([pageObj]="pagination", (goToPage)="goToPage($event)", [right]="true")
 
     .animating-width(*ngIf="igDisplay && !reorderMode", [ngClass]="[ showIgDescBool ? 'col-3' : 'col-2']")
-      .group-details-header(*ngIf="(igMetaData.tags && igMetaData.tags.length > 0) || igMetaData.description", (click)="toggleShowIgDesc()", tabindex="4", (keyup.enter)="toggleShowIgDesc()", [attr.aria-label]="showIgDescBool ? 'This is the Group Details section. Hit the enter key to collapse this section.' : 'This is the Group Details section. Hit the enter key to expand this section.'")
+      .group-details-header(tabindex="4", (click)="toggleShowIgDesc()", (keyup.enter)="toggleShowIgDesc()", [attr.aria-label]="showIgDescBool ? 'This is the Group Details section. Hit the enter key to collapse this section.' : 'This is the Group Details section. Hit the enter key to expand this section.'")
         span Group Details
         i.icon.icon-down([ngClass]="{'collapsed' : showIgDescBool }")
-      .group-details-header.no-details-available(*ngIf="(!igMetaData.tags || igMetaData.tags.length === 0) && !igMetaData.description")
-        span No Group Details
+      //- .group-details-header.no-details-available(*ngIf="(!igMetaData.tags || igMetaData.tags.length === 0) && !igMetaData.description")
+      //-   span No Group Details
 
 
 
@@ -121,7 +121,12 @@
               (keyup.enter)="goToAsset(asset)"
             )
             a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", (click)="selectAsset(asset, $event)", (focus)="showBox($event)", (blur)="hideBox($event)", [routerLink]="editMode ? null : constructNavigationCommands(asset)", tabIndex="-1")
-              ang-thumbnail([thumbnail]="asset", [reorderMode]="reorderMode", [editMode]="editMode", [largeThmbView]="largeThmbView")
+              ang-thumbnail(
+                [thumbnail]="asset", 
+                [reorderMode]="false", 
+                [editMode]="editMode", 
+                [largeThmbView]="largeThmbView"
+              )
             .mobile--hide
               input.check(tabIndex="3", type="checkbox", [checked]="isSelectedAsset(asset) > -1", [ngStyle]="{ 'opacity': isSelectedAsset(asset) > -1 ? '1' : '0' }", (change)="editMode = true; selectAsset(asset);")
             .mobile--show
@@ -139,31 +144,40 @@
             ng-container(*ngFor="let asset of results; let i = index")
               .col-sm-4.col-md-2.col-xl-1.col--reorder.draggable
                 .card.card--asset([ngClass]="{ 'lrgThmb': largeThmbView }")
-                  ang-thumbnail([thumbnail]="asset",
+                  ang-thumbnail(
+                    [thumbnail]="asset",
                     [itemIndex]="i",
                     [arrowReorderMode]="arrowReorderMode",
-                    [reorderMode]="reorderMode",
+                    [reorderMode]="true",
                     [editMode]="editMode",
                     [largeThmbView]="largeThmbView",
                     (click)="arrowReorderMode = false",
                     (keydown)="arrowReorder(i, $event)",
-                    [attr.aria-controls]="reorder-status")
+                    [attr.aria-controls]="reorder-status"
+                  )
             .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
               | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
 
     .group-details.animating-width(*ngIf="igDisplay && showIgDescBool && animationFinished", [ngClass]="[ animationFinished && showIgDescBool ? 'col-3' : 'col-0'  ]")
       .group-details-wrapper([ngClass]="{ 'show' : showIgDescBool }")
         .ig-tags.meta-block(*ngIf="igMetaData.tags && igMetaData.tags.length > 0")
-          .label.pb-2 Tags
-          ul.filter-list.pad-top(#groupTagsList="")
+          label Tags
+          ul.meta-block.filter-list.pad-top(#groupTagsList="")
             li.filter-item(*ngFor="let tag of igMetaData.tags")
               a.font-weight-bold([routerLink]="['/browse', 'groups', 'search']", [queryParams]="{ 'level': 'all', 'tags' : encodeTag(tag), 'page' : '1' }") {{ tag }}
-        .meta-block(*ngIf="igMetaData.description && igMetaData.description.length > 0")
-          .label Description
-        .desc-no-expand.meta-block(*ngIf="!igMetaData.description || igMetaData.description.length <= 0")
-          .label No Description
-        #pageDescription.page__description(*ngIf="igDisplay && igMetaData.description", [innerHTML]="igMetaData.description")
-
+        
+        .ig-tags.meta-block(*ngIf="igMetaData.tags && igMetaData.tags.length === 0")
+          label Tags
+          .meta-block
+            a.edit-group-link(*ngIf="allowIgUpdate", tabindex="4", aria-label="Add tags to this group, clicking this will allow you to make edits to this group", (click)="showEditGroup()", (keyup.enter)="showEditGroup()") + Add tags
+            .no-details(*ngIf="!allowIgUpdate") This group does not have any tags
+          
+        .meta-block
+          label Description
+          #pageDescription.page__description(*ngIf="igDisplay && igMetaData.description", [innerHTML]="igMetaData.description")
+          .desc-no-expand.meta-block(*ngIf="allowIgUpdate && (!igMetaData.description || igMetaData.description.length <= 0)")
+            a.edit-group-link(tabindex="4", aria-label="Add description to this group, clicking this will allow you to make edits to this group", (click)="showEditGroup()", (keyup.enter)="showEditGroup()") + Add description
+          .no-details(*ngIf="!allowIgUpdate && (!igMetaData.description || igMetaData.description.length <= 0)") This group does not have a description
   .row
     div([ngClass]="[ (igDisplay && showIgDescBool) ? 'col-9' : 'col-12']")
       ang-prompt(*ngIf="_auth.isPublicOnly() && searchTerm", style='width:100%; margin-top:36px; margin-bottom:20px;')
