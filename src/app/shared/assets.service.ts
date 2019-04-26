@@ -11,10 +11,12 @@ import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService, GroupService, ToolboxService  } from '../shared'
+// import { AuthService, GroupService, ToolboxService  } from '../shared'
 import { AssetFiltersService } from './../asset-filters/asset-filters.service'
 import { AssetSearchService, SearchResponse } from './asset-search.service'
-import { ImageGroup, Thumbnail } from '.'
+import { ImageGroup, Thumbnail, AuthService } from '.'
+import { GroupService } from './group.service'
+import { ToolboxService } from './toolbox.service'
 import { AppConfig } from 'app/app.service'
 import { APP_CONST } from '../app.constants'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
