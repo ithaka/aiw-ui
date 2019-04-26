@@ -132,9 +132,11 @@ app.use('*', (req, res, next) => {
  */
 app.use('/assets/', express.static(join(DIST_FOLDER, 'browser')))
 app.use('/', express.static(join(DIST_FOLDER, 'browser')))
+app.use(':filename.js', express.static(join(DIST_FOLDER, 'browser')))
 // Pass all other/unspecified routes to the Angular static app
 app.get('*', (req, res) => {
-  res.redirect('/#'+req.url)
+  // res.redirect('/#'+req.url)
+  res.sendFile(join(DIST_FOLDER, 'browser/index.html'))
 })
 
 app.post('*', (req, res) => {
