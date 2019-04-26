@@ -1,19 +1,16 @@
 import { HttpClientModule } from '@angular/common/http'
 import { TestBed, getTestBed, inject, async } from '@angular/core/testing'
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
-import { map, take } from 'rxjs/operators'
-import { Subscription } from 'rxjs'
 
-// import { AuthService } from '../shared'
+// Project Dependencies
 import { CollectionService, InstitutionService } from '../_services'
-import { Pact } from '@pact-foundation/pact';
 
 describe('Collections #pact #collections', () => {
 
   let provider, _collectionService, _institutionService
 
   beforeAll(function (done) {
-    provider = new Pact({ consumer: 'aiw-ui', provider: 'binder-collections', port: 1204 })
+    provider = new PactWeb({ consumer: 'aiw-ui', provider: 'binder-collections', port: 1204 })
     setTimeout(function () { done() }, 2000)
     provider.removeInteractions()
   })
