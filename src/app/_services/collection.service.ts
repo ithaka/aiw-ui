@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http'
 import { map } from 'rxjs/operators'
 
 // Project dependencies
-import { AuthService } from '../shared'
+// import { AuthService } from '../shared/auth.service'
 import { CategoryName } from '../shared/datatypes'
+import { environment } from 'environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,7 @@ import { CategoryName } from '../shared/datatypes'
 export class CollectionService {
 
   constructor(
-    private http: HttpClient,
-    private _auth:  AuthService
+    private http: HttpClient
   ) {}
 
   /**
@@ -27,7 +27,7 @@ export class CollectionService {
     let options = { withCredentials: true };
 
     return this.http
-      .get(this._auth.getUrl() + '/v1/collections/' + colId, options)
+      .get(environment.API_URL + '/api/v1/collections/' + colId, options)
       .toPromise();
   }
 
@@ -39,7 +39,7 @@ export class CollectionService {
     let options = { withCredentials: true };
 
     return this.http
-      .get(this._auth.getUrl() + '/v1/categorydesc/' + catId, options)
+      .get(environment.API_URL + '/api/v1/categorydesc/' + catId, options)
       .toPromise()
   }
 
@@ -48,15 +48,15 @@ export class CollectionService {
     let options = { withCredentials: true }
 
     return this.http
-      .get(this._auth.getHostname() + '/api/v1/collections/103/categorynames', options)
-      .toPromise()
-      .then(res => {
+      .get(environment.API_URL + '/api/v1/collections/103/categorynames', options)
+      .pipe(map(res => {
         if (res && res[0]) {
           return <CategoryName[]>res
         } else {
           return <CategoryName[]>[]
         }
-      })
+      }))
+      .toPromise()
   }
 
   /**
@@ -68,7 +68,7 @@ export class CollectionService {
     let options = { withCredentials: true };
     // Returns all of the collections names
     return this.http
-      .get(this._auth.getUrl() + '/v1/collections/', options).pipe(
+      .get(environment.API_URL + '/api/v1/collections/', options).pipe(
         map(res => {
           if (type) {
             let data = res

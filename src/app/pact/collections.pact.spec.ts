@@ -4,17 +4,18 @@ import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 import { map, take } from 'rxjs/operators'
 import { Subscription } from 'rxjs'
 
-import { AuthService } from '../shared'
+// import { AuthService } from '../shared'
 import { CollectionService, InstitutionService } from '../_services'
+import { Pact } from '@pact-foundation/pact';
 
 describe('Collections #pact #collections', () => {
 
   let provider, _collectionService, _institutionService
 
   beforeAll(function (done) {
-    provider = new PactWeb({ consumer: 'aiw-ui', provider: 'binder-collections', port: 1204 })
+    provider = new Pact({ consumer: 'aiw-ui', provider: 'binder-collections', port: 1204 })
     setTimeout(function () { done() }, 2000)
-      provider.removeInteractions()
+    provider.removeInteractions()
   })
 
   afterAll(function (done) {
@@ -26,13 +27,6 @@ describe('Collections #pact #collections', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule],
       providers: [
-        // provides _auth.getUrl and _auth.getHostname used in getCategoryDescription
-        { provide: AuthService, useValue:
-          {
-            getUrl: () => { return '/api' },
-            getHostname: () => { return '' }
-          }
-        },
         CollectionService,
         InstitutionService
       ],
@@ -253,18 +247,17 @@ describe('Collections #pact #collections', () => {
     it('should return a valid institutions array', (done) => {
 
       _institutionService.getAllInstitutions().subscribe(res => {
-        let actualResKeys = Object.keys(res)
-        let expectedResKeys = mockInstitutionsRespKeys
+          let actualResKeys = Object.keys(res)
+          let expectedResKeys = mockInstitutionsRespKeys
 
-        expect(res).toBeTruthy()
-        expect(actualResKeys).toEqual(expectedResKeys)
-        expect(res).toEqual(mockInstitutionsResp)
+          expect(res).toBeTruthy()
+          expect(actualResKeys).toEqual(expectedResKeys)
+          expect(res).toEqual(mockInstitutionsResp)
+          done()
         },
         err => {
           done.fail(err)
         })
-
-      done()
     })
   })
 
