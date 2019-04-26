@@ -1,18 +1,39 @@
-.modal.fade.show(id="modal", tabindex="-1")
+.modal.fade.show(id="modal", role="dialog")
   .modal-dialog(role="document")
-    .modal-content(*ngIf="!serviceResponse.success")
-      .modal-header
+    .modal-content(
+        tabindex="1"
+      )
+      .modal-header(
+        #modalHeader,
+        tabindex="1",
+        (keydown.tab)="focusElement(firstField, $event)",
+        (keydown.shit.tab)="focusElement(confirmButton, $event)"
+      )
         h4.modal-title(*ngIf="!copyIG && !editIG") {{ 'NEW_GROUP_MODAL.CREATE_TITLE' | translate }}
         h4.modal-title(*ngIf="copyIG") {{ 'NEW_GROUP_MODAL.COPY_TITLE' | translate }}
         h4.modal-title(*ngIf="editIG") {{ 'NEW_GROUP_MODAL.EDIT_TITLE' | translate }}
-        button.close((click)="closeModal.emit()", type="button", aria-label="Close")
+        button.close(
+          #closeIcon,
+          (click)="closeModal.emit()",
+          type="button",
+          aria-label="Close",
+          (keydown.tab)="focusElement(firstField, $event)",
+          (keydown.shift.tab)="focusElement(confirmButton, $event)"
+        )
           span(aria-hidden="true") &times;
       form#newIgForm([formGroup]="newIgForm", (ngSubmit)="igFormSubmit(newIgForm.value)")
         .modal-body
-          label.modal-label(*ngIf="!hasPrivateGroups") {{ 'NEW_GROUP_MODAL.FIRST_GROUP_MSG' | translate }}
+          label.modal-label(*ngIf="!editIG && !copyIG && !hasPrivateGroups") {{ 'NEW_GROUP_MODAL.FIRST_GROUP_MSG' | translate }}
           .form-group
             label.modal-label(for="igTitleInput") {{ 'NEW_GROUP_MODAL.TITLE_FIELD_LABEL' | translate }}&#42;
-            input#igTitleInput.form-control.placeholder-text(type="text", [formControl]="newIgForm.controls['title']", placeholder="Give your group a title...", spellcheck="false", tabindex="0")
+            input#igTitleInput.form-control.placeholder-text(
+              #firstField,
+              type="text",
+              [formControl]="newIgForm.controls['title']",
+              placeholder="Give your group a title...",
+              spellcheck="false",
+              tabindex="0"
+            )
             .has-danger(*ngIf="(submitted && newIgForm.controls['title'].hasError('required')) || (newIgForm.controls['title'].dirty && newIgForm.controls['title'].invalid)" )
               p.form-control-feedback {{ 'NEW_GROUP_MODAL.TITLE_REQUIRED_MSG' | translate }}
           .form-group
@@ -53,11 +74,16 @@
         .modal-footer
           .wrapper
             a.help-link.mr-2(href="http://support.artstor.org/?article=create-and-manage-image-groups", target="_blank") ?
-            .link.modal-footer-link-left(*ngIf="showAddToGroup && hasPrivateGroups", (click)="addToGroup.emit()") {{ 'NEW_GROUP_MODAL.SHOW_ADD_TO_IMAGE_GROUP' | translate }}
+            .link.modal-footer-link-left(*ngIf="!editIG && !copyIG && showAddToGroup && hasPrivateGroups", (click)="addToGroup.emit()") {{ 'NEW_GROUP_MODAL.SHOW_ADD_TO_IMAGE_GROUP' | translate }}
           .wrapper
             button.btn.btn-secondary.mr-2(type="button", (click)="closeModal.emit()") {{ 'NEW_GROUP_MODAL.CONTROLS.CLOSE' | translate }}
-            button.btn.btn-primary(type="submit", [class.loading]="isLoading",
-              [ngClass]="{ 'disabled-btn' : newIgForm.controls['title'].hasError('required') }") {{ 'NEW_GROUP_MODAL.CONTROLS.SAVE_EDIT' | translate }}
+            button.btn.btn-primary(
+              #confirmButton,
+              type="submit",
+              [class.loading]="isLoading",
+              [ngClass]="{ 'disabled-btn' : newIgForm.controls['title'].hasError('required') }",
+              (keydown.tab)="focusElement(closeIcon, $event)"
+            ) {{ ((editIG || copyIG) ? 'NEW_GROUP_MODAL.CONTROLS.SAVE_EDIT' : 'NEW_GROUP_MODAL.CONTROLS.SAVE_CREATE') | translate }}
     .modal-content(*ngIf="serviceResponse.success && !editIG")
       .modal-header
         h5.modal-title Group created

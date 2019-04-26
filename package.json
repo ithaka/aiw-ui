@@ -1,6 +1,6 @@
 {
   "name": "avatar",
-  "version": "2.0.13",
+  "version": "2.1.0",
   "description": "Front End for the Artstor Digital Library",
   "author": "Artstor Team Air",
   "license": "MIT",
@@ -85,7 +85,7 @@
     "@types/hammerjs": "^2.0.36",
     "@types/jasmine": "3.3.0",
     "@types/jasminewd2": "~2.0.5",
-    "@types/node": "~8.9.4",
+    "@types/node": "^11.13.7",
     "@types/protractor": "^4.0.0",
     "@types/selenium-webdriver": "3.0.12",
     "@types/uglify-js": "^3.0.4",
