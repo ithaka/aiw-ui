@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output, ElementRef, Inject, PLATFORM_ID, ViewChild } from '@angular/core'
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, ElementRef, Inject, PLATFORM_ID, ViewChild, AfterViewInit, asNativeElements } from '@angular/core'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
@@ -16,7 +16,7 @@ import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/
   selector: 'ang-new-ig-modal',
   templateUrl: 'new-ig-modal.component.pug'
 })
-export class NewIgModal implements OnInit {
+export class NewIgModal implements OnInit, AfterViewInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter();
   @Output() addToGroup: EventEmitter<any> = new EventEmitter();
   @Output() igReloadTriggered: EventEmitter<any> = new EventEmitter();
@@ -32,35 +32,38 @@ export class NewIgModal implements OnInit {
   public hasPrivateGroups: boolean = false // If a user has at least one image group
 
   /** Switch for running logic to copy image group */
-  @Input() private copyIG: boolean = false;
+  @Input() public copyIG: boolean = false;
   /** The image group object */
   @Input() private ig: ImageGroup = <ImageGroup>{};
   /** Controls the user seeing the toggle to add images to group or create a new group */
-  @Input() private showAddToGroup: boolean = true
+  @Input() public showAddToGroup: boolean = true
 
-  @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef;
+  @ViewChild("modalHeader", {read: ElementRef }) modalRef: ElementRef
+  @ViewChild("firstField", { read: ElementRef }) firstFieldRef: ElementRef
+  @ViewChild("closeIcon", { read: ElementRef }) closeIconRef: ElementRef
+  @ViewChild("confirmButton", { read: ElementRef }) cancelButtonRef: ElementRef
 
   /** The form */
-  private newIgForm: FormGroup;
+  public newIgForm: FormGroup;
   /** Gives artstor institution users the ability to curate image public image groups */
-  private isArtstorUser: boolean = false;
+  public isArtstorUser: boolean = false;
   // We need to seed the medium editor with an empty div to fix line return issues in Firefox!
-  private igDescription: string = '';
+  public igDescription: string = '';
   /** The list of assets which are currently selected from the asset grid */
   @Input() private selectedAssets: any[] = [];
 
   /** List of subscriptions to add to and then destroy ngOnDestroy */
   private subscriptions: Subscription[] = [];
   /** Controls display of loading symbol(s) */
-  private isLoading: boolean = false;
+  public isLoading: boolean = false;
   /** Set to true once the form is submitted */
-  private submitted: boolean = false;
+  public submitted: boolean = false;
   /** The new group created after it comes back from the service */
   private newGroup: ImageGroup;
 
   private util: IgFormUtil = new IgFormUtil()
 
-  private tagSuggestions: string[] = []
+  public tagSuggestions: string[] = []
 
   // There must be a more Angular way to handle this debounce
   private tagSuggestTerm: string = ''
@@ -111,17 +114,8 @@ export class NewIgModal implements OnInit {
           }
         )).subscribe()
     }
-
-    // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    // let htmlelement: HTMLElement = this.el.nativeElement
-    // htmlelement.focus()
-    if (this.modalElement && this.modalElement.nativeElement){
-      this.modalElement.nativeElement.focus()
-    }
-
     /** Set isArtstorUser to true if the user's institution is 1000. This will let them make global image groups */
     this.isArtstorUser = this._auth.getUser().institutionId == 1000;
-
     /**
      * Set the field values, depending on the image group that is input
      *  only set the field values if you are copying or editing - otherwise, you're trying to make a new image group
@@ -147,8 +141,30 @@ export class NewIgModal implements OnInit {
     }
   }
 
+  ngAfterViewInit() {
+    // Set focus to the modal to make the links in the modal first thing to tab for accessibility
+    this.focusElement(this.modalRef)
+  }
+
   ngOnDestroy() {
       this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+  }
+
+  /**
+   * Force focus upon a key event
+   * @param event keydown/click event
+   * @param element element to focus
+   */
+  public focusElement(element: { nativeElement?: HTMLElement, focus?: Function }, event?: Event) {
+    if (event) {
+      event.stopPropagation()
+      event.preventDefault()
+    }
+    if (element.nativeElement) {
+      element.nativeElement.focus()
+    } else if (element.focus) {
+      element.focus()
+    }
   }
 
   private refreshIG(): void{
@@ -156,7 +172,7 @@ export class NewIgModal implements OnInit {
     this.closeModal.emit()
   }
 
-  private getTagSuggestions(event: any): void  {
+  public getTagSuggestions(event: any): void  {
     this.tagSuggestTerm = event.target.value
 
     if (!this.tagDebouncing) {
@@ -191,7 +207,7 @@ export class NewIgModal implements OnInit {
    * Called on form submission
    *  contains almost all of the logic for creating/editing the image group
    */
-  private igFormSubmit(formValue: IgFormValue): void {
+  public igFormSubmit(formValue: IgFormValue): void {
 
     this.submitted = true;
     // avoid making the service calls, but still trigger error display
@@ -226,13 +242,26 @@ export class NewIgModal implements OnInit {
         map(data => {
             this.isLoading = false;
             this.newGroup = data;
-            this.serviceResponse.success = true;
             this._assets.clearSelectMode.next(true);
+
+            this.closeModal.emit()
+            this.igReloadTriggered.emit()
+            this._toasts.sendToast({
+              id: 'updateGroup',
+              type: 'success',
+              stringHTML: '<p><b>' + group.name + '</b> was updated.</p>',
+              links: []
+            })
           },
           error => {
             console.error(error);
-            this.errorMsg = '<p>Sorry, we weren’t able create update this group. Try again later or contact <a href="http://support.artstor.org/">support</a>.</p>'
-            this.serviceResponse.failure = true;
+
+            this._toasts.sendToast({
+              id: 'updateGroup',
+              type: 'error',
+              stringHTML: '<p>Sorry, we weren’t able to update your group. Try again later or contact <a href="http://support.artstor.org/" target="_blank">support</a>.</p>',
+              links: []
+            })
             this.isLoading = false;
           }
         )).subscribe()

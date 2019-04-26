@@ -140,16 +140,25 @@ export class PptModalComponent implements OnInit, AfterViewInit {
     return this._assets.getAllThumbnails({ itemObjs: group.items }, group.id)
     .then((thumbnails) => {
       let imgDownloadStrings: string[] = []
-      thumbnails.forEach((thumbnail, index) => {
-        let imgStr: string = [(index + 1), thumbnail.objectId, '1024x1024'].join(':')
-        thumbnail.status == 'available' && imgDownloadStrings.push(imgStr)
+      // Set accessible Ids array from the response of getAllThumbnails
+      // This is for easier search when iterate through the group.items
+      let availableIds: string[] = []
+      thumbnails.forEach((thumbnail) => {
+        thumbnail.status === 'available' && availableIds.push(thumbnail.objectId)
       })
-
+      // Loop through and build image strings
+      for (let i = 0; i < group.items.length; i++) {
+        let itemId = group.items[i].id
+        if (availableIds.includes(itemId)) {
+          let imgStr: string = [i, itemId, '1024x1024'].join(':')
+          imgDownloadStrings.push(imgStr)
+        } 
+      }
+      // Set up params for export endpoint
       data = {
           igName: group.name,
           images: imgDownloadStrings.join(',')
       }
-
       return data
     })
     .then((data) => {

@@ -1,0 +1,11 @@
+@import '../../sass/core/variables';
+.main-content {
+    min-height: 130px;
+
+    .error-msg {
+        font-size: 16px;
+        font-weight: 600;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        color: $red;
+    }
+}

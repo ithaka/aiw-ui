@@ -30,8 +30,15 @@ export class ImageGroupService {
 
   public igDownloadTrigger: EventEmitter<string> = new EventEmitter();
 
+
+  public editGroupObservableSource: BehaviorSubject<boolean>;
+  public editGroupObservable: Observable<boolean>;
+
   constructor(private _router: Router, private http: HttpClient, private _auth: AuthService, private _assets: AssetService ){
     this.baseUrl = this._auth.getUrl();
+    
+    this.editGroupObservableSource = new BehaviorSubject(false)
+    this.editGroupObservable = this.editGroupObservableSource.asObservable()
   }
 
   /**
