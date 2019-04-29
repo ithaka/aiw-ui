@@ -1,10 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-// import { Observable } from 'rxjs';
-// import { Angulartics2 } from 'angulartics2';
-
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, AfterViewInit } from '@angular/core'
 import { DomUtilityService } from '../../shared';
-// import { SlidesService } from './../../_services'
-// import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/public_api';
 
 @Component({
   selector: 'ang-loading-state',
@@ -16,8 +11,9 @@ export class LoadingStateComponent implements OnInit, AfterViewInit {
   @Input()
   public options: LoadingStateOptions
   @Output()
-  public closeModal: EventEmitter<any> = new EventEmitter();
-
+  public closeModal: EventEmitter<any> = new EventEmitter()
+  @Output()
+  public triggerRetry: EventEmitter<any> = new EventEmitter()
 
   constructor(
     private _dom: DomUtilityService
@@ -40,10 +36,14 @@ export class LoadingStateComponent implements OnInit, AfterViewInit {
 
   public close(): void {
     let params: any = {}
-    if(this.options.state === LoadingState.loading) {
+    if (this.options.state === LoadingState.loading) {
       params['cancelExport'] = true
     }
     this.closeModal.emit(params)
+  }
+
+  public tryAgain(): void {
+    this.triggerRetry.emit(this.options.exportType)
   }
 
 }
@@ -52,7 +52,7 @@ export class LoadingStateComponent implements OnInit, AfterViewInit {
 export interface LoadingStateOptions {
   exportType: string,
   state: LoadingState,
-  progress?: number // percentage value 
+  progress?: number // percentage value
   errorType?: string
 }
 
