@@ -74,6 +74,8 @@ export class NavMenu implements OnInit, OnDestroy {
   public toastType: string = ''
   public toastHTML: string = ''
 
+  public hasPrivateGroups: boolean = true
+
   // TypeScript public modifiers
   constructor(
     public _appConfig: AppConfig,
@@ -138,8 +140,15 @@ export class NavMenu implements OnInit, OnDestroy {
             this.showImageGroupModal = true
             this._ig.editGroupObservableSource.next(false)
           }
+        })).subscribe(),
+
+      this._group.hasPrivateGroup.pipe(
+        map((res: any) => {
+          this.hasPrivateGroups = res;
         })).subscribe()
     )
+
+    this._group.hasPrivateGroups()
 
   } // onInit
 

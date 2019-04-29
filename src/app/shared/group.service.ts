@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { BehaviorSubject, Observable, Subject, pipe } from 'rxjs'
 import { catchError } from 'rxjs/operators'
 import { GroupList, ImageZoomParams } from './datatypes'
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 
 // Project Dependencies
 import { AuthService } from '.'
@@ -15,7 +16,12 @@ export class GroupService {
     private groupV1: string
     private options: {}
 
+    public hasPrivateGroup: Observable<any>
+    private hasPrivateGroupValue: boolean = false;
+    private hasPrivateGroupSource: BehaviorSubject<boolean> = new BehaviorSubject(this.hasPrivateGroupValue);
+
     constructor(
+        private _storage: ArtstorStorageService,
         private http: HttpClient
     ) {
         this.groupUrl = environment.API_URL + '/api/v2/group'
@@ -25,6 +31,7 @@ export class GroupService {
          */
         this.groupV1 = environment.API_URL + '/api/v1/group'
         this.options = { withCredentials: true }
+        this.hasPrivateGroup = this.hasPrivateGroupSource.asObservable()
     }
 
     /**
@@ -138,8 +145,28 @@ export class GroupService {
     /**
      * Check if a user has at least one Private Group
      */
-    public hasPrivateGroups(): Observable<any> {
-      return this.http.get(this.groupUrl + '?size=1&level=private', this.options)
+    public hasPrivateGroups(): void {
+
+        let hasPrivate = this._storage.getLocal('hasPrivateGroups')
+        if (hasPrivate)  {
+            this.hasPrivateGroupSource.next(true) 
+        }
+        else {
+            this.http.get(this.groupUrl + '?size=1&level=private', this.options)
+            .toPromise()
+            .then( res => {
+                if (res['total'] > 0) {
+                    this._storage.setLocal('hasPrivateGroups', true)
+                    this.hasPrivateGroupSource.next(true)
+                } else {
+                    this.hasPrivateGroupSource.next(false)
+                }
+            })
+            .catch( error => {
+                console.error( error )
+            })
+              
+        }
     }
 
      /**
