@@ -132,7 +132,12 @@ app.use('*', (req, res, next) => {
  */
 app.use('/assets/', express.static(join(DIST_FOLDER, 'browser')))
 app.use('/', express.static(join(DIST_FOLDER, 'browser')))
+// Specifically allow file types that live in the root of /dist/browser
 app.use(':filename.js', express.static(join(DIST_FOLDER, 'browser')))
+app.use(':filename.html', express.static(join(DIST_FOLDER, 'browser')))
+app.use(':filename.txt', express.static(join(DIST_FOLDER, 'browser')))
+app.use(':filename.xml', express.static(join(DIST_FOLDER, 'browser')))
+app.use(':filename.css', express.static(join(DIST_FOLDER, 'browser')))
 // Pass all other/unspecified routes to the Angular static app
 app.get('*', (req, res) => {
   // res.redirect('/#'+req.url)
