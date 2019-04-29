@@ -146,12 +146,14 @@ export class GroupService {
      * Check if a user has at least one Private Group
      */
     public hasPrivateGroups(): void {
-
-        let hasPrivate = this._storage.getLocal('hasPrivateGroups')
+        let cachedUser = this._storage.getLocal('user')
+        let hasPrivate = cachedUser.isLoggedIn && this._storage.getLocal('hasPrivateGroups')
         if (hasPrivate)  {
             this.hasPrivateGroupSource.next(true) 
         }
-        else {
+        else if (!cachedUser.isLoggedIn) {
+            this.hasPrivateGroupSource.next(false) 
+        } else {
             this.http.get(this.groupUrl + '?size=1&level=private', this.options)
             .toPromise()
             .then( res => {

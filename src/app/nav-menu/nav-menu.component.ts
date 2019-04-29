@@ -141,7 +141,6 @@ export class NavMenu implements OnInit, OnDestroy {
             this._ig.editGroupObservableSource.next(false)
           }
         })).subscribe(),
-
       this._group.hasPrivateGroup.pipe(
         map((res: any) => {
           this.hasPrivateGroups = res;
