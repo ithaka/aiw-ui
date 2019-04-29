@@ -177,6 +177,8 @@ export class AssetPage implements OnInit, OnDestroy {
     // Flag for server vs client rendering
     public isBrowser: boolean = true
 
+    private hasPrivateGroups: boolean = true
+
     constructor(
         public _appConfig: AppConfig,
         private _assets: AssetService,
@@ -314,6 +316,10 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // sets up subscription to allResults, which is the service providing thumbnails
         this.subscriptions.push(
+            this._group.hasPrivateGroup.pipe(
+                map((res: any) => {
+                  this.hasPrivateGroups = res;
+                })).subscribe(),
             this._auth.currentUser.subscribe((user) => {
                 this.user = user
                 // userSessionFresh: Do not attempt to load asset until we know user object is fresh
@@ -419,6 +425,8 @@ export class AssetPage implements OnInit, OnDestroy {
             bodyText: 'Zoom in on any image and add the detail to a group to refer back to later.',
             learnMoreURL: 'https://support.artstor.org/?article=zooming-image-details'
         }
+
+        this._group.hasPrivateGroups()
     } // OnInit
 
     ngOnDestroy() {
@@ -838,8 +846,11 @@ export class AssetPage implements OnInit, OnDestroy {
                 delete this.assets[0]['zoom']
             }
 
-            this.showAddModal = true
-
+            if (this.hasPrivateGroups) {
+                this.showAddModal = true
+            } else {
+                this.showCreateGroupModal = true
+            }            
         } else {
           this.showLoginModal = true;
         }
