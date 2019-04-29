@@ -22,7 +22,7 @@
             // Active on Image Group Page
             button.dropdown-item((click)="selectAllInAssetGrid()", [disabled]="!allowSelectAll || !user.isLoggedIn", tabindex="1") {{ 'NAV_MENU.ORGANIZE.SELECT_ALL' | translate }}
             button#btnSaveToNewGroup.dropdown-item([disabled]="selectedAssets.length < 1 || !user.isLoggedIn", (click)="copyIG = false; editIG = false; showImageGroupModal = true;", tabindex="1") {{ 'NAV_MENU.ORGANIZE.NEW_GROUP' | translate }}
-            button#btnSaveToExistingGroup.dropdown-item([disabled]="selectedAssets.length < 1 || !user.isLoggedIn || !hasPrivateGroups", (click)="showAddToGroupModal = true;", tabindex="1") {{ 'NAV_MENU.ORGANIZE.EXISTING_GROUP' | translate }}
+            button#btnSaveToExistingGroup.dropdown-item([disabled]="(selectedAssets.length < 1 || !user.isLoggedIn) && !hasPrivateGroups", (click)="showAddToGroupModal = true;", tabindex="1") {{ 'NAV_MENU.ORGANIZE.EXISTING_GROUP' | translate }}
             button#btnDeleteFromGroup.dropdown-item(*ngIf="params['igId']", [disabled]="selectedAssets.length < 1 || !allowIgUpdate", (click)="showConfirmationModal = true", tabindex="1") {{ 'NAV_MENU.ORGANIZE.DELETE_SELECTIONS' | translate }}
             button#btnDeselectImages.dropdown-item([disabled]="selectedAssets.length < 1 || !user.isLoggedIn", (click)="_assets.setSelectedAssets([])", tabindex="1") {{ 'NAV_MENU.ORGANIZE.DESELECT' | translate }}
             .dropdown-divider
