@@ -78,12 +78,13 @@ describe('Collections #pact #collections', () => {
           .then(res => {
             expect(res).toEqual(mockCategoryDescResp)
             expect(res.name.length).toBeGreaterThan(0)
+            done()
           },
           err => {
             done.fail(err)
           })
 
-        done()
+
       })
   })
 
@@ -130,17 +131,19 @@ describe('Collections #pact #collections', () => {
       _collectionService.getCategoryNames()
         .then(res => {
 
-          let actualResKeys = Object.keys(res)
+          let actualResKeys = Object.keys(res[0])
           let expectedResKeys = mockCategoryNamesRespKeys
 
           expect(res).toBeTruthy()
+          expect(actualResKeys).toEqual(mockCategoryNamesRespKeys)
+          done()
 
         },
           err => {
             done.fail(err)
           })
 
-      done()
+
     })
   })
 
@@ -194,12 +197,13 @@ describe('Collections #pact #collections', () => {
           expect(res).toBeTruthy()
           expect(actualResKeys).toEqual(expectedResKeys)
           expect(res.bigimageurl.length).toBeGreaterThan(0)
+          done()
         },
         err => {
           done.fail(err)
         })
 
-      done()
+
     })
   })
 
@@ -274,10 +278,10 @@ const mockCategoryDescResp = {
 
 // Category Names - api/v1/collections/103/categorynames
 const mockCategoryNamesResp = [
-  { "categoryid": 1031896055, "categoryname": "Historic American Sheet Music Covers (Minneapolis College of Art and Design)" },
-  { "categoryid": 1034136270, "categoryname": "Historic Illustrations of Art & Architecture (Minneapolis College of Art and Design)" },
-  { "categoryid": 1034458025, "categoryname": "Historic Campus Architecture Collection (HCAP) (Council of Independent Colleges)" },
-  { "categoryid": 1034347075, "categoryname": "Alexander Adducci: Historical Scenic Design" }
+  { categoryid: 1031896055, categoryname: "Historic American Sheet Music Covers (Minneapolis College of Art and Design)" },
+  { categoryid: 1034136270, categoryname: "Historic Illustrations of Art & Architecture (Minneapolis College of Art and Design)" },
+  { categoryid: 1034458025, categoryname: "Historic Campus Architecture Collection (HCAP) (Council of Independent Colleges)" },
+  { categoryid: 1034347075, categoryname: "Alexander Adducci: Historical Scenic Design" }
 ]
 
 const mockCategoryNamesRespKeys = ['categoryid', 'categoryname']

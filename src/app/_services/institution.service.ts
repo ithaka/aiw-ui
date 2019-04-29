@@ -25,7 +25,7 @@ export class InstitutionService {
     } else {
       this._storage.setSession('allInstitutions', 'undefined')
       return this.http.get(
-        environment.API_URL + '/v1/collections/institutions?_method=allinstitutions',
+        environment.API_URL + '/api/v1/collections/institutions?_method=allinstitutions',
         { withCredentials: true }
       )
     }
@@ -34,7 +34,7 @@ export class InstitutionService {
   // Shared Shelf institutions list
   public getSSInstitutions(): Observable<any> {
     return this.http.get(
-      environment.API_URL + '/v1/collections/institutions?_method=allssinstitutions',
+      environment.API_URL + '/api/v1/collections/institutions?_method=allssinstitutions',
       { withCredentials: true }
     )
   }
@@ -43,7 +43,7 @@ export class InstitutionService {
   public getDonatingInstitutions(): Observable<any> {
     // Before we subscribe available filter, make sure we get the list of institution id-name map
     return this.http.get(
-      environment.API_URL + '/v1/collections/institutions?_method=alldonatinginstitutions',
+      environment.API_URL + '/api/v1/collections/institutions?_method=alldonatinginstitutions',
       { withCredentials: true }
     )
   }

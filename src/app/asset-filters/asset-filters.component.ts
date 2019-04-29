@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs'
 import { map, take, filter } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
-import { AuthService, FlagService, AssetService } from 'app/shared'
+import { AuthService, FlagService, AssetService } from '../shared'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { InstitutionService } from '../_services'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
