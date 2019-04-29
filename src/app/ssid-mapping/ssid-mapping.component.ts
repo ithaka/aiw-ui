@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Router, ActivatedRoute, UrlSegment } from '@angular/router'
 import { Subscription }   from 'rxjs'
-import { map } from 'rxjs/operators'
+import { map, take } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetSearchService } from './../shared'
+import { AssetSearchService, AuthService } from './../shared'
 import { MetadataService } from './../_services'
 
 @Component({
@@ -26,25 +26,27 @@ export class SsidMapping implements OnInit {
     private _router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
+    private _auth: AuthService
   ) {}
 
   ngOnInit() {
     // Subscribe to ID in params
     this.subscriptions.push(
-      this.route.params.pipe(
-        map(routeParams => {
-        this.ssid = routeParams['ssid']
+      this._auth.getUserInfo().pipe(take(1)).subscribe(user => {
         if(this.ssid) {
           this.loading = true
           this.searchSsid()
         }
+      }),
+      this.route.params.pipe(
+        map(routeParams => {
+        this.ssid = routeParams['ssid']
     })).subscribe()
     )
   }
 
   private searchSsid(): void {
     this._search.getAssetById(this.ssid, true).subscribe( (res) => {
-      console.log(res, 'this is result')
       if(res.artstorid) {
         this.loading = false
         this._router.navigate(['/asset', res.artstorid])
