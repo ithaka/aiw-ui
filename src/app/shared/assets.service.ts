@@ -5,13 +5,13 @@
 import { Injectable, OnDestroy, OnInit, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
-import { Observable, BehaviorSubject, Subject } from 'rxjs'
-
-import { Subscription }   from 'rxjs'
+import { Observable, BehaviorSubject, Subject, Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService, GroupService, ToolboxService  } from '../shared'
+import { AuthService } from './auth.service'
+import { GroupService } from './group.service'
+import { ToolboxService } from './toolbox.service'
 import { AssetFiltersService } from './../asset-filters/asset-filters.service'
 import { AssetSearchService, SearchResponse } from './asset-search.service'
 import { ImageGroup, Thumbnail } from '.'
@@ -843,8 +843,8 @@ export class AssetService {
     /**
      * Build full group thumbnail array
      * - Maps item objects to their appropriate thumbnail data
-     * @param items 
-     * @param thumbnails 
+     * @param items
+     * @param thumbnails
      */
     private mapThumbnailsToItems(items: any[], thumbnails: any[]): any[] {
         return items.reduce((newItems, item) => {
