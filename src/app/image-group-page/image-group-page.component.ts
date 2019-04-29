@@ -368,7 +368,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     let downloadLink: string = ''
     this._ig.getDownloadLink(this.ig)
       .then( data => {
-        if (data.path) {
+        if (data.path && this.showExportLoadingState) {
           downloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/')
           clearInterval(interval)
 
@@ -405,7 +405,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     let zipDownloadLink: string = ''
     this._ig.getDownloadLink(this.ig, true)
       .then( data => {
-        if (data.path) {
+        if (data.path && this.showExportLoadingState) {
           zipDownloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/')
           clearInterval(interval)
 
