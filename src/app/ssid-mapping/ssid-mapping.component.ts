@@ -17,6 +17,7 @@ import { MetadataService } from './../_services'
 
 export class SsidMapping implements OnInit {
   private ssid: string
+  private user: any
   private subscriptions: Subscription[] = []
   public errorMsg: string = ''
   public loading: boolean = false
@@ -33,28 +34,30 @@ export class SsidMapping implements OnInit {
 
   ngOnInit() {
     this.subscriptions.push(
+      // Subscribe to ssid in params
+      this.route.params.pipe(
+        map(routeParams => {
+        this.ssid = routeParams['ssid']
+      })).subscribe(),
       // Subscribe User object updates
       this._auth.currentUser.subscribe(
         (userObj) => {
-          if(userObj.isLoggedIn) {
+          this.user = userObj
+          if(this._auth.userSessionFresh) {
             if(this.ssid) {
               this.loading = true
               this.searchSsid()
+            } else {
+              this._router.navigate(['/not-found']);
             }
           } else {
-            this._auth.store('stashedRoute', this.location.path(false));
-            this._router.navigate(['/login']);
+            this.loading = true
           }
         },
         (err) => {
           console.error(err)
         }
-      ),
-      // Subscribe to ssid in params
-      this.route.params.pipe(
-        map(routeParams => {
-        this.ssid = routeParams['ssid']
-    })).subscribe()
+      )
     )
   }
 
@@ -63,6 +66,14 @@ export class SsidMapping implements OnInit {
       if(res.artstorid) {
         this.loading = false
         this._router.navigate(['/asset', res.artstorid])
+      } else if (!this.user.isLoggedIn) {
+        // If user is not logged in, they may not have access
+        this._auth.store('stashedRoute', this.location.path(false));
+        this._router.navigate(['/login']);
+      } else {
+        // If user is logged in, and asset not found, assume there was an error/bad id
+        this.loading = false
+        this.errorMsg = 'Unable to match SSID'
       }
     },
     (error)=> {
