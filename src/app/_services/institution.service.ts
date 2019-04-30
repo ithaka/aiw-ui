@@ -3,15 +3,15 @@ import { Subject, from } from 'rxjs'
 import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 
-import { AuthService } from '../shared/auth.service'
+// Project Dependencies
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
+import { environment } from 'environments/environment';
 
 @Injectable()
-export class InstitutionsService {
+export class InstitutionService {
 
   constructor(
     private http: HttpClient,
-    private _auth: AuthService,
     private _storage: ArtstorStorageService
   ) {
   }
@@ -25,7 +25,7 @@ export class InstitutionsService {
     } else {
       this._storage.setSession('allInstitutions', 'undefined')
       return this.http.get(
-        this._auth.getUrl() + '/v1/collections/institutions?_method=allinstitutions',
+        environment.API_URL + '/api/v1/collections/institutions?_method=allinstitutions',
         { withCredentials: true }
       )
     }
@@ -34,7 +34,7 @@ export class InstitutionsService {
   // Shared Shelf institutions list
   public getSSInstitutions(): Observable<any> {
     return this.http.get(
-      this._auth.getUrl() + '/v1/collections/institutions?_method=allssinstitutions',
+      environment.API_URL + '/api/v1/collections/institutions?_method=allssinstitutions',
       { withCredentials: true }
     )
   }
@@ -43,7 +43,7 @@ export class InstitutionsService {
   public getDonatingInstitutions(): Observable<any> {
     // Before we subscribe available filter, make sure we get the list of institution id-name map
     return this.http.get(
-      this._auth.getUrl() + '/v1/collections/institutions?_method=alldonatinginstitutions',
+      environment.API_URL + '/api/v1/collections/institutions?_method=alldonatinginstitutions',
       { withCredentials: true }
     )
   }

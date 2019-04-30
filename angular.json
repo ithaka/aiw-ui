@@ -161,14 +161,6 @@
             "project": "projects/artstor-storage/ng-package.json"
           }
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/artstor-storage/src/test.ts",
-            "tsConfig": "projects/artstor-storage/tsconfig.spec.json",
-            "karmaConfig": "projects/artstor-storage/karma.conf.js"
-          }
-        },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {

@@ -140,7 +140,7 @@ describe('Group Calls #pact #group', () => {
           uponReceiving: 'a request to create a new image group',
           withRequest: {
             method: 'POST',
-            path: '/api/v1/group',
+            path: '/api/v2/group',
             headers: { 'Content-Type': Matchers.somethingLike('application/json') }
           },
           willRespondWith: {
@@ -180,7 +180,7 @@ describe('Group Calls #pact #group', () => {
           uponReceiving: 'a request for all private groups',
           withRequest: {
             method: 'GET',
-            path: '/api/v1/group',
+            path: '/api/v2/group',
             query: 'size=48&level=private&from=0&sort=alpha&order=asc'
           },
           willRespondWith: {
@@ -238,14 +238,14 @@ describe('Group Calls #pact #group', () => {
     /**
      * Mock and test a group/id enpoint (a single group)
      */
-    describe('GET /api/v1/group/{id}', () => {
+    describe('GET /api/v2/group/{id}', () => {
       beforeAll((done) => {
 
         provider.addInteraction({
           uponReceiving: 'a request for an individual image group',
           withRequest: {
             method: 'GET',
-            path: '/api/v1/group/f907383d-4412-4875-b7bc-344fda158d40',
+            path: '/api/v2/group/f907383d-4412-4875-b7bc-344fda158d40',
           },
           willRespondWith: {
             status: 200,
