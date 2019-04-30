@@ -9,6 +9,7 @@ import { SearchQueryUtil } from './search-query'
 import { AssetFiltersService } from './../../asset-filters/asset-filters.service'
 import { AuthService, AssetService, AssetSearchService, DomUtilityService } from 'app/shared'
 import { AppConfig } from '../../app.service'
+import { CollectionService } from '../../_services'
 
 @Component({
   selector: 'ang-search-modal',
@@ -94,7 +95,8 @@ export class SearchModal implements OnInit, AfterViewInit {
         private _auth: AuthService,
         // Solr Search service
         private _assetFilters: AssetFiltersService,
-        private _dom: DomUtilityService
+        private _dom: DomUtilityService,
+        private _collectionService: CollectionService
       ) {
 
     // Setup two query fields
@@ -489,7 +491,7 @@ export class SearchModal implements OnInit, AfterViewInit {
 
     // Get institutional collections
     this.subscriptions.push(
-      this._assets.getCollectionsList('institution').pipe(
+      this._collectionService.getCollectionsList('institution').pipe(
         map(data => {
             this.colTree.push({
               id: 'allSS',
