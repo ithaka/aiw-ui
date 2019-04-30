@@ -281,7 +281,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           let downloadLink, zipDownloadLink = ''
           // If user has agreed, we should trigger download directly
           switch (exportType) {
-            case 'PPT': {
+            case 'ppt': {
               // Perform PPT download action
               this.getPPT()
               break
@@ -295,7 +295,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
               }
               break
             }
-            case 'ZIP': {
+            case 'zip': {
               // Perform ZIP download action
               this.getZIP()
               break
@@ -326,7 +326,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     this.showTermsConditions = false
 
     switch (event) {
-      case 'PPT': {
+      case 'ppt': {
         // Perform PPT download action
         this.getPPT()
         break
@@ -340,7 +340,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         }
         break
       }
-      case 'ZIP': {
+      case 'zip': {
         // Perform ZIP download action
         this.getZIP()
         break
@@ -353,7 +353,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   private getPPT(): void{
     this.exportLoadingStateopts = {
-      exportType: 'PPT',
+      exportType: 'ppt',
       state: LoadingState.loading,
       progress: 0
     }
@@ -390,7 +390,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   private getZIP(): void{
     this.exportLoadingStateopts = {
-      exportType: 'ZIP',
+      exportType: 'zip',
       state: LoadingState.loading,
       progress: 0
     }
