@@ -23,7 +23,7 @@
           span(aria-hidden="true") &times;
       form#newIgForm([formGroup]="newIgForm", (ngSubmit)="igFormSubmit(newIgForm.value)")
         .modal-body
-          label.modal-label(*ngIf="!editIG && !copyIG && !hasPrivateGroups") {{ 'NEW_GROUP_MODAL.FIRST_GROUP_MSG' | translate }}
+          label.modal-label.font-italic(*ngIf="!editIG && !copyIG && !hasPrivateGroups") {{ 'NEW_GROUP_MODAL.FIRST_GROUP_MSG' | translate }}
           .form-group
             label.modal-label(for="igTitleInput") {{ 'NEW_GROUP_MODAL.TITLE_FIELD_LABEL' | translate }}&#42;
             input#igTitleInput.form-control.placeholder-text(

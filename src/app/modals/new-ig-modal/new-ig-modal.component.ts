@@ -95,25 +95,12 @@ export class NewIgModal implements OnInit, AfterViewInit {
 
   ngOnInit() {
     // Does user have any private groups yet?
-    // Check local storage first, otherwise call group service
-    let hasPrivate = this._storage.getLocal('hasPrivateGroups')
-    if (hasPrivate)  {
-      this.hasPrivateGroups = true
-    }
-    else {
-      this._group.hasPrivateGroups().pipe(
-        take(1),
-        map(res => {
-          if (res['total'] > 0) {
-            this.hasPrivateGroups = true
-            this._storage.setLocal('hasPrivateGroups', true)
-          }
-        },
-          (err) => {
-            console.error(err)
-          }
-        )).subscribe()
-    }
+    this.subscriptions.push(
+      this._group.hasPrivateGroup.pipe(
+        map((res: any) => {
+          this.hasPrivateGroups = res;
+        })).subscribe()
+    )
     /** Set isArtstorUser to true if the user's institution is 1000. This will let them make global image groups */
     this.isArtstorUser = this._auth.getUser().institutionId == 1000;
     /**
@@ -139,6 +126,8 @@ export class NewIgModal implements OnInit, AfterViewInit {
         )).subscribe()
       )
     }
+
+    this._group.hasPrivateGroups()
   }
 
   ngAfterViewInit() {
