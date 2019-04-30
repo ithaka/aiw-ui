@@ -30,7 +30,7 @@ export class MetadataService {
             switch (assetData.object_type_id) {
             case 12:
             case 24:
-                return this.getFpxInfo(assetData.object_id)
+                return this.getFpxInfo(assetData.object_id, groupId)
                 .pipe(map((res) => {
                     assetData.fpxInfo = res
                     return assetData
@@ -162,8 +162,8 @@ export class MetadataService {
        * @param assetId The artstor id for the relevant asset
        * @param objectTypeId The number corresponding to the asset's type - a map to English names can be found in the Asset class
        */
-      private getFpxInfo(assetId: string): Observable<ImageFPXResponse> {
-        let requestUrl = this._auth.getUrl() + '/imagefpx/' + assetId + '/24'
+      private getFpxInfo(assetId: string, groupId?: string): Observable<ImageFPXResponse> {
+        let requestUrl = groupId ? this._auth.getUrl() + '/imagefpx/' + assetId + '/24?groupid=' + groupId : this._auth.getUrl() + '/imagefpx/' + assetId + '/24'
         let headers: HttpHeaders = new HttpHeaders().set('Content-Type', 'application/json')
         return this._http
             .get<ImageFPXResponse>(requestUrl, { headers: this._auth.getHeaders(), withCredentials: true })
