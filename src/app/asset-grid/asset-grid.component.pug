@@ -164,7 +164,7 @@
           label Description
           #pageDescription.page__description(*ngIf="igDisplay && igMetaData.description", [innerHTML]="igMetaData.description")
           .desc-no-expand.meta-block(*ngIf="allowIgUpdate && (!igMetaData.description || igMetaData.description.length <= 0)")
-            a.edit-group-link(tabindex="4", aria-label="Add description to this group, clicking this will allow you to make edits to this group", (click)="showEditGroup()", (keyup.enter)="showEditGroup()") + Add description
+            a.edit-group-link#btnGroupAddDescription(tabindex="4", aria-label="Add description to this group, clicking this will allow you to make edits to this group", (click)="showEditGroup()", (keyup.enter)="showEditGroup()") + Add description
           .no-details(*ngIf="!allowIgUpdate && (!igMetaData.description || igMetaData.description.length <= 0)") This group does not have a description
         .ig-tags.meta-block(*ngIf="igMetaData.tags && igMetaData.tags.length > 0")
           label Tags
@@ -174,7 +174,7 @@
         .ig-tags.meta-block(*ngIf="igMetaData.tags && igMetaData.tags.length === 0")
           label Tags
           .meta-block
-            a.edit-group-link(*ngIf="allowIgUpdate", tabindex="4", aria-label="Add tags to this group, clicking this will allow you to make edits to this group", (click)="showEditGroup()", (keyup.enter)="showEditGroup()") + Add tags
+            a.edit-group-link#btnGroupAddTags(*ngIf="allowIgUpdate", tabindex="4", aria-label="Add tags to this group, clicking this will allow you to make edits to this group", (click)="showEditGroup()", (keyup.enter)="showEditGroup()") + Add tags
             .no-details(*ngIf="!allowIgUpdate") This group does not have any tags
   .row
     div([ngClass]="[ (igDisplay && showIgDescBool) ? 'col-9' : 'col-12']")
