@@ -7,9 +7,11 @@ import { map } from 'rxjs/operators'
 import { AssetService } from './../shared/assets.service'
 import { AssetSearchService } from './../shared/asset-search.service'
 import { AuthService } from './../shared/auth.service'
+import { TitleService } from '../shared/title.service'
+import { CollectionService } from '../_services'
 import { TagsService } from './tags.service'
 import { Tag } from './tag/tag.class'
-import { TitleService } from '../shared/title.service'
+
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 
 @Component({
@@ -69,7 +71,8 @@ export class LibraryComponent implements OnInit {
     private _tags: TagsService,
     private _title: TitleService,
     private _filters: AssetFiltersService,
-    private _storage: ArtstorStorageService
+    private _storage: ArtstorStorageService,
+    private _collectionService: CollectionService
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
@@ -153,7 +156,7 @@ export class LibraryComponent implements OnInit {
 
     // Fetch browse collection object from local storage & check if the required collection list has already been set
     let storageBrwseColObj = this._storage.getLocal('browseColObject')
-    
+
     let hasCategoryTitles = storageBrwseColObj && storageBrwseColObj['categoryid'] && storageBrwseColObj['categoryid'][2] && storageBrwseColObj['categoryid'][2].title.length > 0
     if ( storageBrwseColObj && storageBrwseColObj[facetType] && hasCategoryTitles){
       if (facetType === 'artstor-geography'){
@@ -176,7 +179,7 @@ export class LibraryComponent implements OnInit {
         // Categoryid facets require an additional call for labels/titles
         if (facetType == 'categoryid') {
 
-            this._assets.categoryNames()
+            this._collectionService.getCategoryNames()
               .then((data) => {
                 // Create an index by ID for naming the facets
                 let categoryIndex = data.reduce( ( result, item ) => {

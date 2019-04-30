@@ -38,7 +38,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { AppComponent } from './app.component'
 import { APP_RESOLVER_PROVIDERS } from './app.resolver'
 import { AppConfig } from './app.service'
-import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService, InstitutionsService, DomUtilityService, ToastComponent, GroupTitleComponent, PromoTooltipComponent } from './shared'
+import { Nav, Footer, SearchComponent, PaginationComponent, AssetSearchService, DomUtilityService, ToastComponent, GroupTitleComponent, PromoTooltipComponent } from './shared'
 import { GuideTourComponent } from './shared/tour/tour.component'
 import { NavMenu } from './nav-menu'
 import { AssetFilters } from './asset-filters'
@@ -107,7 +107,7 @@ import {
   PersonalCollectionService,
   AccountService
 } from './shared'
-import { MetadataService, SlidesService } from './_services'
+import { MetadataService, SlidesService, CollectionService, InstitutionService } from './_services'
 
 import { LocalPCService } from './_local-pc-asset.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
@@ -128,7 +128,7 @@ import * as Sentry from '@sentry/browser';
 import { version } from '../../package.json'
 
 // Sentry Raven reporter
-Sentry.init({ 
+Sentry.init({
   dsn: 'https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953',
   release: version
 });
@@ -153,7 +153,7 @@ const APP_PROVIDERS = [
   AuthService,
   DatePipe,
   FlagService,
-  InstitutionsService,
+  InstitutionService,
   DomUtilityService,
   GroupService,
   PersonalCollectionService,
@@ -171,6 +171,7 @@ const APP_PROVIDERS = [
   Title,
   TitleService,
   MetadataService,
+  CollectionService,
   { provide: UrlSerializer, useClass: CustomUrlSerializer },
   // 401/Unauthorized handler
   { provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true },

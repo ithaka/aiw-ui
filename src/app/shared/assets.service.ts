@@ -5,17 +5,14 @@
 import { Injectable, OnDestroy, OnInit, EventEmitter } from '@angular/core'
 import { Router, ActivatedRoute, Params } from '@angular/router'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
-import { Observable, BehaviorSubject, Subject } from 'rxjs'
-
-import { Subscription }   from 'rxjs'
+import { Observable, BehaviorSubject, Subject, Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { categoryName } from './datatypes/category.interface'
 
 // Project Dependencies
 import { AuthService } from './auth.service'
 import { GroupService } from './group.service'
-import { AssetFiltersService } from './../asset-filters/asset-filters.service'
 import { ToolboxService } from './toolbox.service'
+import { AssetFiltersService } from './../asset-filters/asset-filters.service'
 import { AssetSearchService, SearchResponse } from './asset-search.service'
 import { ImageGroup, Thumbnail } from '.'
 import { AppConfig } from 'app/app.service'
@@ -326,9 +323,9 @@ export class AssetService {
         let baseUrl = `https://${this._app.clientHostname}/`
         if (isPublic) {
             // Public assets are linked without a hash, so the server-rendered page can provide rich previews
-            return  baseUrl + 'public/' + assetId 
+            return  baseUrl + 'public/' + assetId
         } else {
-            return  baseUrl + '#/asset/' + ( externalAsset ? 'external/' : '' ) + assetId 
+            return  baseUrl + '#/asset/' + ( externalAsset ? 'external/' : '' ) + assetId
         }
     }
 
@@ -442,20 +439,7 @@ export class AssetService {
     //         .toPromise()
     // }
 
-    public categoryNames(): Promise<categoryName[]> {
-        let options = { withCredentials: true }
 
-        return this.http
-            .get(this._auth.getHostname() + '/api/v1/collections/103/categorynames', options)
-            .toPromise()
-            .then(res => {
-                if (res && res[0]) {
-                    return <categoryName[]>res
-                } else {
-                    return <categoryName[]>[]
-                }
-            })
-    }
 
     public categoryByFacet(facetName: string, collectionType ?: number): Promise<SolrFacet[]> {
       let options = { withCredentials: true };
@@ -543,51 +527,6 @@ export class AssetService {
           }
           return <SolrFacet[]>res
         })
-    }
-
-    /**
-     * Get metadata about a Category
-     * @param catId The Category ID
-     */
-    public getCategoryInfo(catId: string) {
-        let options = { withCredentials: true };
-
-        return this.http
-            .get(this._auth.getUrl() + '/v1/categorydesc/' + catId, options)
-            .toPromise();
-    }
-
-    /**
-     * Wrapper function for HTTP call to get collections. Used by home component
-     * @param type Can either be 'ssc' or 'institution'
-     * @returns Chainable promise containing collection data
-     */
-    public getCollectionsList(type?: string) {
-        let options = { withCredentials: true };
-        // Returns all of the collections names
-        return this.http
-            .get(this._auth.getUrl() + '/v1/collections/', options).pipe(
-              map(res => {
-                if (type) {
-                    let data = res
-
-                    if (type == 'institution') {
-                        data['Collections'] = data['Collections'].filter((collection) => {
-                            return collection.collectionType == 2 || collection.collectionType == 4
-                        })
-                    }
-                    if (type == 'ssc') {
-                        data['Collections'] = data['Collections'].filter((collection) => {
-                            return collection.collectionType == 5
-                        })
-                    }
-
-                    return data
-                } else {
-                    return res
-                }
-              }
-            ))
     }
 
     public getBlogEntries(query ?: string) {
@@ -904,8 +843,8 @@ export class AssetService {
     /**
      * Build full group thumbnail array
      * - Maps item objects to their appropriate thumbnail data
-     * @param items 
-     * @param thumbnails 
+     * @param items
+     * @param thumbnails
      */
     private mapThumbnailsToItems(items: any[], thumbnails: any[]): any[] {
         return items.reduce((newItems, item) => {
@@ -933,10 +872,6 @@ export class AssetService {
 
 }
 
-export interface categoryName {
-    categoryid: string,
-    categoryname: string
-}
 export interface SolrFacet {
     name: string,
     count: number,

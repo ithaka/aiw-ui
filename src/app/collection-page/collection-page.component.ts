@@ -6,10 +6,8 @@ import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetService } from './../shared/assets.service'
-import { AuthService } from './../shared/auth.service'
-import { TitleService } from '../shared/title.service'
-import { ScriptService } from '../shared'
+import { AssetService, AuthService, TitleService, ScriptService,  } from '../shared'
+import { CollectionService } from '../_services'
 
 @Component({
   selector: 'ang-collection-page',
@@ -35,9 +33,6 @@ export class CollectionPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private userSessionFresh: boolean = false;
 
-  // private searchInResults: boolean = false;
-
-
   constructor(
     private _assets: AssetService,
     private _auth: AuthService,
@@ -46,6 +41,7 @@ export class CollectionPage implements OnInit, OnDestroy {
     private http: HttpClient,
     private _title: TitleService,
     private _script: ScriptService,
+    private _collectionService: CollectionService,
     private meta: Meta
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
@@ -70,18 +66,6 @@ export class CollectionPage implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  /**
-  * Get metadata about a collection
-  * @param colId The collection ID
-  */
-  private getCollectionInfo(colId: string) {
-    let options = { withCredentials: true };
-
-    return this.http
-      .get(this._auth.getUrl() + '/v1/collections/' + colId, options)
-      .toPromise();
-  }
-
   private routeParamSubscrpt(): void {
     this.route.params.pipe(
       map(routeParams => {
@@ -102,7 +86,7 @@ export class CollectionPage implements OnInit, OnDestroy {
 
         } else if (this.colId) {
           this._assets.clearAssets();
-            this.getCollectionInfo(this.colId)
+            this._collectionService.getCollectionInfo(this.colId)
               .then((data) => {
                 this._assets.queryAll(routeParams, true);
 
