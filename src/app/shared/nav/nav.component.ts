@@ -174,7 +174,6 @@ export class Nav implements OnInit, OnDestroy {
 
   navigateAndSaveRoute(route: string): void {
     this._auth.store('stashedRoute', this.location.path(false));
-
     this._router.navigate([route]);
   }
 
