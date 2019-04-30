@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Router, ActivatedRoute, UrlSegment } from '@angular/router'
+import { Location } from '@angular/common';
 import { Subscription }   from 'rxjs'
 import { map, take } from 'rxjs/operators'
 
@@ -26,18 +27,30 @@ export class SsidMapping implements OnInit {
     private _router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private _auth: AuthService
+    private _auth: AuthService,
+    private location: Location
   ) {}
 
   ngOnInit() {
-    // Subscribe to ID in params
     this.subscriptions.push(
-      this._auth.getUserInfo().pipe(take(1)).subscribe(user => {
-        if(this.ssid) {
-          this.loading = true
-          this.searchSsid()
+      // Subscribe User object updates
+      this._auth.currentUser.subscribe(
+        (userObj) => {
+          if(userObj.isLoggedIn) {
+            if(this.ssid) {
+              this.loading = true
+              this.searchSsid()
+            }
+          } else {
+            this._auth.store('stashedRoute', this.location.path(false));
+            this._router.navigate(['/login']);
+          }
+        },
+        (err) => {
+          console.error(err)
         }
-      }),
+      ),
+      // Subscribe to ssid in params
       this.route.params.pipe(
         map(routeParams => {
         this.ssid = routeParams['ssid']
