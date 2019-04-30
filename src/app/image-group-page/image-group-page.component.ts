@@ -6,12 +6,12 @@ import { map, take } from 'rxjs/operators'
 // Internal Dependencies
 import { AppConfig } from '../app.service'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
-import { 
-  AssetService, 
-  AuthService, 
+import {
+  AssetService,
+  AuthService,
   TitleService,
-  ImageGroup, 
-  ImageGroupService, 
+  ImageGroup,
+  ImageGroupService,
   GroupService,
   DomUtilityService
 } from './../shared'
@@ -281,7 +281,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           let downloadLink, zipDownloadLink = ''
           // If user has agreed, we should trigger download directly
           switch (exportType) {
-            case 'PPT': {
+            case 'ppt': {
               // Perform PPT download action
               this.getPPT()
               break
@@ -295,7 +295,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
               }
               break
             }
-            case 'ZIP': {
+            case 'zip': {
               // Perform ZIP download action
               this.getZIP()
               break
@@ -322,11 +322,11 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     }
   }
 
-  private handleTCModalClose(event: any): void {
+  private exportGroup(event: any): void {
     this.showTermsConditions = false
 
     switch (event) {
-      case 'PPT': {
+      case 'ppt': {
         // Perform PPT download action
         this.getPPT()
         break
@@ -340,7 +340,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         }
         break
       }
-      case 'ZIP': {
+      case 'zip': {
         // Perform ZIP download action
         this.getZIP()
         break
@@ -368,7 +368,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     let downloadLink: string = ''
     this._ig.getDownloadLink(this.ig)
       .then( data => {
-        if (data.path) {
+        if (data.path && this.showExportLoadingState) {
           downloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/')
           clearInterval(interval)
 
@@ -377,7 +377,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           // On success fade out the component after 5 sec & begin download
           setTimeout(() => {
             this.closeExportLoadingState()
-            this.downLoadFile(this.ig.name, downloadLink)            
+            this.downLoadFile(this.ig.name, downloadLink)
           }, 5000)
         }
       })
@@ -405,7 +405,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     let zipDownloadLink: string = ''
     this._ig.getDownloadLink(this.ig, true)
       .then( data => {
-        if (data.path) {
+        if (data.path && this.showExportLoadingState) {
           zipDownloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/')
           clearInterval(interval)
 
@@ -414,7 +414,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           // On success fade out the component after 5 sec & begin download
           setTimeout(() => {
             this.closeExportLoadingState()
-            this.downLoadFile(this.ig.name, zipDownloadLink)            
+            this.downLoadFile(this.ig.name, zipDownloadLink)
           }, 5000)
         }
       })

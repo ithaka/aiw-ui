@@ -74,11 +74,11 @@ export class ImageGroupService {
   }
 
   public triggerPPTExport(): void {
-    this.igDownloadTrigger.emit('PPT');
+    this.igDownloadTrigger.emit('ppt');
   }
 
   public triggerZIPExport(): void {
-    this.igDownloadTrigger.emit('ZIP');
+    this.igDownloadTrigger.emit('zip');
   }
 
   public triggerGoogleSlides(): void {
@@ -136,5 +136,5 @@ export class ImageGroupService {
       return res
     })
   }
-  
+
 }
