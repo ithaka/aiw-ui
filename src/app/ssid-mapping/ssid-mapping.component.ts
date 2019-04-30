@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, OnDestroy } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Router, ActivatedRoute, UrlSegment } from '@angular/router'
 import { Location } from '@angular/common';
@@ -15,7 +15,7 @@ import { MetadataService } from './../_services'
   templateUrl: './ssid-mapping.component.pug'
 })
 
-export class SsidMapping implements OnInit {
+export class SsidMapping implements OnInit, OnDestroy {
   private ssid: string
   private user: any
   private subscriptions: Subscription[] = []
@@ -59,6 +59,10 @@ export class SsidMapping implements OnInit {
         }
       )
     )
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe() })
   }
 
   private searchSsid(): void {
