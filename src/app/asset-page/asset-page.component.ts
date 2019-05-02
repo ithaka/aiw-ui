@@ -1214,6 +1214,7 @@ export class AssetPage implements OnInit, OnDestroy {
             if (this.multiviewItems) {
                 fullSizeLink = tilesourceStr + 'full/full/0/default.jpg'
                 fullSizeLink = this.getDownloadServiceUrl(asset, fullSizeLink)
+                this.generatedFullURL = fullSizeLink
             }
             // Attach zoom parameters to tilesource
             tilesourceStr = tilesourceStr + Math.round( bounds['x'] ) + ',' + Math.round( bounds['y'] ) + ',' + Math.round( bounds['width'] ) + ',' + Math.round( bounds['height'] ) + '/full/0/default.jpg'
