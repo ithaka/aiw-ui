@@ -617,6 +617,11 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     setDownloadView(): void {
         this.downloadUrl = this.downloadViewLink
+        if (this.assetGroupId && this.downloadUrl.indexOf("/media/") === -1 ) {
+            // Group id needs to be passed to allow download for images accessed via groups
+            // - Binder prefers lowercase service this.downloadUrl params
+            this.downloadUrl = this.downloadUrl + '&groupid=' + this.assetGroupId
+        }
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
     }
@@ -1177,7 +1182,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    private genDownloadViewLink() {
+    private genDownloadLinks() {
         // Do nothing if this is not an image
         if (!this.assets[0].typeName || !this.assets[0].typeName.length) {
             return
@@ -1189,7 +1194,7 @@ export class AssetPage implements OnInit, OnDestroy {
         if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
             // Get Bounds from OSD viewer for the saved detail
             let bounds = this.assetViewer.osdViewer.viewport.viewportToImageRectangle(this.assetViewer.osdViewer.viewport.getBounds(true))
-
+            let multiviewIndex = this.assetViewer.osdViewer._sequenceIndex || 0
             // Make sure the bounds are adjusted for the negative x and y values
             bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
             bounds['height'] = bounds['y'] < 0 ? bounds['height'] + bounds['y'] : bounds['height']
@@ -1199,9 +1204,9 @@ export class AssetPage implements OnInit, OnDestroy {
             bounds['height'] = bounds['height'] > this.assets[0].viewportDimensions.contentSize['y'] ? this.assets[0].viewportDimensions.contentSize['y'] : bounds['height']
 
             // Generate the view url from tilemap service
-            let tilesourceStr = Array.isArray(asset.tileSource) ? asset.tileSource[0] : asset.tileSource
+            let tilesourceStr = Array.isArray(asset.tileSource) ? asset.tileSource[multiviewIndex] : asset.tileSource
             // Attach zoom parameters to tilesource
-            tilesourceStr = tilesourceStr.replace('info.json', '') + Math.round( bounds['x'] ) + ',' + Math.round( bounds['y'] ) + ',' + Math.round( bounds['width'] ) + ',' + Math.round( bounds['height'] ) + '/full/0/native.jpg'
+            tilesourceStr = tilesourceStr.replace('info.json', '') + Math.round( bounds['x'] ) + ',' + Math.round( bounds['y'] ) + ',' + Math.round( bounds['width'] ) + ',' + Math.round( bounds['height'] ) + '/full/0/default.jpg'
             // Ensure iiif parameter is encoded correctly
             tilesourceStr = tilesourceStr.replace('.fcgi%3F', '.fcgi?')
             if (tilesourceStr.indexOf('//') == 0) {
