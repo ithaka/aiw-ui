@@ -107,12 +107,9 @@
                 role="button")
                 i.icon.icon-add-detail-view([class.disabled]="assetViewer.state !== 1 || multiviewItems")
                 | &nbsp;Add detail view
-
-
           //- Download dropdown options
-          | {{downloadUrl}}
-          .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess || assets[0].publicDownload)", ngbTooltip, [disableTooltip]="!multiviewItems", [ngbTooltip]="multiViewDownloadDisabled", triggers="focusin:focusout mouseenter:mouseleave", placement="bottom", aria-haspopup="true")
-            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="genDownloadViewLink()", (keydown.enter)="genDownloadViewLink()", (keyup.arrowdown)="downloadOptsArrowDown($event.target)", [disabled]="multiviewItems", tabindex="2", aria-label="Download")
+          .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess || assets[0].publicDownload)", triggers="focusin:focusout mouseenter:mouseleave", placement="bottom", aria-haspopup="true")
+            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="genDownloadLinks()", (keydown.enter)="genDownloadViewLink()", (keyup.arrowdown)="downloadOptsArrowDown($event.target)", tabindex="2", aria-label="Download")
               | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
               = " "
             .dropdown-menu.download-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
