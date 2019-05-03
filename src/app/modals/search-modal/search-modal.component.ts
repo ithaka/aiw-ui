@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs'
-import { map, take } from 'rxjs/operators'
+import { map, take, filter } from 'rxjs/operators'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Component, OnInit, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
@@ -239,9 +239,37 @@ export class SearchModal implements OnInit, AfterViewInit {
     if (currentParams['featureFlag']) {
       filterParams['featureFlag'] = currentParams['featureFlag']
     }
+    
+    // Construct OR query between filters within the same filter group
+    // filters across multiple filter groups will be AND-ed
+    // example orQuery: paints AND artclassification_str:"Photographs" OR artclassification_str:"Paintings" OR artclassification_str:"Prints" OR artclassification_str:"photographs" AND year:[-4000 TO 1980]
+    let orQuery: string = '';
+    orQuery += advQuery;
+    
+    for(let key in filterParams) {
+      if(key !== 'startDate' && key !== 'endDate') {
+        orQuery += ' AND '
+        let filterValues = filterParams[key].split('|')
+        let index = 0
+        for(let value of filterValues) {
+          if(index > 0) {
+            orQuery += ' OR '
+          }
+          orQuery += key + ':"' + value + '"'
+          index++
+        }
+      }
+    }
+
+    if(filterParams["startDate"] && filterParams["endDate"]) {
+      orQuery += ' AND ' + 'year:[' + filterParams["startDate"] + ' TO ' + filterParams["endDate"] + ']'
+    }
+
+    console.log(orQuery, 'orquery')
 
     // Open search page with new query
-    this._router.navigate(['/search', advQuery, filterParams]);
+    // this._router.navigate(['/search', advQuery, filterParams]);
+    this._router.navigate(['/search', orQuery]);
 
     // Close advance search modal
     this.close();
