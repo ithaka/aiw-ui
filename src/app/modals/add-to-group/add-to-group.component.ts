@@ -386,6 +386,8 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
           .catch( error => {
             console.error(error)
           })
+        } else { // Incase the result has 0 groups
+          this.loading.allGroups = false
         }
       },
       (error) => {
