@@ -312,28 +312,33 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     ).pipe(
     take(1),
       map(data => {
+        let itemIds = []
         for(let group of data.groups) {
-          // Check the length of itemIds to remove invalid call with object_id=null
-          if(group.items.length !== 0) {
-            this._assets.getAllThumbnails(group.items)
-            .then( allThumbnails => {
-              allThumbnails = allThumbnails.map( thmbObj => {
-                for (let group of data.groups) {
-                  if(group.items[0] && group.items[0] === thmbObj.objectId){
-                    group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
-                    group['compoundmediaCount'] = thmbObj['compoundmediaCount']
-                  }
-                }
-                return thmbObj
-              })
-
-              this.recentGroups = data.groups
-              this.loading.recentGroups = false
-            })
-            .catch( error => {
-              console.error(error)
-            })
+          if(group.items.length > 0){
+            itemIds.push(group.items[0])
           }
+        }
+
+        // Check the length of itemIds to remove invalid call with object_id=null
+        if(itemIds.length !== 0) {
+          this._assets.getAllThumbnails({ itemIds })
+          .then( allThumbnails => {
+            allThumbnails = allThumbnails.map( thmbObj => {
+              for (let group of data.groups) {
+                if(group.items[0] && group.items[0] === thmbObj.objectId){
+                  group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
+                  group['compoundmediaCount'] = thmbObj['compoundmediaCount']
+                }
+              }
+              return thmbObj
+            })
+
+            this.recentGroups = data.groups
+            this.loading.recentGroups = false
+          })
+          .catch( error => {
+            console.error(error)
+          })
         }
       },
       (error) => {
