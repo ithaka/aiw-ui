@@ -617,6 +617,11 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     setDownloadView(): void {
         this.downloadUrl = this.downloadViewLink
+        if (this.assetGroupId && this.downloadUrl.indexOf("/media/") === -1 ) {
+            // Group id needs to be passed to allow download for images accessed via groups
+            // - Binder prefers lowercase service this.downloadUrl params
+            this.downloadUrl = this.downloadUrl + '&groupid=' + this.assetGroupId
+        }
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
     }
@@ -1177,7 +1182,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    private genDownloadViewLink() {
+    private genDownloadLinks() {
         // Do nothing if this is not an image
         if (!this.assets[0].typeName || !this.assets[0].typeName.length) {
             return
@@ -1189,7 +1194,10 @@ export class AssetPage implements OnInit, OnDestroy {
         if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
             // Get Bounds from OSD viewer for the saved detail
             let bounds = this.assetViewer.osdViewer.viewport.viewportToImageRectangle(this.assetViewer.osdViewer.viewport.getBounds(true))
-
+            let multiviewIndex: number  = this.assetViewer.osdViewer._sequenceIndex || 0
+            // Generate the view url from tilemap service
+            let tilesourceStr: string = Array.isArray(asset.tileSource) ? asset.tileSource[multiviewIndex] : asset.tileSource
+            let fullSizeLink: string
             // Make sure the bounds are adjusted for the negative x and y values
             bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
             bounds['height'] = bounds['y'] < 0 ? bounds['height'] + bounds['y'] : bounds['height']
@@ -1197,18 +1205,20 @@ export class AssetPage implements OnInit, OnDestroy {
             // Make sure the bounds are within the content size for the IIIF endpoint.
             bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']
             bounds['height'] = bounds['height'] > this.assets[0].viewportDimensions.contentSize['y'] ? this.assets[0].viewportDimensions.contentSize['y'] : bounds['height']
-
-            // Generate the view url from tilemap service
-            let tilesourceStr = Array.isArray(asset.tileSource) ? asset.tileSource[0] : asset.tileSource
-            // Attach zoom parameters to tilesource
-            tilesourceStr = tilesourceStr.replace('info.json', '') + Math.round( bounds['x'] ) + ',' + Math.round( bounds['y'] ) + ',' + Math.round( bounds['width'] ) + ',' + Math.round( bounds['height'] ) + '/full/0/native.jpg'
-            // Ensure iiif parameter is encoded correctly
-            tilesourceStr = tilesourceStr.replace('.fcgi%3F', '.fcgi?')
+// Ensure iiif parameter is encoded correctly
+            tilesourceStr = tilesourceStr.replace('.fcgi%3F', '.fcgi?').replace('info.json', '')
             if (tilesourceStr.indexOf('//') == 0) {
                 tilesourceStr = 'https:' + tilesourceStr
             }
-
-            tilesourceStr = this._auth.getUrl() + "/download?imgid=" + asset.id + "&url=" + encodeURIComponent( encodeURI(tilesourceStr) ) + "&iiif=true"
+            // Build full image url for multiviews
+            if (this.multiviewItems) {
+                fullSizeLink = tilesourceStr + 'full/full/0/default.jpg'
+                fullSizeLink = this.getDownloadServiceUrl(asset, fullSizeLink)
+                this.generatedFullURL = fullSizeLink
+            }
+            // Attach zoom parameters to tilesource
+            tilesourceStr = tilesourceStr + Math.round( bounds['x'] ) + ',' + Math.round( bounds['y'] ) + ',' + Math.round( bounds['width'] ) + ',' + Math.round( bounds['height'] ) + '/full/0/default.jpg'
+            tilesourceStr = this.getDownloadServiceUrl(asset, tilesourceStr)
             this.downloadViewLink = tilesourceStr
             this.downloadViewReady = true
             this.downloadLoading = false
@@ -1216,6 +1226,16 @@ export class AssetPage implements OnInit, OnDestroy {
         else {
             this.downloadLoading = false
         }
+    }
+
+    /**
+     * Fill parameters for Download Service
+     * @description Use the download service to attach metadata
+     * @param asset Item being downloaded
+     * @param downloadUrl Url to the image for the item
+     */
+    private getDownloadServiceUrl(asset, downloadUrl): string {
+        return this._auth.getUrl() + "/download?imgid=" + asset.id + "&url=" + encodeURIComponent( encodeURI(downloadUrl) ) + "&iiif=true"
     }
 
     /**
