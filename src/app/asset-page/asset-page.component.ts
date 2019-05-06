@@ -105,7 +105,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private restrictedAssetsCount: number = 0
     private showMetadataPending: boolean = false
     private showMetadataError: boolean = false
-
+    // Share and Download URls
     private copyURLStatusMsg: string = ''
     private showCopyUrl: boolean = false
     private showEditDetails: boolean = false
@@ -115,6 +115,8 @@ export class AssetPage implements OnInit, OnDestroy {
     // Used for agree modal input, changes based on selection
     private downloadUrl: any
     private downloadName: string
+    public errorFormUrl: string
+    public iapFormUrl: string
 
     private prevRouteParams: any = []
 
@@ -506,6 +508,13 @@ export class AssetPage implements OnInit, OnDestroy {
 
                 // Set image share link
                 this.generateImgURL(this.assetIds[0], this.collectionType.type, this.encryptedAccess || this.fromOpenLibrary)
+                // Set report and request urls
+                this.errorFormUrl = this.getErrorFormUrl(this.assets[0])
+                if (this.route.snapshot.params.iap == 'true') {
+                    this.iapFormUrl = this.getIapFormUrl(this.assets[0])
+                } else {
+                    this.iapFormUrl = ''
+                }
                 // Load related results from jstor
                 if (this.relatedResFlag) {
                     this.getJstorRelatedResults(asset)
@@ -671,7 +680,7 @@ export class AssetPage implements OnInit, OnDestroy {
      * @param asset Asset for which the user is requesting IAP
      * @returns string Request IAP form url with query params
      */
-    getIapFormUrl(asset: Asset): string {
+    private getIapFormUrl(asset: Asset): string {
         let baseUrl = 'http://www.artstor.org/form/iap-request-form'
         let name = asset.title
         let collection = asset.formattedMetadata && asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
@@ -687,8 +696,9 @@ export class AssetPage implements OnInit, OnDestroy {
      * @param asset Asset for which the user is reporting an error
      * @returns string Error form url with query params
      */
-    getErrorFormUrl(asset: Asset): string {
-        let baseUrl = 'http://www.artstor.org/form/report-error'
+    private getErrorFormUrl(asset: Asset): string {
+        let baseUrl = 'http://www.artstor.org/form/error-report-form'
+        
         let collection = asset.formattedMetadata && asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
         let id = asset.id
         let email = this.user.username
