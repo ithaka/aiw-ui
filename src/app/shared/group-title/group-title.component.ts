@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ImageGroup, FlagService, ImageGroupService, AssetService } from './../'
-
+import { ToolboxService } from '../toolbox.service';
 
 @Component({
     selector: 'ang-group-title',
@@ -31,7 +31,8 @@ import { ImageGroup, FlagService, ImageGroupService, AssetService } from './../'
       private _assets: AssetService,
       private route: ActivatedRoute,
       private _router: Router,
-      public _flags: FlagService
+      public _flags: FlagService,
+      private _toolbox: ToolboxService
     ){ }
 
     ngOnInit() {
@@ -72,6 +73,9 @@ import { ImageGroup, FlagService, ImageGroupService, AssetService } from './../'
         groupId: this.ig.id,
         presentMode: true
       }
+      // Enter fullscreen - must fire within click binding (Firefox, Safari)
+      this._toolbox.requestFullScreen()
+      // Route to viewer
       this._router.navigate(['/asset', id, queryParams]);
     }
 

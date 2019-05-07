@@ -7,12 +7,11 @@ import { ActivatedRoute } from '@angular/router'
 
 // Internal Dependencies
 // import '/krpano.js'
-import { Asset, AuthService, ImageZoomParams, LogService } from 'app/shared';
+import { Asset, AuthService, ImageZoomParams, LogService, ToolboxService } from 'app/shared';
 import { MetadataService } from 'app/_services'
 import { isPlatformBrowser } from '@angular/common';
 
 // Browser API delcarations
-declare var ActiveXObject: any
 declare var embedpano: any
 declare var OpenSeadragon: any
 
@@ -141,7 +140,8 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         private _metadata: MetadataService,
         private _auth: AuthService,
         @Inject(PLATFORM_ID) private platformId: Object,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private _toolbox: ToolboxService
     ) {
         if(!this.index) {
             this.index = 0
@@ -495,32 +495,6 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         })
     }
 
-    private requestFullScreen(el: any): void {
-        // Supports most browsers and their versions.
-        var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen;
-
-        if (requestMethod) { // Native full screen.
-            requestMethod.call(el);
-        } else if (window['ActiveXObject'] && typeof window['ActiveXObject'] !== "undefined") { // Older IE.
-            var wscript = new ActiveXObject("WScript.Shell");
-            if (wscript !== null) {
-                wscript.SendKeys("{F11}");
-            }
-        }
-    }
-
-    private exitFullScreen(): void {
-        // Being permissive to reference possible Document methods
-        let document: any = window.document;
-        if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        } else if (document.exitFullscreen) {
-            document.exitFullscreen();
-        }
-    }
-
     private changeHandler() {
         if (document['webkitIsFullScreen'] || document['mozFullScreen'] || document['fullscreen']) {
             this.setFullscreen(true);
@@ -539,7 +513,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         var elem = document.body;
 
         if (!this.isFullscreen) {
-            this.requestFullScreen(elem);
+            this._toolbox.requestFullScreen();
             this.setFullscreen(true);
 
             // Add Captain's log event for entering full screen mode
@@ -547,7 +521,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
                 eventType: 'artstor_enter_fullscreen'
             })
         } else {
-            this.exitFullScreen();
+            this._toolbox.exitFullScreen();
             this.setFullscreen(false);
         }
     };

@@ -538,11 +538,6 @@ export class AssetPage implements OnInit, OnDestroy {
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
             this.updateMetadataFromLocal(this._localPC.getAsset(parseInt(this.assets[0].SSID)))
-
-            // Once the asset has loaded, check if its the present mode and togglePresentationMode
-            if (this.presentMode) {
-                this.assetViewer.togglePresentationMode()
-            }
         }
         // Set download link
         this.setDownloadFull()
