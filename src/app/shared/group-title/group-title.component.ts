@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core'
 import { Subscription } from 'rxjs'
-import { ActivatedRoute } from '@angular/router'
-import { ImageGroup, FlagService, ImageGroupService } from './../'
-
+import { ActivatedRoute, Router } from '@angular/router'
+import { ImageGroup, FlagService, ImageGroupService, AssetService } from './../'
+import { ToolboxService } from '../toolbox.service';
 
 @Component({
     selector: 'ang-group-title',
@@ -24,10 +24,15 @@ import { ImageGroup, FlagService, ImageGroupService } from './../'
 
     private subscriptions: Subscription[] = []
 
+    private prevRouteTS: string = ''
+
     constructor(
       private _ig: ImageGroupService,
+      private _assets: AssetService,
       private route: ActivatedRoute,
-      public _flags: FlagService
+      private _router: Router,
+      public _flags: FlagService,
+      private _toolbox: ToolboxService
     ){ }
 
     ngOnInit() {
@@ -43,11 +48,32 @@ import { ImageGroup, FlagService, ImageGroupService } from './../'
           this._flags.readFlags(routeParams)
         })
       )
-  
     } // onInit
 
     ngOnDestroy() {
       this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+    }
+
+    /**
+     * Routes user to fullscreen, presentation mode via Asset Page
+     */
+    public presentGroup(): void {
+      console.log('presentGroup called', this.ig)
+      let id = ''
+      if(this.ig.items[0] && this.ig.items[0].id) {
+        id = this.ig.items[0].id
+      } else {
+        id = this.ig.items[0]
+      }
+      let queryParams = {
+        prevRouteTS: this._assets.currentPreviousRouteTS ,
+        groupId: this.ig.id,
+        presentMode: true
+      }
+      // Enter fullscreen - must fire within click binding (Firefox, Safari)
+      this._toolbox.requestFullScreen()
+      // Route to viewer
+      this._router.navigate(['/asset', id, queryParams]);
     }
 
 }

@@ -181,6 +181,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private hasPrivateGroups: boolean = true
 
+    private presentMode: boolean = false
+
     constructor(
         public _appConfig: AppConfig,
         private _assets: AssetService,
@@ -297,6 +299,12 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.prevRouteParams = []
                     this.totalAssetCount = 1
                     this.assetNumber = 1
+                }
+
+                if(routeParams['presentMode']) {
+                    this.presentMode = true
+                } else {
+                    this.presentMode = false
                 }
             })
         ); // subscriptions.push
@@ -1136,6 +1144,11 @@ export class AssetPage implements OnInit, OnDestroy {
 
         this.assetViewer.togglePresentationMode();
         this.showAssetDrawer = false;
+
+        // If presentMode, go back to the group on fullscreen exit
+        if(this.presentMode) {
+            this.backToResults()
+        }
     }
 
     private backToResults(): void {
