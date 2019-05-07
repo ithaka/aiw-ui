@@ -60,7 +60,10 @@ import { ToolboxService } from '../toolbox.service';
       this.subscriptions.forEach((sub) => { sub.unsubscribe() })
     }
 
-    private presentGroup(): void {
+    /**
+     * Routes user to fullscreen, presentation mode via Asset Page
+     */
+    public presentGroup(): void {
       console.log('presentGroup called', this.ig)
       let id = ''
       if(this.ig.items[0] && this.ig.items[0].id) {
