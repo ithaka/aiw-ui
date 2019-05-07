@@ -697,7 +697,7 @@ export class AssetPage implements OnInit, OnDestroy {
      * @returns string Error form url with query params
      */
     private getErrorFormUrl(asset: Asset): string {
-        let baseUrl = 'http://www.artstor.org/form/error-report-form'
+        let baseUrl = 'http://www.artstor.org/form/report-error'
         
         let collection = asset.formattedMetadata && asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
         let id = asset.id
