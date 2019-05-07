@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core'
 import { Subscription } from 'rxjs'
-import { ActivatedRoute } from '@angular/router'
-import { ImageGroup, FlagService, ImageGroupService } from './../'
+import { ActivatedRoute, Router } from '@angular/router'
+import { ImageGroup, FlagService, ImageGroupService, AssetService } from './../'
 
 
 @Component({
@@ -24,9 +24,13 @@ import { ImageGroup, FlagService, ImageGroupService } from './../'
 
     private subscriptions: Subscription[] = []
 
+    private prevRouteTS: string = ''
+
     constructor(
       private _ig: ImageGroupService,
+      private _assets: AssetService,
       private route: ActivatedRoute,
+      private _router: Router,
       public _flags: FlagService
     ){ }
 
@@ -43,11 +47,32 @@ import { ImageGroup, FlagService, ImageGroupService } from './../'
           this._flags.readFlags(routeParams)
         })
       )
+
+      // Subscribe to prevRouteTimeStamp
+      this._assets.previousRouteTimeStamp.subscribe( timestamp => {
+        this.prevRouteTS = timestamp
+      })
   
     } // onInit
 
     ngOnDestroy() {
       this.subscriptions.forEach((sub) => { sub.unsubscribe() })
+    }
+
+    private presentGroup(): void {
+      console.log('presentGroup called', this.ig)
+      let id = ''
+      if(this.ig.items[0] && this.ig.items[0].id) {
+        id = this.ig.items[0].id
+      } else {
+        id = this.ig.items[0]
+      }
+      let queryParams = {
+        prevRouteTS: this.prevRouteTS,
+        groupId: this.ig.id,
+        presentMode: true
+      }
+      this._router.navigate(['/asset', id, queryParams]);
     }
 
 }

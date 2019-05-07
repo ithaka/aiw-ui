@@ -39,6 +39,10 @@ export class AssetService {
     public selectModeToggle: EventEmitter<any> = new EventEmitter()
 
 
+    // Set up subject observable for previousRouteTS
+    public previousRouteTimeStamp: Subject<string> = new Subject();
+
+
     // Keep track of which params the current results are related to
     public currentLoadedParams: any = {};
 
