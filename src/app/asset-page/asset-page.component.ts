@@ -583,18 +583,18 @@ export class AssetPage implements OnInit, OnDestroy {
             this.assets = [this.assets[0]]
             this.assetIds = [this.assetIds[0]]
             this.indexZoomMap = [this.indexZoomMap[0]]
-        } else if (Array.isArray(this.assets[0].tileSource)){ // Log GA event for opening a multi view item in Fullscreen
-            this.angulartics.eventTrack.next({ properties: { event: 'multiViewItemFullscreen', category: 'multiview', label: this.assets[0].id } });
-        }
-        else {
+        } else {
             // Make sure we only send one ga event when going to fullscreen mode
             if (this.isFullscreen !== isFullscreen) {
                 // Add Google Analytics tracking to "fullscreen" button
                 this.angulartics.eventTrack.next({ properties: { event: 'Enter Fullscreen', category: 'fullscreen', label: this.assetIds[0] } })
+                // Log GA event for opening a multi view item in Fullscreen
+                if (this.multiviewItems) { 
+                    this.angulartics.eventTrack.next({ properties: { event: 'multiViewItemFullscreen', category: 'multiview', label: this.assets[0].id } });
+                }
             }
         }
         this.isFullscreen = isFullscreen
-
     }
 
     /**
