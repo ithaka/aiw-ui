@@ -855,7 +855,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.showAddModal = true
             } else {
                 this.showCreateGroupModal = true
-            }            
+            }
         } else {
           this.showLoginModal = true;
         }
@@ -1362,10 +1362,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
                         this.closeEditDetails(1)
 
-                        // Reload asset metadata
-                        this._router.navigate(['/asset', ''])
+                        // Reload asset metadata and pass the prevRouteTS param to make sure we load prevRouteParams
                         setTimeout(() => {
-                            // Pass the prevRouteTS param to make sure we load prevRouteParams
                             this._router.navigate([ '/asset', this.assets[0].id, this.prevRouteTS ? { prevRouteTS: this.prevRouteTS } : {} ])
                         }, 250)
                     }
