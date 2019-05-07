@@ -40,8 +40,7 @@ export class AssetService {
 
 
     // Set up subject observable for previousRouteTS
-    public previousRouteTimeStamp: Subject<string> = new Subject();
-
+    public currentPreviousRouteTS: string = ''
 
     // Keep track of which params the current results are related to
     public currentLoadedParams: any = {};

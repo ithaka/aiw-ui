@@ -48,12 +48,6 @@ import { ToolboxService } from '../toolbox.service';
           this._flags.readFlags(routeParams)
         })
       )
-
-      // Subscribe to prevRouteTimeStamp
-      this._assets.previousRouteTimeStamp.subscribe( timestamp => {
-        this.prevRouteTS = timestamp
-      })
-  
     } // onInit
 
     ngOnDestroy() {
@@ -72,7 +66,7 @@ import { ToolboxService } from '../toolbox.service';
         id = this.ig.items[0]
       }
       let queryParams = {
-        prevRouteTS: this.prevRouteTS,
+        prevRouteTS: this._assets.currentPreviousRouteTS ,
         groupId: this.ig.id,
         presentMode: true
       }

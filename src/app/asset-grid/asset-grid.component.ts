@@ -410,7 +410,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           this._storage.setSession('prevRouteParams', prevRouteParams)
 
           // Make sure to record the PrevRoute Timestamp/key to subject observable - will be subscribed later by ang-group-title for routing to presentMode
-          this._assets.previousRouteTimeStamp.next(id)
+          this._assets.currentPreviousRouteTS = id
 
           // Generate Facets
           if (allResults && allResults.collTypeFacets) {
