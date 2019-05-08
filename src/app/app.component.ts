@@ -187,7 +187,7 @@ export class AppComponent {
           }
 
           // Show Ethnio survey on browse/groups and /group/id
-          if (event.url.indexOf('/browse/groups/') > -1 || event.url.indexOf('/group/') > -1) {
+          if (event.url.indexOf('/browse/groups') > -1 || event.url.indexOf('/group/') > -1) {
             this._script.loadScript('ethnio-survey')
           }
 
