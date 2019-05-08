@@ -178,10 +178,9 @@ export class AssetPage implements OnInit, OnDestroy {
     public addGrpTTDismissed: boolean = false
     // Flag for server vs client rendering
     public isBrowser: boolean = true
+    public presentMode: boolean = false
 
     private hasPrivateGroups: boolean = true
-
-    private presentMode: boolean = false
 
     constructor(
         public _appConfig: AppConfig,
@@ -597,7 +596,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 // Add Google Analytics tracking to "fullscreen" button
                 this.angulartics.eventTrack.next({ properties: { event: 'Enter Fullscreen', category: 'fullscreen', label: this.assetIds[0] } })
                 // Log GA event for opening a multi view item in Fullscreen
-                if (this.multiviewItems) { 
+                if (this.multiviewItems) {
                     this.angulartics.eventTrack.next({ properties: { event: 'multiViewItemFullscreen', category: 'multiview', label: this.assets[0].id } });
                 }
             }
@@ -706,7 +705,7 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     private getErrorFormUrl(asset: Asset): string {
         let baseUrl = 'http://www.artstor.org/form/report-error'
-        
+
         let collection = asset.formattedMetadata && asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
         let id = asset.id
         let email = this.user.username
