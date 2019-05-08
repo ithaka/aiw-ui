@@ -1240,7 +1240,7 @@ export class AssetPage implements OnInit, OnDestroy {
             }
             else {
               // Attach zoom parameters to tilesource
-              tilesourceStr = tilesourceStr + Math.round( bounds['x'] ) + ',' + Math.round( bounds['y'] ) + ',' + Math.round( bounds['width'] ) + ',' + Math.round( bounds['height'] ) + '/full/0/.jpg'
+              tilesourceStr = tilesourceStr + Math.round( bounds['x'] ) + ',' + Math.round( bounds['y'] ) + ',' + Math.round( bounds['width'] ) + ',' + Math.round( bounds['height'] ) + '/full/0/native.jpg'
               tilesourceStr = this.getDownloadServiceUrl(asset, tilesourceStr)
               this.downloadViewLink = tilesourceStr
               this.downloadViewReady = true
