@@ -110,7 +110,7 @@
                 | &nbsp;Add detail view
           //- Download dropdown options
           .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess || assets[0].publicDownload)", triggers="focusin:focusout mouseenter:mouseleave", placement="bottom", aria-haspopup="true")
-            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="genDownloadLinks()", (keydown.enter)="genDownloadViewLink()", (keyup.arrowdown)="downloadOptsArrowDown($event.target)", tabindex="2", aria-label="Download")
+            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="genDownloadLinks()", (keydown.enter)="genDownloadLinks()", (keyup.arrowdown)="downloadOptsArrowDown($event.target)", tabindex="2", aria-label="Download")
               | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
               = " "
             .dropdown-menu.download-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")

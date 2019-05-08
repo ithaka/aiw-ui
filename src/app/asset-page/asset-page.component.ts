@@ -1238,12 +1238,14 @@ export class AssetPage implements OnInit, OnDestroy {
                 fullSizeLink = this.getDownloadServiceUrl(asset, fullSizeLink)
                 this.generatedFullURL = fullSizeLink
             }
-            // Attach zoom parameters to tilesource
-            tilesourceStr = tilesourceStr + Math.round( bounds['x'] ) + ',' + Math.round( bounds['y'] ) + ',' + Math.round( bounds['width'] ) + ',' + Math.round( bounds['height'] ) + '/full/0/default.jpg'
-            tilesourceStr = this.getDownloadServiceUrl(asset, tilesourceStr)
-            this.downloadViewLink = tilesourceStr
-            this.downloadViewReady = true
-            this.downloadLoading = false
+            else {
+              // Attach zoom parameters to tilesource
+              tilesourceStr = tilesourceStr + Math.round( bounds['x'] ) + ',' + Math.round( bounds['y'] ) + ',' + Math.round( bounds['width'] ) + ',' + Math.round( bounds['height'] ) + '/full/0/.jpg'
+              tilesourceStr = this.getDownloadServiceUrl(asset, tilesourceStr)
+              this.downloadViewLink = tilesourceStr
+              this.downloadViewReady = true
+              this.downloadLoading = false
+            }
         }
         else {
             this.downloadLoading = false
