@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { Params } from '@angular/router/src/shared';
 
+declare var ActiveXObject: any
 @Injectable()
 export class ToolboxService {
 
@@ -75,5 +76,39 @@ export class ToolboxService {
         let newParams: Params = Object.assign(baseParams, params)
 
         return newParams
+    }
+
+    /**
+     * Enters fullscreen, if allowed by browser
+     * @note Should fire immediately within a user-event binding (click, key)
+     */
+    public requestFullScreen(): void {
+        let el = document.body
+        // Supports most browsers and their versions.
+        var requestMethod = el.requestFullscreen || el['webkitRequestFullscreen'] || el['mozRequestFullscreen'] || el['msRequestFullscreen']
+        if (requestMethod) { // Native full screen.
+            requestMethod.call(el);
+        } else if (window['ActiveXObject'] && typeof window['ActiveXObject'] !== "undefined") { // Older IE.
+            var wscript = new ActiveXObject("WScript.Shell");
+            if (wscript !== null) {
+                wscript.SendKeys("{F11}");
+            }
+        }
+    }
+
+    /**
+     * Exits fullscreen, if allowed by browser
+     * @note Should fire immediately within a user-event binding (click, key)
+     */
+    public exitFullScreen(): void {
+        // Being permissive to reference possible Document methods
+        let document: any = window.document;
+        if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
     }
 }

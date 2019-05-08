@@ -225,3 +225,16 @@
 .btn.dropdown-toggle {
    padding: 0px 20px;
 }
+
+#presentBtn {
+  font-family: Verdana;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+
+  .icon-present-mode {
+    margin: 0 6px 0px 0px;
+  }
+}
