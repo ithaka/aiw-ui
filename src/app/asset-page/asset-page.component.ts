@@ -897,6 +897,10 @@ export class AssetPage implements OnInit, OnDestroy {
                     queryParams['groupId'] = this.assetGroupId
                 }
 
+                if (this.presentMode) {
+                    queryParams['presentMode'] = true
+                }
+
                 // Add zoom query params for saved views
                 if(this.prevAssetResults.thumbnails[prevAssetIndex]['zoom']) {
                     queryParams['x'] = this.prevAssetResults.thumbnails[prevAssetIndex]['zoom'].viewerX
@@ -930,6 +934,10 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
                 if (this.assetGroupId) {
                     queryParams['groupId'] = this.assetGroupId
+                }
+
+                if (this.presentMode) {
+                    queryParams['presentMode'] = true
                 }
 
                 // Add zoom query params for saved views
