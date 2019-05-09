@@ -13,6 +13,29 @@
   padding: 24px;
   color: $color-white;
 
+  &.quiz-tooltip{
+    width: 380px;
+    bottom: 50px;
+    right: 20px;
+    left: auto;
+
+    &:before, &:after{
+      right: 28%;
+      left: auto;
+      transform: rotate(180deg);
+    }
+
+    &:before {
+      bottom: -14px;
+      top: auto;
+    }
+
+    &:after {
+      bottom: -12px;
+      top: auto;
+    }
+  }
+
   &:before, &:after{
     content: '';
     display: block;
@@ -90,6 +113,18 @@
       vertical-align: middle;
       border-radius: 4px;
       background-color: $color-white;
+    }
+  }
+
+  .close {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+
+    span {
+      color: $color-white;
+      font-weight: 100;
+      font-size: 18px;
     }
   }
 }

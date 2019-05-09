@@ -1,8 +1,10 @@
-.tooltip-container(tabindex="2")
-  .new-badge(*ngIf="options.new") New!
+.tooltip-container(tabindex="2", [ngClass]="{ 'quiz-tooltip': options.badge && options.badge === 'STUDY' }")
+  button.close(type="button", (click)="close.emit()", aria-label="Close")
+    span(aria-hidden="true") &times;
+  .new-badge(*ngIf="options.badge") {{ options.badge }}
   .heading {{ options.heading }}
   .body-text {{ options.bodyText }}
   .links
-    a(tabindex="2", aria-label="Got it! Hit enter or escape to close this tooltip.", (click)="close.emit()", (keyup.esc)="close.emit()", (keyup.enter)="close.emit()") Got it
+    a(tabindex="2", [attr.aria-label]="dismissText + '! Hit enter or escape to close this tooltip.'", (click)="close.emit()", (keyup.esc)="close.emit()", (keyup.enter)="close.emit()") {{ options.dismissText }}
     span
     a(tabindex="2", aria-label="Learn more. Hit enter to be open a new tab to an Artstor support page.", [href]="options.learnMoreURL", target="_blank", (click)="close.emit()", (keyup.enter)="close.emit()") Learn More
