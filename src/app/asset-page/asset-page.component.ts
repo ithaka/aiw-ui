@@ -179,6 +179,7 @@ export class AssetPage implements OnInit, OnDestroy {
     // Flag for server vs client rendering
     public isBrowser: boolean = true
     public presentMode: boolean = false
+    public studyMode: boolean = false
 
     private hasPrivateGroups: boolean = true
 
@@ -304,6 +305,12 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.presentMode = true
                 } else {
                     this.presentMode = false
+                }
+
+                if(routeParams['studyMode']) {
+                    this.studyMode = true
+                } else {
+                    this.studyMode = false
                 }
             })
         ); // subscriptions.push
@@ -533,6 +540,10 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.meta.updateTag({ property: 'og:image', content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
                 // Update content info in GTM data layer
                 this.trackContentDataLayer(asset)
+
+                if(this.studyMode) {
+                    this.toggleQuizMode()
+                }
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
@@ -1145,7 +1156,7 @@ export class AssetPage implements OnInit, OnDestroy {
         this.showAssetDrawer = false;
 
         // If presentMode, go back to the group on fullscreen exit
-        if(this.presentMode) {
+        if(this.presentMode || this.studyMode) {
             this.backToResults()
         }
     }

@@ -58,7 +58,6 @@ import { ToolboxService } from '../toolbox.service';
      * Routes user to fullscreen, presentation mode via Asset Page
      */
     public presentGroup(): void {
-      console.log('presentGroup called', this.ig)
       let id = ''
       if(this.ig.items[0] && this.ig.items[0].id) {
         id = this.ig.items[0].id
@@ -69,6 +68,24 @@ import { ToolboxService } from '../toolbox.service';
         prevRouteTS: this._assets.currentPreviousRouteTS ,
         groupId: this.ig.id,
         presentMode: true
+      }
+      // Enter fullscreen - must fire within click binding (Firefox, Safari)
+      this._toolbox.requestFullScreen()
+      // Route to viewer
+      this._router.navigate(['/asset', id, queryParams]);
+    }
+
+    public studyGroup(): void {
+      let id = ''
+      if(this.ig.items[0] && this.ig.items[0].id) {
+        id = this.ig.items[0].id
+      } else {
+        id = this.ig.items[0]
+      }
+      let queryParams = {
+        prevRouteTS: this._assets.currentPreviousRouteTS ,
+        groupId: this.ig.id,
+        studyMode: true
       }
       // Enter fullscreen - must fire within click binding (Firefox, Safari)
       this._toolbox.requestFullScreen()

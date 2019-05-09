@@ -36,3 +36,7 @@
         a#presentLink.icon-link(*ngIf="exportReframeFlag", tabindex="3", (click)="presentGroup()", (keyup.enter)="presentGroup()")
           i.icon.icon-present-mode
           | Present
+
+        a#studyLink.icon-link(*ngIf="exportReframeFlag", tabindex="3", (click)="studyGroup()", (keyup.enter)="studyGroup()")
+          i.icon.icon-study-mode
+          | Study
