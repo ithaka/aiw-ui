@@ -10,8 +10,8 @@
     .col-lg-4.col-md-4.col-sm-4.btn-row.center-align
         //- button.btn.btn-secondary.ml-3 Export
         .dropdown.d-inline-block(*ngIf="exportReframeFlag", ngbDropdown, aria-haspopup="true", (openChange)="dropDownOpen = $event")
-            button#exportDropdown.btn.btn-secondary((mouseover)="dropDownBtnHovered = true", (mouseout)="dropDownBtnHovered = false",(focus)="dropDownBtnFocused = true", (focusout)="dropDownBtnFocused = false", ngbDropdownToggle, tabindex="3", aria-label="Export group")
-              i.icon([ngClass]="[ dropDownBtnHovered || dropDownBtnFocused || dropDownOpen ? 'icon-export-btn-hover' : 'icon-export-btn']")
+            button#exportDropdown.btn.btn-primary.m-0((mouseover)="dropDownBtnHovered = true", (mouseout)="dropDownBtnHovered = false",(focus)="dropDownBtnFocused = true", (focusout)="dropDownBtnFocused = false", ngbDropdownToggle, tabindex="3", aria-label="Export group")
+              i.icon.icon-export-btn-hover
               | Export
               = " "
             .dropdown-menu([ngClass]="{ 'hovered' : dropDownOptHovered || dropDownOptFocused }", ngbDropdownMenu)
@@ -33,6 +33,6 @@
                   label ZIP File
                   .caption Items and their metadata are combined as a compressed file
 
-        button#presentBtn.btn.btn-primary.ml-3(*ngIf="exportReframeFlag", (click)="presentGroup()")
+        a#presentLink.icon-link(*ngIf="exportReframeFlag", tabindex="3", (click)="presentGroup()", (keyup.enter)="presentGroup()")
           i.icon.icon-present-mode
           | Present
