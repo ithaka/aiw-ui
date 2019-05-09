@@ -1227,7 +1227,8 @@ export class AssetPage implements OnInit, OnDestroy {
             // Make sure the bounds are within the content size for the IIIF endpoint.
             bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']
             bounds['height'] = bounds['height'] > this.assets[0].viewportDimensions.contentSize['y'] ? this.assets[0].viewportDimensions.contentSize['y'] : bounds['height']
-// Ensure iiif parameter is encoded correctly
+
+            // Ensure iiif parameter is encoded correctly
             tilesourceStr = tilesourceStr.replace('.fcgi%3F', '.fcgi?').replace('info.json', '')
             if (tilesourceStr.indexOf('//') == 0) {
                 tilesourceStr = 'https:' + tilesourceStr
@@ -1238,8 +1239,8 @@ export class AssetPage implements OnInit, OnDestroy {
                 fullSizeLink = this.getDownloadServiceUrl(asset, fullSizeLink)
                 this.generatedFullURL = fullSizeLink
             }
-            // Attach zoom parameters to tilesource
-            tilesourceStr = tilesourceStr + Math.round( bounds['x'] ) + ',' + Math.round( bounds['y'] ) + ',' + Math.round( bounds['width'] ) + ',' + Math.round( bounds['height'] ) + '/full/0/default.jpg'
+            // Attach zoom parameters to tilesource. Note: Multiviews use default.jpg and normal assets use native.jpg
+            tilesourceStr = tilesourceStr + Math.round(bounds['x']) + ',' + Math.round(bounds['y']) + ',' + Math.round(bounds['width']) + ',' + Math.round(bounds['height']) + (this.multiviewItems ? '/full/0/default.jpg' : '/full/0/native.jpg')
             tilesourceStr = this.getDownloadServiceUrl(asset, tilesourceStr)
             this.downloadViewLink = tilesourceStr
             this.downloadViewReady = true
