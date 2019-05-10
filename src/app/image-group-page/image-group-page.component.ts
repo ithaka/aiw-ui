@@ -433,6 +433,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   /**
    * Dynamically trigger file download having file name & file download URL
+   * @requires browser
    */
   private downLoadFile(filename: string, fileURL: string): void{
     let downloadLinkElement = this._dom.create('a')
