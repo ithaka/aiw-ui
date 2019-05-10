@@ -305,16 +305,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
             }
           }
         }
-      }
-
-      else {
-        // Keep this until terms and conditions modal completely replace show ppt modal
-        // we will need a new way to know whether or not the user is authorized to download - for now, I will always enable them
-        if (this.ig.id) {
-          this.showPptModal = true;
-        } else {
-          this.showDownloadLimitModal = true;
-        }
+      } else {
+        console.error("showDownloadModal() Expected a valid export type, received: " + exportType)
       }
     } else if (!this.user.isLoggedIn) {
       // show login required modal if they're not logged in
@@ -441,11 +433,15 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   /**
    * Dynamically trigger file download having file name & file download URL
+   * @requires browser
    */
   private downLoadFile(filename: string, fileURL: string): void{
     let downloadLinkElement = this._dom.create('a')
+    downloadLinkElement.text = 'Download File'
     downloadLinkElement.download = filename
     downloadLinkElement.href = fileURL
+    // Firefox: Needs link to exist in document
+    document.body.appendChild(downloadLinkElement);
     downloadLinkElement.click()
     downloadLinkElement.remove()
   }
