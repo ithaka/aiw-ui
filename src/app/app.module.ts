@@ -58,7 +58,7 @@ import { BrowsePage, LibraryComponent, AdlCollectionFilterPipe, IgGroupFilterPip
 import { AssetPage, AgreeModalComponent, ArtstorViewerComponent } from './asset-page'
 import { AccountPage } from './account-page'
 import { AssociatedPage } from './associated-page'
-import { ImageGroupPage, PptModalComponent, TermsAndConditionsComponent } from './image-group-page'
+import { ImageGroupPage, TermsAndConditionsComponent } from './image-group-page'
 import { Login } from './login'
 import { NoContent } from './no-content'
 import { LinkPage } from './link-page'
@@ -244,7 +244,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     PaginationComponent,
     GuideTourComponent,
     PCollectionPage,
-    PptModalComponent,
     PwdResetModal,
     RegisterComponent,
     RegisterJstorModal,

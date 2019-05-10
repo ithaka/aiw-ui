@@ -86,7 +86,7 @@ export interface FeatureFlags {
   bannerCopy?: string,
   solrMetadata?: boolean,
   // detailViews?: boolean,
-  exportReframe?: boolean,
+  exportGoogle?: boolean,
   relatedResFlag?: boolean
 }
 

@@ -305,16 +305,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
             }
           }
         }
-      }
-
-      else {
-        // Keep this until terms and conditions modal completely replace show ppt modal
-        // we will need a new way to know whether or not the user is authorized to download - for now, I will always enable them
-        if (this.ig.id) {
-          this.showPptModal = true;
-        } else {
-          this.showDownloadLimitModal = true;
-        }
+      } else {
+        console.error("showDownloadModal() Expected a valid export type, received: " + exportType)
       }
     } else if (!this.user.isLoggedIn) {
       // show login required modal if they're not logged in
