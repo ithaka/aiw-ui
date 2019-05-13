@@ -28,6 +28,9 @@ $toastPad: 14px;
     &.error{
         border-top-color: #ED3323;
     }
+    &.info{
+        border-top-color: $blue;
+    }
 
     &.slide-in {
         animation: slide-in 0.5s forwards;
