@@ -17,6 +17,7 @@ import {
 } from './../shared'
 
 import { LoadingStateOptions, LoadingState } from './../modals/loading-state/loading-state.component'
+import { ToastService } from 'app/_services'
 
 @Component({
   selector: 'ang-image-group',
@@ -84,7 +85,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private _title: TitleService,
     private _storage: ArtstorStorageService,
-    private _dom: DomUtilityService
+    private _dom: DomUtilityService,
+    private _toasts: ToastService
 
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
@@ -420,7 +422,12 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   public closeExportLoadingState(event?: any): void {
     this.showExportLoadingState = false
     if(event && event['cancelExport']) {
-      console.log('Show cancel export toast!')
+      this._toasts.sendToast({
+        id: 'cancelExport',
+        type: 'info',
+        stringHTML: '<p>Your group export was cancelled.</p>',
+        links: []
+      })
     }
   }
 
