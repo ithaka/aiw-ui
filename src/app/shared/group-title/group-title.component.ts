@@ -20,7 +20,7 @@ import { ToolboxService } from '../toolbox.service';
     public dropDownOptFocused: boolean = false
     public dropDownOptHovered: boolean = false
 
-    public exportReframeFlag: boolean = false
+    public exportGoogleFlag: boolean = false
 
     private subscriptions: Subscription[] = []
 
@@ -40,7 +40,7 @@ import { ToolboxService } from '../toolbox.service';
       this.subscriptions.push(
         // Feature flag subscription
         this._flags.flagUpdates.subscribe((flags) => {
-            this.exportReframeFlag = flags.exportReframe ? true : false
+            this.exportGoogleFlag = flags.exportGoogle ? true : false
         }),
         // Read params
         this.route.params.subscribe((routeParams) => {

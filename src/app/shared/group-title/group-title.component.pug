@@ -21,7 +21,7 @@
                   label PowerPoint
                   .caption Exports as one image per slide, with metadata in the speaker notes
 
-              a#exportGsLink.dropdown-item((click)="_ig.triggerGoogleSlides()", (keyup.enter)="_ig.triggerGoogleSlides()", tabindex="3", aria-label="Google Slides", role="button")
+              a#exportGsLink.dropdown-item(*ngIf="exportGoogleFlag", (click)="_ig.triggerGoogleSlides()", (keyup.enter)="_ig.triggerGoogleSlides()", tabindex="3", aria-label="Google Slides", role="button")
                 i.icon.icon-google-slides
                 .content
                   label Google Slides

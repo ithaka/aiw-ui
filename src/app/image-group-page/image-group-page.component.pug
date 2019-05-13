@@ -16,7 +16,6 @@ div
 ang-google-auth(*ngIf="showGoogleAuth", (closeModal)="closeGoogleAuth($event)")
 ang-loading-state(*ngIf="showExportLoadingState", [options]="exportLoadingStateopts", (closeModal)="closeExportLoadingState($event)", (triggerRetry)="exportGroup($event)")
 ang-terms-and-conditions(*ngIf="showTermsConditions", [exportType]="exportType", (closeModal)="exportGroup($event)", [ig]="ig")
-ang-ig-download-modal(*ngIf="showPptModal", (closeModal)="showPptModal = false", [ig]="ig")
 ang-download-limit-modal(*ngIf="showDownloadLimitModal", (closeModal)="showDownloadLimitModal = false", [ig]="ig")
 ang-login-req-modal(*ngIf="showLoginModal", (closeModal)="showLoginModal = false")
 ang-no-ig-modal(*ngIf="showNoIgModal || showNoAccessIgModal", [noAccessIg]="showNoAccessIgModal", (closeModal)="showNoIgModal = false")
