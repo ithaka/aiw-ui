@@ -88,6 +88,7 @@
 @include icon('present-mode', 'svg');
 @include icon('study-mode', 'svg');
 @include icon('more', 'svg');
+@include icon('info', 'svg');
 @include icon('share', 'svg');
 @include icon('share-white', 'svg');
 @include icon('star', 'svg');
@@ -113,7 +114,7 @@
 @include icon('error', 'svg');
 @include icon('collab', 'gif');
 @include icon('iap', 'svg');
-@include icon('info', 'png');
+// @include icon('info', 'png');
 @include icon('compare', 'svg');
 @include icon--hover('icon-slideshow', 'gif');
 @include icon('add-white', 'svg');

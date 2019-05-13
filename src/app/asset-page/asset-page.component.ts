@@ -1412,17 +1412,19 @@ export class AssetPage implements OnInit, OnDestroy {
                     if (data.success) {
                         this.isProcessing = false
 
-                        this._localPC.setAsset({
-                            ssid: parseInt(this.assets[0].SSID),
-                            asset_metadata: formValue
-                        })
+                      this.closeEditDetails(1)
 
-                        this.closeEditDetails(1)
+                      this._localPC.setAsset({
+                        ssid: parseInt(this.assets[0].SSID),
+                        asset_metadata: formValue
+                      })
 
-                        // Reload asset metadata and pass the prevRouteTS param to make sure we load prevRouteParams
-                        setTimeout(() => {
-                            this._router.navigate([ '/asset', this.assets[0].id, this.prevRouteTS ? { prevRouteTS: this.prevRouteTS } : {} ])
-                        }, 250)
+                      this.showMetadataPending = true // Show pending metadata update message
+
+                      // Reload asset metadata and pass the prevRouteTS param to make sure we load prevRouteParams
+                      setTimeout(() => {
+                          this._router.navigate([ '/asset', this.assets[0].id, this.prevRouteTS ? { prevRouteTS: this.prevRouteTS } : {} ])
+                      }, 250)
                     }
                 },
                 error => {
@@ -1499,15 +1501,15 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private updateMetadataFromLocal(localData: LocalPCAsset): void {
         if (!localData) { return } // if we don't have metadata for that asset, we won't run any of the update code
+
         // Track whether or not server has propagated changes yet
-        this.showMetadataPending = false
         for (let key in localData.asset_metadata) {
             let metadataLabel: string = this.mapLocalFieldToLabel(key)
             let fieldValue: string = localData.asset_metadata[key]
             // all objects in formattedMetadata are arrays, but these should all be length 0
             if (fieldValue) {
                 if (this.assets[0].formattedMetadata[metadataLabel] && this.assets[0].formattedMetadata[metadataLabel].indexOf(fieldValue) > -1) {
-                    // No change
+                    this.showMetadataPending = false
                 } else {
                    this.assets[0].formattedMetadata[metadataLabel] = [fieldValue]
                    this.showMetadataPending = true
