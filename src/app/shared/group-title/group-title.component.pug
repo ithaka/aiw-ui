@@ -9,7 +9,7 @@
             span Last updated {{ ig.update_date | date:'MMMM dd, yyyy' }}
     .col-lg-4.col-md-4.col-sm-4.btn-row.center-align
         //- button.btn.btn-secondary.ml-3 Export
-        .dropdown.d-inline-block(*ngIf="exportReframeFlag", ngbDropdown, aria-haspopup="true", (openChange)="dropDownOpen = $event")
+        .dropdown.d-inline-block(ngbDropdown, aria-haspopup="true", (openChange)="dropDownOpen = $event")
             button#exportDropdown.btn.btn-primary.m-0((mouseover)="dropDownBtnHovered = true", (mouseout)="dropDownBtnHovered = false",(focus)="dropDownBtnFocused = true", (focusout)="dropDownBtnFocused = false", ngbDropdownToggle, tabindex="3", aria-label="Export group")
               i.icon.icon-export-btn-hover
               | Export
@@ -33,10 +33,10 @@
                   label ZIP File
                   .caption Items and their metadata are combined as a compressed file
 
-        a#presentLink.icon-link(*ngIf="exportReframeFlag", tabindex="3", (click)="presentGroup()", (keyup.enter)="presentGroup()")
+        a#presentLink.icon-link(tabindex="3", (click)="presentGroup()", (keyup.enter)="presentGroup()")
           i.icon.icon-present-mode
           | Present
 
-        a#studyLink.icon-link(*ngIf="exportReframeFlag", tabindex="3", (click)="studyGroup()", (keyup.enter)="studyGroup()")
+        a#studyLink.icon-link(tabindex="3", (click)="studyGroup()", (keyup.enter)="studyGroup()")
           i.icon.icon-study-mode
           | Study
