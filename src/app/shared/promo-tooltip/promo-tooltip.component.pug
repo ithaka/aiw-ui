@@ -5,6 +5,6 @@
   .heading {{ options.heading }}
   .body-text {{ options.bodyText }}
   .links
-    a(tabindex="2", [attr.aria-label]="dismissText + '! Hit enter or escape to close this tooltip.'", (click)="close.emit()", (keyup.esc)="close.emit()", (keyup.enter)="close.emit()") {{ options.dismissText }}
+    a(tabindex="2", [attr.aria-label]="options.dismissText + '! Hit enter or escape to close this tooltip.'", (click)="close.emit()", (keyup.esc)="close.emit()", (keyup.enter)="close.emit()") {{ options.dismissText }}
     span
     a(tabindex="2", aria-label="Learn more. Hit enter to be open a new tab to an Artstor support page.", [href]="options.learnMoreURL", target="_blank", (click)="close.emit()", (keyup.enter)="close.emit()") Learn More
