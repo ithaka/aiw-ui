@@ -174,11 +174,17 @@ export class AssetPage implements OnInit, OnDestroy {
     // Map for asset zoom values corresponding to the asset index in assets array
     public indexZoomMap: ImageZoomParams[] = []
 
+    // Tooltips
     public addGroupTooltipOpts: any = {}
+    public quizModeTooltipOpts: any = {}
     public addGrpTTDismissed: boolean = false
+    public quizModeTTDismissed: boolean = false
+    
     // Flag for server vs client rendering
     public isBrowser: boolean = true
+
     public presentMode: boolean = false
+    public studyMode: boolean = false
 
     private hasPrivateGroups: boolean = true
 
@@ -221,6 +227,7 @@ export class AssetPage implements OnInit, OnDestroy {
     ngOnInit() {
         this.user = this._auth.getUser();
         this.addGrpTTDismissed = this._storage.getLocal('addGrpTTDismissed') ? this._storage.getLocal('addGrpTTDismissed') : false
+        this.quizModeTTDismissed = this._storage.getLocal('quizModeTTDismissed') ? this._storage.getLocal('quizModeTTDismissed') : false
         this.subscriptions.push(
             this._flags.flagUpdates.subscribe((flags) => {
                 this.relatedResFlag = flags.relatedResFlag ? true : false
@@ -304,6 +311,20 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.presentMode = true
                 } else {
                     this.presentMode = false
+                }
+
+                if(routeParams['studyMode']) {
+                    this.studyMode = true
+
+                    this.quizModeTooltipOpts = {
+                        badge: 'STUDY',
+                        heading: 'Quiz Mode',
+                        bodyText: 'Test your skills to see if you can identify the items in this group without looking at the captions.',
+                        learnMoreURL: 'https://support.artstor.org/?article=zooming-image-details',
+                        dismissText: 'Try it'
+                    }
+                } else {
+                    this.studyMode = false
                 }
             })
         ); // subscriptions.push
@@ -429,10 +450,11 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // Set options for add to group tooltip component
         this.addGroupTooltipOpts = {
-            new: true,
+            badge: 'NEW!',
             heading: 'Add details to groups',
             bodyText: 'Zoom in on any image and add the detail to a group to refer back to later.',
-            learnMoreURL: 'https://support.artstor.org/?article=zooming-image-details'
+            learnMoreURL: 'https://support.artstor.org/?article=zooming-image-details',
+            dismissText: 'Got it'
         }
 
         this._group.hasPrivateGroups()
@@ -533,6 +555,10 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.meta.updateTag({ property: 'og:image', content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
                 // Update content info in GTM data layer
                 this.trackContentDataLayer(asset)
+
+                if(this.studyMode) {
+                    this.toggleQuizMode()
+                }
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
@@ -1153,7 +1179,7 @@ export class AssetPage implements OnInit, OnDestroy {
         this.showAssetDrawer = false;
 
         // If presentMode, go back to the group on fullscreen exit
-        if(this.presentMode) {
+        if(this.presentMode || this.studyMode) {
             this.backToResults()
         }
     }
@@ -1651,6 +1677,14 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // Add Google Analytics tracking for "detailViewTooltipDismissed"
         this.angulartics.eventTrack.next({ properties: { event: 'detailViewTooltipDismissed', category: 'promotion', label: this.assetIds[0] } })
+    }
+
+    public closeQuizModeTooltip(): void {
+        this.quizModeTTDismissed = true
+        this._storage.setLocal('quizModeTTDismissed', this.quizModeTTDismissed)
+
+        // Add Google Analytics tracking for "quizModeTooltipDismissed"
+        this.angulartics.eventTrack.next({ properties: { event: 'quizModeTooltipDismissed', category: 'promotion', label: this.assetIds[0] } })
     }
 
 }
