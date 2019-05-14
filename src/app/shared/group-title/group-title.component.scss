@@ -249,8 +249,8 @@
   &:hover, &:focus {
     color: $color-orange-active !important;
 
-    & .icon {
-      filter: brightness(75%);
-    }
+    // & .icon {
+    //   filter: brightness(75%);
+    // }
   }
 }

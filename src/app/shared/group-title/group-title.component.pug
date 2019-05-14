@@ -33,10 +33,10 @@
                   label ZIP File
                   .caption Items and their metadata are combined as a compressed file
 
-        a#presentLink.icon-link(tabindex="3", (click)="presentGroup()", (keyup.enter)="presentGroup()")
-          i.icon.icon-present-mode
+        a#presentLink.icon-link(tabindex="3", (click)="presentGroup()", (keyup.enter)="presentGroup()", (mouseenter)="presentHoverState = true", (mouseleave)="presentHoverState = false", (focus)="presentHoverState = true", (focusout)="presentHoverState = false")
+          i.icon([ngClass]="[ presentHoverState ? 'icon-present-mode-hover' : 'icon-present-mode' ]")
           | Present
 
-        a#studyLink.icon-link(tabindex="3", (click)="studyGroup()", (keyup.enter)="studyGroup()")
-          i.icon.icon-study-mode
+        a#studyLink.icon-link(tabindex="3", (click)="studyGroup()", (keyup.enter)="studyGroup()", (mouseenter)="studyHoverState = true", (mouseleave)="studyHoverState = false", (focus)="studyHoverState = true", (focusout)="studyHoverState = false")
+          i.icon([ngClass]="[ studyHoverState ? 'icon-study-mode-hover' : 'icon-study-mode' ]")
           | Study

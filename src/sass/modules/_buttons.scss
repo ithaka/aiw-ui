@@ -55,6 +55,16 @@ $iconBtnSize: $btnHeight;
      }
 }
 
+
+
+// Custom styles for dropdown buttons menu
+.dropdown{
+    &.show > .btn-primary.dropdown-toggle {
+        border-color: $color-orange-active !important;
+        background-color: $color-orange-active !important;
+    }
+}
+
 /**
  * @atom Button
  * @section Navigation > Buttons

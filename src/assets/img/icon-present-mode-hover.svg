@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>icon-present</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="group---present-study" transform="translate(-1047.000000, -337.000000)" stroke="#993E0A" stroke-width="1.71428571">
+            <g id="icon-present" transform="translate(1048.000000, 338.000000)">
+                <g id="icons/actions/present">
+                    <g id="Group" transform="translate(0.142857, 0.142857)">
+                        <path d="M2.48444256,0.198728276 L2.48444256,4.77015685" id="Line-2" stroke-linecap="square" transform="translate(2.484443, 2.484443) rotate(-225.000000) translate(-2.484443, -2.484443) "></path>
+                        <polyline id="Path-3" points="4.57142857 0 0 0 0 4.57142857"></polyline>
+                    </g>
+                    <g id="Group" transform="translate(11.357143, 2.642857) scale(-1, 1) translate(-11.357143, -2.642857) translate(8.857143, 0.142857)">
+                        <path d="M2.48444256,0.198728276 L2.48444256,4.77015685" id="Line-2" stroke-linecap="square" transform="translate(2.484443, 2.484443) rotate(-225.000000) translate(-2.484443, -2.484443) "></path>
+                        <polyline id="Path-3" points="4.57142857 0 0 0 0 4.57142857"></polyline>
+                    </g>
+                    <g id="Group" transform="translate(2.642857, 11.357143) scale(1, -1) translate(-2.642857, -11.357143) translate(0.142857, 8.857143)">
+                        <path d="M2.48444256,0.198728276 L2.48444256,4.77015685" id="Line-2" stroke-linecap="square" transform="translate(2.484443, 2.484443) rotate(-225.000000) translate(-2.484443, -2.484443) "></path>
+                        <polyline id="Path-3" points="4.57142857 0 0 0 0 4.57142857"></polyline>
+                    </g>
+                    <g id="Group" transform="translate(11.357143, 11.357143) scale(-1, -1) translate(-11.357143, -11.357143) translate(8.857143, 8.857143)">
+                        <path d="M2.48444256,0.198728276 L2.48444256,4.77015685" id="Line-2" stroke-linecap="square" transform="translate(2.484443, 2.484443) rotate(-225.000000) translate(-2.484443, -2.484443) "></path>
+                        <polyline id="Path-3" points="4.57142857 0 0 0 0 4.57142857"></polyline>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
