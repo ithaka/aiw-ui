@@ -298,7 +298,14 @@ export class AuthService implements CanActivate {
       // Clear in-memory object
       // delete this.currentAuthHeaders
       // Clear local user object, and other settings
+      let quizModeTTDismissed = this._storage.getLocal('quizModeTTDismissed')
       this._storage.clearLocalStorage()
+
+      // if quizModeTTDismissed is set make sure it's set after logout as well.
+      if(quizModeTTDismissed) {
+        this._storage.setLocal('quizModeTTDismissed', quizModeTTDismissed)
+      }
+      
       // Clear observables
       this.userSource.next({})
       this.institutionObjSource.next({})

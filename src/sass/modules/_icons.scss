@@ -56,7 +56,9 @@
         background-position: center center;
         background-size: 100% auto;
 
-        &:hover, &:focus, &:active {
+        &:hover, &:focus, &:active, 
+        .btn:hover &, .btn:focus &,
+        a:hover &, a:focus & {
             background-image: url('/assets/img/icon-' + $name + '--hover.' + $imageType);
         }
     }
@@ -85,8 +87,10 @@
 @include icon('export-white', 'svg');
 @include icon('fit', 'svg');
 @include icon('fullscreen', 'svg');
-@include icon('present-mode', 'svg');
+@include icon--hover('present-mode--orange', 'svg');
+@include icon--hover('study-mode', 'svg');
 @include icon('more', 'svg');
+@include icon('info', 'svg');
 @include icon('share', 'svg');
 @include icon('share-white', 'svg');
 @include icon('star', 'svg');
@@ -112,7 +116,7 @@
 @include icon('error', 'svg');
 @include icon('collab', 'gif');
 @include icon('iap', 'svg');
-@include icon('info', 'png');
+// @include icon('info', 'png');
 @include icon('compare', 'svg');
 @include icon--hover('icon-slideshow', 'gif');
 @include icon('add-white', 'svg');

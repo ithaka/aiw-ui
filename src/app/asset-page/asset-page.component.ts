@@ -174,11 +174,17 @@ export class AssetPage implements OnInit, OnDestroy {
     // Map for asset zoom values corresponding to the asset index in assets array
     public indexZoomMap: ImageZoomParams[] = []
 
+    // Tooltips
     public addGroupTooltipOpts: any = {}
+    public quizModeTooltipOpts: any = {}
     public addGrpTTDismissed: boolean = false
+    public quizModeTTDismissed: boolean = false
+    
     // Flag for server vs client rendering
     public isBrowser: boolean = true
+
     public presentMode: boolean = false
+    public studyMode: boolean = false
 
     private hasPrivateGroups: boolean = true
 
@@ -221,6 +227,7 @@ export class AssetPage implements OnInit, OnDestroy {
     ngOnInit() {
         this.user = this._auth.getUser();
         this.addGrpTTDismissed = this._storage.getLocal('addGrpTTDismissed') ? this._storage.getLocal('addGrpTTDismissed') : false
+        this.quizModeTTDismissed = this._storage.getLocal('quizModeTTDismissed') ? this._storage.getLocal('quizModeTTDismissed') : false
         this.subscriptions.push(
             this._flags.flagUpdates.subscribe((flags) => {
                 this.relatedResFlag = flags.relatedResFlag ? true : false
@@ -304,6 +311,20 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.presentMode = true
                 } else {
                     this.presentMode = false
+                }
+
+                if(routeParams['studyMode']) {
+                    this.studyMode = true
+
+                    this.quizModeTooltipOpts = {
+                        badge: 'STUDY',
+                        heading: 'Quiz Mode',
+                        bodyText: 'Test your skills to see if you can identify the items in this group without looking at the captions.',
+                        learnMoreURL: 'https://support.artstor.org/?article=quiz-mode-in-fullscreen',
+                        dismissText: 'Try it'
+                    }
+                } else {
+                    this.studyMode = false
                 }
             })
         ); // subscriptions.push
@@ -429,10 +450,11 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // Set options for add to group tooltip component
         this.addGroupTooltipOpts = {
-            new: true,
+            badge: 'NEW!',
             heading: 'Add details to groups',
             bodyText: 'Zoom in on any image and add the detail to a group to refer back to later.',
-            learnMoreURL: 'https://support.artstor.org/?article=zooming-image-details'
+            learnMoreURL: 'https://support.artstor.org/?article=zooming-image-details',
+            dismissText: 'Got it'
         }
 
         this._group.hasPrivateGroups()
@@ -533,6 +555,10 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.meta.updateTag({ property: 'og:image', content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
                 // Update content info in GTM data layer
                 this.trackContentDataLayer(asset)
+
+                if(this.studyMode) {
+                    this.toggleQuizMode(this.studyMode)
+                }
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
@@ -895,11 +921,12 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (this.assetGroupId) {
                     queryParams['groupId'] = this.assetGroupId
                 }
-
                 if (this.presentMode) {
                     queryParams['presentMode'] = true
                 }
-
+                if (this.studyMode) {
+                    queryParams['studyMode'] = true
+                }
                 // Add zoom query params for saved views
                 if(this.prevAssetResults.thumbnails[prevAssetIndex]['zoom']) {
                     queryParams['x'] = this.prevAssetResults.thumbnails[prevAssetIndex]['zoom'].viewerX
@@ -934,11 +961,12 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (this.assetGroupId) {
                     queryParams['groupId'] = this.assetGroupId
                 }
-
                 if (this.presentMode) {
                     queryParams['presentMode'] = true
                 }
-
+                if (this.studyMode) {
+                    queryParams['studyMode'] = true
+                }
                 // Add zoom query params for saved views
                 if(this.prevAssetResults.thumbnails[nextAssetIndex]['zoom']) {
                     queryParams['x'] = this.prevAssetResults.thumbnails[nextAssetIndex]['zoom'].viewerX
@@ -1153,7 +1181,7 @@ export class AssetPage implements OnInit, OnDestroy {
         this.showAssetDrawer = false;
 
         // If presentMode, go back to the group on fullscreen exit
-        if(this.presentMode) {
+        if(this.presentMode || this.studyMode) {
             this.backToResults()
         }
     }
@@ -1179,15 +1207,19 @@ export class AssetPage implements OnInit, OnDestroy {
         return (title && fileExt) ? title.replace(/\./g, '-') + '.' + fileExt : ''
     }
 
-    private toggleQuizMode(): void {
-        if (this.quizMode) { // Leave Quiz mode
+    private toggleQuizMode(forceValue?: boolean): void {
+        let targetValue = typeof(forceValue) != 'undefined' ? forceValue : !this.quizMode
+        if (targetValue === false) { // Leave Quiz mode
             this.quizMode = false;
             this.showAssetCaption = true;
         }
-        else { // Enter Quiz mode
-            this._log.log({
-                eventType: 'artstor_quiz_toggle'
-            })
+        else { 
+            // Enter Quiz mode
+            if (this.quizMode != targetValue) {
+                this._log.log({
+                    eventType: 'artstor_quiz_toggle'
+                })
+            }
             this.quizMode = true;
             this.showAssetCaption = false;
             this.toggleAssetDrawer(false);
@@ -1227,6 +1259,10 @@ export class AssetPage implements OnInit, OnDestroy {
             let multiviewIndex: number  = this.assetViewer.osdViewer._sequenceIndex || 0
             // Generate the view url from tilemap service
             let tilesourceStr: string = Array.isArray(asset.tileSource) ? asset.tileSource[multiviewIndex] : asset.tileSource
+            // If using rosa/IIIF endpoint, we have to use "native"
+            let isRosa: boolean = tilesourceStr.indexOf('rosa-iiif') !== -1
+            // IIIF api dictates that the name indicates type/quality
+            let imageQuality: string = (isRosa ? 'native.jpg' : 'default.jpg')
             let fullSizeLink: string
             // Make sure the bounds are adjusted for the negative x and y values
             bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
@@ -1243,12 +1279,12 @@ export class AssetPage implements OnInit, OnDestroy {
             }
             // Build full image url for multiviews
             if (this.multiviewItems) {
-                fullSizeLink = tilesourceStr + 'full/full/0/default.jpg'
+                fullSizeLink = tilesourceStr + 'full/full/0/' + imageQuality
                 fullSizeLink = this.getDownloadServiceUrl(asset, fullSizeLink)
                 this.generatedFullURL = fullSizeLink
             }
             // Attach zoom parameters to tilesource. Note: Multiviews use default.jpg and normal assets use native.jpg
-            tilesourceStr = tilesourceStr + Math.round(bounds['x']) + ',' + Math.round(bounds['y']) + ',' + Math.round(bounds['width']) + ',' + Math.round(bounds['height']) + (this.multiviewItems ? '/full/0/default.jpg' : '/full/0/native.jpg')
+            tilesourceStr = tilesourceStr + Math.round(bounds['x']) + ',' + Math.round(bounds['y']) + ',' + Math.round(bounds['width']) + ',' + Math.round(bounds['height']) + '/full/0/' + imageQuality
             tilesourceStr = this.getDownloadServiceUrl(asset, tilesourceStr)
             this.downloadViewLink = tilesourceStr
             this.downloadViewReady = true
@@ -1651,6 +1687,14 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // Add Google Analytics tracking for "detailViewTooltipDismissed"
         this.angulartics.eventTrack.next({ properties: { event: 'detailViewTooltipDismissed', category: 'promotion', label: this.assetIds[0] } })
+    }
+
+    public closeQuizModeTooltip(): void {
+        this.quizModeTTDismissed = true
+        this._storage.setLocal('quizModeTTDismissed', this.quizModeTTDismissed)
+
+        // Add Google Analytics tracking for "quizModeTooltipDismissed"
+        this.angulartics.eventTrack.next({ properties: { event: 'quizModeTooltipDismissed', category: 'promotion', label: this.assetIds[0] } })
     }
 
 }

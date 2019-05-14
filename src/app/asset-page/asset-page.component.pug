@@ -1,4 +1,4 @@
-.present-mode-curtain(*ngIf="presentMode")
+.present-mode-curtain(*ngIf="presentMode || studyMode")
 .container-fluid.asset-page(*ngIf="assetIds[0]", [class.fullscreen]="isFullscreen")
   .row
     //- View prev/next asset
@@ -65,6 +65,7 @@
           div(*ngIf="selectedJstorResult.doi") Stable URL: {{ 'http://www.jstor.org/stable/' + selectedJstorResult.doi }}
 
       .col-md-12.quiz-caption-cntnr(*ngIf="isFullscreen", [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg' ]")
+        ang-promo-tooltip(*ngIf="user.isLoggedIn && !quizModeTTDismissed && studyMode", [options]="quizModeTooltipOpts", (close)="closeQuizModeTooltip()")
         .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", (click)="showAssetCaption = !showAssetCaption", title="{{ showAssetCaption ? 'Hide Asset Meta Information' : 'Show Asset Meta Information' }}")
           span.caption-btn
           | {{ showAssetCaption ? 'HIDE CAPTION' : 'SHOW CAPTION' }}
