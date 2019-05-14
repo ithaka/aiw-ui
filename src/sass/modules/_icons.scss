@@ -56,7 +56,9 @@
         background-position: center center;
         background-size: 100% auto;
 
-        &:hover, &:focus, &:active {
+        &:hover, &:focus, &:active, 
+        .btn:hover &, .btn:focus &,
+        a:hover &, a:focus & {
             background-image: url('/assets/img/icon-' + $name + '--hover.' + $imageType);
         }
     }
@@ -85,10 +87,8 @@
 @include icon('export-white', 'svg');
 @include icon('fit', 'svg');
 @include icon('fullscreen', 'svg');
-@include icon('present-mode', 'svg');
-@include icon('present-mode-hover', 'svg');
-@include icon('study-mode', 'svg');
-@include icon('study-mode-hover', 'svg');
+@include icon--hover('present-mode', 'svg');
+@include icon--hover('study-mode', 'svg');
 @include icon('more', 'svg');
 @include icon('info', 'svg');
 @include icon('share', 'svg');
