@@ -320,7 +320,7 @@ export class AssetPage implements OnInit, OnDestroy {
                         badge: 'STUDY',
                         heading: 'Quiz Mode',
                         bodyText: 'Test your skills to see if you can identify the items in this group without looking at the captions.',
-                        learnMoreURL: 'https://support.artstor.org/?article=zooming-image-details',
+                        learnMoreURL: 'https://support.artstor.org/?article=quiz-mode-in-fullscreen',
                         dismissText: 'Try it'
                     }
                 } else {

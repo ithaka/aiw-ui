@@ -238,9 +238,19 @@
   color: $color-orange !important;
   text-transform: uppercase;
   text-decoration: none !important;
+  transition: color ease .15s;
 
   .icon {
     margin-right: 6px;
     font-size: 16px;
+    transition: filter ease .15s;
+  }
+
+  &:hover, &:focus {
+    color: $color-orange-active !important;
+
+    & .icon {
+      filter: brightness(75%);
+    }
   }
 }
