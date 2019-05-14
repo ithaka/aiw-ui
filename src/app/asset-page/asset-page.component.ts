@@ -557,7 +557,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.trackContentDataLayer(asset)
 
                 if(this.studyMode) {
-                    this.toggleQuizMode()
+                    this.toggleQuizMode(this.studyMode)
                 }
             }
             // Assign collections array for this asset. Provided in metadata
@@ -921,11 +921,12 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (this.assetGroupId) {
                     queryParams['groupId'] = this.assetGroupId
                 }
-
                 if (this.presentMode) {
                     queryParams['presentMode'] = true
                 }
-
+                if (this.studyMode) {
+                    queryParams['studyMode'] = true
+                }
                 // Add zoom query params for saved views
                 if(this.prevAssetResults.thumbnails[prevAssetIndex]['zoom']) {
                     queryParams['x'] = this.prevAssetResults.thumbnails[prevAssetIndex]['zoom'].viewerX
@@ -960,11 +961,12 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (this.assetGroupId) {
                     queryParams['groupId'] = this.assetGroupId
                 }
-
                 if (this.presentMode) {
                     queryParams['presentMode'] = true
                 }
-
+                if (this.studyMode) {
+                    queryParams['studyMode'] = true
+                }
                 // Add zoom query params for saved views
                 if(this.prevAssetResults.thumbnails[nextAssetIndex]['zoom']) {
                     queryParams['x'] = this.prevAssetResults.thumbnails[nextAssetIndex]['zoom'].viewerX
@@ -1205,15 +1207,19 @@ export class AssetPage implements OnInit, OnDestroy {
         return (title && fileExt) ? title.replace(/\./g, '-') + '.' + fileExt : ''
     }
 
-    private toggleQuizMode(): void {
-        if (this.quizMode) { // Leave Quiz mode
+    private toggleQuizMode(forceValue?: boolean): void {
+        let targetValue = typeof(forceValue) != 'undefined' ? forceValue : !this.quizMode
+        if (targetValue === false) { // Leave Quiz mode
             this.quizMode = false;
             this.showAssetCaption = true;
         }
-        else { // Enter Quiz mode
-            this._log.log({
-                eventType: 'artstor_quiz_toggle'
-            })
+        else { 
+            // Enter Quiz mode
+            if (this.quizMode != targetValue) {
+                this._log.log({
+                    eventType: 'artstor_quiz_toggle'
+                })
+            }
             this.quizMode = true;
             this.showAssetCaption = false;
             this.toggleAssetDrawer(false);

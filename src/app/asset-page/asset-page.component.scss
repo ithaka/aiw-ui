@@ -524,12 +524,6 @@ $titleNavBg: #eee;
   text-transform: capitalize;
 }
 
-// Custom styles for dropdown buttons menu
-.show > .btn-primary.dropdown-toggle {
-    border-color: $color-orange-active !important;
-    background-color: $color-orange-active !important;
-}
-
 .dropdown-menu {
 
     border: 1px solid $color-border-gray;

@@ -22,6 +22,10 @@ import { ToolboxService } from '../toolbox.service';
 
     public exportGoogleFlag: boolean = false
 
+    // Hover states for present and study mode
+    public presentHoverState: boolean = false
+    public studyHoverState: boolean = false
+
     private subscriptions: Subscription[] = []
 
     private prevRouteTS: string = ''
