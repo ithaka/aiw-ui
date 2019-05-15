@@ -74,7 +74,7 @@ module.exports = function (config) {
         port: 1205,
         dir: 'pacts/',
         consumer: 'aiw-ui',
-        provider: 'artaa_service'
+        provider: 'artaa_service2'
       },
     ],
     // 4) here we can define proxies to redirect requests from our pact tests to the mock server
@@ -88,7 +88,7 @@ module.exports = function (config) {
       '/api/secure/user/': 'http://localhost:1203/api/secure/user/',
       '/api/secure/user/abcdefg': 'http://localhost:1203/api/secure/user/abcdefg',
       // Uer Registration
-      'api/securre/register': 'http://localhost:1205/api/secure/register'
+      'api/securre/register': 'http://localhost:1205/api/secure/register',
 
       // Collection Endpoints
       '/api/v1/categorydesc/10374058879': 'http://localhost:1204/api/v1/categorydesc/10374058879',
