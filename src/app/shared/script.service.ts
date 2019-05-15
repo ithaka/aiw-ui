@@ -18,7 +18,8 @@ export class ScriptService {
         ScriptStore.forEach((script: any) => {
             this.scripts[script.name] = {
                 loaded: false,
-                src: script.src
+                src: script.src,
+                innerText: script.innerText || ''
             };
         });
     }
@@ -45,6 +46,7 @@ export class ScriptService {
                 script.charset = 'utf-8'
                 script.src = this.scripts[name].src
                 script.id = name
+                script.innerText = this.scripts[name].innerText || ''
                 if (script.readyState) {  // IE
                     script.onreadystatechange = () => {
                         if (script.readyState === 'loaded' || script.readyState === 'complete') {
@@ -58,10 +60,6 @@ export class ScriptService {
                         this.scripts[name].loaded = true;
                         resolve({script: name, loaded: true, status: 'loaded'});
                     };
-                }
-                // window binding for mouseflow script
-                if (script.id === 'mouseflow') {
-                  script.innerText = 'window._mfq = window._mfq || [];'
                 }
 
                 script.onerror = (error: any) => resolve({script: name, loaded: false, status: 'not_loaded'});
