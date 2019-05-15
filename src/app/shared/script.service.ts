@@ -59,6 +59,11 @@ export class ScriptService {
                         resolve({script: name, loaded: true, status: 'loaded'});
                     };
                 }
+                // window binding for mouseflow script
+                if (script.id === 'mouseflow') {
+                  script.innerText = 'window._mfq = window._mfq || [];'
+                }
+
                 script.onerror = (error: any) => resolve({script: name, loaded: false, status: 'not_loaded'});
                 this._dom.byTagName('head').appendChild(script);
             }
