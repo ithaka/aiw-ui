@@ -47,8 +47,6 @@ export class NavMenu implements OnInit, OnDestroy {
   // Flag for confimation popup for deleting selected asset(s) from the IG
   public showConfirmationModal: boolean = false
 
-  public exportReframeFlag: boolean = false
-
   @Input()
   private disableIgDelete: boolean = false;
 
@@ -112,10 +110,6 @@ export class NavMenu implements OnInit, OnDestroy {
           console.error(error)
         }
       )).subscribe(),
-      // Feature flag subscription
-      this._flags.flagUpdates.subscribe((flags) => {
-        this.exportReframeFlag = flags.exportReframe ? true : false
-      }),
       // Route params subscription
       this.route.params.subscribe((routeParams) => {
         this.params = routeParams

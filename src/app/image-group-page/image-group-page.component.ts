@@ -17,6 +17,7 @@ import {
 } from './../shared'
 
 import { LoadingStateOptions, LoadingState } from './../modals/loading-state/loading-state.component'
+import { ToastService } from 'app/_services'
 
 @Component({
   selector: 'ang-image-group',
@@ -84,7 +85,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private _title: TitleService,
     private _storage: ArtstorStorageService,
-    private _dom: DomUtilityService
+    private _dom: DomUtilityService,
+    private _toasts: ToastService
 
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
@@ -305,16 +307,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
             }
           }
         }
-      }
-
-      else {
-        // Keep this until terms and conditions modal completely replace show ppt modal
-        // we will need a new way to know whether or not the user is authorized to download - for now, I will always enable them
-        if (this.ig.id) {
-          this.showPptModal = true;
-        } else {
-          this.showDownloadLimitModal = true;
-        }
+      } else {
+        console.error("showDownloadModal() Expected a valid export type, received: " + exportType)
       }
     } else if (!this.user.isLoggedIn) {
       // show login required modal if they're not logged in
@@ -428,7 +422,12 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   public closeExportLoadingState(event?: any): void {
     this.showExportLoadingState = false
     if(event && event['cancelExport']) {
-      console.log('Show cancel export toast!')
+      this._toasts.sendToast({
+        id: 'cancelExport',
+        type: 'info',
+        stringHTML: '<p>Your group export was cancelled.</p>',
+        links: []
+      })
     }
   }
 
@@ -441,11 +440,15 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
   /**
    * Dynamically trigger file download having file name & file download URL
+   * @requires browser
    */
   private downLoadFile(filename: string, fileURL: string): void{
     let downloadLinkElement = this._dom.create('a')
+    downloadLinkElement.text = 'Download File'
     downloadLinkElement.download = filename
     downloadLinkElement.href = fileURL
+    // Firefox: Needs link to exist in document
+    document.body.appendChild(downloadLinkElement);
     downloadLinkElement.click()
     downloadLinkElement.remove()
   }

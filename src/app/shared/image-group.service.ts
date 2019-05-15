@@ -69,10 +69,6 @@ export class ImageGroupService {
           });
   }
 
-  public triggerIgDownload(): void {
-    this.igDownloadTrigger.emit();
-  }
-
   public triggerPPTExport(): void {
     this.igDownloadTrigger.emit('ppt');
   }

@@ -105,7 +105,7 @@ export class AssetPage implements OnInit, OnDestroy {
     private restrictedAssetsCount: number = 0
     private showMetadataPending: boolean = false
     private showMetadataError: boolean = false
-
+    // Share and Download URls
     private copyURLStatusMsg: string = ''
     private showCopyUrl: boolean = false
     private showEditDetails: boolean = false
@@ -115,6 +115,8 @@ export class AssetPage implements OnInit, OnDestroy {
     // Used for agree modal input, changes based on selection
     private downloadUrl: any
     private downloadName: string
+    public errorFormUrl: string
+    public iapFormUrl: string
 
     private prevRouteParams: any = []
 
@@ -172,10 +174,17 @@ export class AssetPage implements OnInit, OnDestroy {
     // Map for asset zoom values corresponding to the asset index in assets array
     public indexZoomMap: ImageZoomParams[] = []
 
+    // Tooltips
     public addGroupTooltipOpts: any = {}
+    public quizModeTooltipOpts: any = {}
     public addGrpTTDismissed: boolean = false
+    public quizModeTTDismissed: boolean = false
+    
     // Flag for server vs client rendering
     public isBrowser: boolean = true
+
+    public presentMode: boolean = false
+    public studyMode: boolean = false
 
     private hasPrivateGroups: boolean = true
 
@@ -218,6 +227,7 @@ export class AssetPage implements OnInit, OnDestroy {
     ngOnInit() {
         this.user = this._auth.getUser();
         this.addGrpTTDismissed = this._storage.getLocal('addGrpTTDismissed') ? this._storage.getLocal('addGrpTTDismissed') : false
+        this.quizModeTTDismissed = this._storage.getLocal('quizModeTTDismissed') ? this._storage.getLocal('quizModeTTDismissed') : false
         this.subscriptions.push(
             this._flags.flagUpdates.subscribe((flags) => {
                 this.relatedResFlag = flags.relatedResFlag ? true : false
@@ -295,6 +305,26 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.prevRouteParams = []
                     this.totalAssetCount = 1
                     this.assetNumber = 1
+                }
+
+                if(routeParams['presentMode']) {
+                    this.presentMode = true
+                } else {
+                    this.presentMode = false
+                }
+
+                if(routeParams['studyMode']) {
+                    this.studyMode = true
+
+                    this.quizModeTooltipOpts = {
+                        badge: 'STUDY',
+                        heading: 'Quiz Mode',
+                        bodyText: 'Test your skills to see if you can identify the items in this group without looking at the captions.',
+                        learnMoreURL: 'https://support.artstor.org/?article=quiz-mode-in-fullscreen',
+                        dismissText: 'Try it'
+                    }
+                } else {
+                    this.studyMode = false
                 }
             })
         ); // subscriptions.push
@@ -420,10 +450,11 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // Set options for add to group tooltip component
         this.addGroupTooltipOpts = {
-            new: true,
+            badge: 'NEW!',
             heading: 'Add details to groups',
             bodyText: 'Zoom in on any image and add the detail to a group to refer back to later.',
-            learnMoreURL: 'https://support.artstor.org/?article=zooming-image-details'
+            learnMoreURL: 'https://support.artstor.org/?article=zooming-image-details',
+            dismissText: 'Got it'
         }
 
         this._group.hasPrivateGroups()
@@ -506,6 +537,13 @@ export class AssetPage implements OnInit, OnDestroy {
 
                 // Set image share link
                 this.generateImgURL(this.assetIds[0], this.collectionType.type, this.encryptedAccess || this.fromOpenLibrary)
+                // Set report and request urls
+                this.errorFormUrl = this.getErrorFormUrl(this.assets[0])
+                if (this.route.snapshot.params.iap == 'true') {
+                    this.iapFormUrl = this.getIapFormUrl(this.assets[0])
+                } else {
+                    this.iapFormUrl = ''
+                }
                 // Load related results from jstor
                 if (this.relatedResFlag) {
                     this.getJstorRelatedResults(asset)
@@ -517,6 +555,10 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.meta.updateTag({ property: 'og:image', content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
                 // Update content info in GTM data layer
                 this.trackContentDataLayer(asset)
+
+                if(this.studyMode) {
+                    this.toggleQuizMode(this.studyMode)
+                }
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
@@ -574,18 +616,18 @@ export class AssetPage implements OnInit, OnDestroy {
             this.assets = [this.assets[0]]
             this.assetIds = [this.assetIds[0]]
             this.indexZoomMap = [this.indexZoomMap[0]]
-        } else if (Array.isArray(this.assets[0].tileSource)){ // Log GA event for opening a multi view item in Fullscreen
-            this.angulartics.eventTrack.next({ properties: { event: 'multiViewItemFullscreen', category: 'multiview', label: this.assets[0].id } });
-        }
-        else {
+        } else {
             // Make sure we only send one ga event when going to fullscreen mode
             if (this.isFullscreen !== isFullscreen) {
                 // Add Google Analytics tracking to "fullscreen" button
                 this.angulartics.eventTrack.next({ properties: { event: 'Enter Fullscreen', category: 'fullscreen', label: this.assetIds[0] } })
+                // Log GA event for opening a multi view item in Fullscreen
+                if (this.multiviewItems) {
+                    this.angulartics.eventTrack.next({ properties: { event: 'multiViewItemFullscreen', category: 'multiview', label: this.assets[0].id } });
+                }
             }
         }
         this.isFullscreen = isFullscreen
-
     }
 
     /**
@@ -617,6 +659,11 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     setDownloadView(): void {
         this.downloadUrl = this.downloadViewLink
+        if (this.assetGroupId && this.downloadUrl.indexOf("/media/") === -1 ) {
+            // Group id needs to be passed to allow download for images accessed via groups
+            // - Binder prefers lowercase service this.downloadUrl params
+            this.downloadUrl = this.downloadUrl + '&groupid=' + this.assetGroupId
+        }
         this.showAgreeModal = true
         this.downloadName = 'download.jpg'
     }
@@ -666,7 +713,7 @@ export class AssetPage implements OnInit, OnDestroy {
      * @param asset Asset for which the user is requesting IAP
      * @returns string Request IAP form url with query params
      */
-    getIapFormUrl(asset: Asset): string {
+    private getIapFormUrl(asset: Asset): string {
         let baseUrl = 'http://www.artstor.org/form/iap-request-form'
         let name = asset.title
         let collection = asset.formattedMetadata && asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
@@ -682,8 +729,9 @@ export class AssetPage implements OnInit, OnDestroy {
      * @param asset Asset for which the user is reporting an error
      * @returns string Error form url with query params
      */
-    getErrorFormUrl(asset: Asset): string {
+    private getErrorFormUrl(asset: Asset): string {
         let baseUrl = 'http://www.artstor.org/form/report-error'
+
         let collection = asset.formattedMetadata && asset.formattedMetadata['Collection'] && asset.formattedMetadata['Collection'][0] ? asset.formattedMetadata['Collection'][0] : ''
         let id = asset.id
         let email = this.user.username
@@ -850,7 +898,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.showAddModal = true
             } else {
                 this.showCreateGroupModal = true
-            }            
+            }
         } else {
           this.showLoginModal = true;
         }
@@ -873,7 +921,12 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (this.assetGroupId) {
                     queryParams['groupId'] = this.assetGroupId
                 }
-
+                if (this.presentMode) {
+                    queryParams['presentMode'] = true
+                }
+                if (this.studyMode) {
+                    queryParams['studyMode'] = true
+                }
                 // Add zoom query params for saved views
                 if(this.prevAssetResults.thumbnails[prevAssetIndex]['zoom']) {
                     queryParams['x'] = this.prevAssetResults.thumbnails[prevAssetIndex]['zoom'].viewerX
@@ -908,7 +961,12 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (this.assetGroupId) {
                     queryParams['groupId'] = this.assetGroupId
                 }
-
+                if (this.presentMode) {
+                    queryParams['presentMode'] = true
+                }
+                if (this.studyMode) {
+                    queryParams['studyMode'] = true
+                }
                 // Add zoom query params for saved views
                 if(this.prevAssetResults.thumbnails[nextAssetIndex]['zoom']) {
                     queryParams['x'] = this.prevAssetResults.thumbnails[nextAssetIndex]['zoom'].viewerX
@@ -1121,6 +1179,11 @@ export class AssetPage implements OnInit, OnDestroy {
 
         this.assetViewer.togglePresentationMode();
         this.showAssetDrawer = false;
+
+        // If presentMode, go back to the group on fullscreen exit
+        if(this.presentMode || this.studyMode) {
+            this.backToResults()
+        }
     }
 
     private backToResults(): void {
@@ -1144,15 +1207,19 @@ export class AssetPage implements OnInit, OnDestroy {
         return (title && fileExt) ? title.replace(/\./g, '-') + '.' + fileExt : ''
     }
 
-    private toggleQuizMode(): void {
-        if (this.quizMode) { // Leave Quiz mode
+    private toggleQuizMode(forceValue?: boolean): void {
+        let targetValue = typeof(forceValue) != 'undefined' ? forceValue : !this.quizMode
+        if (targetValue === false) { // Leave Quiz mode
             this.quizMode = false;
             this.showAssetCaption = true;
         }
-        else { // Enter Quiz mode
-            this._log.log({
-                eventType: 'artstor_quiz_toggle'
-            })
+        else { 
+            // Enter Quiz mode
+            if (this.quizMode != targetValue) {
+                this._log.log({
+                    eventType: 'artstor_quiz_toggle'
+                })
+            }
             this.quizMode = true;
             this.showAssetCaption = false;
             this.toggleAssetDrawer(false);
@@ -1177,7 +1244,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
     }
 
-    private genDownloadViewLink() {
+    private genDownloadLinks() {
         // Do nothing if this is not an image
         if (!this.assets[0].typeName || !this.assets[0].typeName.length) {
             return
@@ -1189,7 +1256,14 @@ export class AssetPage implements OnInit, OnDestroy {
         if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
             // Get Bounds from OSD viewer for the saved detail
             let bounds = this.assetViewer.osdViewer.viewport.viewportToImageRectangle(this.assetViewer.osdViewer.viewport.getBounds(true))
-
+            let multiviewIndex: number  = this.assetViewer.osdViewer._sequenceIndex || 0
+            // Generate the view url from tilemap service
+            let tilesourceStr: string = Array.isArray(asset.tileSource) ? asset.tileSource[multiviewIndex] : asset.tileSource
+            // If using rosa/IIIF endpoint, we have to use "native"
+            let isRosa: boolean = tilesourceStr.indexOf('rosa-iiif') !== -1
+            // IIIF api dictates that the name indicates type/quality
+            let imageQuality: string = (isRosa ? 'native.jpg' : 'default.jpg')
+            let fullSizeLink: string
             // Make sure the bounds are adjusted for the negative x and y values
             bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
             bounds['height'] = bounds['y'] < 0 ? bounds['height'] + bounds['y'] : bounds['height']
@@ -1198,17 +1272,20 @@ export class AssetPage implements OnInit, OnDestroy {
             bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']
             bounds['height'] = bounds['height'] > this.assets[0].viewportDimensions.contentSize['y'] ? this.assets[0].viewportDimensions.contentSize['y'] : bounds['height']
 
-            // Generate the view url from tilemap service
-            let tilesourceStr = Array.isArray(asset.tileSource) ? asset.tileSource[0] : asset.tileSource
-            // Attach zoom parameters to tilesource
-            tilesourceStr = tilesourceStr.replace('info.json', '') + Math.round( bounds['x'] ) + ',' + Math.round( bounds['y'] ) + ',' + Math.round( bounds['width'] ) + ',' + Math.round( bounds['height'] ) + '/full/0/native.jpg'
             // Ensure iiif parameter is encoded correctly
-            tilesourceStr = tilesourceStr.replace('.fcgi%3F', '.fcgi?')
+            tilesourceStr = tilesourceStr.replace('.fcgi%3F', '.fcgi?').replace('info.json', '')
             if (tilesourceStr.indexOf('//') == 0) {
                 tilesourceStr = 'https:' + tilesourceStr
             }
-
-            tilesourceStr = this._auth.getUrl() + "/download?imgid=" + asset.id + "&url=" + encodeURIComponent( encodeURI(tilesourceStr) ) + "&iiif=true"
+            // Build full image url for multiviews
+            if (this.multiviewItems) {
+                fullSizeLink = tilesourceStr + 'full/full/0/' + imageQuality
+                fullSizeLink = this.getDownloadServiceUrl(asset, fullSizeLink)
+                this.generatedFullURL = fullSizeLink
+            }
+            // Attach zoom parameters to tilesource. Note: Multiviews use default.jpg and normal assets use native.jpg
+            tilesourceStr = tilesourceStr + Math.round(bounds['x']) + ',' + Math.round(bounds['y']) + ',' + Math.round(bounds['width']) + ',' + Math.round(bounds['height']) + '/full/0/' + imageQuality
+            tilesourceStr = this.getDownloadServiceUrl(asset, tilesourceStr)
             this.downloadViewLink = tilesourceStr
             this.downloadViewReady = true
             this.downloadLoading = false
@@ -1216,6 +1293,16 @@ export class AssetPage implements OnInit, OnDestroy {
         else {
             this.downloadLoading = false
         }
+    }
+
+    /**
+     * Fill parameters for Download Service
+     * @description Use the download service to attach metadata
+     * @param asset Item being downloaded
+     * @param downloadUrl Url to the image for the item
+     */
+    private getDownloadServiceUrl(asset, downloadUrl): string {
+        return this._auth.getUrl() + "/download?imgid=" + asset.id + "&url=" + encodeURIComponent( encodeURI(downloadUrl) ) + "&iiif=true"
     }
 
     /**
@@ -1335,19 +1422,19 @@ export class AssetPage implements OnInit, OnDestroy {
                     if (data.success) {
                         this.isProcessing = false
 
-                        this._localPC.setAsset({
-                            ssid: parseInt(this.assets[0].SSID),
-                            asset_metadata: formValue
-                        })
+                      this.closeEditDetails(1)
 
-                        this.closeEditDetails(1)
+                      this._localPC.setAsset({
+                        ssid: parseInt(this.assets[0].SSID),
+                        asset_metadata: formValue
+                      })
 
-                        // Reload asset metadata
-                        this._router.navigate(['/asset', ''])
-                        setTimeout(() => {
-                            // Pass the prevRouteTS param to make sure we load prevRouteParams
-                            this._router.navigate([ '/asset', this.assets[0].id, this.prevRouteTS ? { prevRouteTS: this.prevRouteTS } : {} ])
-                        }, 250)
+                      this.showMetadataPending = true // Show pending metadata update message
+
+                      // Reload asset metadata and pass the prevRouteTS param to make sure we load prevRouteParams
+                      setTimeout(() => {
+                          this._router.navigate([ '/asset', this.assets[0].id, this.prevRouteTS ? { prevRouteTS: this.prevRouteTS } : {} ])
+                      }, 250)
                     }
                 },
                 error => {
@@ -1424,15 +1511,15 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private updateMetadataFromLocal(localData: LocalPCAsset): void {
         if (!localData) { return } // if we don't have metadata for that asset, we won't run any of the update code
+
         // Track whether or not server has propagated changes yet
-        this.showMetadataPending = false
         for (let key in localData.asset_metadata) {
             let metadataLabel: string = this.mapLocalFieldToLabel(key)
             let fieldValue: string = localData.asset_metadata[key]
             // all objects in formattedMetadata are arrays, but these should all be length 0
             if (fieldValue) {
                 if (this.assets[0].formattedMetadata[metadataLabel] && this.assets[0].formattedMetadata[metadataLabel].indexOf(fieldValue) > -1) {
-                    // No change
+                    this.showMetadataPending = false
                 } else {
                    this.assets[0].formattedMetadata[metadataLabel] = [fieldValue]
                    this.showMetadataPending = true
@@ -1600,6 +1687,14 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // Add Google Analytics tracking for "detailViewTooltipDismissed"
         this.angulartics.eventTrack.next({ properties: { event: 'detailViewTooltipDismissed', category: 'promotion', label: this.assetIds[0] } })
+    }
+
+    public closeQuizModeTooltip(): void {
+        this.quizModeTTDismissed = true
+        this._storage.setLocal('quizModeTTDismissed', this.quizModeTTDismissed)
+
+        // Add Google Analytics tracking for "quizModeTooltipDismissed"
+        this.angulartics.eventTrack.next({ properties: { event: 'quizModeTooltipDismissed', category: 'promotion', label: this.assetIds[0] } })
     }
 
 }

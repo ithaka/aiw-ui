@@ -1,5 +1,5 @@
 .row.group-border(*ngIf="ig.name")
-    .col-lg-9.col-md-9.col-sm-9.btn-row
+    .col-lg-8.col-md-8.col-sm-8.btn-row
         .row.m-sm-0.pb-3(#titlerow="")
             h1.title {{ ig.name }}
         .row.m-sm-0.item-last-updated
@@ -7,11 +7,11 @@
             span(*ngIf="ig.total === 1") {{ ig.total }} item
             span.dot •
             span Last updated {{ ig.update_date | date:'MMMM dd, yyyy' }}
-    .col-lg-3.col-md-3.col-sm-9.btn-row.center-align
+    .col-lg-4.col-md-4.col-sm-4.btn-row.center-align
         //- button.btn.btn-secondary.ml-3 Export
-        .dropdown.d-inline-block(*ngIf="exportReframeFlag", ngbDropdown, aria-haspopup="true", (openChange)="dropDownOpen = $event")
-            button#exportDropdown.btn.btn-secondary((mouseover)="dropDownBtnHovered = true", (mouseout)="dropDownBtnHovered = false",(focus)="dropDownBtnFocused = true", (focusout)="dropDownBtnFocused = false", ngbDropdownToggle, tabindex="3", aria-label="Export group")
-              i.icon([ngClass]="[ dropDownBtnHovered || dropDownBtnFocused || dropDownOpen ? 'icon-export-btn-hover' : 'icon-export-btn']")
+        .dropdown.d-inline-block(ngbDropdown, aria-haspopup="true", (openChange)="dropDownOpen = $event")
+            button#exportDropdown.btn.btn-primary.m-0((mouseover)="dropDownBtnHovered = true", (mouseout)="dropDownBtnHovered = false",(focus)="dropDownBtnFocused = true", (focusout)="dropDownBtnFocused = false", ngbDropdownToggle, tabindex="3", aria-label="Export group")
+              i.icon.icon-export-btn-hover
               | Export
               = " "
             .dropdown-menu([ngClass]="{ 'hovered' : dropDownOptHovered || dropDownOptFocused }", ngbDropdownMenu)
@@ -21,7 +21,7 @@
                   label PowerPoint
                   .caption Exports as one image per slide, with metadata in the speaker notes
 
-              a#exportGsLink.dropdown-item((click)="_ig.triggerGoogleSlides()", (keyup.enter)="_ig.triggerGoogleSlides()", tabindex="3", aria-label="Google Slides", role="button")
+              a#exportGsLink.dropdown-item(*ngIf="exportGoogleFlag", (click)="_ig.triggerGoogleSlides()", (keyup.enter)="_ig.triggerGoogleSlides()", tabindex="3", aria-label="Google Slides", role="button")
                 i.icon.icon-google-slides
                 .content
                   label Google Slides
@@ -33,4 +33,10 @@
                   label ZIP File
                   .caption Items and their metadata are combined as a compressed file
 
-        //- button.btn.btn-primary.ml-3 Present
+        a#presentLink.icon-link(tabindex="3", (click)="presentGroup()", (keyup.enter)="presentGroup()")
+          i.icon.icon-present-mode--orange
+          | Present
+
+        a#studyLink.icon-link(tabindex="3", (click)="studyGroup()", (keyup.enter)="studyGroup()")
+          i.icon.icon-study-mode
+          | Study

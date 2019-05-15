@@ -1,3 +1,4 @@
+.present-mode-curtain(*ngIf="presentMode || studyMode")
 .container-fluid.asset-page(*ngIf="assetIds[0]", [class.fullscreen]="isFullscreen")
   .row
     //- View prev/next asset
@@ -64,6 +65,7 @@
           div(*ngIf="selectedJstorResult.doi") Stable URL: {{ 'http://www.jstor.org/stable/' + selectedJstorResult.doi }}
 
       .col-md-12.quiz-caption-cntnr(*ngIf="isFullscreen", [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg' ]")
+        ang-promo-tooltip(*ngIf="user.isLoggedIn && !quizModeTTDismissed && studyMode", [options]="quizModeTooltipOpts", (close)="closeQuizModeTooltip()")
         .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", (click)="showAssetCaption = !showAssetCaption", title="{{ showAssetCaption ? 'Hide Asset Meta Information' : 'Show Asset Meta Information' }}")
           span.caption-btn
           | {{ showAssetCaption ? 'HIDE CAPTION' : 'SHOW CAPTION' }}
@@ -107,12 +109,9 @@
                 role="button")
                 i.icon.icon-add-detail-view([class.disabled]="assetViewer.state !== 1 || multiviewItems")
                 | &nbsp;Add detail view
-
-
           //- Download dropdown options
-          | {{downloadUrl}}
-          .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess || assets[0].publicDownload)", ngbTooltip, [disableTooltip]="!multiviewItems", [ngbTooltip]="multiViewDownloadDisabled", triggers="focusin:focusout mouseenter:mouseleave", placement="bottom", aria-haspopup="true")
-            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="genDownloadViewLink()", (keydown.enter)="genDownloadViewLink()", (keyup.arrowdown)="downloadOptsArrowDown($event.target)", [disabled]="multiviewItems", tabindex="2", aria-label="Download")
+          .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess || assets[0].publicDownload)", triggers="focusin:focusout mouseenter:mouseleave", placement="bottom", aria-haspopup="true")
+            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="genDownloadLinks()", (keydown.enter)="genDownloadLinks()", (keyup.arrowdown)="downloadOptsArrowDown($event.target)", tabindex="2", aria-label="Download")
               | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
               = " "
             .dropdown-menu.download-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
@@ -201,8 +200,8 @@
             .label#ssid {{ 'ASSET_PAGE.METADATA_LABELS.SSID' | translate }}
               .value([innerHtml]="assets[0].SSID", aria-labelledby="ssid")
           .text-left.pt-2
-            a#buttonRequestIap.btn.btn-secondary.my-1(*ngIf="route.snapshot.params.iap == 'true'", [attr.href]="getIapFormUrl(assets[0])", title="Request Image for Academic Publishing", tabindex="8", target="_blank") {{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}
-            a#buttonReportAssetError.btn.btn-secondary.my-1([attr.href]="getErrorFormUrl(assets[0])", title="Report an error", tabindex="14", target="_blank") {{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}
+            a#buttonRequestIap.btn.btn-secondary.my-1(*ngIf="iapFormUrl", [attr.href]="getIapFormUrl(assets[0])", title="Request Image for Academic Publishing", tabindex="8", target="_blank") {{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}
+            a#buttonReportAssetError.btn.btn-secondary.my-1(*ngIf="errorFormUrl", [attr.href]="errorFormUrl", title="Report an error", tabindex="14", target="_blank") {{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}
 
         //- Form hidden by default
         .mt-2.d-none([class.d-block]="showEditDetails")

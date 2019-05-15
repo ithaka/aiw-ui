@@ -36,17 +36,15 @@
         .nav-item(ngbDropdown, (mouseenter)="openDrop($event, drop3)", (mouseleave)="closeDrop($event, drop3)", #drop3="ngbDropdown")
           button#shareMenu.btn.btn-link(ngbDropdownToggle, tabindex="1", (focus)="closeNavMenuDropdowns()") {{ 'NAV_MENU.SHARE.TITLE' | translate }}
           .dropdown-menu(ngbDropdownMenu, aria-labelledby="shareMenu")
-            button.dropdown-item([disabled]="selectedAssets.length !== 1", (click)="showShareLinkModal = true", tabindex="1") {{ 'NAV_MENU.SHARE.GENERATE_IMAGE_LINK' | translate }}
-            // Active on Image Group Page
-            button.dropdown-item([disabled]="!actionOptions.group || !genImgGrpLink", (click)="showShareIgModal = true", tabindex="1") {{ 'NAV_MENU.SHARE.GENERATE_GROUP_LINK' | translate }}
-            // Active on Image Group Page
-            button.dropdown-item([disabled]="!actionOptions.group", (click)="printImageGroupPage()", tabindex="1") {{ 'NAV_MENU.SHARE.PRINT_GROUP' | translate }}
-            // Active on Image Group Page
-            button.dropdown-item(*ngIf="!exportReframeFlag && params['igId']", (click)="_ig.triggerIgDownload()", tabindex="1") {{ 'NAV_MENU.SHARE.DOWNLOAD_GROUP' | translate }}
-            // Active on Image Group Page
-            button.dropdown-item(*ngIf="exportReframeFlag && params['igId']", (click)="_ig.triggerPPTExport()", tabindex="1") {{ 'NAV_MENU.SHARE.EXPORT_TO_PPT' | translate }}
-            // Active on Image Group Page
-            button.dropdown-item(*ngIf="exportReframeFlag && params['igId']", (click)="_ig.triggerZIPExport()", tabindex="1") {{ 'NAV_MENU.SHARE.EXPORT_AS_ZIP' | translate }}
+            button#shareNavImageLink.dropdown-item([disabled]="selectedAssets.length !== 1", (click)="showShareLinkModal = true", tabindex="1") {{ 'NAV_MENU.SHARE.GENERATE_IMAGE_LINK' | translate }}
+            //- Share Group link: Active on Image Group Page
+            button#shareNavGroupLink.dropdown-item([disabled]="!actionOptions.group || !genImgGrpLink", (click)="showShareIgModal = true", tabindex="1") {{ 'NAV_MENU.SHARE.GENERATE_GROUP_LINK' | translate }}
+            //- Print Group: Active on Image Group Page
+            button#shareNavPrintGroup.dropdown-item([disabled]="!actionOptions.group", (click)="printImageGroupPage()", tabindex="1") {{ 'NAV_MENU.SHARE.PRINT_GROUP' | translate }}
+            //- Export Group to PPT: Active on Image Group Page
+            button#shareNavExportGroupPPT.dropdown-item(*ngIf="params['igId']", (click)="_ig.triggerPPTExport()", tabindex="1") {{ 'NAV_MENU.SHARE.EXPORT_TO_PPT' | translate }}
+            //- Export Group to Zip: Active on Image Group Page
+            button#shareNavExportGroupZip.dropdown-item(*ngIf="params['igId']", (click)="_ig.triggerZIPExport()", tabindex="1") {{ 'NAV_MENU.SHARE.EXPORT_AS_ZIP' | translate }}
         .nav-item
           a#viewMenu.btn.btn-link(*ngIf="_auth.isPublicOnly()", href="//support.artstor.org/?article-category=05-public-access-to-artstor", target="_blank", tabindex="1", (focus)="closeNavMenuDropdowns()") Support
           a#viewMenu.btn.btn-link(*ngIf="!_auth.isPublicOnly()", href="//support.artstor.org", target="_blank", tabindex="1", (focus)="closeNavMenuDropdowns()") Support
