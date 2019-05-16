@@ -287,8 +287,39 @@ export class SearchModal implements OnInit, AfterViewInit {
    * Update advanceQueries, advanceSearchDate and selected filters based on applied filters from URL
    */
   private loadAppliedFiltersFromURL(): void{
-
     let routeParams = this.route.snapshot.params
+
+    // Setup selected filters object to show applied filters for edit
+    let appliedFiltersObj = {}
+    let query = routeParams['term']
+    let andQuerySegments = query.split(' AND ')
+    for(let andQuerySegment of andQuerySegments) {
+      let orQuerySegments = andQuerySegment.split(' OR ')
+      let termOperator = ''
+
+      if( orQuerySegments.length > 1 ) {
+        termOperator = ' OR '
+      } else {
+        termOperator = ' AND '
+      }
+      
+      for(let orQuerySegment of orQuerySegments) {
+        if( orQuerySegment.indexOf(':') > -1 ) { // Its a filter query
+          let key = orQuerySegment.split(':')[0]
+          let value = orQuerySegment.split(':')[1]
+          if(key === 'year') {
+            appliedFiltersObj['startDate'] = value.replace('[','').replace(']', '').split(' TO ')[0]
+            appliedFiltersObj['endDate'] = value.replace('[','').replace(']', '').split(' TO ')[1]
+          } else {
+            appliedFiltersObj[key] = appliedFiltersObj[key] ? appliedFiltersObj[key] + '|' + value.replace(/"/g, '') : value.replace(/"/g, '')
+          }
+        } else { // Its a term query
+          appliedFiltersObj['term'] = appliedFiltersObj['term'] ? appliedFiltersObj['term'] + termOperator + orQuerySegment : orQuerySegment
+        }
+      }
+    }
+
+    routeParams = appliedFiltersObj
 
     // Used to determine if generateSelectedFilters will be called or not, should only be called if we have a tri-state checkbox checked
     let updateSelectedFilters: boolean = false
