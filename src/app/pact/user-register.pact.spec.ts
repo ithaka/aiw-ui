@@ -4,6 +4,8 @@ import { TestBed, getTestBed, inject, async } from '@angular/core/testing'
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 import { Angulartics2, ANGULARTICS2_TOKEN, RouterlessTracking } from 'angulartics2'
 import { FormBuilder, FormGroup } from "@angular/forms"
+import { Location } from '@angular/common'
+import { AppConfig } from '../app.service'
 
 import { AuthService, } from '../shared'
 import { RegisterComponent } from '../register/register.component'
@@ -12,6 +14,7 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
 
   let provider
   let register: RegisterComponent
+  let _authService: AuthService
 
   beforeAll(function (done) {
     provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service2', port: 1205 })
@@ -28,12 +31,15 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule],
       providers: [
-        { provide: AuthService, usevalue: {} },
+        //{ provide: AuthService, usevalue: {} },
         { provide: Router, usevalue: {} },
         { provide: ActivatedRoute, usevalue: {} },
         { provide: RouterlessTracking, usevalue: {} },
         { provide: Angulartics2 },
         { provide: FormBuilder },
+        { provide: Location , usevalue: {} },
+        { provide: AppConfig, usevalue: {} },
+        AuthService,
         RegisterComponent
       ],
     })
@@ -82,10 +88,11 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
     })
 
     it('should return a user success response', (done) => {
-      this.register.registerSubmit(mockAlreadyRegisteredFormInput)
+      //this.register.registerCall(mockAlreadyRegisteredFormInput)
+
+      this._auth.registerUSer(mockAlreadyRegisteredFormInput)
         .then(res => {
           expect(res).toEqual(registerStatusMessages[0])
-
           done()
         },
           err => {
@@ -107,6 +114,17 @@ interface RegistrationFormBody {
     survey: string,
     portal: string
 }
+
+// let userInfo: any = {
+//   _method: 'update',
+//   username: formValue.email.toLowerCase(),
+//   password: formValue.password,
+//   role: formValue.role,
+//   dept: formValue.dept,
+//   info: formValue.info,
+//   survey: formValue.survey,
+//   portal: 'library'
+// }
 
   /**
    * Response Status Messages

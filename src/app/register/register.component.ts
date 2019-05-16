@@ -100,6 +100,9 @@ export class RegisterComponent implements OnInit {
 
   /** Gets called when the registration form is submitted */
   public registerSubmit(formValue: any) {
+
+    console.log('Value of formValue arg: ', formValue)
+
     this.registerCall = (value) => { return this._auth.registerUser(value) }
     this.serviceErrors = {}
     this.submitted = true
@@ -165,7 +168,7 @@ export class RegisterComponent implements OnInit {
     }
     else if (formSubmissionResponse['statusMessage'] === 'User already exists.' && formSubmissionResponse['statusCode'] === 1) {
       this.serviceErrors.duplicate = true
-    } 
+    }
     else if (formSubmissionResponse['statusCode'] === 3 || formSubmissionResponse['statusMessage'].indexOf('registered with Google') >= 0) {
       this.serviceErrors.hasGoogle = true
     }
