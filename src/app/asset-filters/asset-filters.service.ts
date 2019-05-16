@@ -187,6 +187,8 @@ export class AssetFiltersService {
             if ((group === filterObj.filterGroup)){
                 if (filterObj.filterValue.indexOf(filter) > -1) {
                     return true;
+                } else if (filterObj.filterValue[0] && filterObj.filterValue[0].indexOf(filter) > -1) {
+                    return true;
                 } else if (filterObj.filterValue == filter) {
                     return true;
                 }
