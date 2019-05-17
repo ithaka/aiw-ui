@@ -185,11 +185,8 @@ export class AssetFiltersService {
         for (let i = 0; i < this.appliedFilters.length; i++){
             let filterObj = this.appliedFilters[i];
             if ((group === filterObj.filterGroup)){
+                // Check if array contains filter
                 if (filterObj.filterValue.indexOf(filter) > -1) {
-                    return true;
-                } else if (filterObj.filterValue[0] && typeof(filterObj.filterValue[0]) == 'string' 
-                        && filterObj.filterValue[0].includes(filter) > -1
-                    ) {
                     return true;
                 } else if (filterObj.filterValue == filter) {
                     return true;
