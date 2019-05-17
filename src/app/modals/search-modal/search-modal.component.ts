@@ -460,7 +460,8 @@ export class SearchModal implements OnInit, AfterViewInit {
             if (this._auth.isPublicOnly() && facet.name == 'collectiontypes' && !(facetName.match(/5/))) { // For public user, only show public collection in collectiontype filter, 5 is Public Collection name
               facet.values.splice(i, 1)
             }
-            else if (facetName && facetName.length > 0){ // Some filters return empty strings, avoid those
+            else if ( (facetName && facetName.length > 0) && (facetName.indexOf('|') === -1) ){ // Some filters return empty strings, avoid those
+              // Make sure the facet name is properly formatted and doesn't contain `|` symbol
               // Push filter objects to Facet Group 'values' Array
               let facetObject: FacetObject = {
                 checked: false,

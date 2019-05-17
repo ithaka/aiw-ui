@@ -58,6 +58,9 @@ export class SearchPage implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    // Mouseflow script
+    this._script.loadScript('mouseflow')
+
     // Subscribe User object updates
     this.subscriptions.push(
       this._auth.currentUser.subscribe(
@@ -85,7 +88,7 @@ export class SearchPage implements OnInit, OnDestroy {
     this.route.params.subscribe( (routeParams) => {
       let params = Object.assign({}, routeParams);
 
-      // Find feature flags applied on route 
+      // Find feature flags applied on route
       // - Needs to be checked before running queryAll)
       this._flags.readFlags(routeParams)
 
