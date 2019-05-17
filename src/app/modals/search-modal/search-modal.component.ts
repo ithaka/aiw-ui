@@ -496,7 +496,7 @@ export class SearchModal implements OnInit, AfterViewInit {
             checked: false,
             name: geoObj.name,
             count: geoObj.count,
-            value: geoObj.efq,
+            value: geoObj.name,
             children: []
           }
 
@@ -505,7 +505,7 @@ export class SearchModal implements OnInit, AfterViewInit {
               checked: false,
               name: child.name,
               count: child.count,
-              value: child.efq
+              value: child.name
             }
 
             geoFacetObj.children.push( geoChildFacetObj )
