@@ -248,7 +248,7 @@ export class SearchModal implements OnInit, AfterViewInit {
     
     for(let key in filterParams) {
       if(key !== 'startDate' && key !== 'endDate') {
-        orQuery += ' AND '
+        orQuery += ' AND ('
         let filterValues = filterParams[key].split('|')
         let index = 0
         for(let value of filterValues) {
@@ -258,14 +258,14 @@ export class SearchModal implements OnInit, AfterViewInit {
           orQuery += key + ':"' + value + '"'
           index++
         }
+        // And closing parenthesis
+        orQuery += ')'
       }
     }
 
     if(filterParams["startDate"] && filterParams["endDate"]) {
       orQuery += ' AND ' + 'year:[' + filterParams["startDate"] + ' TO ' + filterParams["endDate"] + ']'
     }
-
-    console.log(orQuery, 'orquery')
 
     // Open search page with new query
     // this._router.navigate(['/search', advQuery, filterParams]);
@@ -292,6 +292,8 @@ export class SearchModal implements OnInit, AfterViewInit {
     // Setup selected filters object to show applied filters for edit
     let appliedFiltersObj = {}
     let query = routeParams['term']
+    // clean out wrapping parenthesis for OR queries
+    query = query.replace(/\(|\)/g, '')
     let andQuerySegments = query.split(' AND ')
     for(let andQuerySegment of andQuerySegments) {
       let orQuerySegments = andQuerySegment.split(' OR ')
