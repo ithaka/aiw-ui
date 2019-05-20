@@ -188,17 +188,20 @@ export class SearchComponent implements OnInit, OnDestroy {
     let queries = searchString.split('#');
     let searchTerm = '';
 
-    for (let query of queries){
-      let queryParts = query.split(',');
-      if (queryParts.length > 1){
-        searchTerm += ' ' + queryParts[0].toUpperCase();
-        searchTerm += ' ' + queryParts[1];
-        // searchTerm += ' ' + queryParts[1].split('|')[0];
+    if ( queries.length > 1) {
+      // Support for formatting legacy search queries in URLs
+      for (let query of queries){
+        let queryParts = query.split(',');
+        if (queryParts.length > 1){
+          searchTerm += ' ' + queryParts[0].toUpperCase();
+          searchTerm += ' ' + queryParts[1];
+        }
+        else if (queryParts.length === 1){
+          searchTerm += queryParts[0];
+        }
       }
-      else if (queryParts.length === 1){
-        searchTerm += queryParts[0];
-        // searchTerm += queryParts[0].split('|')[0];
-      }
+    } else {
+      searchTerm = queries[0]
     }
 
     this.term = searchTerm;

@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs'
-import { map, take } from 'rxjs/operators'
+import { map, take, filter } from 'rxjs/operators'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Component, OnInit, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild } from '@angular/core'
 import { Angulartics2 } from 'angulartics2'
@@ -239,9 +239,37 @@ export class SearchModal implements OnInit, AfterViewInit {
     if (currentParams['featureFlag']) {
       filterParams['featureFlag'] = currentParams['featureFlag']
     }
+    
+    // Construct OR query between filters within the same filter group
+    // filters across multiple filter groups will be AND-ed
+    // example orQuery: paints AND artclassification_str:"Photographs" OR artclassification_str:"Paintings" OR artclassification_str:"Prints" OR artclassification_str:"photographs" AND year:[-4000 TO 1980]
+    let orQuery: string = '';
+    orQuery += advQuery;
+    
+    for(let key in filterParams) {
+      if(key !== 'startDate' && key !== 'endDate') {
+        orQuery += ' AND ('
+        let filterValues = filterParams[key].split('|')
+        let index = 0
+        for(let value of filterValues) {
+          if(index > 0) {
+            orQuery += ' OR '
+          }
+          orQuery += key + ':"' + value + '"'
+          index++
+        }
+        // And closing parenthesis
+        orQuery += ')'
+      }
+    }
+
+    if(filterParams["startDate"] && filterParams["endDate"]) {
+      orQuery += ' AND ' + 'year:[' + filterParams["startDate"] + ' TO ' + filterParams["endDate"] + ']'
+    }
 
     // Open search page with new query
-    this._router.navigate(['/search', advQuery, filterParams]);
+    // this._router.navigate(['/search', advQuery, filterParams]);
+    this._router.navigate(['/search', orQuery]);
 
     // Close advance search modal
     this.close();
@@ -259,8 +287,41 @@ export class SearchModal implements OnInit, AfterViewInit {
    * Update advanceQueries, advanceSearchDate and selected filters based on applied filters from URL
    */
   private loadAppliedFiltersFromURL(): void{
-
     let routeParams = this.route.snapshot.params
+
+    // Setup selected filters object to show applied filters for edit
+    let appliedFiltersObj = {}
+    let query = routeParams['term']
+    // clean out wrapping parenthesis for OR queries
+    query = query.replace(/\(|\)/g, '')
+    let andQuerySegments = query.split(' AND ')
+    for(let andQuerySegment of andQuerySegments) {
+      let orQuerySegments = andQuerySegment.split(' OR ')
+      let termOperator = ''
+
+      if( orQuerySegments.length > 1 ) {
+        termOperator = ' OR '
+      } else {
+        termOperator = ' AND '
+      }
+      
+      for(let orQuerySegment of orQuerySegments) {
+        if( orQuerySegment.indexOf(':') > -1 ) { // Its a filter query
+          let key = orQuerySegment.split(':')[0]
+          let value = orQuerySegment.split(':')[1]
+          if(key === 'year') {
+            appliedFiltersObj['startDate'] = value.replace('[','').replace(']', '').split(' TO ')[0]
+            appliedFiltersObj['endDate'] = value.replace('[','').replace(']', '').split(' TO ')[1]
+          } else {
+            appliedFiltersObj[key] = appliedFiltersObj[key] ? appliedFiltersObj[key] + '|' + value.replace(/"/g, '') : value.replace(/"/g, '')
+          }
+        } else { // Its a term query
+          appliedFiltersObj['term'] = appliedFiltersObj['term'] ? appliedFiltersObj['term'] + termOperator + orQuerySegment : orQuerySegment
+        }
+      }
+    }
+
+    routeParams = appliedFiltersObj
 
     // Used to determine if generateSelectedFilters will be called or not, should only be called if we have a tri-state checkbox checked
     let updateSelectedFilters: boolean = false
@@ -437,7 +498,7 @@ export class SearchModal implements OnInit, AfterViewInit {
             checked: false,
             name: geoObj.name,
             count: geoObj.count,
-            value: geoObj.efq,
+            value: geoObj.name,
             children: []
           }
 
@@ -446,7 +507,7 @@ export class SearchModal implements OnInit, AfterViewInit {
               checked: false,
               name: child.name,
               count: child.count,
-              value: child.efq
+              value: child.name
             }
 
             geoFacetObj.children.push( geoChildFacetObj )
