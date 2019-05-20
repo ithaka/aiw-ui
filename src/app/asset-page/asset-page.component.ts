@@ -30,6 +30,7 @@ import { AppConfig } from '../app.service'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 import { MetadataService } from 'app/_services';
 import { rights } from './rights.ts'
+import { licenses } from './licenses.ts'
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
@@ -68,6 +69,11 @@ export class AssetPage implements OnInit, OnDestroy {
     public rightsText: string = ''
     public rightsLink: string = ''
     public rightsImg: string = ''
+
+    // License Statements values
+    public licenseText: string = ''
+    public licenseLink: string = ''
+    public licenseImg: string = ''
 
     // Toast Variables
     public showToast: boolean = false
@@ -566,12 +572,18 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         // Set download link
         this.setDownloadFull()
-
         if (this.assets[0] && this.assets[0].formattedMetadata && this.assets[0].formattedMetadata.Rights) {
             // Loop over Rights fields and set rights statement values via isRightStatement
             for (let i = 0; i < this.assets[0].formattedMetadata.Rights.length; i++) {
                 let rightsField = this.assets[0].formattedMetadata.Rights[i]
                 this.isRightStatement(rightsField)
+            }
+        }
+        if (this.assets[0] && this.assets[0].formattedMetadata && this.assets[0].formattedMetadata.License) {
+            // Loop over License fields and set license statement values via isCreativeCommonsLicense
+            for (let i = 0; i < this.assets[0].formattedMetadata.License.length; i++) {
+                let licenseField = this.assets[0].formattedMetadata.License[i]
+                this.isCreativeCommonsLicense(licenseField)
             }
         }
     }
@@ -794,6 +806,22 @@ export class AssetPage implements OnInit, OnDestroy {
         }
       }
       return false
+    }
+
+    public isCreativeCommonsLicense(license_text: string): boolean {
+        // Handle extra spaces and differences in punctuation in License fields
+        // by doing uppercase comparison of alphanumeric chars only
+        let reg = /[^a-zA-Z0-9]/
+
+        for (let i = 0; i < licenses.length; i++) {
+            if (licenses[i].name.split(reg).join('').toUpperCase() === license_text.split(reg).join('').toUpperCase()) {
+                this.licenseText = license_text
+                this.licenseLink = licenses[i].link
+                this.licenseImg = licenses[i].img
+                return true
+            }
+        }
+        return false
     }
 
     private handleSkipAsset(): void {
