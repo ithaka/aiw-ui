@@ -291,7 +291,12 @@ export class SearchModal implements OnInit, AfterViewInit {
 
     // Setup selected filters object to show applied filters for edit
     let appliedFiltersObj = {}
-    let query = routeParams['term']
+    let query: string = routeParams['term']
+    if (!query) {
+      // Do not process if query does not exist
+      this.loadingFilters = false
+      return
+    }
     // clean out wrapping parenthesis for OR queries
     query = query.replace(/\(|\)/g, '')
     let andQuerySegments = query.split(' AND ')
