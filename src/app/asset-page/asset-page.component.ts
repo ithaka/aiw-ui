@@ -80,6 +80,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Feature Flags
     public relatedResFlag: boolean = false
+    private isFullscreen: boolean = false
+
     private encryptedAccess: boolean = false
     private document = document
     private URL = URL
@@ -95,7 +97,6 @@ export class AssetPage implements OnInit, OnDestroy {
     private prevAssetResults: any = { thumbnails: [] }
     private loadArrayFirstAsset: boolean = false
     private loadArrayLastAsset: boolean = false
-    private isFullscreen: boolean = false
     private showAssetDrawer: boolean = false
 
     // MS IE/Edge for Download View
@@ -179,7 +180,7 @@ export class AssetPage implements OnInit, OnDestroy {
     public quizModeTooltipOpts: any = {}
     public addGrpTTDismissed: boolean = false
     public quizModeTTDismissed: boolean = false
-    
+
     // Flag for server vs client rendering
     public isBrowser: boolean = true
 
@@ -1213,7 +1214,7 @@ export class AssetPage implements OnInit, OnDestroy {
             this.quizMode = false;
             this.showAssetCaption = true;
         }
-        else { 
+        else {
             // Enter Quiz mode
             if (this.quizMode != targetValue) {
                 this._log.log({
