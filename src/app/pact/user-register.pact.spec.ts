@@ -92,7 +92,7 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
     it('should return a user success response', (done) => {
       //this.register.registerCall(mockAlreadyRegisteredFormInput)
 
-      this._auth.registerUSer(mockAlreadyRegisteredFormInput)
+      this._auth.registerUser(mockAlreadyRegisteredFormInput)
         .then(res => {
           expect(res).toEqual(registerStatusMessages[0])
           done()
@@ -107,14 +107,14 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
 })
 
 interface RegistrationFormBody {
-    _method: string,
+    //_method: string,
     username: string,
     password: string,
     role: string,
     dept: string,
     info: string,
     survey: string,
-    portal: string
+    //portal: string
 }
 
 // let userInfo: any = {
@@ -145,12 +145,12 @@ let registerStatusMessages: StatusResponse[] = [
 
 // Mock Test Form Inputs
 let mockAlreadyRegisteredFormInput: RegistrationFormBody = {
-  _method: 'update',
+  //_method: 'update',
   username: 'brett.fraley@ithaka.org',
   password: 'bretttest',
   role: 'ROLE_OTHER',
   dept: 'DEPT_OTHER',
   info: 'false',
   survey: 'false',
-  portal: 'library'
+  //portal: 'library'
 }
