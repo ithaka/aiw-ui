@@ -279,7 +279,6 @@ export class SearchModal implements OnInit, AfterViewInit {
    */
   private loadAppliedFiltersFromURL(): void{
     let routeParams = this.route.snapshot.params
-
     // Setup selected filters object to show applied filters for edit
     let appliedFiltersObj = {}
     let query: string = routeParams['term']
@@ -288,7 +287,8 @@ export class SearchModal implements OnInit, AfterViewInit {
       this.loadingFilters = false
       return
     }
-    // clean out wrapping parenthesis for OR queries
+    // Process advance search query string
+    // - clean out wrapping parenthesis for OR queries
     query = query.replace(/\(|\)/g, '')
     let andQuerySegments = query.split(' AND ')
     for(let andQuerySegment of andQuerySegments) {
@@ -316,12 +316,15 @@ export class SearchModal implements OnInit, AfterViewInit {
         }
       }
     }
-
+    // Maintain date filters via regular Asset Filters
+    if (routeParams['startDate'] || routeParams['endDate']) {
+      appliedFiltersObj['startDate'] = routeParams['startDate']
+      appliedFiltersObj['endDate'] = routeParams['endDate']
+    }
+    // Use cleaned params for applying
     routeParams = appliedFiltersObj
-
     // Used to determine if generateSelectedFilters will be called or not, should only be called if we have a tri-state checkbox checked
     let updateSelectedFilters: boolean = false
-
     for (let key in routeParams){
       let switchCaseValue: string = ( key === 'collectiontypes' || key === 'geography' ) ? 'colTypeGeo' : key
       switch ( switchCaseValue ){
@@ -344,8 +347,8 @@ export class SearchModal implements OnInit, AfterViewInit {
 
         // For tri-state checkboxes set the checked flag for filter object based on param value and in the end run generateSelectedFilters to updated selected filters object
         case 'artclassification_str': {
-          let classificatioFilters = routeParams[key].split('|')
-          for (let filter of classificatioFilters){
+          let classificationFilters = routeParams[key].split('|')
+          for (let filter of classificationFilters){
             let clsFilterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === key )
             let updateFilterObj = clsFilterGroup && clsFilterGroup.values.find( filterObj => filterObj.value === filter )
             updateFilterObj && (updateFilterObj.checked = true)
