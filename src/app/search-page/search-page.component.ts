@@ -64,7 +64,7 @@ export class SearchPage implements OnInit, OnDestroy {
         if (window['_mfq']) {
           // Trigger mouseflow page view
           // Doc: http://help.mouseflow.com/knowledge_base/topics/single-page-websites
-          window['_mfq'].push(["search"])
+          window['_mfq'].push(["newPageView", "/search"])
         } else {
           console.warn('Unable to find Mouseflow window object')
         }
