@@ -1259,10 +1259,6 @@ export class AssetPage implements OnInit, OnDestroy {
             let multiviewIndex: number  = this.assetViewer.osdViewer._sequenceIndex || 0
             // Generate the view url from tilemap service
             let tilesourceStr: string = Array.isArray(asset.tileSource) ? asset.tileSource[multiviewIndex] : asset.tileSource
-            // If using rosa/IIIF endpoint, we have to use "native"
-            let isRosa: boolean = tilesourceStr.indexOf('rosa-iiif') !== -1
-            // IIIF api dictates that the name indicates type/quality
-            let imageQuality: string = (isRosa ? 'native.jpg' : 'default.jpg')
             let fullSizeLink: string
             // Make sure the bounds are adjusted for the negative x and y values
             bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
@@ -1279,12 +1275,12 @@ export class AssetPage implements OnInit, OnDestroy {
             }
             // Build full image url for multiviews
             if (this.multiviewItems) {
-                fullSizeLink = tilesourceStr + 'full/full/0/' + imageQuality
+                fullSizeLink = tilesourceStr + 'full/full/0/' + asset.iiifFilename()
                 fullSizeLink = this.getDownloadServiceUrl(asset, fullSizeLink)
                 this.generatedFullURL = fullSizeLink
             }
             // Attach zoom parameters to tilesource. Note: Multiviews use default.jpg and normal assets use native.jpg
-            tilesourceStr = tilesourceStr + Math.round(bounds['x']) + ',' + Math.round(bounds['y']) + ',' + Math.round(bounds['width']) + ',' + Math.round(bounds['height']) + '/full/0/' + imageQuality
+            tilesourceStr = tilesourceStr + Math.round(bounds['x']) + ',' + Math.round(bounds['y']) + ',' + Math.round(bounds['width']) + ',' + Math.round(bounds['height']) + '/full/0/' + asset.iiifFilename()
             tilesourceStr = this.getDownloadServiceUrl(asset, tilesourceStr)
             this.downloadViewLink = tilesourceStr
             this.downloadViewReady = true

@@ -13,7 +13,10 @@ export class Asset {
     kalturaUrl: string
     downloadLink: string
     downloadName: string
+    // IIIF Attributes
     tileSource: any
+    qualities: string[] // IIIF quality available: https://iiif.io/api/image/2.1/#quality
+    formats: string[] = ['jpg'] // IIIF formats available: https://iiif.io/api/image/2.1/#format
     collectionType: number
     contributinginstitutionid: number
     personalCollectionOwner: number
@@ -94,7 +97,7 @@ export class Asset {
             default:
                 if (Array.isArray(this.tileSource) && this.tileSource.length >= 1) {
                     // Handle Multi View downloads using IIIF
-                    let url = 'https:' + this.tileSource[0].replace('info.json', '') + 'full/full/0/default.jpg'
+                    let url = 'https:' + this.tileSource[0].replace('info.json', '') + 'full/full/0/' + this.iiifFilename()
                     // Pass IIIF url to Download Service for processing metadata
                     // Include "iiif" param in this case
                     downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url) + "&iiif=true"
@@ -105,7 +108,7 @@ export class Asset {
                         if (url.indexOf('//') == 0) {
                             url = 'https:' + url
                         }
-                        url += 'full/3000,/0/native.jpg'
+                        url += 'full/3000,/0/' + this.iiifFilename()
                         
                         downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent( encodeURI(url) ) + "&iiif=true"
                     } else {
@@ -121,6 +124,14 @@ export class Asset {
                 }
         }
         return downloadLink
+    }
+
+    /**
+     * Get IIIF default filename
+     * - Combines default "quality" with default "format"
+     */
+    public iiifFilename(): string {
+        return this.qualities[0] + '.' + this.formats[0]
     }
 
     /**
@@ -228,6 +239,10 @@ export class Asset {
         else {
             this.tileSource = data.tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgPath) + '/info.json'
         }
+        // If using rosa/IIIF endpoint, we have to use "native"
+        let isRosa: boolean = this.tileSource.indexOf('rosa-iiif') !== -1
+        // IIIF api dictates that the name indicates type/quality
+        this.qualities = [(isRosa ? 'native' : 'default')]
         // Set download after tilesource determined
         this.downloadLink = this.buildDownloadLink(data, data.groupId)
 

@@ -6,7 +6,7 @@ import { CompleterService, CompleterData } from 'ng2-completer'
 import { Angulartics2 } from 'angulartics2'
 import { Router } from '@angular/router'
 
-import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService, DomUtilityService, ImageZoomParams } from './../../shared'
+import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService, DomUtilityService, ImageZoomParams, Asset } from './../../shared'
 import { ToastService } from 'app/_services';
 
 @Component({
@@ -19,7 +19,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
   @Output() createGroup: EventEmitter<any> = new EventEmitter()
   @Input() public copySelectionStr: string = 'ADD_TO_GROUP_MODAL.FROM_SELECTED'
   @Input() showCreateGroup: boolean = true
-  @Input() public selectedAssets: any[] = [] // this is used in the asset page, where a single asset can be injected directly
+  @Input() public selectedAssets: Asset[] = [] // this is used in the asset page, where a single asset can be injected directly
 
   public selectedIg: ImageGroup
   public selectedGroupName: string
@@ -99,7 +99,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
 
     if(this.selectedAssets[0]['zoom'] && this.selectedAssets[0]['zoom']['pointWidth']){
       this.detailViewBounds = this.selectedAssets[0]['zoom']
-      this.detailPreviewURL = this.selectedAssets[0].tileSource ? this.selectedAssets[0].tileSource.replace('info.json', '') + this.detailViewBounds['viewerX'] + ',' + this.detailViewBounds['viewerY'] + ',' + this.detailViewBounds['pointWidth'] + ',' + this.detailViewBounds['pointHeight'] + '/352,/0/native.jpg' : ''
+      this.detailPreviewURL = this.selectedAssets[0].tileSource ? this.selectedAssets[0].tileSource.replace('info.json', '') + this.detailViewBounds['viewerX'] + ',' + this.detailViewBounds['viewerY'] + ',' + this.detailViewBounds['pointWidth'] + ',' + this.detailViewBounds['pointHeight'] + '/352,/0/' + this.selectedAssets[0].iiifFilename() : ''
     }
 
     // Freeze background body scroll
