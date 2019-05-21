@@ -60,7 +60,14 @@ export class SearchPage implements OnInit, OnDestroy {
 
     // Mouseflow script
     this._script.loadScript('mouseflow')
-
+      .then(() => {
+        if (window['_mfq']) {
+          // trigger mouseflow page view
+          window['_mfq'].push(["search"])
+        } else {
+          console.warn('Unable to find Mouseflow window object')
+        }
+      })
     // Subscribe User object updates
     this.subscriptions.push(
       this._auth.currentUser.subscribe(
