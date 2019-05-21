@@ -210,17 +210,13 @@ export class SearchModal implements OnInit, AfterViewInit {
     if (!this.validateForm()) {
       return;
     }
-
     // Clear existing filters set outside this modal
     this._filters.clearApplied(true)
-
-    let advQuery
-    let filterParams
+    let advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
+    let filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
     let currentParams = this.route.snapshot.params
-
-    advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
-    filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
-
+    let queryParams = {}
+    // Consolidate filters with multiple applied
     for (let key in filterParams) {
       let filterValue = ''
       if ( filterParams[key] instanceof Array ){
@@ -231,15 +227,10 @@ export class SearchModal implements OnInit, AfterViewInit {
         filterParams[key] = filterValue
       }
     }
-
-    // Track in angulartics
-    this.angulartics.eventTrack.next({ properties: { event: 'advSearch', category: 'search', label: advQuery } })
-
     // Maintain feature flags
     if (currentParams['featureFlag']) {
-      filterParams['featureFlag'] = currentParams['featureFlag']
+      queryParams['featureFlag'] = currentParams['featureFlag']
     }
-    
     // Construct OR query between filters within the same filter group
     // filters across multiple filter groups will be AND-ed
     // example orQuery: paints AND artclassification_str:"Photographs" OR artclassification_str:"Paintings" OR artclassification_str:"Prints" OR artclassification_str:"photographs" AND year:[-4000 TO 1980]
@@ -262,15 +253,15 @@ export class SearchModal implements OnInit, AfterViewInit {
         orQuery += ')'
       }
     }
-
+    // Apply date filter
     if(filterParams["startDate"] && filterParams["endDate"]) {
-      orQuery += ' AND ' + 'year:[' + filterParams["startDate"] + ' TO ' + filterParams["endDate"] + ']'
+      queryParams["startDate"] = filterParams["startDate"]
+      queryParams["endDate"] = filterParams["endDate"]
     }
-
+    // Track in angulartics
+    this.angulartics.eventTrack.next({ properties: { event: 'advSearch', category: 'search', label: advQuery } })
     // Open search page with new query
-    // this._router.navigate(['/search', advQuery, filterParams]);
-    this._router.navigate(['/search', orQuery]);
-
+    this._router.navigate(['/search', orQuery, queryParams])
     // Close advance search modal
     this.close();
   }
