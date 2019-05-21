@@ -1,6 +1,8 @@
 import { HttpClientModule } from '@angular/common/http'
 import { RouterModule, Router, ActivatedRoute } from '@angular/router'
 import { TestBed, getTestBed, inject, async } from '@angular/core/testing'
+import { Idle, DEFAULT_INTERRUPTSOURCES, IdleExpiry } from '@ng-idle/core'
+
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 import { Angulartics2, ANGULARTICS2_TOKEN, RouterlessTracking } from 'angulartics2'
 import { FormBuilder, FormGroup } from "@angular/forms"
@@ -17,7 +19,7 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
   let _authService: AuthService
 
   beforeAll(function (done) {
-    provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service2', port: 1205 })
+    provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service', port: 1205 })
     setTimeout(function () { done() }, 2000)
     provider.removeInteractions()
   })
@@ -31,15 +33,15 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule],
       providers: [
-        //{ provide: AuthService, usevalue: {} },
         { provide: Router, usevalue: {} },
         { provide: ActivatedRoute, usevalue: {} },
         { provide: RouterlessTracking, usevalue: {} },
         { provide: Angulartics2 },
         { provide: FormBuilder },
         { provide: Location , usevalue: {} },
-        { provide: AppConfig, usevalue: {} },
+        AppConfig,
         AuthService,
+        Idle, IdleExpiry,
         RegisterComponent
       ],
     })
