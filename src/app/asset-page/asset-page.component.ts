@@ -80,7 +80,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Feature Flags
     public relatedResFlag: boolean = false
-    private isFullscreen: boolean = false
+    public isFullscreen: boolean = false
 
     private encryptedAccess: boolean = false
     private document = document
