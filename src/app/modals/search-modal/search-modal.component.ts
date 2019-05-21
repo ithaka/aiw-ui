@@ -210,17 +210,13 @@ export class SearchModal implements OnInit, AfterViewInit {
     if (!this.validateForm()) {
       return;
     }
-
     // Clear existing filters set outside this modal
     this._filters.clearApplied(true)
-
-    let advQuery
-    let filterParams
+    let advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
+    let filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
     let currentParams = this.route.snapshot.params
-
-    advQuery = this.queryUtil.generateSearchQuery(this.advanceQueries)
-    filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
-
+    let queryParams = {}
+    // Consolidate filters with multiple applied
     for (let key in filterParams) {
       let filterValue = ''
       if ( filterParams[key] instanceof Array ){
@@ -231,24 +227,26 @@ export class SearchModal implements OnInit, AfterViewInit {
         filterParams[key] = filterValue
       }
     }
-
-    // Track in angulartics
-    this.angulartics.eventTrack.next({ properties: { event: 'advSearch', category: 'search', label: advQuery } })
-
     // Maintain feature flags
     if (currentParams['featureFlag']) {
-      filterParams['featureFlag'] = currentParams['featureFlag']
+      queryParams['featureFlag'] = currentParams['featureFlag']
     }
-    
     // Construct OR query between filters within the same filter group
     // filters across multiple filter groups will be AND-ed
     // example orQuery: paints AND artclassification_str:"Photographs" OR artclassification_str:"Paintings" OR artclassification_str:"Prints" OR artclassification_str:"photographs" AND year:[-4000 TO 1980]
-    let orQuery: string = '';
-    orQuery += advQuery;
+    let orQuery: string = ''
+    // Do not apply "* AND", Solr will treat the wildcard as a character in that case
+    if (advQuery !== '*' && filterParams.length > 0) {
+      orQuery = advQuery
+    }
     
     for(let key in filterParams) {
       if(key !== 'startDate' && key !== 'endDate') {
-        orQuery += ' AND ('
+        if (orQuery.length > 0) {
+          orQuery += ' AND ('
+        } else {
+          orQuery = '('
+        }
         let filterValues = filterParams[key].split('|')
         let index = 0
         for(let value of filterValues) {
@@ -262,15 +260,15 @@ export class SearchModal implements OnInit, AfterViewInit {
         orQuery += ')'
       }
     }
-
+    // Apply date filter
     if(filterParams["startDate"] && filterParams["endDate"]) {
-      orQuery += ' AND ' + 'year:[' + filterParams["startDate"] + ' TO ' + filterParams["endDate"] + ']'
+      queryParams["startDate"] = filterParams["startDate"]
+      queryParams["endDate"] = filterParams["endDate"]
     }
-
+    // Track in angulartics
+    this.angulartics.eventTrack.next({ properties: { event: 'advSearch', category: 'search', label: advQuery } })
     // Open search page with new query
-    // this._router.navigate(['/search', advQuery, filterParams]);
-    this._router.navigate(['/search', orQuery]);
-
+    this._router.navigate(['/search', orQuery, queryParams])
     // Close advance search modal
     this.close();
   }
@@ -288,7 +286,6 @@ export class SearchModal implements OnInit, AfterViewInit {
    */
   private loadAppliedFiltersFromURL(): void{
     let routeParams = this.route.snapshot.params
-
     // Setup selected filters object to show applied filters for edit
     let appliedFiltersObj = {}
     let query: string = routeParams['term']
@@ -297,7 +294,8 @@ export class SearchModal implements OnInit, AfterViewInit {
       this.loadingFilters = false
       return
     }
-    // clean out wrapping parenthesis for OR queries
+    // Process advance search query string
+    // - clean out wrapping parenthesis for OR queries
     query = query.replace(/\(|\)/g, '')
     let andQuerySegments = query.split(' AND ')
     for(let andQuerySegment of andQuerySegments) {
@@ -325,12 +323,15 @@ export class SearchModal implements OnInit, AfterViewInit {
         }
       }
     }
-
+    // Maintain date filters via regular Asset Filters
+    if (routeParams['startDate'] || routeParams['endDate']) {
+      appliedFiltersObj['startDate'] = routeParams['startDate']
+      appliedFiltersObj['endDate'] = routeParams['endDate']
+    }
+    // Use cleaned params for applying
     routeParams = appliedFiltersObj
-
     // Used to determine if generateSelectedFilters will be called or not, should only be called if we have a tri-state checkbox checked
     let updateSelectedFilters: boolean = false
-
     for (let key in routeParams){
       let switchCaseValue: string = ( key === 'collectiontypes' || key === 'geography' ) ? 'colTypeGeo' : key
       switch ( switchCaseValue ){
@@ -353,8 +354,8 @@ export class SearchModal implements OnInit, AfterViewInit {
 
         // For tri-state checkboxes set the checked flag for filter object based on param value and in the end run generateSelectedFilters to updated selected filters object
         case 'artclassification_str': {
-          let classificatioFilters = routeParams[key].split('|')
-          for (let filter of classificatioFilters){
+          let classificationFilters = routeParams[key].split('|')
+          for (let filter of classificationFilters){
             let clsFilterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === key )
             let updateFilterObj = clsFilterGroup && clsFilterGroup.values.find( filterObj => filterObj.value === filter )
             updateFilterObj && (updateFilterObj.checked = true)
