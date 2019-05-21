@@ -91,12 +91,12 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
     })
 
     it('should return a user success response', (done) => {
-      let res = register.registerCall(mockAlreadyRegisteredFormInput)
-      expect(res).toEqual(registerStatusMessages[0])
+      let res = register.registerSubmit(mockAlreadyRegisteredFormInput)
+      expect(res).toBeDefined()
       done()
+    })
   })
 
-  })
 })
 
 interface RegistrationFormBody {
