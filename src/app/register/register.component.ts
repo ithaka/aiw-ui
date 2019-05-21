@@ -46,7 +46,7 @@ export class RegisterComponent implements OnInit {
   // Error codes for shibboleth messages
   private shibErrorCodes: string[] = ['2010', '2020', '2030', '2040', '2050', '2060', '2070', '2080']
 
-  private registerCall: Function
+  public registerCall: Function
 
   constructor(
     private _auth: AuthService,
@@ -92,9 +92,9 @@ export class RegisterComponent implements OnInit {
 
     // If not proxied/IP-authed OR not Shibboleth workflow, redirect to Login
     // If logged in, redirect to Home
-    if (!this.isShibbFlow && this._auth.isPublicOnly() || this._auth.getUser().isLoggedIn) {
-      this._auth.getUser().isLoggedIn ? this._router.navigate(['/home']) : this._router.navigate(['/login'])
-    }
+    // if (!this.isShibbFlow && this._auth.isPublicOnly() || this._auth.getUser().isLoggedIn) {
+    //   this._auth.getUser().isLoggedIn ? this._router.navigate(['/home']) : this._router.navigate(['/login'])
+    // }
 
   } // OnInit
 

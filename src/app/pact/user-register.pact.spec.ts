@@ -2,21 +2,22 @@ import { HttpClientModule } from '@angular/common/http'
 import { RouterModule, Router, ActivatedRoute } from '@angular/router'
 import { TestBed, getTestBed, inject, async } from '@angular/core/testing'
 import { Idle, DEFAULT_INTERRUPTSOURCES, IdleExpiry } from '@ng-idle/core'
-
+import { map, take, catchError } from 'rxjs/operators'
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 import { Angulartics2, ANGULARTICS2_TOKEN, RouterlessTracking } from 'angulartics2'
 import { FormBuilder, FormGroup } from "@angular/forms"
 import { Location } from '@angular/common'
 import { AppConfig } from '../app.service'
 
-import { AuthService, } from '../shared'
+import { AuthService } from '../shared'
 import { RegisterComponent } from '../register/register.component'
 
 describe('Register form POST /api/secure/register #pact #user-register', () => {
 
   let provider
+  let mockFormInput
   let register: RegisterComponent
-  let _authService: AuthService
+  let authService: AuthService
 
   beforeAll(function (done) {
     provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service', port: 1205 })
@@ -37,10 +38,10 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
         { provide: ActivatedRoute, usevalue: {} },
         { provide: RouterlessTracking, usevalue: {} },
         { provide: Angulartics2 },
-        { provide: FormBuilder },
         { provide: Location , usevalue: {} },
         AppConfig,
         AuthService,
+        FormBuilder,
         Idle, IdleExpiry,
         RegisterComponent
       ],
@@ -90,31 +91,23 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
     })
 
     it('should return a user success response', (done) => {
-      //this.register.registerCall(mockAlreadyRegisteredFormInput)
-
-      this._auth.registerUser(mockAlreadyRegisteredFormInput)
-        .then(res => {
-          expect(res).toEqual(registerStatusMessages[0])
-          done()
-        },
-          err => {
-            done.fail(err)
-          })
+      let res = register.registerCall(mockAlreadyRegisteredFormInput)
+      expect(res).toEqual(registerStatusMessages[0])
       done()
-    })
   })
 
+  })
 })
 
 interface RegistrationFormBody {
-    //_method: string,
+    _method: string,
     username: string,
     password: string,
     role: string,
     dept: string,
     info: string,
     survey: string,
-    //portal: string
+    portal: string
 }
 
 // let userInfo: any = {
@@ -144,13 +137,13 @@ let registerStatusMessages: StatusResponse[] = [
 ]
 
 // Mock Test Form Inputs
-let mockAlreadyRegisteredFormInput: RegistrationFormBody = {
-  //_method: 'update',
+let mockAlreadyRegisteredFormInput = {
+  _method: 'update',
   username: 'brett.fraley@ithaka.org',
   password: 'bretttest',
   role: 'ROLE_OTHER',
   dept: 'DEPT_OTHER',
   info: 'false',
   survey: 'false',
-  //portal: 'library'
+  portal: 'library',
 }
