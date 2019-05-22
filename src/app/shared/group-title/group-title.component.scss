@@ -226,15 +226,31 @@
    padding: 0px 20px;
 }
 
-#presentBtn {
+.icon-link {
   font-family: Verdana;
   font-size: 12px;
   font-weight: bold;
   line-height: normal;
-  letter-spacing: normal;
   text-align: center;
+  margin-left: 24px !important;
+  display: flex;
+  align-items: center;
+  color: $color-orange !important;
+  text-transform: uppercase;
+  text-decoration: none !important;
+  transition: color ease .15s;
 
-  .icon-present-mode {
-    margin: 0 6px 0px 0px;
+  .icon {
+    margin-right: 6px;
+    font-size: 16px;
+    transition: filter ease .15s;
+  }
+
+  &:hover, &:focus {
+    color: $color-orange-active !important;
+
+    // & .icon {
+    //   filter: brightness(75%);
+    // }
   }
 }

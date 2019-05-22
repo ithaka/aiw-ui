@@ -1,7 +1,7 @@
-.toast-cntnr.slide-in([ngClass]="{ 'slide-out' : hideToast, 'success' : type == 'success', 'error' : type == 'error' }")
+.toast-cntnr.slide-in([ngClass]="{ 'slide-out' : hideToast, 'success' : type == 'success', 'error' : type == 'error', 'info' : type == 'info' }")
   .toast-body
     .toast-icon
-      i.icon([ngClass]="{ 'icon-success' : type == 'success', 'icon-error' : type == 'error' }")
+      i.icon([ngClass]="{ 'icon-success' : type == 'success', 'icon-error' : type == 'error', 'icon-info': type == 'info' }")
     div.toast-message
       div#toast-text([innerHTML]="stringHTML")
       ng-container(*ngFor="let link of links")

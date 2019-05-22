@@ -58,6 +58,17 @@ export class SearchPage implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    // Mouseflow script
+    this._script.loadScript('mouseflow')
+      .then(() => {
+        if (window['_mfq']) {
+          // Trigger mouseflow page view
+          // Doc: http://help.mouseflow.com/knowledge_base/topics/single-page-websites
+          window['_mfq'].push(["newPageView", "/search"])
+        } else {
+          console.warn('Unable to find Mouseflow window object')
+        }
+      })
     // Subscribe User object updates
     this.subscriptions.push(
       this._auth.currentUser.subscribe(
@@ -85,7 +96,7 @@ export class SearchPage implements OnInit, OnDestroy {
     this.route.params.subscribe( (routeParams) => {
       let params = Object.assign({}, routeParams);
 
-      // Find feature flags applied on route 
+      // Find feature flags applied on route
       // - Needs to be checked before running queryAll)
       this._flags.readFlags(routeParams)
 

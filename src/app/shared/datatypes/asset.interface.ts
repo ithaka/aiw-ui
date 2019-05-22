@@ -13,7 +13,10 @@ export class Asset {
     kalturaUrl: string
     downloadLink: string
     downloadName: string
+    // IIIF Attributes
     tileSource: any
+    qualities: string[] // IIIF quality available: https://iiif.io/api/image/2.1/#quality
+    formats: string[] = ['jpg'] // IIIF formats available: https://iiif.io/api/image/2.1/#format
     collectionType: number
     contributinginstitutionid: number
     personalCollectionOwner: number
@@ -94,21 +97,41 @@ export class Asset {
             default:
                 if (Array.isArray(this.tileSource) && this.tileSource.length >= 1) {
                     // Handle Multi View downloads using IIIF
-                    let url = 'https:' + this.tileSource[0].replace('info.json', '') + 'full/full/0/default.jpg'
+                    let url = 'https:' + this.tileSource[0].replace('info.json', '') + 'full/full/0/' + this.iiifFilename()
                     // Pass IIIF url to Download Service for processing metadata
                     // Include "iiif" param in this case
                     downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url) + "&iiif=true"
                 } else if (data.image_url) {
-                    // Handle images and video thumbnails
-                    let imageServer = 'http://imgserver.artstor.net/'
-                    // Pass Image url to Download Service for processing metadata
-                    let url = imageServer + data.image_url + "?cell=" + data.download_size + "&rgnn=0,0,1,1&cvt=JPEG"
-                    downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url)
+                    // If image width or height exceed 3000 pixels, use IIIF URL (max 3000px wide) to download the item
+                    if(data.width >= 3000 || data.height >= 3000) {
+                        let url = this.tileSource.replace('.fcgi%3F', '.fcgi?').replace('info.json', '')
+                        if (url.indexOf('//') == 0) {
+                            url = 'https:' + url
+                        }
+                        url += 'full/3000,/0/' + this.iiifFilename()
+                        
+                        downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent( encodeURI(url) ) + "&iiif=true"
+                    } else {
+                        // Handle images and video thumbnails
+                        let imageServer = 'http://imgserver.artstor.net/'
+                        // Pass Image url to Download Service for processing metadata
+                        let url = imageServer + data.image_url + "?cell=" + data.download_size + "&rgnn=0,0,1,1&cvt=JPEG"
+                        downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url)
+                            
+                    }
                 } else {
                     // nothing happens here because some assets are not allowed to be downloaded
                 }
         }
         return downloadLink
+    }
+
+    /**
+     * Get IIIF default filename
+     * - Combines default "quality" with default "format"
+     */
+    public iiifFilename(): string {
+        return this.qualities[0] + '.' + this.formats[0]
     }
 
     /**
@@ -216,6 +239,10 @@ export class Asset {
         else {
             this.tileSource = data.tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgPath) + '/info.json'
         }
+        // If using rosa/IIIF endpoint, we have to use "native"
+        let isRosa: boolean = this.tileSource.indexOf('rosa-iiif') !== -1
+        // IIIF api dictates that the name indicates type/quality
+        this.qualities = [(isRosa ? 'native' : 'default')]
         // Set download after tilesource determined
         this.downloadLink = this.buildDownloadLink(data, data.groupId)
 

@@ -80,6 +80,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Feature Flags
     public relatedResFlag: boolean = false
+    public isFullscreen: boolean = false
+
     private encryptedAccess: boolean = false
     private document = document
     private URL = URL
@@ -95,7 +97,6 @@ export class AssetPage implements OnInit, OnDestroy {
     private prevAssetResults: any = { thumbnails: [] }
     private loadArrayFirstAsset: boolean = false
     private loadArrayLastAsset: boolean = false
-    private isFullscreen: boolean = false
     private showAssetDrawer: boolean = false
 
     // MS IE/Edge for Download View
@@ -174,11 +175,17 @@ export class AssetPage implements OnInit, OnDestroy {
     // Map for asset zoom values corresponding to the asset index in assets array
     public indexZoomMap: ImageZoomParams[] = []
 
+    // Tooltips
     public addGroupTooltipOpts: any = {}
+    public quizModeTooltipOpts: any = {}
     public addGrpTTDismissed: boolean = false
+    public quizModeTTDismissed: boolean = false
+
     // Flag for server vs client rendering
     public isBrowser: boolean = true
+
     public presentMode: boolean = false
+    public studyMode: boolean = false
 
     private hasPrivateGroups: boolean = true
 
@@ -221,6 +228,7 @@ export class AssetPage implements OnInit, OnDestroy {
     ngOnInit() {
         this.user = this._auth.getUser();
         this.addGrpTTDismissed = this._storage.getLocal('addGrpTTDismissed') ? this._storage.getLocal('addGrpTTDismissed') : false
+        this.quizModeTTDismissed = this._storage.getLocal('quizModeTTDismissed') ? this._storage.getLocal('quizModeTTDismissed') : false
         this.subscriptions.push(
             this._flags.flagUpdates.subscribe((flags) => {
                 this.relatedResFlag = flags.relatedResFlag ? true : false
@@ -304,6 +312,20 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.presentMode = true
                 } else {
                     this.presentMode = false
+                }
+
+                if(routeParams['studyMode']) {
+                    this.studyMode = true
+
+                    this.quizModeTooltipOpts = {
+                        badge: 'STUDY',
+                        heading: 'Quiz Mode',
+                        bodyText: 'Test your skills to see if you can identify the items in this group without looking at the captions.',
+                        learnMoreURL: 'https://support.artstor.org/?article=quiz-mode-in-fullscreen',
+                        dismissText: 'Try it'
+                    }
+                } else {
+                    this.studyMode = false
                 }
             })
         ); // subscriptions.push
@@ -429,10 +451,11 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // Set options for add to group tooltip component
         this.addGroupTooltipOpts = {
-            new: true,
+            badge: 'NEW!',
             heading: 'Add details to groups',
             bodyText: 'Zoom in on any image and add the detail to a group to refer back to later.',
-            learnMoreURL: 'https://support.artstor.org/?article=zooming-image-details'
+            learnMoreURL: 'https://support.artstor.org/?article=zooming-image-details',
+            dismissText: 'Got it'
         }
 
         this._group.hasPrivateGroups()
@@ -533,6 +556,10 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.meta.updateTag({ property: 'og:image', content: asset.thumbnail_url ? 'https:' + asset.thumbnail_url : '' }, 'property="og:image"')
                 // Update content info in GTM data layer
                 this.trackContentDataLayer(asset)
+
+                if(this.studyMode) {
+                    this.toggleQuizMode(this.studyMode)
+                }
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
@@ -581,6 +608,7 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     updateFullscreenVar(isFullscreen: boolean): void {
         if (!isFullscreen) {
+            // Exit Fullscreen
             this.showAssetDrawer = false
             if (this.originPage > 0 && this.pagination.page !== this.originPage) {
                 this.pagination.page = this.originPage
@@ -590,7 +618,12 @@ export class AssetPage implements OnInit, OnDestroy {
             this.assets = [this.assets[0]]
             this.assetIds = [this.assetIds[0]]
             this.indexZoomMap = [this.indexZoomMap[0]]
+            // If presentMode, go back to the group on fullscreen exit
+            if(this.presentMode || this.studyMode) {
+                this.backToResults()
+            }
         } else {
+            // Enter Fullscreen
             // Make sure we only send one ga event when going to fullscreen mode
             if (this.isFullscreen !== isFullscreen) {
                 // Add Google Analytics tracking to "fullscreen" button
@@ -895,11 +928,12 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (this.assetGroupId) {
                     queryParams['groupId'] = this.assetGroupId
                 }
-
                 if (this.presentMode) {
                     queryParams['presentMode'] = true
                 }
-
+                if (this.studyMode) {
+                    queryParams['studyMode'] = true
+                }
                 // Add zoom query params for saved views
                 if(this.prevAssetResults.thumbnails[prevAssetIndex]['zoom']) {
                     queryParams['x'] = this.prevAssetResults.thumbnails[prevAssetIndex]['zoom'].viewerX
@@ -934,11 +968,12 @@ export class AssetPage implements OnInit, OnDestroy {
                 if (this.assetGroupId) {
                     queryParams['groupId'] = this.assetGroupId
                 }
-
                 if (this.presentMode) {
                     queryParams['presentMode'] = true
                 }
-
+                if (this.studyMode) {
+                    queryParams['studyMode'] = true
+                }
                 // Add zoom query params for saved views
                 if(this.prevAssetResults.thumbnails[nextAssetIndex]['zoom']) {
                     queryParams['x'] = this.prevAssetResults.thumbnails[nextAssetIndex]['zoom'].viewerX
@@ -1140,7 +1175,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Exit Presentation / Fullscreen mode and reset assets comparison array
     private exitPresentationMode(): void {
-
         for (let i = 0; i < this.prevAssetResults.thumbnails.length; i++) {
             this.prevAssetResults.thumbnails[i].selected = false;
         }
@@ -1151,11 +1185,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
         this.assetViewer.togglePresentationMode();
         this.showAssetDrawer = false;
-
-        // If presentMode, go back to the group on fullscreen exit
-        if(this.presentMode) {
-            this.backToResults()
-        }
     }
 
     private backToResults(): void {
@@ -1179,15 +1208,19 @@ export class AssetPage implements OnInit, OnDestroy {
         return (title && fileExt) ? title.replace(/\./g, '-') + '.' + fileExt : ''
     }
 
-    private toggleQuizMode(): void {
-        if (this.quizMode) { // Leave Quiz mode
+    private toggleQuizMode(forceValue?: boolean): void {
+        let targetValue = typeof(forceValue) != 'undefined' ? forceValue : !this.quizMode
+        if (targetValue === false) { // Leave Quiz mode
             this.quizMode = false;
             this.showAssetCaption = true;
         }
-        else { // Enter Quiz mode
-            this._log.log({
-                eventType: 'artstor_quiz_toggle'
-            })
+        else {
+            // Enter Quiz mode
+            if (this.quizMode != targetValue) {
+                this._log.log({
+                    eventType: 'artstor_quiz_toggle'
+                })
+            }
             this.quizMode = true;
             this.showAssetCaption = false;
             this.toggleAssetDrawer(false);
@@ -1243,12 +1276,12 @@ export class AssetPage implements OnInit, OnDestroy {
             }
             // Build full image url for multiviews
             if (this.multiviewItems) {
-                fullSizeLink = tilesourceStr + 'full/full/0/default.jpg'
+                fullSizeLink = tilesourceStr + 'full/full/0/' + asset.iiifFilename()
                 fullSizeLink = this.getDownloadServiceUrl(asset, fullSizeLink)
                 this.generatedFullURL = fullSizeLink
             }
             // Attach zoom parameters to tilesource. Note: Multiviews use default.jpg and normal assets use native.jpg
-            tilesourceStr = tilesourceStr + Math.round(bounds['x']) + ',' + Math.round(bounds['y']) + ',' + Math.round(bounds['width']) + ',' + Math.round(bounds['height']) + (this.multiviewItems ? '/full/0/default.jpg' : '/full/0/native.jpg')
+            tilesourceStr = tilesourceStr + Math.round(bounds['x']) + ',' + Math.round(bounds['y']) + ',' + Math.round(bounds['width']) + ',' + Math.round(bounds['height']) + '/full/0/' + asset.iiifFilename()
             tilesourceStr = this.getDownloadServiceUrl(asset, tilesourceStr)
             this.downloadViewLink = tilesourceStr
             this.downloadViewReady = true
@@ -1386,17 +1419,19 @@ export class AssetPage implements OnInit, OnDestroy {
                     if (data.success) {
                         this.isProcessing = false
 
-                        this._localPC.setAsset({
-                            ssid: parseInt(this.assets[0].SSID),
-                            asset_metadata: formValue
-                        })
+                      this.closeEditDetails(1)
 
-                        this.closeEditDetails(1)
+                      this._localPC.setAsset({
+                        ssid: parseInt(this.assets[0].SSID),
+                        asset_metadata: formValue
+                      })
 
-                        // Reload asset metadata and pass the prevRouteTS param to make sure we load prevRouteParams
-                        setTimeout(() => {
-                            this._router.navigate([ '/asset', this.assets[0].id, this.prevRouteTS ? { prevRouteTS: this.prevRouteTS } : {} ])
-                        }, 250)
+                      this.showMetadataPending = true // Show pending metadata update message
+
+                      // Reload asset metadata and pass the prevRouteTS param to make sure we load prevRouteParams
+                      setTimeout(() => {
+                          this._router.navigate([ '/asset', this.assets[0].id, this.prevRouteTS ? { prevRouteTS: this.prevRouteTS } : {} ])
+                      }, 250)
                     }
                 },
                 error => {
@@ -1473,15 +1508,15 @@ export class AssetPage implements OnInit, OnDestroy {
 
     private updateMetadataFromLocal(localData: LocalPCAsset): void {
         if (!localData) { return } // if we don't have metadata for that asset, we won't run any of the update code
+
         // Track whether or not server has propagated changes yet
-        this.showMetadataPending = false
         for (let key in localData.asset_metadata) {
             let metadataLabel: string = this.mapLocalFieldToLabel(key)
             let fieldValue: string = localData.asset_metadata[key]
             // all objects in formattedMetadata are arrays, but these should all be length 0
             if (fieldValue) {
                 if (this.assets[0].formattedMetadata[metadataLabel] && this.assets[0].formattedMetadata[metadataLabel].indexOf(fieldValue) > -1) {
-                    // No change
+                    this.showMetadataPending = false
                 } else {
                    this.assets[0].formattedMetadata[metadataLabel] = [fieldValue]
                    this.showMetadataPending = true
@@ -1649,6 +1684,14 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // Add Google Analytics tracking for "detailViewTooltipDismissed"
         this.angulartics.eventTrack.next({ properties: { event: 'detailViewTooltipDismissed', category: 'promotion', label: this.assetIds[0] } })
+    }
+
+    public closeQuizModeTooltip(): void {
+        this.quizModeTTDismissed = true
+        this._storage.setLocal('quizModeTTDismissed', this.quizModeTTDismissed)
+
+        // Add Google Analytics tracking for "quizModeTooltipDismissed"
+        this.angulartics.eventTrack.next({ properties: { event: 'quizModeTooltipDismissed', category: 'promotion', label: this.assetIds[0] } })
     }
 
 }
