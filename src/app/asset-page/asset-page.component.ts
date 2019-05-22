@@ -755,7 +755,7 @@ export class AssetPage implements OnInit, OnDestroy {
      * A collection may be private, institutional, or public.
      * If both institional(2) and public(5), we set the link to the public collection id.
      */
-    setCollectionLink(asset: Asset): any[] {
+    setCollectionLink(asset: Asset, value: string): any[] {
         let link = []
 
         // 103 Collection Id routes to /category/<categoryId>, some of the collections have collectionId of NaN, check the id in the collections array instead
@@ -765,15 +765,15 @@ export class AssetPage implements OnInit, OnDestroy {
         else {
             for (let col of this.collections) {
                 // Private/Personal Collection
-                if (col.type === '6') {
+                if (col.type === '6' && col.name === value) {
                     return ['/pcollection', col.id]
                 }
                 // Public Collection
-                else if (col.type === '5') {
+                else if (col.type === '5' && col.name === value) {
                     asset.publicDownload = true
                     return ['/collection', col.id]
                 }
-                else {
+                else if (col.name === value) {
                     link = ['/collection', col.id]
                 }
             }
