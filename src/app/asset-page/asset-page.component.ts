@@ -80,6 +80,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Feature Flags
     public relatedResFlag: boolean = false
+    public isFullscreen: boolean = false
+
     private encryptedAccess: boolean = false
     private document = document
     private URL = URL
@@ -95,7 +97,6 @@ export class AssetPage implements OnInit, OnDestroy {
     private prevAssetResults: any = { thumbnails: [] }
     private loadArrayFirstAsset: boolean = false
     private loadArrayLastAsset: boolean = false
-    private isFullscreen: boolean = false
     private showAssetDrawer: boolean = false
 
     // MS IE/Edge for Download View
@@ -179,7 +180,7 @@ export class AssetPage implements OnInit, OnDestroy {
     public quizModeTooltipOpts: any = {}
     public addGrpTTDismissed: boolean = false
     public quizModeTTDismissed: boolean = false
-    
+
     // Flag for server vs client rendering
     public isBrowser: boolean = true
 
@@ -607,6 +608,7 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     updateFullscreenVar(isFullscreen: boolean): void {
         if (!isFullscreen) {
+            // Exit Fullscreen
             this.showAssetDrawer = false
             if (this.originPage > 0 && this.pagination.page !== this.originPage) {
                 this.pagination.page = this.originPage
@@ -616,7 +618,12 @@ export class AssetPage implements OnInit, OnDestroy {
             this.assets = [this.assets[0]]
             this.assetIds = [this.assetIds[0]]
             this.indexZoomMap = [this.indexZoomMap[0]]
+            // If presentMode, go back to the group on fullscreen exit
+            if(this.presentMode || this.studyMode) {
+                this.backToResults()
+            }
         } else {
+            // Enter Fullscreen
             // Make sure we only send one ga event when going to fullscreen mode
             if (this.isFullscreen !== isFullscreen) {
                 // Add Google Analytics tracking to "fullscreen" button
@@ -1168,7 +1175,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Exit Presentation / Fullscreen mode and reset assets comparison array
     private exitPresentationMode(): void {
-
         for (let i = 0; i < this.prevAssetResults.thumbnails.length; i++) {
             this.prevAssetResults.thumbnails[i].selected = false;
         }
@@ -1179,11 +1185,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
         this.assetViewer.togglePresentationMode();
         this.showAssetDrawer = false;
-
-        // If presentMode, go back to the group on fullscreen exit
-        if(this.presentMode || this.studyMode) {
-            this.backToResults()
-        }
     }
 
     private backToResults(): void {
@@ -1213,7 +1214,7 @@ export class AssetPage implements OnInit, OnDestroy {
             this.quizMode = false;
             this.showAssetCaption = true;
         }
-        else { 
+        else {
             // Enter Quiz mode
             if (this.quizMode != targetValue) {
                 this._log.log({
@@ -1259,10 +1260,6 @@ export class AssetPage implements OnInit, OnDestroy {
             let multiviewIndex: number  = this.assetViewer.osdViewer._sequenceIndex || 0
             // Generate the view url from tilemap service
             let tilesourceStr: string = Array.isArray(asset.tileSource) ? asset.tileSource[multiviewIndex] : asset.tileSource
-            // If using rosa/IIIF endpoint, we have to use "native"
-            let isRosa: boolean = tilesourceStr.indexOf('rosa-iiif') !== -1
-            // IIIF api dictates that the name indicates type/quality
-            let imageQuality: string = (isRosa ? 'native.jpg' : 'default.jpg')
             let fullSizeLink: string
             // Make sure the bounds are adjusted for the negative x and y values
             bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
@@ -1279,12 +1276,12 @@ export class AssetPage implements OnInit, OnDestroy {
             }
             // Build full image url for multiviews
             if (this.multiviewItems) {
-                fullSizeLink = tilesourceStr + 'full/full/0/' + imageQuality
+                fullSizeLink = tilesourceStr + 'full/full/0/' + asset.iiifFilename()
                 fullSizeLink = this.getDownloadServiceUrl(asset, fullSizeLink)
                 this.generatedFullURL = fullSizeLink
             }
             // Attach zoom parameters to tilesource. Note: Multiviews use default.jpg and normal assets use native.jpg
-            tilesourceStr = tilesourceStr + Math.round(bounds['x']) + ',' + Math.round(bounds['y']) + ',' + Math.round(bounds['width']) + ',' + Math.round(bounds['height']) + '/full/0/' + imageQuality
+            tilesourceStr = tilesourceStr + Math.round(bounds['x']) + ',' + Math.round(bounds['y']) + ',' + Math.round(bounds['width']) + ',' + Math.round(bounds['height']) + '/full/0/' + asset.iiifFilename()
             tilesourceStr = this.getDownloadServiceUrl(asset, tilesourceStr)
             this.downloadViewLink = tilesourceStr
             this.downloadViewReady = true

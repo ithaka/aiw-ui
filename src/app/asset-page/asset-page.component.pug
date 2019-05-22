@@ -1,4 +1,4 @@
-.present-mode-curtain(*ngIf="presentMode || studyMode")
+.present-mode-curtain(*ngIf="(presentMode || studyMode) && isFullscreen")
 .container-fluid.asset-page(*ngIf="assetIds[0]", [class.fullscreen]="isFullscreen")
   .row
     //- View prev/next asset
