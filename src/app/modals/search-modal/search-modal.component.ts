@@ -236,10 +236,10 @@ export class SearchModal implements OnInit, AfterViewInit {
     // example orQuery: paints AND artclassification_str:"Photographs" OR artclassification_str:"Paintings" OR artclassification_str:"Prints" OR artclassification_str:"photographs" AND year:[-4000 TO 1980]
     let orQuery: string = ''
     // Do not apply "* AND", Solr will treat the wildcard as a character in that case
-    if (advQuery !== '*' && filterParams.length > 0) {
+    if (advQuery !== '*') {
       orQuery = advQuery
     }
-    
+    // Build Solr query string from filters
     for(let key in filterParams) {
       if(key !== 'startDate' && key !== 'endDate') {
         if (orQuery.length > 0) {
