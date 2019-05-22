@@ -107,7 +107,7 @@ import {
   PersonalCollectionService,
   AccountService
 } from './shared'
-import { MetadataService, SlidesService, CollectionService, InstitutionService } from './_services'
+import { MetadataService, SlidesService, CollectionService, InstitutionService, ThumbnailService } from './_services'
 
 import { LocalPCService } from './_local-pc-asset.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
@@ -165,6 +165,7 @@ const APP_PROVIDERS = [
   AssetFiltersService,
   TagFiltersService,
   TagsService,
+  ThumbnailService,
   ToolboxService,
   LegacyRouteResolver,
   GroupsRouteResolver,
