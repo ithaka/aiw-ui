@@ -1272,7 +1272,7 @@ export class AssetPage implements OnInit, OnDestroy {
             Object.keys(bounds).forEach(property => {
                 bounds[property] = Math.round(bounds[property])
             })
-            // Set size
+            // Set size (avoid exceeding bound size)
             if (bounds.width > bounds.height) {
                 // Landscape detail
                 size = Math.min(bounds.width,asset.downloadMaxWidth) + ','
