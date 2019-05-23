@@ -101,13 +101,11 @@ export class RegisterComponent implements OnInit {
   /** Gets called when the registration form is submitted */
   public registerSubmit(formValue: any) {
 
-    console.log('Value of formValue arg: ', formValue)
-
     this.registerCall = (value) => { return this._auth.registerUser(value) }
     this.serviceErrors = {}
     this.submitted = true
 
-    if (!this.registerForm.valid) { return }
+    //if (!this.registerForm.valid) { return 'form was not valid' }
     this.isLoading = true
 
     // this is the object that the service will receive

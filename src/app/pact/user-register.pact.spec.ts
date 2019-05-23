@@ -14,8 +14,7 @@ import { RegisterComponent } from '../register/register.component'
 
 describe('Register form POST /api/secure/register #pact #user-register', () => {
 
-  let provider
-  let mockFormInput
+  let provider, _auth
   let register: RegisterComponent
   let authService: AuthService
 
@@ -47,6 +46,7 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
       ],
     })
     const testbed = getTestBed()
+    _auth = testbed.get(AuthService)
     register = testbed.get(RegisterComponent)
 
   })
@@ -91,8 +91,21 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
     })
 
     it('should return a user success response', (done) => {
-      let res = register.registerSubmit(mockAlreadyRegisteredFormInput)
-      expect(res).toBeDefined()
+
+      // TEST registerCall instead of full submit
+
+      // let res = register.registerCall(mockAlreadyRegisteredFormInput) // <== called userI fo in register component
+      // expect(res).toEqual(registerStatusMessages[0])
+      // //expect(res.statusMessage).toEqual(registerStatusMessages[0].statusMessage)
+      // done()
+      let res
+      _auth.registerUser(mockAlreadyRegisteredFormInput)
+      .subscribe(data => {
+        res = data
+        console.log('!!!!!!!', data)
+      }) // <== called userI fo in register component
+      expect(res).toEqual(registerStatusMessages[0])
+      //expect(res.statusMessage).toEqual(registerStatusMessages[0].statusMessage)
       done()
     })
   })
@@ -129,7 +142,7 @@ interface StatusResponse {
   statusMessage: String
 }
 
-let registerStatusMessages: StatusResponse[] = [
+let registerStatusMessages = [
 
   // Scenario : When user email already exists in the portal for which the user is registering
   // or when the email exists in a different portal and the password does not match.
@@ -145,5 +158,5 @@ let mockAlreadyRegisteredFormInput = {
   dept: 'DEPT_OTHER',
   info: 'false',
   survey: 'false',
-  portal: 'library',
+  portal: 'library'
 }
