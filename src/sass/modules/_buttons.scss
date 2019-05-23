@@ -26,7 +26,7 @@ $iconBtnSize: $btnHeight;
      line-height: $btnHeight;
 
      &:hover, &:focus, &:active {
-         color: #fff;
+        color: #fff;
         border-bottom: none;
      }
 
@@ -224,7 +224,7 @@ $iconBtnSize: $btnHeight;
     }
  }
 
- $btnBorderRadius: 0;
+ $btnBorderRadius: 4px;
 
 .btn.btn--square {
     height: $iconBtnSize;

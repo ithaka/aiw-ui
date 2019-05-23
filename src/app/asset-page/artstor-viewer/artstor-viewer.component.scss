@@ -11,6 +11,8 @@ $xsphone: 320px;
 $tablet: 768px;
 $desktop: 992px;*/
 
+@import '../../../sass/core/variables';
+
 .aiw-hidden {
     display: none;
     pointer-events: none;
@@ -53,7 +55,23 @@ $desktop: 992px;*/
     top: 20px;
     left: 20px;
     z-index: 1000;
-    padding: 10px;
+    margin: 10px;
+    box-shadow: 0 0 4px 1px #0000003b;
+
+    .btn--icon {
+        height: 40px !important;
+        width: 40px !important;
+        border: 1px solid $color-gray-3 !important;
+
+        &:hover {
+            background-color: $color-gray-3 !important;
+        }
+
+        .icon {
+            width: 24px !important;
+            height: 24px !important;
+        }
+    }
 }
 @media(max-width: 576px) {
     .asset-viewer__buttons {
@@ -486,4 +504,19 @@ background:  #000 !important;
 
 [class$="-displayregion"] {
     border: 2px solid rgb(224, 11, 11) !important;
+}
+
+.bs-tooltip-bottom .arrow::before {
+    border-bottom-color: $color-gray-7;
+}
+
+.tooltip-inner {
+    background-color: $color-gray-7;
+    font-family: Arial;
+    font-size: 10px;
+    font-weight: normal;
+    line-height: 1.2;
+    letter-spacing: normal;
+    text-align: center;
+    color: $color-white;
 }

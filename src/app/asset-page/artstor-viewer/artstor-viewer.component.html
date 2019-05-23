@@ -20,8 +20,19 @@
     <!--Viewer Buttons-->
     <div *ngIf="!thumbnailMode">
         <div class="button-group asset-viewer__buttons" id="imageButtons-{{ osdViewerId }}">
-        <button class="btn btn--icon btn--zoomIn" [class.aiw-hidden]="state != 1" id="zoomIn-{{ osdViewerId}}" title="Zoom In"><i class="icon icon-zoom-in"></i></button><button class="btn btn--icon btn--zoomOut" [class.aiw-hidden]="state != 1" id="zoomOut-{{ osdViewerId }}" title="Zoom Out"><i class="icon icon-zoom-out"></i></button><button class="btn btn--icon btn--zoomFit" [class.aiw-hidden]="state != 1" id="zoomFit-{{ osdViewerId }}" title="Zoom Fit"><i class="icon icon-fit"></i></button><button class="btn btn--icon btn--fullScreen" *ngIf="!isFullscreen" id="fullScreen-{{ osdViewerId }}" (click)="togglePresentationMode()" title="Full Screen"><i class="icon icon-fullscreen"></i></button><button class="btn btn--icon" *ngIf="isFullscreen && assetCompareCount > 1" (click)="removeAsset.emit(asset)" title="Remove from Comparison"><i class="icon icon-close"></i></button>
+            <button class="btn btn--icon btn--zoomIn" [class.aiw-hidden]="state != 1" id="zoomIn-{{ osdViewerId}}" [ngbTooltip]="zoomInTooltip" placement="bottom"><i class="icon icon-zoom-in-new"></i></button>
+            <button class="btn btn--icon btn--zoomOut" [class.aiw-hidden]="state != 1" id="zoomOut-{{ osdViewerId }}" [ngbTooltip]="zoomOutTooltip" placement="bottom"><i class="icon icon-zoom-out-new"></i></button>
+            <button class="btn btn--icon btn--zoomFit" [class.aiw-hidden]="state != 1" id="zoomFit-{{ osdViewerId }}" [ngbTooltip]="fitToViewTooltip" placement="bottom"><i class="icon icon-fit-to-view"></i></button>
+            <button class="btn btn--icon btn--fullScreen" *ngIf="!isFullscreen" id="fullScreen-{{ osdViewerId }}" (click)="togglePresentationMode()" [ngbTooltip]="presentTooltip" placement="bottom"><i class="icon icon-present-dark"></i></button>
+            <button class="btn btn--icon" *ngIf="isFullscreen && assetCompareCount > 1" (click)="removeAsset.emit(asset)" [ngbTooltip]="removeCompTooltip" placement="bottom"><i class="icon icon-remove-from-comparison"></i></button>
         </div>
+
+        <ng-template #zoomInTooltip><div>Zoom in</div></ng-template>
+        <ng-template #zoomOutTooltip><div>Zoom out</div></ng-template>
+        <ng-template #fitToViewTooltip><div>Fit to view</div></ng-template>
+        <ng-template #presentTooltip><div>Present</div></ng-template>
+        <ng-template #removeCompTooltip><div>Remove from comparison</div></ng-template>
+
         <!-- Hide if not multi view (do not use ngIf, OSD needs to bind) -->
         <!-- Bottom right arrow style -->
         <!-- <div [class.aiw-hidden]="!isMultiView" class="button-group asset-viewer__pagination" id="imagePageButtons-{{ osdViewerId }}">

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="33px" height="33px" viewBox="0 0 33 33" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>icon-remove-from-comparison</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-12.8%" y="-50.0%" width="125.6%" height="200.0%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="4" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.4 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="hovers-on-image-controls" transform="translate(-1048.000000, -424.000000)" stroke="#333333" stroke-width="1.5">
+            <g id="item-controls-copy-6" filter="url(#filter-1)" transform="translate(956.000000, 425.000000)">
+                <g id="icon-remove-from-comparison" transform="translate(101.000000, 8.000000)">
+                    <polyline id="Rectangle" transform="translate(6.117647, 6.117647) rotate(-180.000000) translate(-6.117647, -6.117647) " points="8.7394958 0 12.2352941 0 12.2352941 12.2352941 0 12.2352941 0 8.7394958"></polyline>
+                    <rect id="Rectangle" x="3.57352941" y="3.57352941" width="11.6764706" height="11.6764706"></rect>
+                    <g id="close-icon" transform="translate(6.588235, 6.588235)">
+                        <path d="M-9.81437154e-14,5.59030302 L5.59030302,9.85878046e-14" id="arrow-right-copy" transform="translate(2.795152, 2.795152) rotate(-90.000000) translate(-2.795152, -2.795152) "></path>
+                        <path d="M3.10862447e-15,5.59030302 L5.59030302,1.33226763e-15" id="arrow-right-copy" transform="translate(2.795152, 2.795152) scale(-1, 1) rotate(-90.000000) translate(-2.795152, -2.795152) "></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

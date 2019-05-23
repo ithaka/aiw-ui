@@ -89,6 +89,13 @@
 @include icon('fullscreen', 'svg');
 @include icon--hover('present-mode--orange', 'svg');
 @include icon--hover('study-mode', 'svg');
+
+@include icon('zoom-in-new', 'svg');
+@include icon('zoom-out-new', 'svg');
+@include icon('fit-to-view', 'svg');
+@include icon('present-dark', 'svg');
+@include icon('remove-from-comparison', 'svg');
+
 @include icon('more', 'svg');
 @include icon('info', 'svg');
 @include icon('share', 'svg');
