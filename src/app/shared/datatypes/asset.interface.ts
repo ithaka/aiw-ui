@@ -106,7 +106,7 @@ export class Asset {
                     maxWidth = parseInt(sizeValues[0]) 
                     maxHeight = parseInt(sizeValues[1])
                 }
-                // Check if valid sizes, otherwise use defaults
+                // Check if valid sizes, otherwise use defaults (larger than 3000 may stall)
                 if (maxWidth < 0 || maxWidth > 3000) maxWidth = 3000
                 if (maxHeight < 0 || maxHeight > 3000) maxHeight = 3000
                 // Set max values on Asset
@@ -119,7 +119,6 @@ export class Asset {
                     // Include "iiif" param in this case
                     downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url) + "&iiif=true"
                 } else if (data.image_url) {
-                    // If image width or height exceed 3000 pixels, use IIIF URL (max 3000px wide) to download the item
                     if(data.width >= maxWidth || data.height >= maxHeight) {
                         let url = this.tileSource.replace('.fcgi%3F', '.fcgi?').replace('info.json', '')
                         if (url.indexOf('//') == 0) {
