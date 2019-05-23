@@ -11,6 +11,9 @@ export class Asset {
     thumbnail_url: string
     thumbnail_size: number = 2
     kalturaUrl: string
+    // Download attributes
+    downloadMaxWidth: number = 0
+    downloadMaxHeight: number = 0
     downloadLink: string
     downloadName: string
     // IIIF Attributes
@@ -95,6 +98,20 @@ export class Asset {
                 downloadLink = groupId ?  downloadLink + queryParam : downloadLink
                 break
             default:
+                // Determine allowable size
+                let maxWidth
+                let maxHeight
+                if (data.download_size && data.download_size.length > 0) {
+                    let sizeValues = data.download_size.split(',')
+                    maxWidth = parseInt(sizeValues[0]) 
+                    maxHeight = parseInt(sizeValues[1])
+                }
+                // Check if valid sizes, otherwise use defaults
+                if (maxWidth < 0 || maxWidth > 3000) maxWidth = 3000
+                if (maxHeight < 0 || maxHeight > 3000) maxHeight = 3000
+                // Set max values on Asset
+                this.downloadMaxWidth = maxWidth
+                this.downloadMaxHeight = maxHeight
                 if (Array.isArray(this.tileSource) && this.tileSource.length >= 1) {
                     // Handle Multi View downloads using IIIF
                     let url = 'https:' + this.tileSource[0].replace('info.json', '') + 'full/full/0/' + this.iiifFilename()
@@ -103,13 +120,18 @@ export class Asset {
                     downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url) + "&iiif=true"
                 } else if (data.image_url) {
                     // If image width or height exceed 3000 pixels, use IIIF URL (max 3000px wide) to download the item
-                    if(data.width >= 3000 || data.height >= 3000) {
+                    if(data.width >= maxWidth || data.height >= maxHeight) {
                         let url = this.tileSource.replace('.fcgi%3F', '.fcgi?').replace('info.json', '')
                         if (url.indexOf('//') == 0) {
                             url = 'https:' + url
                         }
-                        url += 'full/3000,/0/' + this.iiifFilename()
-                        
+                        if (data.width > data.height) {
+                            // Landscape
+                            url += `full/${maxWidth},/0/${this.iiifFilename()}`
+                        } else {
+                            // Portrait
+                            url += `full/,${maxHeight}/0/${this.iiifFilename()}`
+                        }
                         downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent( encodeURI(url) ) + "&iiif=true"
                     } else {
                         // Handle images and video thumbnails
