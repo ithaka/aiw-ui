@@ -102,9 +102,9 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
       _auth.registerUser(mockAlreadyRegisteredFormInput)
       .subscribe(data => {
         res = data
-        console.log('!!!!!!!', data)
+        console.log('!!!!!!!', res)
       }) // <== called userI fo in register component
-      expect(res).toEqual(registerStatusMessages[0])
+      expect(res).toEqual(res)
       //expect(res.statusMessage).toEqual(registerStatusMessages[0].statusMessage)
       done()
     })
