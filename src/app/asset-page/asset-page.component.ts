@@ -8,7 +8,7 @@ import { ArtstorViewerComponent } from './artstor-viewer/artstor-viewer.componen
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
 // Project Dependencies
-import { Asset, ImageZoomParams } from '../shared'
+import { Asset, ImageZoomParams, IIIFRect } from '../shared'
 import {
     AuthService,
     AssetService,
@@ -1256,19 +1256,30 @@ export class AssetPage implements OnInit, OnDestroy {
 
         if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
             // Get Bounds from OSD viewer for the saved detail
-            let bounds = this.assetViewer.osdViewer.viewport.viewportToImageRectangle(this.assetViewer.osdViewer.viewport.getBounds(true))
+            let bounds: IIIFRect = this.assetViewer.osdViewer.viewport.viewportToImageRectangle(this.assetViewer.osdViewer.viewport.getBounds(true))
             let multiviewIndex: number  = this.assetViewer.osdViewer._sequenceIndex || 0
             // Generate the view url from tilemap service
             let tilesourceStr: string = Array.isArray(asset.tileSource) ? asset.tileSource[multiviewIndex] : asset.tileSource
             let fullSizeLink: string
+            let size: string // https://iiif.io/api/image/2.1/#size
             // Make sure the bounds are adjusted for the negative x and y values
-            bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
-            bounds['height'] = bounds['y'] < 0 ? bounds['height'] + bounds['y'] : bounds['height']
-
+            bounds.width = bounds.x < 0 ? bounds.width + bounds.x : bounds.width
+            bounds.height = bounds.y < 0 ? bounds.height + bounds.y : bounds.height
             // Make sure the bounds are within the content size for the IIIF endpoint.
-            bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']
-            bounds['height'] = bounds['height'] > this.assets[0].viewportDimensions.contentSize['y'] ? this.assets[0].viewportDimensions.contentSize['y'] : bounds['height']
-
+            bounds.width = bounds.width > this.assets[0].viewportDimensions.contentSize.x ? this.assets[0].viewportDimensions.contentSize.x : bounds.width
+            bounds.height = bounds.height > this.assets[0].viewportDimensions.contentSize.y ? this.assets[0].viewportDimensions.contentSize.y : bounds.height
+            // Ensure bounds are rounded
+            Object.keys(bounds).forEach(property => {
+                bounds[property] = Math.round(bounds[property])
+            })
+            // Set size (avoid exceeding bound size)
+            if (bounds.width > bounds.height) {
+                // Landscape detail
+                size = Math.min(bounds.width,asset.downloadMaxWidth) + ','
+            } else {
+                // Portrait detail
+                size = ',' + Math.min(bounds.height,asset.downloadMaxHeight)
+            }
             // Ensure iiif parameter is encoded correctly
             tilesourceStr = tilesourceStr.replace('.fcgi%3F', '.fcgi?').replace('info.json', '')
             if (tilesourceStr.indexOf('//') == 0) {
@@ -1276,12 +1287,12 @@ export class AssetPage implements OnInit, OnDestroy {
             }
             // Build full image url for multiviews
             if (this.multiviewItems) {
-                fullSizeLink = tilesourceStr + 'full/full/0/' + asset.iiifFilename()
+                fullSizeLink = `${tilesourceStr}full/,${asset.downloadMaxHeight}/0/${asset.iiifFilename()}`
                 fullSizeLink = this.getDownloadServiceUrl(asset, fullSizeLink)
                 this.generatedFullURL = fullSizeLink
             }
             // Attach zoom parameters to tilesource. Note: Multiviews use default.jpg and normal assets use native.jpg
-            tilesourceStr = tilesourceStr + Math.round(bounds['x']) + ',' + Math.round(bounds['y']) + ',' + Math.round(bounds['width']) + ',' + Math.round(bounds['height']) + '/full/0/' + asset.iiifFilename()
+            tilesourceStr = tilesourceStr + bounds.x + ',' + bounds.y + ',' + bounds.width + ',' + bounds.height + '/'+size+'/0/' + asset.iiifFilename()
             tilesourceStr = this.getDownloadServiceUrl(asset, tilesourceStr)
             this.downloadViewLink = tilesourceStr
             this.downloadViewReady = true
