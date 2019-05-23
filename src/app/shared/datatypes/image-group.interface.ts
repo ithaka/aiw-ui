@@ -31,6 +31,16 @@ export interface GroupItem {
 }
 
 /**
+ * Raw IIIF values
+ */
+export interface IIIFRect {
+  width: number,
+  height: number,
+  x: number,
+  y: number
+}
+
+/**
  * IIIF Zoom parameters as passed by Group service and URL params
  */
 export interface ImageZoomParams {

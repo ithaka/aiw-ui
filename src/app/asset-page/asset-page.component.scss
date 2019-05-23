@@ -578,8 +578,11 @@ $titleNavBg: #eee;
             &.icon-add-item, &.icon-add-detail-view, &.icon-download, &.icon-download-detail-view {
                 opacity: 1;
             }
-            &.disabled {
-              opacity: 0.3;
+        }
+
+        &.disabled {
+            & .icon {
+                opacity: 0.3;
             }
         }
     }
