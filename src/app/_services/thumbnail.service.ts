@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 
 // Project Dependencies
-import { RawSearchAsset, MediaObject, SearchAsset, AuthService, AssetThumbnail } from 'app/shared';
+import { AuthService } from './auth.service';
+import { RawSearchAsset, MediaObject } from './asset-search.service';
+import { AssetThumbnail } from 'app/shared';
 
 @Injectable()
 export class ThumbnailService {

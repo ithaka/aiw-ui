@@ -1,9 +1,9 @@
 import { Router } from '@angular/router';
 import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 
-import { Thumbnail, AssetService, CollectionTypeHandler, AssetSearchService, CollectionTypeInfo, AssetThumbnail } from './../../shared'
+import { Thumbnail, CollectionTypeHandler, CollectionTypeInfo, AssetThumbnail } from './../../shared'
 import { Angulartics2 } from 'angulartics2';
-import { ThumbnailService } from 'app/_services';
+import { AssetService, AssetSearchService, ThumbnailService } from 'app/_services';
 
 @Component({
   selector: 'ang-thumbnail',
