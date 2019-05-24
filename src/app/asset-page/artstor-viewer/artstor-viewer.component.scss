@@ -14,8 +14,8 @@ $desktop: 992px;*/
 @import '../../../sass/core/variables';
 
 .aiw-hidden {
-    display: none;
-    pointer-events: none;
+    display: none !important;
+    pointer-events: none !important;
 }
 
 .mwEmbedKalturaIframe {
