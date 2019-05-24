@@ -101,6 +101,7 @@ export class Asset {
                 // Determine allowable size
                 let maxWidth
                 let maxHeight
+                let maxSize
                 if (data.download_size && data.download_size.length > 0) {
                     let sizeValues = data.download_size.split(',')
                     maxWidth = parseInt(sizeValues[0]) 
@@ -112,9 +113,17 @@ export class Asset {
                 // Set max values on Asset
                 this.downloadMaxWidth = maxWidth
                 this.downloadMaxHeight = maxHeight
+                // Generate IIIF size string based on orientation
+                if (data.width > data.height) {
+                    // Landscape
+                    maxSize = maxWidth + ','
+                } else {
+                    // Portrait
+                    maxSize = ',' + maxHeight
+                }
                 if (Array.isArray(this.tileSource) && this.tileSource.length >= 1) {
                     // Handle Multi View downloads using IIIF
-                    let url = 'https:' + this.tileSource[0].replace('info.json', '') + 'full/full/0/' + this.iiifFilename()
+                    let url = 'https:' + this.tileSource[0].replace('info.json', '') + 'full/'+maxSize+'/0/' + this.iiifFilename()
                     // Pass IIIF url to Download Service for processing metadata
                     // Include "iiif" param in this case
                     downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url) + "&iiif=true"
@@ -124,13 +133,8 @@ export class Asset {
                         if (url.indexOf('//') == 0) {
                             url = 'https:' + url
                         }
-                        if (data.width > data.height) {
-                            // Landscape
-                            url += `full/${maxWidth},/0/${this.iiifFilename()}`
-                        } else {
-                            // Portrait
-                            url += `full/,${maxHeight}/0/${this.iiifFilename()}`
-                        }
+                        // Build IIIF query
+                        url += `full/${maxSize}/0/${this.iiifFilename()}`
                         downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent( encodeURI(url) ) + "&iiif=true"
                     } else {
                         // Handle images and video thumbnails
@@ -138,7 +142,6 @@ export class Asset {
                         // Pass Image url to Download Service for processing metadata
                         let url = imageServer + data.image_url + "?cell=" + data.download_size + "&rgnn=0,0,1,1&cvt=JPEG"
                         downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url)
-                            
                     }
                 } else {
                     // nothing happens here because some assets are not allowed to be downloaded
