@@ -1,82 +1,117 @@
 import { Injectable } from '@angular/core';
 
 // Project Dependencies
-import { RawSearchAsset, MediaObject, SearchAsset, AuthService } from 'app/shared';
+import { RawSearchAsset, MediaObject, SearchAsset, AuthService, AssetThumbnail } from 'app/shared';
 
 @Injectable()
 export class ThumbnailService {
 
-    constructor(private _auth: AuthService) {
+  constructor(private _auth: AuthService) {
 
+  }
+  
+  public searchAssetToThumbnail(asset: RawSearchAsset): AssetThumbnail {
+      let cleanedSSID: string = asset.doi.substr(asset.doi.lastIndexOf('.') + 1) // split the ssid off the doi
+      let cleanedMedia: MediaObject
+      if (asset && asset.media && typeof asset.media == 'string') { cleanedMedia = JSON.parse(asset.media) }
+      let cleanedAsset: AssetThumbnail = Object.assign(
+        {}, // assigning it to a new object
+        asset, // base is the raw asset returned from search
+        { // this object contains all of the new properties which exist on a cleaned asset
+          media: cleanedMedia, // assign a media object instead of a string
+          ssid: cleanedSSID, // assign the ssid, which is taken off the doi
+          thumbnailUrls: [], // this is only the array init - we add the urls later
+          img: ''
+        }
+      )
+      // Parse stringified compound media if available
+      if (cleanedAsset.compound_media) {
+        cleanedAsset.compound_media_json = JSON.parse(cleanedAsset.compound_media)
+      }
+      // Use the compound media thumbnail url where sequenceNum equals 1
+      if (cleanedAsset && cleanedAsset.compound_media_json && cleanedAsset.compound_media_json.objects) {
+        let compoundAsset = cleanedAsset.compound_media_json.objects.filter((asset) => {
+          return asset['sequenceNum'] === 1
+        })
+
+        if (compoundAsset[0]) {
+          cleanedAsset.thumbnailUrls.push(this._auth.getThumbHostname(true) + compoundAsset[0].thumbnailSizeOnePath)
+        }
+      }
+      else { // make the thumbnail urls and add them to the array
+        for (let i = 1; i <= 5; i++) {
+          cleanedAsset.thumbnailUrls.push(this.makeThumbUrl(cleanedAsset.media.thumbnailSizeOnePath, i))
+        }
+      }
+
+      // Attach usable thumbnail url
+      cleanedAsset.img = this.getThumbnailImg(cleanedAsset)
+      // Attach media flags
+      cleanedAsset = this.attachMediaFlags(cleanedAsset)
+
+      return cleanedAsset
+  }
+
+  /**
+   * Get image url to set on thumbnail
+   */
+  getThumbnailImg(thumbnail: AssetThumbnail): string {
+      if (thumbnail.status != 'not-available' && thumbnail.isDetailView && !thumbnail.isDowngradedMedia) {
+        return this.makeDetailViewThmb(thumbnail)
+      } else if (thumbnail.isMultiView || (thumbnail.isDetailView && thumbnail.isDowngradedMedia)) {
+        return thumbnail.thumbnailImgUrl
+      } else if (thumbnail.status != 'not-available') {
+        return this.makeThumbUrl(thumbnail)
+      } else {
+        return
+      }
+  }
+
+  /**
+   * Decorate with media type flags
+   * - Should not be referenced outside of the service, instead use public transform functions
+   * @param thumbnail 
+   */
+  private attachMediaFlags(thumbnail: AssetThumbnail): AssetThumbnail {
+    // Compound 'multiview' assets for image groups, assigned in assets service
+    if (thumbnail['compoundmediaCount']) {
+      thumbnail.isMultiView = true
+      thumbnail.multiviewItemCount = thumbnail['compoundmediaCount']
     }
-    
-    public searchAssetToThumbnail(asset: RawSearchAsset): AssetThumbnail {
-        let cleanedSSID: string = asset.doi.substr(asset.doi.lastIndexOf('.') + 1) // split the ssid off the doi
-        let cleanedMedia: MediaObject
-        if (asset && asset.media && typeof asset.media == 'string') { cleanedMedia = JSON.parse(asset.media) }
-        let cleanedAsset: SearchAsset = Object.assign(
-          {}, // assigning it to a new object
-          asset, // base is the raw asset returned from search
-          { // this object contains all of the new properties which exist on a cleaned asset
-            media: cleanedMedia, // assign a media object instead of a string
-            ssid: cleanedSSID, // assign the ssid, which is taken off the doi
-            thumbnailUrls: [] // this is only the array init - we add the urls later
-          }
-        )
-        // Parse stringified compound media if available
-        if (cleanedAsset.compound_media) {
-          cleanedAsset.compound_media_json = JSON.parse(cleanedAsset.compound_media)
-        }
-        // Use the compound media thumbnail url where sequenceNum equals 1
-        if (cleanedAsset && cleanedAsset.compound_media_json && cleanedAsset.compound_media_json.objects) {
-          let compoundAsset = cleanedAsset.compound_media_json.objects.filter((asset) => {
-            return asset['sequenceNum'] === 1
-          })
-
-          if (compoundAsset[0]) {
-            cleanedAsset.thumbnailUrls.push(this._auth.getThumbHostname(true) + compoundAsset[0].thumbnailSizeOnePath)
-          }
-        }
-        else { // make the thumbnail urls and add them to the array
-          for (let i = 1; i <= 5; i++) {
-            cleanedAsset.thumbnailUrls.push(this.makeThumbUrl(cleanedAsset.media.thumbnailSizeOnePath, i))
-          }
-        }
-
-        // Build thumb url
-        // if (thumbnail.status != 'not-available' && this.isDetailView && !this.isDowngradedMedia) {
-        //     return this._search.makeDetailViewThmb(thumbnail)
-        //     } 
-        //     else if (this.isMultiView || (this.isDetailView && this.isDowngradedMedia)) {
-        //     return thumbnail.thumbnailImgUrl
-        //     } 
-        //     else if (thumbnail.status != 'not-available') {
-        //     return this.makeThumbUrl(thumbnail, this.thumbnailSize)
-        //     } else {
-        //     return
-        // }
-
-        return cleanedAsset
+    // Compound 'multiview' assets use cleanedAsset.thumbnailUrls[0], assigned in asset-search
+    if (thumbnail.compound_media_json && thumbnail.compound_media_json.objects) {
+      thumbnail.isMultiView = true
+      thumbnail.thumbnailImgUrl = thumbnail['thumbnailUrls'][0]
+      thumbnail.multiviewItemCount = thumbnail.compound_media_json.objects.length
+    } else if (thumbnail['media']) {
+      thumbnail.thumbnailImgUrl = thumbnail.media.thumbnailSizeOnePath
     }
 
+    // Set isDetailView
+    if (thumbnail['zoom']) {
+      thumbnail.isDetailView = true
+    }
+    // Set isDowngradedMedia
+    if ( (thumbnail.isMultiView && thumbnail.media && thumbnail.media.format === 'null') ||
+        ( (thumbnail.isMultiView || thumbnail.isDetailView) && thumbnail['compoundmediaCount'] === 1)) {
+      thumbnail.isDowngradedMedia = true
+    }
+    // Set alt text
+    thumbnail.thumbnailAlt = thumbnail['name'] ? 'Thumbnail of ' +thumbnail['name'] : 'Untitled'
+    thumbnail.thumbnailAlt = thumbnail['agent'] ? thumbnail.thumbnailAlt + ' by ' +thumbnail['agent'] : thumbnail.thumbnailAlt + ' by Unknown'
+    return thumbnail
+  }
 
-
-    /**
-     * Get image url to set on thumbnail
-     */
-    // getThumbnailImg(thumbnail: Thumbnail): string {
-    //     if (thumbnail.status != 'not-available' && this.isDetailView && !this.isDowngradedMedia) {
-    //     return this._search.makeDetailViewThmb(thumbnail)
-    //     } 
-    //     else if (this.isMultiView || (this.isDetailView && this.isDowngradedMedia)) {
-    //     return thumbnail.thumbnailImgUrl
-    //     } 
-    //     else if (thumbnail.status != 'not-available') {
-    //     return this._search.makeThumbUrl(thumbnail, this.thumbnailSize)
-    //     } else {
-    //     return
-    //     }
-    // }
+  /**
+   * Generate Thumbnail URL for detailed view using the zoom property of the thumbnail
+   */
+  public makeDetailViewThmb(thumbnailObj: any): string{
+    let thumbURL: string = ''
+    let tileSourceHostname = (this._auth.getEnv() == 'test') ? '//tsstage.artstor.org' : '//tsprod.artstor.org'
+    let imgURL = thumbnailObj['thumbnailImgUrl'].replace('/thumb/imgstor/size0', '').replace('.jpg', '.fpx')
+    thumbURL = tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgURL) + '/' + thumbnailObj['zoom']['viewerX'] + ',' + thumbnailObj['zoom']['viewerY'] + ',' + thumbnailObj['zoom']['pointWidth'] + ',' + thumbnailObj['zoom']['pointHeight'] + '/,115/0/native.jpg'
+    return thumbURL
+  }
 
     /**
    * Generate Thumbnail URL
@@ -84,6 +119,7 @@ export class ThumbnailService {
    * @param size: number - sizes 0 through 4 are acceptable
    */
   public makeThumbUrl(thumbData: any, size?: number): string {
+    console.log("MAKE URL", thumbData)
     let imagePath: string
     let isMultiView: boolean
     let isThumbnailImgUrl: boolean
@@ -91,7 +127,7 @@ export class ThumbnailService {
     let receivedFullUrl: boolean
     // Set default size
     if (!size) {
-      size = 1
+      size = 2
     }
     // Handle variations of Multi Views
     if (typeof(thumbData.tileSource) !== 'undefined' && thumbData.thumbnail_url === thumbData.tileSource) {
@@ -144,10 +180,4 @@ export class ThumbnailService {
     return this._auth.getThumbHostname() + imagePath;
   }
 
-}
-
-export interface AssetThumbnail {
-    // ???
-    doi ?: string
-    artstorid ?: string
 }

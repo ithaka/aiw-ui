@@ -47,6 +47,29 @@ export interface Thumbnail {
   }
 }
 
+
+export interface AssetThumbnail {
+  objectId?: string
+  img: string
+  size?: number
+  thumbnailAlt?: string
+  status?: string
+  isDetailView?: boolean
+  isMultiView?: boolean
+  isDowngradedMedia?: boolean
+  multiviewItemCount?: number
+  media?: any
+  thumbnailImgUrl?: string
+  thumbnailUrls?: string[]
+  compound_media?: any
+  compound_media_json?: {
+    types?: string[],
+    objects?: any[]
+  }
+  doi ?: string
+  artstorid ?: string
+}
+
 // export interface SearchServiceThumbnail {
   // id	664db63b-d45e-3ad3-aad2-a3828dc819f2
   // doi	10.2307/artstor.12240886

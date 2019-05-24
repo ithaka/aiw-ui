@@ -13,8 +13,8 @@ import { AppConfig } from '../app.service'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { APP_CONST } from '../app.constants'
-import { Thumbnail, AssetData } from './datatypes';
-import { ThumbnailService, AssetThumbnail } from 'app/_services';
+import { Thumbnail, AssetData, AssetThumbnail } from './datatypes';
+import { ThumbnailService } from 'app/_services';
 @Injectable()
 export class AssetSearchService {
 
@@ -515,18 +515,6 @@ export class AssetSearchService {
   //   // Determine if hostname should be appended
   //   return this._auth.getThumbHostname() + imagePath;
   // }
-
-
-  /**
-   * Generate Thumbnail URL for detailed view using the zoom property of the thumbnail
-   */
-  public makeDetailViewThmb(thumbnailObj: any): string{
-    let thumbURL: string = ''
-    let tileSourceHostname = (this._auth.getEnv() == 'test') ? '//tsstage.artstor.org' : '//tsprod.artstor.org'
-    let imgURL = thumbnailObj['thumbnailImgUrl'].replace('/thumb/imgstor/size0', '').replace('.jpg', '.fpx')
-    thumbURL = tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgURL) + '/' + thumbnailObj['zoom']['viewerX'] + ',' + thumbnailObj['zoom']['viewerY'] + ',' + thumbnailObj['zoom']['pointWidth'] + ',' + thumbnailObj['zoom']['pointHeight'] + '/,115/0/native.jpg'
-    return thumbURL
-  }
 }
 
 // the cleaned response object which is returned by the service
