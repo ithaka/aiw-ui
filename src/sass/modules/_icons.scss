@@ -90,8 +90,6 @@
 @include icon--hover('present-mode--orange', 'svg');
 @include icon--hover('study-mode', 'svg');
 
-@include icon('zoom-in-new', 'svg');
-@include icon('zoom-out-new', 'svg');
 @include icon('fit-to-view', 'svg');
 @include icon('present-dark', 'svg');
 @include icon('remove-from-comparison', 'svg');
@@ -101,8 +99,8 @@
 @include icon('share', 'svg');
 @include icon('share-white', 'svg');
 @include icon('star', 'svg');
-@include icon('zoom-in', 'svg');
-@include icon('zoom-out', 'svg');
+@include icon('zoom-in-v2', 'svg');
+@include icon('zoom-out-v2', 'svg');
 @include icon('large-view', 'svg');
 @include icon('small-view', 'svg');
 @include icon('detail-view', 'svg');
