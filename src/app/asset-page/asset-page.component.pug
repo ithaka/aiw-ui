@@ -175,7 +175,7 @@
             ang-collection-badge([collectionType]="collectionType")
           //- Old metadata loop
           .meta-block(*ngFor="let fieldName of assets[0].formattedMetadata | keys")
-            ng-container(*ngIf="fieldName != 'Rights'")
+            ng-container(*ngIf="fieldName != 'Rights' && fieldName != 'License'")
               .label([attr.id]="cleanId(fieldName)") {{ fieldName }}
               div(*ngFor="let value of assets[0].formattedMetadata[fieldName]; let i=index")
                 a.value.col-link(*ngIf="(fieldName === 'Collection' && i===0)", (click)="trackCollectionLink(cleanFieldValue(value))", [routerLink]="setCollectionLink(assets[0])", [innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")
@@ -188,6 +188,14 @@
                 | &nbsp;
                 a.value.col-link.rights-text([innerHTML]="cleanFieldValue(right) | lowercase | linkify", [attr.href]="rightsLink", aria-label="Learn about this rights statement on rightsstatements.org", target="_blank")
               .value(*ngIf="rightsText !== right", [innerHTML]="cleanFieldValue(right) | linkify", [attr.aria-labelledby]="'Rights'")
+          .meta-block(*ngIf="assets[0].formattedMetadata.License && assets[0].formattedMetadata.License.length > 0")
+            .label#License License
+            .license(*ngFor="let license of assets[0].formattedMetadata.License")
+              a(*ngIf="licenseText === license", [attr.href]="licenseLink", aria-label="Learn about this license statement on creativecommons.org", target="_blank")
+                img.license-icon([attr.src]="licenseImg", [attr.alt]="license", title="License")
+                | &nbsp;
+                span.value.license-text([innerHTML]="cleanFieldValue(license) | lowercase | linkify", title="License")
+              .value(*ngIf="licenseText !== license", [innerHTML]="cleanFieldValue(license) | linkify")
 
           .row-hdr.pt-3(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
           //- Loop through File Properties Array
