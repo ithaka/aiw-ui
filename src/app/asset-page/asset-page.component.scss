@@ -524,6 +524,25 @@ $titleNavBg: #eee;
   text-transform: capitalize;
 }
 
+.license {
+    padding: 2px 0px;
+
+    .license-icon {
+        width: 88px;
+        height: 31px;
+        line-height: 31px;
+        display: inline-block;
+    }
+
+    .license-text {
+        height: 31px;
+        line-height: 31px;
+        text-decoration: underline;
+        text-transform: capitalize;
+        color: $color-gray-7;
+    }
+}
+
 .dropdown-menu {
 
     border: 1px solid $color-border-gray;
@@ -578,8 +597,11 @@ $titleNavBg: #eee;
             &.icon-add-item, &.icon-add-detail-view, &.icon-download, &.icon-download-detail-view {
                 opacity: 1;
             }
-            &.disabled {
-              opacity: 0.3;
+        }
+
+        &.disabled {
+            & .icon {
+                opacity: 0.3;
             }
         }
     }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="25px" height="25px" viewBox="0 0 25 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>icon-zoom-in</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-6.4%" y="-25.0%" width="112.8%" height="150.0%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="hovers-on-image-controls" transform="translate(-231.000000, -429.000000)" stroke="#333333">
+            <g id="controls---zoom-in" filter="url(#filter-1)" transform="translate(227.000000, 425.000000)">
+                <g id="icon-zoom-in" transform="translate(7.000000, 7.000000)">
+                    <g id="icons/actions/zoom-in">
+                        <g id="Group-2" transform="translate(10.285714, 10.285714) rotate(-45.000000) translate(-10.285714, -10.285714) translate(3.857143, 1.285714)">
+                            <circle id="Oval-Copy-2" stroke-width="1.5" cx="6.42857143" cy="6.42857143" r="6.42857143"></circle>
+                            <g id="Group-3" transform="translate(6.428571, 6.428571) rotate(-45.000000) translate(-6.428571, -6.428571) translate(4.500000, 4.500000)" stroke-linecap="square" stroke-width="1.5">
+                                <path d="M1.92857143,0 L1.92857143,3.85714286" id="Line-4"></path>
+                                <path d="M1.92857143,-8.8817842e-15 L1.92857143,3.85714286" id="Line-4-Copy" transform="translate(1.928571, 1.928571) rotate(90.000000) translate(-1.928571, -1.928571) "></path>
+                            </g>
+                            <path d="M6.42857143,14.1428571 L6.42857143,18" id="Line-3" stroke-width="1.5" stroke-linecap="square"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
