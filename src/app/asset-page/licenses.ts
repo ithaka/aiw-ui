@@ -29,7 +29,8 @@ export const licenses = [
     },
     { name: 'Public Domain',
       link: 'https://creativecommons.org/share-your-work/public-domain/',
-      img: 'https://licensebuttons.net/p/88x31.png'
+      img: 'https://licensebuttons.net/p/88x31.png',
+      html: '<a href="https://creativecommons.org/publicdomain/zero/1.0/" title="CC0 1.0 Universal (CC0 1.0) Public Domain Dedication">Public Domain</a></div>'
     }
 ]
   

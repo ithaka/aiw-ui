@@ -583,7 +583,8 @@ export class AssetPage implements OnInit, OnDestroy {
             // Loop over License fields and set license statement values via isCreativeCommonsLicense
             for (let i = 0; i < this.assets[0].formattedMetadata.License.length; i++) {
                 let licenseField = this.assets[0].formattedMetadata.License[i]
-                this.isCreativeCommonsLicense(licenseField)
+                let resLicenseVal = this.isCreativeCommonsLicense(licenseField)
+                this.assets[0].formattedMetadata.License[i] = resLicenseVal ? resLicenseVal : licenseField
             }
         }
     }
@@ -808,20 +809,21 @@ export class AssetPage implements OnInit, OnDestroy {
       return false
     }
 
-    public isCreativeCommonsLicense(license_text: string): boolean {
+    public isCreativeCommonsLicense(license_text: string): any {
         // Handle extra spaces and differences in punctuation in License fields
         // by doing uppercase comparison of alphanumeric chars only
         let reg = /[^a-zA-Z0-9]/
 
         for (let i = 0; i < licenses.length; i++) {
-            if (licenses[i].name.split(reg).join('').toUpperCase() === license_text.split(reg).join('').toUpperCase()) {
-                this.licenseText = license_text
+            if ((licenses[i].name.split(reg).join('').toUpperCase() === license_text.split(reg).join('').toUpperCase()) || (licenses[i].html === license_text)) {
+                this.licenseText = licenses[i].name
                 this.licenseLink = licenses[i].link
                 this.licenseImg = licenses[i].img
-                return true
+                
+                return this.licenseText
             }
         }
-        return false
+        return
     }
 
     private handleSkipAsset(): void {
