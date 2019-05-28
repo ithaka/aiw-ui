@@ -9,11 +9,8 @@ import { Observable, BehaviorSubject, Subject, Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService } from './auth.service'
-import { GroupService } from './group.service'
-import { ToolboxService } from './toolbox.service'
+import { AssetSearchService, AuthService, GroupService, SearchResponse, ToolboxService } from './'
 import { AssetFiltersService } from './../asset-filters/asset-filters.service'
-import { AssetSearchService, SearchResponse } from './asset-search.service'
 import { GroupItem, ImageGroup, Thumbnail } from 'datatypes'
 import { AppConfig } from 'app/app.service'
 import { APP_CONST } from '../app.constants'

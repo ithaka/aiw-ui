@@ -67,6 +67,22 @@ export class AssetThumbnail {
   }
   doi ?: string
   artstorid ?: string
+  // In template
+  tombstone: any
+  name?: string
+  agent?: string
+  date?: string
+  thumbnail1?: string
+  thumbnail2?: string
+  thumbnail3?: string
+  thumbnail4?: string
+  cfObjectId?: string
+  clustered?: any
+  iap?: any
+  partofcluster?: any
+  frequentlygroupedwith?: any
+  objectTypeId?: number
+  zoom?: any
 }
 
 // export interface SearchServiceThumbnail {

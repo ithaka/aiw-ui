@@ -16,7 +16,7 @@ export class ThumbnailService {
       let cleanedSSID: string = asset.doi.substr(asset.doi.lastIndexOf('.') + 1) // split the ssid off the doi
       let cleanedMedia: MediaObject
       if (asset && asset.media && typeof asset.media == 'string') { cleanedMedia = JSON.parse(asset.media) }
-      let cleanedAsset: AssetThumbnail = Object.assign(
+      let cleanedAsset: AssetThumbnail | any = Object.assign(
         {}, // assigning it to a new object
         asset, // base is the raw asset returned from search
         { // this object contains all of the new properties which exist on a cleaned asset
@@ -51,7 +51,7 @@ export class ThumbnailService {
       // Attach media flags
       cleanedAsset = this.attachMediaFlags(cleanedAsset)
 
-      return cleanedAsset
+      return <AssetThumbnail>cleanedAsset
   }
 
   /**
