@@ -25,7 +25,7 @@ import { Angulartics2 } from 'angulartics2';
 @Injectable()
 export class AuthService implements CanActivate {
   public currentUser: Observable<any>
-  public currentAuthHeaders: AuthTriplet 
+  public currentAuthHeaders: AuthTriplet
   // Track whether or not user object has been refreshed since app opened
   public userSessionFresh: boolean = false
   public showUserInactiveModal: Subject<boolean> = new Subject(); // Set up subject observable for showing inactive user modal
@@ -303,7 +303,7 @@ export class AuthService implements CanActivate {
       if(quizModeTTDismissed) {
         this._storage.setLocal('quizModeTTDismissed', quizModeTTDismissed)
       }
-      
+
       // Clear observables
       this.userSource.next({})
       this.institutionObjSource.next({})
@@ -361,6 +361,8 @@ export class AuthService implements CanActivate {
 
     let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // form encode it
     let options = { headers: header, withCredentials: true }; // Create a request option
+
+    console.log(this.getUrl(true) + '/register')
     return this.http.post(this.getUrl(true) + '/register', data , options);
   }
 
@@ -558,7 +560,7 @@ export class AuthService implements CanActivate {
       'userDepartment' : user.dept || ''
     }
     // Push to GTM data layer
-    this.angulartics.eventTrack.next( { properties : { 
+    this.angulartics.eventTrack.next( { properties : {
       gtmCustom : {
         "user" : userGTMVars
       }
@@ -570,7 +572,7 @@ export class AuthService implements CanActivate {
     this.angulartics.setUserProperties.next({ isLoggedIn: (user.isLoggedIn || false) });
     this.angulartics.setUserProperties.next({ shibbolethUser: (user.shibbolethUser || false) });
     this.angulartics.setUserProperties.next({ dept: (user.dept || '') });
-    this.angulartics.setUserProperties.next({ ssEnabled: (user.ssEnabled || false) }) 
+    this.angulartics.setUserProperties.next({ ssEnabled: (user.ssEnabled || false) })
   }
 
   /**
@@ -661,8 +663,8 @@ export class AuthService implements CanActivate {
   public getUserInfo(triggerSessionExpModal?: boolean): Observable<any> {
     return this.http
       .get(this.genUserInfoUrl(), {
-        observe: 'response', 
-        headers: this.getHeaders(), 
+        observe: 'response',
+        headers: this.getHeaders(),
         withCredentials: true
       }).pipe(
       map((res)  => {

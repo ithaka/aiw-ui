@@ -61,7 +61,7 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
 
       interactions.push(
         provider.addInteraction({
-          uponReceiving: 'form POST registration form submission',
+          uponReceiving: 'registration form submission',
           withRequest: {
             method: 'POST',
             path: '/api/secure/register',
@@ -90,7 +90,7 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
         })
     })
 
-    it('should return a user success response', (done) => {
+    fit('should return a user success response', (done) => {
 
       // TEST registerCall instead of full submit
 
@@ -102,11 +102,18 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
       _auth.registerUser(mockAlreadyRegisteredFormInput)
       .subscribe(data => {
         res = data
-        console.log('!!!!!!!', res)
+        expect(res).toEqual(registerStatusMessages[0])
       }) // <== called userI fo in register component
-      expect(res).toEqual(res)
-      //expect(res.statusMessage).toEqual(registerStatusMessages[0].statusMessage)
       done()
+
+
+
+
+      //expect(res).toEqual(res)
+      // console.log('running after')
+      // expect(res).toEqual(JSON.stringify(registerStatusMessages[0]))
+      //expect(res.statusMessage).toEqual(registerStatusMessages[0].statusMessage)
+
     })
   })
 
@@ -146,7 +153,7 @@ let registerStatusMessages = [
 
   // Scenario : When user email already exists in the portal for which the user is registering
   // or when the email exists in a different portal and the password does not match.
-  { statusCode: 1, statusMessage: "User already exists." }
+  JSON.stringify({ statusCode: 1, statusMessage: "User already exists." })
 ]
 
 // Mock Test Form Inputs
