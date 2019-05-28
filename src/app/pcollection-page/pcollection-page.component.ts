@@ -5,9 +5,7 @@ import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetService } from './../shared/assets.service'
-import { AuthService } from './../shared/auth.service'
-import { TitleService } from '../shared/title.service'
+import { AssetService, AuthService, TitleService } from '_services'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
 
 @Component({

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core'
 
 // Project Dependencies
-import { AuthService } from './_services'
-import { AssetDetailsFormValue } from 'shared'
+import { AuthService, AssetDetailsFormValue } from './_services'
 
 @Injectable()
 export class LocalPCService {

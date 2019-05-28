@@ -5,8 +5,7 @@ import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetSearchService } from './../shared'
-import { MetadataService, ThumbnailService } from './../_services'
+import { AssetSearchService, MetadataService, ThumbnailService } from '_services'
 
 @Component({
   selector: 'ang-asset-pp-page',

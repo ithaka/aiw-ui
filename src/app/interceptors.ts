@@ -12,7 +12,7 @@ import { Observable } from 'rxjs'
 import { tap } from 'rxjs/operators'
 
 // our code
-import { AuthService } from 'app/shared'
+import { AuthService } from '_services'
 
 /**
  * This interceptor is applied to all http requests, and monitors ONLY their response. Its job

@@ -13,8 +13,8 @@ import { AppConfig } from '../app.service'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { APP_CONST } from '../app.constants'
-import { Thumbnail, AssetData, AssetThumbnail } from './datatypes';
-import { ThumbnailService } from 'app/_services';
+import { Thumbnail, AssetData, AssetThumbnail } from 'datatypes'
+import { ThumbnailService } from '_services'
 @Injectable()
 export class AssetSearchService {
 

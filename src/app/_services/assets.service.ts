@@ -14,11 +14,10 @@ import { GroupService } from './group.service'
 import { ToolboxService } from './toolbox.service'
 import { AssetFiltersService } from './../asset-filters/asset-filters.service'
 import { AssetSearchService, SearchResponse } from './asset-search.service'
-import { ImageGroup, Thumbnail } from '.'
+import { GroupItem, ImageGroup, Thumbnail } from 'datatypes'
 import { AppConfig } from 'app/app.service'
 import { APP_CONST } from '../app.constants'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
-import { GroupItem } from './datatypes';
 
 @Injectable()
 export class AssetService {

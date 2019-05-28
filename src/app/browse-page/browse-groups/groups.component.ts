@@ -4,10 +4,10 @@ import { Subscription } from 'rxjs'
 import { map, take, filter } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
-import { AuthService, GroupService } from './../../shared'
+// Project Dependencies
+import { AuthService, GroupService, TitleService } from '_services'
 import { Tag } from './../tag'
 import { TagFiltersService } from './tag-filters.service'
-import { TitleService } from '../../shared/title.service'
 import { AppConfig } from '../../app.service';
 import { TourStep } from '../../shared/tour/tour.component'
 

@@ -8,8 +8,8 @@ import { Angulartics2 } from 'angulartics2'
 import { isPlatformBrowser } from '@angular/common'
 
 // Project Dependencies
-import { AuthService } from './../auth.service'
-import { DomUtilityService } from '../../shared'
+import { AuthService, DomUtilityService } from '_services'
+import {  } from '../../shared'
 
 @Component({
     selector: 'ang-guide-tour',

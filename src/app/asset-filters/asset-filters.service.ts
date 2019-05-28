@@ -3,7 +3,8 @@ import { BehaviorSubject, Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 
-import { AuthService } from '../shared/auth.service'
+// Project Dependencies
+import { AuthService } from '_services'
 
 @Injectable()
 export class AssetFiltersService {

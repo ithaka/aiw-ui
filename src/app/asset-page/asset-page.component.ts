@@ -14,15 +14,14 @@ import {
     AssetService,
     AssetSearchService,
     GroupService,
-    CollectionTypeHandler,
     LogService,
     PersonalCollectionService,
     AssetDetailsFormValue,
-    CollectionTypeInfo,
+    TitleService,
     FlagService,
     DomUtilityService,
-} from './../shared'
-import { TitleService } from '../shared/title.service'
+} from '_services'
+import { CollectionTypeHandler, CollectionTypeInfo} from 'datatypes'
 import { ScriptService } from '../shared/script.service'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
 import { APP_CONST } from '../app.constants'

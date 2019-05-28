@@ -14,12 +14,11 @@ import {
   GroupService,
   ImageGroupService,
   LogService,
-  Thumbnail,
   ToolboxService,
   FlagService,
-  DomUtilityService,
-  ImageGroup
-} from '../shared'
+  DomUtilityService
+} from '_services'
+import { Thumbnail, ImageGroup } from 'datatypes'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { APP_CONST } from '../app.constants'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'

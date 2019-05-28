@@ -5,7 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common'
 
 // Project Dependencies
-import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService, FlagService } from '../shared'
+import { AssetService, ImageGroupService, GroupService, AuthService, FlagService } from '_services'
+import { ImageGroup } from 'datatypes'
 import { AppConfig } from '../app.service'
 import { Toast, ToastService } from 'app/_services';
 

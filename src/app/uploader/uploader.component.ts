@@ -1,7 +1,8 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core'
-
 import { FileUploader, FileSelectDirective, FileLikeObject, FileItem } from 'ng2-file-upload'
-import { AuthService, PostPersonalCollectionResponse } from '../shared'
+
+// Project Dependencies
+import { AuthService, PostPersonalCollectionResponse } from '_services'
 
 @Component({
   selector: 'ang-uploader',

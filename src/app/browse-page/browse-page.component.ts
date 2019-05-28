@@ -4,12 +4,10 @@ import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Project Dependencies
-import { TitleService } from '../shared/title.service'
-import { AssetService } from '../shared/assets.service'
-import { AuthService } from '../shared/auth.service'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { AppConfig } from '../app.service'
-import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
+import { AuthService, AssetService, TitleService } from '_services'
 
 @Component({
   selector: 'ang-browse-page',

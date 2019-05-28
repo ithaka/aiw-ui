@@ -5,9 +5,8 @@ import { Location } from '@angular/common';
 import { Subscription }   from 'rxjs'
 import { map, take } from 'rxjs/operators'
 
-// Internal Dependencies
-import { AssetSearchService, AuthService } from './../shared'
-import { MetadataService } from './../_services'
+// Project Dependencies
+import { AssetSearchService, AuthService, MetadataService } from '_services'
 
 @Component({
   selector: 'ang-ssid-mapping',

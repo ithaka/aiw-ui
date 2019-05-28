@@ -3,7 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { map } from 'rxjs/operators'
 
 // Project Dependencies
-import { GroupService, AssetService } from './../../shared';
+import { GroupService, AssetService } from '_services'
 @Component({
   selector: 'ang-delete-ig-modal',
   templateUrl: 'delete-ig.component.pug',

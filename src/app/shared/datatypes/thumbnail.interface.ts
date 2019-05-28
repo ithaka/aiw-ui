@@ -1,7 +1,6 @@
 // I've seeded the interface with a few parameters that I know to exist on (most) thumbnails
 //  if you need more, you can add them to the interface
-
-export interface Thumbnail {
+export class Thumbnail {
   name?: string
   agent?: string
   date?: string
@@ -48,7 +47,7 @@ export interface Thumbnail {
 }
 
 
-export interface AssetThumbnail {
+export class AssetThumbnail {
   objectId?: string
   img: string
   size?: number

@@ -6,8 +6,10 @@ import { CompleterService, CompleterData } from 'ng2-completer'
 import { Angulartics2 } from 'angulartics2'
 import { Router } from '@angular/router'
 
-import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService, DomUtilityService, ImageZoomParams, Asset } from './../../shared'
-import { ToastService } from 'app/_services';
+// Project Dependencies
+import { AssetService, GroupService, AuthService, AssetSearchService, DomUtilityService } from '_services'
+import { ImageGroup, ImageZoomParams, Asset } from 'datatypes'
+import { ToastService } from 'app/_services'
 
 @Component({
   selector: 'ang-add-to-group',
