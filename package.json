@@ -138,6 +138,7 @@
     "@pact-foundation/pact": "^8.1.2",
     "@pact-foundation/pact-node": "^8.1.2",
     "@pact-foundation/pact-web": "^8.1.2",
+    "codelyzer": "^5.0.1",
     "gh-pages": "^2.0.1",
     "grunt": "^1.0.3",
     "html-loader": "^0.5.5",
