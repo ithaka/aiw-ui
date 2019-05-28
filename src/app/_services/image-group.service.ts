@@ -1,11 +1,11 @@
 import { Injectable, EventEmitter } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Router } from '@angular/router'
-
 import { Observable, BehaviorSubject } from 'rxjs'
 
-import { AuthService, AssetService, ImageGroup } from './../shared'
-import { ImageGroupDescription } from './../shared'
+// Project Dependencies
+import { AuthService, AssetService,  } from './../_services'
+import { ImageGroup, ImageGroupDescription } from './../shared'
 
 /**
  *

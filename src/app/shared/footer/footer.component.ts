@@ -4,11 +4,11 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 
-import { AppConfig } from '../../app.service'
-import { AuthService } from '../auth.service'
-
+// Project Dependencies
 import { version } from '../../../../package.json'
 import { environment } from 'environments/environment'
+import { AppConfig } from 'app/app.service.js'
+import { AuthService } from 'app/_services'
 
 declare let google
 

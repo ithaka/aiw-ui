@@ -5,12 +5,9 @@ import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 import * as Sentry from '@sentry/browser';
 
-import { AuthService } from '../auth.service'
-import { AssetService } from '../assets.service'
-import { ToolboxService } from '../toolbox.service'
+// Project Dependencies
 import { AppConfig } from '../../app.service'
-import { Toast, ToastService } from 'app/_services';
-import { FlagService } from '../flag.service';
+import { AssetService, AuthService, FlagService, Toast, ToastService, ToolboxService } from 'app/_services'
 
 @Component({
   selector: 'nav-bar',
