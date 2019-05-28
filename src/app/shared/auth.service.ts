@@ -357,12 +357,13 @@ export class AuthService implements CanActivate {
    * @param registration should have properties: _method="update", username, password, role, dept, info<boolean>, survey<boolean>
    */
   public registerUser(registration: any): Observable<any> {
+
+    console.log('from auth register user')
     let data = this.formEncode(registration);
 
     let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // form encode it
     let options = { headers: header, withCredentials: true }; // Create a request option
 
-    console.log(this.getUrl(true) + '/register')
     return this.http.post(this.getUrl(true) + '/register', data , options);
   }
 
