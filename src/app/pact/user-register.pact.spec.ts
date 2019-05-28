@@ -8,13 +8,10 @@ import { Angulartics2, ANGULARTICS2_TOKEN, RouterlessTracking } from 'angulartic
 import { FormBuilder, FormGroup } from "@angular/forms"
 import { Location } from '@angular/common'
 import { AppConfig } from '../app.service'
-
 import { AuthService } from '../shared'
 import { RegisterComponent } from '../register/register.component'
 
-
-
-describe('Register form POST /api/secure/register #pact #user-register', () => {
+fdescribe('Register form POST /api/secure/register #pact #user-register', () => {
 
   let provider, _auth
   let register: RegisterComponent
@@ -45,13 +42,11 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
         AppConfig,
         AuthService,
         FormBuilder,
-        Idle, IdleExpiry,
-        RegisterComponent
+        Idle, IdleExpiry
       ],
     })
     const testbed = getTestBed()
     _auth = testbed.get(AuthService)
-    register = testbed.get(RegisterComponent)
 
   })
 
@@ -94,35 +89,20 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
         })
     })
 
-    it('should call register and pass', (done) => {
+    it('should return already registered status message', (done) => {
       _auth.registerUser(mockAlreadyRegisteredFormInput).subscribe((data) => {
-        expect(registerStatusMessages[0]).toEqual(registerStatusMessages[0])
+        expect(data).toEqual(registerStatusMessages[0])
         done()
       })
     })
 
-    // it('should return a user success response', (done) => {
+    it('should return a successful registration response', (done) => {
+      _auth.registerUser(mockRegisterResponse).subscribe((data) => {
+        expect(data).toEqual(registerStatusMessages[0])
+        done()
+      })
+    })
 
-    //   // this.registerCall(userInfo).pipe(
-    //   //   catchError(this.handleError.bind(this)), // Component 'this' needs bound to handleError callback
-    //   //   take(1),
-    //   //   map(data => {
-    //   //     this.handleRegistrationResp(data)
-    //   //   })).subscribe()
-    //   let res
-    //   _auth.registerUser(mockAlreadyRegisteredFormInput).pipe(
-    //     take(1),
-    //     map(data => {
-    //     res = data
-    //     console.log('res: ', res)
-
-    //   })).subscribe(() => {
-    //     expect(res).toEqual(registerStatusMessages[0])
-    //     expect(1).toEqual(1)
-    //     done()
-    //   })
-
-    // })
   })
 
 })

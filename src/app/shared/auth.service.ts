@@ -18,6 +18,7 @@ import { IdleWatcherUtil } from './idle-watcher'
 import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 import { Angulartics2 } from 'angulartics2';
+import { environment } from 'environments/environment'
 /**
  * Controls authorization through IP address and locally stored user object
  */
@@ -357,14 +358,12 @@ export class AuthService implements CanActivate {
    * @param registration should have properties: _method="update", username, password, role, dept, info<boolean>, survey<boolean>
    */
   public registerUser(registration: any): Observable<any> {
-
-    console.log('from auth register user')
     let data = this.formEncode(registration);
 
     let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // form encode it
     let options = { headers: header, withCredentials: true }; // Create a request option
 
-    return this.http.post(this.getUrl(true) + '/register', data , options);
+    return this.http.post(environment.API_URL + '/api/secure/register', data , options);
   }
 
   /**
@@ -379,7 +378,7 @@ export class AuthService implements CanActivate {
     let header = new HttpHeaders().set('Content-Type', 'application/json')
     let options = { headers: header, withCredentials: true }
 
-    return this.http.post(this.getHostname() + '/saml/user/create', registration , options)
+    return this.http.post(environment.API_URL + '/saml/user/create', registration , options)
   }
 
   /**
@@ -390,7 +389,7 @@ export class AuthService implements CanActivate {
     let header = new HttpHeaders().set('Content-Type', 'application/json')
     let options = { headers: header, withCredentials: true }
 
-    return this.http.post(this.getHostname() + '/saml/user/link', credentials , options)
+    return this.http.post(environment.API_URL + '/saml/user/link', credentials , options)
       .toPromise()
   }
 
@@ -456,7 +455,7 @@ export class AuthService implements CanActivate {
   /** Returns url used for downloading some media, such as documents */
   public getMediaUrl(): string {
     // This is a special case, and should always points to library.artstor or stage
-    return this.getHostname() + '/media';
+    return environment.API_URL + '/media';
   }
 
   /**
@@ -741,7 +740,7 @@ export class AuthService implements CanActivate {
     }
 
     getInstitutions() {
-        let url = this.getHostname() + '/api/institutions?_method=shibbolethOnly';
+        let url = environment.API_URL + '/api/institutions?_method=shibbolethOnly';
 
         return this.http
             .get(url)

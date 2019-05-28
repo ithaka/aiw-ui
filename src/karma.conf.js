@@ -26,10 +26,10 @@ module.exports = function (config) {
     reporters: ['mocha', 'progress', 'kjhtml'],
     port: 9876,
     colors: true,
-    logLevel: config.logLevel,
+    logLevel: config.LOG_LEVEL,
     autoWatch: true,
     browsers: ['Chrome'],
-    singleRun: false,
+    singleRun: true,
 
     /**
      * Configure Pact mock servers
