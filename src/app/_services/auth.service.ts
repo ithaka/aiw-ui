@@ -14,10 +14,10 @@ import { map, take, catchError } from 'rxjs/operators'
 import { AppConfig } from '../app.service'
 
 // For session timeout management
-import { IdleWatcherUtil } from 'shared'
+import { IdleWatcherUtil } from 'shared/idle-watcher'
 import { Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
-import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
-import { Angulartics2 } from 'angulartics2';
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
+import { Angulartics2 } from 'angulartics2'
 /**
  * Controls authorization through IP address and locally stored user object
  */

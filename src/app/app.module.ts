@@ -93,10 +93,6 @@ import { SkyBannerComponent } from './sky-banner/sky-banner.component'
 
 
 // Application wide providers
-import {
-  TypeIdPipe,
-  ScriptService
-} from './shared'
 import { 
   AccountService,
   AssetSearchService, 
@@ -116,6 +112,10 @@ import {
   TitleService,
   ToolboxService
 } from './_services'
+import {
+  TypeIdPipe,
+  ScriptService
+} from './shared'
 
 import { LocalPCService } from './_local-pc-asset.service'
 import { AssetFiltersService } from './asset-filters/asset-filters.service'
@@ -168,19 +168,19 @@ const APP_PROVIDERS = [
   LocalPCService,
   LogService,
   ImageGroupService,
-  ScriptService,
   SlidesService,
-  AssetFiltersService,
   TagFiltersService,
   TagsService,
   ThumbnailService,
   ToolboxService,
   LegacyRouteResolver,
   GroupsRouteResolver,
+  ScriptService,
   Title,
   TitleService,
   MetadataService,
   CollectionService,
+  AssetFiltersService,
   { provide: UrlSerializer, useClass: CustomUrlSerializer },
   // 401/Unauthorized handler
   { provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true },
