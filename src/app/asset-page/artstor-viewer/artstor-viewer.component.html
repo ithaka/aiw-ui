@@ -17,6 +17,10 @@
     <div class="krpano-viewer osd-wrap" [class.aiw-hidden]="state != 3">
         <div class="pano" id="pano-{{ index }}"></div>
     </div>
+    <!--pdf viewer-->
+    <div class="pdf-viewer osd-wrap" [class.aiw-hidden]="state != 6">
+        <pdf-viewer [src]="abc"></pdf-viewer>
+    </div>
     <!--Viewer Buttons-->
     <div *ngIf="!thumbnailMode">
         <div class="button-group asset-viewer__buttons" id="imageButtons-{{ osdViewerId }}">

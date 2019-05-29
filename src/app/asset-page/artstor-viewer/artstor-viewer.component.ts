@@ -21,7 +21,8 @@ export enum viewState {
   kalturaReady, // 2
   krpanoReady, // 3
   thumbnailFallback, // 4
-  audioFallback //5
+  audioFallback, //5
+  pdfReady // 6
 }
 
 @Component({
@@ -133,6 +134,12 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
     private tilesLoaded: boolean = false
     public multiViewPage: number = 1
     public multiViewCount: number = 1
+
+    public abc:any = {
+        // url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+        url: 'https://stage.artstor.org/media/SS37268_37268_35801243/20',
+        withCredentials: true
+    }
 
     constructor(
         private _http: HttpClient, // TODO: move _http into a service
@@ -247,25 +254,35 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         this.state = viewState.thumbnailFallback
         if (this.thumbnailMode) { return } // leave state on thumbnail if thumbnail mode is triggered
 
+        console.log('asset.typeName', asset.typeName)
         // Object types that need loaders
-        switch (asset.typeName) {
-            case 'image':
-                // Image, try IIF
-                this.loadIIIF();
-                break;
-            case 'audio':
-                // Kaltura media
-                this.loadKaltura();
-                // this.state = viewState.audioFallback
-                break;
-            case 'kaltura':
-                // Kaltura media
-                this.loadKaltura();
-                break;
-            case 'panorama':
-                this.loadKrpanoViewer();
-                break;
+        if(asset.typeId === 20) {
+            this.loadPdfViewer();
+        } else {
+            switch (asset.typeName) {
+                case 'image':
+                    // Image, try IIF
+                    this.loadIIIF();
+                    break;
+                case 'audio':
+                    // Kaltura media
+                    this.loadKaltura();
+                    // this.state = viewState.audioFallback
+                    break;
+                case 'kaltura':
+                    // Kaltura media
+                    this.loadKaltura();
+                    break;
+                case 'panorama':
+                    this.loadKrpanoViewer();
+                    break;
+            }
         }
+    }
+
+    private loadPdfViewer(): void {
+        console.log('loadPdfViewer ccalled')
+        this.state = viewState.pdfReady
     }
 
 
