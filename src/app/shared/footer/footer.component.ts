@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators'
 // Project Dependencies
 import { version } from '../../../../package.json'
 import { environment } from 'environments/environment'
-import { AppConfig } from 'app/app.service.js'
+import { AppConfig } from 'app/app.service'
 import { AuthService } from 'app/_services'
 
 declare let google
@@ -28,7 +28,6 @@ export class Footer {
 
   // TypeScript public modifiers
   constructor(
-    public _appConfig: AppConfig,
     private location: Location,
     private _app: AppConfig,
     private _router: Router,
@@ -36,7 +35,7 @@ export class Footer {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // console.log("Constructing footer...")
-    this.siteID = this._appConfig.config.siteID;
+    this.siteID = this._app.config.siteID;
     // Get version number
     this.appVersion = version
     this.links = this._app.config.footerLinks

@@ -46,10 +46,10 @@ export class ThumbnailService {
         }
       }
 
-      // Attach usable thumbnail url
-      cleanedAsset.img = this.getThumbnailImg(cleanedAsset)
       // Attach media flags
       cleanedAsset = this.attachMediaFlags(cleanedAsset)
+      // Attach usable thumbnail url
+      cleanedAsset.img = this.getThumbnailImg(cleanedAsset)
 
       return <AssetThumbnail>cleanedAsset
   }
