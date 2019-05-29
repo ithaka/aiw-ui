@@ -8,6 +8,7 @@ import { Angulartics2, ANGULARTICS2_TOKEN, RouterlessTracking } from 'angulartic
 
 import { AppConfig } from '../app.service'
 import { AuthService } from '../shared'
+import { environment } from 'environments/environment.prod';
 
 fdescribe('Register form POST /api/secure/register #pact #user-register', () => {
 
@@ -81,13 +82,28 @@ fdescribe('Register form POST /api/secure/register #pact #user-register', () => 
             headers: { 'Content-Type': 'application/json;charset=UTF-8' },
             body: mockRegistrationResponses[1]
           }
+        }),
+        // Invalid Request
+        provider.addInteraction({
+          uponReceiving: 'invalid POST request',
+          withRequest: {
+            method: 'POST',
+            path: '/api/secure/register',
+            headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+            body: invalidRequest
+          },
+          willRespondWith: {
+            status: 200,
+            headers: { 'Content-Type': '*/*' },
+            body: invalidInputResponse
+          }
         })
       )
 
       Promise.all(interactions)
         .then(() => { done() })
         .catch((err) => { done.fail(err) })
-    })
+    }) // beforeAll
 
     afterAll((done) => {
       provider.verify()
@@ -113,6 +129,17 @@ fdescribe('Register form POST /api/secure/register #pact #user-register', () => 
         done()
       })
     })
+
+    // Test invalid input 400 response
+    // it('should return 400 error and error response', (done) => {
+
+    //   this.http.post(environment.API_URL + '/api/secure/register', )
+
+    //   _auth.registerUser(invalidRequest).subscribe((data) => {
+    //     expect(data).toEqual(invalidInputResponse)
+    //     done()
+    //   })
+    // })
 
   })
 
@@ -141,8 +168,17 @@ let mockRegisterFormInput = {
   portal: 'library'
 }
 
-let mockRegistrationResponses = [
+let invalidRequest = {
+  username: 'sgdsf',
+  password: 'sdfgs',
+  role: 'sdfgs',
+  dept: 'sgfdgs',
+  info: 'false',
+  survey: 'false',
+  portal: 'library'
+}
 
+let mockRegistrationResponses = [
   // Mock successful registration response, from auth swagger docs
   {
     "adminContact": "string",
@@ -223,6 +259,9 @@ let mockRegistrationResponses = [
 
   // Scenario : When user email already exists in the portal for which the user is registering
   // or when the email exists in a different portal and the password does not match.
-  { statusCode: 1, statusMessage: "User already exists." }
-
+  { statusCode: 1, statusMessage: "User already exists." },
 ]
+
+// HTML response for 400 Invalid Input
+let invalidInputResponse = `<html><head><title>Apache Tomcat/7.0.81 - Error report</title > <style><!--H1 { font - family: Tahoma, Arial, sans - serif; color: white; background - color: #525D76; font - size: 22px; } H2 { font - family: Tahoma, Arial, sans - serif; color: white; background - color: #525D76; font - size: 16px; } H3 { font - family: Tahoma, Arial, sans - serif; color: white; background - color: #525D76; font - size: 14px; } BODY { font - family: Tahoma, Arial, sans - serif; color: black; background - color: white; } B { font - family: Tahoma, Arial, sans - serif; color: white; background - color: #525D76; } P { font - family: Tahoma, Arial, sans - serif; background: white; color: black; font - size: 12px; } A { color: black; } A.name { color: black; } HR { color: #525D76; } --> </style> </head > <body><h1>HTTP Status 400 - Required String parameter 'username' is not present < /h1><HR size="1" noshade="noshade"><p><b>type</b > Status report < /p><p><b>message</b > <u>Required String parameter 'username' is not present < /u></p > <p><b>description < /b> <u>The request sent by the client was syntactically incorrect.</u > </p><HR size="1" noshade="noshade"><h3>Apache Tomcat/7.0.81 < /h3></body></html>`
+
