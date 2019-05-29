@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core'
 import { map, take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService } from '.';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class LogService {

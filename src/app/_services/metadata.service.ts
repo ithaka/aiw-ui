@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 // Project Dependencies
-import { AuthService } from '_services'
+import { AuthService } from './auth.service' // specific to avoid circular dependency
 import { Asset } from 'datatypes'
 import { map, mergeMap } from 'rxjs/operators';
 import { isPlatformBrowser } from '@angular/common';

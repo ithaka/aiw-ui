@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 
 // Project Dependencies
-import { AuthService } from '_services'
+import { AuthService } from 'app/_services/auth.service' // specific to avoid circular dependency
 
 @Injectable()
 export class AssetFiltersService {
