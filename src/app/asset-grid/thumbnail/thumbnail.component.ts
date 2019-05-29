@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 
-import { Thumbnail, CollectionTypeHandler, CollectionTypeInfo, AssetThumbnail } from './../../shared'
+import { AssetThumbnail } from './../../shared'
 import { Angulartics2 } from 'angulartics2';
 import { AssetService, AssetSearchService, ThumbnailService } from 'app/_services';
 

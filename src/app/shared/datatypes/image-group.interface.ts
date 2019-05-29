@@ -1,4 +1,4 @@
-import { Thumbnail } from './thumbnail.interface'
+import { AssetThumbnail } from './thumbnail.interface'
 
 export interface ImageGroup {
   id?: string; // new ig property
@@ -14,7 +14,7 @@ export interface ImageGroup {
   igId?: string,
   count?: number,
   total?: number,
-  thumbnails?: Thumbnail[],
+  thumbnails?: AssetThumbnail[],
   items?: any[],
   description?: string,
   // description?: ImageGroupDescription, // this does not naturally come with image groups, but sometimes we attach it

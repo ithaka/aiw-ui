@@ -18,7 +18,7 @@ import {
   FlagService,
   DomUtilityService
 } from '_services'
-import { Thumbnail, ImageGroup } from 'datatypes'
+import { AssetThumbnail, ImageGroup } from 'datatypes'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { APP_CONST } from '../app.constants'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
@@ -592,7 +592,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     }
   }
 
-  private constructNavigationCommands (thumbnail: Thumbnail) : any[] {
+  private constructNavigationCommands (thumbnail: AssetThumbnail) : any[] {
     let assetId = thumbnail.objectId ? thumbnail.objectId : thumbnail.artstorid
     let params: any = {
       prevRouteTS: this.prevRouteTS // for fetching previous route params from session storage, on asset page
@@ -876,7 +876,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    * - Owner of Group only
    * @requires browser
    */
-  private removeFromGroup(assetsToRemove: Thumbnail[], clearRestricted?: boolean): void {
+  private removeFromGroup(assetsToRemove: AssetThumbnail[], clearRestricted?: boolean): void {
     for (let i = 0; i < assetsToRemove.length; i++) {
       let assetId = assetsToRemove[i].objectId
       let igIndex = this.ig.items.indexOf(assetId)

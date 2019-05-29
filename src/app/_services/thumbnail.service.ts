@@ -64,7 +64,6 @@ export class ThumbnailService {
    */
   public itemAssetToThumbnail(item: RawItemAsset): AssetThumbnail 
   {
-    console.log("COLLL TYPES", this.getCollectionType(item))
     let cleanedAsset: AssetThumbnail = {
       name: item.tombstone[0],
       agent: item.tombstone[1],
@@ -75,9 +74,9 @@ export class ThumbnailService {
       multiviewItemCount: item.compoundmediaCount,
       status: item.status,
       img : '',
-      thumbnailImgUrl: item.thumbnailImgUrl
+      thumbnailImgUrl: item.thumbnailImgUrl,
+      zoom: item.zoom
     }
-    // Object.assign({}, item, { img: ''})
     // media takes priority over thumbnailImgUrl
     if (item['media'] && item.media.thumbnailSizeOnePath) {
       cleanedAsset.thumbnailImgUrl = item.media.thumbnailSizeOnePath
@@ -133,7 +132,7 @@ export class ThumbnailService {
     }
 
     // Set isDetailView
-    if (thumbnail['zoom']) {
+    if (thumbnail.zoom) {
       thumbnail.isDetailView = true
     }
     // Set isDowngradedMedia
@@ -150,11 +149,11 @@ export class ThumbnailService {
   /**
    * Generate Thumbnail URL for detailed view using the zoom property of the thumbnail
    */
-  public makeDetailViewThmb(thumbnailObj: any): string{
+  public makeDetailViewThmb(thumbnailObj: AssetThumbnail): string{
     let thumbURL: string = ''
     let tileSourceHostname = (this._auth.getEnv() == 'test') ? '//tsstage.artstor.org' : '//tsprod.artstor.org'
-    let imgURL = thumbnailObj['thumbnailImgUrl'].replace('/thumb/imgstor/size0', '').replace('.jpg', '.fpx')
-    thumbURL = tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgURL) + '/' + thumbnailObj['zoom']['viewerX'] + ',' + thumbnailObj['zoom']['viewerY'] + ',' + thumbnailObj['zoom']['pointWidth'] + ',' + thumbnailObj['zoom']['pointHeight'] + '/,115/0/native.jpg'
+    let imgURL = thumbnailObj.thumbnailImgUrl.replace('/thumb/imgstor/size0', '').replace('.jpg', '.fpx')
+    thumbURL = tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgURL) + '/' + thumbnailObj.zoom.viewerX + ',' + thumbnailObj.zoom.viewerY + ',' + thumbnailObj.zoom.pointWidth + ',' + thumbnailObj.zoom.pointHeight + '/,115/0/native.jpg'
     return thumbURL
   }
 

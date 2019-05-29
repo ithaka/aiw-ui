@@ -10,7 +10,7 @@ import { map } from 'rxjs/operators'
 
 // Project Dependencies
 import { AssetFiltersService } from './../asset-filters/asset-filters.service'
-import { GroupItem, ImageGroup, Thumbnail, AssetThumbnail } from 'datatypes'
+import { GroupItem, ImageGroup, AssetThumbnail } from 'datatypes'
 import { AppConfig } from 'app/app.service'
 import { APP_CONST } from '../app.constants'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
@@ -185,7 +185,7 @@ export class AssetService {
      */
     public removeFromResults(ids: string[], totalResults: number ): void {
         // Remove deleted thumbnails
-        this.allResultsValue['thumbnails'] = this.allResultsValue['thumbnails'].filter((thumbnail: Thumbnail) => {
+        this.allResultsValue['thumbnails'] = this.allResultsValue['thumbnails'].filter((thumbnail: AssetThumbnail) => {
             return ids.indexOf(thumbnail.objectId) < 0
         })
         // Remove deleted ids
@@ -374,7 +374,7 @@ export class AssetService {
      * @param itemIds the ids for which you need the thumbnails
      * @param igId passed if you are viewing an image group, which may contain pc assets and therefore access is checked against user's access to group
      */
-    public getAllThumbnails(group: { itemObjs?: GroupItem[], itemIds?: string[]}, igId?: string): Promise<Thumbnail[]> {
+    public getAllThumbnails(group: { itemObjs?: GroupItem[], itemIds?: string[]}, igId?: string): Promise<AssetThumbnail[]> {
         let itemIds: string[] = []
         let itemObjs: GroupItem[] = []
         /**
