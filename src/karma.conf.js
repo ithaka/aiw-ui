@@ -26,7 +26,7 @@ module.exports = function (config) {
     reporters: ['mocha', 'progress', 'kjhtml'],
     port: 9876,
     colors: true,
-    logLevel: config.LOG_LEVEL,
+    logLevel: config.LOG_ERROR,
     autoWatch: true,
     browsers: ['Chrome'],
     singleRun: true,

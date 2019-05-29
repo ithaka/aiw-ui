@@ -46,7 +46,7 @@ export class RegisterComponent implements OnInit {
   // Error codes for shibboleth messages
   private shibErrorCodes: string[] = ['2010', '2020', '2030', '2040', '2050', '2060', '2070', '2080']
 
-  public registerCall: Function
+  private registerCall: Function
 
   constructor(
     private _auth: AuthService,
@@ -105,7 +105,7 @@ export class RegisterComponent implements OnInit {
     this.serviceErrors = {}
     this.submitted = true
 
-    //if (!this.registerForm.valid) { return 'form was not valid' }
+    if (!this.registerForm.valid) { return 'form was not valid' }
     this.isLoading = true
 
     // this is the object that the service will receive
