@@ -4,7 +4,8 @@ import { Router } from '@angular/router'
 import { Observable, BehaviorSubject } from 'rxjs'
 
 // Project Dependencies
-import { AuthService, AssetService,  } from './../_services'
+import { AuthService } from './auth.service'
+import { AssetService } from './assets.service'
 import { ImageGroup, ImageGroupDescription } from './../shared'
 
 /**

@@ -5,11 +5,10 @@ import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Project Dependencies
-import { AssetService, AuthService, LogService, FlagService, DomUtilityService, TitleService } from '../_services'
+import { AssetService, AuthService, LogService, FlagService, DomUtilityService, ScriptService, TitleService } from '../_services'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { AssetGrid } from './../asset-grid/asset-grid.component'
 import { AppConfig } from '../app.service'
-import { ScriptService } from 'app/shared'
 
 @Component({
   selector: 'ang-search-page',

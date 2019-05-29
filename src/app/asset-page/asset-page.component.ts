@@ -20,9 +20,9 @@ import {
     TitleService,
     FlagService,
     DomUtilityService,
+    ScriptService
 } from '_services'
 import { CollectionTypeHandler, CollectionTypeInfo} from 'datatypes'
-import { ScriptService } from '../shared/script.service'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
 import { APP_CONST } from '../app.constants'
 import { AppConfig } from '../app.service'

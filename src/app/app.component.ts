@@ -10,9 +10,8 @@ import { map, take } from 'rxjs/operators'
 
 // Project Dependencies
 import { AppConfig } from './app.service'
-import { ScriptService,  } from './shared'
 import { isPlatformBrowser } from '@angular/common'
-import { DomUtilityService, FlagService } from '_services'
+import { DomUtilityService, FlagService, ScriptService } from '_services'
 
 // Server only imports
 import * as enTranslation from '../assets/i18n/en.json'

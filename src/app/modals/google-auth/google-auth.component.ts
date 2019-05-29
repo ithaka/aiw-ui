@@ -3,8 +3,7 @@ import { Observable } from 'rxjs';
 import { Angulartics2 } from 'angulartics2';
 
 // Project Dependencies
-import { DomUtilityService, SlidesService } from '_services'
-import { ScriptService } from 'shared'
+import { DomUtilityService, ScriptService, SlidesService } from '_services'
 import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/public_api';
 
 @Component({

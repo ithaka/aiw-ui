@@ -1,3 +1,5 @@
+import { CollectionTypeInfo } from "./collection-type-handler";
+
 // I've seeded the interface with a few parameters that I know to exist on (most) thumbnails
 //  if you need more, you can add them to the interface
 export class Thumbnail {
@@ -49,7 +51,9 @@ export class Thumbnail {
 
 export class AssetThumbnail {
   objectId?: string
+  objectTypeId: number
   img: string
+  collectionType: CollectionTypeInfo
   size?: number
   thumbnailAlt?: string
   status?: string
@@ -69,9 +73,9 @@ export class AssetThumbnail {
   artstorid ?: string
   // In template
   // tombstone: any
-  name?: string
-  agent?: string
-  date?: string
+  name: string
+  agent: string
+  date: string
   // thumbnail1?: string
   // thumbnail2?: string
   // thumbnail3?: string
@@ -81,7 +85,6 @@ export class AssetThumbnail {
   iap?: any
   partofcluster?: any
   frequentlygroupedwith?: any
-  objectTypeId?: number
   zoom?: any
 }
 

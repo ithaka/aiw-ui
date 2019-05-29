@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 
 // Project Dependencies
-import { AuthService } from './auth.service';
-import { RawSearchAsset, MediaObject } from './asset-search.service';
-import { AssetThumbnail, RawItemAsset } from 'app/shared';
+import { AuthService } from './auth.service'
+import { RawSearchAsset, MediaObject } from './asset-search.service'
+import { AssetThumbnail, RawItemAsset, CollectionTypeHandler, CollectionTypeInfo } from 'datatypes'
 
 @Injectable()
 export class ThumbnailService {
@@ -64,7 +64,16 @@ export class ThumbnailService {
    */
   public itemAssetToThumbnail(item: RawItemAsset): AssetThumbnail 
   {
-    let cleanedAsset: AssetThumbnail = Object.assign({}, item, { img: ''})
+    let cleanedAsset: AssetThumbnail = {
+      name: item.tombstone[0],
+      agent: item.tombstone[1],
+      date: item.tombstone[2],
+      objectId: item.objectId,
+      objectTypeId: item.objectTypeId,
+      collectionType: this.getCollectionType(item),
+      img : ''
+    }
+    // Object.assign({}, item, { img: ''})
     // media takes priority over thumbnailImgUrl
     if (item['media'] && item.media.thumbnailSizeOnePath) {
       cleanedAsset.thumbnailImgUrl = item.media.thumbnailSizeOnePath
@@ -75,7 +84,13 @@ export class ThumbnailService {
     cleanedAsset = this.attachMediaFlags(cleanedAsset)
     // Attach usable thumbnail url
     cleanedAsset.img = this.getThumbnailImg(cleanedAsset)
+    // Set as AssetThumbnail
     return cleanedAsset
+  }
+
+  private getCollectionType(thumbnail: any): CollectionTypeInfo {
+    let collectionValue = thumbnail['collectionType'] ? [ thumbnail['collectionType'] ] : thumbnail['collectiontypes']
+    return CollectionTypeHandler.getCollectionType(collectionValue, thumbnail['contributinginstitutionid'])
   }
 
   /**

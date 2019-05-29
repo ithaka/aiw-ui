@@ -11,7 +11,7 @@ import { map } from 'rxjs/operators'
 // Project Dependencies
 import { AssetSearchService, AuthService, GroupService, SearchResponse, ToolboxService } from './'
 import { AssetFiltersService } from './../asset-filters/asset-filters.service'
-import { GroupItem, ImageGroup, Thumbnail } from 'datatypes'
+import { GroupItem, ImageGroup, Thumbnail, AssetThumbnail } from 'datatypes'
 import { AppConfig } from 'app/app.service'
 import { APP_CONST } from '../app.constants'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
@@ -844,10 +844,12 @@ export class AssetService {
     /**
      * Build full group thumbnail array
      * - Maps item objects to their appropriate thumbnail data
+     * - Transforms item assets into AIW AssetThumbnail
      * @param items
      * @param thumbnails
+     * @returns AssetThumbnail array
      */
-    private mapThumbnailsToItems(items: any[], thumbnails: any[]): any[] {
+    private mapThumbnailsToItems(items: any[], thumbnails: any[]): AssetThumbnail[] {
         return items.reduce((newItems, item) => {
             let newItem
             // Attach zoom object from items to the relevant thumbnail, to be used in asset grid

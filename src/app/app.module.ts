@@ -107,14 +107,14 @@ import {
   LogService,
   MetadataService, 
   PersonalCollectionService,
+  ScriptService,
   SlidesService, 
   ThumbnailService, 
   TitleService,
   ToolboxService
 } from './_services'
 import {
-  TypeIdPipe,
-  ScriptService
+  TypeIdPipe
 } from './shared'
 
 import { LocalPCService } from './_local-pc-asset.service'
