@@ -1,23 +1,17 @@
-import { HttpClientModule, HttpHeaders, HttpClient } from '@angular/common/http'
+import { Location } from '@angular/common'
+import { HttpClientModule } from '@angular/common/http'
 import { RouterModule, Router, ActivatedRoute } from '@angular/router'
 import { TestBed, getTestBed, inject, async } from '@angular/core/testing'
 import { Idle, DEFAULT_INTERRUPTSOURCES, IdleExpiry } from '@ng-idle/core'
-import { map, take, catchError } from 'rxjs/operators'
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 import { Angulartics2, ANGULARTICS2_TOKEN, RouterlessTracking } from 'angulartics2'
-import { FormBuilder, FormGroup } from "@angular/forms"
-import { Location } from '@angular/common'
+
 import { AppConfig } from '../app.service'
 import { AuthService } from '../shared'
-import { RegisterComponent } from '../register/register.component'
 
 fdescribe('Register form POST /api/secure/register #pact #user-register', () => {
 
   let provider, _auth
-  let register: RegisterComponent
-  let authService: AuthService
-  let http: HttpClient
-
 
   beforeAll(function (done) {
     provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service', port: 1205 })
@@ -41,7 +35,6 @@ fdescribe('Register form POST /api/secure/register #pact #user-register', () => 
         { provide: Location , usevalue: {} },
         AppConfig,
         AuthService,
-        FormBuilder,
         Idle, IdleExpiry
       ],
     })
@@ -59,8 +52,24 @@ fdescribe('Register form POST /api/secure/register #pact #user-register', () => 
       let interactions = []
 
       interactions.push(
+        // Registration Success
         provider.addInteraction({
-          uponReceiving: 'registration form submission',
+          uponReceiving: 'registration form submission from a new user',
+          withRequest: {
+            method: 'POST',
+            path: '/api/secure/register',
+            headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+            body: mockRegisterFormInput
+          },
+          willRespondWith: {
+            status: 200,
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            body: mockRegistrationResponses[0]
+          }
+        }),
+        // Already Registered
+        provider.addInteraction({
+          uponReceiving: 'registration form submission from an already registered user',
           withRequest: {
             method: 'POST',
             path: '/api/secure/register',
@@ -70,7 +79,7 @@ fdescribe('Register form POST /api/secure/register #pact #user-register', () => 
           willRespondWith: {
             status: 200,
             headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-            body: registerStatusMessages[0]
+            body: mockRegistrationResponses[1]
           }
         })
       )
@@ -89,16 +98,18 @@ fdescribe('Register form POST /api/secure/register #pact #user-register', () => 
         })
     })
 
-    it('should return already registered status message', (done) => {
-      _auth.registerUser(mockAlreadyRegisteredFormInput).subscribe((data) => {
-        expect(data).toEqual(registerStatusMessages[0])
+    // Test successful registration response
+    it('should return a successful registration response', (done) => {
+      _auth.registerUser(mockRegisterFormInput).subscribe((data) => {
+        expect(data).toEqual(mockRegistrationResponses[0])
         done()
       })
     })
 
-    it('should return a successful registration response', (done) => {
-      _auth.registerUser(mockRegisterResponse).subscribe((data) => {
-        expect(data).toEqual(registerStatusMessages[0])
+    // Tests already registered service response
+    it('should return already registered status message', (done) => {
+      _auth.registerUser(mockAlreadyRegisteredFormInput).subscribe((data) => {
+        expect(data).toEqual(mockRegistrationResponses[1])
         done()
       })
     })
@@ -106,21 +117,6 @@ fdescribe('Register form POST /api/secure/register #pact #user-register', () => 
   })
 
 })
-
-  /**
-   * Response Status Messages
-   */
-interface StatusResponse {
-  statusCode: number,
-  statusMessage: String
-}
-
-let registerStatusMessages = [
-
-  // Scenario : When user email already exists in the portal for which the user is registering
-  // or when the email exists in a different portal and the password does not match.
-  { statusCode: 1, statusMessage: "User already exists." }
-]
 
 // Mock Test Form Inputs
 let mockAlreadyRegisteredFormInput = {
@@ -134,80 +130,99 @@ let mockAlreadyRegisteredFormInput = {
   portal: 'library'
 }
 
-// Mock register success
-let mockRegisterResponse = {
-"adminContact": "string",
-"contentSubscriptions": [
-"ADL"
-],
-"dayRemain": 0,
-"instContact": "string",
-"institutionName": "string",
-"isRememberMe": true,
-"k12User": true,
-"maxPeriod": 0,
-"remoteaccess": true,
-"shibbolethUser": true,
-"status": true,
-"statusCode": 0,
-"statusMessage": "string",
-"targetUrl": "string",
-"user": {
-"accesibleInstitutionsByUser": "string",
-"accountNonExpired": true,
-"accountNonLocked": true,
-"authorities": [
-{
-"authority": "string"
+let mockRegisterFormInput = {
+  _method: 'update',
+  username: 'ithakaqa_artstor-03@artstor.org',
+  password: '1234567',
+  role: 'ROLE_CU_GRAD_STUDENT',
+  dept: 'DEPT_ARCHAEO',
+  info: 'false',
+  survey: 'false',
+  portal: 'library'
 }
-],
-"baseProfileId": 0,
-"cIFolderAllowed": 0,
-"citationsCount": 0,
-"dayRemain": 0,
-"defaultView": "string",
-"dept": "string",
-"facetedSearchView": 0,
-"firstName": "string",
-"imageIVBGcolor": "string",
-"imageTNBGcolor": "string",
-"institutionId": 0,
-"k12User": true,
-"lastName": "string",
-"maxPeriod": 0,
-"portalDescipline": 0,
-"portalInstitution": 0,
-"profileInstitution": 0,
-"referred": true,
-"regionId": 0,
-"rememberMe": true,
-"role": "string",
-"sessionTimeout": 0,
-"shibbolethUser": true,
-"ssAdmin": true,
-"ssEnabled": true,
-"thumbsPerPage": 0,
-"typeId": 0,
-"userAccesibleDesciplines": "string",
-"userAccessiblePortalsMap": [
+
+let mockRegistrationResponses = [
+
+  // Mock successful registration response, from auth swagger docs
   {
-    "insAdmin": 0,
-    "institutionid": 0,
-    "pcAllowed": 0,
-    "portalName": "string",
-    "profileDescipline": 0,
-    "profileid": 0,
-    "ssAdmin": 0,
-    "ssEnabled": 0,
-    "typeid": 0,
-    "userActive": 0,
-    "virtualProfileid": 0
-  }
-],
-  "userFromPortal": true,
-    "userPCAllowed": "string",
-    "userWithMultiInstitutionAccess": true,
-    "username": "string",
-    "viewerView": "string"
-  }
-}
+    "adminContact": "string",
+    "contentSubscriptions": [
+      "ADL"
+    ],
+    "dayRemain": 0,
+    "instContact": "string",
+    "institutionName": "string",
+    "isRememberMe": true,
+    "k12User": true,
+    "maxPeriod": 0,
+    "remoteaccess": true,
+    "shibbolethUser": true,
+    "status": true,
+    "statusCode": 0,
+    "statusMessage": "string",
+    "targetUrl": "string",
+    "user": {
+      "accesibleInstitutionsByUser": "string",
+      "accountNonExpired": true,
+      "accountNonLocked": true,
+      "authorities": [
+        {
+          "authority": "string"
+        }
+      ],
+      "baseProfileId": 0,
+      "cIFolderAllowed": 0,
+      "citationsCount": 0,
+      "dayRemain": 0,
+      "defaultView": "string",
+      "dept": "string",
+      "facetedSearchView": 0,
+      "firstName": "string",
+      "imageIVBGcolor": "string",
+      "imageTNBGcolor": "string",
+      "institutionId": 0,
+      "k12User": true,
+      "lastName": "string",
+      "maxPeriod": 0,
+      "portalDescipline": 0,
+      "portalInstitution": 0,
+      "profileInstitution": 0,
+      "referred": true,
+      "regionId": 0,
+      "rememberMe": true,
+      "role": "string",
+      "sessionTimeout": 0,
+      "shibbolethUser": true,
+      "ssAdmin": true,
+      "ssEnabled": true,
+      "thumbsPerPage": 0,
+      "typeId": 0,
+      "userAccesibleDesciplines": "string",
+      "userAccessiblePortalsMap": [
+        {
+          "insAdmin": 0,
+          "institutionid": 0,
+          "pcAllowed": 0,
+          "portalName": "string",
+          "profileDescipline": 0,
+          "profileid": 0,
+          "ssAdmin": 0,
+          "ssEnabled": 0,
+          "typeid": 0,
+          "userActive": 0,
+          "virtualProfileid": 0
+        }
+      ],
+      "userFromPortal": true,
+      "userPCAllowed": "string",
+      "userWithMultiInstitutionAccess": true,
+      "username": "string",
+      "viewerView": "string"
+    }
+  },
+
+  // Scenario : When user email already exists in the portal for which the user is registering
+  // or when the email exists in a different portal and the password does not match.
+  { statusCode: 1, statusMessage: "User already exists." }
+
+]

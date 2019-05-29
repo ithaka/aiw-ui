@@ -310,7 +310,7 @@ export class AuthService implements CanActivate {
       this.institutionObjSource.next({})
 
       return this.http
-          .post(this.getUrl(true) + '/logout', {}, options)
+          .post(environment.API_URL + '/api/secure/logout', {}, options)
           .toPromise()
           .catch(function(err) {
               // error handling
