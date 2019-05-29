@@ -16,7 +16,7 @@
     //- ng-container(*ngFor="let data of thumbnail.tombstone")
     //-   span(*ngIf="data", [innerHtml]="data")
   .card-icon-group((click)="$event.stopPropagation(); $event.preventDefault();", [ngClass]="{ 'disablePointerEvents': editMode }")
-    ang-collection-badge([collectionType]="getCollectionType()")
+    ang-collection-badge([collectionType]="thumbnail.collectionTypeInfo")
     .float-right
       //- Legacy Service icons
       //- i.icon.icon-collab(*ngIf="thumbnail.cfObjectId && thumbnail.cfObjectId.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.artstorid ? thumbnail.artstorid : thumbnail.objectId])" title="Others are also interested in button icon. Press enter to click this button", (keyup.enter)="openLink($event, ['/associated', thumbnail.artstorid])", tabindex="3", aria-role="button")

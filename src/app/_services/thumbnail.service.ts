@@ -64,20 +64,24 @@ export class ThumbnailService {
    */
   public itemAssetToThumbnail(item: RawItemAsset): AssetThumbnail 
   {
+    console.log("COLLL TYPES", this.getCollectionType(item))
     let cleanedAsset: AssetThumbnail = {
       name: item.tombstone[0],
       agent: item.tombstone[1],
       date: item.tombstone[2],
       objectId: item.objectId,
       objectTypeId: item.objectTypeId,
-      collectionType: this.getCollectionType(item),
-      img : ''
+      collectionTypeInfo: this.getCollectionType(item),
+      multiviewItemCount: item.compoundmediaCount,
+      status: item.status,
+      img : '',
+      thumbnailImgUrl: item.thumbnailImgUrl
     }
     // Object.assign({}, item, { img: ''})
     // media takes priority over thumbnailImgUrl
     if (item['media'] && item.media.thumbnailSizeOnePath) {
       cleanedAsset.thumbnailImgUrl = item.media.thumbnailSizeOnePath
-    } else if (item['thumbnailImgUrl'] && item['compoundmediaCount'] > 0) {
+    } else if (item['thumbnailImgUrl'] && item.compoundmediaCount > 0) {
       cleanedAsset.thumbnailImgUrl = this._auth.getThumbHostname(true) + item.thumbnailImgUrl
     }
     // Attach media flags
@@ -115,9 +119,9 @@ export class ThumbnailService {
    */
   private attachMediaFlags(thumbnail: AssetThumbnail): AssetThumbnail {
     // Compound 'multiview' assets for image groups, assigned in assets service
-    if (thumbnail['compoundmediaCount']) {
+    if (thumbnail.multiviewItemCount) {
       thumbnail.isMultiView = true
-      thumbnail.multiviewItemCount = thumbnail['compoundmediaCount']
+      thumbnail.multiviewItemCount = thumbnail.multiviewItemCount
     }
     // Compound 'multiview' assets use cleanedAsset.thumbnailUrls[0], assigned in asset-search
     if (thumbnail.compound_media_json && thumbnail.compound_media_json.objects) {
@@ -134,7 +138,7 @@ export class ThumbnailService {
     }
     // Set isDowngradedMedia
     if ( (thumbnail.isMultiView && thumbnail.media && thumbnail.media.format === 'null') ||
-        ( (thumbnail.isMultiView || thumbnail.isDetailView) && thumbnail['compoundmediaCount'] === 1)) {
+        ( (thumbnail.isMultiView || thumbnail.isDetailView) && thumbnail.multiviewItemCount === 1)) {
       thumbnail.isDowngradedMedia = true
     }
     // Set alt text

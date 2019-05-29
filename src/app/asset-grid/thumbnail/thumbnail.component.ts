@@ -137,11 +137,11 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     }
   }
 
-  // wrapper function for getting the collection type
-  getCollectionType(): CollectionTypeInfo {
-    // Some endpoints give us the collectionType info in 'collectionType: number', where as others give the same info in 'collectiontypes: Array<number>'
-    return CollectionTypeHandler.getCollectionType( this.thumbnail['collectionType'] ? [ this.thumbnail['collectionType'] ] : this.thumbnail['collectiontypes'], this.thumbnail['contributinginstitutionid'])
-  }
+  // // wrapper function for getting the collection type
+  // getCollectionType(): CollectionTypeInfo {
+  //   // Some endpoints give us the collectionType info in 'collectionType: number', where as others give the same info in 'collectiontypes: Array<number>'
+  //   return CollectionTypeHandler.getCollectionType( this.thumbnail['collectionType'] ? [ this.thumbnail['collectionType'] ] : this.thumbnail['collectiontypes'], this.thumbnail['contributinginstitutionid'])
+  // }
 
   // If large thumbnail image fails to load, fallback to smaller thumbnail image
   thumbnailError(): void{

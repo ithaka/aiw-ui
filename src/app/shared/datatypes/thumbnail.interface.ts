@@ -53,10 +53,10 @@ export class AssetThumbnail {
   objectId?: string
   objectTypeId: number
   img: string
-  collectionType: CollectionTypeInfo
+  collectionTypeInfo: CollectionTypeInfo
   size?: number
   thumbnailAlt?: string
-  status?: string
+  status?: string // 'not-available', 'available'
   isDetailView?: boolean
   isMultiView?: boolean
   isDowngradedMedia?: boolean
