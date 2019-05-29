@@ -15,6 +15,7 @@ import { GroupItem, ImageGroup, Thumbnail } from 'datatypes'
 import { AppConfig } from 'app/app.service'
 import { APP_CONST } from '../app.constants'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
+import { ThumbnailService } from './thumbnail.service';
 
 @Injectable()
 export class AssetService {
@@ -133,6 +134,7 @@ export class AssetService {
         private _storage: ArtstorStorageService,
         private _auth: AuthService,
         private _groups: GroupService,
+        private _thumbnail: ThumbnailService,
         private _toolbox: ToolboxService,
         private _assetSearch: AssetSearchService,
         private _app: AppConfig
@@ -852,15 +854,12 @@ export class AssetService {
             for(let thumbnail of thumbnails) {
                 if (item['id'] === thumbnail['objectId']) {
                     newItem = Object.assign({}, thumbnail)  // Make copy to avoid modifying subsequent items
+                    // Attach zoom params
                     if(item['zoom']){
                         newItem['zoom'] = item['zoom']
                     }
-                    // media takes priority over thumbnailImgUrl
-                    if (thumbnail['media'] && thumbnail.media.thumbnailSizeOnePath) {
-                        newItem.thumbnailImgUrl = thumbnail.media.thumbnailSizeOnePath
-                    } else if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
-                        newItem.thumbnailImgUrl = this._auth.getThumbHostname(true) + thumbnail.thumbnailImgUrl
-                    }
+                    // Map to AssetThumbnail
+                    newItem = this._thumbnail.itemAssetToThumbnail(newItem)
                     newItems.push(newItem)
                     break
                 }

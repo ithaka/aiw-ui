@@ -117,24 +117,20 @@ export class AssetThumbnail {
   // additional_Fields	{}
 // }
 
-// export interface GroupServiceThumbnail {
-//   objectId	ASPENCEIG_10313206874
-//   compoundmediaCount	0
-//   downloadSize	1024,1024
-//   tombstone	[…]
-//   0	Untitled (spider)
-//   1	Andrew Spence
-//   2	2004
-//   collections	[…]
-//   0	35953
-//   thumbnailImgUrl	/thumb/imgstor/size0/aspence/d0001/spence_untitled_spider_as_8b_srgb.jpg
-//   iap	false
-//   status	available
-//   objectTypeId	10
-//   collectiontypes	[…]
-//   0	1
-//   contributinginstitutionid	1000
-//   clustered	0
-//   largeImgUrl	/thumb/imgstor/size1/aspence/d0001/spence_untitled_spider_as_8b_srgb.jpg
-//   cfObjectId	null
-// }
+export interface RawItemAsset {
+  objectId?: string
+  compoundmediaCount?: number
+  downloadSize?: string
+  tombstone?: string[]
+  collections?: string[]
+  thumbnailImgUrl?: string
+  media?: any
+  iap?: boolean
+  status: string // "available"
+  objectTypeId?: number
+  collectiontypes?: number[]
+  contributinginstitutionid?: number
+  clustered?: number
+  largeImgUrl?: string
+  cfObjectId?: string
+}

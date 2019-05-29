@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 // Project Dependencies
 import { AuthService } from './auth.service';
 import { RawSearchAsset, MediaObject } from './asset-search.service';
-import { AssetThumbnail } from 'app/shared';
+import { AssetThumbnail, RawItemAsset } from 'app/shared';
 
 @Injectable()
 export class ThumbnailService {
@@ -12,6 +12,10 @@ export class ThumbnailService {
 
   }
   
+  /**
+   * Transforms object:
+   * SEARCH/Solr record --> AIW AssetThumbnail
+   */
   public searchAssetToThumbnail(asset: RawSearchAsset): AssetThumbnail {
       let cleanedSSID: string = asset.doi.substr(asset.doi.lastIndexOf('.') + 1) // split the ssid off the doi
       let cleanedMedia: MediaObject
@@ -52,6 +56,26 @@ export class ThumbnailService {
       cleanedAsset.img = this.getThumbnailImg(cleanedAsset)
 
       return <AssetThumbnail>cleanedAsset
+  }
+
+  /**
+   * Transforms object:
+   * Group/Item service result --> AIW AssetThumbnail
+   */
+  public itemAssetToThumbnail(item: RawItemAsset): AssetThumbnail 
+  {
+    let cleanedAsset: AssetThumbnail = Object.assign({}, item, { img: ''})
+    // media takes priority over thumbnailImgUrl
+    if (item['media'] && item.media.thumbnailSizeOnePath) {
+      cleanedAsset.thumbnailImgUrl = item.media.thumbnailSizeOnePath
+    } else if (item['thumbnailImgUrl'] && item['compoundmediaCount'] > 0) {
+      cleanedAsset.thumbnailImgUrl = this._auth.getThumbHostname(true) + item.thumbnailImgUrl
+    }
+    // Attach media flags
+    cleanedAsset = this.attachMediaFlags(cleanedAsset)
+    // Attach usable thumbnail url
+    cleanedAsset.img = this.getThumbnailImg(cleanedAsset)
+    return cleanedAsset
   }
 
   /**
@@ -121,7 +145,7 @@ export class ThumbnailService {
    * @param size: number - sizes 0 through 4 are acceptable
    */
   public makeThumbUrl(thumbData: any, size?: number): string {
-    console.log("MAKE URL", thumbData)
+    // console.log("MAKE URL", thumbData)
     let imagePath: string
     let isMultiView: boolean
     let isThumbnailImgUrl: boolean
