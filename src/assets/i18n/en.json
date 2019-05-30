@@ -71,6 +71,7 @@
     },
     "INFO_PROMPT": "Yes, send me information about new Artstor content and tools (Optional)",
     "SURVEY_PROMPT": "Yes, send me surveys (Optional)",
+    "ARTSTOR_UPDATES": "I’d like to receive updates from Artstor (webinars/newsletters/surveys).",
     "TERMS": "I agree to the Artstor Digital Library <a id=\"linkTermsConditions\" data-automation-component=\"artstor-register-terms\" href=\"http://www.artstor.org/terms\" class=\"link bold\" target=\"_blank\">Terms</a>",
     "PRIVACY_DISCLAIMER": "You may unsubscribe at any time by clicking on the provided link on any marketing message.",
     "FIELDS_REQUIRED": "Please note that all fields are required unless noted."
