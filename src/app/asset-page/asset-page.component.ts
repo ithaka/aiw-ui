@@ -8,7 +8,7 @@ import { ArtstorViewerComponent } from './artstor-viewer/artstor-viewer.componen
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
 // Project Dependencies
-import { Asset, ImageZoomParams } from '../shared'
+import { Asset, ImageZoomParams, IIIFRect } from '../shared'
 import {
     AuthService,
     AssetService,
@@ -30,6 +30,7 @@ import { AppConfig } from '../app.service'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 import { MetadataService } from 'app/_services';
 import { rights } from './rights.ts'
+import { licenses } from './licenses.ts'
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
@@ -68,6 +69,11 @@ export class AssetPage implements OnInit, OnDestroy {
     public rightsText: string = ''
     public rightsLink: string = ''
     public rightsImg: string = ''
+
+    // License Statements values
+    public licenseText: string = ''
+    public licenseLink: string = ''
+    public licenseImg: string = ''
 
     // Toast Variables
     public showToast: boolean = false
@@ -567,12 +573,19 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         // Set download link
         this.setDownloadFull()
-
         if (this.assets[0] && this.assets[0].formattedMetadata && this.assets[0].formattedMetadata.Rights) {
             // Loop over Rights fields and set rights statement values via isRightStatement
             for (let i = 0; i < this.assets[0].formattedMetadata.Rights.length; i++) {
                 let rightsField = this.assets[0].formattedMetadata.Rights[i]
                 this.isRightStatement(rightsField)
+            }
+        }
+        if (this.assets[0] && this.assets[0].formattedMetadata && this.assets[0].formattedMetadata.License) {
+            // Loop over License fields and set license statement values via isCreativeCommonsLicense
+            for (let i = 0; i < this.assets[0].formattedMetadata.License.length; i++) {
+                let licenseField = this.assets[0].formattedMetadata.License[i]
+                let resLicenseVal = this.isCreativeCommonsLicense(licenseField)
+                this.assets[0].formattedMetadata.License[i] = resLicenseVal ? resLicenseVal : licenseField
             }
         }
     }
@@ -755,30 +768,34 @@ export class AssetPage implements OnInit, OnDestroy {
      * A collection may be private, institutional, or public.
      * If both institional(2) and public(5), we set the link to the public collection id.
      */
-    setCollectionLink(asset: Asset): any[] {
+    setCollectionLink(asset: Asset, value: string): any[] {
         let link = []
 
         // 103 Collection Id routes to /category/<categoryId>, some of the collections have collectionId of NaN, check the id in the collections array instead
         if (String(asset.collectionId) === '103' || String(asset.collections[0].id) === '103') {
-            return ['/category', String(asset.categoryId)]
+            link = ['/category', String(asset.categoryId)]
+            return link
         }
         else {
             for (let col of this.collections) {
-                // Private/Personal Collection
-                if (col.type === '6') {
-                    return ['/pcollection', col.id]
-                }
-                // Public Collection
-                else if (col.type === '5') {
-                    asset.publicDownload = true
-                    return ['/collection', col.id]
-                }
-                else {
-                    link = ['/collection', col.id]
+                if(col.name === value) {
+                    switch (col.type) {
+                        case '6': 
+                            link = ['/pcollection', col.id]
+                            break
+                        case '5':
+                            asset.publicDownload = true
+                            link = ['/collection', col.id]
+                            break
+                        default:
+                            link = ['/collection', col.id]
+                            break
+                        
+                    }
+                    return link
                 }
             }
         }
-        return link
     }
 
     /**
@@ -801,6 +818,23 @@ export class AssetPage implements OnInit, OnDestroy {
         }
       }
       return false
+    }
+
+    public isCreativeCommonsLicense(license_text: string): any {
+        // Handle extra spaces and differences in punctuation in License fields
+        // by doing uppercase comparison of alphanumeric chars only
+        let reg = /[^a-zA-Z0-9]/
+
+        for (let i = 0; i < licenses.length; i++) {
+            if ((licenses[i].name.split(reg).join('').toUpperCase() === license_text.split(reg).join('').toUpperCase()) || (licenses[i].html === license_text)) {
+                this.licenseText = licenses[i].name
+                this.licenseLink = licenses[i].link
+                this.licenseImg = licenses[i].img
+                
+                return this.licenseText
+            }
+        }
+        return
     }
 
     private handleSkipAsset(): void {
@@ -1256,19 +1290,30 @@ export class AssetPage implements OnInit, OnDestroy {
 
         if (asset.typeName === 'image' && asset.viewportDimensions.contentSize) {
             // Get Bounds from OSD viewer for the saved detail
-            let bounds = this.assetViewer.osdViewer.viewport.viewportToImageRectangle(this.assetViewer.osdViewer.viewport.getBounds(true))
+            let bounds: IIIFRect = this.assetViewer.osdViewer.viewport.viewportToImageRectangle(this.assetViewer.osdViewer.viewport.getBounds(true))
             let multiviewIndex: number  = this.assetViewer.osdViewer._sequenceIndex || 0
             // Generate the view url from tilemap service
             let tilesourceStr: string = Array.isArray(asset.tileSource) ? asset.tileSource[multiviewIndex] : asset.tileSource
             let fullSizeLink: string
+            let size: string // https://iiif.io/api/image/2.1/#size
             // Make sure the bounds are adjusted for the negative x and y values
-            bounds['width'] = bounds['x'] < 0 ? bounds['width'] + bounds['x'] : bounds['width']
-            bounds['height'] = bounds['y'] < 0 ? bounds['height'] + bounds['y'] : bounds['height']
-
+            bounds.width = bounds.x < 0 ? bounds.width + bounds.x : bounds.width
+            bounds.height = bounds.y < 0 ? bounds.height + bounds.y : bounds.height
             // Make sure the bounds are within the content size for the IIIF endpoint.
-            bounds['width'] = bounds['width'] > this.assets[0].viewportDimensions.contentSize['x'] ? this.assets[0].viewportDimensions.contentSize['x'] : bounds['width']
-            bounds['height'] = bounds['height'] > this.assets[0].viewportDimensions.contentSize['y'] ? this.assets[0].viewportDimensions.contentSize['y'] : bounds['height']
-
+            bounds.width = bounds.width > this.assets[0].viewportDimensions.contentSize.x ? this.assets[0].viewportDimensions.contentSize.x : bounds.width
+            bounds.height = bounds.height > this.assets[0].viewportDimensions.contentSize.y ? this.assets[0].viewportDimensions.contentSize.y : bounds.height
+            // Ensure bounds are rounded
+            Object.keys(bounds).forEach(property => {
+                bounds[property] = Math.round(bounds[property])
+            })
+            // Set size (avoid exceeding bound size)
+            if (bounds.width > bounds.height) {
+                // Landscape detail
+                size = Math.min(bounds.width,asset.downloadMaxWidth) + ','
+            } else {
+                // Portrait detail
+                size = ',' + Math.min(bounds.height,asset.downloadMaxHeight)
+            }
             // Ensure iiif parameter is encoded correctly
             tilesourceStr = tilesourceStr.replace('.fcgi%3F', '.fcgi?').replace('info.json', '')
             if (tilesourceStr.indexOf('//') == 0) {
@@ -1276,12 +1321,12 @@ export class AssetPage implements OnInit, OnDestroy {
             }
             // Build full image url for multiviews
             if (this.multiviewItems) {
-                fullSizeLink = tilesourceStr + 'full/full/0/' + asset.iiifFilename()
+                fullSizeLink = `${tilesourceStr}full/,${asset.downloadMaxHeight}/0/${asset.iiifFilename()}`
                 fullSizeLink = this.getDownloadServiceUrl(asset, fullSizeLink)
                 this.generatedFullURL = fullSizeLink
             }
             // Attach zoom parameters to tilesource. Note: Multiviews use default.jpg and normal assets use native.jpg
-            tilesourceStr = tilesourceStr + Math.round(bounds['x']) + ',' + Math.round(bounds['y']) + ',' + Math.round(bounds['width']) + ',' + Math.round(bounds['height']) + '/full/0/' + asset.iiifFilename()
+            tilesourceStr = tilesourceStr + bounds.x + ',' + bounds.y + ',' + bounds.width + ',' + bounds.height + '/'+size+'/0/' + asset.iiifFilename()
             tilesourceStr = this.getDownloadServiceUrl(asset, tilesourceStr)
             this.downloadViewLink = tilesourceStr
             this.downloadViewReady = true

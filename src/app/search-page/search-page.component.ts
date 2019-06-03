@@ -58,17 +58,9 @@ export class SearchPage implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    // Mouseflow script
-    this._script.loadScript('mouseflow')
-      .then(() => {
-        if (window['_mfq']) {
-          // Trigger mouseflow page view
-          // Doc: http://help.mouseflow.com/knowledge_base/topics/single-page-websites
-          window['_mfq'].push(["newPageView", "/search"])
-        } else {
-          console.warn('Unable to find Mouseflow window object')
-        }
-      })
+    // Ethnio Search survey - 5/24
+    this._script.loadScript('ethnio-search-survey')
+
     // Subscribe User object updates
     this.subscriptions.push(
       this._auth.currentUser.subscribe(
