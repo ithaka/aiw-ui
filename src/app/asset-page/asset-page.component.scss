@@ -23,21 +23,24 @@ $titleNavBg: #eee;
 .title-nav-cntnr{
     // border-bottom: 1px solid #ddd;
     background: $titleNavBg;
-    padding: 1rem 0;
+    padding: 1.5rem 0;
     text-align: center;
     font-weight: bold;
     min-height: 48px;
 
     @media(max-width: $phone) {
-        margin-top:22px;
+        margin-top: 22px;
         background: transparent;
+    }
+
+    & .icon-arrow-back {
+      margin-right: 10px
     }
 
     .back-results{
         position: absolute;
         left: 20px;
         font-weight: 400;
-        text-decoration: underline;
         cursor: pointer;
     }
 }
@@ -46,7 +49,7 @@ $titleNavBg: #eee;
     margin: 3px;
     cursor: pointer;
 }
-.title-nav-cntnr .title{
+.title-nav-cntnr.col-md-12.title{
     display: inline-block;
     max-width: 400px;
     margin: auto;
@@ -55,46 +58,46 @@ $titleNavBg: #eee;
     text-overflow: ellipsis;
     vertical-align: top;
 }
-.title-nav-cntnr .page-tooltip{
-    font-weight: normal;
-    font-size: 10px;
-    min-width: 120px;
-    line-height: 21px;
-    display: block;
-    position: absolute;
-    z-index: 5000;
-    top: 100%;
-    left: 50%;
-    -webkit-transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    -o-transform: translateX(-50%);
-    transform: translateX(-50%);
-    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
-    background: white;
-    color: black;
-    padding: 2px 15px 0;
-    opacity: 0;
-    -webkit-transition: opacity linear 0.3s;
-    -moz-transition: opacity linear 0.3s;
-    transition: opacity linear 0.3s;
 
-    &.show{
-        opacity: 1;
-    }
+.paginator {
+  text-align: center;
+  max-width: calc(100% - 800px);
 }
-.title-nav-cntnr:hover .page-tooltip{
-    opacity: 1;
-}
+
+// 1735
+// .title-nav-cntnr .page-tooltip{
+//     font-weight: normal;
+//     font-size: 10px;
+//     min-width: 120px;
+//     line-height: 21px;
+//     display: block;
+//     position: absolute;
+//     z-index: 5000;
+//     top: 100%;
+//     left: 50%;
+//     -webkit-transform: translateX(-50%);
+//     -moz-transform: translateX(-50%);
+//     -ms-transform: translateX(-50%);
+//     -o-transform: translateX(-50%);
+//     transform: translateX(-50%);
+//     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
+//     background: white;
+//     color: black;
+//     padding: 2px 15px 0;
+//     -webkit-transition: opacity linear 0.3s;
+//     -moz-transition: opacity linear 0.3s;
+//     transition: opacity linear 0.3s;
+// }
 
 .title-wrap {
     display: block;
+    font-family: Georgia, 'Times New Roman', Times, serif;
 
      & .title {
          max-width: calc(100% - 50px);
 
          &.shortened{
-             max-width: calc(100% - 300px) !important;
+             max-width: calc(100% - 800px)
          }
      }
 }
