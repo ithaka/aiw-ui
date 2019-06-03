@@ -14,8 +14,9 @@
             .paginator
               //- Pagination
               i.icon.icon-direction.icon-left(title="Previous in results", (click)="showPrevAsset()", (keyup.enter)="showPrevAsset()", [class.disabled]="assetNumber <= 1", [attr.tabindex]="assetNumber <= 1 ? -1 : 1", aria-label="Previous item, press enter to go to previous result item. You can also use left and right arrow keys to navigate between result items.", role="button")
-              span#assetPageNumber {{ assetNumber }}&nbsp;of&nbsp;
-              span#assetPageCount {{ totalAssetCount - restrictedAssetsCount }}
+              span#assetPageNumber.font-weight-bold {{ assetNumber }}
+              span.font-weight-normal &nbsp;of&nbsp;
+              span#assetPageCount.font-weight-bold {{ totalAssetCount - restrictedAssetsCount }}
               i.icon.icon-direction.icon-right(title="Next in results", (click)="showNextAsset()", (keyup.enter)="showNextAsset()", [class.disabled]="assetNumber >= totalAssetCount - restrictedAssetsCount", [attr.tabindex]="assetNumber >= totalAssetCount - restrictedAssetsCount ? -1 : 1", aria-label="Next item, press enter to go to next result item. You can also use left and right arrow keys to navigate between result items.", role="button")
     //- for accessibility so that page has title
     h1.sr-only(*ngIf="isFullscreen") Full screen mode
