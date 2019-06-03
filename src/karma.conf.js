@@ -87,7 +87,7 @@ module.exports = function (config) {
       // User Endpoints
       '/api/secure/user/': 'http://localhost:1203/api/secure/user/',
       '/api/secure/user/abcdefg': 'http://localhost:1203/api/secure/user/abcdefg',
-      // Uer Registration
+      // User Registration
       '/api/secure/register': 'http://localhost:1205/api/secure/register',
 
       // Collection Endpoints

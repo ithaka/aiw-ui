@@ -1,5 +1,5 @@
 import { Location } from '@angular/common'
-import { HttpClientModule } from '@angular/common/http'
+import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http'
 import { RouterModule, Router, ActivatedRoute } from '@angular/router'
 import { TestBed, getTestBed, inject, async } from '@angular/core/testing'
 import { Idle, DEFAULT_INTERRUPTSOURCES, IdleExpiry } from '@ng-idle/core'
@@ -10,9 +10,9 @@ import { AppConfig } from '../app.service'
 import { AuthService } from '../shared'
 import { environment } from 'environments/environment.prod';
 
-fdescribe('Register form POST /api/secure/register #pact #user-register', () => {
+describe('Register form POST /api/secure/register #pact #user-register', () => {
 
-  let provider, _auth
+  let provider, _auth, http
 
   beforeAll(function (done) {
     provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service', port: 1205 })
@@ -41,6 +41,7 @@ fdescribe('Register form POST /api/secure/register #pact #user-register', () => 
     })
     const testbed = getTestBed()
     _auth = testbed.get(AuthService)
+    http = testbed.get(HttpClient)
 
   })
 
@@ -93,8 +94,7 @@ fdescribe('Register form POST /api/secure/register #pact #user-register', () => 
             body: invalidRequest
           },
           willRespondWith: {
-            status: 200,
-            headers: { 'Content-Type': '*/*' },
+            status: 400,
             body: invalidInputResponse
           }
         })
@@ -110,6 +110,7 @@ fdescribe('Register form POST /api/secure/register #pact #user-register', () => 
         .then(function (a) {
           done()
         }, function (e) {
+          console.error(e)
           done.fail(e)
         })
     })
@@ -131,19 +132,24 @@ fdescribe('Register form POST /api/secure/register #pact #user-register', () => 
     })
 
     // Test invalid input 400 response
-    // it('should return 400 error and error response', (done) => {
+    // @TODO - The service swagger docs for an invalid request are not up to date to reflect a 400 Bad Request response
+    it('should return 400 error and error response', (done) => {
 
-    //   this.http.post(environment.API_URL + '/api/secure/register', )
-
-    //   _auth.registerUser(invalidRequest).subscribe((data) => {
-    //     expect(data).toEqual(invalidInputResponse)
-    //     done()
-    //   })
-    // })
+      _auth.registerUser(invalidRequest).subscribe((data) => {
+        done.fail('successful response received when failure was expected')
+      },
+      err => {
+        expect(err.status).toEqual(400)
+        expect(err.message).toContain('Http failure response')
+        expect(err.statusText).toBe('Bad Request')
+        done()
+      })
+    })
 
   })
 
 })
+
 
 // Mock Test Form Inputs
 let mockAlreadyRegisteredFormInput = {
@@ -169,6 +175,7 @@ let mockRegisterFormInput = {
 }
 
 let invalidRequest = {
+  _method: 'uodate',
   username: 'sgdsf',
   password: 'sdfgs',
   role: 'sdfgs',
@@ -263,5 +270,5 @@ let mockRegistrationResponses = [
 ]
 
 // HTML response for 400 Invalid Input
-let invalidInputResponse = `<html><head><title>Apache Tomcat/7.0.81 - Error report</title > <style><!--H1 { font - family: Tahoma, Arial, sans - serif; color: white; background - color: #525D76; font - size: 22px; } H2 { font - family: Tahoma, Arial, sans - serif; color: white; background - color: #525D76; font - size: 16px; } H3 { font - family: Tahoma, Arial, sans - serif; color: white; background - color: #525D76; font - size: 14px; } BODY { font - family: Tahoma, Arial, sans - serif; color: black; background - color: white; } B { font - family: Tahoma, Arial, sans - serif; color: white; background - color: #525D76; } P { font - family: Tahoma, Arial, sans - serif; background: white; color: black; font - size: 12px; } A { color: black; } A.name { color: black; } HR { color: #525D76; } --> </style> </head > <body><h1>HTTP Status 400 - Required String parameter 'username' is not present < /h1><HR size="1" noshade="noshade"><p><b>type</b > Status report < /p><p><b>message</b > <u>Required String parameter 'username' is not present < /u></p > <p><b>description < /b> <u>The request sent by the client was syntactically incorrect.</u > </p><HR size="1" noshade="noshade"><h3>Apache Tomcat/7.0.81 < /h3></body></html>`
+let invalidInputResponse = "<html><head><title>Apache Tomcat/7.0.81 - Error report</title > <style><!--H1 { font - family: Tahoma, Arial, sans - serif; color: white; background - color: #525D76; font - size: 22px; } H2 { font - family: Tahoma, Arial, sans - serif; color: white; background - color: #525D76; font - size: 16px; } H3 { font - family: Tahoma, Arial, sans - serif; color: white; background - color: #525D76; font - size: 14px; } BODY { font - family: Tahoma, Arial, sans - serif; color: black; background - color: white; } B { font - family: Tahoma, Arial, sans - serif; color: white; background - color: #525D76; } P { font - family: Tahoma, Arial, sans - serif; background: white; color: black; font - size: 12px; } A { color: black; } A.name { color: black; } HR { color: #525D76; } --> </style> </head > <body><h1>HTTP Status 400 - Required String parameter 'username' is not present < /h1><HR size=\"1\" noshade=\"noshade\"><p><b>type</b > Status report < /p><p><b>message</b > <u>Required String parameter 'username' is not present < /u></p > <p><b>description < /b> <u>The request sent by the client was syntactically incorrect.</u > </p><HR size=\"1\" noshade=\"noshade\"><h3>Apache Tomcat/7.0.81 < /h3></body></html>"
 
