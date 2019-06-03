@@ -38,6 +38,10 @@ export class AssetThumbnail {
   zoom?: ImageZoomParams
 }
 
+/**
+ * Raw thumbnail/asset object returned by:
+ * Search Service (Team Sycamore/Search)
+ */
 // export interface SearchServiceThumbnail {
   // id	664db63b-d45e-3ad3-aad2-a3828dc819f2
   // doi	10.2307/artstor.12240886
@@ -70,6 +74,10 @@ export class AssetThumbnail {
   // additional_Fields	{}
 // }
 
+/**
+ * Raw thumbnail/asset object returned by:
+ * Item/Groups Service (Team Binder)
+ */
 export interface RawItemAsset {
   objectId?: string
   compoundmediaCount?: number

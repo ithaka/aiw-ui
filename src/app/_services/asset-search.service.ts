@@ -553,7 +553,10 @@ export interface RawSearchResponse {
   hierarchies2: HierarchicalFilter
 }
 
-// the data returned from search in the results array
+/**
+ * Raw thumbnail/asset object returned by:
+ * Search Service (Team Sycamore/Search)
+ */
 export interface RawSearchAsset {
   agent: string // creator of the piece
   artstorid: string // the correct id to reference when searching for artstor assets
