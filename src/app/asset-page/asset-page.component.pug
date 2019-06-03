@@ -4,13 +4,13 @@
     //- View prev/next asset
     .title-nav-cntnr.col-md-12([class.hidden]="isFullscreen")
       .row
-        .col-md-3
+        .col-md-2
           span.back-results.hidden-sm-down(*ngIf="prevRouteParams.length > 0", (keyup.enter)="backToResults()", (click)="backToResults()", tabindex="1", aria-label="Back to results", role="link")
             i.icon.icon-arrow-back
             | {{ 'ASSET_PAGE.LINKS.BACK' | translate}}
-        .col-md-9
+        .col-md-4.col-md-offset-6
           .title-wrap(*ngIf="assets[0]")
-            .title([ngClass]="[ prevRouteParams.length > 0 ? 'shortened' : '' ]", [innerHTML]="assets[0].title ? assets[0].title : ''", (focus)="showPageToolTip = true", (focusout)="showPageToolTip = false", tabindex="1", attr.aria-label="{{assets[0].title ? assets[0].title : ''}}, result {{assetNumber}} of {{totalAssetCount - restrictedAssetsCount}}")
+            .title([innerHTML]="assets[0].title ? assets[0].title : ''", (focus)="showPageToolTip = true", (focusout)="showPageToolTip = false", tabindex="1", attr.aria-label="{{assets[0].title ? assets[0].title : ''}}, result {{assetNumber}} of {{totalAssetCount - restrictedAssetsCount}}")
             .paginator
               //- Pagination
               i.icon.icon-direction.icon-left(title="Previous in results", (click)="showPrevAsset()", (keyup.enter)="showPrevAsset()", [class.disabled]="assetNumber <= 1", [attr.tabindex]="assetNumber <= 1 ? -1 : 1", aria-label="Previous item, press enter to go to previous result item. You can also use left and right arrow keys to navigate between result items.", role="button")

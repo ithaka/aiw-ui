@@ -61,7 +61,7 @@ $titleNavBg: #eee;
 
 .paginator {
   text-align: center;
-  max-width: calc(100% - 800px);
+  // 1735 max-width: calc(100% - 800px);
 }
 
 // 1735
@@ -93,13 +93,14 @@ $titleNavBg: #eee;
     display: block;
     font-family: Georgia, 'Times New Roman', Times, serif;
 
-     & .title {
-         max-width: calc(100% - 50px);
+    // 1735
+    //  & .title {
+    //      max-width: calc(100% - 50px);
 
-         &.shortened{
-             max-width: calc(100% - 800px)
-         }
-     }
+    //      &.shortened{
+    //          max-width: calc(100% - 800px)
+    //      }
+    //  }
 }
 
 .fullscreen-btns {
