@@ -43,6 +43,8 @@ export class AuthService implements CanActivate {
   private logUrl: string;
   private groupUrl = '';
   private solrUrl: string;
+  private solrUrlV3: string;
+  public useSearch3: boolean = false
 
   private institutionObjValue: any = {};
   private institutionObjSource: BehaviorSubject<any> = new BehaviorSubject(this.institutionObjValue);
@@ -95,6 +97,7 @@ export class AuthService implements CanActivate {
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
     this.subdomain = 'library'
     this.solrUrl = '/api/search/v1.0/search'
+    this.solrUrlV3 = '/api/search/v3.0/search'
 
 
     let testHostnames = [
@@ -130,6 +133,7 @@ export class AuthService implements CanActivate {
       // Explicit live endpoints
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = '/api/search/v1.0/search'
+      this.solrUrlV3 = '/api/search/v3.0/search'
       this.ENV = 'prod'
     }
     else if ( this.clientHostname.indexOf('prod.cirrostratus.org') > -1 ) {
@@ -139,6 +143,7 @@ export class AuthService implements CanActivate {
       this.baseUrl =  '//library.artstor.org/api'
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
+      this.solrUrlV3 = this.hostname + '/api/search/v3.0/search'
       this.ENV = 'prod'
     } else if ( new RegExp(testHostnames.join('|')).test(this.clientHostname) ) {
       console.info('Using Test Endpoints')
@@ -150,6 +155,7 @@ export class AuthService implements CanActivate {
       this.compoundUrl = '//stor.stage.artstor.org/stor'
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
       this.solrUrl = '/api/search/v1.0/search'
+      this.solrUrlV3 = '/api/search/v3.0/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
     }
@@ -188,6 +194,7 @@ export class AuthService implements CanActivate {
     if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'beta.stage.artstor.org', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(this.clientHostname)) {
       this.baseUrl = this.hostname + '/api'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
+      this.solrUrlV3 = this.hostname + '/api/search/v3.0/search'
     }
 
     // Set idle timer and auth heartbeat when loaded in Browser
@@ -433,7 +440,7 @@ export class AuthService implements CanActivate {
   }
 
   public getSearchUrl(): string {
-    return this.solrUrl;
+    return this.useSearch3 ? this.solrUrlV3 : this.solrUrl;
   }
 
   public getEnv(): string {
