@@ -105,7 +105,7 @@ export class RegisterComponent implements OnInit {
     this.serviceErrors = {}
     this.submitted = true
 
-    if (!this.registerForm.valid) { return 'form was not valid' }
+    if (!this.registerForm.valid) { return }
     this.isLoading = true
 
     // this is the object that the service will receive
