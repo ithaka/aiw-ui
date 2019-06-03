@@ -42,7 +42,8 @@ module.exports = function (config) {
         port: 1201,
         dir: 'pacts/',
         consumer: 'aiw-ui',
-        provider: 'binder-group'
+        provider: 'binder-group',
+        pactFileWriteMode: 'merge'
       },
       {
         cors: true,
@@ -50,7 +51,8 @@ module.exports = function (config) {
         port: 1202,
         dir: 'pacts/',
         consumer: 'aiw-ui',
-        provider: 'binder-metadata'
+        provider: 'binder-metadata',
+        pactFileWriteMode: 'merge'
       },
       {
         cors: true,
@@ -58,7 +60,8 @@ module.exports = function (config) {
         port: 1203,
         dir: 'pacts/',
         consumer: 'aiw-ui',
-        provider: 'artaa_service'
+        provider: 'artaa_service',
+        pactFileWriteMode: 'merge'
       },
       {
         cors: true,
@@ -66,7 +69,8 @@ module.exports = function (config) {
         port: 1204,
         dir: 'pacts/',
         consumer: 'aiw-ui',
-        provider: 'binder-collections'
+        provider: 'binder-collections',
+        pactFileWriteMode: 'merge'
       },
       {
         cors: true,
@@ -74,7 +78,8 @@ module.exports = function (config) {
         port: 1205,
         dir: 'pacts/',
         consumer: 'aiw-ui',
-        provider: 'artaa_service'
+        provider: 'artaa_service',
+        pactFileWriteMode: 'merge'
       },
     ],
     // 4) here we can define proxies to redirect requests from our pact tests to the mock server
