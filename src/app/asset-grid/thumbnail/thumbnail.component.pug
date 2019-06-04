@@ -33,8 +33,8 @@
       //- Associated or "Grouped with" assets
       i.icon.icon-collab(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", (click)="openLink($event, ['/associated', thumbnail.id])", title="Others are also interested in button icon. Press enter to click this button", tabIndex="3", (keyup.enter)="openLink($event, ['/associated', thumbnail.artstorid])")
       //- Media type icon (w/ tooltip)
-      i.icon(*ngIf="thumbnail.media && thumbnail.media.adlObjectType && (thumbnail.media.adlObjectType != 10) && (multiviewItemCount <= 1)",
-          [ngClass]="[ mouseOverMedia ? 'icon-' + (thumbnail.media.adlObjectType | typeIdPipe) + '-hover' : 'icon-' + (thumbnail.media.adlObjectType | typeIdPipe) ]",
+      i.icon(*ngIf="thumbnail.objectTypeId && (thumbnail.objectTypeId != 10) && (multiviewItemCount <= 1)",
+          [ngClass]="[ mouseOverMedia ? 'icon-' + (thumbnail.objectTypeId | typeIdPipe) + '-hover' : 'icon-' + (thumbnail.objectTypeId | typeIdPipe) ]",
           (mouseover)="mouseOverMedia=true",
           (mouseout)="mouseOverMedia=false",
           [ngbTooltip]="mediaTooltip",
@@ -42,18 +42,18 @@
           placement="right")
 
         <ng-template #mediaTooltip>
-          div {{thumbnail.media.adlObjectType | typeIdPipe:true }}
+          div {{thumbnail.objectTypeId | typeIdPipe:true }}
         </ng-template>
-      i.icon(*ngIf="!thumbnail.media && thumbnail.objectTypeId && thumbnail.objectTypeId != 10",
-          [ngClass]="[ mouseOverNoMedia ? 'icon-' + (thumbnail.objectTypeId | typeIdPipe) + '-hover' : 'icon-' + (thumbnail.objectTypeId | typeIdPipe) ]",
-          (mouseover)="mouseOverNoMedia=true",
-          (mouseout)="mouseOverNoMedia=false")
+      //- i.icon(*ngIf="!thumbnail.media && thumbnail.objectTypeId && thumbnail.objectTypeId != 10",
+      //-     [ngClass]="[ mouseOverNoMedia ? 'icon-' + (thumbnail.objectTypeId | typeIdPipe) + '-hover' : 'icon-' + (thumbnail.objectTypeId | typeIdPipe) ]",
+      //-     (mouseover)="mouseOverNoMedia=true",
+      //-     (mouseout)="mouseOverNoMedia=false")
 
-      //- Set the media type icon for downgraded media using media.adlObjectType
-      i.icon(*ngIf="isDowngradedMedia && !isDetailView && thumbnail.media",
-          [ngClass]="[ mouseOverDowngradedMedia ? 'icon-' + (thumbnail.media.adlObjectType | typeIdPipe) + '-hover' : 'icon-' + (thumbnail.media.adlObjectType | typeIdPipe) ]",
-          (mouseover)="mouseOverDowngradedMedia=true",
-          (mouseout)="mouseOverDowngradedMedia=false")
+      //- //- Set the media type icon for downgraded media using objectTypeId
+      //- i.icon(*ngIf="isDowngradedMedia && !isDetailView && thumbnail.media",
+      //-     [ngClass]="[ mouseOverDowngradedMedia ? 'icon-' + (thumbnail.objectTypeId | typeIdPipe) + '-hover' : 'icon-' + (thumbnail.objectTypeId | typeIdPipe) ]",
+      //-     (mouseover)="mouseOverDowngradedMedia=true",
+      //-     (mouseout)="mouseOverDowngradedMedia=false")
 
       //- Detail view icon
       i.icon(*ngIf="thumbnail.zoom", [ngClass]="[ mouseOverDetailIcon ? 'icon-detail-view-hover' : 'icon-detail-view' ]", [ngbTooltip]="tipDetailView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", tabIndex="3", (mouseover)="mouseOverDetailIcon=true", (mouseout)="mouseOverDetailIcon=false")

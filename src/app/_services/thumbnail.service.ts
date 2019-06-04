@@ -28,7 +28,7 @@ export class ThumbnailService {
         agent: asset.agent,
         date: asset.date,
         id: asset.artstorid,
-        objectTypeId: -1,
+        objectTypeId: cleanedMedia ? cleanedMedia.adlObjectType : -1,
         collectionTypeInfo: this.getCollectionType(asset),
         compound_media: asset.compound_media,
         multiviewItemCount: 0, // set later from compound_media
