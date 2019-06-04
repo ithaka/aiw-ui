@@ -44,20 +44,9 @@
         <ng-template #mediaTooltip>
           div {{thumbnail.objectTypeId | typeIdPipe:true }}
         </ng-template>
-      //- i.icon(*ngIf="!thumbnail.media && thumbnail.objectTypeId && thumbnail.objectTypeId != 10",
-      //-     [ngClass]="[ mouseOverNoMedia ? 'icon-' + (thumbnail.objectTypeId | typeIdPipe) + '-hover' : 'icon-' + (thumbnail.objectTypeId | typeIdPipe) ]",
-      //-     (mouseover)="mouseOverNoMedia=true",
-      //-     (mouseout)="mouseOverNoMedia=false")
-
-      //- //- Set the media type icon for downgraded media using objectTypeId
-      //- i.icon(*ngIf="isDowngradedMedia && !isDetailView && thumbnail.media",
-      //-     [ngClass]="[ mouseOverDowngradedMedia ? 'icon-' + (thumbnail.objectTypeId | typeIdPipe) + '-hover' : 'icon-' + (thumbnail.objectTypeId | typeIdPipe) ]",
-      //-     (mouseover)="mouseOverDowngradedMedia=true",
-      //-     (mouseout)="mouseOverDowngradedMedia=false")
-
       //- Detail view icon
       i.icon(*ngIf="thumbnail.zoom", [ngClass]="[ mouseOverDetailIcon ? 'icon-detail-view-hover' : 'icon-detail-view' ]", [ngbTooltip]="tipDetailView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", tabIndex="3", (mouseover)="mouseOverDetailIcon=true", (mouseout)="mouseOverDetailIcon=false")
-
+      //- Multi view icon
       .multiview-indicator(*ngIf="multiviewItemCount > 1", [ngbTooltip]="tipMultiView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", title="See multiview items button icon. Press enter to click this button", tabIndex="3", aria-role="button")
         i.icon([ngClass]="[ mouseOverMultiview ? 'icon-multiview-hover' : 'icon-multiview' ]", (mouseover)="mouseOverMultiview=true", (mouseout)="mouseOverMultiview=false")
         span.multiview-count {{multiviewItemCount}}
