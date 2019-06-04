@@ -198,12 +198,11 @@ export class LoginFormComponent implements OnInit {
   /**
    * Handle Login error
    * @param err Error Response from /login call
-   * @return translation key for error message 
+   * @return translation key for error message
    */
   getLoginErrorMsg(err: HttpErrorResponse): string {
     let serverMsg = err.error && err.error.message
     // Check for error code 422 for lost password
-    // Maybe better to check by serverMsg later when the response message is decided by Auth
     if (err && (err.status === 422 || serverMsg.includes('password reset required'))) {
       // Display lost password modal
       this.resetPassword.emit(true)
@@ -211,14 +210,14 @@ export class LoginFormComponent implements OnInit {
     }
     else if (serverMsg) {
       return this.keyForLoginError(serverMsg)
-    } 
+    }
     else {
       return 'LOGIN.SERVER_ERROR'
     }
   }
 
   /**
-   * Return the login error translation key 
+   * Return the login error translation key
    * @param serverMsg error message from server
    */
   keyForLoginError(serverMsg: string): string {
