@@ -75,32 +75,6 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     this.isDowngradedMedia = this.thumbnail.isDowngradedMedia
     this.multiviewItemCount = this.thumbnail.multiviewItemCount
     this.thumbnailAlt = this.thumbnail.thumbnailAlt
-    // // Compound 'multiview' assets for image groups, assigned in assets service
-    // if (this.thumbnail['compoundmediaCount']) {
-    //   this.isMultiView = true
-    //   this.multiviewItemCount = this.thumbnail['compoundmediaCount']
-    // }
-    // // Compound 'multiview' assets use cleanedAsset.thumbnailUrls[0], assigned in asset-search
-    // if (this.thumbnail.compound_media_json && this.thumbnail.compound_media_json.objects) {
-    //   this.isMultiView = true
-    //   this.thumbnail.thumbnailImgUrl = this.thumbnail['thumbnailUrls'][0]
-    //   this.multiviewItemCount = this.thumbnail.compound_media_json.objects.length
-    // } else if (this.thumbnail['media']) {
-    //   this.thumbnail.thumbnailImgUrl = this.thumbnail.media.thumbnailSizeOnePath
-    // }
-
-    // // Set isDetailView
-    // if (this.thumbnail['zoom']) {
-    //   this.isDetailView = true
-    // }
-    // // Set isDowngradedMedia
-    // if ( (this.isMultiView && this.thumbnail.media && this.thumbnail.media.format === 'null') ||
-    //     ( (this.isMultiView || this.isDetailView) && this.thumbnail['compoundmediaCount'] === 1)) {
-    //   this.isDowngradedMedia = true
-    // }
-    // // Set alt text
-    // this.thumbnailAlt = this.thumbnail['name'] ? 'Thumbnail of ' + this.thumbnail['name'] : 'Untitled'
-    // this.thumbnailAlt = this.thumbnail['agent'] ? this.thumbnailAlt + ' by ' + this.thumbnail['agent'] : this.thumbnailAlt + ' by Unknown'
   }
 
   // Fires when the component input(s) (i.e largeThmbView) changes - Updates the thumbnailSize based on largeThmbView current value
@@ -136,12 +110,6 @@ export class ThumbnailComponent implements OnInit, OnChanges {
       return assetId.match(/IAP/) ? 1 : 0
     }
   }
-
-  // // wrapper function for getting the collection type
-  // getCollectionType(): CollectionTypeInfo {
-  //   // Some endpoints give us the collectionType info in 'collectionType: number', where as others give the same info in 'collectiontypes: Array<number>'
-  //   return CollectionTypeHandler.getCollectionType( this.thumbnail['collectionType'] ? [ this.thumbnail['collectionType'] ] : this.thumbnail['collectiontypes'], this.thumbnail['contributinginstitutionid'])
-  // }
 
   // If large thumbnail image fails to load, fallback to smaller thumbnail image
   thumbnailError(): void{
