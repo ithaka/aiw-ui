@@ -33,12 +33,15 @@ $titleNavBg: #eee;
     }
 
     & .icon-arrow-back {
-      margin-right: 10px
+      margin-right: 10px;
     }
 
-    .back-results{
+    .back-results {
         position: absolute;
-        left: 20px;
+        left: 40px;
+        top: 12px;
+        display: inline;
+        white-space: nowrap;
         font-weight: 400;
         cursor: pointer;
     }
