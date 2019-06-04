@@ -42,7 +42,7 @@ $titleNavBg: #eee;
         top: 12px;
         display: inline;
         white-space: nowrap;
-        font-weight: 400;
+        font-weight: bold;
         cursor: pointer;
     }
 }
@@ -62,12 +62,23 @@ $titleNavBg: #eee;
 }
 
 .paginator {
-  text-align: center;
+    text-align: center;
+    font-family: Arial;
+
+    .icon-left {
+        margin-right: 10px;
+    }
+    .icon-right {
+        margin-left: 10px;
+  }
 }
 
 .title-wrap {
     display: block;
-    font-family: Georgia, 'Times New Roman', Times, serif;
+
+    .title {
+        font-family: $asset-page-title-font;
+    }
 }
 
 .fullscreen-btns {
