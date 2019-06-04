@@ -21,19 +21,14 @@ $titleNavBg: #eee;
 
 // Title Prev / Next Asset
 .title-nav-cntnr {
-    // border-bottom: 1px solid #ddd;
     background: $titleNavBg;
-    padding: 1.5rem 0;
+    padding: 1.2rem 0;
     text-align: center;
     min-height: 48px;
 
     @media(max-width: $phone) {
         margin-top: 22px;
         background: transparent;
-    }
-
-    & .icon-arrow-back {
-      margin-right: 10px;
     }
 
     .back-results {
@@ -44,8 +39,26 @@ $titleNavBg: #eee;
         white-space: nowrap;
         font-weight: bold;
         cursor: pointer;
+
+        .icon-arrow-back {
+            width: 16px;
+            height: 16px;
+            margin-right: 10px;
+        }
+    }
+
+    .paginator {
+        text-align: center;
+
+        .icon-left {
+            margin-right: 10px;
+        }
+        .icon-right {
+            margin-left: 10px;
+        }
     }
 }
+
 .title-nav-cntnr i {
     vertical-align: top;
     margin: 3px;
@@ -59,18 +72,6 @@ $titleNavBg: #eee;
     overflow: hidden;
     text-overflow: ellipsis;
     vertical-align: top;
-}
-
-.paginator {
-    text-align: center;
-    font-family: Arial;
-
-    .icon-left {
-        margin-right: 10px;
-    }
-    .icon-right {
-        margin-left: 10px;
-  }
 }
 
 .title-wrap {
