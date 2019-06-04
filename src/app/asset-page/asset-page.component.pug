@@ -10,7 +10,7 @@
             span.d-none.d-md-inline-block {{ 'ASSET_PAGE.LINKS.BACK' | translate}}
         .col-md-6.col-md-offset-4.col-lg-8.col-lg-offset-2
           .title-wrap(*ngIf="assets[0]")
-            .title([innerHTML]="assets[0].title ? assets[0].title : ''", attr.aria-label="{{assets[0].title ? assets[0].title : ''}}, result {{assetNumber}} of {{totalAssetCount - restrictedAssetsCount}}")
+            .title.text-truncate([innerHTML]="assets[0].title ? assets[0].title : ''", attr.aria-label="{{assets[0].title ? assets[0].title : ''}}, result {{assetNumber}} of {{totalAssetCount - restrictedAssetsCount}}")
             //- Pagination
             .paginator
               i.icon.icon-direction.icon-left(title="Previous in results", (click)="showPrevAsset()", (keyup.enter)="showPrevAsset()", [class.disabled]="assetNumber <= 1", [attr.tabindex]="assetNumber <= 1 ? -1 : 1", aria-label="Previous item, press enter to go to previous result item. You can also use left and right arrow keys to navigate between result items.", role="button")
