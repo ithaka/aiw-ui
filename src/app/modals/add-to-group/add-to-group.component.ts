@@ -327,7 +327,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
           .then( allThumbnails => {
             allThumbnails = allThumbnails.map( thmbObj => {
               for (let group of data.groups) {
-                if(group.items[0] && group.items[0] === thmbObj.objectId){
+                if(group.items[0] && group.items[0] === thmbObj.id){
                   group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
                   group['compoundmediaCount'] = thmbObj['compoundmediaCount']
                 }
@@ -372,7 +372,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
           .then( allThumbnails => {
             allThumbnails = allThumbnails.map( thmbObj => {
               for (let group of data.groups) {
-                if(group.items[0] && group.items[0] === thmbObj.objectId){
+                if(group.items[0] && group.items[0] === thmbObj.id){
                   group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
                   group['compoundmediaCount'] = thmbObj['compoundmediaCount']
                 }

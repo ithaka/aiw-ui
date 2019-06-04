@@ -6,10 +6,11 @@ import { ImageZoomParams } from "./image-group.interface";
  * - Services returning thumbnails/results should map to this type
  */
 export class AssetThumbnail {
-  objectId?: string
+  id: string
   objectTypeId: number
   img: string
   collectionTypeInfo: CollectionTypeInfo
+  ssid?: string
   size?: number
   thumbnailAlt?: string
   status?: string // 'not-available', 'available'
@@ -26,15 +27,15 @@ export class AssetThumbnail {
     objects?: any[]
   }
   doi ?: string
-  artstorid ?: string
   // "Tombstone" Data
   name: string
   agent: string
   date: string
   // In template
-  iap?: any
-  partofcluster?: any
-  frequentlygroupedwith?: any
+  iap: boolean
+  partofcluster: boolean
+  clusterid?: string
+  frequentlygroupedwith: string[]
   zoom?: ImageZoomParams
 }
 

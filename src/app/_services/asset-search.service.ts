@@ -433,7 +433,7 @@ export class AssetSearchService {
     ).pipe(
       map((res) => {
         // search through results and make sure the id's match
-        let desiredAsset: AssetThumbnail = res.results.find((asset) => {
+        let desiredAsset: any = res.results.find((asset) => {
           if(ssid) {
             // extract ssid from doi field value
             return asset.doi.split('/')[1].replace('artstor.', '') === assetId
@@ -443,7 +443,7 @@ export class AssetSearchService {
         })
 
         if (desiredAsset) {
-          return desiredAsset
+          return this._thumbnail.searchAssetToThumbnail(desiredAsset)
         } else {
           throw new Error('No results found for the requested id')
         }
@@ -530,7 +530,7 @@ export interface SearchResponse {
   }[]
   bad_request: boolean
   requestId: string
-  results: AssetThumbnail[]
+  results: RawSearchAsset[]
   total: number // total number of assets returned
   hierarchies2: HierarchicalFilter
 }
@@ -564,13 +564,14 @@ export interface RawSearchAsset {
   collections: string[] // array of collections this asset exists under
   collectiontypenameid: string[]
   collectiontypes: number[] // all of the collection types this asset fits
+  compound_media: string // json as string
   contributinginstitutionid: number // which institution added the asset
   date: string // a string entered by the user, not an actually useful date other than display
   doi: string // ex: "10.2307/artstor.16515779"
   frequentlygroupedwith: string[] // array of other asset ids this image is grouped with
   iap: boolean // do we support Images for Academic Publishing for the asset
   // id: string // the id used by the SOLR cluster, which is not reliable, therefore it's left commented out
-  media: string // this one is weird because it's a json object encoded as a string
+  media: string // json as string
   name: string // the asset's name
   partofcluster: boolean
   tokens: string[]

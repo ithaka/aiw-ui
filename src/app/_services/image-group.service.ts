@@ -107,7 +107,7 @@ export class ImageGroupService {
       let imgDownloadStrings: string[] = []
 
       thumbnails.forEach((thumbnail, index) => {
-        let imgStr: string = [(index + 1), thumbnail.objectId, '1024x1024'].join(':')
+        let imgStr: string = [(index + 1), thumbnail.id, '1024x1024'].join(':')
         thumbnail.status == 'available' && imgDownloadStrings.push(imgStr)
       })
 

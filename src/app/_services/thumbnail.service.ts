@@ -19,29 +19,23 @@ export class ThumbnailService {
   public searchAssetToThumbnail(asset: RawSearchAsset): AssetThumbnail {
       let cleanedSSID: string = asset.doi.substr(asset.doi.lastIndexOf('.') + 1) // split the ssid off the doi
       let cleanedMedia: MediaObject
-      if (asset && asset.media && typeof asset.media == 'string') { cleanedMedia = JSON.parse(asset.media) }
-      // let cleanedAsset: AssetThumbnail | any = Object.assign(
-      //   {}, // assigning it to a new object
-      //   asset, // base is the raw asset returned from search
-      //   { // this object contains all of the new properties which exist on a cleaned asset
-      //     media: cleanedMedia, // assign a media object instead of a string
-      //     ssid: cleanedSSID, // assign the ssid, which is taken off the doi
-      //     thumbnailUrls: [], // this is only the array init - we add the urls later
-      //     img: ''
-      //   }
-      // )
       let cleanedAsset: AssetThumbnail = {
         name: asset.name,
         agent: asset.agent,
         date: asset.date,
-        objectId: asset.artstorid,
+        id: asset.artstorid,
         objectTypeId: -1,
-        collectionTypeInfo: this.getCollectionType(item),
-        multiviewItemCount: item.compoundmediaCount,
-        status: item.status,
-        img : '',
-        thumbnailImgUrl: item.thumbnailImgUrl,
-        zoom: item.zoom
+        collectionTypeInfo: this.getCollectionType(asset),
+        multiviewItemCount: 1, // set tlater
+        status: 'available', // all search assets are "available"
+        img : '', // set later by getThumbnailImg
+        thumbnailUrls: [],
+        media: cleanedMedia,
+        ssid: cleanedSSID,
+        iap: asset.iap,
+        frequentlygroupedwith: asset.frequentlygroupedwith,
+        partofcluster: asset.partofcluster
+        // thumbnailImgUrl: asset.thumbnailImgUrl,
       }
       // Parse stringified compound media if available
       if (cleanedAsset.compound_media) {
@@ -78,17 +72,21 @@ export class ThumbnailService {
   public itemAssetToThumbnail(item: RawItemAsset): AssetThumbnail 
   {
     let cleanedAsset: AssetThumbnail = {
+      id: item.objectId,
       name: item.tombstone[0],
       agent: item.tombstone[1],
       date: item.tombstone[2],
-      objectId: item.objectId,
       objectTypeId: item.objectTypeId,
       collectionTypeInfo: this.getCollectionType(item),
       multiviewItemCount: item.compoundmediaCount,
       status: item.status,
       img : '',
       thumbnailImgUrl: item.thumbnailImgUrl,
-      zoom: item.zoom
+      zoom: item.zoom,
+      iap: item.iap,
+      partofcluster: item.clustered && item.clustered == 1,
+      clusterid: item.objectId,
+      frequentlygroupedwith: item.cfObjectId ? [item.cfObjectId] : []
     }
     // media takes priority over thumbnailImgUrl
     if (item['media'] && item.media.thumbnailSizeOnePath) {

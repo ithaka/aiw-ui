@@ -66,9 +66,9 @@ export class SsidMapping implements OnInit, OnDestroy {
 
   private searchSsid(): void {
     this._search.getAssetById(this.ssid, true).subscribe( (res) => {
-      if(res.artstorid) {
+      if(res.id) {
         this.loading = false
-        this._router.navigate(['/asset', res.artstorid])
+        this._router.navigate(['/asset', res.id])
       } else if (!this.user.isLoggedIn) {
         // If user is not logged in, they may not have access
         this._auth.store('stashedRoute', this.location.path(false));

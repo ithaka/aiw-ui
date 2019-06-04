@@ -593,7 +593,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   private constructNavigationCommands (thumbnail: AssetThumbnail) : any[] {
-    let assetId = thumbnail.objectId ? thumbnail.objectId : thumbnail.artstorid
+    let assetId = thumbnail.id
     let params: any = {
       prevRouteTS: this.prevRouteTS // for fetching previous route params from session storage, on asset page
     }
@@ -878,7 +878,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   private removeFromGroup(assetsToRemove: AssetThumbnail[], clearRestricted?: boolean): void {
     for (let i = 0; i < assetsToRemove.length; i++) {
-      let assetId = assetsToRemove[i].objectId
+      let assetId = assetsToRemove[i].id
       let igIndex = this.ig.items.indexOf(assetId)
       // Passing -1 will splice the wrong asset!
       if (igIndex >= 0) {

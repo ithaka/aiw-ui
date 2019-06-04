@@ -186,7 +186,7 @@ export class AssetService {
     public removeFromResults(ids: string[], totalResults: number ): void {
         // Remove deleted thumbnails
         this.allResultsValue['thumbnails'] = this.allResultsValue['thumbnails'].filter((thumbnail: AssetThumbnail) => {
-            return ids.indexOf(thumbnail.objectId) < 0
+            return ids.indexOf(thumbnail.id) < 0
         })
         // Remove deleted ids
         this.allResultsValue['items'] = this.allResultsValue['items'].filter((item: string) => {
