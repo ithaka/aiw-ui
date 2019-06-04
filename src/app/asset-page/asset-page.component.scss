@@ -34,16 +34,24 @@ $titleNavBg: #eee;
     .back-results {
         position: absolute;
         left: 40px;
-        top: 12px;
+        top: 8px;
         display: inline;
         white-space: nowrap;
         font-weight: bold;
+        font-size: 12px;
         cursor: pointer;
 
         .icon-arrow-back {
             width: 16px;
             height: 16px;
             margin-right: 10px;
+        }
+
+        // Note: This span contains the back to results text and has 2px padding-top to
+        // align the difference in size between the back (<-)icon and the font-size.
+        // Remove this padding if the font-size changes to be larger than 12px.
+        span {
+          padding-top: 2px;
         }
     }
 
