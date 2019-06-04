@@ -545,6 +545,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
             this.osdViewer.viewport.fitBounds(bounds, true)
         } else {
             this.osdViewer.viewport.fitVertically(true)
+            this.osdViewer.viewport.zoomTo(this.osdViewer.viewport.getMinZoom())
 
         }
     }
