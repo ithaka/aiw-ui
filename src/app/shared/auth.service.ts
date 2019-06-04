@@ -18,6 +18,7 @@ import { IdleWatcherUtil } from './idle-watcher'
 import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 import { Angulartics2 } from 'angulartics2';
+import { environment } from 'environments/environment'
 /**
  * Controls authorization through IP address and locally stored user object
  */
@@ -25,7 +26,7 @@ import { Angulartics2 } from 'angulartics2';
 @Injectable()
 export class AuthService implements CanActivate {
   public currentUser: Observable<any>
-  public currentAuthHeaders: AuthTriplet 
+  public currentAuthHeaders: AuthTriplet
   // Track whether or not user object has been refreshed since app opened
   public userSessionFresh: boolean = false
   public showUserInactiveModal: Subject<boolean> = new Subject(); // Set up subject observable for showing inactive user modal
@@ -43,6 +44,8 @@ export class AuthService implements CanActivate {
   private logUrl: string;
   private groupUrl = '';
   private solrUrl: string;
+  private solrUrlV3: string;
+  public useSearch3: boolean = false
 
   private institutionObjValue: any = {};
   private institutionObjSource: BehaviorSubject<any> = new BehaviorSubject(this.institutionObjValue);
@@ -95,6 +98,7 @@ export class AuthService implements CanActivate {
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
     this.subdomain = 'library'
     this.solrUrl = '/api/search/v1.0/search'
+    this.solrUrlV3 = '/api/search/v3.0/search'
 
 
     let testHostnames = [
@@ -131,6 +135,7 @@ export class AuthService implements CanActivate {
       // Explicit live endpoints
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = '/api/search/v1.0/search'
+      this.solrUrlV3 = '/api/search/v3.0/search'
       this.ENV = 'prod'
     }
     // Cirrostratus or server-side handling
@@ -141,6 +146,7 @@ export class AuthService implements CanActivate {
       this.baseUrl =  '//library.artstor.org/api'
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
+      this.solrUrlV3 = this.hostname + '/api/search/v3.0/search'
       this.ENV = 'prod'
     } else if ( new RegExp(testHostnames.join('|')).test(this.clientHostname) ) {
       console.info('Using Test Endpoints (Absolute)')
@@ -152,6 +158,7 @@ export class AuthService implements CanActivate {
       this.compoundUrl = '//stor.stage.artstor.org/stor'
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
       this.solrUrl = '/api/search/v1.0/search'
+      this.solrUrlV3 = '/api/search/v3.0/search'
       this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
       this.ENV = 'test'
     }
@@ -190,6 +197,7 @@ export class AuthService implements CanActivate {
     if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'beta.stage.artstor.org', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(this.clientHostname)) {
       this.baseUrl = this.hostname + '/api'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
+      this.solrUrlV3 = this.hostname + '/api/search/v3.0/search'
     }
 
     // Set idle timer and auth heartbeat when loaded in Browser
@@ -305,13 +313,13 @@ export class AuthService implements CanActivate {
       if(quizModeTTDismissed) {
         this._storage.setLocal('quizModeTTDismissed', quizModeTTDismissed)
       }
-      
+
       // Clear observables
       this.userSource.next({})
       this.institutionObjSource.next({})
 
       return this.http
-          .post(this.getUrl(true) + '/logout', {}, options)
+          .post(environment.API_URL + '/api/secure/logout', {}, options)
           .toPromise()
           .catch(function(err) {
               // error handling
@@ -363,7 +371,8 @@ export class AuthService implements CanActivate {
 
     let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // form encode it
     let options = { headers: header, withCredentials: true }; // Create a request option
-    return this.http.post(this.getUrl(true) + '/register', data , options);
+
+    return this.http.post(environment.API_URL + '/api/secure/register', data , options);
   }
 
   /**
@@ -378,7 +387,7 @@ export class AuthService implements CanActivate {
     let header = new HttpHeaders().set('Content-Type', 'application/json')
     let options = { headers: header, withCredentials: true }
 
-    return this.http.post(this.getHostname() + '/saml/user/create', registration , options)
+    return this.http.post(environment.API_URL + '/saml/user/create', registration , options)
   }
 
   /**
@@ -389,7 +398,7 @@ export class AuthService implements CanActivate {
     let header = new HttpHeaders().set('Content-Type', 'application/json')
     let options = { headers: header, withCredentials: true }
 
-    return this.http.post(this.getHostname() + '/saml/user/link', credentials , options)
+    return this.http.post(environment.API_URL + '/saml/user/link', credentials , options)
       .toPromise()
   }
 
@@ -435,7 +444,7 @@ export class AuthService implements CanActivate {
   }
 
   public getSearchUrl(): string {
-    return this.solrUrl;
+    return this.useSearch3 ? this.solrUrlV3 : this.solrUrl;
   }
 
   public getEnv(): string {
@@ -455,7 +464,7 @@ export class AuthService implements CanActivate {
   /** Returns url used for downloading some media, such as documents */
   public getMediaUrl(): string {
     // This is a special case, and should always points to library.artstor or stage
-    return this.getHostname() + '/media';
+    return environment.API_URL + '/media';
   }
 
   /**
@@ -560,7 +569,7 @@ export class AuthService implements CanActivate {
       'userDepartment' : user.dept || ''
     }
     // Push to GTM data layer
-    this.angulartics.eventTrack.next( { properties : { 
+    this.angulartics.eventTrack.next( { properties : {
       gtmCustom : {
         "user" : userGTMVars
       }
@@ -572,7 +581,7 @@ export class AuthService implements CanActivate {
     this.angulartics.setUserProperties.next({ isLoggedIn: (user.isLoggedIn || false) });
     this.angulartics.setUserProperties.next({ shibbolethUser: (user.shibbolethUser || false) });
     this.angulartics.setUserProperties.next({ dept: (user.dept || '') });
-    this.angulartics.setUserProperties.next({ ssEnabled: (user.ssEnabled || false) }) 
+    this.angulartics.setUserProperties.next({ ssEnabled: (user.ssEnabled || false) })
   }
 
   /**
@@ -663,8 +672,8 @@ export class AuthService implements CanActivate {
   public getUserInfo(triggerSessionExpModal?: boolean): Observable<any> {
     return this.http
       .get(this.genUserInfoUrl(), {
-        observe: 'response', 
-        headers: this.getHeaders(), 
+        observe: 'response',
+        headers: this.getHeaders(),
         withCredentials: true
       }).pipe(
       map((res)  => {
@@ -740,7 +749,7 @@ export class AuthService implements CanActivate {
     }
 
     getInstitutions() {
-        let url = this.getHostname() + '/api/institutions?_method=shibbolethOnly';
+        let url = environment.API_URL + '/api/institutions?_method=shibbolethOnly';
 
         return this.http
             .get(url)

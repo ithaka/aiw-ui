@@ -61,6 +61,8 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
     }
   ]
 
+
+  // Describes PUT path: '/api/secure/user/id'
   describe("update individual user properties", () => {
 
     beforeAll(function (done) {
