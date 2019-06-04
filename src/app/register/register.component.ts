@@ -115,7 +115,7 @@ export class RegisterComponent implements OnInit {
       role: formValue.role,
       dept: formValue.dept,
       info: formValue.info,
-      survey: formValue.survey,
+      survey: formValue.info,
       portal: 'library'
     }
 
