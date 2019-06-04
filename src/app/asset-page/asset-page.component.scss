@@ -20,7 +20,7 @@ $titleNavBg: #eee;
 }
 
 // Title Prev / Next Asset
-.title-nav-cntnr{
+.title-nav-cntnr {
     // border-bottom: 1px solid #ddd;
     background: $titleNavBg;
     padding: 1.5rem 0;
@@ -46,12 +46,12 @@ $titleNavBg: #eee;
         cursor: pointer;
     }
 }
-.title-nav-cntnr i{
+.title-nav-cntnr i {
     vertical-align: top;
     margin: 3px;
     cursor: pointer;
 }
-.title-nav-cntnr.col-md-12.title{
+.title-nav-cntnr.col-md-12.title {
     display: inline-block;
     max-width: 400px;
     margin: auto;
@@ -181,7 +181,7 @@ $titleNavBg: #eee;
     }
 }
 
-.copy-status-msg{
+.copy-status-msg {
     font-family: 'Graphik Web', sans-serif;
     font-size: 12px;
     color: #000;
@@ -268,7 +268,7 @@ $titleNavBg: #eee;
 
 .btn{
 
-    .icon-print{
+    .icon-print {
         background-image: url("/assets/img/icon-print-white.svg");
         background-repeat: no-repeat;
         background-position: center center;
@@ -276,7 +276,7 @@ $titleNavBg: #eee;
     }
 }
 
-.quiz-caption-cntnr{
+.quiz-caption-cntnr {
     position: absolute;
     background: #f1f8f1;
     left: 0;
@@ -289,11 +289,11 @@ $titleNavBg: #eee;
     transition: transform 0.2s linear;
     transform: translateY(0);
 
-    &.cntnr-bg{
+    &.cntnr-bg {
         background: #f1f8f1;
     }
 
-    .quiz-cntnr{
+    .quiz-cntnr {
         position: absolute;
         right: 15px;
         top: 15px;
@@ -304,7 +304,7 @@ $titleNavBg: #eee;
         font-size: 12px;
         transition: 250ms all;
 
-        .quiz-btn{
+        .quiz-btn {
             width: 10px;
             height: 10px;
             display: inline-block;
@@ -325,7 +325,7 @@ $titleNavBg: #eee;
         }
     }
 
-    .shuffle-cntnr{
+    .shuffle-cntnr {
         position: absolute;
         right: 15px;
         top: 2px;
@@ -335,7 +335,7 @@ $titleNavBg: #eee;
         cursor: pointer;
         font-size: 12px;
 
-        .shuffle-btn{
+        .shuffle-btn {
             width: 10px;
             height: 10px;
             display: inline-block;
@@ -345,7 +345,7 @@ $titleNavBg: #eee;
             margin-right: 8px;
         }
 
-        &.active{
+        &.active {
             color: #000;
 
             .shuffle-btn{
@@ -355,7 +355,7 @@ $titleNavBg: #eee;
         }
     }
 
-    .caption-btn-cntnr{
+    .caption-btn-cntnr {
         position: absolute;
         left: 15px;
         top: 15px;
@@ -365,7 +365,7 @@ $titleNavBg: #eee;
         cursor: pointer;
         font-size: 12px;
 
-        .caption-btn{
+        .caption-btn {
             width: 10px;
             height: 10px;
             display: inline-block;
@@ -375,7 +375,7 @@ $titleNavBg: #eee;
             margin-right: 8px;
         }
 
-        &.active{
+        &.active {
             color: #000;
 
             .caption-btn{
@@ -385,7 +385,7 @@ $titleNavBg: #eee;
         }
     }
 
-    .quiz-browse-cntnr{
+    .quiz-browse-cntnr {
         display: block;
         width: 120px;
         margin: auto;
@@ -414,19 +414,19 @@ $titleNavBg: #eee;
     color: $color-gray-5;
 }
 
-.jstor-result{
+.jstor-result {
     cursor: pointer;
     padding-bottom: 5px;
     display: block;
 
     a{
         padding: 5px 5px 5px 0;
-        &:hover{
+        &:hover {
             background: #f9f9f9;
         }
     }
 
-    .type{
+    .type {
         color: #989898;
         font-size: 1rem;
         font-weight: 600;
@@ -434,7 +434,7 @@ $titleNavBg: #eee;
         display: inline;
     }
 
-    .label{
+    .label {
         display: inline;
     }
 }
@@ -526,7 +526,7 @@ $titleNavBg: #eee;
         left: 61% !important;
     }
 
-    &:before, &:after{
+    &:before, &:after {
         content: '';
         display: block;
         position: absolute;
@@ -536,13 +536,13 @@ $titleNavBg: #eee;
         border-style: solid;
     }
 
-    &:before{
+    &:before {
         top: -14px;
         border-color: transparent transparent $color-border-gray transparent;
         border-width: 7px;
     }
 
-    &:after{
+    &:after {
         top: -12px;
         border-color: transparent transparent $color-white transparent;
         border-width: 7px;
@@ -556,7 +556,7 @@ $titleNavBg: #eee;
         display: flex;
         align-items: center;
 
-        &:hover{
+        &:hover {
             background-color: $color-gray-2;
         }
 
