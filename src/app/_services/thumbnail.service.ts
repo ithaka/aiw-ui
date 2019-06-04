@@ -34,6 +34,7 @@ export class ThumbnailService {
         multiviewItemCount: 0, // set later from compound_media
         status: 'available', // all search assets are "available"
         img : '', // set later by getThumbnailImg
+        thumbnailImgUrl: cleanedMedia ? cleanedMedia.thumbnailSizeOnePath : '',
         thumbnailUrls: [],
         media: cleanedMedia,
         ssid: cleanedSSID,
@@ -60,7 +61,8 @@ export class ThumbnailService {
           cleanedAsset.thumbnailUrls.push(this.makeThumbUrl(cleanedAsset, i))
         }
       }
-
+      // Set thumbnailImgUrl for multi-views
+      cleanedAsset.thumbnailImgUrl = cleanedAsset.thumbnailUrls[0]
       // Attach media flags
       cleanedAsset = this.attachMediaFlags(cleanedAsset)
       // Attach usable thumbnail url
@@ -201,13 +203,11 @@ export class ThumbnailService {
       isMultiView = true
     }
     // Check thumbnail url source
-    if(thumbData.thumbnailUrls && thumbData.thumbnailUrls[0]) {
-      imagePath = thumbData.thumbnailUrls[0]
-    } else if (thumbData.thumbnailImgUrl) {
+    if (thumbData.thumbnailImgUrl) {
       isThumbnailImgUrl = true
       imagePath = thumbData.thumbnailImgUrl
     } else {
-      imagePath = thumbData.thumbnail_url
+      imagePath = thumbData.thumbnail_url // Passed back by metadata service
     }
     // Test for full url 
     receivedFullUrl = /\/\/[\W\D]*(artstor.org)/.test(imagePath)
