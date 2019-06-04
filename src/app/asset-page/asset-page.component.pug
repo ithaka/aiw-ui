@@ -4,11 +4,11 @@
     //- View prev/next asset
     .title-nav-cntnr.col-md-12([class.hidden]="isFullscreen")
       .row
-        .col-md-2
+        .col-2
           span.back-results(*ngIf="prevRouteParams.length > 0", (keyup.enter)="backToResults()", (click)="backToResults()", tabindex="1", aria-label="Back to results", role="link")
             i.icon.icon-arrow-back
             span.d-none.d-md-inline-block {{ 'ASSET_PAGE.LINKS.BACK' | translate}}
-        .col-md-6.col-md-offset-4.col-lg-8.col-lg-offset-2
+        .col-sm-8.col-md-offset-2.col-lg-9.col-lg-offset-1
           .title-wrap(*ngIf="assets[0]")
             .title.text-truncate([innerHTML]="assets[0].title ? assets[0].title : ''", attr.aria-label="{{assets[0].title ? assets[0].title : ''}}, result {{assetNumber}} of {{totalAssetCount - restrictedAssetsCount}}")
             //- Pagination
