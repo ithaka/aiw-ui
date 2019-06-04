@@ -19,6 +19,10 @@ export class ThumbnailService {
   public searchAssetToThumbnail(asset: RawSearchAsset): AssetThumbnail {
       let cleanedSSID: string = asset.doi.substr(asset.doi.lastIndexOf('.') + 1) // split the ssid off the doi
       let cleanedMedia: MediaObject
+      if (asset && asset.media && typeof asset.media == 'string') { 
+        cleanedMedia = JSON.parse(asset.media) 
+      }
+      // Map RawSearchAsset fields to AssetThumbnail
       let cleanedAsset: AssetThumbnail = {
         name: asset.name,
         agent: asset.agent,
@@ -26,7 +30,8 @@ export class ThumbnailService {
         id: asset.artstorid,
         objectTypeId: -1,
         collectionTypeInfo: this.getCollectionType(asset),
-        multiviewItemCount: 1, // set tlater
+        compound_media: asset.compound_media,
+        multiviewItemCount: 0, // set later from compound_media
         status: 'available', // all search assets are "available"
         img : '', // set later by getThumbnailImg
         thumbnailUrls: [],
@@ -35,25 +40,24 @@ export class ThumbnailService {
         iap: asset.iap,
         frequentlygroupedwith: asset.frequentlygroupedwith,
         partofcluster: asset.partofcluster
-        // thumbnailImgUrl: asset.thumbnailImgUrl,
       }
       // Parse stringified compound media if available
       if (cleanedAsset.compound_media) {
         cleanedAsset.compound_media_json = JSON.parse(cleanedAsset.compound_media)
+        cleanedAsset.multiviewItemCount = cleanedAsset.compound_media_json.objects ? cleanedAsset.compound_media_json.objects.length : 0
       }
       // Use the compound media thumbnail url where sequenceNum equals 1
       if (cleanedAsset && cleanedAsset.compound_media_json && cleanedAsset.compound_media_json.objects) {
         let compoundAsset = cleanedAsset.compound_media_json.objects.filter((asset) => {
           return asset['sequenceNum'] === 1
         })
-
         if (compoundAsset[0]) {
           cleanedAsset.thumbnailUrls.push(this._auth.getThumbHostname(true) + compoundAsset[0].thumbnailSizeOnePath)
         }
       }
       else { // make the thumbnail urls and add them to the array
         for (let i = 1; i <= 5; i++) {
-          cleanedAsset.thumbnailUrls.push(this.makeThumbUrl(cleanedAsset.media.thumbnailSizeOnePath, i))
+          cleanedAsset.thumbnailUrls.push(this.makeThumbUrl(cleanedAsset, i))
         }
       }
 
@@ -71,6 +75,7 @@ export class ThumbnailService {
    */
   public itemAssetToThumbnail(item: RawItemAsset): AssetThumbnail 
   {
+    // Map RawItemAsset fields to AssetThumbnail
     let cleanedAsset: AssetThumbnail = {
       id: item.objectId,
       name: item.tombstone[0],
@@ -78,7 +83,7 @@ export class ThumbnailService {
       date: item.tombstone[2],
       objectTypeId: item.objectTypeId,
       collectionTypeInfo: this.getCollectionType(item),
-      multiviewItemCount: item.compoundmediaCount,
+      multiviewItemCount: item.compoundmediaCount ? item.compoundmediaCount : 0,
       status: item.status,
       img : '',
       thumbnailImgUrl: item.thumbnailImgUrl,
@@ -172,9 +177,9 @@ export class ThumbnailService {
    * Generate Thumbnail URL
    * @param thumbData: AssetData | Thumbnail - returned by search service, metadata service, or group service
    * @param size: number - sizes 0 through 4 are acceptable
+   * @todo SIMPLIFY this function once it is ONLY used with AssetThumbnail objects
    */
   public makeThumbUrl(thumbData: any, size?: number): string {
-    // console.log("MAKE URL", thumbData)
     let imagePath: string
     let isMultiView: boolean
     let isThumbnailImgUrl: boolean
@@ -191,12 +196,14 @@ export class ThumbnailService {
     } else if (typeof(thumbData.tileSource) === 'object' && thumbData.tileSource.length) {
       // Check if multi-view, when via search service
       isMultiView = true
-    } else if (thumbData.compoundmediaCount) {
+    } else if (thumbData.compoundmediaCount || thumbData.multiviewItemCount) {
       // Check if multi-view, when via group service
       isMultiView = true
     }
     // Check thumbnail url source
-    if (thumbData.thumbnailImgUrl) {
+    if(thumbData.thumbnailUrls && thumbData.thumbnailUrls[0]) {
+      imagePath = thumbData.thumbnailUrls[0]
+    } else if (thumbData.thumbnailImgUrl) {
       isThumbnailImgUrl = true
       imagePath = thumbData.thumbnailImgUrl
     } else {
