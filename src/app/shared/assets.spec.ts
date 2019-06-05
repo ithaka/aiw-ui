@@ -1,5 +1,4 @@
 import { TestBed, inject, async } from '@angular/core/testing'
-import { AssetService } from './assets.service'
 
 // Library imports
 import { Injectable, OnDestroy, OnInit } from '@angular/core'
@@ -10,7 +9,7 @@ import 'rxjs/add/operator/toPromise'
 import { map, take } from 'rxjs/operators'
 
 // Project dependencies
-import { AuthService } from './auth.service'
+import { AuthService, AssetService } from '_services'
 import { AssetFiltersService } from './../asset-filters/asset-filters.service'
 import { ToolboxService } from './toolbox.service'
 

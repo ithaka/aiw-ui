@@ -7,8 +7,7 @@ import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 import { Angulartics2, ANGULARTICS2_TOKEN, RouterlessTracking } from 'angulartics2'
 
 import { AppConfig } from '../app.service'
-import { AuthService } from '../shared'
-import { environment } from 'environments/environment.prod';
+import { AuthService } from '_services'
 
 describe('Register form POST /api/secure/register #pact #user-register', () => {
 
