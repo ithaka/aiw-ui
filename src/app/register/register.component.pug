@@ -65,14 +65,14 @@
               .form-group
                 .form-check
                   label.form-check-label
-                    input#checkInfo.form-check-input(type="checkbox", [formControl]="registerForm.controls['info']", tabindex="0", aria-label="Newsletter sign up. Yes, send me information about new Artstor content and tools (Optional)")
+                    input#checkInfo.form-check-input(type="checkbox", [formControl]="registerForm.controls['info']", tabindex="0", [attr.aria-label]="'REGISTER.ARTSTOR_UPDATES' | translate")
                     = " "
-                    | {{ 'REGISTER.INFO_PROMPT' | translate }}
-                .form-check
-                  label.form-check-label
-                    input#checkSurvey.form-check-input(type="checkbox", [formControl]="registerForm.controls['survey']", tabindex="0", aria-label="Survey sign up. Yes, send me surveys (Optional)")
-                    = " "
-                    | {{ 'REGISTER.SURVEY_PROMPT' | translate }}
+                    | {{ 'REGISTER.ARTSTOR_UPDATES' | translate }}
+                //- .form-check
+                //-   label.form-check-label
+                //-     input#checkSurvey.form-check-input(type="checkbox", [formControl]="registerForm.controls['survey']", tabindex="0", aria-label="Survey sign up. Yes, send me surveys (Optional)")
+                //-     = " "
+                //-     | {{ 'REGISTER.SURVEY_PROMPT' | translate }}
                 .form-check
                   label.form-check-label
                     input#checkSurvey.form-check-input(type="checkbox", [formControl]="registerForm.controls['terms']", tabindex="0", aria-label="Terms agreement. I agree to the Artstor Digital Library Terms (Required)")
