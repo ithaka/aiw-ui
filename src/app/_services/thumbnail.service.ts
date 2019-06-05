@@ -109,24 +109,25 @@ export class ThumbnailService {
     return cleanedAsset
   }
 
-  private getCollectionType(thumbnail: any): CollectionTypeInfo {
-    let collectionValue = thumbnail['collectionType'] ? [ thumbnail['collectionType'] ] : thumbnail['collectiontypes']
-    return CollectionTypeHandler.getCollectionType(collectionValue, thumbnail['contributinginstitutionid'])
-  }
-
   /**
    * Get image url to set on thumbnail
    */
-  getThumbnailImg(thumbnail: AssetThumbnail): string {
-      if (thumbnail.status != 'not-available' && thumbnail.isDetailView && !thumbnail.isDowngradedMedia) {
-        return this.makeDetailViewThmb(thumbnail)
-      } else if (thumbnail.isMultiView || (thumbnail.isDetailView && thumbnail.isDowngradedMedia)) {
-        return thumbnail.thumbnailImgUrl
-      } else if (thumbnail.status != 'not-available') {
-        return this.makeThumbUrl(thumbnail)
-      } else {
-        return
-      }
+  public getThumbnailImg(thumbnail: AssetThumbnail): string {
+    if (thumbnail.status != 'not-available' && thumbnail.isDetailView && !thumbnail.isDowngradedMedia) {
+      return this.makeDetailViewThmb(thumbnail)
+    } else if (thumbnail.isMultiView || (thumbnail.isDetailView && thumbnail.isDowngradedMedia)) {
+      return thumbnail.thumbnailImgUrl
+    } else if (thumbnail.status != 'not-available') {
+      return this.makeThumbUrl(thumbnail)
+    } else {
+      return ''
+    }
+  }
+
+
+  private getCollectionType(thumbnail: any): CollectionTypeInfo {
+    let collectionValue = thumbnail['collectionType'] ? [ thumbnail['collectionType'] ] : thumbnail['collectiontypes']
+    return CollectionTypeHandler.getCollectionType(collectionValue, thumbnail['contributinginstitutionid'])
   }
 
   /**
