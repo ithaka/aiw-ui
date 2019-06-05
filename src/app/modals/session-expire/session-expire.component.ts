@@ -2,7 +2,8 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { Router } from '@angular/router'
 import { Location } from '@angular/common'
 
-import { AuthService } from './../../shared/auth.service'
+// Project Dependencies
+import { AuthService } from '_services'
 
 @Component({
   selector: 'ang-session-expire-modal',

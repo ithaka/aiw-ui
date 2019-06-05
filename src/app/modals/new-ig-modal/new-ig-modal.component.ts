@@ -5,8 +5,9 @@ import { map, take } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
 // Project dependencies
-import { AssetService, AuthService, GroupService, ImageGroup, LogService } from './../../shared'
-import { ToastService } from 'app/_services';
+import { AssetService, AuthService, GroupService, LogService } from '_services'
+import { ImageGroup } from 'datatypes'
+import { ToastService } from 'app/_services'
 import { IgFormValue, IgFormUtil } from './new-ig'
 import { isPlatformBrowser } from '@angular/common'
 import { Router } from '@angular/router'

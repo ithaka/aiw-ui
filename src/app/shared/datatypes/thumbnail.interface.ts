@@ -1,55 +1,69 @@
-// I've seeded the interface with a few parameters that I know to exist on (most) thumbnails
-//  if you need more, you can add them to the interface
+import { CollectionTypeInfo } from "./collection-type-handler";
+import { ImageZoomParams } from "./image-group.interface";
 
-export interface Thumbnail {
-  name?: string
-  agent?: string
-  date?: string
-  img?: string // Set locally in our app to be the image displayed
-  tombstone?: string[]
-  clustered?: number
-  partofcluster?: boolean
-  frequentlygroupedwith?: string[]
-  objectId?: string
-  objectTypeId?: number
-  artstorid?: string
-  collectionId: string
-  collectionType: number
+/**
+ * AssetThumbnail is the type we use to represent thumbnails on the front-end
+ * - Services returning thumbnails/results should map to this type
+ */
+export class AssetThumbnail {
+  id: string
+  objectTypeId: number
+  img: string
+  collectionTypeInfo: CollectionTypeInfo
+  ssid?: string
+  size?: number
+  thumbnailAlt?: string
+  status?: string // 'not-available', 'available'
+  isDetailView?: boolean
+  isMultiView?: boolean
+  isDowngradedMedia?: boolean
+  multiviewItemCount?: number
+  media?: any
+  thumbnailImgUrl?: string
+  thumbnailUrls?: string[]
+  compound_media?: any
   compound_media_json?: {
     types?: string[],
     objects?: any[]
   }
-  cfObjCount: number // number of associated assets
-  cfObjectId: string // haven't seen any for which this is different than objectId
-  count: number
-  largeImageUrl: string
-  publicAccess: boolean
-  iap?: number
-  status: string
-  media: {
-    adlObjectType: number
-    thumbnailSizeOnePath: string
-    format?: string
-  }
-  compound_media: any
-  thumbnailImgUrl: string
-  thumbnail1: any
-  thumbnail2: any
-  thumbnail3: any
-  thumbnail4: any
-  navigationCommands: any[] // added when thumbnail is constructed, allows proper navigation from search
-  zoom?: { // optional zoom params to be available only for detail view thumbnails
-    index: number
-    pointHeight: number
-    pointWidth: number
-    viewerX: number
-    viewerY: number
-  }
+  doi ?: string
+  // "Tombstone" Data
+  name: string
+  agent: string
+  date: string
+  // In template
+  iap: boolean
+  partofcluster: boolean
+  clusterid?: string
+  frequentlygroupedwith: string[]
+  zoom?: ImageZoomParams
 }
 
-// export interface SearchThumbnail {
-//   artstorid: string
-//   collections: string[]
-//   collectiontypenameid: string[]
-//   collectiontypes: number[]
-// }
+/**
+ * Raw thumbnail/asset object returned by:
+ * -> See RawSearchAsset in asset-search.service.ts
+ */
+
+/**
+ * Raw thumbnail/asset object returned by:
+ * Item/Groups Service (Team Binder)
+ */
+export interface RawItemAsset {
+  objectId?: string
+  compoundmediaCount?: number
+  downloadSize?: string
+  tombstone?: string[]
+  collections?: string[]
+  thumbnailImgUrl?: string
+  media?: any
+  iap?: boolean
+  status: string // "available"
+  objectTypeId?: number
+  collectiontypes?: number[]
+  contributinginstitutionid?: number
+  clustered?: number
+  largeImgUrl?: string
+  cfObjectId?: string
+  // We attach zoom from the group service
+  zoom?: ImageZoomParams
+}

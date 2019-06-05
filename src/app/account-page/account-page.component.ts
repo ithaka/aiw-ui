@@ -4,7 +4,7 @@ import { Component, OnInit } from "@angular/core"
 import { Router } from "@angular/router"
 
 // Project Dependencies
-import { AuthService, AccountService } from "../shared"
+import { AuthService, AccountService } from "../_services"
 import { FormBuilder, FormGroup } from "@angular/forms"
 import {
   USER_ROLES,

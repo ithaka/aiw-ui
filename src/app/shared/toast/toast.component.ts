@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core'
+import { Router, RouterLink } from '@angular/router'
+import { Angulartics2 } from 'angulartics2'
 
-import { Toast, ToastService } from 'app/_services';
-import { Router, RouterLink } from '@angular/router';
-import { Angulartics2 } from 'angulartics2';
-import { DomUtilityService } from 'app/shared';
-
+// Project Dependencies
+import { DomUtilityService, Toast, ToastService } from '_services'
 @Component({
   selector: 'ang-toast',
   templateUrl: 'toast.component.pug',

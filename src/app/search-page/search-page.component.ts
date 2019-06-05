@@ -4,11 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
-import { AssetService } from './../shared/assets.service'
-import { AuthService, LogService, FlagService, ScriptService, DomUtilityService } from '../shared'
+// Project Dependencies
+import { AssetService, AuthService, LogService, FlagService, DomUtilityService, ScriptService, TitleService } from '../_services'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { AssetGrid } from './../asset-grid/asset-grid.component'
-import { TitleService } from '../shared/title.service'
 import { AppConfig } from '../app.service'
 
 @Component({

@@ -1,27 +1,16 @@
-.card-block.card-text(tabindex="3", [attr.aria-label]="thumbnail.tombstone && thumbnail.tombstone.length > 0 ? thumbnail.tombstone.join(', ') : thumbnail.name + ', '  + thumbnail.agent + ', ' + thumbnail.date", [attr.id]="('item-' + itemIndex)", [ngClass]="{ 'reorder--asset' : arrowReorderMode }")
+.card-block.card-text(tabindex="3", [attr.aria-label]="thumbnail.name + ', '  + thumbnail.agent + ', ' + thumbnail.date", [attr.id]="('item-' + itemIndex)", [ngClass]="{ 'reorder--asset' : arrowReorderMode }")
   .card-img-top
     //- Thumbnail Image
-    img(*ngIf="thumbnail.img", id="{{thumbnail.artstorid}}", [class.disablePointerEvents]="reorderMode", [attr.src]="thumbnail.img", (error)="thumbnailError()", [attr.alt]="thumbnailAlt", [attr.title]="thumbnailAlt", aria-role="image")
+    img(*ngIf="thumbnail.img", id="{{thumbnail.id}}", [class.disablePointerEvents]="reorderMode", [attr.src]="thumbnail.img", (error)="thumbnailError()", [attr.alt]="thumbnailAlt", [attr.title]="thumbnailAlt", aria-role="image")
   .metadata-wrap
-    //- New Asset display
+    //- Asset "tombstone" metadata display (Title, Creator, Date)
     span.asset-title(*ngIf="thumbnail.name", title="{{ thumbnail.name }}", [innerHTML]="thumbnail.name", aria-hidden="true")
     span.asset-agent(*ngIf="thumbnail.agent", title="{{ thumbnail.agent }}", [innerHTML]="thumbnail.agent", aria-hidden="true")
     span.asset-date(*ngIf="thumbnail.date", title="{{ thumbnail.date }}", [innerHTML]="thumbnail.date", aria-hidden="true")
-    //- Old asset display
-    span.asset-title(*ngIf="thumbnail.thumbnail1", title="{{ thumbnail.thumbnail1 }}", [innerHTML]="thumbnail.thumbnail1")
-    span.asset-agent.notranslate(*ngIf="thumbnail.thumbnail2", title="{{ thumbnail.thumbnail2 }}", [innerHTML]="thumbnail.thumbnail2")
-    span.asset-date(*ngIf="thumbnail.thumbnail3", title="{{ thumbnail.thumbnail3 }}", [innerHTML]="thumbnail.thumbnail3")
-    span(*ngIf="thumbnail.thumbnail4", title="{{ thumbnail.thumbnail4 }}", [innerHTML]="thumbnail.thumbnail4")
-    //- Schema moving forward
-    ng-container(*ngFor="let data of thumbnail.tombstone")
-      span(*ngIf="data", [innerHtml]="data")
   .card-icon-group((click)="$event.stopPropagation(); $event.preventDefault();", [ngClass]="{ 'disablePointerEvents': editMode }")
-    ang-collection-badge([collectionType]="getCollectionType()")
+    ang-collection-badge([collectionType]="thumbnail.collectionTypeInfo")
     .float-right
-      //- Legacy Service icons
-      i.icon.icon-collab(*ngIf="thumbnail.cfObjectId && thumbnail.cfObjectId.length > 0", [id]="thumbnail.objectId + '_associated_images'", (click)="openLink($event, ['/associated', thumbnail.artstorid ? thumbnail.artstorid : thumbnail.objectId])" title="Others are also interested in button icon. Press enter to click this button", (keyup.enter)="openLink($event, ['/associated', thumbnail.artstorid])", tabindex="3", aria-role="button")
-      i.icon.icon-cluster(*ngIf="thumbnail.clustered == 1", [id]="thumbnail.objectId + '_clustered_images'", (click)="openLink($event, ['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }])", title="View related media button icon. Press enter to click this button", (keyup.enter)="openLink($event, ['/cluster', thumbnail.objectId, { objTitle :  thumbnail.thumbnail1 }])", tabindex="3", aria-role="button")
-      //- IAP Icon
+      //- IAP Icon - Is this part of Images for Academic Publishing
       i.icon.icon-iap(
         *ngIf="thumbnail.iap",
         tabindex="3",
@@ -33,19 +22,19 @@
         <ng-template #iapTooltip>
           div Images for Academic Publishing
         </ng-template>
-      //- New search icons
+      //- Clustered asset (has Duplicates and Details)
       i.icon.icon-cluster(
         *ngIf="thumbnail.partofcluster",
-        (click)="openLink($event, ['/cluster', thumbnail.clusterid ? thumbnail.clusterid : thumbnail.artstorid, { objTitle :  thumbnail.name }])",
+        (click)="openLink($event, ['/cluster', thumbnail.clusterid, { objTitle :  thumbnail.name }])",
         title="View related media button icon. Press enter to click this button",
         tabIndex="3",
-        (keyup.enter)="openLink($event, ['/cluster', thumbnail.clusterid ? thumbnail.clusterid : thumbnail.artstorid, { objTitle :  thumbnail.name }])"
+        (keyup.enter)="openLink($event, ['/cluster', thumbnail.clusterid, { objTitle :  thumbnail.name }])"
       )
-      i.icon.icon-collab(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", (click)="openLink($event, ['/associated', thumbnail.artstorid ? thumbnail.artstorid : thumbnail.objectId])", title="Others are also interested in button icon. Press enter to click this button", tabIndex="3", (keyup.enter)="openLink($event, ['/associated', thumbnail.artstorid])")
-      //- ang-collection-badge([collectionType]="getCollectionType()", tabIndex="3")
-
-      i.icon(*ngIf="thumbnail.media && thumbnail.media.adlObjectType && (thumbnail.media.adlObjectType != 10) && (multiviewItemCount <= 1)",
-          [ngClass]="[ mouseOverMedia ? 'icon-' + (thumbnail.media.adlObjectType | typeIdPipe) + '-hover' : 'icon-' + (thumbnail.media.adlObjectType | typeIdPipe) ]",
+      //- Associated or "Grouped with" assets
+      i.icon.icon-collab(*ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0", (click)="openLink($event, ['/associated', thumbnail.id])", title="Others are also interested in button icon. Press enter to click this button", tabIndex="3", (keyup.enter)="openLink($event, ['/associated', thumbnail.artstorid])")
+      //- Media type icon (w/ tooltip)
+      i.icon(*ngIf="thumbnail.objectTypeId && (thumbnail.objectTypeId != 10) && (multiviewItemCount <= 1)",
+          [ngClass]="[ mouseOverMedia ? 'icon-' + (thumbnail.objectTypeId | typeIdPipe) + '-hover' : 'icon-' + (thumbnail.objectTypeId | typeIdPipe) ]",
           (mouseover)="mouseOverMedia=true",
           (mouseout)="mouseOverMedia=false",
           [ngbTooltip]="mediaTooltip",
@@ -53,22 +42,11 @@
           placement="right")
 
         <ng-template #mediaTooltip>
-          div {{thumbnail.media.adlObjectType | typeIdPipe:true }}
+          div {{thumbnail.objectTypeId | typeIdPipe:true }}
         </ng-template>
-      i.icon(*ngIf="!thumbnail.media && thumbnail.objectTypeId && thumbnail.objectTypeId != 10",
-          [ngClass]="[ mouseOverNoMedia ? 'icon-' + (thumbnail.objectTypeId | typeIdPipe) + '-hover' : 'icon-' + (thumbnail.objectTypeId | typeIdPipe) ]",
-          (mouseover)="mouseOverNoMedia=true",
-          (mouseout)="mouseOverNoMedia=false")
-
-      //- Set the media type icon for downgraded media using media.adlObjectType
-      i.icon(*ngIf="isDowngradedMedia && !isDetailView && thumbnail.media",
-          [ngClass]="[ mouseOverDowngradedMedia ? 'icon-' + (thumbnail.media.adlObjectType | typeIdPipe) + '-hover' : 'icon-' + (thumbnail.media.adlObjectType | typeIdPipe) ]",
-          (mouseover)="mouseOverDowngradedMedia=true",
-          (mouseout)="mouseOverDowngradedMedia=false")
-
       //- Detail view icon
       i.icon(*ngIf="thumbnail.zoom", [ngClass]="[ mouseOverDetailIcon ? 'icon-detail-view-hover' : 'icon-detail-view' ]", [ngbTooltip]="tipDetailView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", tabIndex="3", (mouseover)="mouseOverDetailIcon=true", (mouseout)="mouseOverDetailIcon=false")
-
+      //- Multi view icon
       .multiview-indicator(*ngIf="multiviewItemCount > 1", [ngbTooltip]="tipMultiView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", title="See multiview items button icon. Press enter to click this button", tabIndex="3", aria-role="button")
         i.icon([ngClass]="[ mouseOverMultiview ? 'icon-multiview-hover' : 'icon-multiview' ]", (mouseover)="mouseOverMultiview=true", (mouseout)="mouseOverMultiview=false")
         span.multiview-count {{multiviewItemCount}}

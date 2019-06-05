@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AssetService } from './../shared/assets.service';
-import { AuthService } from './../shared/auth.service';
-import { TagsService } from './tags.service';
+// Project Dependencies
 import { Tag } from './tag/tag.class';
-import { TitleService } from '../shared/title.service';
+import { AssetService, TitleService, AuthService } from 'app/_services';
+import { TagsService } from './tags.service';
 
 @Component({
   selector: 'ang-browse-institution',

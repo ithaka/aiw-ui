@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 
 // Project Dependencies
-import { AssetService, AssetSearchService, DomUtilityService, Thumbnail } from '../../shared';
+import { AssetService, AssetSearchService, DomUtilityService } from '_services';
 import { Asset } from '../../asset-page/asset';
 
 @Component({

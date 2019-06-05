@@ -6,8 +6,7 @@ import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetService, AuthService, TitleService } from '../shared'
-import { CollectionService } from '../_services'
+import { AssetService, AuthService, CollectionService, TitleService } from '_services'
 
 @Component({
   selector: 'ang-category-page',
