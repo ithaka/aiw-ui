@@ -88,6 +88,14 @@ $titleNavBg: #eee;
 
     .title {
         font-family: $asset-page-title-font;
+
+        // @TODO - AIR-1735 follow up.
+        // xsphone and col-xs breakpoint styles are being overridden,
+        // so we force a centered max width on the title here.
+        @media(max-width: $phone) {
+          max-width: 70%;
+          margin: auto;
+        }
     }
 }
 
