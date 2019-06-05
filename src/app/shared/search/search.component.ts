@@ -5,10 +5,8 @@ import { map } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
 // Project dependencies
-import { AssetService } from '../../shared/assets.service'
+import { AssetService, AuthService, DomUtilityService } from '_services'
 import { AssetFiltersService } from '../../asset-filters/asset-filters.service'
-import { AuthService } from '../auth.service'
-import { DomUtilityService } from '../../shared';
 
 @Component({
   selector: 'ang-search',

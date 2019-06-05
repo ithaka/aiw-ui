@@ -3,9 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { Subscription }   from 'rxjs'
 import { map, take } from 'rxjs/operators'
 
-import { AuthService } from './../shared/auth.service'
-import { AssetService } from './../shared/assets.service'
-import { MetadataService } from '../_services'
+// Project Dependencies
+import { AssetService, AuthService, MetadataService } from '_services'
 
 @Component({
   selector: 'ang-associated-page',

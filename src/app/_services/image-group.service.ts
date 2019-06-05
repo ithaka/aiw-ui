@@ -1,11 +1,12 @@
 import { Injectable, EventEmitter } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Router } from '@angular/router'
-
 import { Observable, BehaviorSubject } from 'rxjs'
 
-import { AuthService, AssetService, ImageGroup } from './../shared'
-import { ImageGroupDescription } from './../shared'
+// Project Dependencies
+import { AuthService } from './auth.service'
+import { AssetService } from './assets.service'
+import { ImageGroup, ImageGroupDescription } from './../shared'
 
 /**
  *
@@ -106,7 +107,7 @@ export class ImageGroupService {
       let imgDownloadStrings: string[] = []
 
       thumbnails.forEach((thumbnail, index) => {
-        let imgStr: string = [(index + 1), thumbnail.objectId, '1024x1024'].join(':')
+        let imgStr: string = [(index + 1), thumbnail.id, '1024x1024'].join(':')
         thumbnail.status == 'available' && imgDownloadStrings.push(imgStr)
       })
 

@@ -20,7 +20,12 @@
       ],
       "artstor-storage/*": [
         "dist/artstor-storage/*"
-      ]
+      ],
+      "_services": ["app/_services"],
+      "_directives": ["app/directives"],
+      "shared": ["app/shared"],
+      "shared/*": ["app/shared/*"],
+      "datatypes": ["app/shared/datatypes"]
     },
     "lib": [
       "dom",

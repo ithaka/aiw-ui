@@ -3,7 +3,8 @@ import { BehaviorSubject, Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 
-import { AuthService } from '../shared/auth.service'
+// Project Dependencies
+import { AuthService } from 'app/_services/auth.service' // specific to avoid circular dependency
 
 @Injectable()
 export class AssetFiltersService {

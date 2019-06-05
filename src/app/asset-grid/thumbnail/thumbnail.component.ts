@@ -1,8 +1,9 @@
-import { Router } from '@angular/router';
-import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router'
+import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core'
 
-import { Thumbnail, AssetService, CollectionTypeHandler, AssetSearchService, CollectionTypeInfo } from './../../shared'
-import { Angulartics2 } from 'angulartics2';
+import { AssetThumbnail } from 'datatypes'
+import { Angulartics2 } from 'angulartics2'
+import { AssetService, AssetSearchService, ThumbnailService } from 'app/_services'
 
 @Component({
   selector: 'ang-thumbnail',
@@ -25,7 +26,7 @@ import { Angulartics2 } from 'angulartics2';
 })
 export class ThumbnailComponent implements OnInit, OnChanges {
   @Input()
-  public thumbnail: Thumbnail
+  public thumbnail: AssetThumbnail
 
   @Input() // allResults index for reorder
   public itemIndex: number
@@ -49,10 +50,6 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   public isDetailView: boolean = false
 
   private constraints: any = {}
-
-  // Variable that determines the thumbnail image size based on largeThmbView and available size for the asset. Defaults to 1 (Small thumbnail view)
-  private thumbnailSize: number = 1
-
   // The alt message for a thumbnail, combined with thumbnail title and creator name
   private thumbnailAlt: string = ''
 
@@ -67,64 +64,24 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     private angulartics: Angulartics2,
     private _assets: AssetService,
     private _search: AssetSearchService,
-    private router: Router
+    private router: Router,
+    private _thumbnail: ThumbnailService
   ) {
    }
 
   ngOnInit() {
-
-    // Compound 'multiview' assets for image groups, assigned in assets service
-    if (this.thumbnail['compoundmediaCount']) {
-      this.isMultiView = true
-      this.multiviewItemCount = this.thumbnail['compoundmediaCount']
-    }
-    // Compound 'multiview' assets use cleanedAsset.thumbnailUrls[0], assigned in asset-search
-    if (this.thumbnail.compound_media_json && this.thumbnail.compound_media_json.objects) {
-      this.isMultiView = true
-      this.thumbnail.thumbnailImgUrl = this.thumbnail['thumbnailUrls'][0]
-      this.multiviewItemCount = this.thumbnail.compound_media_json.objects.length
-    } else if (this.thumbnail['media']) {
-      this.thumbnail.thumbnailImgUrl = this.thumbnail.media.thumbnailSizeOnePath
-    }
-
-    // Set isDetailView
-    if (this.thumbnail['zoom']) {
-      this.isDetailView = true
-    }
-    // Set isDowngradedMedia
-    if ( (this.isMultiView && this.thumbnail.media && this.thumbnail.media.format === 'null') ||
-        ( (this.isMultiView || this.isDetailView) && this.thumbnail['compoundmediaCount'] === 1)) {
-      this.isDowngradedMedia = true
-    }
-    // Set thumbnail URL
-    this.thumbnail.img = this.getThumbnailImg(this.thumbnail)
-    // Set alt text
-    this.thumbnailAlt = this.thumbnail['name'] ? 'Thumbnail of ' + this.thumbnail['name'] : 'Untitled'
-    this.thumbnailAlt = this.thumbnail['agent'] ? this.thumbnailAlt + ' by ' + this.thumbnail['agent'] : this.thumbnailAlt + ' by Unknown'
+    this.isDetailView = this.thumbnail.isDetailView
+    this.isMultiView = this.thumbnail.isMultiView
+    this.isDowngradedMedia = this.thumbnail.isDowngradedMedia
+    this.multiviewItemCount = this.thumbnail.multiviewItemCount
+    this.thumbnailAlt = this.thumbnail.thumbnailAlt
   }
 
   // Fires when the component input(s) (i.e largeThmbView) changes - Updates the thumbnailSize based on largeThmbView current value
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.largeThmbView){
-      this.thumbnailSize = changes.largeThmbView.currentValue ? 2 : 1
-    }
-  }
-
-  /**
-   * Get image url to set on thumbnail
-   */
-  getThumbnailImg(thumbnail: Thumbnail): string {
-    if (thumbnail.status != 'not-available' && this.isDetailView && !this.isDowngradedMedia) {
-      return this._search.makeDetailViewThmb(thumbnail)
-    } 
-    else if (this.isMultiView || (this.isDetailView && this.isDowngradedMedia)) {
-      return thumbnail.thumbnailImgUrl
-    } 
-    else if (thumbnail.status != 'not-available') {
-      return this._search.makeThumbUrl(thumbnail, this.thumbnailSize)
-    } else {
-      return
-    }
+    // if (changes.largeThmbView){
+    //   this.thumbnail.size = changes.largeThmbView.currentValue ? 2 : 1
+    // }
   }
 
   openLink(event: Event, urlParams: any[]) {
@@ -133,10 +90,10 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     event.stopPropagation()
 
     if (urlParams[0] === '/associated') {
-      this.angulartics.eventTrack.next({ properties: { event: 'view associated images', label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
+      this.angulartics.eventTrack.next({ properties: { event: 'view associated images', label: this.thumbnail.id } })
     }
     if (urlParams[0] === '/cluster') {
-      this.angulartics.eventTrack.next({ properties: { event: 'view cluster', label: this.thumbnail.objectId ? this.thumbnail.objectId : this.thumbnail.artstorid } })
+      this.angulartics.eventTrack.next({ properties: { event: 'view cluster', label: this.thumbnail.id } })
     }
     this.router.navigate(urlParams)
   }
@@ -154,17 +111,11 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     }
   }
 
-  // wrapper function for getting the collection type
-  getCollectionType(): CollectionTypeInfo {
-    // Some endpoints give us the collectionType info in 'collectionType: number', where as others give the same info in 'collectiontypes: Array<number>'
-    return CollectionTypeHandler.getCollectionType( this.thumbnail['collectionType'] ? [ this.thumbnail['collectionType'] ] : this.thumbnail['collectiontypes'], this.thumbnail['contributinginstitutionid'])
-  }
-
   // If large thumbnail image fails to load, fallback to smaller thumbnail image
   thumbnailError(): void{
-    if (this.thumbnailSize > 1) {
-      this.thumbnailSize--
-      this.thumbnail.img = this.getThumbnailImg(this.thumbnail)
+    if (this.thumbnail.size > 1) {
+      this.thumbnail.size--
+      this.thumbnail.img = this._thumbnail.getThumbnailImg(this.thumbnail)
     }
   }
 

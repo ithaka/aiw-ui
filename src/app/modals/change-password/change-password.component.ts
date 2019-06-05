@@ -1,8 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { AuthService } from '../../shared'
 import { map, take } from 'rxjs/operators'
 
+// Project Dependencies
+import { AuthService } from '_services'
 @Component({
   selector: 'ang-change-password-modal',
   templateUrl: 'change-password.component.pug'

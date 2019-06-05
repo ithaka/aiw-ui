@@ -1,8 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core'
 
-import { AssetService } from '../../shared/assets.service';
-import { TagsService } from '../tags.service';
-import { Tag } from './tag.class';
+// Project Dependencies
+import { TagsService } from '../tags.service'
+import { Tag } from './tag.class'
+import { AssetService } from 'app/_services'
 
 @Component({
   selector: 'ang-tag',

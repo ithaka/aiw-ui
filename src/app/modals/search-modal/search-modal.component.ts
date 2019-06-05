@@ -7,9 +7,8 @@ import { Angulartics2 } from 'angulartics2'
 // Project dependencies
 import { SearchQueryUtil } from './search-query'
 import { AssetFiltersService } from './../../asset-filters/asset-filters.service'
-import { AuthService, AssetService, AssetSearchService, DomUtilityService } from 'app/shared'
+import { AuthService, AssetService, AssetSearchService, CollectionService, DomUtilityService } from '_services'
 import { AppConfig } from '../../app.service'
-import { CollectionService } from '../../_services'
 
 @Component({
   selector: 'ang-search-modal',

@@ -1,9 +1,10 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { ActivatedRoute, Router } from '@angular/router'
-import { ImageGroup, FlagService, ImageGroupService, AssetService } from './../'
-import { ToolboxService } from '../toolbox.service';
 
+// Project Dependencies
+import { FlagService, ImageGroupService, AssetService, ToolboxService } from '_services'
+import { ImageGroup } from 'datatypes'
 @Component({
     selector: 'ang-group-title',
     templateUrl: 'group-title.component.pug',

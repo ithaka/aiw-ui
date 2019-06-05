@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Input, Output, AfterViewInit, ElementR
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 
 // Project Dependencies
-import { AuthService } from '../../shared'
+import { AuthService } from '_services'
 @Component({
   selector: 'ang-pwd-reset-modal',
   templateUrl: 'pwd-reset.component.pug'

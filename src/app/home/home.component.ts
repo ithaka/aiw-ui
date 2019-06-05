@@ -5,7 +5,8 @@ import { map } from 'rxjs/operators'
 import { DeviceDetectorModule, DeviceDetectorService } from 'ngx-device-detector'
 import { isPlatformBrowser } from '@angular/common'
 
-import { AssetService, AuthService, DomUtilityService } from '../shared'
+// Project Dependencies
+import { AssetService, AuthService, DomUtilityService } from '_services'
 import { AppConfig } from '../app.service'
 import { Featured } from './featured'
 import { TagsService } from '../browse-page/tags.service';

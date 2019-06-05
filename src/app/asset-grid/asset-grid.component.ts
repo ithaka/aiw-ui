@@ -14,12 +14,11 @@ import {
   GroupService,
   ImageGroupService,
   LogService,
-  Thumbnail,
   ToolboxService,
   FlagService,
-  DomUtilityService,
-  ImageGroup
-} from '../shared'
+  DomUtilityService
+} from '_services'
+import { AssetThumbnail, ImageGroup } from 'datatypes'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { APP_CONST } from '../app.constants'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
@@ -593,8 +592,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     }
   }
 
-  private constructNavigationCommands (thumbnail: Thumbnail) : any[] {
-    let assetId = thumbnail.objectId ? thumbnail.objectId : thumbnail.artstorid
+  private constructNavigationCommands (thumbnail: AssetThumbnail) : any[] {
+    let assetId = thumbnail.id
     let params: any = {
       prevRouteTS: this.prevRouteTS // for fetching previous route params from session storage, on asset page
     }
@@ -877,9 +876,9 @@ export class AssetGrid implements OnInit, OnDestroy {
    * - Owner of Group only
    * @requires browser
    */
-  private removeFromGroup(assetsToRemove: Thumbnail[], clearRestricted?: boolean): void {
+  private removeFromGroup(assetsToRemove: AssetThumbnail[], clearRestricted?: boolean): void {
     for (let i = 0; i < assetsToRemove.length; i++) {
-      let assetId = assetsToRemove[i].objectId
+      let assetId = assetsToRemove[i].id
       let igIndex = this.ig.items.indexOf(assetId)
       // Passing -1 will splice the wrong asset!
       if (igIndex >= 0) {

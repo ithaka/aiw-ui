@@ -7,7 +7,7 @@
 
 import { ActivatedRouteSnapshot, RouteReuseStrategy, DetachedRouteHandle } from '@angular/router';
 
-import { ToolboxService } from './shared';
+import { ToolboxService } from '_services';
 
 /** Object which can store both:
  * An ActivatedRouteSnapshot, which is useful for determining whether or not you should attach a route (see this.shouldAttach)

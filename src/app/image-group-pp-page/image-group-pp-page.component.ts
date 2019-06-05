@@ -5,7 +5,8 @@ import { Subscription }   from 'rxjs'
 import { map, take } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetService, AssetSearchService, AuthService, ImageGroupDescription, ImageGroupService } from './../shared';
+import { AssetService, AssetSearchService, AuthService, ImageGroupService } from '_services'
+import { ImageGroupDescription } from 'datatypes'
 
 @Component({
   selector: 'ang-image-group-pp-page',

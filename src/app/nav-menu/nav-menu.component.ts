@@ -5,7 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common'
 
 // Project Dependencies
-import { AssetService, ImageGroupService, ImageGroup, GroupService, AuthService, FlagService } from '../shared'
+import { AssetService, ImageGroupService, GroupService, AuthService, FlagService } from '_services'
+import { ImageGroup } from 'datatypes'
 import { AppConfig } from '../app.service'
 import { Toast, ToastService } from 'app/_services';
 
@@ -110,6 +111,11 @@ export class NavMenu implements OnInit, OnDestroy {
           console.error(error)
         }
       )).subscribe(),
+      
+      // Set _auth flag for version 3 search based on featureFlag
+      this._flags.flagUpdates.subscribe((flags) => {
+        this._auth.useSearch3 = flags.searchV3 ? true : false
+      }),
       // Route params subscription
       this.route.params.subscribe((routeParams) => {
         this.params = routeParams

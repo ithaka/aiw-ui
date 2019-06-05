@@ -7,9 +7,10 @@ import { ActivatedRoute } from '@angular/router'
 
 // Internal Dependencies
 // import '/krpano.js'
-import { Asset, AuthService, ImageZoomParams, LogService, ToolboxService } from 'app/shared';
+import { AuthService, LogService, ToolboxService } from '_services'
+import { Asset, ImageZoomParams } from 'datatypes'
 import { MetadataService } from 'app/_services'
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common'
 
 // Browser API delcarations
 declare var embedpano: any

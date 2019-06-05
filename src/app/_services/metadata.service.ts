@@ -2,7 +2,9 @@ import { Injectable, Inject, PLATFORM_ID, Injector } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 
-import { AuthService, Asset } from 'app/shared';
+// Project Dependencies
+import { AuthService } from './auth.service' // specific to avoid circular dependency
+import { Asset } from 'datatypes'
 import { map, mergeMap } from 'rxjs/operators';
 import { isPlatformBrowser } from '@angular/common';
 

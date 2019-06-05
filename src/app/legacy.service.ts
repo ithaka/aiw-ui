@@ -3,7 +3,8 @@ import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@a
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs'
 
-import { AuthService } from './shared'
+// Project Dependencies
+import { AuthService } from '_services'
 
 declare var initPath: string
 

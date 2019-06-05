@@ -12,7 +12,7 @@ import {
   AuthService,
   PersonalCollectionUploadAsset,
   AssetDetailsFormValue
-} from './../../shared'
+} from '_services'
 import { Asset } from '../../asset-page/asset'
 import { LocalPCService, LocalPCAsset } from '../../_local-pc-asset.service'
 

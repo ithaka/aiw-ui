@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 
 // Project Dependencies
-import { TitleService, AssetSearchService, AuthService, AssetService, FlagService } from '../shared'
+import { TitleService, AssetSearchService, AuthService, AssetService } from '_services'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 
 @Component({
