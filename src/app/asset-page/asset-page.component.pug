@@ -9,7 +9,7 @@
             i.icon.icon-arrow-back
             span.d-none.d-md-inline-block {{ 'ASSET_PAGE.LINKS.BACK' | translate}}
         .col-sm-8.col-md-offset-2.col-lg-9.col-lg-offset-1
-          .title-wrap(*ngIf="assets[0]")
+          .title-wrap(*ngIf="assets[0]", tabindex="1")
             .title.text-truncate([innerHTML]="assets[0].title ? assets[0].title : ''", attr.aria-label="{{assets[0].title ? assets[0].title : ''}}, result {{assetNumber}} of {{totalAssetCount - restrictedAssetsCount}}")
             //- Pagination
             .paginator
