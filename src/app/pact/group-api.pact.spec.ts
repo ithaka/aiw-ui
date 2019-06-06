@@ -4,7 +4,8 @@ import { TestBed, getTestBed } from '@angular/core/testing'
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 
 // Project Dependencies
-import { GroupService, GroupList, ImageGroup } from '../shared'
+import { GroupList, ImageGroup } from '../shared'
+import { GroupService } from '_services'
 
 describe('Group Calls #pact #group', () => {
 

@@ -80,7 +80,6 @@ export class AssetPage implements OnInit, OnDestroy {
     public toastHTML: string = ''
 
     // Variables related to how we call for metadata
-    public assetIdProperty: string = 'artstorid'
     public fromOpenLibrary: boolean = false
 
     // Feature Flags
@@ -366,9 +365,6 @@ export class AssetPage implements OnInit, OnDestroy {
             this._assets.allResults.subscribe((allResults) => {
                 // console.log("allResults subscription returned")
                 if (allResults.thumbnails) {
-                    // Set asset id property to reference
-                    this.assetIdProperty = (allResults.thumbnails[0] && allResults.thumbnails[0].objectId) ? 'objectId' : 'artstorid'
-
                     this.prevAssetResults.thumbnails = allResults.thumbnails
                     this.restrictedAssetsCount = allResults.restricted_thumbnails.length
                     if (this.loadArrayFirstAsset) {
@@ -388,7 +384,7 @@ export class AssetPage implements OnInit, OnDestroy {
                             if (this.assetGroupId) {
                                 queryParams['groupId'] = this.assetGroupId
                             }
-                            this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0][this.assetIdProperty], queryParams]);
+                            this._router.navigate(['/asset', this.prevAssetResults.thumbnails[0].id, queryParams]);
                         }
                     }
                     else if (this.loadArrayLastAsset) {
@@ -408,7 +404,7 @@ export class AssetPage implements OnInit, OnDestroy {
                             if (this.assetGroupId) {
                                 queryParams['groupId'] = this.assetGroupId
                             }
-                            this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1][this.assetIdProperty], queryParams]);
+                            this._router.navigate(['/asset', this.prevAssetResults.thumbnails[this.prevAssetResults.thumbnails.length - 1].id, queryParams]);
                         }
                     }
                     else {
@@ -510,7 +506,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.meta.updateTag({name: 'DC.type', content: 'Artwork'})
                 this.meta.updateTag({name: 'DC.title', content: asset.title})
                 // this.meta.updateTag({name: 'asset.id"', content: asset.id})
-                let currentAssetId: string = this.assets[0].id || this.assets[0]['objectId'] // couldn't trust the 'this.assetIdProperty' variable
+                let currentAssetId: string = this.assets[0].id
                 // Search returns a 401 if /userinfo has not yet set cookies
                 if (Object.keys(this._auth.getUser()).length !== 0) {
                     // pass collectiontypeIds from asset.collections to getCollectionType function as an array of number
@@ -875,7 +871,7 @@ export class AssetPage implements OnInit, OnDestroy {
         if (this.assetIds[0]) {
             for (let i = 0; i < this.prevAssetResults.thumbnails.length; i++) {
                 // Select the thumbnail if its arstor_id is in assetIds
-                let index: number = this.assetIds.indexOf(this.prevAssetResults.thumbnails[i][this.assetIdProperty])
+                let index: number = this.assetIds.indexOf(this.prevAssetResults.thumbnails[i].id)
                 if (index > -1) {
                     let zoomMatched: boolean = true
                     if(this.prevAssetResults.thumbnails[i].zoom){
@@ -894,7 +890,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 }
 
 
-                // if (this.assetIds.indexOf(this.prevAssetResults.thumbnails[i][this.assetIdProperty]) > -1) {
+                // if (this.assetIds.indexOf(this.prevAssetResults.thumbnails[i].id) > -1) {
                 //     this.prevAssetResults.thumbnails[i].selected = true
                 //     assetIndex = i
                 //     assetFound = true
@@ -975,7 +971,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     queryParams['h'] = this.prevAssetResults.thumbnails[prevAssetIndex]['zoom'].pointHeight
                 }
 
-                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[prevAssetIndex][this.assetIdProperty], queryParams]);
+                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[prevAssetIndex].id, queryParams]);
             }
             else if (this.assetIndex == 0) {
                 this.loadArrayLastAsset = true;
@@ -1014,8 +1010,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     queryParams['w'] = this.prevAssetResults.thumbnails[nextAssetIndex]['zoom'].pointWidth
                     queryParams['h'] = this.prevAssetResults.thumbnails[nextAssetIndex]['zoom'].pointHeight
                 }
-
-                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[nextAssetIndex][this.assetIdProperty], queryParams]);
+                this._router.navigate(['/asset', this.prevAssetResults.thumbnails[nextAssetIndex].id, queryParams]);
             }
             else if ((this.prevAssetResults.thumbnails) && (this.assetIndex == (this.prevAssetResults.thumbnails.length - 1))) {
                 this.loadArrayFirstAsset = true;
@@ -1180,7 +1175,7 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         if (add == true) {
             asset.selected = true;
-            this.assetIds.push(asset[this.assetIdProperty]);
+            this.assetIds.push(asset.id);
             // Push the zoom object for the asset
             let zoomObj: ImageZoomParams = asset.zoom ? {
                 viewerX: parseInt(asset.zoom['viewerX']),
@@ -1673,9 +1668,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
     public isPrimaryAsset(asset: any): boolean{
         let primaryAsset: boolean = true
-        let assetIdProperty =  asset['artstorid'] ? 'artstorid' : 'objectId'
 
-        if (this.assets[0].id === asset[assetIdProperty]){
+        if (this.assets[0].id === asset.id){
             if(asset['zoom']){
                 let primaryAssetZoomObj = this.indexZoomMap[0]
                 if(JSON.stringify(asset['zoom']) !== JSON.stringify(primaryAssetZoomObj)){

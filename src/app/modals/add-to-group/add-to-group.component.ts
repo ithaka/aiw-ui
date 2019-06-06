@@ -7,7 +7,7 @@ import { Angulartics2 } from 'angulartics2'
 import { Router } from '@angular/router'
 
 // Project Dependencies
-import { AssetService, GroupService, AuthService, AssetSearchService, DomUtilityService } from '_services'
+import { AssetService, GroupService, AuthService, DomUtilityService, ThumbnailService } from '_services'
 import { ImageGroup, ImageZoomParams, Asset } from 'datatypes'
 import { ToastService } from 'app/_services'
 
@@ -69,7 +69,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private _assets: AssetService,
-    private _search: AssetSearchService,
+    private _thumbnail: ThumbnailService,
     private _group: GroupService,
     private _angulartics: Angulartics2,
     private completerService: CompleterService,

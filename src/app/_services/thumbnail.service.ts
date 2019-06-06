@@ -34,6 +34,7 @@ export class ThumbnailService {
         multiviewItemCount: 0, // set later from compound_media
         status: 'available', // all search assets are "available"
         img : '', // set later by getThumbnailImg
+        size: 1, // default to size 1, large view uses size 2
         thumbnailImgUrl: cleanedMedia ? cleanedMedia.thumbnailSizeOnePath : '',
         thumbnailUrls: [],
         media: cleanedMedia,
@@ -88,6 +89,7 @@ export class ThumbnailService {
       multiviewItemCount: item.compoundmediaCount ? item.compoundmediaCount : 0,
       status: item.status,
       img : '',
+      size: 1, // default to size 1, large view uses size 2
       thumbnailImgUrl: item.thumbnailImgUrl,
       zoom: item.zoom,
       iap: item.iap,
@@ -190,7 +192,7 @@ export class ThumbnailService {
     let receivedFullUrl: boolean
     // Set default size
     if (!size) {
-      size = 2
+      size = thumbData.size ? thumbData.size : 2
     }
     // Handle variations of Multi Views
     if (typeof(thumbData.tileSource) !== 'undefined' && thumbData.thumbnail_url === thumbData.tileSource) {

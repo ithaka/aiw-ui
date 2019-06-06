@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 
 // Project Dependencies
-import { AssetService, AssetSearchService, DomUtilityService } from '_services';
+import { AssetService, DomUtilityService, ThumbnailService } from '_services';
 import { Asset } from '../../asset-page/asset';
 
 @Component({
@@ -23,7 +23,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
 
   constructor(
     private _assets: AssetService,
-    private _search: AssetSearchService,
+    private _thumbnail: ThumbnailService,
     private _dom: DomUtilityService
   ) { }
 

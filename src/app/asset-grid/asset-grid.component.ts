@@ -698,8 +698,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     let newItemsArray: any[] = [];
     // Construct the updated array of item objects containing id and zoom if avilable
     for (let i = 0; i < this.allResults.length; i++) {
-      if ('objectId' in this.allResults[i]) {
-        let itemObj = { id: this.allResults[i]['objectId'] }
+      if ('id' in this.allResults[i]) {
+        let itemObj = { id: this.allResults[i].id }
         if(this.allResults[i]['zoom']) {
           itemObj['zoom'] = this.allResults[i]['zoom']
         }
@@ -783,15 +783,9 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   private isSelectedAsset(asset: any): number{
     let index: number = -1
-    let assetIdProperty =  'artstorid'
-
-    // some services return assets with objectId instead of artstorid, so check the first one and use that
-    if (this.selectedAssets[0] && !this.selectedAssets[0].hasOwnProperty('artstorid')) {
-      assetIdProperty = 'objectId'
-    }
     let len = this.selectedAssets.length
     for (let i = 0; i < len; i++){
-      if (this.selectedAssets[i][assetIdProperty] === asset[assetIdProperty]){
+      if (this.selectedAssets[i].id === asset.id){
 
         // Also consider zoom detail for exact match on assets
         let zoomMatched: boolean = true
@@ -850,7 +844,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    * Returns asset path for linking
    */
   private getAssetPath(asset): string[] {
-    let params = ['/asset', asset.objectId ? asset.objectId : asset.artstorid]
+    let params = ['/asset', asset.id]
     if (this.ig && this.ig.id) {
       params.push({ 'groupId' : this.ig.id })
     }

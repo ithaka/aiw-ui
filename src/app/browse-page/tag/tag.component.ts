@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core'
 // Project Dependencies
 import { TagsService } from '../tags.service'
 import { Tag } from './tag.class'
-import { AssetService } from 'app/_services'
+import { ThumbnailService } from 'app/_services'
 
 @Component({
   selector: 'ang-tag',
@@ -24,8 +24,8 @@ export class TagComponent {
   private loading: boolean = false;
 
   constructor(
-    private _assets: AssetService,
-    private _tags: TagsService
+    public _thumbnail: ThumbnailService,
+    private _tags: TagsService,
   ) {
 
   }

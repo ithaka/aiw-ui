@@ -4019,7 +4019,7 @@ button.close {
   .bs-popover-top .arrow::before, .bs-popover-auto[x-placement^="top"] .arrow::before {
     bottom: 0;
     border-top-color: rgba(0, 0, 0, 0.25); }
-  
+
   .bs-popover-top .arrow::after,
   .bs-popover-auto[x-placement^="top"] .arrow::after {
     bottom: 1px;
@@ -4039,7 +4039,7 @@ button.close {
   .bs-popover-right .arrow::before, .bs-popover-auto[x-placement^="right"] .arrow::before {
     left: 0;
     border-right-color: rgba(0, 0, 0, 0.25); }
-  
+
   .bs-popover-right .arrow::after,
   .bs-popover-auto[x-placement^="right"] .arrow::after {
     left: 1px;
@@ -4056,7 +4056,7 @@ button.close {
   .bs-popover-bottom .arrow::before, .bs-popover-auto[x-placement^="bottom"] .arrow::before {
     top: 0;
     border-bottom-color: rgba(0, 0, 0, 0.25); }
-  
+
   .bs-popover-bottom .arrow::after,
   .bs-popover-auto[x-placement^="bottom"] .arrow::after {
     top: 1px;
@@ -4085,7 +4085,7 @@ button.close {
   .bs-popover-left .arrow::before, .bs-popover-auto[x-placement^="left"] .arrow::before {
     right: 0;
     border-left-color: rgba(0, 0, 0, 0.25); }
-  
+
   .bs-popover-left .arrow::after,
   .bs-popover-auto[x-placement^="left"] .arrow::after {
     right: 1px;
@@ -6831,7 +6831,7 @@ main {
 
 /**
  * # Typography
- * All type styles 
+ * All type styles
  */
 a, .translate-flyout a, .translate-flyout a.goog-te-menu-value, button, h1, .h1, h2, .h2, h3, .h3, .row-hdr, p, html, h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5, .meta-block, .alert, .translate-flyout .goog-te-gadget-simple {
   font-family: Verdana, Arial, sans-serif;
@@ -6958,7 +6958,7 @@ h3, .h3 {
 
 /**
  * # Base
- * Styles for default HTML elements (not including type, eg. H1, H2, P...) 
+ * Styles for default HTML elements (not including type, eg. H1, H2, P...)
  */
 /**
  * @atom Horizontal Rule
@@ -7369,6 +7369,12 @@ ngx-tag-input > form > input {
 
 .icon-search {
   background-image: url("/assets/img/icon-search.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% auto; }
+
+.icon-arrow-back {
+  background-image: url("/assets/img/icon-arrow-back.svg");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 100% auto; }
@@ -8275,7 +8281,7 @@ img.no-stretch {
       border: none;
       box-shadow: none;
       outline: 0; }
-  
+
   .medium-editor-toolbar-form a,
   .medium-editor-toolbar-form .translate-flyout a.goog-te-menu-value,
   .translate-flyout .medium-editor-toolbar-form a.goog-te-menu-value {
@@ -8365,7 +8371,7 @@ img.no-stretch {
     box-sizing: border-box;
     color: #ccc;
     height: 50px; }
-  
+
   .medium-editor-toolbar-form a,
   .medium-editor-toolbar-form .translate-flyout a.goog-te-menu-value,
   .translate-flyout .medium-editor-toolbar-form a.goog-te-menu-value {

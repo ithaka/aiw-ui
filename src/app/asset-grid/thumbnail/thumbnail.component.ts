@@ -79,9 +79,10 @@ export class ThumbnailComponent implements OnInit, OnChanges {
 
   // Fires when the component input(s) (i.e largeThmbView) changes - Updates the thumbnailSize based on largeThmbView current value
   ngOnChanges(changes: SimpleChanges) {
-    // if (changes.largeThmbView){
-    //   this.thumbnail.size = changes.largeThmbView.currentValue ? 2 : 1
-    // }
+    if (changes.largeThmbView){
+      this.thumbnail.size = changes.largeThmbView.currentValue ? 2 : 1
+      this.thumbnail.img = this._thumbnail.getThumbnailImg(this.thumbnail)
+    }
   }
 
   openLink(event: Event, urlParams: any[]) {
@@ -113,9 +114,11 @@ export class ThumbnailComponent implements OnInit, OnChanges {
 
   // If large thumbnail image fails to load, fallback to smaller thumbnail image
   thumbnailError(): void{
-    if (this.thumbnail.size > 1) {
+    console.log("Thumbnail error!", this.thumbnail.size)
+    if (this.thumbnail.size > 0) {
       this.thumbnail.size--
       this.thumbnail.img = this._thumbnail.getThumbnailImg(this.thumbnail)
+      console.log("New img url:", this.thumbnail.img)
     }
   }
 
