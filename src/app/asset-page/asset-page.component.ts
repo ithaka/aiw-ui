@@ -1010,8 +1010,6 @@ export class AssetPage implements OnInit, OnDestroy {
                     queryParams['w'] = this.prevAssetResults.thumbnails[nextAssetIndex]['zoom'].pointWidth
                     queryParams['h'] = this.prevAssetResults.thumbnails[nextAssetIndex]['zoom'].pointHeight
                 }
-                console.log("SHOW NEXT")
-                console.log(this.prevAssetResults.thumbnails, this.prevAssetResults.thumbnails[nextAssetIndex])
                 this._router.navigate(['/asset', this.prevAssetResults.thumbnails[nextAssetIndex].id, queryParams]);
             }
             else if ((this.prevAssetResults.thumbnails) && (this.assetIndex == (this.prevAssetResults.thumbnails.length - 1))) {
