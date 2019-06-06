@@ -5,7 +5,7 @@
     .title-nav-cntnr.col-md-12([class.hidden]="isFullscreen")
       .row
         .col-2
-          span.back-results(*ngIf="prevRouteParams.length > 0", (keyup.enter)="backToResults()", (click)="backToResults()", tabindex="1", aria-label="Back to results", role="link")
+          span#previousPageLink.back-results(*ngIf="prevRouteParams.length > 0", (keyup.enter)="backToResults()", (click)="backToResults()", tabindex="1", aria-label="Back to results", role="link")
             i.icon.icon-arrow-back
             span.d-none.d-md-inline-block {{ 'ASSET_PAGE.LINKS.BACK' | translate}}
         .col-sm-8.col-md-offset-2.col-lg-9.col-lg-offset-1
