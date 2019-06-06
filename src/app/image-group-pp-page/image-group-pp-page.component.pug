@@ -12,6 +12,12 @@
                 [attr.alt]="asset.title ? 'Thumbnail of ' + asset.title : 'No title available'"
               )
           .col-md-8
-            .meta-block(*ngFor="let metadata of asset.tombstone")
+            .meta-block
               .label
-                .value([innerHTML]="metadata")
+                .value([innerHTML]="asset.name")
+            .meta-block
+              .label
+                .value([innerHTML]="asset.agent")
+            .meta-block
+              .label
+                .value([innerHTML]="asset.date")
