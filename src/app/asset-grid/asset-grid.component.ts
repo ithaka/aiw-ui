@@ -14,12 +14,11 @@ import {
   GroupService,
   ImageGroupService,
   LogService,
-  Thumbnail,
   ToolboxService,
   FlagService,
-  DomUtilityService,
-  ImageGroup
-} from '../shared'
+  DomUtilityService
+} from '_services'
+import { AssetThumbnail, ImageGroup } from 'datatypes'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { APP_CONST } from '../app.constants'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
@@ -593,8 +592,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     }
   }
 
-  private constructNavigationCommands (thumbnail: Thumbnail) : any[] {
-    let assetId = thumbnail.objectId ? thumbnail.objectId : thumbnail.artstorid
+  private constructNavigationCommands (thumbnail: AssetThumbnail) : any[] {
+    let assetId = thumbnail.id
     let params: any = {
       prevRouteTS: this.prevRouteTS // for fetching previous route params from session storage, on asset page
     }
@@ -699,8 +698,8 @@ export class AssetGrid implements OnInit, OnDestroy {
     let newItemsArray: any[] = [];
     // Construct the updated array of item objects containing id and zoom if avilable
     for (let i = 0; i < this.allResults.length; i++) {
-      if ('objectId' in this.allResults[i]) {
-        let itemObj = { id: this.allResults[i]['objectId'] }
+      if ('id' in this.allResults[i]) {
+        let itemObj = { id: this.allResults[i].id }
         if(this.allResults[i]['zoom']) {
           itemObj['zoom'] = this.allResults[i]['zoom']
         }
@@ -784,15 +783,9 @@ export class AssetGrid implements OnInit, OnDestroy {
    */
   private isSelectedAsset(asset: any): number{
     let index: number = -1
-    let assetIdProperty =  'artstorid'
-
-    // some services return assets with objectId instead of artstorid, so check the first one and use that
-    if (this.selectedAssets[0] && !this.selectedAssets[0].hasOwnProperty('artstorid')) {
-      assetIdProperty = 'objectId'
-    }
     let len = this.selectedAssets.length
     for (let i = 0; i < len; i++){
-      if (this.selectedAssets[i][assetIdProperty] === asset[assetIdProperty]){
+      if (this.selectedAssets[i].id === asset.id){
 
         // Also consider zoom detail for exact match on assets
         let zoomMatched: boolean = true
@@ -851,7 +844,7 @@ export class AssetGrid implements OnInit, OnDestroy {
    * Returns asset path for linking
    */
   private getAssetPath(asset): string[] {
-    let params = ['/asset', asset.objectId ? asset.objectId : asset.artstorid]
+    let params = ['/asset', asset.id]
     if (this.ig && this.ig.id) {
       params.push({ 'groupId' : this.ig.id })
     }
@@ -877,9 +870,9 @@ export class AssetGrid implements OnInit, OnDestroy {
    * - Owner of Group only
    * @requires browser
    */
-  private removeFromGroup(assetsToRemove: Thumbnail[], clearRestricted?: boolean): void {
+  private removeFromGroup(assetsToRemove: AssetThumbnail[], clearRestricted?: boolean): void {
     for (let i = 0; i < assetsToRemove.length; i++) {
-      let assetId = assetsToRemove[i].objectId
+      let assetId = assetsToRemove[i].id
       let igIndex = this.ig.items.indexOf(assetId)
       // Passing -1 will splice the wrong asset!
       if (igIndex >= 0) {

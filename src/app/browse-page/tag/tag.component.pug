@@ -3,7 +3,7 @@ div(id="tagItem{{ tag.tagId }}", [ngClass]="[ tag.canOpen ? 'clickable' : '', 't
   a.tag-link(id="tagItem{{ tag.tagId }}Open", title="{{ tag.title }}", [ngClass]="{ 'no-link' : linkRoute.length < 1 || !tag.canOpen }", [routerLink]="[ linkRoute, tag.tagId ]")
     span.notranslate {{tag.title}}
   .info-cntnr([ngbCollapse]="tag.isCollapsed", *ngIf="tag.description")
-    img(*ngIf="tag.thumbnail.length > 0", [src]="_assets.makeThumbUrl(tag.thumbnail)")
+    img(*ngIf="tag.thumbnail.length > 0", [src]="_thumbnail.makeThumbUrl(tag.thumbnail)")
     .desc([innerHTML]="tag.description")
 //- Sets up for tag's children, and applies ngbCollapse (hides child element) based on whether or not parent is collapsed
 .container--slide

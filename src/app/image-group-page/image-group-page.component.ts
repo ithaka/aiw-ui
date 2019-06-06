@@ -10,14 +10,13 @@ import {
   AssetService,
   AuthService,
   TitleService,
-  ImageGroup,
   ImageGroupService,
   GroupService,
-  DomUtilityService
-} from './../shared'
-
+  DomUtilityService,
+  ToastService
+} from '_services'
 import { LoadingStateOptions, LoadingState } from './../modals/loading-state/loading-state.component'
-import { ToastService } from 'app/_services'
+import { ImageGroup } from 'datatypes'
 
 @Component({
   selector: 'ang-image-group',

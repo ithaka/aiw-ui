@@ -6,9 +6,9 @@ import { Angulartics2 } from 'angulartics2'
 import { throwError } from 'rxjs'
 import { map, take, catchError } from 'rxjs/operators'
 
-import { AuthService } from './../shared'
+// Project Dependencies
+import { AuthService } from './../_services'
 import { USER_ROLES, USER_DEPTS, UserRolesAndDepts } from './user-roles'
-import { HttpErrorResponse } from '@angular/common/http'
 
 @Component({
   selector: 'ang-register-page',
@@ -100,6 +100,7 @@ export class RegisterComponent implements OnInit {
 
   /** Gets called when the registration form is submitted */
   public registerSubmit(formValue: any) {
+
     this.registerCall = (value) => { return this._auth.registerUser(value) }
     this.serviceErrors = {}
     this.submitted = true
@@ -115,7 +116,7 @@ export class RegisterComponent implements OnInit {
       role: formValue.role,
       dept: formValue.dept,
       info: formValue.info,
-      survey: formValue.survey,
+      survey: formValue.info,
       portal: 'library'
     }
 
@@ -165,7 +166,7 @@ export class RegisterComponent implements OnInit {
     }
     else if (formSubmissionResponse['statusMessage'] === 'User already exists.' && formSubmissionResponse['statusCode'] === 1) {
       this.serviceErrors.duplicate = true
-    } 
+    }
     else if (formSubmissionResponse['statusCode'] === 3 || formSubmissionResponse['statusMessage'].indexOf('registered with Google') >= 0) {
       this.serviceErrors.hasGoogle = true
     }

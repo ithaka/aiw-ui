@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
 
-import { AssetService } from './../shared/assets.service';
-import { TagsService } from './tags.service';
-import { Tag } from './tag/tag.class';
-import { TitleService } from '../shared/title.service';
+// Project Dependencies
+import { AssetService, TitleService } from '_services'
+import { TagsService } from './tags.service'
+import { Tag } from './tag/tag.class'
 
 @Component({
   selector: 'ang-browse-commons',

@@ -113,11 +113,6 @@
       "check-finally",
       "check-whitespace"
     ],
-    "quotemark": [
-      true,
-      "single",
-      "avoid-escape"
-    ],
     "semicolon": [false, "never"],
     "variable-name": [
       true,

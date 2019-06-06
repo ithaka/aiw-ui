@@ -1,11 +1,10 @@
-import { DomUtilityService } from 'app/shared';
 import { Router } from '@angular/router'
 import { Component, OnInit, EventEmitter, Input, Output, ElementRef, ViewChild } from '@angular/core'
 import { Location } from '@angular/common'
 import { map, take } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService } from '../../shared'
+import { AuthService, DomUtilityService } from '_services'
 
 @Component({
   selector: 'ang-access-denied-modal',

@@ -56,7 +56,7 @@
         background-position: center center;
         background-size: 100% auto;
 
-        &:hover, &:focus, &:active, 
+        &:hover, &:focus, &:active,
         .btn:hover &, .btn:focus &,
         a:hover &, a:focus & {
             background-image: url('/assets/img/icon-' + $name + '--hover.' + $imageType);
@@ -64,6 +64,7 @@
     }
 }
 
+@include icon('arrow-back', 'svg');
 @include icon('search', 'svg');
 @include icon('filter', 'png');
 @include icon('up', 'svg');

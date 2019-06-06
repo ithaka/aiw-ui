@@ -8,10 +8,10 @@ import { Router, NavigationStart, NavigationEnd } from '@angular/router'
 import { TranslateService } from '@ngx-translate/core'
 import { map, take } from 'rxjs/operators'
 
+// Project Dependencies
 import { AppConfig } from './app.service'
-import { ScriptService, FlagService } from './shared'
-import { isPlatformBrowser } from '@angular/common';
-import { DomUtilityService } from 'app/shared';
+import { isPlatformBrowser } from '@angular/common'
+import { DomUtilityService, FlagService, ScriptService } from '_services'
 
 // Server only imports
 import * as enTranslation from '../assets/i18n/en.json'
@@ -186,7 +186,7 @@ export class AppComponent {
             this.resetOgpTags();
           }
 
-          // Show Ethnio survey on browse/groups and /group/id
+          // Show OIV Ethnio survey on browse/groups and /group/id
           if (event.url.indexOf('/browse/groups') > -1 || event.url.indexOf('/group/') > -1) {
             this._script.loadScript('ethnio-survey')
           }

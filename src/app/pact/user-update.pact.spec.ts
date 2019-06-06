@@ -6,7 +6,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http'
 import { map } from 'rxjs/operators'
 
 // Project Dependencies
-import { AccountService } from './../shared'
+import { AccountService } from '_services'
 
 describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
@@ -61,6 +61,8 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
     }
   ]
 
+
+  // Describes PUT path: '/api/secure/user/id'
   describe("update individual user properties", () => {
 
     beforeAll(function (done) {

@@ -1,8 +1,8 @@
 import { Component, OnInit, Output, Input, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 
-import { AuthService } from './../../shared/auth.service';
-import { Asset } from './../asset';
-import { DomUtilityService } from 'app/shared';
+// Project Dependencies
+import { AuthService, DomUtilityService } from '_services'
+import { Asset } from './../asset'
 
 @Component({
   selector: 'ang-agree-modal',

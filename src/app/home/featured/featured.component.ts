@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, Inject, PLATFORM_ID } from '@angular/core';
-import { AppConfig } from '../../app.service';
 
 // Project Dependencies
-import { AuthService } from '../../shared';
-import { FeaturedCollection } from './featured-collection';
-import { isPlatformBrowser } from '@angular/common';
+import { AppConfig } from '../../app.service'
+import { AuthService } from '_services'
+import { FeaturedCollection } from './featured-collection'
+import { isPlatformBrowser } from '@angular/common'
 
 @Component({
   selector: 'ang-featured',

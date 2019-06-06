@@ -1,7 +1,9 @@
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
-import { DomUtilityService, ScriptStore } from '../shared';
+// Project Dependencies
+import { DomUtilityService } from './dom-utility.service'
+import { ScriptStore } from './script.store'
 
 declare var document: any;
 

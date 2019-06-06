@@ -3,7 +3,7 @@ import { Component, OnInit, EventEmitter, Input, Output, ElementRef, ViewChild }
 import { Location } from '@angular/common'
 
 // Project Dependencies
-import { DomUtilityService } from 'app/shared'
+import { DomUtilityService } from '_services'
 import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/public_api';
 @Component({
   selector: 'ang-server-error-modal',

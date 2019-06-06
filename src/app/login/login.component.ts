@@ -6,8 +6,9 @@ import { CompleterService, LocalData } from 'ng2-completer'
 import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 
+// Project Dependencies
 import { AppConfig } from '../app.service'
-import { AuthService, User, AssetService, FlagService } from './../shared'
+import { AuthService, User, AssetService, FlagService } from './../_services'
 import { environment } from 'environments/environment'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
 

@@ -13,7 +13,8 @@ import { AppConfig } from '../app.service'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { APP_CONST } from '../app.constants'
-import { Thumbnail, AssetData } from './datatypes';
+import { AssetThumbnail } from 'datatypes'
+import { ThumbnailService } from 'app/_services/thumbnail.service' // specific to avoid circular dependency
 @Injectable()
 export class AssetSearchService {
 
@@ -42,7 +43,8 @@ export class AssetSearchService {
     private _http: HttpClient,
     private _filters: AssetFiltersService,
     private _auth: AuthService,
-    private _app: AppConfig
+    private _app: AppConfig,
+    private _thumbnail: ThumbnailService
   ) {
     this.showCollectionType = this._app.config.advSearch.showCollectionTypeFacet
   }
@@ -362,40 +364,8 @@ export class AssetSearchService {
         }
 
         // media comes as a json string, so we'll parse it into an object for each result
-        let cleanedResults: SearchAsset[] = res.results.map((item) => {
-          let cleanedSSID: string = item.doi.substr(item.doi.lastIndexOf('.') + 1) // split the ssid off the doi
-          let cleanedMedia: MediaObject
-          if (item && item.media && typeof item.media == 'string') { cleanedMedia = JSON.parse(item.media) }
-          let cleanedAsset: SearchAsset = Object.assign(
-            {}, // assigning it to a new object
-            item, // base is the raw item returned from search
-            { // this object contains all of the new properties which exist on a cleaned asset
-              media: cleanedMedia, // assign a media object instead of a string
-              ssid: cleanedSSID, // assign the ssid, which is taken off the doi
-              thumbnailUrls: [] // this is only the array init - we add the urls later
-            }
-          )
-          // Parse stringified compound media if available
-          if (cleanedAsset.compound_media) {
-            cleanedAsset.compound_media_json = JSON.parse(cleanedAsset.compound_media)
-          }
-          // Use the compound media thumbnail url where sequenceNum equals 1
-          if (cleanedAsset && cleanedAsset.compound_media_json && cleanedAsset.compound_media_json.objects) {
-            let compoundAsset = cleanedAsset.compound_media_json.objects.filter((item) => {
-              return item['sequenceNum'] === 1
-            })
-
-            if (compoundAsset[0]) {
-              cleanedAsset.thumbnailUrls.push(this._auth.getThumbHostname(true) + compoundAsset[0].thumbnailSizeOnePath)
-            }
-          }
-          else { // make the thumbnail urls and add them to the array
-            for (let i = 1; i <= 5; i++) {
-              cleanedAsset.thumbnailUrls.push(this.makeThumbUrl(cleanedAsset.media.thumbnailSizeOnePath, i))
-            }
-          }
-
-          return cleanedAsset
+        let cleanedResults: AssetThumbnail[] = res.results.map((item) => {
+          return this._thumbnail.searchAssetToThumbnail(item)
         })
 
         // create the cleaned response to pass to caller
@@ -450,7 +420,7 @@ export class AssetSearchService {
    *
    * @param assetId The id of the desired asset
    */
-  public getAssetById(assetId: string, ssid?: boolean): Observable<SearchAsset> {
+  public getAssetById(assetId: string, ssid?: boolean): Observable<AssetThumbnail> {
     let assetQuery: SearchRequest = {
       query: ssid ? 'ssid:' + assetId : assetId,
       content_types: ['art']
@@ -463,7 +433,7 @@ export class AssetSearchService {
     ).pipe(
       map((res) => {
         // search through results and make sure the id's match
-        let desiredAsset: SearchAsset = res.results.find((asset) => {
+        let desiredAsset: any = res.results.find((asset) => {
           if(ssid) {
             // extract ssid from doi field value
             return asset.doi.split('/')[1].replace('artstor.', '') === assetId
@@ -473,89 +443,11 @@ export class AssetSearchService {
         })
 
         if (desiredAsset) {
-          return desiredAsset
+          return this._thumbnail.searchAssetToThumbnail(desiredAsset)
         } else {
           throw new Error('No results found for the requested id')
         }
       }))
-  }
-
-  /**
-   * Generate Thumbnail URL
-   * @param thumbData: AssetData | Thumbnail - returned by search service, metadata service, or group service
-   * @param size: number - sizes 0 through 4 are acceptable
-   */
-  public makeThumbUrl(thumbData: any, size?: number): string {
-    let imagePath: string
-    let isMultiView: boolean
-    let isThumbnailImgUrl: boolean
-    let isDowngradedMultiView: boolean
-    let receivedFullUrl: boolean
-    // Set default size
-    if (!size) {
-      size = 1
-    }
-    // Handle variations of Multi Views
-    if (typeof(thumbData.tileSource) !== 'undefined' && thumbData.thumbnail_url === thumbData.tileSource) {
-      // Handle downgraded Multi View
-      isDowngradedMultiView = true
-    } else if (typeof(thumbData.tileSource) === 'object' && thumbData.tileSource.length) {
-      // Check if multi-view, when via search service
-      isMultiView = true
-    } else if (thumbData.compoundmediaCount) {
-      // Check if multi-view, when via group service
-      isMultiView = true
-    }
-    // Check thumbnail url source
-    if (thumbData.thumbnailImgUrl) {
-      isThumbnailImgUrl = true
-      imagePath = thumbData.thumbnailImgUrl
-    } else {
-      imagePath = thumbData.thumbnail_url
-    }
-    // Test for full url 
-    receivedFullUrl = /\/\/[\W\D]*(artstor.org)/.test(imagePath)
-    // Multiviews and downgraded views receive FULL URLS via "thumbnail_url"
-    // Group list service returns full urls as thumbnailImgUrl
-    if ((isMultiView || isDowngradedMultiView) && receivedFullUrl) {
-      return imagePath;
-    }
-    else if (isMultiView && isThumbnailImgUrl) {
-      return this._auth.getThumbHostname(isMultiView) + imagePath;
-    }
-    else if (imagePath) {
-      if (size) {
-        imagePath = imagePath.replace(/(size)[0-4]/g, 'size' + size);
-      }
-      // Ensure relative
-      if (imagePath.indexOf('artstor.org') > -1) {
-        imagePath = imagePath.substring(imagePath.indexOf('artstor.org') + 12);
-      }
-
-      if (imagePath[0] != '/') {
-        imagePath = '/' + imagePath;
-      }
-
-      if (imagePath.indexOf('thumb') < 0) {
-        imagePath = '/thumb' + imagePath;
-      }
-    } else {
-      imagePath = '';
-    }
-    // Determine if hostname should be appended
-    return this._auth.getThumbHostname() + imagePath;
-  }
-
-
-  /**
-   * Generate Thumbnail URL for detailed view using the zoom property of the thumbnail
-   */
-  public makeDetailViewThmb(thumbnailObj: any): string{
-    let thumbURL: string = ''
-    let tileSourceHostname = (this._auth.getEnv() == 'test') ? '//tsstage.artstor.org' : '//tsprod.artstor.org'
-    let imgURL = thumbnailObj['thumbnailImgUrl'].replace('/thumb/imgstor/size0', '').replace('.jpg', '.fpx')
-    thumbURL = tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgURL) + '/' + thumbnailObj['zoom']['viewerX'] + ',' + thumbnailObj['zoom']['viewerY'] + ',' + thumbnailObj['zoom']['pointWidth'] + ',' + thumbnailObj['zoom']['pointHeight'] + '/,115/0/native.jpg'
-    return thumbURL
   }
 }
 
@@ -572,7 +464,7 @@ export interface SearchResponse {
   }[]
   bad_request: boolean
   requestId: string
-  results: SearchAsset[]
+  results: RawSearchAsset[]
   total: number // total number of assets returned
   hierarchies2: HierarchicalFilter
 }
@@ -595,7 +487,10 @@ export interface RawSearchResponse {
   hierarchies2: HierarchicalFilter
 }
 
-// the data returned from search in the results array
+/**
+ * Raw thumbnail/asset object returned by:
+ * Search Service (Team Sycamore/Search)
+ */
 export interface RawSearchAsset {
   agent: string // creator of the piece
   artstorid: string // the correct id to reference when searching for artstor assets
@@ -603,13 +498,14 @@ export interface RawSearchAsset {
   collections: string[] // array of collections this asset exists under
   collectiontypenameid: string[]
   collectiontypes: number[] // all of the collection types this asset fits
+  compound_media: string // json as string
   contributinginstitutionid: number // which institution added the asset
   date: string // a string entered by the user, not an actually useful date other than display
   doi: string // ex: "10.2307/artstor.16515779"
   frequentlygroupedwith: string[] // array of other asset ids this image is grouped with
   iap: boolean // do we support Images for Academic Publishing for the asset
   // id: string // the id used by the SOLR cluster, which is not reliable, therefore it's left commented out
-  media: string // this one is weird because it's a json object encoded as a string
+  media: string // json as string
   name: string // the asset's name
   partofcluster: boolean
   tokens: string[]

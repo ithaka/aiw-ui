@@ -42,7 +42,8 @@ module.exports = function (config) {
         port: 1201,
         dir: 'pacts/',
         consumer: 'aiw-ui',
-        provider: 'binder-group'
+        provider: 'binder-group',
+        pactFileWriteMode: 'merge'
       },
       {
         cors: true,
@@ -50,7 +51,8 @@ module.exports = function (config) {
         port: 1202,
         dir: 'pacts/',
         consumer: 'aiw-ui',
-        provider: 'binder-metadata'
+        provider: 'binder-metadata',
+        pactFileWriteMode: 'merge'
       },
       {
         cors: true,
@@ -58,7 +60,8 @@ module.exports = function (config) {
         port: 1203,
         dir: 'pacts/',
         consumer: 'aiw-ui',
-        provider: 'artaa_service'
+        provider: 'artaa_service',
+        pactFileWriteMode: 'merge'
       },
       {
         cors: true,
@@ -66,8 +69,18 @@ module.exports = function (config) {
         port: 1204,
         dir: 'pacts/',
         consumer: 'aiw-ui',
-        provider: 'binder-collections'
-      }
+        provider: 'binder-collections',
+        pactFileWriteMode: 'merge'
+      },
+      {
+        cors: true,
+        host: 'localhost',
+        port: 1205,
+        dir: 'pacts/',
+        consumer: 'aiw-ui',
+        provider: 'artaa_service',
+        pactFileWriteMode: 'merge'
+      },
     ],
     // 4) here we can define proxies to redirect requests from our pact tests to the mock server
     proxies: {
@@ -79,6 +92,9 @@ module.exports = function (config) {
       // User Endpoints
       '/api/secure/user/': 'http://localhost:1203/api/secure/user/',
       '/api/secure/user/abcdefg': 'http://localhost:1203/api/secure/user/abcdefg',
+      // User Registration
+      '/api/secure/register': 'http://localhost:1205/api/secure/register',
+
       // Collection Endpoints
       '/api/v1/categorydesc/10374058879': 'http://localhost:1204/api/v1/categorydesc/10374058879',
       '/api/v1/collections/103/categorynames': 'http://localhost:1204/api/v1/collections/103/categorynames',

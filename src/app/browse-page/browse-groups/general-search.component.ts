@@ -2,7 +2,9 @@ import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild }
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
-import { DomUtilityService } from 'app/shared';
+
+// Project Dependencies
+import { DomUtilityService } from '_services'
 
 @Component({
   selector: 'ang-general-search',
