@@ -5,7 +5,7 @@ import { Subscription }   from 'rxjs'
 import { map, take } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetService, AssetSearchService, AuthService, ImageGroupService } from '_services'
+import { AssetService, AssetSearchService, AuthService, ImageGroupService, ThumbnailService } from '_services'
 import { ImageGroupDescription } from 'datatypes'
 
 @Component({
@@ -35,6 +35,7 @@ export class ImageGroupPPPage implements OnInit, OnDestroy {
     private _router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
+    public _thumbnail: ThumbnailService
   ) {}
 
   ngOnInit() {
