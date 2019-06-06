@@ -34,7 +34,7 @@ $titleNavBg: #eee;
     .back-results {
         z-index: 8000;
         position: absolute;
-        left: 0px;
+        left: 40px;
         top: 8px;
         display: inline;
         white-space: nowrap;
@@ -46,6 +46,10 @@ $titleNavBg: #eee;
             width: 16px;
             height: 16px;
             margin-right: 10px;
+        }
+
+        @media(max-width: $phone) {
+            left: 0px;
         }
 
         // Note: This span contains the back to results text and has 2px padding-top to
@@ -69,11 +73,29 @@ $titleNavBg: #eee;
     }
 }
 
-.title-nav-cntnr i {
-    vertical-align: top;
-    margin: 3px;
-    cursor: pointer;
+.title-nav-cntnr {
+    & i {
+        vertical-align: top;
+        margin: 3px;
+        cursor: pointer;
+    }
+    
+    & .paginator i {
+        // By increasing the size of the icon, we increase the hitbox/click-ability
+        width: 1.5em;
+        height: 1.5em;
+        border-radius: 2px;
+        background-size: 75% 75%;
+        margin: 0px;
+        background-position: center;
+        background-repeat: no-repeat;
+
+        &:hover, &:focus {
+            background-color: rgba(0,0,0,0.1);
+        }
+    }
 }
+
 .title-nav-cntnr.col-md-12.title {
     display: inline-block;
     max-width: 400px;
