@@ -62,7 +62,7 @@ import { ImageGroup } from 'datatypes'
     /**
      * Routes user to fullscreen, presentation mode via Asset Page
      */
-    public presentGroup(): void {
+    public presentStudyGroup( type: string ): void {
       let id = ''
       if(this.ig.items[0] && this.ig.items[0].id) {
         id = this.ig.items[0].id
@@ -71,26 +71,22 @@ import { ImageGroup } from 'datatypes'
       }
       let queryParams = {
         prevRouteTS: this._assets.currentPreviousRouteTS ,
-        groupId: this.ig.id,
-        presentMode: true
+        groupId: this.ig.id
       }
-      // Enter fullscreen - must fire within click binding (Firefox, Safari)
-      this._toolbox.requestFullScreen()
-      // Route to viewer
-      this._router.navigate(['/asset', id, queryParams]);
-    }
 
-    public studyGroup(): void {
-      let id = ''
-      if(this.ig.items[0] && this.ig.items[0].id) {
-        id = this.ig.items[0].id
-      } else {
-        id = this.ig.items[0]
+      // Pass presentMode or studyMode param to asset page based on type param passed to the method
+      if(type === 'present') {
+        queryParams['presentMode'] = true
+      } else if(type === 'study')  {
+        queryParams['studyMode'] = true
       }
-      let queryParams = {
-        prevRouteTS: this._assets.currentPreviousRouteTS ,
-        groupId: this.ig.id,
-        studyMode: true
+
+      // Pass zoom params to the asset page if the first asset is a saved detail
+      if(this.ig.items[0] && this.ig.items[0].zoom){
+        queryParams['x'] = this.ig.items[0].zoom.viewerX
+        queryParams['y'] = this.ig.items[0].zoom.viewerY
+        queryParams['w'] = this.ig.items[0].zoom.pointWidth
+        queryParams['h'] = this.ig.items[0].zoom.pointHeight
       }
       // Enter fullscreen - must fire within click binding (Firefox, Safari)
       this._toolbox.requestFullScreen()
