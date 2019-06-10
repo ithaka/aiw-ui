@@ -760,10 +760,15 @@ export class AuthService implements CanActivate {
      * @param email account password should be reset on
      */
     pwdReset(email: string): Promise<any> {
-        let options = { withCredentials: true };
-
+        let options = { 
+          withCredentials: true, 
+          params: { 
+            'email': email, 
+            'portal' : this._app.config.pwResetPortal 
+          }
+        }
         return this.http
-            .get(this.getUrl() + '/lostpw?email=' + email.toLowerCase() + '&portal=' + this._app.config.pwResetPortal, options)
+            .get(environment.API_URL + '/api/lostpw', options)
             .toPromise();
     }
 

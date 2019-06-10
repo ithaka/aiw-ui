@@ -103,8 +103,8 @@ fdescribe('Register form POST /api/secure/register #pact #user-register', () => 
           withRequest: {
             method: 'GET',
             path: '/api/lostpw',
-            qs: {
-              email: Matchers.somethingLike('example@email.com'),
+            query: {
+              email: Matchers.somethingLike('EXAMPLE_EMAIL'),
               portal: Matchers.somethingLike('artstor')
             }
           },
@@ -113,7 +113,7 @@ fdescribe('Register form POST /api/secure/register #pact #user-register', () => 
             body: {
               "msg": Matchers.somethingLike(''),
               "status": true,
-              "username": Matchers.somethingLike('example@email.com')
+              "username": Matchers.somethingLike('EXAMPLE_EMAIL')
             }
           }
         })
@@ -167,15 +167,15 @@ fdescribe('Register form POST /api/secure/register #pact #user-register', () => 
 
     // Test password reset request
     it('should return a successful password reset response', (done) => {
-      _auth.pwdReset('example@email.com')
+      _auth.pwdReset('EXAMPLE_EMAIL')
       .then((data) => {
         expect(data.status).toBe(true)
         // Usernames are not always emails, but we do expect an account name to be returned
-        expect(data.username.length()).toBeGreaterThan(0) 
+        expect(data.username).toBeTruthy('Did not receive "username" propety on /lostpw response')
         done()
       })
       .catch(err => {
-        done.fail('valid password reset query should not fail')
+        done.fail('Valid password reset query should not fail, received: ' + err.message)
       })
       
     })
