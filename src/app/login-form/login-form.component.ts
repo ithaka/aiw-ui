@@ -6,9 +6,10 @@ import { Angulartics2 } from 'angulartics2'
 import { CompleterService, LocalData } from 'ng2-completer'
 import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 
+// Project Dependencies
 import { AppConfig } from '../app.service'
-import { AuthService, User, AssetService } from './../shared'
-import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService, User, AssetService } from '_services'
+import { HttpErrorResponse } from '@angular/common/http'
 
 @Component({
   selector: 'ang-login-form',

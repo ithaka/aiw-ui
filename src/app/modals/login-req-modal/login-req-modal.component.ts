@@ -1,10 +1,10 @@
-import { DomUtilityService } from 'app/shared';
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { AuthService, ToolboxService } from './../../shared';
+// Project Dependencies
+import { AuthService, DomUtilityService, ToolboxService } from './../../_services';
 
 @Component({
   selector: 'ang-login-req-modal',

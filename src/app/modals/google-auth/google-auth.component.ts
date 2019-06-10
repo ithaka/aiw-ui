@@ -2,8 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, 
 import { Observable } from 'rxjs';
 import { Angulartics2 } from 'angulartics2';
 
-import { AssetService, AuthService, ImageGroup, DomUtilityService, ScriptService } from './../../shared';
-import { SlidesService } from './../../_services'
+// Project Dependencies
+import { DomUtilityService, ScriptService, SlidesService } from '_services'
 import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/public_api';
 
 @Component({

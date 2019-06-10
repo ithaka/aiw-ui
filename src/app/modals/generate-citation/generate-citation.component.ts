@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild  } from '@angular/core'
 import { DatePipe, Location } from '@angular/common'
 
-import { Asset } from '../../shared'
-import { LogService, DomUtilityService } from '../../shared'
+// Project Dependencies
+import { Asset } from 'datatypes'
+import { LogService, DomUtilityService } from '_services'
 import { AppConfig } from 'app/app.service'
 
 @Component({

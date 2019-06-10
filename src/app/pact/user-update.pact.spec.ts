@@ -6,7 +6,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http'
 import { map } from 'rxjs/operators'
 
 // Project Dependencies
-import { AccountService } from './../shared'
+import { AccountService } from '_services'
 
 describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 

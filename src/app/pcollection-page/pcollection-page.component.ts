@@ -1,13 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
-import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetService } from './../shared/assets.service'
-import { AuthService } from './../shared/auth.service'
-import { TitleService } from '../shared/title.service'
+import { AssetService, AuthService, TitleService } from '_services'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
 
 @Component({
@@ -165,7 +163,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
     let statusArray: Array<any> = []
     for (let ssid of this.publishingAssets['ssids']){
       this._assets.getPCImageStatus(ssid).pipe(
-        map(res => {
+        map((res: HttpErrorResponse) => {
           let assetStatus = '' // i.e. available, publishing_que, publishing_failure
           if (res.status){
             assetStatus = 'available'

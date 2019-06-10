@@ -57,6 +57,7 @@ $desktop: 992px;*/
     z-index: 1000;
     margin: 10px;
     box-shadow: 0 0 4px 1px #0000003b;
+    border-radius: 4px;
 
     .btn--icon {
         height: 40px !important;
@@ -321,10 +322,11 @@ $desktop: 992px;*/
 }
 
 .fullscreen-metadata i{
-    vertical-align: top;
+    vertical-align: middle;
     margin: 3px;
     cursor: pointer;
 }
+
 .fullscreen-metadata .title{
     font-family: 'Lyon Display Web', Georgia, Times;
     font-size: 18px;

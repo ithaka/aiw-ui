@@ -5,8 +5,7 @@ import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetSearchService } from './../shared'
-import { MetadataService } from './../_services'
+import { AssetSearchService, MetadataService, ThumbnailService } from '_services'
 
 @Component({
   selector: 'ang-asset-pp-page',
@@ -26,6 +25,7 @@ export class AssetPPPage implements OnInit {
     private _metadata: MetadataService,
     private _search: AssetSearchService,
     private _router: Router,
+    private _thumbnail: ThumbnailService,
     private route: ActivatedRoute,
     private http: HttpClient,
   ) {}
@@ -42,7 +42,7 @@ export class AssetPPPage implements OnInit {
   }
 
   setThumbnail(asset) {
-    return this._search.makeThumbUrl(asset, 2)
+    return this._thumbnail.makeThumbUrl(asset, 2)
   }
 
   // Load Image Group Assets

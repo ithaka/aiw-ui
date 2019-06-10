@@ -20,33 +20,83 @@ $titleNavBg: #eee;
 }
 
 // Title Prev / Next Asset
-.title-nav-cntnr{
-    // border-bottom: 1px solid #ddd;
+.title-nav-cntnr {
     background: $titleNavBg;
-    padding: 1rem 0;
+    padding: 1.2rem 0;
     text-align: center;
-    font-weight: bold;
-    min-height: 48px;
+    min-height: 70px;
 
     @media(max-width: $phone) {
-        margin-top:22px;
+        margin-top: 22px;
         background: transparent;
     }
 
-    .back-results{
+    .back-results {
+        z-index: 8000;
         position: absolute;
-        left: 20px;
-        font-weight: 400;
-        text-decoration: underline;
+        left: 40px;
+        top: 8px;
+        display: inline;
+        white-space: nowrap;
+        font-weight: bold;
+        font-size: 12px;
         cursor: pointer;
+
+        .icon-arrow-back {
+            width: 16px;
+            height: 16px;
+            margin-right: 10px;
+        }
+
+        @media(max-width: $phone) {
+            left: 0px;
+        }
+
+        // Note: This span contains the back to results text and has 2px padding-top to
+        // align the difference in size between the back (<-)icon and the font-size.
+        // Remove this padding if the font-size changes to be larger than 12px.
+        span {
+          padding-top: 2px;
+        }
+    }
+
+    .paginator {
+        text-align: center;
+        font-size: 12px;
+
+        .icon-left {
+            margin-right: 10px;
+        }
+        .icon-right {
+            margin-left: 10px;
+        }
     }
 }
-.title-nav-cntnr i{
-    vertical-align: top;
-    margin: 3px;
-    cursor: pointer;
+
+.title-nav-cntnr {
+    & i {
+        vertical-align: top;
+        margin: 3px;
+        cursor: pointer;
+    }
+    
+    & .paginator i {
+        // By increasing the size of the icon, we increase the hitbox/click-ability
+        width: 1.5em;
+        height: 1.5em;
+        border-radius: 2px;
+        background-size: 75% 75%;
+        margin: 0px;
+        background-position: center;
+        background-repeat: no-repeat;
+
+        &:hover, &:focus {
+            background-color: rgba(0,0,0,0.1);
+        }
+    }
 }
-.title-nav-cntnr .title{
+
+.title-nav-cntnr.col-md-12.title {
     display: inline-block;
     max-width: 400px;
     margin: auto;
@@ -55,48 +105,25 @@ $titleNavBg: #eee;
     text-overflow: ellipsis;
     vertical-align: top;
 }
-.title-nav-cntnr .page-tooltip{
-    font-weight: normal;
-    font-size: 10px;
-    min-width: 120px;
-    line-height: 21px;
-    display: block;
-    position: absolute;
-    z-index: 5000;
-    top: 100%;
-    left: 50%;
-    -webkit-transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    -o-transform: translateX(-50%);
-    transform: translateX(-50%);
-    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
-    background: white;
-    color: black;
-    padding: 2px 15px 0;
-    opacity: 0;
-    -webkit-transition: opacity linear 0.3s;
-    -moz-transition: opacity linear 0.3s;
-    transition: opacity linear 0.3s;
-
-    &.show{
-        opacity: 1;
-    }
-}
-.title-nav-cntnr:hover .page-tooltip{
-    opacity: 1;
-}
 
 .title-wrap {
     display: block;
 
-     & .title {
-         max-width: calc(100% - 50px);
+    &:focus {
+        outline: none;
+    }
 
-         &.shortened{
-             max-width: calc(100% - 300px) !important;
-         }
-     }
+    .title {
+        font-family: $asset-page-title-font;
+
+        // @TODO - AIR-1735 follow up.
+        // xsphone and col-xs breakpoint styles are being overridden,
+        // so we force a centered max width on the title here.
+        @media(max-width: $phone) {
+          max-width: 70%;
+          margin: auto;
+        }
+    }
 }
 
 .fullscreen-btns {
@@ -210,7 +237,7 @@ $titleNavBg: #eee;
     }
 }
 
-.copy-status-msg{
+.copy-status-msg {
     font-family: 'Graphik Web', sans-serif;
     font-size: 12px;
     color: #000;
@@ -297,7 +324,7 @@ $titleNavBg: #eee;
 
 .btn{
 
-    .icon-print{
+    .icon-print {
         background-image: url("/assets/img/icon-print-white.svg");
         background-repeat: no-repeat;
         background-position: center center;
@@ -305,7 +332,7 @@ $titleNavBg: #eee;
     }
 }
 
-.quiz-caption-cntnr{
+.quiz-caption-cntnr {
     position: absolute;
     background: #f1f8f1;
     left: 0;
@@ -318,11 +345,11 @@ $titleNavBg: #eee;
     transition: transform 0.2s linear;
     transform: translateY(0);
 
-    &.cntnr-bg{
+    &.cntnr-bg {
         background: #f1f8f1;
     }
 
-    .quiz-cntnr{
+    .quiz-cntnr {
         position: absolute;
         right: 15px;
         top: 15px;
@@ -333,7 +360,7 @@ $titleNavBg: #eee;
         font-size: 12px;
         transition: 250ms all;
 
-        .quiz-btn{
+        .quiz-btn {
             width: 10px;
             height: 10px;
             display: inline-block;
@@ -354,7 +381,7 @@ $titleNavBg: #eee;
         }
     }
 
-    .shuffle-cntnr{
+    .shuffle-cntnr {
         position: absolute;
         right: 15px;
         top: 2px;
@@ -364,7 +391,7 @@ $titleNavBg: #eee;
         cursor: pointer;
         font-size: 12px;
 
-        .shuffle-btn{
+        .shuffle-btn {
             width: 10px;
             height: 10px;
             display: inline-block;
@@ -374,7 +401,7 @@ $titleNavBg: #eee;
             margin-right: 8px;
         }
 
-        &.active{
+        &.active {
             color: #000;
 
             .shuffle-btn{
@@ -384,7 +411,7 @@ $titleNavBg: #eee;
         }
     }
 
-    .caption-btn-cntnr{
+    .caption-btn-cntnr {
         position: absolute;
         left: 15px;
         top: 15px;
@@ -394,7 +421,7 @@ $titleNavBg: #eee;
         cursor: pointer;
         font-size: 12px;
 
-        .caption-btn{
+        .caption-btn {
             width: 10px;
             height: 10px;
             display: inline-block;
@@ -404,7 +431,7 @@ $titleNavBg: #eee;
             margin-right: 8px;
         }
 
-        &.active{
+        &.active {
             color: #000;
 
             .caption-btn{
@@ -414,7 +441,7 @@ $titleNavBg: #eee;
         }
     }
 
-    .quiz-browse-cntnr{
+    .quiz-browse-cntnr {
         display: block;
         width: 120px;
         margin: auto;
@@ -443,19 +470,19 @@ $titleNavBg: #eee;
     color: $color-gray-5;
 }
 
-.jstor-result{
+.jstor-result {
     cursor: pointer;
     padding-bottom: 5px;
     display: block;
 
     a{
         padding: 5px 5px 5px 0;
-        &:hover{
+        &:hover {
             background: #f9f9f9;
         }
     }
 
-    .type{
+    .type {
         color: #989898;
         font-size: 1rem;
         font-weight: 600;
@@ -463,7 +490,7 @@ $titleNavBg: #eee;
         display: inline;
     }
 
-    .label{
+    .label {
         display: inline;
     }
 }
@@ -555,7 +582,7 @@ $titleNavBg: #eee;
         left: 61% !important;
     }
 
-    &:before, &:after{
+    &:before, &:after {
         content: '';
         display: block;
         position: absolute;
@@ -565,13 +592,13 @@ $titleNavBg: #eee;
         border-style: solid;
     }
 
-    &:before{
+    &:before {
         top: -14px;
         border-color: transparent transparent $color-border-gray transparent;
         border-width: 7px;
     }
 
-    &:after{
+    &:after {
         top: -12px;
         border-color: transparent transparent $color-white transparent;
         border-width: 7px;
@@ -585,7 +612,7 @@ $titleNavBg: #eee;
         display: flex;
         align-items: center;
 
-        &:hover{
+        &:hover {
             background-color: $color-gray-2;
         }
 

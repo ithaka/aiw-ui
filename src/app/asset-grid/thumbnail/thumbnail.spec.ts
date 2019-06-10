@@ -1,16 +1,15 @@
 // test imports
-import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
-import { By }              from '@angular/platform-browser';
-import { DebugElement }    from '@angular/core';
+import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing'
+import { By } from '@angular/platform-browser'
+import { DebugElement } from '@angular/core'
 
 // angular imports
-import { Router } from '@angular/router';
+import { Router } from '@angular/router'
 
 // our file imports
-import { ThumbnailComponent } from './thumbnail.component';
-import { AssetService } from './../../shared/assets.service';
-import { TypeIdPipe } from './../../shared';
-import { Thumbnail } from './../../shared'
+import { ThumbnailComponent } from './thumbnail.component'
+import { AssetService } from './../../_services'
+import { TypeIdPipe } from './../../shared'
 
 class MockTestService {
   public makeThumbUrl(imagePath: string, size ?: number): string {

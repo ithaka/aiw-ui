@@ -3,8 +3,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Angulartics2 } from 'angulartics2';
 
-import { AssetService, AuthService, ImageGroup, DomUtilityService } from './../../shared';
-import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/public_api';
+import { AssetService, AuthService, DomUtilityService } from '_services'
+import { ImageGroup } from 'datatypes'
+import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/public_api'
 
 @Component({
   selector: 'ang-terms-and-conditions',

@@ -9,16 +9,18 @@ import { Observable, BehaviorSubject, Subject, Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Project Dependencies
+import { AssetFiltersService } from './../asset-filters/asset-filters.service'
+import { GroupItem, ImageGroup, AssetThumbnail } from 'datatypes'
+import { AppConfig } from 'app/app.service'
+import { APP_CONST } from '../app.constants'
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
+// Specific to avoid circular dependencies
+import { ThumbnailService } from './thumbnail.service'
+import { AssetSearchService } from './asset-search.service'
 import { AuthService } from './auth.service'
 import { GroupService } from './group.service'
 import { ToolboxService } from './toolbox.service'
-import { AssetFiltersService } from './../asset-filters/asset-filters.service'
-import { AssetSearchService, SearchResponse } from './asset-search.service'
-import { ImageGroup, Thumbnail } from '.'
-import { AppConfig } from 'app/app.service'
-import { APP_CONST } from '../app.constants'
-import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
-import { GroupItem } from './datatypes';
+
 
 @Injectable()
 export class AssetService {
@@ -137,6 +139,7 @@ export class AssetService {
         private _storage: ArtstorStorageService,
         private _auth: AuthService,
         private _groups: GroupService,
+        private _thumbnail: ThumbnailService,
         private _toolbox: ToolboxService,
         private _assetSearch: AssetSearchService,
         private _app: AppConfig
@@ -182,8 +185,8 @@ export class AssetService {
      */
     public removeFromResults(ids: string[], totalResults: number ): void {
         // Remove deleted thumbnails
-        this.allResultsValue['thumbnails'] = this.allResultsValue['thumbnails'].filter((thumbnail: Thumbnail) => {
-            return ids.indexOf(thumbnail.objectId) < 0
+        this.allResultsValue['thumbnails'] = this.allResultsValue['thumbnails'].filter((thumbnail: AssetThumbnail) => {
+            return ids.indexOf(thumbnail.id) < 0
         })
         // Remove deleted ids
         this.allResultsValue['items'] = this.allResultsValue['items'].filter((item: string) => {
@@ -371,7 +374,7 @@ export class AssetService {
      * @param itemIds the ids for which you need the thumbnails
      * @param igId passed if you are viewing an image group, which may contain pc assets and therefore access is checked against user's access to group
      */
-    public getAllThumbnails(group: { itemObjs?: GroupItem[], itemIds?: string[]}, igId?: string): Promise<Thumbnail[]> {
+    public getAllThumbnails(group: { itemObjs?: GroupItem[], itemIds?: string[]}, igId?: string): Promise<AssetThumbnail[]> {
         let itemIds: string[] = []
         let itemObjs: GroupItem[] = []
         /**
@@ -846,25 +849,24 @@ export class AssetService {
     /**
      * Build full group thumbnail array
      * - Maps item objects to their appropriate thumbnail data
+     * - Transforms item assets into AIW AssetThumbnail
      * @param items
      * @param thumbnails
+     * @returns AssetThumbnail array
      */
-    private mapThumbnailsToItems(items: any[], thumbnails: any[]): any[] {
+    private mapThumbnailsToItems(items: any[], thumbnails: any[]): AssetThumbnail[] {
         return items.reduce((newItems, item) => {
             let newItem
             // Attach zoom object from items to the relevant thumbnail, to be used in asset grid
             for(let thumbnail of thumbnails) {
                 if (item['id'] === thumbnail['objectId']) {
                     newItem = Object.assign({}, thumbnail)  // Make copy to avoid modifying subsequent items
+                    // Attach zoom params
                     if(item['zoom']){
                         newItem['zoom'] = item['zoom']
                     }
-                    // media takes priority over thumbnailImgUrl
-                    if (thumbnail['media'] && thumbnail.media.thumbnailSizeOnePath) {
-                        newItem.thumbnailImgUrl = thumbnail.media.thumbnailSizeOnePath
-                    } else if (thumbnail['thumbnailImgUrl'] && thumbnail['compoundmediaCount'] > 0) {
-                        newItem.thumbnailImgUrl = this._auth.getThumbHostname(true) + thumbnail.thumbnailImgUrl
-                    }
+                    // Map to AssetThumbnail
+                    newItem = this._thumbnail.itemAssetToThumbnail(newItem)
                     newItems.push(newItem)
                     break
                 }

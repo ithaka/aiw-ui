@@ -5,9 +5,8 @@ import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 import { map } from 'rxjs/operators'
 
 // Project Dependencies
-import { MetadataResponse, AssetDataResponse } from '../_services'
-import { MetadataService } from '../shared/metadata.service';
-import { FlagService } from '../shared';
+import { FlagService, MetadataResponse, AssetDataResponse } from '../_services'
+import { MetadataService } from '../shared/metadata.service'
 
 describe('Metadata Calls #pact #metadata', () => {
 

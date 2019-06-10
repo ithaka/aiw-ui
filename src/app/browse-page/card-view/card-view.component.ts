@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 
+// Project Dependencies
 import { Tag } from '../tag/tag.class'
-import { AssetService, AssetSearchService, AuthService, GroupItem } from '../../shared'
+import { AssetService, AuthService, ThumbnailService } from '_services'
 import { GroupQuery } from './../browse-groups/groups.component'
 
 @Component({
@@ -30,7 +31,7 @@ export class CardViewComponent implements OnInit {
 
   constructor(
     private _auth: AuthService,
-    private _search: AssetSearchService,
+    private _thumbnail: ThumbnailService, // used in template
     private _assets: AssetService,
     private _router: Router,
     private route: ActivatedRoute

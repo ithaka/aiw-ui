@@ -6,9 +6,9 @@ import { Angulartics2 } from 'angulartics2'
 import { throwError } from 'rxjs'
 import { map, take, catchError } from 'rxjs/operators'
 
-import { AuthService } from './../shared'
+// Project Dependencies
+import { AuthService } from './../_services'
 import { USER_ROLES, USER_DEPTS, UserRolesAndDepts } from './user-roles'
-import { HttpErrorResponse } from '@angular/common/http'
 
 @Component({
   selector: 'ang-register-page',

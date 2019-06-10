@@ -2,12 +2,11 @@ import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { BehaviorSubject, Observable, Subject, pipe } from 'rxjs'
 import { catchError } from 'rxjs/operators'
-import { GroupList, ImageZoomParams } from './datatypes'
-import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 
 // Project Dependencies
-import { AuthService } from '.'
 import { environment } from 'environments/environment'
+import { GroupList, ImageZoomParams } from 'datatypes'
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 
 @Injectable()
 export class GroupService {

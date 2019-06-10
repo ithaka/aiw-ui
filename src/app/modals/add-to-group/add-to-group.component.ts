@@ -6,8 +6,10 @@ import { CompleterService, CompleterData } from 'ng2-completer'
 import { Angulartics2 } from 'angulartics2'
 import { Router } from '@angular/router'
 
-import { AssetService, GroupService, ImageGroup, AuthService, AssetSearchService, DomUtilityService, ImageZoomParams, Asset } from './../../shared'
-import { ToastService } from 'app/_services';
+// Project Dependencies
+import { AssetService, GroupService, AuthService, DomUtilityService, ThumbnailService } from '_services'
+import { ImageGroup, ImageZoomParams, Asset } from 'datatypes'
+import { ToastService } from 'app/_services'
 
 @Component({
   selector: 'ang-add-to-group',
@@ -67,7 +69,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private _assets: AssetService,
-    private _search: AssetSearchService,
+    private _thumbnail: ThumbnailService,
     private _group: GroupService,
     private _angulartics: Angulartics2,
     private completerService: CompleterService,
@@ -325,7 +327,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
           .then( allThumbnails => {
             allThumbnails = allThumbnails.map( thmbObj => {
               for (let group of data.groups) {
-                if(group.items[0] && group.items[0] === thmbObj.objectId){
+                if(group.items[0] && group.items[0] === thmbObj.id){
                   group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
                   group['compoundmediaCount'] = thmbObj['compoundmediaCount']
                 }
@@ -370,7 +372,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
           .then( allThumbnails => {
             allThumbnails = allThumbnails.map( thmbObj => {
               for (let group of data.groups) {
-                if(group.items[0] && group.items[0] === thmbObj.objectId){
+                if(group.items[0] && group.items[0] === thmbObj.id){
                   group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
                   group['compoundmediaCount'] = thmbObj['compoundmediaCount']
                 }

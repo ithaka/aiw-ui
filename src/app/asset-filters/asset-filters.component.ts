@@ -4,10 +4,9 @@ import { Subscription } from 'rxjs'
 import { map, take, filter } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
 
-import { AssetService } from '../shared/assets.service'
-import { AuthService, FlagService } from 'app/shared'
+// Project Dependencies
+import { AuthService, FlagService, InstitutionService } from 'app/_services'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
-import { InstitutionService } from '../_services'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
 
 declare var _satellite: any

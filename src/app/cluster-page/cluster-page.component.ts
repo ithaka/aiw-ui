@@ -3,7 +3,8 @@ import { Router, ActivatedRoute, Params } from '@angular/router'
 import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
-import { AssetService } from './../shared/assets.service'
+// Project Dependencies
+import { AssetService } from '_services'
 @Component({
   selector: 'ang-cluster-page',
   providers: [],

@@ -1,8 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild } from '@angular/core'
 import { map, take } from 'rxjs/operators'
 
-import { ImageGroup, GroupService, AuthService, LogService, DomUtilityService } from './../../shared'
-import { AppConfig } from 'app/app.service';
+// Project Dependencies
+import { GroupService, AuthService, LogService, DomUtilityService } from '_services'
+import { AppConfig } from 'app/app.service'
+import { ImageGroup } from 'datatypes'
 
 @Component({
   selector: 'ang-share-ig-link',
