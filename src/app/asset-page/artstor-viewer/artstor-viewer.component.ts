@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation, Inject, PLATFORM_ID } from '@angular/core';
 import { Subscription, Observable, of } from 'rxjs'
 import { take, map, mergeMap } from 'rxjs/operators'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
@@ -31,7 +31,7 @@ export enum viewState {
   styleUrls: ['./artstor-viewer.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ArtstorViewerComponent implements OnInit, OnDestroy {
 
     // public testEnv: boolean = false
     // public encrypted: boolean = false
@@ -205,9 +205,6 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
         });
     }
 
-    ngAfterViewInit() {
-    }
-
     private loadAssetById(assetId: string, groupId: string): void {
         // Destroy previous viewers
         if (this.osdViewer) {
@@ -361,7 +358,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
             },
             timeout: 60000,
             useCanvas: true,
-            // defaultZoomLevel: 1.2, // We don't want the image to be covered on load
+            // defaultZoomLevel: 1, // We don't want the image to be covered on load
             // visibilityRatio: 0.2, // Determines percentage of background that has to be covered by the image while panning
             // debugMode: true,
             preserveImageSizeOnResize: this.zoom && this.zoom.viewerX ? true : false
@@ -427,7 +424,14 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
             if (this.isMultiView) {
                 this.attemptShowReferenceStrip()
             }
-            this.refreshZoomedView()
+
+          // If we need an initial zoomed view, refreshZoomedView - otherwise load full default image
+          if (this.zoom && this.zoom.viewerX) {
+              this.refreshZoomedView()
+          } else {
+            this.osdViewer.viewport.zoomTo(this.osdViewer.viewport.getMinZoom())
+          }
+
         })
 
         if (this.osdViewer && this.osdViewer.ButtonGroup) {
@@ -541,12 +545,11 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private refreshZoomedView(): void{
         // For detailed views set the viewport bouds based on the zoom params passed
-        if(this.zoom && this.zoom.viewerX){
-            let bounds = this.osdViewer.viewport.imageToViewportRectangle(this.zoom.viewerX, this.zoom.viewerY, this.zoom.pointWidth, this.zoom.pointHeight)
-            this.osdViewer.viewport.fitBounds(bounds, true)
+        if (this.zoom && this.zoom.viewerX){
+          let bounds = this.osdViewer.viewport.imageToViewportRectangle(this.zoom.viewerX, this.zoom.viewerY, this.zoom.pointWidth, this.zoom.pointHeight)
+          this.osdViewer.viewport.fitBounds(bounds, true)
         } else {
-            this.osdViewer.viewport.fitVertically(true)
-
+          this.osdViewer.viewport.fitVertically(true)
         }
     }
     /**
