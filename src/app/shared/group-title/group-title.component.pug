@@ -33,10 +33,10 @@
                   label ZIP File
                   .caption Items and their metadata are combined as a compressed file
 
-        a#presentLink.icon-link(tabindex="3", (click)="presentGroup()", (keyup.enter)="presentGroup()")
+        a#presentLink.icon-link(tabindex="3", (click)="presentStudyGroup('present')", (keyup.enter)="presentStudyGroup('present')")
           i.icon.icon-present-mode--orange
           | Present
 
-        a#studyLink.icon-link(tabindex="3", (click)="studyGroup()", (keyup.enter)="studyGroup()")
+        a#studyLink.icon-link(tabindex="3", (click)="presentStudyGroup('study')", (keyup.enter)="presentStudyGroup('study')")
           i.icon.icon-study-mode
           | Study
