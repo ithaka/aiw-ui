@@ -454,12 +454,12 @@ export class AssetService {
             // Base solr query
             'limit': 0,
             'start': 1,
-            'content_types': [
+            'content_set_flags': [
                 'art'
             ],
             'hier_facet_fields2': [],
             'facet_fields' : [],
-            'filter_query' : []
+            'filter_queries' : []
         };
       let isHierarchy = facetName === 'artstor-geography'
       if (isHierarchy) {
@@ -517,7 +517,7 @@ export class AssetService {
         filterArray.push('contributinginstitutionid:' + institutionFilters[i])
       }
 
-      query['filter_query'] = filterArray
+      query['filter_queries'] = filterArray
 
       return this.http.post(this._auth.getSearchUrl(), query, options)
         .toPromise()

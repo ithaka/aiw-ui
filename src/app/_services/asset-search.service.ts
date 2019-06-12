@@ -54,7 +54,7 @@ export class AssetSearchService {
     return {
       'limit': pageSize,
       'start': startIndex,
-      'content_types': [
+      'content_set_flags': [
         'art'
       ],
       // "startdate" : earliestDate,
@@ -70,7 +70,7 @@ export class AssetSearchService {
       // ],
       // Add fuzzy operator
       'query': keyword,
-      filter_query: [],
+      filter_queries: [],
       'hier_facet_fields2': [
         {
           'field': 'hierarchies',
@@ -168,7 +168,7 @@ export class AssetSearchService {
       }
     }
 
-    query.filter_query = filterOptions.filterArray
+    query.filter_queries = filterOptions.filterArray
 
     if (filterOptions.dateFacet.modified) {
       filterOptions.earliestDate = filterOptions.dateFacet.earliest.date;
@@ -177,7 +177,7 @@ export class AssetSearchService {
       filterOptions.latestDate = filterOptions.dateFacet.latest.date;
       filterOptions.latestDate = (filterOptions.dateFacet.latest.era == 'BCE') ? (parseInt(filterOptions.latestDate) * -1).toString() : filterOptions.latestDate.toString();
 
-      query['filter_query'].push('year:[' + filterOptions.earliestDate + ' TO ' + filterOptions.latestDate + ']')
+      query['filter_queries'].push('year:[' + filterOptions.earliestDate + ' TO ' + filterOptions.latestDate + ']')
     }
 
     if (sortIndex) {
@@ -193,7 +193,7 @@ export class AssetSearchService {
       } else if (sortIndex == '2') {
         query['sort'] = 'agent_str'
       } else if (sortIndex == '3') {
-        query['filter_query'].push('year:[* TO *]', '-year:((0) OR (9999))', 'yearend:[* TO *]', '-yearend:((0) OR (9999))')
+        query['filter_queries'].push('year:[* TO *]', '-year:((0) OR (9999))', 'yearend:[* TO *]', '-yearend:((0) OR (9999))')
         query['sort'] = 'yearend'
       } else if (sortIndex == '4') {
         query['sort'] = 'updatedon_str'
@@ -209,7 +209,7 @@ export class AssetSearchService {
     let query = {
       'limit': 0,
       'start': 1,
-      'content_types': [
+      'content_set_flags': [
         'art'
       ],
       // "query": "*",
@@ -259,7 +259,7 @@ export class AssetSearchService {
       filterArray.push('contributinginstitutionid:' + institutionFilters[i])
     }
 
-    query['filter_query'] = filterArray
+    query['filter_queries'] = filterArray
 
     return this._http.post(this._auth.getSearchUrl(), query, { withCredentials: true })
   }
@@ -384,7 +384,7 @@ export class AssetSearchService {
   public searchJstor(searchTerm: string): Observable<any> {
 
     let query = {
-      'content_types': [],
+      'content_set_flags': [],
       'additional_fields': ['rectype', 'raw_type', 'htopic_st'],
       'hier_facet_fields': [
         {
@@ -423,7 +423,7 @@ export class AssetSearchService {
   public getAssetById(assetId: string, ssid?: boolean): Observable<AssetThumbnail> {
     let assetQuery: SearchRequest = {
       query: ssid ? 'ssid:' + assetId : assetId,
-      content_types: ['art']
+      content_set_flags: ['art']
     }
 
     return this._http.post<SearchResponse>(
@@ -583,7 +583,7 @@ export interface MediaObject {
 export interface SearchRequest {
   limit?: number
   start?: number
-  content_types: string[]
+  content_set_flags: string[]
   query: string
   facet_fields?: {
     name: string
@@ -597,7 +597,7 @@ export interface SearchRequest {
     look_behind: number
     d_look_ahead: number
   }[]
-  filter_query?: string[]
+  filter_queries?: string[]
   sortorder?: string
   sort?: string
 }
