@@ -104,6 +104,13 @@ app.get(['/public/*', '/object/*'], (req, res, next) => {
           // Hide no js messaging for server-rendered pages
           html = html.replace('<noscript>', '<div class="no-script--hidden">')
           html = html.replace('</noscript>', '</div>')
+          // Attach canonical meta tag if successful
+
+          // Return error status code if unable to load asset
+          // + We're using a 503 here to indicate "Service Unavailable" - this ensures Google will come back
+          // + We continue returning the page so a user is not interrupted 
+          // return res.status(503).send(html)
+
           return res.send(html)
         }
     });
