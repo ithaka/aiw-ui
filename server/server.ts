@@ -92,7 +92,7 @@ app.get('/api/*', (req, res) => {
 /**
  * Handle server-rendered paths
  */
-app.get('/public/*', (req, res, next) => {
+app.get(['/public/*', '/object/*'], (req, res, next) => {
   console.log('/public route request received')
   try {
     res.render('index', { req, res },

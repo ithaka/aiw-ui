@@ -92,15 +92,19 @@ export class Home implements OnInit, OnDestroy {
           })
       }
     } else {
-      // Handle /public clean urls to handover app using hash routing for the client
+      // Handle /public and /object clean urls to handover app using hash routing for the client
       let req = this.injector.get('request');
-      if (req && req.url && req.url.indexOf('public') >= 0) {
-        let assetId = req.url.replace('/public/','')
-        this._router.navigate(['/public', assetId], { skipLocationChange: true })
-          .then(result => {
-            console.log('Handled /public route clean url complete: ' + result)
-          }) 
-      }
+      let ssrRoutes = ['/public/', '/object/']
+
+      ssrRoutes.forEach (route => {
+        if (req && req.url && req.url.indexOf(route) >= 0) {
+          let assetId = req.url.replace(route, '')
+          this._router.navigate([route, assetId], { skipLocationChange: true })
+            .then(result => {
+              console.log(`Handled ${route} route clean url complete: ${result}`)
+            })
+          }
+      })
     }
 
     this.user = this._auth.getUser();
