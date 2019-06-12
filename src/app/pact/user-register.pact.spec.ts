@@ -9,7 +9,7 @@ import { Angulartics2, ANGULARTICS2_TOKEN, RouterlessTracking } from 'angulartic
 import { AppConfig } from '../app.service'
 import { AuthService } from '_services'
 
-describe('Register form POST /api/secure/register #pact #user-register', () => {
+fdescribe('Register form POST /api/secure/register #pact #user-register', () => {
 
   let provider, _auth, http
 
@@ -85,7 +85,7 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
         }),
         // Invalid Request
         provider.addInteraction({
-          uponReceiving: 'invalid POST request',
+          uponReceiving: 'invalid registration POST request',
           withRequest: {
             method: 'POST',
             path: '/api/secure/register',
@@ -95,6 +95,26 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
           willRespondWith: {
             status: 400,
             body: invalidInputResponse
+          }
+        }),
+        // Password reset
+        provider.addInteraction({
+          uponReceiving: 'valid password reset POST request',
+          withRequest: {
+            method: 'GET',
+            path: '/api/lostpw',
+            query: {
+              email: Matchers.somethingLike('EXAMPLE_EMAIL'),
+              portal: Matchers.somethingLike('artstor')
+            }
+          },
+          willRespondWith: {
+            status: 200,
+            body: {
+              "msg": Matchers.somethingLike(''),
+              "status": true,
+              "username": Matchers.somethingLike('EXAMPLE_EMAIL')
+            }
           }
         })
       )
@@ -143,6 +163,21 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
         expect(err.statusText).toBe('Bad Request')
         done()
       })
+    })
+
+    // Test password reset request
+    it('should return a successful password reset response', (done) => {
+      _auth.pwdReset('EXAMPLE_EMAIL')
+      .then((data) => {
+        expect(data.status).toBe(true)
+        // Usernames are not always emails, but we do expect an account name to be returned
+        expect(data.username).toBeTruthy('Did not receive "username" propety on /lostpw response')
+        done()
+      })
+      .catch(err => {
+        done.fail('Valid password reset query should not fail, received: ' + err.message)
+      })
+      
     })
 
   })
