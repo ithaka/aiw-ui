@@ -12,6 +12,7 @@ import { map, take } from 'rxjs/operators'
 import { AppConfig } from './app.service'
 import { isPlatformBrowser } from '@angular/common'
 import { DomUtilityService, FlagService, ScriptService } from '_services'
+import { version } from './../../package.json'
 
 // Server only imports
 import * as enTranslation from '../assets/i18n/en.json'
@@ -90,7 +91,7 @@ export class AppComponent {
     // console.info("Constructing app component")
     // Append timestamp param to dodge caching
     if (isPlatformBrowser(this.platformId)) {
-      let langStr = 'en.json?no-cache=' + new Date().valueOf()
+      let langStr = 'en.json?version=' + version
       // Use the translate loader to pull translations client-side
       this.translate.use(langStr);
       this.translate.setDefaultLang(langStr);
