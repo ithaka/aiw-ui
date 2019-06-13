@@ -5912,6 +5912,11 @@ isbinaryfile@^3.0.0:
   dependencies:
     buffer-alloc "^1.2.0"
 
+isbot@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/isbot/-/isbot-2.3.0.tgz#aed9bb1ca0319d4c2357dd8dbf2515c22e447e18"
+  integrity sha512-Z8NSY6/gbtx8z+Jqw7oekGfg217p2Cs+IMgL49Go7BPCC/byQT+0kbdinyRa8R0njYr8SZqeL9rCVFk0BYjD/g==
+
 isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"

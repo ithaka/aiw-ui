@@ -4,6 +4,7 @@ import 'reflect-metadata'
 // Dependencies
 import { enableProdMode } from '@angular/core';
 import * as express from 'express';
+import * as isbot from 'isbot'
 import * as fs from 'fs';
 import { join } from 'path';
 import * as https from 'https';
@@ -104,13 +105,23 @@ app.get(['/public/*', '/object/*'], (req, res, next) => {
           // Hide no js messaging for server-rendered pages
           html = html.replace('<noscript>', '<div class="no-script--hidden">')
           html = html.replace('</noscript>', '</div>')
-          // Attach canonical meta tag if successful
-
-          // Return error status code if unable to load asset
+          // Turn off javascript for crawlers to avoid content rewrite errors
+          if (isbot(req.headers['user-agent'])) {
+            let scriptTest = new RegExp(/<script.*<\/script>/g)
+            // Strip javascript script tags
+            html = html.replace(scriptTest, '')
+          }
+          // Canonical tag on render success, 503 on error (signals to Google)
           // + We're using a 503 here to indicate "Service Unavailable" - this ensures Google will come back
           // + We continue returning the page so a user is not interrupted 
-          // return res.status(503).send(html)
-
+          // + "asset.rendered.success" tag is attached in asset-page to indicate render
+          if (new RegExp(/\"asset\.rendered\.success\"/g).test(html)) {
+            // Attach canonical meta tag if successful
+            html = html.replace('<head>', '<head><link rel="canonical" href="'+req.originalUrl+'"/>')
+          } else {
+            // Return a 503 if asset was not rendered successfully
+            return res.status(503).send(html)
+          }
           return res.send(html)
         }
     });
