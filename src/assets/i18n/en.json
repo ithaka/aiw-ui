@@ -1,7 +1,7 @@
 {
   "LOGIN": {
     "REG_LOGIN": {
-      "HEADING": "Log in with your Artstor account",
+      "HEADING": "Log in to your account",
       "EMAIL_LABEL": "Email Address",
       "PASSWORD_LABEL": "<span class=\"sr-only\">Artstor </span>Password",
       "FORCE_PW_RESET_MSG": "Please <a id=\"forcePwdResetModal\" (click)=\"showPwdModal = true\" class=\"link\">reset your password</a> in order to log in.",
@@ -41,15 +41,15 @@
     }
   },
   "LINK_PAGE": {
-    "LOGIN_HEADING": "Link your existing Artstor account",
+    "LOGIN_HEADING": "Link your existing account",
     "LOGIN_BUTTON": "Link Account",
     "LOGIN_OPTION": "Link Existing Account",
-    "REGISTER_HEADING": "Link a new Artstor account",
+    "REGISTER_HEADING": "Link a new account",
     "REGISTER_LINK": "Register a new account",
     "REGISTER_OPTION" : "Link a New Account"
   },
   "REGISTER": {
-    "REGISTER_HEADING": "Register for a new Artstor account",
+    "REGISTER_HEADING": "Register for a new account",
     "REGISTER_DESCRIPTION": "Registering for an account lets you download images, save them to groups, create presentations, and share them with other Artstor users.",
     "REGISTER_JSTOR_MESSAGE": "You can now use your JSTOR account to register for Artstor.",
     "EMAIL_HELP_TXT": "Use your JSTOR account",
@@ -94,6 +94,7 @@
     "FORGOT": "(Forgot your password?)"
   },
   "ACCOUNT": {
+    "HEADER": "Settings",
     "CHANGE_PASS": {
       "TITLE" : "Change Password",
       "LABELS": {
