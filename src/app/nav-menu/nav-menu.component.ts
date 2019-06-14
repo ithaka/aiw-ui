@@ -111,7 +111,7 @@ export class NavMenu implements OnInit, OnDestroy {
           console.error(error)
         }
       )).subscribe(),
-      
+
       // Set _auth flag for version 3 search based on featureFlag
       this._flags.flagUpdates.subscribe((flags) => {
         this._auth.useSearch3 = flags.searchV3 ? true : false
@@ -228,7 +228,7 @@ export class NavMenu implements OnInit, OnDestroy {
       assetFound = false
       this._assets.getSelectedAssets().forEach((asset) => {
         // Support both legacy and new Group items format
-        if (asset.objectId === item || asset.objectId === item.id) {
+        if (asset.id === item || asset.id === item.id) {
           let zoomMatched: boolean = true
           if(asset.zoom && asset.zoom.viewerX){
             let itemZoomObj = item.zoom ? item.zoom : {}
