@@ -94,6 +94,7 @@ module.exports = function (config) {
       '/api/secure/user/abcdefg': 'http://localhost:1203/api/secure/user/abcdefg',
       // User Registration
       '/api/secure/register': 'http://localhost:1205/api/secure/register',
+      '/api/secure/login': 'http://localhost:1205/api/secure/login',
       // User Account
       '/api/lostpw': 'http://localhost:1205/api/lostpw',
       // Collection Endpoints
