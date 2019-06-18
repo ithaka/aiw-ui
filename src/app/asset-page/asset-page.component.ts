@@ -215,7 +215,7 @@ export class AssetPage implements OnInit, OnDestroy {
         private meta: Meta,
         @Inject(PLATFORM_ID) private platformId: Object
     ) {
-        this.isBrowser = isPlatformBrowser(this.platformId)
+        this.isBrowser = isPlatformBrowser(platformId)
         this.editDetailsForm = _fb.group({
             creator: [null],
             title: [null, Validators.required],
@@ -486,7 +486,9 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.showServerErrorModal = true
                 }
             } else if (err.status === 401) {
-                // Should be handled by the 401 interceptor
+                // Client-side: Should be handled by the 401 interceptor
+                // Server-side: Display error modal for non-javascript cases
+                this.showServerErrorModal = true
             } else {
                 // Something must have gone quite wrong, presumably a server error
                 console.error(err)
@@ -505,8 +507,12 @@ export class AssetPage implements OnInit, OnDestroy {
                 this._title.setTitle(asset.title)
                 this.meta.updateTag({name: 'DC.type', content: 'Artwork'})
                 this.meta.updateTag({name: 'DC.title', content: asset.title})
-                // this.meta.updateTag({name: 'asset.id"', content: asset.id})
-                let currentAssetId: string = this.assets[0].id
+                let currentAssetId: string = this.assetIds[0]
+                this.meta.updateTag({name: 'asset.id', content: currentAssetId})
+                if (!this.isBrowser) {
+                    // Used in Express middleware to determine load success (/server/server.ts)
+                    this.meta.addTag({name: 'asset.rendered.success', content: currentAssetId })
+                }
                 // Search returns a 401 if /userinfo has not yet set cookies
                 if (Object.keys(this._auth.getUser()).length !== 0) {
                     // pass collectiontypeIds from asset.collections to getCollectionType function as an array of number

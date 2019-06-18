@@ -103,6 +103,7 @@
     "domino": "^2.1.1",
     "driver.js": "^0.8.1",
     "ie-shim": "^0.1.0",
+    "isbot": "^2.3.0",
     "jquery": "^3.3.1",
     "json-loader": "^0.5.7",
     "linkifyjs": "^2.1.4",
