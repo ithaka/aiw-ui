@@ -873,7 +873,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   private removeFromGroup(assetsToRemove: AssetThumbnail[], clearRestricted?: boolean): void {
     for (let i = 0; i < assetsToRemove.length; i++) {
       let assetId = assetsToRemove[i].id
-      let igIndex = this.ig.items.indexOf(assetId)
+      let igIndex = this.ig.items.findIndex(item => item.id === assetId)
       // Passing -1 will splice the wrong asset!
       if (igIndex >= 0) {
         this.ig.items.splice(igIndex, 1)
