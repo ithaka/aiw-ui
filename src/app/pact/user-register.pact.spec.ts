@@ -9,7 +9,7 @@ import { Angulartics2, ANGULARTICS2_TOKEN, RouterlessTracking } from 'angulartic
 import { AppConfig } from '../app.service'
 import { AuthService } from '_services'
 
-fdescribe('Register form POST /api/secure/register #pact #user-register', () => {
+describe('Register form POST /api/secure/register #pact #user-register', () => {
 
   let provider, _auth, http
 
