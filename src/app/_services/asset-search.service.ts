@@ -39,6 +39,10 @@ export class AssetSearchService {
 
   public latestSearchRequestId: string
 
+  // Used for simplify the code when we need to account for both search and search3 version 
+  private contentQueryKey: string
+  private filterQueryKey: string
+
   constructor(
     private _http: HttpClient,
     private _filters: AssetFiltersService,
@@ -50,13 +54,15 @@ export class AssetSearchService {
   }
 
   private initQuery(keyword: string, pageSize, startIndex) {
+    this.contentQueryKey = this._auth.useSearch3 ? 'content_set_flags' : 'content_types'
+    this.filterQueryKey = this._auth.useSearch3 ? 'filter_queries' : 'filter_query'
 
-    return {
+    let query = {
       'limit': pageSize,
       'start': startIndex,
-      'content_types': [
-        'art'
-      ],
+      // 'content_types': [
+      //   'art'
+      // ],
       // "startdate" : earliestDate,
       // "enddate" : latestDate,
       //   "facet_fields": [
@@ -70,7 +76,7 @@ export class AssetSearchService {
       // ],
       // Add fuzzy operator
       'query': keyword,
-      filter_query: [],
+      // filter_query: [],
       'hier_facet_fields2': [
         {
           'field': 'hierarchies',
@@ -102,6 +108,10 @@ export class AssetSearchService {
           }
         ],
     };
+    query[this.contentQueryKey] = ['art'];
+    query[this.filterQueryKey] = [];
+
+    return query;
   }
 
   /**
@@ -168,7 +178,7 @@ export class AssetSearchService {
       }
     }
 
-    query.filter_query = filterOptions.filterArray
+    query[this.filterQueryKey] = filterOptions.filterArray
 
     if (filterOptions.dateFacet.modified) {
       filterOptions.earliestDate = filterOptions.dateFacet.earliest.date;
@@ -177,7 +187,7 @@ export class AssetSearchService {
       filterOptions.latestDate = filterOptions.dateFacet.latest.date;
       filterOptions.latestDate = (filterOptions.dateFacet.latest.era == 'BCE') ? (parseInt(filterOptions.latestDate) * -1).toString() : filterOptions.latestDate.toString();
 
-      query['filter_query'].push('year:[' + filterOptions.earliestDate + ' TO ' + filterOptions.latestDate + ']')
+      query[this.filterQueryKey].push('year:[' + filterOptions.earliestDate + ' TO ' + filterOptions.latestDate + ']')
     }
 
     if (sortIndex) {
@@ -193,7 +203,7 @@ export class AssetSearchService {
       } else if (sortIndex == '2') {
         query['sort'] = 'agent_str'
       } else if (sortIndex == '3') {
-        query['filter_query'].push('year:[* TO *]', '-year:((0) OR (9999))', 'yearend:[* TO *]', '-yearend:((0) OR (9999))')
+        query[this.filterQueryKey].push('year:[* TO *]', '-year:((0) OR (9999))', 'yearend:[* TO *]', '-yearend:((0) OR (9999))')
         query['sort'] = 'yearend'
       } else if (sortIndex == '4') {
         query['sort'] = 'updatedon_str'
@@ -205,13 +215,12 @@ export class AssetSearchService {
    * Uses wildcard search to retrieve filters
    */
   public getFacets() {
-
     let query = {
       'limit': 0,
       'start': 1,
-      'content_types': [
-        'art'
-      ],
+      // 'content_types': [
+      //   'art'
+      // ],
       // "query": "*",
       'hier_facet_fields2': [
         {
@@ -238,6 +247,7 @@ export class AssetSearchService {
           // }
         ],
     };
+    query[this.contentQueryKey] = ['art'];
 
     let filterArray = []
 
@@ -259,7 +269,7 @@ export class AssetSearchService {
       filterArray.push('contributinginstitutionid:' + institutionFilters[i])
     }
 
-    query['filter_query'] = filterArray
+    query[this.filterQueryKey] = filterArray
 
     return this._http.post(this._auth.getSearchUrl(), query, { withCredentials: true })
   }
@@ -382,7 +392,6 @@ export class AssetSearchService {
    * @returns       Returns a response object from jstor search containing results
    */
   public searchJstor(searchTerm: string): Observable<any> {
-
     let query = {
       'content_types': [],
       'additional_fields': ['rectype', 'raw_type', 'htopic_st'],
@@ -421,10 +430,9 @@ export class AssetSearchService {
    * @param assetId The id of the desired asset
    */
   public getAssetById(assetId: string, ssid?: boolean): Observable<AssetThumbnail> {
-    let assetQuery: SearchRequest = {
-      query: ssid ? 'ssid:' + assetId : assetId,
-      content_types: ['art']
-    }
+    let assetQuery: SearchRequest
+    assetQuery['query'] = ssid ? 'ssid:' + assetId : assetId
+    assetQuery[this.contentQueryKey] = ['art']
 
     return this._http.post<SearchResponse>(
       this._auth.getSearchUrl(),
@@ -583,7 +591,8 @@ export interface MediaObject {
 export interface SearchRequest {
   limit?: number
   start?: number
-  content_types: string[]
+  content_types?: string[] // made to optional because under search3 we use content_set_flags instead of content_types
+  content_set_flags?: string[]
   query: string
   facet_fields?: {
     name: string
@@ -598,6 +607,7 @@ export interface SearchRequest {
     d_look_ahead: number
   }[]
   filter_query?: string[]
+  filter_queries?: string[]
   sortorder?: string
   sort?: string
 }
