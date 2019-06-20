@@ -41,7 +41,8 @@ export class ThumbnailService {
         ssid: cleanedSSID,
         iap: asset.iap,
         frequentlygroupedwith: asset.frequentlygroupedwith,
-        partofcluster: asset.partofcluster
+        partofcluster: asset.partofcluster,
+        clusterid: asset.clusterid
       }
       // Parse stringified compound media if available
       if (cleanedAsset.compound_media) {
