@@ -1,7 +1,8 @@
 import { Location } from '@angular/common'
-import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http'
+import { HttpClientModule } from '@angular/common/http'
 import { RouterModule, Router, ActivatedRoute } from '@angular/router'
 import { TestBed, getTestBed, inject, async } from '@angular/core/testing'
+import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { Idle, DEFAULT_INTERRUPTSOURCES, IdleExpiry } from '@ng-idle/core'
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 import { Angulartics2, ANGULARTICS2_TOKEN, RouterlessTracking } from 'angulartics2'
@@ -9,9 +10,9 @@ import { Angulartics2, ANGULARTICS2_TOKEN, RouterlessTracking } from 'angulartic
 import { AppConfig } from '../app.service'
 import { AuthService } from '_services'
 
-describe('Login and userinfo #pact #user-access', () => {
+fdescribe('Login and userinfo #pact #user-access', () => {
 
-  let provider, _auth, http
+  let provider, _auth
 
   beforeAll(function (done) {
     provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service', port: 1205 })
@@ -40,7 +41,6 @@ describe('Login and userinfo #pact #user-access', () => {
     })
     const testbed = getTestBed()
     _auth = testbed.get(AuthService)
-    http = testbed.get(HttpClient)
 
   })
 
@@ -57,17 +57,19 @@ describe('Login and userinfo #pact #user-access', () => {
         provider.addInteraction({
           uponReceiving: 'log in form submission',
           withRequest: {
-            method: 'POST',
+            method: 'GET',
             path: '/api/secure/login',
-            // headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-            query: {
-              j_username: Matchers.like('EXAMPLE_EMAIL'),
-              j_password: Matchers.like('EXAMPLE_PASSWORD')
-            }
+            // headers: { 
+            //   'Cache-Control': 'no-store, no-cache',
+            //   'Content-type': 'application/x-www-form-urlencoded'
+            // },
+            // body: {
+            //   'j_username': 'EXAMPLE_EMAIL',
+            //   'j_password': 'EXAMPLE_PASSWORD'
+            // }
           },
           willRespondWith: {
             status: 200,
-            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
             body: {
               "status":  Matchers.boolean(true),
               "dayRemain": Matchers.integer(4190),
@@ -134,8 +136,7 @@ describe('Login and userinfo #pact #user-access', () => {
           expect(data.status).toBeTruthy()
           expect(data.user.username).toEqual('EXAMPLE_EMAIL')
           done()
-        })
-        .catch((err) => {
+        }, (err) => {
           console.error(err)
           done.fail(err)
         })

@@ -718,20 +718,24 @@ export class AuthService implements CanActivate {
      * @param user User must have username (which is an email address) and password to be passed in the request
      */
     login(user: User): Promise<any> {
-        let header = new HttpHeaders().set('Cache-Control', 'no-store, no-cache').set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
-        let options = { headers: header, withCredentials: true }; // Create a request option
-        let data = this.formEncode({
-                'j_username': user.username.toLowerCase(),
-                'j_password': user.password
-            });
+        let header = new HttpHeaders().set('Cache-Control', 'no-store, no-cache').set('Content-Type', 'application/x-www-form-urlencoded')
+        let options = { 
+          // headers: header, 
+          // withCredentials: true
+        }; // Create a request option
+        let data = {}
+        // this.formEncode({
+        //         'j_username': user.username, //.toLowerCase(),
+        //         'j_password': user.password
+        //     });
 
         return this.http
-            .post(this.getUrl(true) + '/login', data, options)
+            .get(this.getUrl(true) + '/login', options)
             .toPromise();
     }
 
     getLoginError(user: User) {
-        let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
+        let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
         let options = { headers: header, withCredentials: true }; // Create a request option
 
         return this.http
