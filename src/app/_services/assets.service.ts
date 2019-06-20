@@ -450,17 +450,22 @@ export class AssetService {
     public categoryByFacet(facetName: string, collectionType ?: number): Promise<SolrFacet[]> {
       let options = { withCredentials: true };
 
+      let contentQueryKey = this._auth.useSearch3 ? 'content_set_flags' : 'content_types'
+      let filterQueryKey = this._auth.useSearch3 ? 'filter_queries' : 'filter_query'
       let query = {
             // Base solr query
             'limit': 0,
             'start': 1,
-            'content_types': [
-                'art'
-            ],
+            // 'content_set_flags': [
+            //     'art'
+            // ],
             'hier_facet_fields2': [],
             'facet_fields' : [],
-            'filter_query' : []
+            // 'filter_queries' : []
         };
+      query[contentQueryKey] = ['art']
+      query[filterQueryKey] = []
+
       let isHierarchy = facetName === 'artstor-geography'
       if (isHierarchy) {
         let hierarchy = {
@@ -517,7 +522,7 @@ export class AssetService {
         filterArray.push('contributinginstitutionid:' + institutionFilters[i])
       }
 
-      query['filter_query'] = filterArray
+      query[filterQueryKey] = filterArray
 
       return this.http.post(this._auth.getSearchUrl(), query, options)
         .toPromise()
