@@ -16,8 +16,8 @@
         //- Title and description of the current primary image
         .featured-title([innerHtml]="collection.subheading | translate")
         p.featured-caption.small([innerHtml]="collection.description | translate")
-      a.link([attr.href]="featured[i].link | translate", (mouseenter)="switchFeaturedIndex(i)", (click)="switchFeaturedIndex(i)", (focus)="pauseSlideShow()", (focusout)="secondaryImgsFocusOut(i)", tabindex="4")
-        img.no-stretch.featured-side-img(*ngIf="primaryFeaturedIndex !== i",  [attr.src]="collection.img_src | translate",
+      a.link(*ngIf="primaryFeaturedIndex !== i", [attr.href]="featured[i].link | translate", (mouseenter)="switchFeaturedIndex(i)", (click)="switchFeaturedIndex(i)", (focus)="pauseSlideShow()", (focusout)="secondaryImgsFocusOut(i)", tabindex="4")
+        img.no-stretch.featured-side-img([attr.src]="collection.img_src | translate",
         [attr.alt]="collection.alt | translate", [attr.title]="collection.link_title | translate", [attr.aria-label]="'Featured Collection: ' + (collection.subheading | translate) + '. Press enter to open this collection.'")
 
 //- ngBoostrap carousel on mobile
