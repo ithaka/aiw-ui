@@ -11,7 +11,7 @@
         )
   //- Secondary Images
   .col-sm-3.featured-col#featured-side
-    .card(*ngFor="let collection of featured; let i = index", tabindex="-1")
+    .card(*ngFor="let collection of featured; let i = index")
       a.card__placard(*ngIf="primaryFeaturedIndex === i", (focus)="pauseSlideShow()", (focusout)="secondaryImgsFocusOut(i)", [attr.href]="featured[i].link | translate", tabindex="4", [attr.aria-label]="'Featured Collection: ' + (collection.subheading | translate) + '. Press enter to open this collection.'")
         //- Title and description of the current primary image
         .featured-title([innerHtml]="collection.subheading | translate")
