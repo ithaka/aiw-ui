@@ -16,7 +16,12 @@ fdescribe('Login and userinfo #pact #user-access', () => {
   let provider, _auth
 
   beforeAll(function (done) {
-    provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service', port: 1206 })
+    provider = new PactWeb({ 
+      logLevel: "debug",
+      consumer: 'aiw-ui', 
+      provider: 'artaa_service', 
+      port: 1206 
+    })
     setTimeout(function () { done() }, 2000)
     provider.removeInteractions()
   })
@@ -32,15 +37,21 @@ fdescribe('Login and userinfo #pact #user-access', () => {
       declarations: [
       ],
       providers: [
+        { provide: PLATFORM_ID, useValue: 'server' },
         { provide: Router, useValue: {} },
         { provide: ActivatedRoute, useValue: {} },
         { provide: RouterlessTracking, useValue: {} },
         { provide: Angulartics2, useValue: {} },
         { provide: Location , useValue: {} },
-        { provide: PLATFORM_ID, useValue: 'server' },
+        { provide: 'request', useValue: {
+          headers: {},
+          ip: '192.168.1.1',
+          get: (string) => { return '' }
+        }},
         { provide: ArtstorStorageService, useValue: {
           getLocal: (string) => {return {}}
-        }},
+          }
+        },
         Injector,
         AppConfig,
         AuthService, 
@@ -65,16 +76,16 @@ fdescribe('Login and userinfo #pact #user-access', () => {
         provider.addInteraction({
           uponReceiving: 'log in form submission',
           withRequest: {
-            method: 'GET',
+            method: 'POST',
             path: '/api/secure/login',
             // headers: { 
             //   'Cache-Control': 'no-store, no-cache',
             //   'Content-type': 'application/x-www-form-urlencoded'
             // },
-            // body: {
-            //   'j_username': 'EXAMPLE_EMAIL',
-            //   'j_password': 'EXAMPLE_PASSWORD'
-            // }
+            body: {
+              'j_username': 'EXAMPLE_EMAIL',
+              'j_password': 'EXAMPLE_PASSWORD'
+            }
           },
           willRespondWith: {
             status: 200,
