@@ -180,9 +180,7 @@ export class AssetPage implements OnInit, OnDestroy {
     public indexZoomMap: ImageZoomParams[] = []
 
     // Tooltips
-    public addGroupTooltipOpts: any = {}
     public quizModeTooltipOpts: any = {}
-    public addGrpTTDismissed: boolean = false
     public quizModeTTDismissed: boolean = false
 
     // Flag for server vs client rendering
@@ -231,7 +229,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.user = this._auth.getUser();
-        this.addGrpTTDismissed = this._storage.getLocal('addGrpTTDismissed') ? this._storage.getLocal('addGrpTTDismissed') : false
         this.quizModeTTDismissed = this._storage.getLocal('quizModeTTDismissed') ? this._storage.getLocal('quizModeTTDismissed') : false
         this.subscriptions.push(
             this._flags.flagUpdates.subscribe((flags) => {
@@ -449,15 +446,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // MS Browser Agent ?
         this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
-
-        // Set options for add to group tooltip component
-        this.addGroupTooltipOpts = {
-            badge: 'NEW!',
-            heading: 'Add details to groups',
-            bodyText: 'Zoom in on any image and add the detail to a group to refer back to later.',
-            learnMoreURL: 'https://support.artstor.org/?article=zooming-image-details',
-            dismissText: 'Got it'
-        }
 
         this._group.hasPrivateGroups()
     } // OnInit
@@ -1720,14 +1708,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     public updatePrimaryAssetZoom(): void{
         this.assets[0].zoom = this.indexZoomMap[0]
-    }
-
-    public closeAddGroupTooltip(): void{
-        this.addGrpTTDismissed = true
-        this._storage.setLocal('addGrpTTDismissed', this.addGrpTTDismissed)
-
-        // Add Google Analytics tracking for "detailViewTooltipDismissed"
-        this.angulartics.eventTrack.next({ properties: { event: 'detailViewTooltipDismissed', category: 'promotion', label: this.assetIds[0] } })
     }
 
     public closeQuizModeTooltip(): void {
