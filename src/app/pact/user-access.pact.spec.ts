@@ -27,8 +27,7 @@ fdescribe('Login and userinfo #pact #user-access', () => {
   })
 
   afterAll(function (done) {
-    provider.finalize()
-      .then(function () { done() }, function (err) { done.fail(err) })
+    provider.finalize().then(done, done.fail)
   })
 
   beforeEach(() => {
@@ -78,11 +77,11 @@ fdescribe('Login and userinfo #pact #user-access', () => {
           withRequest: {
             method: 'POST',
             path: '/api/secure/login',
-            // headers: { 
-            //   'Cache-Control': 'no-store, no-cache',
-            //   'Content-type': 'application/x-www-form-urlencoded'
-            // },
-            body: {
+            headers: { 
+              'Cache-Control': 'no-store, no-cache',
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            form: {
               'j_username': 'EXAMPLE_EMAIL',
               'j_password': 'EXAMPLE_PASSWORD'
             }
@@ -116,7 +115,8 @@ fdescribe('Login and userinfo #pact #user-access', () => {
               }
             }
           }
-        }),
+        })
+        .then(done, done.fail),
         // // User info
         // provider.addInteraction({
         //   uponReceiving: 'registration form submission from an already registered user',
@@ -134,9 +134,9 @@ fdescribe('Login and userinfo #pact #user-access', () => {
         // })
       )
 
-      Promise.all(interactions)
-        .then(() => { done() })
-        .catch((err) => { done.fail(err) })
+      // Promise.all(interactions)
+      //   .then(() => { done() })
+      //   .catch((err) => { done.fail(err) })
     }) // beforeAll
 
     afterAll((done) => {
@@ -153,7 +153,7 @@ fdescribe('Login and userinfo #pact #user-access', () => {
     it('should return a successful login response', (done) => {
       _auth.login({'username': 'EXAMPLE_EMAIL', 'password': 'EXAMPLE_PASSWORD'})
         .then((data) => {
-          // expect(data.status).toBeTruthy()
+          expect(data.status).toBeTruthy()
           // expect(data.user.username).toEqual('EXAMPLE_EMAIL')
           done()
         }, (err) => {
