@@ -723,10 +723,11 @@ export class AuthService implements CanActivate {
         //   // headers: header, 
         //   // withCredentials: true
         // }; // Create a request option
-        let data = this.formEncode({
+        let data =  {
             'j_username': user.username, //.toLowerCase(),
             'j_password': user.password
-        });
+        }
+        // );
 
         return this.http
             .post(environment.API_URL + '/api/secure/login', data)
