@@ -67,6 +67,32 @@ fdescribe('Login and userinfo #pact #user-access', () => {
   */
   describe('/api/secure/login', () => {
     beforeAll((done) => {
+      // Set up expected objects
+      let expectedUserResponse = {
+        "status":  Matchers.boolean(true),
+        "dayRemain": Matchers.integer(4190),
+        "maxPeriod": Matchers.integer(120),
+        "remoteaccess": Matchers.boolean(false),
+        "isRememberMe": Matchers.boolean(true),
+        "contentSubscriptions": Matchers.eachLike("ADL", { min: 1 }),
+        "user":{
+          "authorities":[
+              {"authority":"ROLE_REGUSER"},
+              {"authority":"SS_ROLE_STAFF"}
+            ],
+          "baseProfileId": Matchers.like(706217),
+          "dayRemain": Matchers.integer(4190),
+          "firstName": Matchers.like("sample"),
+          "lastName": Matchers.like("user"),
+          "institutionId": Matchers.integer(24615),
+          "shibbolethUser": Matchers.boolean(false),
+          "ssAdmin": Matchers.boolean(false),
+          "ssEnabled": Matchers.boolean(true),
+          "typeId": 1,
+          "userPCAllowed": Matchers.like("1"),
+          "username": Matchers.like("EXAMPLE_EMAIL")
+        }
+      }
 
       let interactions = []
 
@@ -89,34 +115,9 @@ fdescribe('Login and userinfo #pact #user-access', () => {
           willRespondWith: {
             status: 200,
             headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-            body: {
-              "status":  Matchers.boolean(true),
-              "dayRemain": Matchers.integer(4190),
-              "maxPeriod": Matchers.integer(120),
-              "remoteaccess": Matchers.boolean(false),
-              "isRememberMe": Matchers.boolean(true),
-              "contentSubscriptions": Matchers.eachLike("ADL", { min: 1 }),
-              "user":{
-                "authorities":[
-                    {"authority":"ROLE_REGUSER"},
-                    {"authority":"SS_ROLE_STAFF"}
-                  ],
-                "baseProfileId": Matchers.like(706217),
-                "dayRemain": Matchers.integer(4190),
-                "firstName": Matchers.like("sample"),
-                "lastName": Matchers.like("user"),
-                "institutionId": Matchers.integer(24615),
-                "shibbolethUser": Matchers.boolean(false),
-                "ssAdmin": Matchers.boolean(false),
-                "ssEnabled": Matchers.boolean(true),
-                "typeId": 1,
-                "userPCAllowed": Matchers.like("1"),
-                "username": Matchers.like("EXAMPLE_EMAIL")
-              }
-            }
+            body: expectedUserResponse
           }
         })
-        .then(done, done.fail),
         // // User info
         // provider.addInteraction({
         //   uponReceiving: 'registration form submission from an already registered user',
@@ -134,9 +135,9 @@ fdescribe('Login and userinfo #pact #user-access', () => {
         // })
       )
 
-      // Promise.all(interactions)
-      //   .then(() => { done() })
-      //   .catch((err) => { done.fail(err) })
+      Promise.all(interactions)
+        .then(() => { done() })
+        .catch((err) => { done.fail(err) })
     }) // beforeAll
 
     afterAll((done) => {
