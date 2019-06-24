@@ -11,6 +11,7 @@ import { AuthService } from '_services'
 import { Injector, PLATFORM_ID } from '@angular/core';
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 import { take } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 fdescribe('Login and userinfo #pact #user-access', () => {
 
@@ -41,7 +42,11 @@ fdescribe('Login and userinfo #pact #user-access', () => {
         { provide: Router, useValue: {} },
         { provide: ActivatedRoute, useValue: {} },
         { provide: RouterlessTracking, useValue: {} },
-        { provide: Angulartics2, useValue: {} },
+        { provide: Angulartics2, useValue: {
+          eventTrack: new Subject(),
+          setUsername: new Subject(),
+          setUserProperties: new Subject()
+        } },
         { provide: Location , useValue: {} },
         { provide: 'request', useValue: {
           headers: {},
@@ -49,9 +54,9 @@ fdescribe('Login and userinfo #pact #user-access', () => {
           get: (string) => { return '' }
         }},
         { provide: ArtstorStorageService, useValue: {
-          getLocal: (string) => {return {}}
-          }
-        },
+          getLocal: (string) => {return {}},
+          setLocal: (string, thing) => { return; },  
+        }},
         Injector,
         AppConfig,
         AuthService, 
