@@ -806,7 +806,12 @@ export class AuthService implements CanActivate {
   // }
 
   private genUserInfoUrl(): string {
-    return this.getUrl(true) + '/userinfo?no-cache=' + new Date().valueOf()
+    let url = this.getUrl(true) + '/userinfo'
+    // We can cache public user object server-side (and for tests!)
+    if (this.isBrowser) {
+      url += '/userinfo?no-cache=' + new Date().valueOf()
+    }
+    return url
   }
 
   private expireSession(): void {

@@ -10,6 +10,7 @@ import { AppConfig } from '../app.service'
 import { AuthService } from '_services'
 import { Injector, PLATFORM_ID } from '@angular/core';
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
+import { take } from 'rxjs/operators';
 
 fdescribe('Login and userinfo #pact #user-access', () => {
 
@@ -117,22 +118,22 @@ fdescribe('Login and userinfo #pact #user-access', () => {
             headers: { 'Content-Type': 'application/json;charset=UTF-8' },
             body: expectedUserResponse
           }
+        }),
+        // User info
+        provider.addInteraction({
+          uponReceiving: 'registration form submission from an already registered user',
+          withRequest: {
+            method: 'GET',
+            path: '/api/secure/userinfo'
+          },
+          willRespondWith: {
+            status: 200,
+            headers: { 
+              'Content-Type': 'application/json;charset=UTF-8' 
+            },
+            body: expectedUserResponse
+          }
         })
-        // // User info
-        // provider.addInteraction({
-        //   uponReceiving: 'registration form submission from an already registered user',
-        //   withRequest: {
-        //     method: 'GET',
-        //     path: '/api/secure/register',
-        //     headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-        //     body: mockAlreadyRegisteredFormInput
-        //   },
-        //   willRespondWith: {
-        //     status: 200,
-        //     headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-        //     body: mockRegistrationResponses[1]
-        //   }
-        // })
       )
 
       Promise.all(interactions)
@@ -163,14 +164,19 @@ fdescribe('Login and userinfo #pact #user-access', () => {
         })
     })
 
-    // Tests already registered service response
-    // it('should return already registered status message', (done) => {
-    //   _auth.registerUser(mockAlreadyRegisteredFormInput).subscribe((data) => {
-    //     expect(data).toEqual(mockRegistrationResponses[1])
-    //     done()
-    //   })
-    // })
-    
+    // Test userinfo/session call
+    it('should return already registered status message', (done) => {
+      _auth.getUserInfo().pipe(take(1)).subscribe(
+        data => {
+          expect(data.status).toBeTruthy()
+          done()
+        },
+        err => {
+          console.log(err)
+          done.fail(err)
+        }
+      )
+    })
 
   })
 
