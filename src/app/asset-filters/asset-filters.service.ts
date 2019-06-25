@@ -23,22 +23,18 @@ export class AssetFiltersService {
         date: [],
         dateObj : {
             earliest : {
-                date : 1000,
                 era : 'BCE'
             },
             latest : {
-                date : 2017,
                 era : 'CE'
             },
         modified : false
         },
         prevDateObj : {
             earliest : {
-                date : 1000,
                 era : 'BCE'
             },
             latest : {
-                date : 2017,
                 era : 'CE'
             }
         },

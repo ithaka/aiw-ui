@@ -720,12 +720,10 @@ export class AssetService {
             } else {
                 dateObj = {
                     modified : false,
-                    earliest : {
-                        date : 1000,
+                    earliest : {                   
                         era : 'BCE'
                     },
                     latest : {
-                        date : 2017,
                         era : 'CE'
                     }
                 }

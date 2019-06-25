@@ -93,11 +93,9 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   public dateFacet = {
     earliest : {
-      date : 1000,
       era : 'BCE'
     },
     latest : {
-      date : 2017,
       era : 'CE'
     },
     modified : false
