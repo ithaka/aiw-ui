@@ -52,6 +52,14 @@ export class MyCollectionsComponent implements OnInit {
       )).subscribe()
     )
 
+    // Show edit PC modal if `upload` route param is passed.
+    this.subscriptions.push(
+      this.route.params.pipe(map(routeParams => {
+          this.showEditPCModal = routeParams['upload'] ? true : false
+        }
+      )).subscribe()
+    );
+
     // If user is logged-in get data for user's Private Collections
     if (this.isLoggedIn) {
       this.getUserPCol('private')
