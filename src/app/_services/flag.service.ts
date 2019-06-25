@@ -88,7 +88,8 @@ export interface FeatureFlags {
   // detailViews?: boolean,
   exportGoogle?: boolean,
   relatedResFlag?: boolean,
-  searchV3?: boolean
+  searchV3?: boolean,
+  newExport?: boolean
 }
 
 interface FlagServiceResponse {
