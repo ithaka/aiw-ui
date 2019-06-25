@@ -11,6 +11,7 @@ import * as https from 'https';
 const jsBundlePattern = new RegExp(/\w*\.\w*\.js$/g);
 // Set up Sentry configuration
 // > Name "NodeSentry" to keep separate from front-end "Sentry" reporter
+// > "artstor-ui-ssr" project in Sentry for server-side reporting
 const NodeSentry = require('@sentry/node')
 NodeSentry.init({
   environment: process.env,
