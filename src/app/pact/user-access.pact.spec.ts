@@ -13,7 +13,7 @@ import { ArtstorStorageService } from '../../../projects/artstor-storage/src/pub
 import { take } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
-fdescribe('Login and userinfo #pact #user-access', () => {
+describe('Login and userinfo #pact #user-access', () => {
 
   let provider, _auth
 
@@ -161,7 +161,7 @@ fdescribe('Login and userinfo #pact #user-access', () => {
       _auth.login({'username': 'EXAMPLE_EMAIL', 'password': 'EXAMPLE_PASSWORD'})
         .then((data) => {
           expect(data.status).toBeTruthy()
-          // expect(data.user.username).toEqual('EXAMPLE_EMAIL')
+          expect(data.user.username).toEqual('EXAMPLE_EMAIL')
           done()
         }, (err) => {
           console.error(err)
@@ -174,6 +174,7 @@ fdescribe('Login and userinfo #pact #user-access', () => {
       _auth.getUserInfo().pipe(take(1)).subscribe(
         data => {
           expect(data.status).toBeTruthy()
+          expect(data.user.username).toBeTruthy()
           done()
         },
         err => {
