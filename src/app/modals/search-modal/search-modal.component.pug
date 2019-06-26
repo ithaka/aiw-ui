@@ -44,14 +44,14 @@
                 .form-card.card.dt-grp
                   .date-filter-row
                     label.sr-only(for="inputDateFilterStart") Start date, only include results from after this date
-                    input#inputDateFilterStart.form-control([(ngModel)]="advanceSearchDate['startDate']", (change)="validateForm()", type="number", (keypress)="dateKeyPress($event)", min="0", placeholder="Start Date")
+                    input#inputDateFilterStart.form-control([(ngModel)]="advanceSearchDate['startDate']", (change)="validateForm()", type="number", (keypress)="dateKeyPress($event)", min="0", placeholder="Start (ex: 1000)")
                     label.sr-only(for="buttonDateFilterStartBCE") BCE, {{ advanceSearchDate['startEra'] == 'BCE' ? 'selected' : 'unselected' }}
                     button#buttonDateFilterStartBCE.side-toggle-btn((click)="advanceSearchDate['startEra'] = 'BCE'", [ngClass]="{'active': advanceSearchDate['startEra'] == 'BCE' }", tabIndex="0", role="button") BCE
                     label.sr-only(for="buttonDateFilterStartCE") CE, {{ advanceSearchDate['startEra'] == 'CE' ? 'selected' : 'unselected' }}
                     button#buttonDateFilterStartCE.side-toggle-btn((click)="advanceSearchDate['startEra'] = 'CE'", [ngClass]="{'active': advanceSearchDate['startEra'] == 'CE' }", tabIndex="0", role="button") CE
                   .date-filter-row
                     label.sr-only(for="inputDateFilterEnd") End date, only include results from before this date
-                    input#inputDateFilterEnd.form-control([(ngModel)]="advanceSearchDate['endDate']", (change)="validateForm()", type="number", (keypress)="dateKeyPress($event)", min="0", placeholder="End Date")
+                    input#inputDateFilterEnd.form-control([(ngModel)]="advanceSearchDate['endDate']", (change)="validateForm()", type="number", (keypress)="dateKeyPress($event)", min="0", placeholder="End (ex: 2019)")
                     label.sr-only(for="buttonDateFilterEndBCE") BCE, {{ advanceSearchDate['endEra'] == 'BCE' ? 'selected' : 'unselected' }}
                     button#buttonDateFilterEndBCE.side-toggle-btn((click)="advanceSearchDate['endEra'] = 'BCE'", [ngClass]="{'active': advanceSearchDate['endEra'] == 'BCE' }", tabIndex="0", role="button") BCE
                     label.sr-only(for="buttonDateFilterEndCE") CE, {{ advanceSearchDate['endEra'] == 'CE' ? 'selected' : 'unselected' }}
