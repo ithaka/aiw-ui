@@ -288,7 +288,7 @@ const mockCategoryNamesRespKeys = ['categoryid', 'categoryname']
 
 // Collection - /v1/collections/id
 const mockCollectionResp = {
-  bigimageurl: "http://mdxstage.artstor.org//thumb/imgstor/size10/CSshared-shelf-2.gif",
+  bigimageurl: "http://mdxlibrary.artstor.org//thumb/imgstor/size10/CSshared-shelf-2.gif",
   blurburl: "<p><a target=_blank  href=http://www.sscommons.org/openlibrary/welcome.html style=display:inline>Shared Shelf Commons</a> is a free, open-access library of images. Search and browse collections with tools to zoom, print, export, and share images. Public Collections are delivered via <a target=_blank href=http://www.artstor.org/jstorforum style=display:inline>JSTOR Forum</a>, a web-based software solution for creating, sharing, and preserving digital collections.</p> Images and media from Shared Shelf Commons can be viewed, downloaded, and shared with anyone on the open web. New open-access collections are added frequently, so check back often to see the latest.</p>",
   catCount: 0,
   collectionImageDesc: null,

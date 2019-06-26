@@ -106,7 +106,7 @@ export class Login implements OnInit, OnDestroy {
           this.loginInstitutions = data['items'];
           // Hardcoded test url for new Shibboleth provider
           if (this._auth.getEnv() === 'test') {
-            let theUrl = 'https://testshibbolethsp.jstor.org/Shibboleth.sso/Login?entityID=https%3A%2F%2Fidp.artstor.org%2Fidp%2Fshibboleth&target=%2Fsecure%2Fshib%3Fdest%3Dhttp%253A%252F%252Fstage.artstor.org%252F%2523%252F%2526site%253Dartstor';
+            let theUrl = 'https://testshibbolethsp.jstor.org/Shibboleth.sso/Login?entityID=https%3A%2F%2Fidp.artstor.org%2Fidp%2Fshibboleth&target=%2Fsecure%2Fshib%3Fdest%3Dhttp%253A%252F%252Flibrary.artstor.org%252F%2523%252F%2526site%253Dartstor';
             this.loginInstitutions.push({
               artstorShibbolethLoginUrl: theUrl,
               entityID: theUrl,

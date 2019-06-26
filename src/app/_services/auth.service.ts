@@ -103,11 +103,10 @@ export class AuthService implements CanActivate {
 
     let testHostnames = [
       'localhost',
-      'localhost:3000',
       'localhost:4000',
       'local.artstor.org',
-      'stage.artstor.org',
-      'beta.stage.artstor.org',
+      'library.artstor.org',
+      'beta.library.artstor.org',
       // test.artstor subdomain is used for WLVs
       'test.artstor.org',
       'test.cirrostratus.org'
@@ -115,6 +114,7 @@ export class AuthService implements CanActivate {
 
     let prodHostnames = [
       'library.artstor.org',
+      'localhost:3000',
       'beta.artstor.org',
       'proxy.artstor.org',
       // prod.artstor subdomain is used for WLVs
@@ -124,20 +124,20 @@ export class AuthService implements CanActivate {
 
     let samlHostnames = [
       'library.artstor.org',
-      'stage.artstor.org',
+      'library.artstor.org',
       'localhost',
       'localhost:3000'
     ]
 
     // Check domain
-    if (  new RegExp(prodHostnames.join('|')).test(this.clientHostname)  ) {
-      // Explicit live endpoints
-      this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
-      this.solrUrl = '/api/search/v1.0/search'
-      this.solrUrlV3 = '/api/search/v3.0/search'
-      this.ENV = 'prod'
-    }
-    else if ( this.clientHostname.indexOf('prod.cirrostratus.org') > -1 ) {
+    // if (  new RegExp(prodHostnames.join('|')).test(this.clientHostname)  ) {
+    //   // Explicit live endpoints
+    //   this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
+    //   this.solrUrl = '/api/search/v1.0/search'
+    //   this.solrUrlV3 = '/api/search/v3.0/search'
+    //   this.ENV = 'prod'
+    // }
+    // else if ( this.clientHostname.indexOf('prod.cirrostratus.org') > -1 ) {
       console.info('Using Prod Endpoints (Absolute)')
       // Prod/Lively endpoints
       this.hostname = '//library.artstor.org'
@@ -146,20 +146,20 @@ export class AuthService implements CanActivate {
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
       this.solrUrlV3 = this.hostname + '/api/search/v3.0/search'
       this.ENV = 'prod'
-    } else if ( new RegExp(testHostnames.join('|')).test(this.clientHostname) ) {
-      console.info('Using Test Endpoints')
-      // Test Endpoints
-      this.hostname = '//stage.artstor.org'
-      this.subdomain = 'stage'
-      this.baseUrl = '//stage.artstor.org/api'
-      this.thumbUrl = '//mdxstage.artstor.org'
-      this.compoundUrl = '//stor.stage.artstor.org/stor'
-      this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
-      this.solrUrl = '/api/search/v1.0/search'
-      this.solrUrlV3 = '/api/search/v3.0/search'
-      this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
-      this.ENV = 'test'
-    }
+    // } else if ( new RegExp(testHostnames.join('|')).test(this.clientHostname) ) {
+    //   console.info('Using Test Endpoints')
+    //   // Test Endpoints
+    //   this.hostname = '//library.artstor.org'
+    //   this.subdomain = 'stage'
+    //   this.baseUrl = '//library.artstor.org/api'
+    //   this.thumbUrl = '//mdxlibrary.artstor.org'
+    //   this.compoundUrl = '//stor.library.artstor.org/stor'
+    //   this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
+    //   this.solrUrl = '/api/search/v1.0/search'
+    //   this.solrUrlV3 = '/api/search/v3.0/search'
+    //   this.IIIFUrl = '//tslibrary.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
+    //   this.ENV = 'test'
+    // }
 
     // Set Saml availability
     if (new RegExp(samlHostnames.join('|')).test(this.clientHostname)) {
@@ -168,13 +168,13 @@ export class AuthService implements CanActivate {
 
     // Additional Local dev domains
     if (this.clientHostname.indexOf('local.sahara') > -1) {
-      this.hostname = '//sahara.beta.stage.artstor.org'
+      this.hostname = '//sahara.beta.library.artstor.org'
       this.ENV = 'test'
     }
 
     // SSR routing WORKAROUND
-    if (this.clientHostname.indexOf('beta.stage.artstor.org') > -1) {
-      this.hostname = '//beta.stage.artstor.org'
+    if (this.clientHostname.indexOf('beta.library.artstor.org') > -1) {
+      this.hostname = '//beta.library.artstor.org'
       this.ENV = 'test'
     } else if (this.clientHostname.indexOf('beta.artstor.org') > -1) {
       this.hostname = '//beta.artstor.org'
@@ -182,8 +182,8 @@ export class AuthService implements CanActivate {
     }
 
     // Sahara routing WORKAROUND
-    if (this.clientHostname.indexOf('sahara.beta.stage.artstor.org') > -1) {
-      this.hostname = '//sahara.beta.stage.artstor.org'
+    if (this.clientHostname.indexOf('sahara.beta.library.artstor.org') > -1) {
+      this.hostname = '//sahara.beta.library.artstor.org'
       this.ENV = 'test'
     }
     if (this.clientHostname.indexOf('sahara.prod.artstor.org') > -1) {
@@ -192,7 +192,7 @@ export class AuthService implements CanActivate {
 
     // Local routing should point to full URL
     // * This should NEVER apply when using a proxy, as it will break authorization
-    if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'beta.stage.artstor.org', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(this.clientHostname)) {
+    if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'beta.library.artstor.org', 'sahara.beta.library.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(this.clientHostname)) {
       this.baseUrl = this.hostname + '/api'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
       this.solrUrlV3 = this.hostname + '/api/search/v3.0/search'

@@ -135,7 +135,7 @@ export class MetadataService {
             resolution_x: data.resolution_x,
             resolution_y: data.resolution_y,
             thumbnail_url: this.buildThumbnailUrl(data),
-            tileSourceHostname: (this._auth.getEnv() == 'test') ? '//tsstage.artstor.org' : '//tsprod.artstor.org',
+            tileSourceHostname: (this._auth.getEnv() == 'test') ? '//tslibrary.artstor.org' : '//stor.artstor.org',
             title: data.title && data.title !== "" ? data.title : 'Untitled',
             updated_on: data.updated_on,
             viewer_data: data.viewer_data,
@@ -172,7 +172,7 @@ export class MetadataService {
             .pipe(map((res) => {
                 // replace imageUrl with stage url if we are in rest mode
                 if (this._auth.getEnv() == 'test') {
-                    res.imageUrl = res.imageUrl.replace('kts.artstor','kts.stage.artstor')
+                    res.imageUrl = res.imageUrl.replace('kts.artstor','kts.library.artstor')
                 }
                 return res
             }))

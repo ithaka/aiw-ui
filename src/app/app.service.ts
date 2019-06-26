@@ -52,7 +52,7 @@ export class AppConfig {
       || this.clientHostname.indexOf('sahara.local.artstor.org') > -1
       || this.clientHostname.indexOf('sahara.prod.artstor.org') > -1
       || this.clientHostname.indexOf('sahara.test.artstor.org') > -1
-      || this.clientHostname.indexOf('sahara.beta.stage.artstor.org') > -1 ) {
+      || this.clientHostname.indexOf('sahara.beta.library.artstor.org') > -1 ) {
       return WLV_SAHARA
     } else {
       return WLV_ARTSTOR

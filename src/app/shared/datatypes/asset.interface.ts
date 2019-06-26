@@ -199,7 +199,7 @@ export class Asset {
      * - Reports status via 'this.dataLoadedSource' observable
      */
     private initAssetProperties(data: AssetData, testEnv?: boolean): void {
-        let storUrl: string = testEnv ? '//stor.stage.artstor.org' : '//stor.artstor.org'
+        let storUrl: string = testEnv ? '//stor.library.artstor.org' : '//stor.artstor.org'
         // Set array of asset metadata fields to Asset, and format
         if (data.metadata_json) {
             this.formattedMetadata = this.formatMetadata(data.metadata_json)
@@ -250,7 +250,7 @@ export class Asset {
             for (let i = 0; i < data.image_compound_urls.length; i++) {
                 let path = data.image_compound_urls[i]
                 // path = path.replace('/info.json','')
-                // data.image_compound_urls[i] = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(path) + '/info.json'
+                // data.image_compound_urls[i] = '//tslibrary.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(path) + '/info.json'
                 data.image_compound_urls[i] = storUrl + '/fcgi-bin/iipsrv.fcgi?IIIF=' + path
             }
             this.tileSource = data.image_compound_urls
@@ -261,12 +261,10 @@ export class Asset {
           this.tileSource = this.thumbnail_url = storUrl + '/stor' + data.image_url
         }
         else {
-            this.tileSource = data.tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgPath) + '/info.json'
+            this.tileSource = 'https://stor.artstor.org/iiif/fpx' + imgPath + '/info.json'
         }
-        // If using rosa/IIIF endpoint, we have to use "native"
-        let isRosa: boolean = this.tileSource.indexOf('rosa-iiif') !== -1
         // IIIF api dictates that the name indicates type/quality
-        this.qualities = [(isRosa ? 'native' : 'default')]
+        this.qualities = ['default']
         // Set download after tilesource determined
         this.downloadLink = this.buildDownloadLink(data, data.groupId)
 
