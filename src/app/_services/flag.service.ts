@@ -50,6 +50,7 @@ export class FlagService {
        */
       this.flags.bannerShow = flags.bannerShow
       this.flags.bannerCopy = flags.bannerCopy
+      this.flags.newExport = flags.newExport
 
       // Push update to subscribers
       this.flagSource.next(this.flags)
@@ -88,7 +89,8 @@ export interface FeatureFlags {
   // detailViews?: boolean,
   exportGoogle?: boolean,
   relatedResFlag?: boolean,
-  searchV3?: boolean
+  searchV3?: boolean,
+  newExport?: boolean
 }
 
 interface FlagServiceResponse {
@@ -96,4 +98,5 @@ interface FlagServiceResponse {
   unaffiliatedAccessRollout: string[]
   bannerShow: boolean
   bannerCopy: string
+  newExport: boolean
 }

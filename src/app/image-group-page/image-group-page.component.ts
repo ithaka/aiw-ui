@@ -13,7 +13,8 @@ import {
   ImageGroupService,
   GroupService,
   DomUtilityService,
-  ToastService
+  ToastService,
+  FlagService
 } from '_services'
 import { LoadingStateOptions, LoadingState } from './../modals/loading-state/loading-state.component'
 import { ImageGroup } from 'datatypes'
@@ -74,6 +75,9 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   public showExportLoadingState: boolean = false
   private exportLoadingStateopts: LoadingStateOptions
 
+  // For group export call param toggle
+  private newExport: boolean = false
+
   constructor(
     public _appConfig: AppConfig,
     private _ig: ImageGroupService, // this will be confusing for a bit. ImageGroupService deals with all the old image group service stuff, and some state management
@@ -85,7 +89,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     private _title: TitleService,
     private _storage: ArtstorStorageService,
     private _dom: DomUtilityService,
-    private _toasts: ToastService
+    private _toasts: ToastService,
+    private _flags: FlagService
 
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
@@ -122,15 +127,35 @@ export class ImageGroupPage implements OnInit, OnDestroy {
             )).subscribe()
           }
       })).subscribe()
-     ) // end push
+    ) // end push
+
+
+    // Set flag for springBoot param based on flag service
+    this.subscriptions.push(
+      this._flags.getFlagsFromService().pipe(
+        take(1),
+        map(flags => {
+          this.newExport = flags.newExport
+        }, (err) => {
+          console.error(err)
+      })).subscribe()
+    )
 
     /**
      * Get Route Params
      * - Let Assets service know what group to load
      */
     this.subscriptions.push(
+      // Set flag for springBoot param based on featureFlag
+      this._flags.flagUpdates.subscribe((flags) => {
+        this.newExport = flags.newExport
+      }),
+
       this.route.params.pipe(
         map(routeParams => {
+          // Find feature flags applied on route
+          this._flags.readFlags(routeParams)
+
           id = routeParams['igId']
           let params = Object.assign({}, routeParams)
           // If a page number isn't set, reset to page 1!
@@ -359,7 +384,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
 
     let downloadLink: string = ''
-    this._ig.getDownloadLink(this.ig)
+    this._ig.getDownloadLink(this.ig, false, this.newExport)
       .then( data => {
         if (data.path && this.showExportLoadingState) {
           downloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/')
@@ -396,7 +421,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
 
     let zipDownloadLink: string = ''
-    this._ig.getDownloadLink(this.ig, true)
+    this._ig.getDownloadLink(this.ig, true, this.newExport)
       .then( data => {
         if (data.path && this.showExportLoadingState) {
           zipDownloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/')
