@@ -135,13 +135,11 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       this._flags.getFlagsFromService().pipe(
         take(1),
         map(flags => {
-          console.log(flags)
           this.newExport = flags.newExport
         }, (err) => {
           console.error(err)
       })).subscribe()
     )
-
 
     /**
      * Get Route Params
