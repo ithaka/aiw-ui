@@ -92,13 +92,14 @@ export class AuthService implements CanActivate {
     // Default to relative or prod endpoints
     this.ENV = 'prod'
     this.hostname = ''
-    this.baseUrl =  '/api'
     this.thumbUrl = '//mdxdv.artstor.org'
     this.compoundUrl = '//stor.artstor.org/stor'
     this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
     this.subdomain = 'library'
     this.solrUrl = '/api/search/v1.0/search'
     this.solrUrlV3 = '/api/search/v3.0/search'
+    // Variables set via environment rather than hostname
+    this.baseUrl =  environment.API_URL + '/api'
 
 
     let testHostnames = [
@@ -141,7 +142,7 @@ export class AuthService implements CanActivate {
       console.info('Using Prod Endpoints (Absolute)')
       // Prod/Lively endpoints
       this.hostname = '//library.artstor.org'
-      this.baseUrl =  '//library.artstor.org/api'
+      // this.baseUrl =  '//library.artstor.org/api'
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
       this.solrUrlV3 = this.hostname + '/api/search/v3.0/search'
@@ -151,7 +152,7 @@ export class AuthService implements CanActivate {
       // Test Endpoints
       this.hostname = '//stage.artstor.org'
       this.subdomain = 'stage'
-      this.baseUrl = '//stage.artstor.org/api'
+      // this.baseUrl = '//stage.artstor.org/api'
       this.thumbUrl = '//mdxstage.artstor.org'
       this.compoundUrl = '//stor.stage.artstor.org/stor'
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
@@ -193,7 +194,7 @@ export class AuthService implements CanActivate {
     // Local routing should point to full URL
     // * This should NEVER apply when using a proxy, as it will break authorization
     if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'beta.stage.artstor.org', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(this.clientHostname)) {
-      this.baseUrl = this.hostname + '/api'
+      // this.baseUrl = this.hostname + '/api'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
       this.solrUrlV3 = this.hostname + '/api/search/v3.0/search'
     }
@@ -414,15 +415,7 @@ export class AuthService implements CanActivate {
 
   public getUrl(secure?: boolean): string {
     let url: string = this.baseUrl
-    if (!this.isBrowser){
-      if (url.indexOf('//') === 0) {
-        // append for local use, which is set to relative protocol
-        url = 'https:' + url
-      } else if (url.indexOf('http') < 0) {
-        // append for server when set by request host in app config (see app.service.ts)
-        url = 'https://' + url
-      }
-    }
+    // Append secure path
     if (secure) {
       url += '/secure'
     }
@@ -724,21 +717,25 @@ export class AuthService implements CanActivate {
      * Logs user in
      * @param user User must have username (which is an email address) and password to be passed in the request
      */
-    login(user: User): Promise<any> {
-        let header = new HttpHeaders().set('Cache-Control', 'no-store, no-cache').set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
-        let options = { headers: header, withCredentials: true }; // Create a request option
-        let data = this.formEncode({
-                'j_username': user.username.toLowerCase(),
-                'j_password': user.password
-            });
+    login(user: any): Promise<any> {
+        let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('Cache-Control', 'no-store, no-cache')
+        let options = { 
+          headers: header, 
+          withCredentials: true
+        }; 
+        // Encode form data
+        let data =  this.formEncode({
+            'j_username': user.username,
+            'j_password': user.password
+        })
 
         return this.http
-            .post(this.getUrl(true) + '/login', data, options)
+            .post(environment.API_URL + '/api/secure/login', data, options)
             .toPromise();
     }
 
     getLoginError(user: User) {
-        let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // ... Set content type to JSON
+        let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
         let options = { headers: header, withCredentials: true }; // Create a request option
 
         return this.http
@@ -809,7 +806,12 @@ export class AuthService implements CanActivate {
   // }
 
   private genUserInfoUrl(): string {
-    return this.getUrl(true) + '/userinfo?no-cache=' + new Date().valueOf()
+    let url = this.getUrl(true) + '/userinfo'
+    // We can cache public user object server-side (and for tests!)
+    if (this.isBrowser) {
+      url += '?no-cache=' + new Date().valueOf()
+    }
+    return url
   }
 
   private expireSession(): void {

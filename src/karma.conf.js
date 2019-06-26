@@ -16,7 +16,7 @@ module.exports = function (config) {
       require('@angular-devkit/build-angular/plugins/karma')
     ],
     client: {
-      clearContext: false // leave Jasmine Spec Runner output visible in browser
+      clearContext: true // leave Jasmine Spec Runner output visible in browser
     },
     coverageIstanbulReporter: {
       dir: require('path').join(__dirname, '../coverage'),
@@ -81,6 +81,15 @@ module.exports = function (config) {
         provider: 'artaa_service',
         pactFileWriteMode: 'merge'
       },
+      {
+        cors: true,
+        host: 'localhost',
+        port: 1206,
+        dir: 'pacts/',
+        consumer: 'aiw-ui',
+        provider: 'artaa_service',
+        pactFileWriteMode: 'merge'
+      },
     ],
     // 4) here we can define proxies to redirect requests from our pact tests to the mock server
     proxies: {
@@ -94,6 +103,9 @@ module.exports = function (config) {
       '/api/secure/user/abcdefg': 'http://localhost:1203/api/secure/user/abcdefg',
       // User Registration
       '/api/secure/register': 'http://localhost:1205/api/secure/register',
+      // User Access
+      '/api/secure/login': 'http://localhost:1206/api/secure/login',
+      '/api/secure/userinfo': 'http://localhost:1206/api/secure/userinfo',
       // User Account
       '/api/lostpw': 'http://localhost:1205/api/lostpw',
       // Collection Endpoints
