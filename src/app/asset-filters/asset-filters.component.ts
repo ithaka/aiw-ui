@@ -272,6 +272,10 @@ export class AssetFilters {
     if (this.availableFilters.dateObj && this.availableFilters.dateObj.modified == true && this.filterDate) {
       params['startDate'] = this.availableFilters.dateObj.earliest.date * (this.availableFilters.dateObj.earliest.era == 'BCE' ? -1 : 1);
       params['endDate'] = this.availableFilters.dateObj.latest.date * (this.availableFilters.dateObj.latest.era == 'BCE' ? -1 : 1);
+    
+      // Make sure the params are not NaN before setting route parameter
+      params['startDate'] = isNaN(params['startDate']) ? 0 : params['startDate']
+      params['endDate'] = isNaN(params['endDate']) ? 0 : params['endDate']
     }
 
     for (let filter of this.appliedFilters) {
