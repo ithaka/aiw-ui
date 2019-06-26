@@ -127,16 +127,30 @@ export class ImageGroupPage implements OnInit, OnDestroy {
             )).subscribe()
           }
       })).subscribe()
-     ) // end push
+    ) // end push
+
+
+    // Set flag for springBoot param based on flag service
+    this.subscriptions.push(
+      this._flags.getFlagsFromService().pipe(
+        take(1),
+        map(flags => {
+          console.log(flags)
+          this.newExport = flags.newExport
+        }, (err) => {
+          console.error(err)
+      })).subscribe()
+    )
+
 
     /**
      * Get Route Params
      * - Let Assets service know what group to load
      */
     this.subscriptions.push(
-      // Set flag for springBoot based on featureFlag
+      // Set flag for springBoot param based on featureFlag
       this._flags.flagUpdates.subscribe((flags) => {
-        this.newExport = flags.newExport ? true : false
+        this.newExport = flags.newExport
       }),
 
       this.route.params.pipe(
