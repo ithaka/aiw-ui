@@ -40,6 +40,18 @@ export class FlagService {
       this.flags.bannerCopy = flags.bannerCopy
       this.flags.newExport = flags.newExport
 
+      /**
+       * EXAMPLE USE OF COUNTRY CODE ROLLOUT
+       * // Boolean assignments
+       * this.unaffiliated = flags.unaffiliatedAccess
+       *
+       * // If the user's country code is allowed, set unaffiliated flag to true
+       * let userCountryCode: string = res.headers.get('x-artstor-country-code').substr(0, 2)
+       * if (flags.unaffiliatedAccessRollout.indexOf(userCountryCode) > -1) {
+       *  this.unaffiliated = true
+       * }
+       */
+
       let userCountryCode: string = res.headers.get('x-artstor-country-code').substr(0, 2)
 
        if (flags.newExportRollout.indexOf(userCountryCode) > -1) {
