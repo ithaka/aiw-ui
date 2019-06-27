@@ -35,26 +35,20 @@ export class FlagService {
     ).pipe(
     map(res => {
       let flags = res.body
-      let userCountryCode: string = res.headers.get('x-artstor-country-code').substr(0, 2)
 
-      /**
-       * EXAMPLE USE OF COUNTRY CODE ROLLOUT
-       * // Boolean assignments
-       * this.unaffiliated = flags.unaffiliatedAccess
-       *
-       * // If the user's country code is allowed, set unaffiliated flag to true
-       * let userCountryCode: string = res.headers.get('x-artstor-country-code').substr(0, 2)
-       * if (flags.unaffiliatedAccessRollout.indexOf(userCountryCode) > -1) {
-       *  this.unaffiliated = true
-       * }
-       */
       this.flags.bannerShow = flags.bannerShow
       this.flags.bannerCopy = flags.bannerCopy
       this.flags.newExport = flags.newExport
 
+      let userCountryCode: string = res.headers.get('x-artstor-country-code').substr(0, 2)
+
+       if (flags.newExportRollout.indexOf(userCountryCode) > -1) {
+         this.flags.newExport = true
+       }
+
       // Push update to subscribers
       this.flagSource.next(this.flags)
-      // Return 
+      // Return
       return this.flags
     }))
   }
@@ -95,8 +89,8 @@ export interface FeatureFlags {
 
 interface FlagServiceResponse {
   unaffiliatedAccess: boolean
-  unaffiliatedAccessRollout: string[]
   bannerShow: boolean
   bannerCopy: string
+  newExportRollout: string[]
   newExport: boolean
 }
