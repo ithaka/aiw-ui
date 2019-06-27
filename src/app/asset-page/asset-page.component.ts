@@ -265,7 +265,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 } else {
                     this.assetIds[0] = routeParams['assetId']
 
-                    if (this.prevAssetResults.thumbnails.length > 0) {
+                    if (this.prevAssetResults.thumbnails && this.prevAssetResults.thumbnails.length > 0) {
                         let currentAssetIndex = this.currentAssetIndex();
                         if (currentAssetIndex === -1){
                             if ( this.assetIndex % 24 === 0 ) { // Browser back button pressed
@@ -366,7 +366,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.restrictedAssetsCount = allResults.restricted_thumbnails.length
                     if (this.loadArrayFirstAsset) {
                         this.loadArrayFirstAsset = false;
-                        if ((this.prevAssetResults) && (this.prevAssetResults.thumbnails.length > 0)) {
+                        if ((this.prevAssetResults.thumbnails) && (this.prevAssetResults.thumbnails.length > 0)) {
                             /***
                              * If current asset is not present in prevAssetResults page,
                              * load next asset page and evaluate current asset index
@@ -899,9 +899,12 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     private addAssetToIG(detailView?: boolean): void {
-
         if (this.user && this.user.isLoggedIn) {
             if(detailView) {
+                if (!this.assetViewer) {
+                    console.warn("addAssetToIG(): Cannot save detail if IIIF viewer does not load")
+                    return
+                }
                 // Get Bounds from OSD viewer for the saved detail
                 let bounds = this.assetViewer.osdViewer.viewport.viewportToImageRectangle(this.assetViewer.osdViewer.viewport.getBounds(true))
                 // Make sure the bounds are adjusted for the negative x and y values
@@ -1205,7 +1208,7 @@ export class AssetPage implements OnInit, OnDestroy {
         this.quizShuffle = false;
         this.showAssetCaption = true;
 
-        this.assetViewer.togglePresentationMode();
+        this.assetViewer && this.assetViewer.togglePresentationMode();
         this.showAssetDrawer = false;
     }
 
