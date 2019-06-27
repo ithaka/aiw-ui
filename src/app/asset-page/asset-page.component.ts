@@ -1612,6 +1612,19 @@ export class AssetPage implements OnInit, OnDestroy {
         })
     }
 
+    /**
+     * Add Captain's log event: Request IAP
+     * @param asset to get the asset id to be logged
+     */
+    private logIAP(asset: Asset): void {
+        this._log.log({
+            eventType: 'artstor_request_iap',
+            additional_fields: {
+                item_id: asset.id
+            }
+        })
+    }
+
     private multiViewPageViaArrow(): void{
         if (this.isFullscreen){
             this.angulartics.eventTrack.next({ properties: { event: 'multiViewFullscreenPageViaArrow', category: 'multiview', label: this.assets[0].id } })
