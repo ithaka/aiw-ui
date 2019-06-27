@@ -131,6 +131,13 @@ export class LoginFormComponent implements OnInit {
   }
 
   login(user: User) {
+    /**
+     * Make sure username/email is all lowercase
+     * > This may be removed in the future, but we would need to coordinate with the Auth team
+     * > There are/were legacy Artstor users who were using mixed case usernames, and continue to try to do so
+     */
+    user.username = user.username.toLowerCase()
+
     this.loginCall = (user) => { return this._auth.login(user) }
 
     user.username = user.username.toLowerCase().trim()
