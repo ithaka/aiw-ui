@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common'
 
 // Project Dependencies
-import { AssetService, ImageGroupService, GroupService, AuthService, FlagService } from '_services'
+import { AssetService, ImageGroupService, GroupService, AuthService, FlagService, LogService } from '_services'
 import { ImageGroup } from 'datatypes'
 import { AppConfig } from '../app.service'
 import { Toast, ToastService } from 'app/_services';
@@ -85,6 +85,7 @@ export class NavMenu implements OnInit, OnDestroy {
     private _ig: ImageGroupService,
     private _group: GroupService,
     private route: ActivatedRoute,
+    private _log: LogService,
     public _auth: AuthService,
     public _flags: FlagService
   ) {
@@ -161,6 +162,14 @@ export class NavMenu implements OnInit, OnDestroy {
 
       if (params['igId']) {
         this._router.navigate(['/printpreview/' + params['igId']])
+
+        // Add Captain's log event: Print image group
+        this._log.log({
+          eventType: 'artstor_print_group',
+          additional_fields: {
+            group_id: params['igId']
+          }
+        })
       }
     }
   }
