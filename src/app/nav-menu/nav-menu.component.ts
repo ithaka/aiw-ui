@@ -161,8 +161,6 @@ export class NavMenu implements OnInit, OnDestroy {
       let params = this.route.snapshot.params
 
       if (params['igId']) {
-        this._router.navigate(['/printpreview/' + params['igId']])
-
         // Add Captain's log event: Print image group
         this._log.log({
           eventType: 'artstor_print_group',
@@ -170,6 +168,8 @@ export class NavMenu implements OnInit, OnDestroy {
             group_id: params['igId']
           }
         })
+
+        this._router.navigate(['/printpreview/' + params['igId']])
       }
     }
   }
