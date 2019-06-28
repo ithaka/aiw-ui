@@ -135,6 +135,15 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
     public multiViewPage: number = 1
     public multiViewCount: number = 1
 
+    public isPdfAsset: boolean = false
+
+    private pdfViewerOpts: any = {
+        url: '/assets/ANG-NewAPIrequestsfromtheAIRteam-270217-0740-16.pdf'
+        // url: 'https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf',
+        // url: 'https://stage.artstor.org/media/1003032929/20',
+        // withCredentials: true
+    }
+
     constructor(
         private _http: HttpClient, // TODO: move _http into a service
         private _log: LogService,
@@ -244,6 +253,12 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
         // Display thumbnail
         this.state = viewState.thumbnailFallback
         if (this.thumbnailMode) { return } // leave state on thumbnail if thumbnail mode is triggered
+
+        console.log(asset, 'asset is');
+
+        if(asset.typeId === 20) {
+            this.isPdfAsset = true
+        }
 
         // Object types that need loaders
         switch (asset.typeName) {
@@ -613,6 +628,10 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
      */
     public hasMultiViewHelp(): boolean {
         return this.multiViewHelp.observers.length > 0
+    }
+
+    public onPdfError(event: any): void {
+        console.log('onPdfError - ', event)
     }
 
 }
