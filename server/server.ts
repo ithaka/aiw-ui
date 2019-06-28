@@ -10,9 +10,11 @@ import { join } from 'path';
 import * as https from 'https';
 const jsBundlePattern = new RegExp(/\w*\.\w*\.js$/g);
 // Set up Sentry configuration
-const Sentry = require('@sentry/node')
-Sentry.init({
-  // environment: process.env,
+// > Name "NodeSentry" to keep separate from front-end "Sentry" reporter
+// > "artstor-ui-ssr" project in Sentry for server-side reporting
+const NodeSentry = require('@sentry/node')
+NodeSentry.init({
+  environment: process.env,
   dsn: 'https://80481e6afe274aa49c671606ca054bec@sentry.io/1391720'
 })
 // Faster server renders w/ Prod mode (dev mode never needed)
@@ -20,9 +22,9 @@ enableProdMode()
 // Express server
 const app = express()
 // Sentry handler must be the first middleware on the app
-app.use(Sentry.Handlers.requestHandler() as express.RequestHandler)
+app.use(NodeSentry.Handlers.requestHandler() as express.RequestHandler)
 // The error handler must be before any other error middleware
-app.use(Sentry.Handlers.errorHandler() as express.ErrorRequestHandler)
+app.use(NodeSentry.Handlers.errorHandler() as express.ErrorRequestHandler)
 // Only use HTTPS settings locally
 if (!process.env.SAGOKU) {
   console.log("Local Development: Setting SSL cert")
@@ -95,6 +97,7 @@ app.get('/api/*', (req, res) => {
  */
 app.get(['/public/*', '/object/*'], (req, res, next) => {
   console.log('/public route request received')
+  NodeSentry.captureException("TEST error!")
   try {
     res.render('index', { req, res },
       (err, html) => {
@@ -127,7 +130,7 @@ app.get(['/public/*', '/object/*'], (req, res, next) => {
     });
   } catch(err) {
     // If render fails, notify Sentry and pass static pages to user
-    Sentry.captureException(err)
+    NodeSentry.captureException(err)
     next()
   }
 });
