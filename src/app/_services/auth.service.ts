@@ -355,6 +355,26 @@ export class AuthService implements CanActivate {
   }
 
   /**
+   * Used for tracking account updates that trigger emails
+   */
+  public getAuthLogParams(): string {
+    /**
+     * Requestor Role
+     * We currently default role, since other cases do not yet apply
+     * - Options: "self" "admin" "staff"
+     */
+    let role = 'self'
+    /**
+     * Requestor Origin
+     * Origins from AIW will either be "artstor" or "sahara"
+     * - Options: “jstor,plants,struggles,heritage,artstor,forum,sahara,bolt”
+     */
+    let origin = this._app.config.siteID.toLowerCase()
+    // Construct param string to attach to account modifying requests
+    return `requestorRole=${role}&requestOrigin=${origin}`
+  }
+
+  /**
    * Gets the roles and departments lists, which are used in the registration page
    * @returns Observable resolved with object containing: roleArray, deptArray
    */
@@ -364,19 +384,21 @@ export class AuthService implements CanActivate {
 
   /** Calls service to register a user
    * @param registration should have properties: _method="update", username, password, role, dept, info<boolean>, survey<boolean>
-   */
+   * - Modifies Account: should include Auth logging params
+   **/
   public registerUser(registration: any): Observable<any> {
     let data = this.formEncode(registration);
 
     let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // form encode it
     let options = { headers: header, withCredentials: true }; // Create a request option
 
-    return this.http.post(environment.API_URL + '/api/secure/register', data , options);
+    return this.http.post(environment.API_URL + '/api/secure/register?' + this.getAuthLogParams(), data , options);
   }
 
   /**
    * Shibboleth/Saml registration
    * @param registration in addition to regular registration form, requires "samlTokenId" property
+   * - Modifies Account: should include Auth logging params
    */
   public registerSamlUser(registration: any): Observable<any> {
     // Clear method used for regular registration
@@ -386,21 +408,27 @@ export class AuthService implements CanActivate {
     let header = new HttpHeaders().set('Content-Type', 'application/json')
     let options = { headers: header, withCredentials: true }
 
-    return this.http.post(environment.API_URL + '/saml/user/create', registration , options)
+    return this.http.post(environment.API_URL + '/saml/user/create?' + this.getAuthLogParams(), registration , options)
   }
 
   /**
    * Shibboleth/Saml linking
    * @param user Artstor login credentials requires "username", "password", and "samlTokenId"
+   * - Modifies Account: should include Auth logging params
    */
   public linkSamlUser(credentials: any): Promise<any> {
     let header = new HttpHeaders().set('Content-Type', 'application/json')
     let options = { headers: header, withCredentials: true }
 
-    return this.http.post(environment.API_URL + '/saml/user/link', credentials , options)
+    return this.http.post(environment.API_URL + '/saml/user/link?' + this.getAuthLogParams(), credentials , options)
       .toPromise()
   }
 
+  /**
+   * Change current user's password
+   * - For password change while logged in
+   * - Modifies Account: should include Auth logging params
+   */
   public changePassword(oldPass: string, newPass: string): Observable<any> {
     let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // form encode it
     let options = { headers: header, withCredentials: true }; // Create a request option
@@ -410,7 +438,7 @@ export class AuthService implements CanActivate {
       password: newPass
     });
 
-    return this.http.post(this.getUrl(true) + '/profile', data, options)
+    return this.http.post(this.getUrl(true) + '/profile?' + this.getAuthLogParams(), data, options)
   }
 
   public getUrl(secure?: boolean): string {
@@ -755,6 +783,7 @@ export class AuthService implements CanActivate {
      * Service call for password reset
      * @note This call actually changes the password to a random new one (2019-06-06)
      * @param email account password should be reset on
+     * - Modifies Account: should include Auth logging params
      */
     pwdReset(email: string): Promise<any> {
         let options = { 
@@ -765,7 +794,7 @@ export class AuthService implements CanActivate {
           }
         }
         return this.http
-            .get(environment.API_URL + '/api/lostpw', options)
+            .get(environment.API_URL + '/api/lostpw?' + this.getAuthLogParams(), options)
             .toPromise();
     }
 
