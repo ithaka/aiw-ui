@@ -1721,4 +1721,13 @@ export class AssetPage implements OnInit, OnDestroy {
         this.angulartics.eventTrack.next({ properties: { event: 'quizModeTooltipDismissed', category: 'promotion', label: this.assetIds[0] } })
     }
 
+    /**
+     * Exits viewer if available and fullscreen
+     */
+    public exitFullscreenViewer() {
+        if (this.assetViewer) {
+            this.assetViewer.exitFullScreen(); 
+            this.assetViewer.setFullscreen(false)
+        }   
+    }
 }
