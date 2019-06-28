@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 
 // Project Dependencies
-import { AssetService, DomUtilityService, ThumbnailService } from '_services';
+import { AssetService, DomUtilityService, ThumbnailService, LogService } from '_services';
 import { Asset } from '../../asset-page/asset';
+import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/public_api';
 
 @Component({
   selector: 'ang-share-link-modal',
@@ -24,7 +25,9 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
   constructor(
     private _assets: AssetService,
     private _thumbnail: ThumbnailService,
-    private _dom: DomUtilityService
+    private _dom: DomUtilityService,
+    private _log: LogService,
+    private _storage: ArtstorStorageService
   ) { }
 
   ngOnInit() {
@@ -90,6 +93,19 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
 
       if (id === 'copyURL'){
         this.copyURLStatusMsg = msg;
+
+        // Add Captain's log event: Copy image url
+        let searchResults = this._storage.getLocal('results')
+        if (searchResults) {
+          this._log.log({
+              eventType: 'artstor_copy_link',
+              additional_fields: {
+                referring_requestid: searchResults.requestId,
+                item_id: this.asset.id
+              }
+          })
+        }
+
         setTimeout(() => {
           this.copyURLStatusMsg = '';
         }, 8000);

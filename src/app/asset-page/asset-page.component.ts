@@ -1049,7 +1049,7 @@ export class AssetPage implements OnInit, OnDestroy {
      * Adds a link to the current asset page to the user's clipboard
      * @requires browser
      */
-    private copyGeneratedImgURL(): void {
+    private copyGeneratedImgURL(asset: Asset): void {
 
         let statusMsg = '';
         let input: any;
@@ -1066,6 +1066,18 @@ export class AssetPage implements OnInit, OnDestroy {
         // Determine if on iOS (no copy functionality)
         if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
             iOSuser = true
+        }
+
+        // Add Captain's log event: Copy image url
+        let searchResults = this._storage.getLocal('results')
+        if (searchResults) {
+            this._log.log({
+                eventType: 'artstor_copy_link',
+                additional_fields: {
+                    referring_requestid: searchResults.requestId,
+                    item_id: asset.id
+                }
+            })
         }
 
         setTimeout(() => {
