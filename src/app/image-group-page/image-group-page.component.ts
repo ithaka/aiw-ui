@@ -386,7 +386,15 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     let downloadLink: string = ''
     this._ig.getDownloadLink(this.ig, false, this.newExport)
       .then( data => {
-        if (data.path && this.showExportLoadingState) {
+
+        // Handle 200 Response with "status": "FAILED"
+        if (data.status === "FAILED") {
+          console.error("Export Failed")
+          this.exportLoadingStateopts.state = LoadingState.error
+          this.exportLoadingStateopts.errorType = 'server'
+        }
+
+        else if (data.path && this.showExportLoadingState) {
           downloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/')
           clearInterval(interval)
 
@@ -398,6 +406,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
             this.downLoadFile(this.ig.name, downloadLink)
           }, 5000)
         }
+
       })
       .catch( error => {
         console.error(error)
