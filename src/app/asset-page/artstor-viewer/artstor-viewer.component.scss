@@ -33,6 +33,22 @@ $desktop: 992px;*/
     overflow: hidden;
 }
 
+.asset-viewer__buttons {
+    .bs-tooltip-bottom .arrow::before {
+        border-bottom-color: $color-gray-7;
+    }
+    .tooltip-inner {
+        background-color: $color-gray-7;
+        font-family: Arial;
+        font-size: 10px;
+        font-weight: normal;
+        line-height: 1.2;
+        letter-spacing: normal;
+        text-align: center;
+        color: $color-white;
+    }
+}
+
 .asset-viewer:hover .asset-viewer__buttons  {
     opacity: 1;
 }
@@ -506,19 +522,4 @@ background:  #000 !important;
 
 [class$="-displayregion"] {
     border: 2px solid rgb(224, 11, 11) !important;
-}
-
-.bs-tooltip-bottom .arrow::before {
-    border-bottom-color: $color-gray-7;
-}
-
-.tooltip-inner {
-    background-color: $color-gray-7;
-    font-family: Arial;
-    font-size: 10px;
-    font-weight: normal;
-    line-height: 1.2;
-    letter-spacing: normal;
-    text-align: center;
-    color: $color-white;
 }
