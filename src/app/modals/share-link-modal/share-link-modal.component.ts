@@ -34,7 +34,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
     if (this.asset) {
       let isPublic = this.asset.collectiontypes ? this.asset.collectiontypes.indexOf(5) >= 0 : false
       // External share links are not handled by this modal, since it is only called by Nav
-      this.shareLink = this._assets.getShareLink(this.asset.objectId ? this.asset.objectId : this.asset.artstorid, isPublic);
+      this.shareLink = this._assets.getShareLink(this.asset.id, isPublic);
       // Clean Group item data
       if (this.asset['tombstone']) {
         this.asset['name'] = this.asset['tombstone'][0]
