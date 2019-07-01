@@ -18,12 +18,12 @@
         <div class="pano" id="pano-{{ index }}"></div>
     </div>
     <div *ngIf="isPdfAsset">
-        <pdf-viewer [src]="pdfViewerOpts" (error)="onPdfError($event)"></pdf-viewer>
+        <pdf-viewer [src]="pdfViewerOpts" (error)="onPdfError($event)" [show-all]="false" [original-size]="false" [page]="2"></pdf-viewer>
     </div>
     <!--Viewer Buttons-->
     <div *ngIf="!thumbnailMode">
         <div class="button-group asset-viewer__buttons" id="imageButtons-{{ osdViewerId }}">
-            <button class="btn btn--icon btn--zoomIn" [class.aiw-hidden]="state != 1" id="zoomIn-{{ osdViewerId}}" [ngbTooltip]="zoomInTooltip" placement="bottom"><i class="icon icon-zoom-in-v2"></i></button>
+            <button class="btn btn--icon btn--zoomIn" [class.aiw-hidden]="state != 1 && !isPdfAsset" id="zoomIn-{{ osdViewerId}}" [ngbTooltip]="zoomInTooltip" placement="bottom"><i class="icon icon-zoom-in-v2"></i></button>
             <button class="btn btn--icon btn--zoomOut" [class.aiw-hidden]="state != 1" id="zoomOut-{{ osdViewerId }}" [ngbTooltip]="zoomOutTooltip" placement="bottom"><i class="icon icon-zoom-out-v2"></i></button>
             <button class="btn btn--icon btn--zoomFit" [class.aiw-hidden]="state != 1" id="zoomFit-{{ osdViewerId }}" [ngbTooltip]="fitToViewTooltip" placement="bottom"><i class="icon icon-fit-to-view"></i></button>
             <button class="btn btn--icon btn--fullScreen" *ngIf="!isFullscreen" id="fullScreen-{{ osdViewerId }}" (click)="togglePresentationMode()" [ngbTooltip]="presentTooltip" placement="bottom"><i class="icon icon-present-dark"></i></button>

@@ -138,10 +138,10 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
     public isPdfAsset: boolean = false
 
     private pdfViewerOpts: any = {
-        url: '/assets/ANG-NewAPIrequestsfromtheAIRteam-270217-0740-16.pdf'
+        // url: '/assets/ANG-NewAPIrequestsfromtheAIRteam-270217-0740-16.pdf'
         // url: 'https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf',
-        // url: 'https://stage.artstor.org/media/1003032929/20',
-        // withCredentials: true
+        url: 'https://stage.artstor.org/media/1003032929/20',
+        withCredentials: true
     }
 
     constructor(
