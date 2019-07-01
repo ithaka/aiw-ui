@@ -173,9 +173,9 @@ export class ThumbnailService {
    */
   public makeDetailViewThmb(thumbnailObj: AssetThumbnail): string{
     let thumbURL: string = ''
-    let tileSourceHostname = (this._auth.getEnv() == 'test') ? '//tsstage.artstor.org' : '//tsprod.artstor.org'
+    let tileSourceHostname = this._auth.getIIIFUrl()
     let imgURL = thumbnailObj.thumbnailImgUrl.replace('/thumb/imgstor/size0', '').replace('.jpg', '.fpx')
-    thumbURL = tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgURL) + '/' + thumbnailObj.zoom.viewerX + ',' + thumbnailObj.zoom.viewerY + ',' + thumbnailObj.zoom.pointWidth + ',' + thumbnailObj.zoom.pointHeight + '/,115/0/native.jpg'
+    thumbURL = tileSourceHostname + '/iiif/fpx' + imgURL + '/' + thumbnailObj.zoom.viewerX + ',' + thumbnailObj.zoom.viewerY + ',' + thumbnailObj.zoom.pointWidth + ',' + thumbnailObj.zoom.pointHeight + '/,115/0/native.jpg'
     return thumbURL
   }
 
