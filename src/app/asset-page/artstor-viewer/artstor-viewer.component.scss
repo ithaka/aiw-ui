@@ -40,7 +40,7 @@ $desktop: 992px;*/
     .tooltip-inner {
         background-color: $color-gray-7;
         font-family: Arial;
-        font-size: 10px;
+        font-size: 12px;
         font-weight: normal;
         line-height: 1.2;
         letter-spacing: normal;
@@ -79,6 +79,7 @@ $desktop: 992px;*/
         height: 40px !important;
         width: 40px !important;
         border: 1px solid $color-gray-3 !important;
+        border-radius: 4px;
 
         &:hover {
             background-color: $color-gray-3 !important;
