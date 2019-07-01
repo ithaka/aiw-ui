@@ -96,15 +96,14 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
 
         // Add Captain's log event: Copy image url
         let searchResults = this._storage.getLocal('results')
-        if (searchResults) {
-          this._log.log({
-              eventType: 'artstor_copy_link',
-              additional_fields: {
-                referring_requestid: searchResults.requestId,
+        let requestedid = searchResults.requestId ? searchResults.requestId : null
+        this._log.log({
+            eventType: 'artstor_copy_link',
+            additional_fields: {
+                referring_requestid: requestedid,
                 item_id: this.asset.id
-              }
-          })
-        }
+            }
+        })
 
         setTimeout(() => {
           this.copyURLStatusMsg = '';
