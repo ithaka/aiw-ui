@@ -31,6 +31,10 @@ $desktop: 992px;*/
     height: 90vh;
     min-height: 600px;
     overflow: hidden;
+
+    &.overflow-initial {
+        overflow: initial !important;
+    }
 }
 
 .asset-viewer:hover .asset-viewer__buttons  {
@@ -521,4 +525,14 @@ background:  #000 !important;
     letter-spacing: normal;
     text-align: center;
     color: $color-white;
+}
+
+.pdf-viewer-container{
+    background-color: $color-gray-4;
+    pdf-viewer {
+        display: block;
+    }
+    .page-info {
+        padding-bottom: 10px;
+    }
 }

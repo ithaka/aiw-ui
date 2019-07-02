@@ -137,11 +137,15 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
 
     public isPdfAsset: boolean = false
 
+    public pdfCurrentPage: number = 1
+    public pdfTotalPages: number = 1
+    public pdfZoomValue: number = 0.5
     private pdfViewerOpts: any = {
         // url: '/assets/ANG-NewAPIrequestsfromtheAIRteam-270217-0740-16.pdf'
         // url: 'https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf',
-        url: 'https://stage.artstor.org/media/1003032929/20',
-        withCredentials: true
+        // url: 'https://stage.artstor.org/media/1003032929/20',
+        // url: '',
+        // withCredentials: true
     }
 
     constructor(
@@ -254,9 +258,9 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
         this.state = viewState.thumbnailFallback
         if (this.thumbnailMode) { return } // leave state on thumbnail if thumbnail mode is triggered
 
-        console.log(asset, 'asset is');
-
         if(asset.typeId === 20) {
+            this.pdfViewerOpts['url'] = asset.downloadLink
+            this.pdfViewerOpts['withCredentials'] = true
             this.isPdfAsset = true
         }
 
@@ -631,7 +635,38 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
     }
 
     public onPdfError(event: any): void {
-        console.log('onPdfError - ', event)
+        console.error('onPdfError - ', event)
+    }
+
+    public onPdfLoad(event: any): void {
+        if(event['_pdfInfo'] && event['_pdfInfo']['numPages']) {
+            this.pdfTotalPages = event['_pdfInfo']['numPages']
+        }
+    }
+
+    public pdfPrevPage(): void {
+        if(this.pdfCurrentPage > 1) {
+            this.pdfCurrentPage--;
+        }
+    }
+
+    public pdfNextPage(): void {
+        if(this.pdfCurrentPage < this.pdfTotalPages) {
+            this.pdfCurrentPage++;
+        }
+    }
+
+    public zoomAsset(type: string): void {
+        // For pdf assets only
+        if(this.asset.typeId === 20) {
+            if(type === 'IN' && this.pdfZoomValue < 0.8) {
+                this.pdfZoomValue += 0.1
+            } else if(type === 'OUT' && this.pdfZoomValue > 0.2) {
+                this.pdfZoomValue -= 0.1
+            } else if(type === 'FIT') {
+                this.pdfZoomValue = 0.5
+            }
+        }
     }
 
 }
