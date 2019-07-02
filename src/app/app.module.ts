@@ -136,22 +136,23 @@ import * as Sentry from '@sentry/browser';
 // Project Dependencies
 import { version } from '../../package.json'
 
-// Sentry Raven reporter
-// Sentry.init({
-//   dsn: 'https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953',
-//   release: version
-// });
-// @Injectable()
-// // export class SentryErrorHandler implements ErrorHandler {
-//   constructor() {}
-//   handleError(error) {
-//     const eventId = Sentry.captureException(error.originalError || error);
-//     // Report bug modal option
-//     // Sentry.showReportDialog({ eventId });
-//     // For additional debugging
-//     // console.log("Sentry ID: " + eventId)
-//   }
-// }
+/**
+ * Sentry.io client-side reporter
+ * > Reports to "artstor-ui" project
+ */
+Sentry.init({
+  dsn: 'https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953',
+  release: version
+});
+@Injectable()
+export class SentryErrorHandler implements ErrorHandler {
+  constructor() {}
+  handleError(error) {
+    const eventId = Sentry.captureException(error.originalError || error);
+    // For additional debugging
+    // console.log("Sentry ID: " + eventId)
+  }
+}
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -186,7 +187,7 @@ const APP_PROVIDERS = [
   // 401/Unauthorized handler
   { provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true },
   // Sentry error reporting
-  // { provide: ErrorHandler, useClass: SentryErrorHandler }
+  { provide: ErrorHandler, useClass: SentryErrorHandler }
   // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
 

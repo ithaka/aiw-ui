@@ -1,5 +1,5 @@
 <div class="asset-viewer" [class.fullscreen]="isFullscreen" [class.multi-view]="isMultiView" (contextmenu)="disableContextMenu($event)">
-    <!-- Large thumbnail fallback 
+    <!-- Large thumbnail fallback
         - Thumbnail is always showing, and hidden by other viewers placed on top
         - This allows search crawlers to find the thumbnail
         -->
@@ -39,7 +39,7 @@
         <ng-template #zoomOutTooltip><div>Zoom out</div></ng-template>
         <ng-template #fitToViewTooltip><div>Fit to view</div></ng-template>
         <ng-template #presentTooltip><div>Present</div></ng-template>
-        <ng-template #removeCompTooltip><div>Remove from comparison</div></ng-template>
+        <ng-template #removeCompTooltip><div>Remove from<br>comparison</div></ng-template>
 
         <!-- Hide if not multi view (do not use ngIf, OSD needs to bind) -->
         <!-- Bottom right arrow style -->

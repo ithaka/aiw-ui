@@ -43,7 +43,6 @@ export class EditPersonalCollectionModal implements OnInit, AfterViewInit {
   } = {}
   public submitted: boolean = false // keeps track of whether or not the form was submitted
 
-  public deleteLoading: boolean = false // state before delete call has returned
   public metadataUpdateLoading: boolean = false
 
   constructor(
@@ -156,34 +155,6 @@ export class EditPersonalCollectionModal implements OnInit, AfterViewInit {
     })).subscribe()
   }
 
-  /**
-   * Removes the selected asset from the array of thumbnails
-   */
-  public removeSelectedAsset(): void {
-    this.collectionAssets.splice(this.collectionAssets.indexOf(this.selectedAsset), 1)
-  }
-
-  /**
-   * Uses personal collection service to make http call and delete asset
-   * @param ssid the ssid of the asset to delete
-   */
-  public deleteAssetById(ssid: string): void {
-    if (this.deleteLoading) { return }
-
-    this.uiMessages = { }
-    this.deleteLoading = true
-    this._pc.deletePersonalAssets([ssid]).pipe(
-      take(1),
-      map((res) => {
-        this.deleteLoading = false
-        this.uiMessages.imgDeleteSuccess = true
-        this.removeSelectedAsset()
-        this.clearSelectedAsset()
-      }, (err) => {
-        console.error(err)
-        this.uiMessages.imgDeleteFailure = true
-    })).subscribe()
-  }
 
   public handleNewAssetUpload(item: PersonalCollectionUploadAsset): void {
     this.uiMessages = {}

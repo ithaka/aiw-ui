@@ -103,4 +103,9 @@ export class MyCollectionsComponent implements OnInit {
     this.loading = false
   }
 
+  closeUploadPCModal(): void {
+    this.router.navigate(['/browse', 'mycollections'], {})
+    this.showEditPCModal = false
+  }
+
 }

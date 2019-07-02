@@ -57,6 +57,9 @@ export class SearchPage implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    // Ethnio Search survey - 6/28
+    this._script.loadScript('ethnio-survey')
+
     // Subscribe User object updates
     this.subscriptions.push(
       this._auth.currentUser.subscribe(
@@ -125,14 +128,14 @@ export class SearchPage implements OnInit, OnDestroy {
   }
 
   public skipToFilterSec(): void{
-    window.setTimeout(function () {
+    window.setTimeout(() => {
       let htmlelement = this._dom.byId('skip-to-search-link');
       htmlelement.focus();
     }, 100);
   }
 
   public skipToSearchSec(): void{
-    window.setTimeout(function () {
+    window.setTimeout(() => {
       let htmlelement = this._dom.byId('skip-to-filter-link');
       htmlelement.focus();
     }, 100);
