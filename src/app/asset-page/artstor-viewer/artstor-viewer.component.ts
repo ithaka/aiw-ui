@@ -139,7 +139,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
 
     public pdfCurrentPage: number = 1
     public pdfTotalPages: number = 1
-    public pdfZoomValue: number = 0.5
+    public pdfZoomValue: number = 0.53
     private pdfViewerOpts: any = {
         // url: '/assets/ANG-NewAPIrequestsfromtheAIRteam-270217-0740-16.pdf'
         // url: 'https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf',
@@ -656,17 +656,17 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public zoomAsset(type: string): void {
-        // For pdf assets only
-        if(this.asset.typeId === 20) {
-            if(type === 'IN' && this.pdfZoomValue < 0.8) {
-                this.pdfZoomValue += 0.1
-            } else if(type === 'OUT' && this.pdfZoomValue > 0.2) {
-                this.pdfZoomValue -= 0.1
-            } else if(type === 'FIT') {
-                this.pdfZoomValue = 0.5
-            }
-        }
-    }
+    // public zoomAsset(type: string): void {
+    //     // For pdf assets only
+    //     if(this.asset.typeId === 20) {
+    //         if(type === 'IN' && this.pdfZoomValue < 0.8) {
+    //             this.pdfZoomValue += 0.1
+    //         } else if(type === 'OUT' && this.pdfZoomValue > 0.2) {
+    //             this.pdfZoomValue -= 0.1
+    //         } else if(type === 'FIT') {
+    //             this.pdfZoomValue = 0.5
+    //         }
+    //     }
+    // }
 
 }
