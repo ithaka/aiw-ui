@@ -33,22 +33,6 @@ $desktop: 992px;*/
     overflow: hidden;
 }
 
-.asset-viewer__buttons {
-    .bs-tooltip-bottom .arrow::before {
-        border-bottom-color: $color-gray-7;
-    }
-    .tooltip-inner {
-        background-color: $color-gray-7;
-        font-family: Arial;
-        font-size: 12px;
-        font-weight: normal;
-        line-height: 1.2;
-        letter-spacing: normal;
-        text-align: center;
-        color: $color-white;
-    }
-}
-
 .asset-viewer:hover .asset-viewer__buttons  {
     opacity: 1;
 }
@@ -79,7 +63,6 @@ $desktop: 992px;*/
         height: 40px !important;
         width: 40px !important;
         border: 1px solid $color-gray-3 !important;
-        border-radius: 4px;
 
         &:hover {
             background-color: $color-gray-3 !important;
@@ -90,6 +73,26 @@ $desktop: 992px;*/
             height: 24px !important;
         }
     }
+    // When remove from comparison icon is by itself and needs a full border-radius
+    .btn--icon.standalone-remove-icon {
+        border-radius: 4px;
+      }
+
+    .bs-tooltip-bottom .arrow::before {
+        border-bottom-color: $color-gray-7;
+    }
+    .tooltip-inner {
+        background-color: $color-gray-7;
+        //font-family: Arial;
+        font-size: 12px;
+        font-weight: normal;
+        line-height: 1.2;
+        letter-spacing: normal;
+        text-align: center;
+        color: $color-white;
+    }
+
+
 }
 @media(max-width: 576px) {
     .asset-viewer__buttons {
