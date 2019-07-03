@@ -97,7 +97,6 @@ app.get('/api/*', (req, res) => {
  */
 app.get(['/public/*', '/object/*'], (req, res, next) => {
   console.log('/public route request received')
-  NodeSentry.captureException("TEST error!")
   try {
     res.render('index', { req, res },
       (err, html) => {
