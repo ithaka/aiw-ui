@@ -140,6 +140,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
     public pdfTotalPages: number = 1
     public pdfZoomValue: number = 0.53
     public pdfViewerOpts: any = {
+        // Example links for testing
         // url: '/assets/ANG-NewAPIrequestsfromtheAIRteam-270217-0740-16.pdf'
         // url: 'https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf',
         // url: 'https://stage.artstor.org/media/1003032929/20',
