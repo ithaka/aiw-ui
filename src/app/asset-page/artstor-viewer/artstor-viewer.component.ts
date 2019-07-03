@@ -17,12 +17,13 @@ declare var embedpano: any
 declare var OpenSeadragon: any
 
 export enum viewState {
-  loading, // 0
-  openSeaReady, // 1
-  kalturaReady, // 2
-  krpanoReady, // 3
-  thumbnailFallback, // 4
-  audioFallback //5
+    loading, // 0
+    openSeaReady, // 1
+    kalturaReady, // 2
+    krpanoReady, // 3
+    thumbnailFallback, // 4
+    audioFallback, //5
+    pdfReady //6
 }
 
 @Component({
@@ -134,6 +135,18 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
     private tilesLoaded: boolean = false
     public multiViewPage: number = 1
     public multiViewCount: number = 1
+
+    public pdfCurrentPage: number = 1
+    public pdfTotalPages: number = 1
+    public pdfZoomValue: number = 0.53
+    public pdfViewerOpts: any = {
+        // Example links for testing
+        // url: '/assets/ANG-NewAPIrequestsfromtheAIRteam-270217-0740-16.pdf'
+        // url: 'https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf',
+        // url: 'https://stage.artstor.org/media/1003032929/20',
+        // url: '',
+        // withCredentials: true
+    }
 
     constructor(
         private _http: HttpClient, // TODO: move _http into a service
@@ -263,6 +276,9 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
             case 'panorama':
                 this.loadKrpanoViewer();
                 break;
+            case 'pdf':
+                this.loadPdfViewer(asset);
+                break;
         }
     }
 
@@ -277,6 +293,16 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
         } else {
             this.state = viewState.thumbnailFallback
         }
+    }
+
+    /**
+     * Initialize PDF viewer variables
+     */
+    private loadPdfViewer(asset: Asset): void {
+        this.pdfViewerOpts['url'] = asset.downloadLink
+        this.pdfViewerOpts['withCredentials'] = true
+        // Set viewer state
+        this.state = viewState.pdfReady
     }
 
     /**
@@ -614,5 +640,42 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
     public hasMultiViewHelp(): boolean {
         return this.multiViewHelp.observers.length > 0
     }
+
+    public onPdfError(event: any): void {
+        console.error('onPdfError - ', event)
+        // Fall back to thumbnail on error
+        this.state = viewState.thumbnailFallback
+    }
+
+    public onPdfLoad(event: any): void {
+        if(event['_pdfInfo'] && event['_pdfInfo']['numPages']) {
+            this.pdfTotalPages = event['_pdfInfo']['numPages']
+        }
+    }
+
+    public pdfPrevPage(): void {
+        if(this.pdfCurrentPage > 1) {
+            this.pdfCurrentPage--;
+        }
+    }
+
+    public pdfNextPage(): void {
+        if(this.pdfCurrentPage < this.pdfTotalPages) {
+            this.pdfCurrentPage++;
+        }
+    }
+
+    // public zoomAsset(type: string): void {
+    //     // For pdf assets only
+    //     if(this.asset.typeId === 20) {
+    //         if(type === 'IN' && this.pdfZoomValue < 0.8) {
+    //             this.pdfZoomValue += 0.1
+    //         } else if(type === 'OUT' && this.pdfZoomValue > 0.2) {
+    //             this.pdfZoomValue -= 0.1
+    //         } else if(type === 'FIT') {
+    //             this.pdfZoomValue = 0.5
+    //         }
+    //     }
+    // }
 
 }

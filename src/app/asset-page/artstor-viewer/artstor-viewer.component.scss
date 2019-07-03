@@ -524,3 +524,33 @@ background:  #000 !important;
 [class$="-displayregion"] {
     border: 2px solid rgb(224, 11, 11) !important;
 }
+
+.bs-tooltip-bottom .arrow::before {
+    border-bottom-color: $color-gray-7;
+}
+
+.tooltip-inner {
+    background-color: $color-gray-7;
+    font-family: Arial;
+    font-size: 10px;
+    font-weight: normal;
+    line-height: 1.2;
+    letter-spacing: normal;
+    text-align: center;
+    color: $color-white;
+}
+
+.pdf-viewer-container{
+    position: relative;
+    height: 90vh;
+    width: 100%;
+    min-height: 90vh;
+    background-color: $color-gray-4;
+    
+    pdf-viewer {
+        display: block;
+    }
+    .page-info {
+        padding-bottom: 10px;
+    }
+}

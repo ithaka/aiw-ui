@@ -17,6 +17,14 @@
     <div class="krpano-viewer osd-wrap" [class.aiw-hidden]="state != 3">
         <div class="pano" id="pano-{{ index }}"></div>
     </div>
+    <div class="pdf-viewer-container" *ngIf="state == 6">
+        <pdf-viewer [src]="pdfViewerOpts" [original-size]="false" [render-text]="true" [autoresize]="true" [show-all]="false" [page]="pdfCurrentPage" [zoom]="pdfZoomValue" (after-load-complete)="onPdfLoad($event)" (error)="onPdfError($event)"></pdf-viewer>
+        <div class="asset-viewer__edge-arrows">
+            <button class="btn btn--icon btn--prev" [class.disabled]="pdfCurrentPage === 1" (click)="pdfPrevPage()"><i class="icon icon-prev--white"></i></button>
+            <button class="btn btn--icon btn--next" [class.disabled]="pdfCurrentPage === pdfTotalPages" (click)="pdfNextPage()"><i class="icon icon-next--white"></i></button>
+        </div>
+        <div class="page-info">Page <b>{{ pdfCurrentPage }}</b> / <b>{{ pdfTotalPages }}</b></div>
+    </div>
     <!--Viewer Buttons-->
     <div *ngIf="!thumbnailMode">
         <div class="button-group asset-viewer__buttons" id="imageButtons-{{ osdViewerId }}">
