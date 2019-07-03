@@ -20,10 +20,6 @@
               i.icon.icon-direction.icon-right(title="Next in results", (click)="showNextAsset()", (keyup.enter)="showNextAsset()", [class.disabled]="assetNumber >= totalAssetCount - restrictedAssetsCount", [attr.tabindex]="assetNumber >= totalAssetCount - restrictedAssetsCount ? -1 : 1", aria-label="Next item, press enter to go to next result item. You can also use left and right arrow keys to navigate between result items.", role="button")
     //- for accessibility so that page has title
     h1.sr-only(*ngIf="isFullscreen") Full screen mode
-    //- pdf-viewer([src]="'/assets/ANG-NewAPIrequestsfromtheAIRteam-270217-0740-16.pdf'")
-    //- pdf-viewer([src]="'https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf'", (error)="onPdfError($event)")
-    //- pdf-viewer([src]="'https://stage.artstor.org/media/1003032929/20'", (error)="onPdfError($event)")
-    //- pdf-viewer([src]="pdfViewerOpts", (error)="onPdfError($event)")
     //- Asset Viewer Row
     .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8', showAssetDrawer && isFullscreen ? 'drawer' : '' ]")
       ng-container(*ngIf="userSessionFresh")
