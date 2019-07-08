@@ -105,6 +105,7 @@ module.exports = function (config) {
       '/api/secure/register': 'http://localhost:1205/api/secure/register',
       // User Access
       '/api/secure/login': 'http://localhost:1206/api/secure/login',
+      '/api/secure/logout': 'http://localhost:1206/api/secure/logout',
       '/api/secure/userinfo': 'http://localhost:1206/api/secure/userinfo',
       // User Account
       '/api/lostpw': 'http://localhost:1205/api/lostpw',

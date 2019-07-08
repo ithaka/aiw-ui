@@ -13,16 +13,16 @@ import { ArtstorStorageService } from '../../../projects/artstor-storage/src/pub
 import { take } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
-describe('Login and userinfo #pact #user-access', () => {
+describe('Login, logout, and userinfo #pact #user-access', () => {
 
   let provider, _auth
 
   beforeAll(function (done) {
-    provider = new PactWeb({ 
+    provider = new PactWeb({
       logLevel: "debug",
-      consumer: 'aiw-ui', 
-      provider: 'artaa_service', 
-      port: 1206 
+      consumer: 'aiw-ui',
+      provider: 'artaa_service',
+      port: 1206
     })
     setTimeout(function () { done() }, 2000)
     provider.removeInteractions()
@@ -55,11 +55,12 @@ describe('Login and userinfo #pact #user-access', () => {
         }},
         { provide: ArtstorStorageService, useValue: {
           getLocal: (string) => {return {}},
-          setLocal: (string, thing) => { return; },  
+          setLocal: (string, thing) => { return; },
+          clearLocalStorage: () => {return {}}
         }},
         Injector,
         AppConfig,
-        AuthService, 
+        AuthService,
         Idle, IdleExpiry
       ],
     })
@@ -69,9 +70,9 @@ describe('Login and userinfo #pact #user-access', () => {
   })
 
   /**
-  * Describes '/api/secure/register' endpoint
+  * Describes '/api/secure/login' endpoint
   */
-  describe('/api/secure/login', () => {
+  fdescribe('/api/secure/login', () => {
     beforeAll((done) => {
       // Set up expected objects
       let expectedUserResponse = {
@@ -100,6 +101,8 @@ describe('Login and userinfo #pact #user-access', () => {
         }
       }
 
+      let expectedLogoutResponse = { "status": true }
+
       let interactions = []
 
       interactions.push(
@@ -109,7 +112,7 @@ describe('Login and userinfo #pact #user-access', () => {
           withRequest: {
             method: 'POST',
             path: '/api/secure/login',
-            headers: { 
+            headers: {
               'Cache-Control': 'no-store, no-cache',
               'Content-Type': 'application/x-www-form-urlencoded'
             },
@@ -124,6 +127,23 @@ describe('Login and userinfo #pact #user-access', () => {
             body: expectedUserResponse
           }
         }),
+        // Log Out
+        provider.addInteraction({
+          uponReceiving: 'logout request',
+          withRequest: {
+            method: 'POST',
+            path: '/api/secure/logout',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            form: {}
+          },
+          willRespondWith: {
+            status: 200,
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            body: expectedLogoutResponse
+          }
+        }),
         // User info
         provider.addInteraction({
           uponReceiving: 'registration form submission from an already registered user',
@@ -133,8 +153,8 @@ describe('Login and userinfo #pact #user-access', () => {
           },
           willRespondWith: {
             status: 200,
-            headers: { 
-              'Content-Type': 'application/json;charset=UTF-8' 
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8'
             },
             body: expectedUserResponse
           }
@@ -156,12 +176,24 @@ describe('Login and userinfo #pact #user-access', () => {
         })
     })
 
-    // Test successful registration response
+    // Test successful login response
     it('should return a successful login response', (done) => {
       _auth.login({'username': 'EXAMPLE_EMAIL', 'password': 'EXAMPLE_PASSWORD'})
         .then((data) => {
           expect(data.status).toBeTruthy()
           expect(data.user.username).toEqual('EXAMPLE_EMAIL')
+          done()
+        }, (err) => {
+          console.error(err)
+          done.fail(err)
+        })
+    })
+
+    // Test successful logout response
+    it('should return a successful logout response', (done) => {
+      _auth.logout()
+        .then((data) => {
+          expect(data.status).toBeTruthy()
           done()
         }, (err) => {
           console.error(err)

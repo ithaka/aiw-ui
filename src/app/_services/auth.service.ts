@@ -747,10 +747,10 @@ export class AuthService implements CanActivate {
      */
     login(user: any): Promise<any> {
         let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('Cache-Control', 'no-store, no-cache')
-        let options = { 
-          headers: header, 
+        let options = {
+          headers: header,
           withCredentials: true
-        }; 
+        };
         // Encode form data
         let data =  this.formEncode({
             'j_username': user.username,
@@ -786,11 +786,11 @@ export class AuthService implements CanActivate {
      * - Modifies Account: should include Auth logging params
      */
     pwdReset(email: string): Promise<any> {
-        let options = { 
-          withCredentials: true, 
-          params: { 
-            'email': email, 
-            'portal' : this._app.config.pwResetPortal 
+        let options = {
+          withCredentials: true,
+          params: {
+            'email': email,
+            'portal' : this._app.config.pwResetPortal
           }
         }
         return this.http
