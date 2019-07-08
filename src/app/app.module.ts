@@ -142,7 +142,7 @@ import { version } from '../../package.json'
  */
 Sentry.init({
   dsn: 'https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953',
-  release: version
+  release: 'artstor-ui@' + version
 });
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
