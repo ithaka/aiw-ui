@@ -58,7 +58,7 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
           uponReceiving: 'registration form submission from a new user',
           withRequest: {
             method: 'POST',
-            path: '/api/secure/register',
+            path: '/api/secure/register?' + _auth.getAuthLogParams(),
             headers: { 'Content-type': 'application/x-www-form-urlencoded' },
             body: mockRegisterFormInput
           },
@@ -73,7 +73,7 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
           uponReceiving: 'registration form submission from an already registered user',
           withRequest: {
             method: 'POST',
-            path: '/api/secure/register',
+            path: '/api/secure/register?' + _auth.getAuthLogParams(),
             headers: { 'Content-type': 'application/x-www-form-urlencoded' },
             body: mockAlreadyRegisteredFormInput
           },
@@ -171,13 +171,13 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
       .then((data) => {
         expect(data.status).toBe(true)
         // Usernames are not always emails, but we do expect an account name to be returned
-        expect(data.username).toBeTruthy('Did not receive "username" propety on /lostpw response')
+        expect(data.username).toBeTruthy('Did not receive "username" property on /lostpw response')
         done()
       })
       .catch(err => {
         done.fail('Valid password reset query should not fail, received: ' + err.message)
       })
-      
+
     })
 
   })
@@ -209,7 +209,7 @@ let mockRegisterFormInput = {
 }
 
 let invalidRequest = {
-  _method: 'uodate',
+  _method: 'update',
   username: 'sgdsf',
   password: 'sdfgs',
   role: 'sdfgs',

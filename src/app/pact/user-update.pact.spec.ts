@@ -6,7 +6,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http'
 import { map } from 'rxjs/operators'
 
 // Project Dependencies
-import { AccountService } from '_services'
+import { AccountService, AuthService } from '_services'
 
 describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
@@ -35,7 +35,7 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule],
         providers: [
-          AccountService
+          AccountService, AuthService
         ]
     })
     const testbed = getTestBed();
