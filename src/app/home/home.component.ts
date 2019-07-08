@@ -158,18 +158,38 @@ export class Home implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       // Load blog posts for home page
       this._assets.getBlogEntries()
-      .then((data) => {
-        if (data['posts']) {
-          this.blogPosts = data['posts'];
+      .then((blogPosts) => {
+        if (Array.isArray(blogPosts)) {
+          // Format blogPosts to extract excerpt if its not available
+          for(let blogPost of blogPosts) {
+            if(blogPost['content'] && blogPost['content']['rendered']) {
+              let excerpt: string = '<div>'
+              let tempElement = document.createElement('div')
+              tempElement.innerHTML = blogPost['content']['rendered']
+              let pTags = tempElement.querySelectorAll('p')
+              for(let i = 0; i < 10; i++) {
+                if(pTags[i] && pTags[i].innerText.length > 120) {
+                  excerpt += pTags[i].innerText.replace('Content:', '')
+                  break
+                }
+              }
+              excerpt += '</div>'
+              if(blogPost['excerpt'] && blogPost['excerpt']['rendered'] === '') {
+                blogPost['excerpt']['rendered'] = excerpt
+              }
+            }
+          }
+
+          this.blogPosts = blogPosts
         }
-        this.blogLoading = false;
+        this.blogLoading = false
       } )
       .catch((error) => {
-        console.log(error);
-        this.blogLoading = false;
+        console.log(error)
+        this.blogLoading = false
       });
       // Device info for contact form
-      this.fetchDeviceInfo();
+      this.fetchDeviceInfo()
     }
 
   } // OnInit
