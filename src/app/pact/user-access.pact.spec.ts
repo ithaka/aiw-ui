@@ -72,7 +72,7 @@ describe('Login, logout, and userinfo #pact #user-access', () => {
   /**
   * Describes '/api/secure/login' endpoint
   */
-  fdescribe('/api/secure/login', () => {
+  describe('/api/secure/login', () => {
     beforeAll((done) => {
       // Set up expected objects
       let expectedUserResponse = {
