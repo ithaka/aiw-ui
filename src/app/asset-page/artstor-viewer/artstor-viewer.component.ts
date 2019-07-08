@@ -455,7 +455,10 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
           if (this.zoom && this.zoom.viewerX) {
               this.refreshZoomedView()
           } else {
-            this.osdViewer.viewport.zoomTo(this.osdViewer.viewport.getMinZoom())
+            // Make sure to wait for 500ms before we set the inital min zoom, to ensure non-detailed view assets load full view.
+            setTimeout(()=> {
+                this.osdViewer.viewport.zoomTo(this.osdViewer.viewport.getMinZoom())
+            }, 500)
           }
 
         })
