@@ -299,7 +299,8 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
      * Initialize PDF viewer variables
      */
     private loadPdfViewer(asset: Asset): void {
-        this.pdfViewerOpts['url'] = asset.downloadLink
+        // Ensure PDF url is served over HTTPS, like our app (avoids "mixed active content" error)
+        this.pdfViewerOpts['url'] = asset.downloadLink.replace('http://', 'https://')
         this.pdfViewerOpts['withCredentials'] = true
         // Set viewer state
         this.state = viewState.pdfReady
