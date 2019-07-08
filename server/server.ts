@@ -54,11 +54,14 @@ win.scrollTo = (x, y) => {
   // For debugging
   // console.log('scrollTo called with: ' + x + ', ' + y)
 }
+// Prevent reference errors (PDFjs)
+win.requestAnimationFrame = (callback) => { }
 global['window'] = win
 global['document'] = win.document
 global['Node'] = win.Node
 global['Text'] = win.Text
 global['HTMLElement'] = win.HTMLElement
+global['Element'] = win.Element // (PDFjs)
 global['navigator'] = win.navigator
 global['XMLHttpRequest'] = require('xmlhttprequest').XMLHttpRequest
 /**
