@@ -200,7 +200,7 @@ export class Asset {
      * - Reports status via 'this.dataLoadedSource' observable
      */
     private initAssetProperties(data: AssetData, testEnv?: boolean): void {
-        let storUrl: string = testEnv ? '//stor.stage.artstor.org' : '//stor.artstor.org'
+        let storUrl: string = testEnv ? 'https://stor.stage.artstor.org' : 'https://stor.artstor.org'
         // Set array of asset metadata fields to Asset, and format
         if (data.metadata_json) {
             this.formattedMetadata = this.formatMetadata(data.metadata_json)
