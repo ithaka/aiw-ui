@@ -17,12 +17,13 @@ declare var embedpano: any
 declare var OpenSeadragon: any
 
 export enum viewState {
-  loading, // 0
-  openSeaReady, // 1
-  kalturaReady, // 2
-  krpanoReady, // 3
-  thumbnailFallback, // 4
-  audioFallback //5
+    loading, // 0
+    openSeaReady, // 1
+    kalturaReady, // 2
+    krpanoReady, // 3
+    thumbnailFallback, // 4
+    audioFallback, //5
+    pdfReady //6
 }
 
 @Component({
@@ -135,12 +136,11 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
     public multiViewPage: number = 1
     public multiViewCount: number = 1
 
-    public isPdfAsset: boolean = false
-
     public pdfCurrentPage: number = 1
     public pdfTotalPages: number = 1
     public pdfZoomValue: number = 0.6
     public pdfViewerOpts: any = {
+        // Example links for testing
         // url: '/assets/ANG-NewAPIrequestsfromtheAIRteam-270217-0740-16.pdf'
         // url: 'https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf',
         // url: 'https://stage.artstor.org/media/1003032929/20',
@@ -258,12 +258,6 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
         this.state = viewState.thumbnailFallback
         if (this.thumbnailMode) { return } // leave state on thumbnail if thumbnail mode is triggered
 
-        if(asset.typeId === 20) {
-            this.pdfViewerOpts['url'] = asset.downloadLink
-            this.pdfViewerOpts['withCredentials'] = true
-            this.isPdfAsset = true
-        }
-
         // Object types that need loaders
         switch (asset.typeName) {
             case 'image':
@@ -282,6 +276,9 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
             case 'panorama':
                 this.loadKrpanoViewer();
                 break;
+            case 'pdf':
+                this.loadPdfViewer(asset);
+                break;
         }
     }
 
@@ -296,6 +293,16 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
         } else {
             this.state = viewState.thumbnailFallback
         }
+    }
+
+    /**
+     * Initialize PDF viewer variables
+     */
+    private loadPdfViewer(asset: Asset): void {
+        this.pdfViewerOpts['url'] = asset.downloadLink
+        this.pdfViewerOpts['withCredentials'] = true
+        // Set viewer state
+        this.state = viewState.pdfReady
     }
 
     /**
@@ -636,6 +643,8 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
 
     public onPdfError(event: any): void {
         console.error('onPdfError - ', event)
+        // Fall back to thumbnail on error
+        this.state = viewState.thumbnailFallback
     }
 
     public onPdfLoad(event: any): void {

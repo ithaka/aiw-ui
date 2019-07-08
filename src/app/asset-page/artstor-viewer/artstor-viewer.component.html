@@ -3,7 +3,7 @@
         - Thumbnail is always showing, and hidden by other viewers placed on top
         - This allows search crawlers to find the thumbnail
         -->
-    <div id="fallbackViewer" *ngIf="!isPdfAsset"><img class="item item--thumbnail" alt="{{ asset.title }}" [attr.src]="asset.thumbnail_url" (error)="asset.fallbackThumbnailUrl()"></div>
+    <div id="fallbackViewer"><img class="item item--thumbnail" alt="{{ asset.title }}" [attr.src]="asset.thumbnail_url" (error)="asset.fallbackThumbnailUrl()"></div>
     <div class="more-results overlay-wrap--center" id="loader-wrapper" *ngIf="state == 0"><i class="icon-asterisk icon-spin icon-large"></i></div>
     <!-- IIIF Image Viewer-->
     <div [class.aiw-hidden]="state != 1">
@@ -17,7 +17,7 @@
     <div class="krpano-viewer osd-wrap" [class.aiw-hidden]="state != 3">
         <div class="pano" id="pano-{{ index }}"></div>
     </div>
-    <div class="pdf-viewer-container" *ngIf="isPdfAsset">
+    <div class="pdf-viewer-container" *ngIf="state == 6">
         <pdf-viewer [src]="pdfViewerOpts" [original-size]="false" [render-text]="true" [autoresize]="true" [show-all]="false" [page]="pdfCurrentPage" [zoom]="pdfZoomValue" (after-load-complete)="onPdfLoad($event)" (error)="onPdfError($event)"></pdf-viewer>
         <div class="asset-viewer__edge-arrows">
             <button class="btn btn--icon btn--prev" [class.disabled]="pdfCurrentPage === 1" (click)="pdfPrevPage()"><i class="icon icon-prev--white"></i></button>
