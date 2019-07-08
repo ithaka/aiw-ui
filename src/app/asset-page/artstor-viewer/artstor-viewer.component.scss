@@ -545,11 +545,8 @@ background:  #000 !important;
 }
 
 .pdf-viewer-container{
-    position: relative;
-    height: 90vh;
-    width: 100%;
-    min-height: 90vh;
     background-color: $color-gray-4;
+    // height: 100%;
     
     pdf-viewer {
         display: block;
