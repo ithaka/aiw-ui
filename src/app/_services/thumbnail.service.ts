@@ -175,7 +175,7 @@ export class ThumbnailService {
     let thumbURL: string = ''
     let tileSourceHostname = this._auth.getIIIFUrl()
     let imgURL = thumbnailObj.thumbnailImgUrl.replace('/thumb/imgstor/size0', '').replace('.jpg', '.fpx')
-    thumbURL = tileSourceHostname + '/iiif/fpx' + imgURL + '/' + thumbnailObj.zoom.viewerX + ',' + thumbnailObj.zoom.viewerY + ',' + thumbnailObj.zoom.pointWidth + ',' + thumbnailObj.zoom.pointHeight + '/,115/0/native.jpg'
+    thumbURL = tileSourceHostname + '/iiif/fpx' + imgURL + '/' + thumbnailObj.zoom.viewerX + ',' + thumbnailObj.zoom.viewerY + ',' + thumbnailObj.zoom.pointWidth + ',' + thumbnailObj.zoom.pointHeight + '/,115/0/default.jpg'
     return thumbURL
   }
 
