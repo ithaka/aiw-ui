@@ -167,9 +167,10 @@ export class Home implements OnInit, OnDestroy {
               let tempElement = document.createElement('div')
               tempElement.innerHTML = blogPost['content']['rendered']
               let pTags = tempElement.querySelectorAll('p')
-              for(let i = 0; i < 3; i++) {
-                if(pTags[i]) {
-                  excerpt += pTags[i].outerHTML
+              for(let i = 0; i < 10; i++) {
+                if(pTags[i] && pTags[i].innerText.length > 120) {
+                  excerpt += pTags[i].innerText.replace('Content:', '')
+                  break
                 }
               }
               excerpt += '</div>'
