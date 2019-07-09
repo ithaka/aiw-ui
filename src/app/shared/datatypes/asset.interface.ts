@@ -175,6 +175,7 @@ export class Asset {
             11: 'panorama',
             12: 'audio',
             13: '3d',
+            20: 'pdf',
             21: 'powerpoint',
             22: 'document',
             23: 'excel',

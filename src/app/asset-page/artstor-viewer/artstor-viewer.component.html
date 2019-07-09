@@ -17,6 +17,14 @@
     <div class="krpano-viewer osd-wrap" [class.aiw-hidden]="state != 3">
         <div class="pano" id="pano-{{ index }}"></div>
     </div>
+    <div class="pdf-viewer-container" *ngIf="state == 6">
+        <pdf-viewer [src]="pdfViewerOpts" [original-size]="false" [render-text]="true" [autoresize]="true" [show-all]="false" [page]="pdfCurrentPage" [zoom]="pdfZoomValue" (after-load-complete)="onPdfLoad($event)" (error)="onPdfError($event)"></pdf-viewer>
+        <div class="asset-viewer__edge-arrows">
+            <button class="btn btn--icon btn--prev" [class.disabled]="pdfCurrentPage === 1" (click)="pdfPrevPage()"><i class="icon icon-prev--white"></i></button>
+            <button class="btn btn--icon btn--next" [class.disabled]="pdfCurrentPage === pdfTotalPages" (click)="pdfNextPage()"><i class="icon icon-next--white"></i></button>
+        </div>
+        <div class="page-info">Page <b>{{ pdfCurrentPage }}</b> / <b>{{ pdfTotalPages }}</b></div>
+    </div>
     <!--Viewer Buttons-->
     <div *ngIf="!thumbnailMode">
         <div class="button-group asset-viewer__buttons" id="imageButtons-{{ osdViewerId }}">
@@ -24,7 +32,7 @@
             <button class="btn btn--icon btn--zoomOut" [class.aiw-hidden]="state != 1" id="zoomOut-{{ osdViewerId }}" [ngbTooltip]="zoomOutTooltip" placement="bottom"><i class="icon icon-zoom-out-v2"></i></button>
             <button class="btn btn--icon btn--zoomFit" [class.aiw-hidden]="state != 1" id="zoomFit-{{ osdViewerId }}" [ngbTooltip]="fitToViewTooltip" placement="bottom"><i class="icon icon-fit-to-view"></i></button>
             <button class="btn btn--icon btn--fullScreen" *ngIf="!isFullscreen" id="fullScreen-{{ osdViewerId }}" (click)="togglePresentationMode()" [ngbTooltip]="presentTooltip" placement="bottom"><i class="icon icon-present-dark"></i></button>
-            <button class="btn btn--icon" *ngIf="isFullscreen && assetCompareCount > 1" (click)="removeAsset.emit(asset)" [ngbTooltip]="removeCompTooltip" placement="bottom"><i class="icon icon-remove-from-comparison"></i></button>
+            <button class="btn btn--icon" [class.standalone-remove-icon]="state != 1" *ngIf="isFullscreen && assetCompareCount > 1" (click)="removeAsset.emit(asset)" [ngbTooltip]="removeCompTooltip" placement="bottom"><i class="icon icon-remove-from-comparison"></i></button>
         </div>
 
         <ng-template #zoomInTooltip><div>Zoom in</div></ng-template>

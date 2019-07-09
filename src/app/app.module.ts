@@ -22,6 +22,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxTagInputModule } from 'ngx-tag-autocomplete';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 // Directives
 import { ClickOutsideDirective } from './_directives';
@@ -141,7 +142,7 @@ import { version } from '../../package.json'
  */
 Sentry.init({
   dsn: 'https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953',
-  release: version
+  release: 'artstor-ui@' + version
 });
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
@@ -279,6 +280,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   imports: [ // import Angular's modules
     BrowserModule.withServerTransition({ appId: 'avatar' }),
+    PdfViewerModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

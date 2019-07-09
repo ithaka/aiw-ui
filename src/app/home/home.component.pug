@@ -27,9 +27,9 @@
             h2.h1([innerHtml]="'HOME.HEADINGS.FRM_BLOG' | translate")
           .loading(*ngIf="blogLoading")
           div(*ngIf="!blogLoading")
-            a.blog-post(*ngFor="let post of blogPosts | slice:0:3", [href]="post['URL']", target="_blank", tabindex="4", [attr.aria-label]="post.title")
-              h3.blog-post__title([innerHtml]="post.title", aria-hidden="true")
-              p.blog-post__preview([innerHtml]="post.excerpt", aria-hidden="true")
+            a.blog-post(*ngFor="let post of blogPosts | slice:0:3", [href]="post['link']", target="_blank", tabindex="4", [attr.aria-label]="post['title']['rendered']")
+              h3.blog-post__title([innerHtml]="post['title']['rendered']", aria-hidden="true")
+              p.blog-post__preview([innerHtml]="post['excerpt']['rendered']", aria-hidden="true")
       div([ngClass]="showBlog ? 'col-sm-3' : 'row'")
         //- Institution Shared Shelf Collections
         .card(*ngIf="institution && instCollections.length > 0", [class.col-sm-4]="!showBlog")

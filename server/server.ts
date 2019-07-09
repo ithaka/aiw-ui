@@ -54,11 +54,14 @@ win.scrollTo = (x, y) => {
   // For debugging
   // console.log('scrollTo called with: ' + x + ', ' + y)
 }
+// Prevent reference errors (PDFjs)
+win.requestAnimationFrame = (callback) => { }
 global['window'] = win
 global['document'] = win.document
 global['Node'] = win.Node
 global['Text'] = win.Text
 global['HTMLElement'] = win.HTMLElement
+global['Element'] = win.Element // (PDFjs)
 global['navigator'] = win.navigator
 global['XMLHttpRequest'] = require('xmlhttprequest').XMLHttpRequest
 /**
@@ -97,7 +100,6 @@ app.get('/api/*', (req, res) => {
  */
 app.get(['/public/*', '/object/*'], (req, res, next) => {
   console.log('/public route request received')
-  NodeSentry.captureException("TEST error!")
   try {
     res.render('index', { req, res },
       (err, html) => {

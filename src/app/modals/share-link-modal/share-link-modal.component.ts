@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 
 // Project Dependencies
-import { AssetService, DomUtilityService, ThumbnailService } from '_services';
+import { AssetService, DomUtilityService, ThumbnailService, LogService } from '_services';
 import { Asset } from '../../asset-page/asset';
+import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/public_api';
 
 @Component({
   selector: 'ang-share-link-modal',
@@ -24,14 +25,16 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
   constructor(
     private _assets: AssetService,
     private _thumbnail: ThumbnailService,
-    private _dom: DomUtilityService
+    private _dom: DomUtilityService,
+    private _log: LogService,
+    private _storage: ArtstorStorageService
   ) { }
 
   ngOnInit() {
     if (this.asset) {
       let isPublic = this.asset.collectiontypes ? this.asset.collectiontypes.indexOf(5) >= 0 : false
       // External share links are not handled by this modal, since it is only called by Nav
-      this.shareLink = this._assets.getShareLink(this.asset.objectId ? this.asset.objectId : this.asset.artstorid, isPublic);
+      this.shareLink = this._assets.getShareLink(this.asset.id, isPublic);
       // Clean Group item data
       if (this.asset['tombstone']) {
         this.asset['name'] = this.asset['tombstone'][0]
@@ -90,6 +93,18 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
 
       if (id === 'copyURL'){
         this.copyURLStatusMsg = msg;
+
+        // Add Captain's log event: Copy image url
+        let searchResults = this._storage.getLocal('results')
+        let requestedid = searchResults.requestId ? searchResults.requestId : null
+        this._log.log({
+            eventType: 'artstor_copy_link',
+            additional_fields: {
+                referring_requestid: requestedid,
+                item_id: this.asset.id
+            }
+        })
+
         setTimeout(() => {
           this.copyURLStatusMsg = '';
         }, 8000);
