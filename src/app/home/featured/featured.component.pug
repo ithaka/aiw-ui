@@ -37,6 +37,6 @@
     p.photo-caption.small([innerHTML]="featured[primaryFeaturedIndex].caption | translate")
   .col
     p.text-right
-      a.link.text-right(*ngIf="!_auth.isPublicOnly() && siteId != 'SAHARA'", [routerLink]="['/browse', 'library']", [innerHtml]="headings + '.VIEW_ALL_LINK' | translate", tabindex="4")
-      a.link.text-right(*ngIf="!_auth.isPublicOnly() && siteId === 'SAHARA'", [routerLink]="['/browse', 'institution']", [innerHtml]="headings + '.VIEW_ALL_LINK' | translate", tabindex="4")
-      a.link.text-right(*ngIf="_auth.isPublicOnly()", [routerLink]="['/browse', 'commons']", [innerHtml]="headings + '.VIEW_PUBLIC_LINK' | translate", tabindex="4")
+      a.link.text-right(*ngIf="!_auth.isPublicOnly() && siteId != 'SAHARA'", href="https://www.artstor.org/blog/", [innerHtml]="headings + '.VIEW_ALL_LINK' | translate", tabindex="4")
+      a.link.text-right(*ngIf="!_auth.isPublicOnly() && siteId === 'SAHARA'", href="https://www.artstor.org/blog/", [innerHtml]="headings + '.VIEW_ALL_LINK' | translate", tabindex="4")
+      a.link.text-right(*ngIf="_auth.isPublicOnly()", href="https://www.artstor.org/blog/", [innerHtml]="headings + '.VIEW_PUBLIC_LINK' | translate", tabindex="4")
