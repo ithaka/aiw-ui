@@ -60,11 +60,11 @@ export class Asset {
         panorama_xml?: string
     }
 
-    constructor(assetData: AssetData, testEnv ?: boolean) {
+    constructor(assetData: AssetData, IIIFUrl ?: string) {
         if (!assetData) {
             throw new Error('No data passed to construct asset')
         }
-        this.initAssetProperties(assetData, testEnv)
+        this.initAssetProperties(assetData, IIIFUrl)
     }
 
     private formatMetadata(metadata: MetadataField[]): FormattedMetadata {
@@ -175,6 +175,7 @@ export class Asset {
             11: 'panorama',
             12: 'audio',
             13: '3d',
+            20: 'pdf',
             21: 'powerpoint',
             22: 'document',
             23: 'excel',
@@ -198,8 +199,8 @@ export class Asset {
      * - Behaves like a delayed constructor
      * - Reports status via 'this.dataLoadedSource' observable
      */
-    private initAssetProperties(data: AssetData, testEnv?: boolean): void {
-        let storUrl: string = testEnv ? '//stor.stage.artstor.org' : '//stor.artstor.org'
+    private initAssetProperties(data: AssetData, IIIFUrl?: string): void {
+        let storUrl: string = IIIFUrl ? IIIFUrl : 'https://stor.artstor.org'
         // Set array of asset metadata fields to Asset, and format
         if (data.metadata_json) {
             this.formattedMetadata = this.formatMetadata(data.metadata_json)
@@ -249,9 +250,7 @@ export class Asset {
         if (data.image_compound_urls && data.image_compound_urls[0]) {
             for (let i = 0; i < data.image_compound_urls.length; i++) {
                 let path = data.image_compound_urls[i]
-                // path = path.replace('/info.json','')
-                // data.image_compound_urls[i] = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(path) + '/info.json'
-                data.image_compound_urls[i] = storUrl + '/fcgi-bin/iipsrv.fcgi?IIIF=' + path
+                data.image_compound_urls[i] = storUrl + '/iiif' + path
             }
             this.tileSource = data.image_compound_urls
 
@@ -261,12 +260,10 @@ export class Asset {
           this.tileSource = this.thumbnail_url = storUrl + '/stor' + data.image_url
         }
         else {
-            this.tileSource = data.tileSourceHostname + '/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx' + encodeURIComponent(imgPath) + '/info.json'
+            this.tileSource = data.tileSourceHostname + '/iiif/fpx' + imgPath + '/info.json'
         }
-        // If using rosa/IIIF endpoint, we have to use "native"
-        let isRosa: boolean = this.tileSource.indexOf('rosa-iiif') !== -1
         // IIIF api dictates that the name indicates type/quality
-        this.qualities = [(isRosa ? 'native' : 'default')]
+        this.qualities = ['default']
         // Set download after tilesource determined
         this.downloadLink = this.buildDownloadLink(data, data.groupId)
 

@@ -146,11 +146,11 @@ export class GroupService {
      */
     public hasPrivateGroups(): void {
         let cachedUser = this._storage.getLocal('user')
-        let hasPrivate = cachedUser.isLoggedIn && this._storage.getLocal('hasPrivateGroups')
+        let hasPrivate = cachedUser && cachedUser.isLoggedIn && this._storage.getLocal('hasPrivateGroups')
         if (hasPrivate)  {
             this.hasPrivateGroupSource.next(true) 
         }
-        else if (!cachedUser.isLoggedIn) {
+        else if (!(cachedUser && cachedUser.isLoggedIn)) {
             this.hasPrivateGroupSource.next(false) 
         } else {
             this.http.get(this.groupUrl + '?size=1&level=private', this.options)
