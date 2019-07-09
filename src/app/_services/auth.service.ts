@@ -94,7 +94,7 @@ export class AuthService implements CanActivate {
     this.hostname = ''
     this.thumbUrl = '//mdxdv.artstor.org'
     this.compoundUrl = '//stor.artstor.org/stor'
-    this.IIIFUrl = '//tsprod.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
+    this.IIIFUrl = 'https://stor.artstor.org'
     this.subdomain = 'library'
     this.solrUrl = '/api/search/v1.0/search'
     this.solrUrlV3 = '/api/search/v3.0/search'
@@ -158,7 +158,7 @@ export class AuthService implements CanActivate {
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
       this.solrUrl = '/api/search/v1.0/search'
       this.solrUrlV3 = '/api/search/v3.0/search'
-      this.IIIFUrl = '//tsstage.artstor.org/rosa-iiif-endpoint-1.0-SNAPSHOT/fpx'
+      this.IIIFUrl = 'https://stor.stage.artstor.org'
       this.ENV = 'test'
     }
 

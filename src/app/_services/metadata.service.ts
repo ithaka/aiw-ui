@@ -45,7 +45,7 @@ export class MetadataService {
                 return of(assetData)
             }
         }),map((assetData: AssetData) => {
-            return new Asset(assetData, (this._auth.getEnv() == 'test'))
+            return new Asset(assetData, this._auth.getIIIFUrl())
         }))
     }
 
@@ -135,7 +135,7 @@ export class MetadataService {
             resolution_x: data.resolution_x,
             resolution_y: data.resolution_y,
             thumbnail_url: this.buildThumbnailUrl(data),
-            tileSourceHostname: (this._auth.getEnv() == 'test') ? '//tsstage.artstor.org' : '//tsprod.artstor.org',
+            tileSourceHostname: this._auth.getIIIFUrl(),
             title: data.title && data.title !== "" ? data.title : 'Untitled',
             updated_on: data.updated_on,
             viewer_data: data.viewer_data,
