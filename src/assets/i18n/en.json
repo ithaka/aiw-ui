@@ -551,10 +551,8 @@
     },
     "FEATURED": {
       "HEADINGS": {
-        "PUBLIC": "Featured Public Collections",
-        "INST": "Featured Collections",
-        "VIEW_ALL_LINK": "View All Collections",
-        "VIEW_PUBLIC_LINK": "View All Public Collections"
+        "BLOG_HEADING": "What's New",
+        "VIEW_BLOG_LINK": "Read more on the blog"
       },
       "COLLECTIONS": [{
           "SUBHEADING": "Panos Pictures",

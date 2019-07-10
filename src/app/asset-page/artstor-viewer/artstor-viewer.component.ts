@@ -11,6 +11,7 @@ import { AuthService, LogService, ToolboxService } from '_services'
 import { Asset, ImageZoomParams } from 'datatypes'
 import { MetadataService } from 'app/_services'
 import { isPlatformBrowser } from '@angular/common'
+import { ArtstorStorageService } from '../../../../projects/artstor-storage/src/public_api';
 
 // Browser API delcarations
 declare var embedpano: any
@@ -127,6 +128,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
     private tileSource: string | string[]
     public lastZoomValue: number
     // private showCaption: boolean = true
+    private autoZoomFinished: boolean = false
 
     public kalturaUrl: string
     public osdViewer: any
@@ -155,7 +157,8 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
         private _auth: AuthService,
         @Inject(PLATFORM_ID) private platformId: Object,
         private route: ActivatedRoute,
-        private _toolbox: ToolboxService
+        private _toolbox: ToolboxService,
+        private _storage: ArtstorStorageService
     ) {
         if(!this.index) {
             this.index = 0
@@ -423,6 +426,18 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
         })
 
         this.osdViewer.addHandler('zoom', (value: any) => {
+            if (this.autoZoomFinished && value.eventSource.id !== this._storage.getSession('loggedZoomAsset')) {
+                this._log.log({
+                    eventType: 'artstor_zoom',
+                    additional_fields: {
+                        item_id: this._assetId,
+                        fullscreen: this.isFullscreen
+                    }
+                })
+                this._storage.setSession('loggedZoomAsset', value.eventSource.id)
+            }
+            
+            
             this.lastZoomValue = value.zoom;
 
             // Save viewport values for downloading the view
@@ -455,10 +470,12 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
           // If we need an initial zoomed view, refreshZoomedView - otherwise load full default image
           if (this.zoom && this.zoom.viewerX) {
               this.refreshZoomedView()
+              this.autoZoomFinished = true
           } else {
             // Make sure to wait for 500ms before we set the inital min zoom, to ensure non-detailed view assets load full view.
             setTimeout(()=> {
                 this.osdViewer.viewport.zoomTo(this.osdViewer.viewport.getMinZoom())
+                this.autoZoomFinished = true
             }, 500)
           }
 
