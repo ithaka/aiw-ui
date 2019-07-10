@@ -551,8 +551,8 @@
     },
     "FEATURED": {
       "HEADINGS": {
-        "PUBLIC": "What's new",
-        "INST": "What's new",
+        "PUBLIC": "What's New",
+        "INST": "What's New",
         "VIEW_ALL_LINK": "Read more on the blog",
         "VIEW_PUBLIC_LINK": "Read more on the blog"
       },
