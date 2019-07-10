@@ -200,8 +200,11 @@ export class GroupService {
           group,
           this.options
       ).pipe(map(data => {
-          // Reassess whether user has groups
-          this.hasPrivateGroups(true)
+          if (data['id']) {
+            // If group created, ensure 'hasPrivateGroups' is true
+            this._storage.setLocal('hasPrivateGroups', true)
+            this.hasPrivateGroupSource.next(true)
+          }
           return data
       }))
     }
@@ -239,7 +242,9 @@ export class GroupService {
                 )
             ), map(data => {
                 // Reassess whether user has groups
-                this.hasPrivateGroups(true)
+                setTimeout(() => { // Allow elastic time to index groups
+                    this.hasPrivateGroups(true)
+                }, 400)
                 return data
             }))
     }
