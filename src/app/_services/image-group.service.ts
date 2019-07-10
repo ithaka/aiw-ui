@@ -2,6 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Router } from '@angular/router'
 import { Observable, BehaviorSubject } from 'rxjs'
+import 'rxjs/add/operator/timeout';
 
 // Project Dependencies
 import { AuthService } from './auth.service'
@@ -125,6 +126,7 @@ export class ImageGroupService {
       // Return request that provides file URL
       return this.http
         .post(groupExportUrl, this._auth.formEncode(data), options)
+        .timeout(20000) // Timeout after 20s
         .toPromise()
       
     })
@@ -136,6 +138,14 @@ export class ImageGroupService {
 
       return res
     })
+  }
+
+  /** Checks for the export status of the specified group */
+  public checkExportStatus(groupId: string): Observable<any> {
+    let requestUrl = this.baseUrl + '/v2/group/export/check/' + groupId;
+
+    return this.http
+      .get(requestUrl, this.options)
   }
 
 }

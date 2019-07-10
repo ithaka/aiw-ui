@@ -78,6 +78,9 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   // For group export call param toggle
   private newExport: boolean = false
 
+  private exportStatusInterval: any = null
+  private loadingStateInterval: any = null
+
   constructor(
     public _appConfig: AppConfig,
     private _ig: ImageGroupService, // this will be confusing for a bit. ImageGroupService deals with all the old image group service stuff, and some state management
@@ -378,7 +381,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     this.showExportLoadingState = true
 
     // Mimmic loading behaviour in intervals
-    let interval = setInterval(() => {
+    this.loadingStateInterval = setInterval(() => {
       this.exportLoadingStateopts.progress += 10
     }, 1000)
 
@@ -396,7 +399,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
         else if (data.path && this.showExportLoadingState) {
           downloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/')
-          clearInterval(interval)
+          clearInterval(this.loadingStateInterval)
 
           this.exportLoadingStateopts.progress = 100
           this.exportLoadingStateopts.state = LoadingState.completed
@@ -410,8 +413,14 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       })
       .catch( error => {
         console.error(error)
-        this.exportLoadingStateopts.state = LoadingState.error
-        this.exportLoadingStateopts.errorType = 'server'
+        clearInterval(this.loadingStateInterval)
+        // this.exportLoadingStateopts.state = LoadingState.error
+        // this.exportLoadingStateopts.errorType = 'server'
+        
+        // When the server timesout or there is an error begin polling on export status every 15s
+        this.exportStatusInterval = setInterval( () => {
+          this.checkExportStatus(this.ig.id)
+        }, 15000)
       })
   }
 
@@ -424,7 +433,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     this.showExportLoadingState = true
 
     // Mimmic loading behaviour in intervals
-    let interval = setInterval(() => {
+    this.loadingStateInterval = setInterval(() => {
       this.exportLoadingStateopts.progress += 10
     }, 1000)
 
@@ -432,9 +441,16 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     let zipDownloadLink: string = ''
     this._ig.getDownloadLink(this.ig, true, this.newExport)
       .then( data => {
-        if (data.path && this.showExportLoadingState) {
+        // Handle 200 Response with "status": "FAILED"
+        if (data.status === "FAILED") {
+          console.error("Export Failed")
+          this.exportLoadingStateopts.state = LoadingState.error
+          this.exportLoadingStateopts.errorType = 'server'
+        }
+
+        else if (data.path && this.showExportLoadingState) {
           zipDownloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/')
-          clearInterval(interval)
+          clearInterval(this.loadingStateInterval)
 
           this.exportLoadingStateopts.progress = 100
           this.exportLoadingStateopts.state = LoadingState.completed
@@ -447,9 +463,38 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       })
       .catch( error => {
         console.error(error)
-        this.exportLoadingStateopts.state = LoadingState.error
-        this.exportLoadingStateopts.errorType = 'server'
+        clearInterval(this.loadingStateInterval)
+        // this.exportLoadingStateopts.state = LoadingState.error
+        // this.exportLoadingStateopts.errorType = 'server'
+
+        // When the server timesout or there is an error begin polling on export status every 15s
+        this.exportStatusInterval = setInterval( () => {
+          this.checkExportStatus(this.ig.id)
+        }, 15000)
       })
+  }
+
+  private checkExportStatus(groupId: string): void {
+    this._ig.checkExportStatus(groupId).subscribe(
+      (response) => {
+        console.log('The response is: ', response)
+        if(response.status && response.status === 'COMPLETED') {
+          clearInterval(this.exportStatusInterval)
+          clearInterval(this.loadingStateInterval)
+          let downloadLink = this._auth.getThumbHostname() + response.path.replace('/nas/', '/thumb/')
+
+          this.exportLoadingStateopts.progress = 100
+          this.exportLoadingStateopts.state = LoadingState.completed
+          // On success fade out the component after 5 sec & begin download
+          setTimeout(() => {
+            this.closeExportLoadingState()
+            this.downLoadFile(this.ig.name, downloadLink)
+          }, 5000)
+        }
+      }, (error) => {
+        console.error('Error in check status: ', error)
+      }
+    )
   }
 
   public closeExportLoadingState(event?: any): void {
