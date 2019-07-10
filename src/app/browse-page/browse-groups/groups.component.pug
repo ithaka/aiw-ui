@@ -53,7 +53,7 @@
         i.icon.icon-add
         i.icon.icon-close
       a#groupTagsClear.link--accent.small(*ngIf="_tagFilters.selectedFilters.length>1", style="margin:3px;", (click)="_tagFilters.clearFilters();", (keyup.enter)="_tagFilters.clearFilters();", tabindex="3", aria-label="Clear all tags") Clear All
-    .group-list.has-icon-overlay.px-2
+    .group-list.px-2
       .alert.alert-warning(*ngIf="selectedFilter && errorObj[selectedFilter.level]", [innerHtml]="errorObj[selectedFilter.level]")
       ng-container
         ang-card-view(*ngFor="let tag of tags; let i=index;", [tag]="tag", [group]="groups[i]", [browseLevel]="selectedFilter.level", link="true")
@@ -61,11 +61,11 @@
       //-   ang-tag(*ngFor="let tag of tags", [tag]="tag", link="true")
     .row.has-icon-overlay(*ngIf="loading")
       i.icon-lg.icon-overlay--top.icon-loading-large
-//- Don't show this if there is a filters list, if it's loading, or if the user hasn't searched for anything yet
-.alert.alert-info(*ngIf="!isSearch && tags.length < 1 && !loading")
-  h3 {{ 'BROWSE.ERRORS.NO_GROUPS_COLLECTIONS_HEADING' | translate }}
-  br
-  div(*ngIf="selectedFilter && selectedFilter.level === 'created'", [innerHtml]="'BROWSE.ERRORS.NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT' | translate")
-  div(*ngIf="selectedFilter && selectedFilter.level === 'institution'", [innerHtml]="'BROWSE.ERRORS.NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT' | translate")
+    //- Don't show this if there is a filters list, if it's loading, or if the user hasn't searched for anything yet
+    .alert.alert-info(*ngIf="!isSearch && tags.length < 1 && !loading")
+      h3 {{ 'BROWSE.ERRORS.NO_GROUPS_COLLECTIONS_HEADING' | translate }}
+      br
+      div(*ngIf="selectedFilter && selectedFilter.level === 'created'", [innerHtml]="'BROWSE.ERRORS.NO_PRIVATE_GROUPS_COLLECTIONS_PROMPT' | translate")
+      div(*ngIf="selectedFilter && selectedFilter.level === 'institution'", [innerHtml]="'BROWSE.ERRORS.NO_INSTITUTIONAL_GROUPS_COLLECTIONS_PROMPT' | translate")
 ang-access-denied-modal(*ngIf="showAccessDeniedModal")
 
