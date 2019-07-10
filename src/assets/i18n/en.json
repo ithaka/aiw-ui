@@ -551,10 +551,8 @@
     },
     "FEATURED": {
       "HEADINGS": {
-        "PUBLIC": "What's New",
-        "INST": "What's New",
-        "VIEW_ALL_LINK": "Read more on the blog",
-        "VIEW_PUBLIC_LINK": "Read more on the blog"
+        "BLOG_HEADING": "What's New",
+        "VIEW_BLOG_LINK": "Read more on the blog"
       },
       "COLLECTIONS": [{
           "SUBHEADING": "Panos Pictures",
