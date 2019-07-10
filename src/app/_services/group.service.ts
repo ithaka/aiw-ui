@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { BehaviorSubject, Observable, Subject, pipe } from 'rxjs'
-import { catchError } from 'rxjs/operators'
+import { catchError, map } from 'rxjs/operators'
 
 // Project Dependencies
 import { environment } from 'environments/environment'
@@ -144,15 +144,16 @@ export class GroupService {
     /**
      * Check if a user has at least one Private Group
      */
-    public hasPrivateGroups(): void {
+    public hasPrivateGroups(forceReassess?: boolean): void {
         let cachedUser = this._storage.getLocal('user')
         let hasPrivate = cachedUser && cachedUser.isLoggedIn && this._storage.getLocal('hasPrivateGroups')
-        if (hasPrivate)  {
+        if (hasPrivate && !forceReassess)  {
             this.hasPrivateGroupSource.next(true) 
         }
         else if (!(cachedUser && cachedUser.isLoggedIn)) {
             this.hasPrivateGroupSource.next(false) 
         } else {
+            // forceReassess should fallback to querying the group service
             this.http.get(this.groupUrl + '?size=1&level=private', this.options)
             .toPromise()
             .then( res => {
@@ -160,6 +161,7 @@ export class GroupService {
                     this._storage.setLocal('hasPrivateGroups', true)
                     this.hasPrivateGroupSource.next(true)
                 } else {
+                    this._storage.setLocal('hasPrivateGroups', false)
                     this.hasPrivateGroupSource.next(false)
                 }
             })
@@ -197,7 +199,11 @@ export class GroupService {
           this.groupUrl,
           group,
           this.options
-      )
+      ).pipe(map(data => {
+          // Reassess whether user has groups
+          this.hasPrivateGroups(true)
+          return data
+      }))
     }
 
     /**
@@ -231,7 +237,11 @@ export class GroupService {
                       withCredentials: true
                     }
                 )
-            ))
+            ), map(data => {
+                // Reassess whether user has groups
+                this.hasPrivateGroups(true)
+                return data
+            }))
     }
 
     /**
