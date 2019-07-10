@@ -38,4 +38,4 @@
   .col
     p.text-right
       a.link.text-right(*ngIf="siteId != 'SAHARA'", href="https://www.artstor.org/blog/", [innerHtml]="headings + '.VIEW_BLOG_LINK' | translate", target="_blank", tabindex="4")
-      a.link.text-right(*ngIf="siteId === 'SAHARA'", [routerLink]="['/browse', 'institution']", [innerHtml]="headings + '.VIEW_ALL_LINK' | translate", target="_blank", tabindex="4")
+      a.link.text-right(*ngIf="siteId === 'SAHARA'", [routerLink]="['/browse', 'institution']", [innerHtml]="headings + '.VIEW_ALL_LINK' | translate", tabindex="4")
