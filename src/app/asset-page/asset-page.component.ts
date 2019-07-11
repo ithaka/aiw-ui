@@ -334,6 +334,8 @@ export class AssetPage implements OnInit, OnDestroy {
         if (!this.isBrowser) {
             this.subscriptions.push(
                 this._auth.getUserInfo().pipe(take(1)).subscribe(user => {
+
+                  console.log('USER: ', user)
                     /**
                      * Server-side rendering requires an additional userinfo request after
                      * the one triggered by the route guard
@@ -769,7 +771,7 @@ export class AssetPage implements OnInit, OnDestroy {
             for (let col of this.collections) {
                 if(col.name === value) {
                     switch (col.type) {
-                        case '6': 
+                        case '6':
                             link = ['/pcollection', col.id]
                             break
                         case '5':
@@ -779,7 +781,7 @@ export class AssetPage implements OnInit, OnDestroy {
                         default:
                             link = ['/collection', col.id]
                             break
-                        
+
                     }
                     return link
                 }
@@ -819,7 +821,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.licenseText = licenses[i].name
                 this.licenseLink = licenses[i].link
                 this.licenseImg = licenses[i].img
-                
+
                 return this.licenseText
             }
         }
@@ -1750,8 +1752,8 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     public exitFullscreenViewer() {
         if (this.assetViewer) {
-            this.assetViewer.exitFullScreen(); 
+            this.assetViewer.exitFullScreen();
             this.assetViewer.setFullscreen(false)
-        }   
+        }
     }
 }
