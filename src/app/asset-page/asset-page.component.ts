@@ -229,9 +229,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.user = this._auth.getUser();
-
-        console.log('ASSET PAGE oninit USER: ', this.user)
-
         this.quizModeTTDismissed = this._storage.getLocal('quizModeTTDismissed') ? this._storage.getLocal('quizModeTTDismissed') : false
         this.subscriptions.push(
             this._flags.flagUpdates.subscribe((flags) => {
@@ -337,8 +334,6 @@ export class AssetPage implements OnInit, OnDestroy {
         if (!this.isBrowser) {
             this.subscriptions.push(
                 this._auth.getUserInfo().pipe(take(1)).subscribe(user => {
-
-                  console.log('USER: ', user)
                     /**
                      * Server-side rendering requires an additional userinfo request after
                      * the one triggered by the route guard
@@ -463,16 +458,15 @@ export class AssetPage implements OnInit, OnDestroy {
 
 
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
-
-      console.log('ASSET ERROR: ', typeof(asset), asset)
         console.log("Handle loaded metadata for " + asset['objectId'])
         // Reset modals if new data comes in
         this.showAccessDeniedModal = false
         this.showServerErrorModal = false
 
+        // asset arg is an Error object
         if (asset && asset['error']) {
             let err = asset['error']
-            if (err.status === 403 || err.message == 'Unable to load metadata!') {
+            if (err.status === 403 || err.message === 'Unable to load metadata!') {
                 // here is where we make the "access denied" modal appear
                 if (!this.encryptedAccess) {
                     this.showAccessDeniedModal = true
@@ -483,14 +477,13 @@ export class AssetPage implements OnInit, OnDestroy {
 
                 // AIR-2439 Workaround:
                 // When browser visits /public asset and receives 404,
-                // checkout route and redirect to #/public/assetId
-              if (this.isBrowser && err.message == 'Unable to load metadata!') {
+                // check if /public route and redirect to #/asset/assetId
+              if (this.isBrowser && err.message === 'Unable to load metadata!') {
 
                 this.route.url.subscribe((url: any[]) => {
+                  let path = url[0].path
 
-                  let publicRoute: boolean = url[0].path === 'public'
-
-                  if (publicRoute && url[1]) {
+                  if (path === 'public' || path === 'object') {
                     this._router.navigate(['/asset', url[1].path])
                   }
                 })

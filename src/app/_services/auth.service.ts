@@ -520,10 +520,8 @@ export class AuthService implements CanActivate {
           headers = headers.append("CLIENTIP", clientIp)
           // Expected Fastly ip header used by most services
           headers = headers.append('Fastly-Client-Ip', clientIp)
-          console.log('SSR Headers: ', headers)
           return headers
       } else {
-          console.log('Browser Client Headers: ', headers)
           return headers
       }
   }
