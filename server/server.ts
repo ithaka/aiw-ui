@@ -116,6 +116,7 @@ app.get(['/public/*', '/object/*'], (req, res, next) => {
             // Strip javascript script tags
             html = html.replace(scriptTest, '')
           }
+          // @TODO AIR-2439 - using a 404 to prevent PLE on failed metadata call, throw 503 again once fixed?
           // Canonical tag on render success, 503 on error (signals to Google)
           // + We're using a 503 here to indicate "Service Unavailable" - this ensures Google will come back
           // + We continue returning the page so a user is not interrupted
