@@ -463,6 +463,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
 
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
+
+      console.log('ASSET ERROR: ', typeof(asset), asset)
         console.log("Handle loaded metadata for " + asset['objectId'])
         // Reset modals if new data comes in
         this.showAccessDeniedModal = false
@@ -478,6 +480,14 @@ export class AssetPage implements OnInit, OnDestroy {
                     console.error('Failed to load externally shared asset', err)
                     this.showServerErrorModal = true
                 }
+
+              // AIR-2439 Workaround:
+              // When browser visits /public asset and receives 404,
+              // checkout route and redirect to #/public/assetId
+
+              if (err.message == 'Unable to load metadata!') {
+                console.log('ROUTE: ', this.route)
+              }
             } else if (err.status === 401) {
                 // Client-side: Should be handled by the 401 interceptor
                 // Server-side: Display error modal for non-javascript cases
@@ -485,6 +495,14 @@ export class AssetPage implements OnInit, OnDestroy {
             } else {
                 // Something must have gone quite wrong, presumably a server error
                 console.error(err)
+
+                // AIR-2439 Workaround:
+                // When browser visits /public asset and receives 404,
+                // checkout route and redirect to #/public/assetId
+
+                if (err.status == 404) {
+                  console.log('ROUTE: ',this.route)
+                }
                 this.showServerErrorModal = true
             }
         } else {
