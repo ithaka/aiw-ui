@@ -481,13 +481,21 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.showServerErrorModal = true
                 }
 
-              // AIR-2439 Workaround:
-              // When browser visits /public asset and receives 404,
-              // checkout route and redirect to #/public/assetId
+                // AIR-2439 Workaround:
+                // When browser visits /public asset and receives 404,
+                // checkout route and redirect to #/public/assetId
+              if (this.isBrowser && err.message == 'Unable to load metadata!') {
 
-              if (err.message == 'Unable to load metadata!') {
-                console.log('ROUTE: ', this.route)
+                this.route.url.subscribe((url: any[]) => {
+
+                  let publicRoute: boolean = url[0].path === 'public'
+
+                  if (publicRoute && url[1]) {
+                    this._router.navigate(['/asset', url[1].path])
+                  }
+                })
               }
+
             } else if (err.status === 401) {
                 // Client-side: Should be handled by the 401 interceptor
                 // Server-side: Display error modal for non-javascript cases
@@ -499,10 +507,6 @@ export class AssetPage implements OnInit, OnDestroy {
                 // AIR-2439 Workaround:
                 // When browser visits /public asset and receives 404,
                 // checkout route and redirect to #/public/assetId
-
-                if (err.status == 404) {
-                  console.log('ROUTE: ',this.route)
-                }
                 this.showServerErrorModal = true
             }
         } else {
