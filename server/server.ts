@@ -118,14 +118,15 @@ app.get(['/public/*', '/object/*'], (req, res, next) => {
           }
           // Canonical tag on render success, 503 on error (signals to Google)
           // + We're using a 503 here to indicate "Service Unavailable" - this ensures Google will come back
-          // + We continue returning the page so a user is not interrupted 
+          // + We continue returning the page so a user is not interrupted
           // + "asset.rendered.success" tag is attached in asset-page to indicate render
           if (new RegExp(/\"asset\.rendered\.success\"/g).test(html)) {
             // Attach canonical meta tag if successful
             html = html.replace('<head>', '<head><link rel="canonical" href="'+req.originalUrl+'"/>')
           } else {
             // Return a 503 if asset was not rendered successfully
-            return res.status(503).send(html)
+            // NOTE: Temporarily return a 404 until fixing 503s for some assets
+            return res.status(404).send(html)
           }
           return res.send(html)
         }
