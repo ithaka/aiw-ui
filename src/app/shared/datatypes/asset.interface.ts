@@ -123,7 +123,11 @@ export class Asset {
                 }
                 if (Array.isArray(this.tileSource) && this.tileSource.length >= 1) {
                     // Handle Multi View downloads using IIIF
-                    let url = 'https:' + this.tileSource[0].replace('info.json', '') + 'full/'+maxSize+'/0/' + this.iiifFilename()
+                    let url = this.tileSource[0].replace('info.json', '') + 'full/'+maxSize+'/0/' + this.iiifFilename()
+                    // Ensure protocol is attached
+                    if (url.indexOf('//') == 0) {
+                        url = 'https:' + url
+                    }
                     // Pass IIIF url to Download Service for processing metadata
                     // Include "iiif" param in this case
                     downloadLink = data.baseUrl + "/api/download?imgid=" + this.id + "&url=" + encodeURIComponent(url) + "&iiif=true"

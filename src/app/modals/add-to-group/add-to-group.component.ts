@@ -341,10 +341,13 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
           .catch( error => {
             console.error(error)
           })
+        } else {
+          this.loading.recentGroups = false
         }
       },
       (error) => {
         console.error(error)
+        this.loading.recentGroups = false
       }
     )).subscribe()
   }
@@ -394,6 +397,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
       },
       (error) => {
         console.error(error)
+        this.loading.allGroups = false
       }
     )).subscribe()
   }
