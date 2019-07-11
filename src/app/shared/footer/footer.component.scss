@@ -67,11 +67,13 @@ p.small {
 
 .social-icons {
     font-size: 25px;
-    margin-bottom: 1em;
+    margin-bottom: 1em; 
 
     & .icon {
         margin: 0;
         opacity: 0.8;
+        background-size: 80% auto;
+        margin-right: 0.5em;
 
         &:hover, &:focus {
             opacity: 1;
