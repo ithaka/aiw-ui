@@ -106,8 +106,7 @@
             b Unable to find any assets
             br
             | A less specific query might be able to find what you are looking for.
-          .alert.alert-danger(*ngIf="!isLoading && (searchError.length > 0) && !searchLimitError")
-            | {{ searchError }}
+          .alert.alert-danger(*ngIf="!isLoading && (searchError.length > 0) && !searchLimitError", [innerHTML]="searchError")
         //- Display Thumbnails
         #assetThumbnailsRow.row.no-gutters(*ngIf="!reorderMode")
           div.selection(
