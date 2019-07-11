@@ -496,10 +496,6 @@ export class AssetPage implements OnInit, OnDestroy {
             } else {
                 // Something must have gone quite wrong, presumably a server error
                 console.error(err)
-
-                // AIR-2439 Workaround:
-                // When browser visits /public asset and receives 404,
-                // checkout route and redirect to #/public/assetId
                 this.showServerErrorModal = true
             }
         } else {
