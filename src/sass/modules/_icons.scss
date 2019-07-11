@@ -149,12 +149,8 @@
 @include icon('multiview', 'svg');
 @include icon('multiview-hover', 'svg');
 // Social media icons
-@include icon('contact', 'png');
-@include icon('youtube', 'png');
-@include icon('facebook', 'png');
-@include icon('twitter', 'png');
-@include icon('wordpress', 'png');
-@include icon('newsletter', 'png');
+@include icon('facebook', 'svg');
+@include icon('twitter', 'svg');
 // Dev icons
 @include icon('flag', 'png');
 

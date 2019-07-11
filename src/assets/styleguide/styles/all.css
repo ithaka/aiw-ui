@@ -7640,38 +7640,14 @@ ngx-tag-input > form > input {
   background-position: center center;
   background-size: 100% auto; }
 
-.icon-contact {
-  background-image: url("/assets/img/icon-contact.png");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto; }
-
-.icon-youtube {
-  background-image: url("/assets/img/icon-youtube.png");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto; }
-
 .icon-facebook {
-  background-image: url("/assets/img/icon-facebook.png");
+  background-image: url("/assets/img/icon-facebook.svg");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 100% auto; }
 
 .icon-twitter {
-  background-image: url("/assets/img/icon-twitter.png");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto; }
-
-.icon-wordpress {
-  background-image: url("/assets/img/icon-wordpress.png");
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% auto; }
-
-.icon-newsletter {
-  background-image: url("/assets/img/icon-newsletter.png");
+  background-image: url("/assets/img/icon-twitter.svg");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 100% auto; }
