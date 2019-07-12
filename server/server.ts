@@ -126,6 +126,7 @@ app.get(['/public/*', '/object/*'], (req, res, next) => {
             html = html.replace('<head>', '<head><link rel="canonical" href="'+req.originalUrl+'"/>')
           } else {
             // Return a 503 if asset was not rendered successfully
+            // NOTE: Temporarily return a 404 until fixing 503s for some assets
             return res.status(404).send(html)
           }
           return res.send(html)
