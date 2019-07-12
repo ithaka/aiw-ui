@@ -58,7 +58,7 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
           uponReceiving: 'registration form submission from a new user',
           withRequest: {
             method: 'POST',
-            path: '/api/secure/register?' + _auth.getAuthLogParams(),
+            path: '/api/secure/register',
             headers: { 'Content-type': 'application/x-www-form-urlencoded' },
             body: mockRegisterFormInput
           },
@@ -73,7 +73,7 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
           uponReceiving: 'registration form submission from an already registered user',
           withRequest: {
             method: 'POST',
-            path: '/api/secure/register?' + _auth.getAuthLogParams(),
+            path: '/api/secure/register',
             headers: { 'Content-type': 'application/x-www-form-urlencoded' },
             body: mockAlreadyRegisteredFormInput
           },
