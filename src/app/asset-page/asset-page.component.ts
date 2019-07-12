@@ -475,20 +475,6 @@ export class AssetPage implements OnInit, OnDestroy {
                     this.showServerErrorModal = true
                 }
 
-                // AIR-2439 Workaround:
-                // When browser visits /public asset and receives 404,
-                // check if /public route and redirect to #/asset/assetId
-              if (this.isBrowser && err.message === 'Unable to load metadata!') {
-
-                this.route.url.subscribe((url: any[]) => {
-                  let path = url[0].path
-
-                  if (path === 'public' || path === 'object') {
-                    this._router.navigate(['/asset', url[1].path])
-                  }
-                })
-              }
-
             } else if (err.status === 401) {
                 // Client-side: Should be handled by the 401 interceptor
                 // Server-side: Display error modal for non-javascript cases
