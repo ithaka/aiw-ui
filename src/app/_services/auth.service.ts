@@ -196,7 +196,7 @@ export class AuthService implements CanActivate {
     // Local routing should point to full URL
     // * This should NEVER apply when using a proxy, as it will break authorization
     if (new RegExp(['cirrostratus.org', 'localhost', 'local.', 'beta.stage.artstor.org', 'sahara.beta.stage.artstor.org', 'sahara.prod.artstor.org'].join('|')).test(this.clientHostname)) {
-      // this.baseUrl = this.hostname + '/api'
+      //this.baseUrl = this.hostname + '/api'
       this.solrUrl = this.hostname + '/api/search/v1.0/search'
       this.solrUrlV3 = this.hostname + '/api/search/v3.0/search'
     }
@@ -749,10 +749,10 @@ export class AuthService implements CanActivate {
      */
     login(user: any): Promise<any> {
         let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('Cache-Control', 'no-store, no-cache')
-        let options = { 
-          headers: header, 
+        let options = {
+          headers: header,
           withCredentials: true
-        }; 
+        };
         // Encode form data
         let data =  this.formEncode({
             'j_username': user.username,
@@ -788,11 +788,11 @@ export class AuthService implements CanActivate {
      * - Modifies Account: should include Auth logging params
      */
     pwdReset(email: string): Promise<any> {
-        let options = { 
-          withCredentials: true, 
-          params: { 
-            'email': email, 
-            'portal' : this._app.config.pwResetPortal 
+        let options = {
+          withCredentials: true,
+          params: {
+            'email': email,
+            'portal' : this._app.config.pwResetPortal
           }
         }
         return this.http

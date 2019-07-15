@@ -463,9 +463,10 @@ export class AssetPage implements OnInit, OnDestroy {
         this.showAccessDeniedModal = false
         this.showServerErrorModal = false
 
+        // asset arg is an Error object
         if (asset && asset['error']) {
             let err = asset['error']
-            if (err.status === 403 || err.message == 'Unable to load metadata!') {
+            if (err.status === 403 || err.message === 'Unable to load metadata!') {
                 // here is where we make the "access denied" modal appear
                 if (!this.encryptedAccess) {
                     this.showAccessDeniedModal = true
@@ -473,6 +474,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     console.error('Failed to load externally shared asset', err)
                     this.showServerErrorModal = true
                 }
+
             } else if (err.status === 401) {
                 // Client-side: Should be handled by the 401 interceptor
                 // Server-side: Display error modal for non-javascript cases
@@ -769,7 +771,7 @@ export class AssetPage implements OnInit, OnDestroy {
             for (let col of this.collections) {
                 if(col.name === value) {
                     switch (col.type) {
-                        case '6': 
+                        case '6':
                             link = ['/pcollection', col.id]
                             break
                         case '5':
@@ -779,7 +781,7 @@ export class AssetPage implements OnInit, OnDestroy {
                         default:
                             link = ['/collection', col.id]
                             break
-                        
+
                     }
                     return link
                 }
@@ -819,7 +821,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.licenseText = licenses[i].name
                 this.licenseLink = licenses[i].link
                 this.licenseImg = licenses[i].img
-                
+
                 return this.licenseText
             }
         }
@@ -1750,8 +1752,8 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     public exitFullscreenViewer() {
         if (this.assetViewer) {
-            this.assetViewer.exitFullScreen(); 
+            this.assetViewer.exitFullScreen();
             this.assetViewer.setFullscreen(false)
-        }   
+        }
     }
 }
