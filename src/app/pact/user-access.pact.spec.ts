@@ -1,17 +1,18 @@
-import { Location } from '@angular/common'
+// import { Location } from '@angular/common'
 import { HttpClientModule } from '@angular/common/http'
-import { RouterModule, Router, ActivatedRoute } from '@angular/router'
+// import { RouterModule, Router, ActivatedRoute } from '@angular/router'
 import { TestBed, getTestBed, inject, async } from '@angular/core/testing'
-import { Idle, DEFAULT_INTERRUPTSOURCES, IdleExpiry } from '@ng-idle/core'
+// import { Idle, DEFAULT_INTERRUPTSOURCES, IdleExpiry } from '@ng-idle/core'
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
-import { Angulartics2, ANGULARTICS2_TOKEN, RouterlessTracking } from 'angulartics2'
+// import { Angulartics2, ANGULARTICS2_TOKEN, RouterlessTracking } from 'angulartics2'
 
-import { AppConfig } from '../app.service'
+// import { AppConfig } from '../app.service'
 import { AuthService } from '_services'
-import { Injector, PLATFORM_ID } from '@angular/core';
-import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
+// import { Injector, PLATFORM_ID } from '@angular/core';
+// import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
 import { take } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+// import { Subject } from 'rxjs';
+import { AuthProviders } from './_auth-providers';
 
 describe('Login, logout, and userinfo #pact #user-access', () => {
 
@@ -37,32 +38,7 @@ describe('Login, logout, and userinfo #pact #user-access', () => {
       imports: [HttpClientModule],
       declarations: [
       ],
-      providers: [
-        { provide: PLATFORM_ID, useValue: 'server' },
-        { provide: Router, useValue: {} },
-        { provide: ActivatedRoute, useValue: {} },
-        { provide: RouterlessTracking, useValue: {} },
-        { provide: Angulartics2, useValue: {
-          eventTrack: new Subject(),
-          setUsername: new Subject(),
-          setUserProperties: new Subject()
-        } },
-        { provide: Location , useValue: {} },
-        { provide: 'request', useValue: {
-          headers: {},
-          ip: '192.168.1.1',
-          get: (string) => { return '' }
-        }},
-        { provide: ArtstorStorageService, useValue: {
-          getLocal: (string) => {return {}},
-          setLocal: (string, thing) => { return; },
-          clearLocalStorage: () => {return {}}
-        }},
-        Injector,
-        AppConfig,
-        AuthService,
-        Idle, IdleExpiry
-      ],
+      providers: AuthProviders,
     })
     const testbed = getTestBed()
     _auth = testbed.get(AuthService)
