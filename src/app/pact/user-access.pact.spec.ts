@@ -32,7 +32,8 @@ describe('Login, logout, and userinfo #pact #user-access', () => {
       declarations: [
       ],
       providers: [
-        ...AUTH_PROVIDERS
+        ...AUTH_PROVIDERS,
+        AuthService
       ]
     })
     const testbed = getTestBed()

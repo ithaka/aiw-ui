@@ -371,7 +371,7 @@ export class AuthService implements CanActivate {
      */
     let origin = this._app.config.siteID.toLowerCase()
     // Construct param string to attach to account modifying requests
-    return `requestorRole=${role}&requestOrigin=${origin}`
+    return `?requestorRole=${role}&requestOrigin=${origin}`
   }
 
   /**
@@ -392,7 +392,7 @@ export class AuthService implements CanActivate {
     let header = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded'); // form encode it
     let options = { headers: header, withCredentials: true }; // Create a request option
 
-    return this.http.post(environment.API_URL + '/api/secure/register?' + this.getAuthLogParams(), data , options);
+    return this.http.post(environment.API_URL + '/api/secure/register' + this.getAuthLogParams(), data , options);
   }
 
   /**
@@ -408,7 +408,7 @@ export class AuthService implements CanActivate {
     let header = new HttpHeaders().set('Content-Type', 'application/json')
     let options = { headers: header, withCredentials: true }
 
-    return this.http.post(environment.API_URL + '/saml/user/create?' + this.getAuthLogParams(), registration , options)
+    return this.http.post(environment.API_URL + '/saml/user/create' + this.getAuthLogParams(), registration , options)
   }
 
   /**
@@ -420,7 +420,7 @@ export class AuthService implements CanActivate {
     let header = new HttpHeaders().set('Content-Type', 'application/json')
     let options = { headers: header, withCredentials: true }
 
-    return this.http.post(environment.API_URL + '/saml/user/link?' + this.getAuthLogParams(), credentials , options)
+    return this.http.post(environment.API_URL + '/saml/user/link' + this.getAuthLogParams(), credentials , options)
       .toPromise()
   }
 
@@ -438,7 +438,7 @@ export class AuthService implements CanActivate {
       password: newPass
     });
 
-    return this.http.post(this.getUrl(true) + '/profile?' + this.getAuthLogParams(), data, options)
+    return this.http.post(this.getUrl(true) + '/profile' + this.getAuthLogParams(), data, options)
   }
 
   public getUrl(secure?: boolean): string {
@@ -794,7 +794,7 @@ export class AuthService implements CanActivate {
           }
         }
         return this.http
-            .get(environment.API_URL + '/api/lostpw?' + this.getAuthLogParams(), options)
+            .get(environment.API_URL + '/api/lostpw' + this.getAuthLogParams(), options)
             .toPromise();
     }
 

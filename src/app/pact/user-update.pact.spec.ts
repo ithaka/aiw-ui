@@ -1,13 +1,9 @@
-/*eslint-disable*/
-import { BaseRequestOptions, Response, RequestOptions, XHRBackend, ResponseOptions, RequestMethod } from '@angular/http';
 import { TestBed, inject, getTestBed, async } from '@angular/core/testing';
 import { PactWeb, Matchers} from '@pact-foundation/pact-web'
-import { HttpClientModule, HttpClient } from '@angular/common/http'
-import { map } from 'rxjs/operators'
+import { HttpClientModule } from '@angular/common/http'
 
 // Project Dependencies
 import { AccountService, AuthService } from '_services'
-import { AUTH_PROVIDERS } from './_auth-providers';
 
 describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
@@ -36,13 +32,15 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule],
         providers: [
-          ...AUTH_PROVIDERS,
-          AuthService,
+          { provide: AuthService, useValue: {
+            // Don't use log params for testing
+            getAuthLogParams: () => { return ''}
+          }},
           AccountService
         ]
     })
     const testbed = getTestBed();
-      service = testbed.get(AccountService);
+    service = testbed.get(AccountService);
   })
 
   const updateObjects: { field: string, value: any }[] = [
