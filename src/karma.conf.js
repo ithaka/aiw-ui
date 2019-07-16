@@ -42,8 +42,7 @@ module.exports = function (config) {
         port: 1201,
         dir: 'pacts/',
         consumer: 'aiw-ui',
-        provider: 'binder-group',
-        pactFileWriteMode: 'merge'
+        provider: 'binder-group'
       },
       {
         cors: true,
@@ -51,8 +50,7 @@ module.exports = function (config) {
         port: 1202,
         dir: 'pacts/',
         consumer: 'aiw-ui',
-        provider: 'binder-metadata',
-        pactFileWriteMode: 'merge'
+        provider: 'binder-metadata'
       },
       {
         cors: true,
@@ -60,8 +58,7 @@ module.exports = function (config) {
         port: 1203,
         dir: 'pacts/',
         consumer: 'aiw-ui',
-        provider: 'artaa_service',
-        pactFileWriteMode: 'merge'
+        provider: 'artaa_service'
       },
       {
         cors: true,
@@ -69,8 +66,7 @@ module.exports = function (config) {
         port: 1204,
         dir: 'pacts/',
         consumer: 'aiw-ui',
-        provider: 'binder-collections',
-        pactFileWriteMode: 'merge'
+        provider: 'binder-collections'
       },
       {
         cors: true,
@@ -78,8 +74,7 @@ module.exports = function (config) {
         port: 1205,
         dir: 'pacts/',
         consumer: 'aiw-ui',
-        provider: 'artaa_service',
-        pactFileWriteMode: 'merge'
+        provider: 'artaa_service'
       },
       {
         cors: true,
@@ -87,8 +82,7 @@ module.exports = function (config) {
         port: 1206,
         dir: 'pacts/',
         consumer: 'aiw-ui',
-        provider: 'artaa_service',
-        pactFileWriteMode: 'merge'
+        provider: 'artaa_service'
       },
     ],
     // 4) here we can define proxies to redirect requests from our pact tests to the mock server
@@ -105,6 +99,7 @@ module.exports = function (config) {
       '/api/secure/register': 'http://localhost:1205/api/secure/register',
       // User Access
       '/api/secure/login': 'http://localhost:1206/api/secure/login',
+      '/api/secure/logout': 'http://localhost:1206/api/secure/logout',
       '/api/secure/userinfo': 'http://localhost:1206/api/secure/userinfo',
       // User Account
       '/api/lostpw': 'http://localhost:1205/api/lostpw',
