@@ -16,7 +16,8 @@ describe('Login, logout, and userinfo #pact #user-access', () => {
       logLevel: "debug",
       consumer: 'aiw-ui',
       provider: 'artaa_service',
-      port: 1206
+      port: 1206,
+      pactfileWriteMode: 'update'
     })
     setTimeout(function () { done() }, 2000)
     provider.removeInteractions()

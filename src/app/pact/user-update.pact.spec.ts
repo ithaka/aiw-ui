@@ -12,7 +12,12 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
   const fakeUserId = 12345
 
   beforeAll(function(done) {
-    provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service', port: 1203 })
+    provider = new PactWeb({ 
+      consumer: 'aiw-ui', 
+      provider: 'artaa_service', 
+      port: 1203,
+      pactfileWriteMode: 'update'
+    })
 
     // required for slower Travis CI environment
     setTimeout(function () { done() }, 2000)
