@@ -1,18 +1,11 @@
-// import { Location } from '@angular/common'
 import { HttpClientModule } from '@angular/common/http'
-// import { RouterModule, Router, ActivatedRoute } from '@angular/router'
-import { TestBed, getTestBed, inject, async } from '@angular/core/testing'
-// import { Idle, DEFAULT_INTERRUPTSOURCES, IdleExpiry } from '@ng-idle/core'
+import { TestBed, getTestBed } from '@angular/core/testing'
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
-// import { Angulartics2, ANGULARTICS2_TOKEN, RouterlessTracking } from 'angulartics2'
 
-// import { AppConfig } from '../app.service'
+// Project Dependencies
 import { AuthService } from '_services'
-// import { Injector, PLATFORM_ID } from '@angular/core';
-// import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
-import { take } from 'rxjs/operators';
-// import { Subject } from 'rxjs';
-import { AuthProviders } from './_auth-providers';
+import { take } from 'rxjs/operators'
+import { AUTH_PROVIDERS } from './_auth-providers'
 
 describe('Login, logout, and userinfo #pact #user-access', () => {
 
@@ -38,7 +31,9 @@ describe('Login, logout, and userinfo #pact #user-access', () => {
       imports: [HttpClientModule],
       declarations: [
       ],
-      providers: AuthProviders,
+      providers: [
+        ...AUTH_PROVIDERS
+      ]
     })
     const testbed = getTestBed()
     _auth = testbed.get(AuthService)

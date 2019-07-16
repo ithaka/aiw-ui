@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators'
 
 // Project Dependencies
 import { AccountService, AuthService } from '_services'
+import { AUTH_PROVIDERS } from './_auth-providers';
 
 describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
@@ -35,7 +36,9 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule],
         providers: [
-          AccountService, AuthService
+          ...AUTH_PROVIDERS,
+          AuthService,
+          AccountService
         ]
     })
     const testbed = getTestBed();

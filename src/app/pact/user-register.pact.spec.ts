@@ -1,13 +1,10 @@
-import { Location } from '@angular/common'
-import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http'
-import { RouterModule, Router, ActivatedRoute } from '@angular/router'
-import { TestBed, getTestBed, inject, async } from '@angular/core/testing'
-import { Idle, DEFAULT_INTERRUPTSOURCES, IdleExpiry } from '@ng-idle/core'
+import { HttpClientModule, HttpClient } from '@angular/common/http'
+import { TestBed, getTestBed } from '@angular/core/testing'
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
-import { Angulartics2, ANGULARTICS2_TOKEN, RouterlessTracking } from 'angulartics2'
 
-import { AppConfig } from '../app.service'
+// Project Dependencies
 import { AuthService } from '_services'
+import { AUTH_PROVIDERS } from './_auth-providers';
 
 describe('Register form POST /api/secure/register #pact #user-register', () => {
 
@@ -28,14 +25,8 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule],
       providers: [
-        { provide: Router, usevalue: {} },
-        { provide: ActivatedRoute, usevalue: {} },
-        { provide: RouterlessTracking, usevalue: {} },
-        { provide: Angulartics2 },
-        { provide: Location , usevalue: {} },
-        AppConfig,
-        AuthService,
-        Idle, IdleExpiry
+        ...AUTH_PROVIDERS,
+        AuthService
       ],
     })
     const testbed = getTestBed()
