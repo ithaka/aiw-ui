@@ -1,28 +1,23 @@
-import { Location } from '@angular/common'
 import { HttpClientModule } from '@angular/common/http'
-import { RouterModule, Router, ActivatedRoute } from '@angular/router'
-import { TestBed, getTestBed, inject, async } from '@angular/core/testing'
-import { Idle, DEFAULT_INTERRUPTSOURCES, IdleExpiry } from '@ng-idle/core'
+import { TestBed, getTestBed } from '@angular/core/testing'
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
-import { Angulartics2, ANGULARTICS2_TOKEN, RouterlessTracking } from 'angulartics2'
 
-import { AppConfig } from '../app.service'
+// Project Dependencies
 import { AuthService } from '_services'
-import { Injector, PLATFORM_ID } from '@angular/core';
-import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
-import { take } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { take } from 'rxjs/operators'
+import { AUTH_PROVIDERS } from './_auth-providers'
 
-describe('Login and userinfo #pact #user-access', () => {
+describe('Login, logout, and userinfo #pact #user-access', () => {
 
   let provider, _auth
 
   beforeAll(function (done) {
-    provider = new PactWeb({ 
+    provider = new PactWeb({
       logLevel: "debug",
-      consumer: 'aiw-ui', 
-      provider: 'artaa_service', 
-      port: 1206 
+      consumer: 'aiw-ui',
+      provider: 'artaa_service',
+      port: 1206,
+      pactfileWriteMode: 'update'
     })
     setTimeout(function () { done() }, 2000)
     provider.removeInteractions()
@@ -38,38 +33,18 @@ describe('Login and userinfo #pact #user-access', () => {
       declarations: [
       ],
       providers: [
-        { provide: PLATFORM_ID, useValue: 'server' },
-        { provide: Router, useValue: {} },
-        { provide: ActivatedRoute, useValue: {} },
-        { provide: RouterlessTracking, useValue: {} },
-        { provide: Angulartics2, useValue: {
-          eventTrack: new Subject(),
-          setUsername: new Subject(),
-          setUserProperties: new Subject()
-        } },
-        { provide: Location , useValue: {} },
-        { provide: 'request', useValue: {
-          headers: {},
-          ip: '192.168.1.1',
-          get: (string) => { return '' }
-        }},
-        { provide: ArtstorStorageService, useValue: {
-          getLocal: (string) => {return {}},
-          setLocal: (string, thing) => { return; },  
-        }},
-        Injector,
-        AppConfig,
-        AuthService, 
-        Idle, IdleExpiry
-      ],
+        ...AUTH_PROVIDERS,
+        AuthService
+      ]
     })
     const testbed = getTestBed()
     _auth = testbed.get(AuthService)
-
+    // Do not attach log params that are not used directly by service
+    _auth.getAuthLogParams = () => { return '' }
   })
 
   /**
-  * Describes '/api/secure/register' endpoint
+  * Describes '/api/secure/login' endpoint
   */
   describe('/api/secure/login', () => {
     beforeAll((done) => {
@@ -100,6 +75,8 @@ describe('Login and userinfo #pact #user-access', () => {
         }
       }
 
+      let expectedLogoutResponse = { "status": true }
+
       let interactions = []
 
       interactions.push(
@@ -109,7 +86,7 @@ describe('Login and userinfo #pact #user-access', () => {
           withRequest: {
             method: 'POST',
             path: '/api/secure/login',
-            headers: { 
+            headers: {
               'Cache-Control': 'no-store, no-cache',
               'Content-Type': 'application/x-www-form-urlencoded'
             },
@@ -124,6 +101,23 @@ describe('Login and userinfo #pact #user-access', () => {
             body: expectedUserResponse
           }
         }),
+        // Log Out
+        provider.addInteraction({
+          uponReceiving: 'logout request',
+          withRequest: {
+            method: 'POST',
+            path: '/api/secure/logout',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            form: {}
+          },
+          willRespondWith: {
+            status: 200,
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            body: expectedLogoutResponse
+          }
+        }),
         // User info
         provider.addInteraction({
           uponReceiving: 'registration form submission from an already registered user',
@@ -133,8 +127,8 @@ describe('Login and userinfo #pact #user-access', () => {
           },
           willRespondWith: {
             status: 200,
-            headers: { 
-              'Content-Type': 'application/json;charset=UTF-8' 
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8'
             },
             body: expectedUserResponse
           }
@@ -156,12 +150,24 @@ describe('Login and userinfo #pact #user-access', () => {
         })
     })
 
-    // Test successful registration response
+    // Test successful login response
     it('should return a successful login response', (done) => {
       _auth.login({'username': 'EXAMPLE_EMAIL', 'password': 'EXAMPLE_PASSWORD'})
         .then((data) => {
           expect(data.status).toBeTruthy()
           expect(data.user.username).toEqual('EXAMPLE_EMAIL')
+          done()
+        }, (err) => {
+          console.error(err)
+          done.fail(err)
+        })
+    })
+
+    // Test successful logout response
+    it('should return a successful logout response', (done) => {
+      _auth.logout()
+        .then((data) => {
+          expect(data.status).toBeTruthy()
           done()
         }, (err) => {
           console.error(err)
