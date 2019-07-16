@@ -31,6 +31,8 @@ describe('Register form POST /api/secure/register #pact #user-register', () => {
     })
     const testbed = getTestBed()
     _auth = testbed.get(AuthService)
+    // Do not attach log params that are not used directly by service
+    _auth.getAuthLogParams = () => { return '' }
     http = testbed.get(HttpClient)
 
   })

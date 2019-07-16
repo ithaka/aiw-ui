@@ -38,7 +38,8 @@ describe('Login, logout, and userinfo #pact #user-access', () => {
     })
     const testbed = getTestBed()
     _auth = testbed.get(AuthService)
-
+    // Do not attach log params that are not used directly by service
+    _auth.getAuthLogParams = () => { return '' }
   })
 
   /**

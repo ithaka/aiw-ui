@@ -1,5 +1,6 @@
 import { PLATFORM_ID, Injector } from "@angular/core"
 import { ActivatedRoute, Router } from "@angular/router"
+import { Location } from '@angular/common'
 import { RouterlessTracking, Angulartics2 } from "angulartics2"
 import { Subject } from "rxjs"
 import { Idle, IdleExpiry } from "@ng-idle/core"
@@ -7,7 +8,6 @@ import { Idle, IdleExpiry } from "@ng-idle/core"
 // Project Dependencies
 import { ArtstorStorageService } from "../../../projects/artstor-storage/src/public_api"
 import { AppConfig } from "app/app.service"
-import { AuthService } from "_services"
 
 /**
  * Mock Auth providers for Pacts
