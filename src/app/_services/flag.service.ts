@@ -38,7 +38,6 @@ export class FlagService {
 
       this.flags.bannerShow = flags.bannerShow
       this.flags.bannerCopy = flags.bannerCopy
-      this.flags.newExport = flags.newExport
 
       /**
        * EXAMPLE USE OF COUNTRY CODE ROLLOUT
@@ -52,11 +51,6 @@ export class FlagService {
        * }
        */
 
-      let userCountryCode: string = res.headers.get('x-artstor-country-code').substr(0, 2)
-
-       if (flags.newExportRollout.indexOf(userCountryCode) > -1) {
-         this.flags.newExport = true
-       }
 
       // Push update to subscribers
       this.flagSource.next(this.flags)
@@ -95,14 +89,11 @@ export interface FeatureFlags {
   // detailViews?: boolean,
   exportGoogle?: boolean,
   relatedResFlag?: boolean,
-  searchV3?: boolean,
-  newExport?: boolean
+  searchV3?: boolean
 }
 
 interface FlagServiceResponse {
   unaffiliatedAccess: boolean
   bannerShow: boolean
   bannerCopy: string
-  newExportRollout: string[]
-  newExport: boolean
 }
