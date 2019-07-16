@@ -146,9 +146,14 @@ describe('Metadata Calls #pact #metadata', () => {
       it('should return metadata for an asset',
        function(done) {
         // Run the tests
-        _metadata.getMetadata('SS34216_34216_39230202', null, false)
+        _metadata.getMetadata('SS34216_34216_39230202', { legacyFlag: false })
           .subscribe(res => {
-            expect(res).toEqual(expectedMetadataObject)
+            /**
+             * Test for mapped metadata values
+             * @todo additional testing should be done with a unit test
+             */
+            expect(res.object_id).toBe('SS34216_34216_39230202')
+            expect(res.title).toEqual('Sample Compound Object')
             done()
           },
           err => {
