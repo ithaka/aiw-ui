@@ -366,7 +366,15 @@ export class AssetGrid implements OnInit, OnDestroy {
           else if (allResults.error) {
             console.error(allResults.error)
             this.isLoading = false
-            this.searchError = 'There was a server error loading your search. Please try again later.'
+            if (allResults.error.error.errors[0].name === 'limit-max-size-exceeded' || allResults.error.error.errors[0].name === 'query-length') {
+              this.searchError = '<b>Unable to find any assets</b><p>A less specific query might be able to find what you are looking for.</p>'
+            }
+            else if (allResults.error.error.errors[0].name === 'pagination-total-results-exceeded') {
+              this.searchError = 'Sorry, additional results cannot be displayed. In order to keep things quick, Artstor does not show more than 5000 results for any search. If you haven\'t found what you are looking for, try using advanced search.'
+            }
+            else {
+              this.searchError = 'There was a server error loading your search. Please try again later.'
+            }
             return
           }
 
