@@ -760,11 +760,7 @@ export class AssetPage implements OnInit, OnDestroy {
      * @returns boolean
      */
     setPublicDownload(): boolean {
-      let publicTypes: string[] = this.collections.filter(col => {
-        return col.type === '5' || col.type === '2'
-      })
-
-      return publicTypes.length > 0 && publicTypes.indexOf('5') > -1
+      return this.collections.map(col => col.type).indexOf('5') > -1
     }
 
     /**
