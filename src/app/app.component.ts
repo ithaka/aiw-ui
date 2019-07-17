@@ -11,12 +11,21 @@ import { map, take } from 'rxjs/operators'
 // Project Dependencies
 import { AppConfig } from './app.service'
 import { isPlatformBrowser } from '@angular/common'
-import { DomUtilityService, FlagService, ScriptService } from '_services'
+import { DomUtilityService, FlagService, ScriptService, AuthService } from '_services'
 import { version } from './../../package.json'
+
+
 
 // Server only imports
 import * as enTranslation from '../assets/i18n/en.json'
 import { Angulartics2 } from 'angulartics2';
+
+import * as StatusPage from 'statuspage-client';
+
+
+
+const STATUS_PAGE_CMP_ID_STAGE: string = 'fck7kkc59xvh'
+const STATUS_PAGE_CMP_ID_PROD: string = 'cmy3vpk5tq18'
 
 /*
  * App Component
@@ -26,7 +35,7 @@ import { Angulartics2 } from 'angulartics2';
   selector: 'app-root',
   encapsulation: ViewEncapsulation.None,
   template: `
-    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="showSkyBanner = false"></ang-sky-banner>
+    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="closeBanner()"></ang-sky-banner>
     <div>
       <div id="skip" tabindex="-1">
         <button id="button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
@@ -47,6 +56,8 @@ export class AppComponent {
   public showSkyBanner: boolean = false
   public skyBannerCopy: string = ''
   public test: any = {}
+
+  public statusPageClient: any
   /**
    * Google Tag Manager variables
    * - In order of specificity
@@ -80,6 +91,7 @@ export class AppComponent {
     private _dom: DomUtilityService,
     private _ga: Angulartics2,
     angulartics2GoogleTagManager: Angulartics2GoogleTagManager,
+    private _auth: AuthService, 
     private titleService: Title,
     private _script: ScriptService,
     private _flags: FlagService,
@@ -212,9 +224,6 @@ export class AppComponent {
       take(1),
       map(flags => {
         // don't need to handle successful response here - this just initiates the flags
-        // Set skybanner
-        this.showSkyBanner = flags.bannerShow
-        this.skyBannerCopy = flags.bannerCopy
       }, (err) => {
         console.error(err)
     })).subscribe()
@@ -223,6 +232,34 @@ export class AppComponent {
   ngOnInit() {
     // Toggle Banner here to show alerts and updates!
     // this.showSkyBanner = true
+
+    // Setup statusPageClient & subscribe to any status updates to show banner
+    this.statusPageClient = StatusPage( this._auth.getEnv() === 'test' ? STATUS_PAGE_CMP_ID_STAGE : STATUS_PAGE_CMP_ID_PROD )
+    this.statusPageClient.subscribe( (error, data) => {
+      if (error) {
+        console.error('Error fetching AIW Banner status updates ', error)
+      } else {
+        let bannerClosed: boolean = this._auth.getFromStorage('bannerClosed')
+        if(data.status && data.status !== 'resolved' && !bannerClosed) {
+          this.showSkyBanner = true
+          this.skyBannerCopy = data.body
+        } else {
+          this.showSkyBanner = false
+        }
+      }
+    })
+    
+  }
+
+  ngOnDestroy() {
+    // Unsubscribe to status updates
+    this.statusPageClient.unsubscribe()
+  }
+  
+  // Close banner and save the action in local storage
+  private closeBanner(): void {
+    this._auth.store('bannerClosed', true)
+    this.showSkyBanner = false
   }
 
   public findMainContent(): void {
