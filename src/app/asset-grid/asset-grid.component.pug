@@ -106,8 +106,7 @@
             b Unable to find any assets
             br
             | A less specific query might be able to find what you are looking for.
-          .alert.alert-danger(*ngIf="!isLoading && (searchError.length > 0) && !searchLimitError")
-            | {{ searchError }}
+          .alert.alert-danger(*ngIf="!isLoading && (searchError.length > 0) && !searchLimitError", [innerHTML]="searchError")
         //- Display Thumbnails
         #assetThumbnailsRow.row.no-gutters(*ngIf="!reorderMode")
           div.selection(
@@ -138,7 +137,7 @@
           p.sr-only Press enter again to tun off reording for that image. Pressing the escape key places focus back on the save reorder button to save your changes.
           .row.no-gutters([sortablejs]="results", [sortablejsOptions]="sortableOptions")
             ng-container(*ngFor="let asset of results; let i = index")
-              .col-sm-4.col-md-2.col-xl-1.col--reorder.draggable
+              .col-sm-4.col-md-2.col-xl-1.col--reorder.draggable(*ngIf="asset['status'] === 'available'")
                 .card.card--asset([ngClass]="{ 'lrgThmb': largeThmbView }")
                   ang-thumbnail(
                     [thumbnail]="asset",

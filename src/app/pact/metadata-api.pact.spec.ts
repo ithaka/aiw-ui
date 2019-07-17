@@ -1,11 +1,12 @@
 /*eslint-disable*/
-import { HttpClientModule } from '@angular/common/http'
+import { HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { TestBed, getTestBed } from '@angular/core/testing'
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
 import { map } from 'rxjs/operators'
 
 // Project Dependencies
-import { FlagService, MetadataService, MetadataResponse, AssetDataResponse } from '_services'
+import { FlagService, MetadataService, MetadataResponse, AssetDataResponse, AuthService } from '_services'
+import { AUTH_PROVIDERS } from './_auth-providers';
 
 describe('Metadata Calls #pact #metadata', () => {
 
@@ -98,6 +99,8 @@ describe('Metadata Calls #pact #metadata', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         providers: [
+          ...AUTH_PROVIDERS,
+          AuthService,
           MetadataService,
           FlagService
         ],
@@ -143,9 +146,14 @@ describe('Metadata Calls #pact #metadata', () => {
       it('should return metadata for an asset',
        function(done) {
         // Run the tests
-        _metadata.getMetadata('SS34216_34216_39230202', null, false)
+        _metadata.getMetadata('SS34216_34216_39230202', { legacyFlag: false })
           .subscribe(res => {
-            expect(res).toEqual(expectedMetadataObject)
+            /**
+             * Test for mapped metadata values
+             * @todo additional testing should be done with a unit test
+             */
+            expect(res.object_id).toBe('SS34216_34216_39230202')
+            expect(res.title).toEqual('Sample Compound Object')
             done()
           },
           err => {

@@ -38,7 +38,7 @@ export class ImageGroupService {
 
   constructor(private _router: Router, private http: HttpClient, private _auth: AuthService, private _assets: AssetService ){
     this.baseUrl = this._auth.getUrl();
-    
+
     this.editGroupObservableSource = new BehaviorSubject(false)
     this.editGroupObservable = this.editGroupObservableSource.asObservable()
   }
@@ -84,7 +84,7 @@ export class ImageGroupService {
   }
 
   /** Gets the link at which the resource can be downloaded. Will be set to the "accept" button's download property */
-  public getDownloadLink(group: ImageGroup, zip ?: boolean, newExport?: boolean): Promise<any> {
+  public getDownloadLink(group: ImageGroup, zip ?: boolean): Promise<any> {
     let header = new HttpHeaders().set('content-type', 'application/x-www-form-urlencoded')
     let options = { headers: header, withCredentials: true }
     let useLegacyMetadata: boolean = true
@@ -120,15 +120,14 @@ export class ImageGroupService {
       return data
     })
     .then((data) => {
-      let groupExportUrl = url + '/' + format + '/' + group.id + '/' + useLegacyMetadata
-      groupExportUrl = newExport ? groupExportUrl + '?springBoot=true' : groupExportUrl
+      let groupExportUrl = url + '/' + format + '/' + group.id + '/' + useLegacyMetadata + '?springBoot=true'
 
       // Return request that provides file URL
       return this.http
         .post(groupExportUrl, this._auth.formEncode(data), options)
         .timeout(20000) // Timeout after 20s
         .toPromise()
-      
+
     })
     .then((res) => {
       // Make authorization call to increment download count after successful response is received

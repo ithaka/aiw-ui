@@ -1,12 +1,9 @@
-/*eslint-disable*/
-import { BaseRequestOptions, Response, RequestOptions, XHRBackend, ResponseOptions, RequestMethod } from '@angular/http';
 import { TestBed, inject, getTestBed, async } from '@angular/core/testing';
 import { PactWeb, Matchers} from '@pact-foundation/pact-web'
-import { HttpClientModule, HttpClient } from '@angular/common/http'
-import { map } from 'rxjs/operators'
+import { HttpClientModule } from '@angular/common/http'
 
 // Project Dependencies
-import { AccountService } from '_services'
+import { AccountService, AuthService } from '_services'
 
 describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
 
@@ -15,7 +12,12 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
   const fakeUserId = 12345
 
   beforeAll(function(done) {
-    provider = new PactWeb({ consumer: 'aiw-ui', provider: 'artaa_service', port: 1203 })
+    provider = new PactWeb({ 
+      consumer: 'aiw-ui', 
+      provider: 'artaa_service', 
+      port: 1203,
+      pactfileWriteMode: 'update'
+    })
 
     // required for slower Travis CI environment
     setTimeout(function () { done() }, 2000)
@@ -35,11 +37,15 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule],
         providers: [
+          { provide: AuthService, useValue: {
+            // Don't use log params for testing
+            getAuthLogParams: () => { return ''}
+          }},
           AccountService
         ]
     })
     const testbed = getTestBed();
-      service = testbed.get(AccountService);
+    service = testbed.get(AccountService);
   })
 
   const updateObjects: { field: string, value: any }[] = [

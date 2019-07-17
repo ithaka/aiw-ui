@@ -72,6 +72,8 @@ p.small {
     & .icon {
         margin: 0;
         opacity: 0.8;
+        background-size: 80% auto;
+        margin-right: 0.5em;
 
         &:hover, &:focus {
             opacity: 1;

@@ -440,12 +440,12 @@
   },
   "FOOTER": {
     "LINKS": {
-      "ABOUT": "<a href=\"http://www.artstor.org/content/artstor-digital-library-features-benefits\" class=\"link\" target=\"_blank\">About</a>",
+      "ABOUT": "<a href=\"https://www.artstor.org/about/\" class=\"link\" target=\"_blank\">About Artstor</a>",
       "GETTING_STARTED": "<a href=\"http://support.artstor.org/?page_id=52\" class=\"link\" target=\"_blank\">Getting Started</a>",
-      "TEACHING_IDEAS": "<a href=\"http://www.artstor.org/content/teaching-resources-overview\" class=\"link\" target=\"_blank\">Teaching and Studying Resources</a>",
-      "STAY_INFORMED": "<a href=\"http://www.artstor.org/content/join-our-mailing-list\" class=\"link\" target=\"_blank\">Stay Informed</a>",
-      "TERMS": "<a href=\"http://www.artstor.org/terms\" class=\"link\" target=\"_blank\">Terms</a>",
-      "PRIVACY": "<a href=\"http://www.artstor.org/privacy-policy\" class=\"link\" target=\"_blank\">Privacy</a>",
+      "TEACHING_IDEAS": "<a href=\"https://www.artstor.org/teach/\" class=\"link\" target=\"_blank\">Teach with Artstor</a>",
+      "STAY_INFORMED": "<a href=\"https://www.artstor.org/newsletter/\" class=\"link\" target=\"_blank\">Newsletters</a>",
+      "TERMS": "<a href=\"https://www.artstor.org/artstor-terms\" class=\"link\" target=\"_blank\">Terms and Conditions</a>",
+      "PRIVACY": "<a href=\"http://www.artstor.org/privacy-policy\" class=\"link\" target=\"_blank\">Privacy Policy</a>",
       "COOKIE_POLICY": "<a href=\"http://www.ithaka.org/cookies\" class=\"link\" target=\"_blank\">Cookie Policy</a>",
       "COPYRIGHT": "<a href=\"http://www.artstor.org/copyright\" class=\"link\" target=\"_blank\">Copyright Concerns</a>",
       "SUPPORT": "<a href=\"http://support.artstor.org\" class=\"link\" target=\"_blank\">Support</a>",
@@ -551,37 +551,35 @@
     },
     "FEATURED": {
       "HEADINGS": {
-        "PUBLIC": "Featured Public Collections",
-        "INST": "Featured Collections",
-        "VIEW_ALL_LINK": "View All Collections",
-        "VIEW_PUBLIC_LINK": "View All Public Collections"
+        "BLOG_HEADING": "What's New",
+        "VIEW_BLOG_LINK": "Read more on the blog"
       },
       "COLLECTIONS": [{
-          "SUBHEADING": "Panos Pictures",
-          "DESCRIPTION": "Wildlife revealed",
-          "CAPTION": "Ami Vitale. A brown bear takes a break. 2007. Photograph. © Ami Vitale. Image and data provided by Panos Pictures.",
-          "LINK": "/#/category/1035192960 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/bear_panos.jpg",
-          "LINK_TITLE": "Panos Pictures",
-          "ALT_TEXT": "Panos Pictures"
+          "SUBHEADING": "American Painting at the IMA",
+          "DESCRIPTION": "An alternative look at the canon",
+          "CAPTION": "Edward Moran, The Valley in the Sea, 1862. Image and original data provided by the Indianapolis Museum of Art at Newfields.",
+          "LINK": "https://www.artstor.org/2019/05/21/american-art-at-the-indianapolis-museum-of-art-at-newfields/",
+          "IMG_SOURCE": "/assets/img/featured-collections/ima_moran.jpg",
+          "LINK_TITLE": "American Painting at the IMA",
+          "ALT_TEXT": "American Painting at the IMA"
         },
         {
-          "SUBHEADING": "Peabody Museum of Natural History (Yale University)",
-          "DESCRIPTION": "Specimens from the the Peabody Museum",
-          "CAPTION": "Asterope sapphira, butterfly. Collected 1936, Brazil. Image and data provided by the Peabody Museum of Natural History (Yale University).",
-          "LINK": "/#/category/1035093156 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/butterfly_yale.jpg",
-          "LINK_TITLE": "Peabody Museum of Natural History",
-          "ALT_TEXT": "Peabody Museum of Natural History"
+          "SUBHEADING": "American Studies in Artstor",
+          "DESCRIPTION": "A guide to our collections",
+          "CAPTION": "Dorothea Lange, Migrant Mother Series, 1936. Image and original data from Eyes of the Nation: A Visual History of the United States (Library of Congress).",
+          "LINK": "http://artstor.libguides.com/c.php?g=807677&p=5764951",
+          "IMG_SOURCE": "/assets/img/featured-collections/loc_lange.jpg",
+          "LINK_TITLE": "American Studies in Artstor",
+          "ALT_TEXT": "American Studies in Artstor"
         },
         {
-          "SUBHEADING": "Trinity College Watkinson Library: Enders Ornithology Lantern Slides",
-          "DESCRIPTION": "Hand tinted glass plates of birds and beasts",
-          "CAPTION": "Herbert Keightley Job. Red Fox, Kent, Connecticut. 1902. Lantern slide. Image and data provided by Trinity College Watkinson Library: Enders Ornithology Lantern Slides.",
-          "LINK": "/#/collection/87729997 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/fox_trinity.jpg",
-          "LINK_TITLE": "Trinity College Watkinson Library: Enders Ornithology Lantern Slides",
-          "ALT_TEXT": "Trinity College Watkinson Library: Enders Ornithology Lantern Slides"
+          "SUBHEADING": "Sweet Fortunes: Sugar, Race, Art, & Patronage in the Americas",
+          "DESCRIPTION": "A group of images for use in teaching",
+          "CAPTION": "Joseph Ferdinand Keppler, The bosses of the Senate, 1889. Image and original data from the Carnegie Arts of the United States.",
+          "LINK": "/#/group/589495",
+          "IMG_SOURCE": "/assets/img/featured-collections/carnegie_puck.jpg",
+          "LINK_TITLE": "Sweet Fortunes: Sugar, Race, Art, & Patronage in the Americas",
+          "ALT_TEXT": "Sweet Fortunes: Sugar, Race, Art, & Patronage in the Americas"
         }
       ],
       "PUBLIC_COLLECTIONS": [

@@ -75,9 +75,6 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   public showExportLoadingState: boolean = false
   private exportLoadingStateopts: LoadingStateOptions
 
-  // For group export call param toggle
-  private newExport: boolean = false
-
   private exportStatusInterval: any = null
   private loadingStateInterval: any = null
 
@@ -132,27 +129,11 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       })).subscribe()
     ) // end push
 
-
-    // Set flag for springBoot param based on flag service
-    this.subscriptions.push(
-      this._flags.getFlagsFromService().pipe(
-        take(1),
-        map(flags => {
-          this.newExport = flags.newExport
-        }, (err) => {
-          console.error(err)
-      })).subscribe()
-    )
-
     /**
      * Get Route Params
      * - Let Assets service know what group to load
      */
     this.subscriptions.push(
-      // Set flag for springBoot param based on featureFlag
-      this._flags.flagUpdates.subscribe((flags) => {
-        this.newExport = flags.newExport
-      }),
 
       this.route.params.pipe(
         map(routeParams => {
@@ -387,7 +368,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
 
     let downloadLink: string = ''
-    this._ig.getDownloadLink(this.ig, false, this.newExport)
+    this._ig.getDownloadLink(this.ig, false)
       .then( data => {
 
         // Handle 200 Response with "status": "FAILED"
@@ -439,7 +420,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
 
     let zipDownloadLink: string = ''
-    this._ig.getDownloadLink(this.ig, true, this.newExport)
+    this._ig.getDownloadLink(this.ig, true)
       .then( data => {
         // Handle 200 Response with "status": "FAILED"
         if (data.status === "FAILED") {
