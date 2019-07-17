@@ -224,9 +224,6 @@ export class AppComponent {
       take(1),
       map(flags => {
         // don't need to handle successful response here - this just initiates the flags
-        // Set skybanner
-        // this.showSkyBanner = flags.bannerShow
-        // this.skyBannerCopy = flags.bannerCopy
       }, (err) => {
         console.error(err)
     })).subscribe()
