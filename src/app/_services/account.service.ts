@@ -33,7 +33,7 @@ export class AccountService {
     }
 
     return this._http.put<UpdateUserResponse>(
-      environment.API_URL + "/api/secure/user/" + user.baseProfileId + "?" + this._auth.getAuthLogParams(),
+      environment.API_URL + "/api/secure/user/" + user.baseProfileId + this._auth.getAuthLogParams(),
       updateBody,
       {
         headers: new HttpHeaders({
