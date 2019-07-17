@@ -373,9 +373,9 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
         // Handle 200 Response with "status": "FAILED"
         if (data.status === "FAILED") {
-          console.error("Export Failed")
-          this.exportLoadingStateopts.state = LoadingState.error
-          this.exportLoadingStateopts.errorType = 'server'
+          console.error('Export Failed:- ', data)
+          clearInterval(this.loadingStateInterval)
+          this.pollForExportStatus()
         }
 
         else if (data.path && this.showExportLoadingState) {
@@ -395,13 +395,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       .catch( error => {
         console.error(error)
         clearInterval(this.loadingStateInterval)
-        // this.exportLoadingStateopts.state = LoadingState.error
-        // this.exportLoadingStateopts.errorType = 'server'
-        
-        // When the server timesout or there is an error begin polling on export status every 15s
-        this.exportStatusInterval = setInterval( () => {
-          this.checkExportStatus(this.ig.id)
-        }, 15000)
+        this.pollForExportStatus()
       })
   }
 
@@ -423,10 +417,10 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     this._ig.getDownloadLink(this.ig, true)
       .then( data => {
         // Handle 200 Response with "status": "FAILED"
-        if (data.status === "FAILED") {
-          console.error("Export Failed")
-          this.exportLoadingStateopts.state = LoadingState.error
-          this.exportLoadingStateopts.errorType = 'server'
+        if (data.status === 'FAILED') {
+          console.error('Export Failed:- ', data)
+          clearInterval(this.loadingStateInterval)
+          this.pollForExportStatus()
         }
 
         else if (data.path && this.showExportLoadingState) {
@@ -445,14 +439,15 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       .catch( error => {
         console.error(error)
         clearInterval(this.loadingStateInterval)
-        // this.exportLoadingStateopts.state = LoadingState.error
-        // this.exportLoadingStateopts.errorType = 'server'
-
-        // When the server timesout or there is an error begin polling on export status every 15s
-        this.exportStatusInterval = setInterval( () => {
-          this.checkExportStatus(this.ig.id)
-        }, 15000)
+        this.pollForExportStatus()
       })
+  }
+
+  private pollForExportStatus(): void {
+    // When the server timesout or there is an error begin polling on export status every 15s
+    this.exportStatusInterval = setInterval( () => {
+      this.checkExportStatus(this.ig.id)
+    }, 15000)
   }
 
   private checkExportStatus(groupId: string): void {
