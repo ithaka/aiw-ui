@@ -230,30 +230,29 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    // Toggle Banner here to show alerts and updates!
-    // this.showSkyBanner = true
-
-    // Setup statusPageClient & subscribe to any status updates to show banner
-    this.statusPageClient = StatusPage( this._auth.getEnv() === 'test' ? STATUS_PAGE_CMP_ID_STAGE : STATUS_PAGE_CMP_ID_PROD )
-    this.statusPageClient.subscribe( (error, data) => {
-      if (error) {
-        console.error('Error fetching AIW Banner status updates ', error)
-      } else {
-        let bannerClosed: boolean = this._auth.getFromStorage('bannerClosed')
-        if(data.status && data.status !== 'resolved' && !bannerClosed) {
-          this.showSkyBanner = true
-          this.skyBannerCopy = data.body
+    if (isPlatformBrowser(this.platformId)) {
+      // Setup statusPageClient & subscribe to any status updates to show banner
+      this.statusPageClient = StatusPage( this._auth.getEnv() === 'test' ? STATUS_PAGE_CMP_ID_STAGE : STATUS_PAGE_CMP_ID_PROD )
+      // Note: NOT an Observable, just a function
+      this.statusPageClient.subscribe( (error, data) => {
+        if (error) {
+          console.error('Error fetching AIW Banner status updates ', error)
         } else {
-          this.showSkyBanner = false
+          let bannerClosed: boolean = this._auth.getFromStorage('bannerClosed')
+          if(data.status && data.status !== 'resolved' && !bannerClosed) {
+            this.showSkyBanner = true
+            this.skyBannerCopy = data.body
+          } else {
+            this.showSkyBanner = false
+          }
         }
-      }
-    })
-    
+      })
+    }
   }
 
   ngOnDestroy() {
     // Unsubscribe to status updates
-    this.statusPageClient.unsubscribe()
+    this.statusPageClient && this.statusPageClient.unsubscribe()
   }
   
   // Close banner and save the action in local storage
