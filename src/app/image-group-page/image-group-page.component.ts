@@ -476,6 +476,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   public closeExportLoadingState(event?: any): void {
     this.showExportLoadingState = false
     if(event && event['cancelExport']) {
+      clearInterval(this.exportStatusInterval)
+      clearInterval(this.loadingStateInterval)
       this._toasts.sendToast({
         id: 'cancelExport',
         type: 'info',
