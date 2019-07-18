@@ -1,31 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
     <title>icon-fit-to-view</title>
     <desc>Created with Sketch.</desc>
     <defs>
-        <filter x="-6.4%" y="-25.0%" width="112.8%" height="150.0%" filterUnits="objectBoundingBox" id="filter-1">
-            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
-            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
-            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
-            <feMerge>
-                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
-                <feMergeNode in="SourceGraphic"></feMergeNode>
-            </feMerge>
-        </filter>
+        <path d="M3,3 L21,3 L21,21 L3,21 L3,3 Z M5,5 L5,19 L19,19 L19,5 L5,5 Z M12.6962783,15.7637085 L13.8318963,14.6280904 L14.8925565,15.6887506 L11.9462783,18.6350288 L9,15.6887506 L10.0606602,14.6280904 L11.1962783,15.7637085 L11.1962783,12.5743687 L12.6962783,12.5743687 L12.6962783,15.7637085 Z M11.1962783,8.07132034 L10.0606602,9.20693843 L9,8.14627825 L11.9462783,5.2 L14.8925565,8.14627825 L13.8318963,9.20693843 L12.6962783,8.07132034 L12.6962783,11.2606602 L11.1962783,11.2606602 L11.1962783,8.07132034 Z" id="path-1"></path>
     </defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="hovers-on-image-controls" transform="translate(-292.000000, -428.000000)">
-            <g id="controls---zoom-in" filter="url(#filter-1)" transform="translate(227.000000, 425.000000)">
-                <g id="icon-fit-to-view" transform="translate(69.000000, 7.000000)">
-                    <g id="icons/actions/fit-to-view">
-                        <g id="icon-fit-to-view">
-                            <path d="M8.17157288,4.17157288 L4.17157288,8.17157288 L4.17157288,4.17157288 L8.17157288,4.17157288 Z M9.82842712,4.17157288 L13.8284271,4.17157288 L13.8284271,8.17157288 L9.82842712,4.17157288 Z M8.17157288,13.8284271 L4.17157288,13.8284271 L4.17157288,9.82842712 L8.17157288,13.8284271 Z M9.82842712,13.8284271 L13.8284271,9.82842712 L13.8284271,13.8284271 L9.82842712,13.8284271 Z" id="Shape" fill="#333333" fill-rule="nonzero" transform="translate(9.000000, 9.000000) rotate(-315.000000) translate(-9.000000, -9.000000) "></path>
-                            <rect id="Rectangle" stroke="#333333" stroke-width="1.5" x="0.75" y="0.75" width="16.5" height="16.5"></rect>
-                        </g>
-                    </g>
-                </g>
-            </g>
-        </g>
+    <g id="icons/actions/fit-to-view" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <mask id="mask-2" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <use id="icon---fit-to-view" fill="#333333" fill-rule="nonzero" xlink:href="#path-1"></use>
     </g>
 </svg>

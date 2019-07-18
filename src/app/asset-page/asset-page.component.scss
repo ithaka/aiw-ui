@@ -130,7 +130,7 @@ $titleNavBg: #eee;
     position: fixed;
     top:0;
     right: 0;
-    margin: 20px*2;
+    margin: 20px;
     z-index: 2000;
 
     opacity: 0.8;
@@ -146,7 +146,8 @@ $titleNavBg: #eee;
     }
 
     & .btn {
-        padding: 0 12px;
+        padding: 0 8px;
+        height: 40px;
     }
 }
 

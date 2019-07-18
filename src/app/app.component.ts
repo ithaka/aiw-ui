@@ -14,14 +14,9 @@ import { isPlatformBrowser } from '@angular/common'
 import { DomUtilityService, FlagService, ScriptService, AuthService } from '_services'
 import { version } from './../../package.json'
 
-
-
 // Server only imports
 import * as enTranslation from '../assets/i18n/en.json'
 import { Angulartics2 } from 'angulartics2';
-
-import * as StatusPage from 'statuspage-client';
-
 
 
 const STATUS_PAGE_CMP_ID_STAGE: string = 'fck7kkc59xvh'
@@ -232,22 +227,32 @@ export class AppComponent {
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       // Setup statusPageClient & subscribe to any status updates to show banner
-      this.statusPageClient = StatusPage( this._auth.getEnv() === 'test' ? STATUS_PAGE_CMP_ID_STAGE : STATUS_PAGE_CMP_ID_PROD )
-      // Note: NOT an Observable, just a function
-      this.statusPageClient.subscribe( (error, data) => {
-        if (error) {
-          console.error('Error fetching AIW Banner status updates ', error)
-        } else {
-          let bannerClosed: boolean = this._auth.getFromStorage('bannerClosed')
-          if(data.status && data.status !== 'resolved' && !bannerClosed) {
-            this.showSkyBanner = true
-            this.skyBannerCopy = data.body
-          } else {
-            this.showSkyBanner = false
-          }
-        }
-      })
+      import('statuspage-client') // Load StatusPage client -side
+          .then((StatusPage) => {
+            this.statusPageClient = StatusPage( this._auth.getEnv() === 'test' ? STATUS_PAGE_CMP_ID_STAGE : STATUS_PAGE_CMP_ID_PROD )
+            this.subscribeToStatus()
+          })
     }
+  }
+
+  /**
+   * Subscribes to StatusPage.io incident/banner updates
+   */
+  private subscribeToStatus(): void {
+    // Note: NOT an Observable, just a function
+    this.statusPageClient.subscribe( (error, data) => {
+      if (error) {
+        console.error('Error fetching AIW Banner status updates ', error)
+      } else {
+        let bannerClosed: boolean = this._auth.getFromStorage('bannerClosed')
+        if(data.status && data.status !== 'resolved' && !bannerClosed) {
+          this.showSkyBanner = true
+          this.skyBannerCopy = data.body
+        } else {
+          this.showSkyBanner = false
+        }
+      }
+    })
   }
 
   ngOnDestroy() {

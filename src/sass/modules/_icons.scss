@@ -92,16 +92,17 @@
 @include icon--hover('study-mode', 'svg');
 
 @include icon('fit-to-view', 'svg');
-@include icon('present-dark', 'svg');
+@include icon('present', 'svg');
 @include icon('remove-from-comparison', 'svg');
+@include icon('exit-fullscreen', 'svg');
 
 @include icon('more', 'svg');
 @include icon('info', 'svg');
 @include icon('share', 'svg');
 @include icon('share-white', 'svg');
 @include icon('star', 'svg');
-@include icon('zoom-in-v2', 'svg');
-@include icon('zoom-out-v2', 'svg');
+@include icon('zoom-in', 'svg');
+@include icon('zoom-out', 'svg');
 @include icon('large-view', 'svg');
 @include icon('small-view', 'svg');
 @include icon('detail-view', 'svg');
