@@ -229,7 +229,7 @@ export class AppComponent {
       // Setup statusPageClient & subscribe to any status updates to show banner
       import('statuspage-client') // Load StatusPage client -side
           .then((StatusPage) => {
-            this.statusPageClient = StatusPage( this._auth.getEnv() === 'test' ? STATUS_PAGE_CMP_ID_STAGE : STATUS_PAGE_CMP_ID_PROD )
+            this.statusPageClient = StatusPage( this._auth.getEnv() === 'test' ? STATUS_PAGE_CMP_ID_STAGE : STATUS_PAGE_CMP_ID_PROD, { environment: this._auth.getEnv() } )
             this.subscribeToStatus()
           })
     }
