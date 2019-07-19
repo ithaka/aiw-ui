@@ -466,6 +466,12 @@ export class ImageGroupPage implements OnInit, OnDestroy {
             this.closeExportLoadingState()
             this.downLoadFile(this.ig.name, downloadLink)
           }, 5000)
+        } else if(response.status && response.status === "FAILED") { // There was a server error while exporting group, allow user to try again
+          console.error("Export Status Failed")
+          clearInterval(this.exportStatusInterval)
+          clearInterval(this.loadingStateInterval)
+          this.exportLoadingStateopts.state = LoadingState.error
+          this.exportLoadingStateopts.errorType = 'server'
         }
       }, (error) => {
         console.error('Error in check status: ', error)
