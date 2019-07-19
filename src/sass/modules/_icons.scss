@@ -94,11 +94,12 @@
 // Image Viewer controls
 @include icon('fit-to-view', 'svg', '-v2');
 @include icon('present', 'svg', '-v2');
-@include icon('zoom-in', 'svg', '-v2');
-@include icon('zoom-out', 'svg', '-v2');
-
-@include icon('remove-from-comparison', 'svg');
-@include icon('exit-fullscreen', 'svg');
+@include icon('zoom-in', 'svg', '-v3');
+@include icon('zoom-out', 'svg', '-v3');
+// Image Viewer fullscreen controls
+@include icon('remove-from-comparison', 'svg', '-v2');
+@include icon('exit-fullscreen', 'svg', '-v2');
+@include icon('compare', 'svg', '-v2');
 
 @include icon('more', 'svg');
 @include icon('info', 'svg');
@@ -126,7 +127,6 @@
 @include icon('collab', 'gif');
 @include icon('iap', 'svg');
 // @include icon('info', 'png');
-@include icon('compare', 'svg');
 @include icon--hover('icon-slideshow', 'gif');
 @include icon('add-white', 'svg');
 @include icon('export-ppt', 'svg');
