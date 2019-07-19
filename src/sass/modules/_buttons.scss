@@ -142,9 +142,9 @@ $iconBtnSize: $btnHeight;
  }
 
  .btn:not(.btn--icon) > .icon {
-    margin: 0 0.5em;
-    width: 1.2em;
-    height: 1.2em;
+    margin: 0 0 0 4px;
+    width: 24px;
+    height: 24px;
     vertical-align: middle;
     transform: translateY(-0.1em);
  }
@@ -247,7 +247,6 @@ $iconBtnSize: $btnHeight;
     border-bottom: none;
 
     & .icon {
-        opacity: 0.8;
         height: 18px;
         width: 18px;
         position: absolute;

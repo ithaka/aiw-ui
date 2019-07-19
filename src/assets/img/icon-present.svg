@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>icon-present</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M18.59375,17.1795364 L18.59375,14.59375 L20.59375,14.59375 L20.59375,20.59375 L14.59375,20.59375 L14.59375,18.59375 L17.1795364,18.59375 L13.6383464,15.0525599 L15.0525599,13.6383464 L18.59375,17.1795364 Z M6.82046356,18.59375 L9.40625,18.59375 L9.40625,20.59375 L3.40625,20.59375 L3.40625,14.59375 L5.40625,14.59375 L5.40625,17.1795364 L8.94744008,13.6383464 L10.3616536,15.0525599 L6.82046356,18.59375 Z M17.1795364,5.40625 L14.59375,5.40625 L14.59375,3.40625 L20.59375,3.40625 L20.59375,9.40625 L18.59375,9.40625 L18.59375,6.82046356 L15.0525599,10.3616536 L13.6383464,8.94744008 L17.1795364,5.40625 Z M5.40625,6.82046356 L5.40625,9.40625 L3.40625,9.40625 L3.40625,3.40625 L9.40625,3.40625 L9.40625,5.40625 L6.82046356,5.40625 L10.3616536,8.94744008 L8.94744008,10.3616536 L5.40625,6.82046356 Z" id="path-1"></path>
+    </defs>
+    <g id="icons/actions/present" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <mask id="mask-2" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <use id="icon---present" fill="#333333" fill-rule="nonzero" xlink:href="#path-1"></use>
+        <g id="mixins/color-gray-7" mask="url(#mask-2)" fill="#333333">
+            <rect id="🎨Color" x="0" y="0" width="24" height="24"></rect>
+        </g>
+    </g>
+</svg>

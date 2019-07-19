@@ -755,12 +755,22 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
+     * setPublicDownload
+     * Called in setCollectionLink to determine asset.publicDownload
+     * @returns boolean
+     */
+    setPublicDownload(): boolean {
+      return this.collections.map(col => col.type).indexOf('5') > -1
+    }
+
+    /**
      * Sets collection id for the Collection href
      * A collection may be private, institutional, or public.
      * If both institional(2) and public(5), we set the link to the public collection id.
      */
     setCollectionLink(asset: Asset, value: string): any[] {
         let link = []
+        asset.publicDownload = this.setPublicDownload()
 
         // 103 Collection Id routes to /category/<categoryId>, some of the collections have collectionId of NaN, check the id in the collections array instead
         if (String(asset.collectionId) === '103' || String(asset.collections[0].id) === '103') {
@@ -775,7 +785,6 @@ export class AssetPage implements OnInit, OnDestroy {
                             link = ['/pcollection', col.id]
                             break
                         case '5':
-                            asset.publicDownload = true
                             link = ['/collection', col.id]
                             break
                         default:
