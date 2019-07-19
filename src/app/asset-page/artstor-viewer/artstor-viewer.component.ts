@@ -343,6 +343,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
      * - Requires this.asset to have an id
      */
     private loadOpenSea(): void {
+        console.log(this._auth.currentAuthHeaders)
         // Single view "multi views" are treated as single images
         this.isMultiView = Array.isArray(this.tileSource) && this.tileSource.length > 1
         this.multiViewPage = 1
@@ -354,7 +355,10 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
             id: this.osdViewerId,
             // prefix for Icon Images (full url needed for SSR)
             prefixUrl: this._auth.getHostname() + '/assets/img/osd/',
-            tileSources: this.tileSource,
+            tileSources: {
+                url: this.tileSource,
+                ajaxHeaders: this._auth.currentAuthHeaders
+            },
             // Trigger conditionally if tilesource is an array of multiple sources
             sequenceMode: this.isMultiView,
             // OpenSeaDragon bug workaround: Reference strip will not load on init
@@ -391,7 +395,8 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
             // defaultZoomLevel: 1, // We don't want the image to be covered on load
             // visibilityRatio: 0.2, // Determines percentage of background that has to be covered by the image while panning
             // debugMode: true,
-            preserveImageSizeOnResize: this.zoom && this.zoom.viewerX ? true : false
+            preserveImageSizeOnResize: this.zoom && this.zoom.viewerX ? true : false,
+            ajaxHeaders: this._auth.currentAuthHeaders
         });
 
         // ---- Use handler in case other error crops up
