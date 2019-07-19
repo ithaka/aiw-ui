@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>icon-fit-to-view</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M3,3 L21,3 L21,21 L3,21 L3,3 Z M5,5 L5,19 L19,19 L19,5 L5,5 Z M12.6962783,15.7637085 L13.8318963,14.6280904 L14.8925565,15.6887506 L11.9462783,18.6350288 L9,15.6887506 L10.0606602,14.6280904 L11.1962783,15.7637085 L11.1962783,12.5743687 L12.6962783,12.5743687 L12.6962783,15.7637085 Z M11.1962783,8.07132034 L10.0606602,9.20693843 L9,8.14627825 L11.9462783,5.2 L14.8925565,8.14627825 L13.8318963,9.20693843 L12.6962783,8.07132034 L12.6962783,11.2606602 L11.1962783,11.2606602 L11.1962783,8.07132034 Z" id="path-1"></path>
+    </defs>
+    <g id="icons/actions/fit-to-view" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <mask id="mask-2" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <use id="icon---fit-to-view" fill="#333333" fill-rule="nonzero" xlink:href="#path-1"></use>
+    </g>
+</svg>
