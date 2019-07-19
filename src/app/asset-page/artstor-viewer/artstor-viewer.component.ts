@@ -355,10 +355,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
             id: this.osdViewerId,
             // prefix for Icon Images (full url needed for SSR)
             prefixUrl: this._auth.getHostname() + '/assets/img/osd/',
-            tileSources: {
-                url: this.tileSource,
-                ajaxHeaders: this._auth.currentAuthHeaders
-            },
+            tileSources: this.tileSource,
             // Trigger conditionally if tilesource is an array of multiple sources
             sequenceMode: this.isMultiView,
             // OpenSeaDragon bug workaround: Reference strip will not load on init
@@ -396,7 +393,8 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
             // visibilityRatio: 0.2, // Determines percentage of background that has to be covered by the image while panning
             // debugMode: true,
             preserveImageSizeOnResize: this.zoom && this.zoom.viewerX ? true : false,
-            ajaxHeaders: this._auth.currentAuthHeaders
+            ajaxHeaders: this._auth.currentAuthHeaders,
+            loadTilesWithAjax: true
         });
 
         // ---- Use handler in case other error crops up
