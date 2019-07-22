@@ -698,6 +698,11 @@ export class AssetPage implements OnInit, OnDestroy {
       this.angulartics.eventTrack.next({ properties: { event: 'metadata_collection_link', category: 'metadata', label: collectionName } });
     }
 
+    // Track metadata creator link click
+    trackCreatorLink(creatorName: string): void {
+        this.angulartics.eventTrack.next({ properties: { event: 'metadata_creator_link', category: 'metadata', label: creatorName } });
+      }
+
     /**
      * Function called when keyboard key is pressed
      * allows user to go to previous/next asset in group or search
