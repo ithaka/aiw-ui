@@ -7,7 +7,7 @@ import { Angulartics2 } from 'angulartics2'
 import { Router } from '@angular/router'
 
 // Project Dependencies
-import { AssetService, GroupService, AuthService, DomUtilityService, ThumbnailService } from '_services'
+import { AssetService, GroupService, AuthService, DomUtilityService, ThumbnailService, LogService } from '_services'
 import { ImageGroup, ImageZoomParams, Asset } from 'datatypes'
 import { ToastService } from 'app/_services'
 
@@ -76,7 +76,8 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     private _auth: AuthService,
     private router: Router,
     private _toasts: ToastService,
-    private _dom: DomUtilityService
+    private _dom: DomUtilityService,
+    private _log: LogService
       ) {}
 
     ngOnInit() {
@@ -456,6 +457,34 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
       group.selected = false
       return group
     })
+  }
+
+  private logAddToGroupEvent(): void {
+    // If the request is from the asset page, log add asset to existing group into Captain's Log
+    if (this.copySelectionStr === 'ADD_TO_GROUP_MODAL.FROM_ASSET') {
+      let add_detail_view = this.detailPreviewURL ? true : false
+      this._log.log({
+        eventType: 'artstor_add_asset_to_existing',
+        additional_fields: {
+            group_id: this.selectedGroup.id,
+            item_id: this.selectedAssets[0].id,
+            add_detail_view: add_detail_view
+        }
+      })
+    } 
+    // If the request is from the collection/search page, log save selections to existing group into Captain's Log
+    else {
+      let item_ids = this.selectedAssets.map(asset => {
+        return asset.id
+      })
+      this._log.log({
+        eventType: 'artstor_save_selections_to_existing',
+        additional_fields: {
+            group_id: this.selectedGroup.id,
+            item_ids: item_ids
+        }
+      })
+    }
   }
 
 }
