@@ -240,7 +240,7 @@ export class AssetSearchService {
           {
             'name': 'artclassification_str',
             'mincount': 1,
-            'limit': 17
+            'limit': 30
           }
           // {
           //   "name" : "artcollectiontitle_str",
