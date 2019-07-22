@@ -459,7 +459,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     })
   }
 
-  private logAddtoGroupEvent(): void {
+  private logAddToGroupEvent(): void {
     // If the request is from the asset page, log add asset to existing group into Captain's Log
     if (this.copySelectionStr === 'ADD_TO_GROUP_MODAL.FROM_ASSET') {
       let add_detail_view = this.detailPreviewURL ? true : false
