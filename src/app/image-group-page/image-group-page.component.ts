@@ -353,6 +353,18 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * getPPt/getZIP loading time
+   */
+  private getProgressIntervals(itemCount, intervals): number {
+    // Base minimum of 5 seconds
+    let totalTime = 5000
+    // Approx. additional 500ms per item
+    totalTime += itemCount*500
+    // Divide by intervals
+    return totalTime/intervals
+  }
+
   private getPPT(): void{
     this.exportLoadingStateopts = {
       exportType: 'ppt',
@@ -363,8 +375,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
     // Mimmic loading behaviour in intervals
     this.loadingStateInterval = setInterval(() => {
-      this.exportLoadingStateopts.progress += 10
-    }, 1000)
+      this.exportLoadingStateopts.progress += 5
+    }, this.getProgressIntervals(this.ig.items.length, 20))
 
 
     let downloadLink: string = ''
@@ -409,8 +421,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
     // Mimmic loading behaviour in intervals
     this.loadingStateInterval = setInterval(() => {
-      this.exportLoadingStateopts.progress += 10
-    }, 1000)
+      this.exportLoadingStateopts.progress += 5
+    }, this.getProgressIntervals(this.ig.items.length, 20))
 
 
     let zipDownloadLink: string = ''
