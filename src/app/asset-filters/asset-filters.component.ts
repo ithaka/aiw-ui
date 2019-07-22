@@ -42,7 +42,7 @@ export class AssetFilters {
   pagination = {
     page : 1,
     totalPages : 1,
-    size : 24
+    size : 48
   };
   activeSort = {
     index : 0,

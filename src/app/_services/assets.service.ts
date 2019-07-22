@@ -85,7 +85,7 @@ export class AssetService {
         page: number
     } = {
         totalPages: 1,
-        size: 24,
+        size: 48,
         page: 1
     };
     private paginationSource = new BehaviorSubject<any>(this.paginationValue);
@@ -107,7 +107,7 @@ export class AssetService {
     private urlParams: any;
     private defaultUrlParams: any = {
             term: '',
-            size: 24,
+            size: 48,
             page: 1,
             startDate: 0,
             endDate: 0,
