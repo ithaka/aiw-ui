@@ -899,8 +899,14 @@ export class AssetService {
                 console.log('res for contextual info is: ', res)
                 
                 if(res['searchResponseElement'] && res['searchResponseElement'][0]) {
-                    conceptId = res['searchResponseElement'][0]['conceptId']
-                    return conceptId
+                    let count = res['searchResponseElement'].length
+                    for (let i = 0; i < count; i++) {
+                        let concept = res['searchResponseElement'][i]
+                        if (concept.recordType === 'P') {
+                            conceptId = concept['conceptId']
+                            return conceptId
+                        }
+                    }
                 }
             })
             .then(id => {
