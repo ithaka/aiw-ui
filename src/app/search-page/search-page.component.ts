@@ -33,6 +33,16 @@ export class SearchPage implements OnInit, OnDestroy {
 
   private userSessionFresh: boolean = false;
 
+  // Artist information
+  public artist: {
+    show?: boolean,
+    name?: string,
+    bio?: string,
+    associates?: any[]
+  } = {
+    
+  }
+
   constructor(
         public _appConfig: AppConfig,
         private _assets: AssetService,
@@ -98,7 +108,18 @@ export class SearchPage implements OnInit, OnDestroy {
         let artistName = params['term'].replace('artcreator:(','').replace(')', '')
         this._assets.getCreatorContextualInfo(artistName)
           .then( conceptData => {
+            let artistData = conceptData.conceptDetailInfo
             console.log('Concept data is: ', conceptData)
+            if (artistData.preferredTerm && artistData.displayText) {
+              this.artist.show = true
+              this.artist.name = artistData.preferredTerm
+              this.artist.bio = artistData.displayText
+              this.artist.associates = artistData.associatives.associative
+              // Clean bio 
+              if (this.artist.bio.indexOf(this.artist.name) === 0) {
+                this.artist.bio = this.artist.bio.substr(this.artist.name.length)
+              }
+            }
           })
           .catch( error => {
             console.error('There was an error fetching contextual info about the artist: ', error)

@@ -11,7 +11,7 @@
           p.small(*ngIf="siteID!='SAHARA' && !_auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.USER' | translate")
           p.small(*ngIf="siteID=='SAHARA'", [innerHtml]="'HOME.CONTENT_ACCESS.SAHARA' | translate")
           ang-asset-filters
-      .col-sm-9
+      .col([ngClass]="artist.show ? '.col-sm-6' : '.col-sm-9'")
         h1.mobile--show Results
         div(aria-activedescendant="button")
           button.skip-btn#skip-to-filter-link((click)="skipToFilterSec()", (keyup.enter)="skipToFilterSec()", tabindex="3", class="sr-only sr-only-focusable") This is the search results section. Skip to the filters section.
@@ -20,3 +20,11 @@
             ang-search(*ngIf="_auth.isPublicOnly()", [allowSearchInRes]="true", [UserNotLoggedIn]="true")
             ang-search(*ngIf="siteID=='SAHARA' || !_auth.isPublicOnly()", [allowSearchInRes]="true", [UserNotLoggedIn]="false")
         ang-asset-grid([hasMaxAssetLimit]="true")
+      .col-sm-3(*ngIf="artist.show")
+        .feature-pane
+          h3 {{ artist.name }}
+          p {{ artist.bio }}
+          ng-container(*ngFor="let associate of artist.associates")
+            .small {{ associate.associativeName }}
+            a.link([routerLink]="['/search', 'artcreator:(' + associate.term + ')']") {{ associate.term }}
+
