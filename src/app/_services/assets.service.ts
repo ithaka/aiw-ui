@@ -131,6 +131,9 @@ export class AssetService {
     // // bandaid for the re-search functionality
     // private searchErrorCount: number = 0
 
+    // Base URL for Forum Concept services on stage
+    private conceptServiceBaseURL: string = 'https://test.forum.jstor.org/names/name/json'
+
     constructor(
         private _filters: AssetFiltersService,
         private _router: Router,
@@ -870,6 +873,45 @@ export class AssetService {
             }
             return newItems
         }, [])
+    }
+
+    /**
+     * Fetches contextual info about the creator
+     * - Searches concepts on creator name
+     * - Fetches concept detail for the first search result
+     * @param creatorName
+     * @returns Detailed data for the creator
+     */
+    public getCreatorContextualInfo(creatorName: string): Promise <any> {
+        let searchQuery: any = {
+            refined: true,
+            authToken: '123',
+            term: creatorName,
+            sort: 'RELEVANCE',
+            pageNumber: 1,
+            pageSize: 10
+        }
+        let conceptId = ''
+        return this.http
+            .get(this.conceptServiceBaseURL + '/searchConcept', { params: searchQuery, withCredentials: true })
+            .toPromise()
+            .then(res => {
+                console.log('res for contextual info is: ', res)
+                
+                if(res['searchResponseElement'] && res['searchResponseElement'][0]) {
+                    conceptId = res['searchResponseElement'][0]['conceptId']
+                    return conceptId
+                }
+            })
+            .then(id => {
+                let detailQuery: any = {
+                    authToken: '123',
+                    conceptId: id
+                }
+                return this.http
+                    .get(this.conceptServiceBaseURL + '/conceptDetail', { params: detailQuery, withCredentials: true })
+                    .toPromise()
+            })
     }
 
 }

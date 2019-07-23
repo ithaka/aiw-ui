@@ -93,6 +93,18 @@ export class SearchPage implements OnInit, OnDestroy {
         params['page'] = 1;
       }
 
+      // Query for contextual info if searching for other works by an artist
+      if(params['term'] && params['term'].includes('artcreator:')) {
+        let artistName = params['term'].replace('artcreator:(','').replace(')', '')
+        this._assets.getCreatorContextualInfo(artistName)
+          .then( conceptData => {
+            console.log('Concept data is: ', conceptData)
+          })
+          .catch( error => {
+            console.error('There was an error fetching contextual info about the artist: ', error)
+          })
+      }
+
       // If the _auth.isPublicOnly() doesn't match the component's "unaffiliatedUser" flag then refresh search results
       let refreshSearch = this.unaffiliatedUser && this._auth.isPublicOnly() ? false : true
 
