@@ -17,9 +17,14 @@ div
             h3#pageType Browse Personal Collection
         .row.pb-4
           .col-sm-9
-            h1#pageTitle.h1--title-block {{ colName }}
+            .row
+              .col-sm-7
+                h1#pageTitle.h1--title-block {{ colName }}
+              .col-sm-5
+                button.btn.btn-secondary((click)="showEditPCModal = true", tabIndex="0", role="button", aria-label="Add items to My Personal Collection") Upload Images to Collection
             p#pageDescription.page__description(#colDesc="", [innerHtml]="colDescription | linkify", [class.limit]="descCollapsed")
             .expander.link--action.small([class.hidden]="colDesc.clientHeight < 75", [class.collapsed]="descCollapsed", (click)="descCollapsed = !descCollapsed", [innerHtml]="descCollapsed ? 'More' : 'Less'", role="button") More
+
           .col-sm-3(*ngIf="colThumbnail.length > 0")
             .thumbnail-shelf
               img.collection-thumb(src="{{ colThumbnail }}")
@@ -37,3 +42,4 @@ div
             span(aria-hidden="true") &times;
         ang-asset-grid([actionOptions]="{collection: true}", [assetCount]="assetCount", [hasMaxAssetLimit]="true")
   ang-access-denied-modal(*ngIf="showAccessDeniedModal")
+  ang-edit-personal-collection(*ngIf="showEditPCModal", (closeModal)="showEditPCModal = false", [colId]="editTagId")
