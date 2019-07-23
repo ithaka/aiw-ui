@@ -38,9 +38,10 @@ export class SearchPage implements OnInit, OnDestroy {
     show?: boolean,
     name?: string,
     bio?: string,
+    note?: string,
     associates?: any[]
   } = {
-    
+
   }
 
   constructor(
@@ -117,7 +118,15 @@ export class SearchPage implements OnInit, OnDestroy {
               this.artist.associates = artistData.associatives.associative
               // Clean bio 
               if (this.artist.bio.indexOf(this.artist.name) === 0) {
-                this.artist.bio = this.artist.bio.substr(this.artist.name.length)
+                this.artist.bio = this.artist.bio.substr(this.artist.name.length) // remove redundant name
+                this.artist.bio = this.artist.bio.replace(/(\(|\))/g, '') // remove parenthesis
+              }
+              // Find scopeNotes, if available
+              if (artistData.scopeNotes && artistData.scopeNotes.scopeNote) {
+                  let scopeNote = artistData.scopeNotes.scopeNote[0]
+                  if (scopeNote.scopeNoteText) {
+                    this.artist.note = scopeNote.scopeNoteText
+                  }
               }
             }
           })

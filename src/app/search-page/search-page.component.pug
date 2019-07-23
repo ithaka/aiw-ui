@@ -20,11 +20,16 @@
             ang-search(*ngIf="_auth.isPublicOnly()", [allowSearchInRes]="true", [UserNotLoggedIn]="true")
             ang-search(*ngIf="siteID=='SAHARA' || !_auth.isPublicOnly()", [allowSearchInRes]="true", [UserNotLoggedIn]="false")
         ang-asset-grid([hasMaxAssetLimit]="true")
-      .col-sm-3(*ngIf="artist.show")
+      .col-sm-3([class.collapse-pane]="!artist.show")
+        .feature-pane__toggle.link(*ngIf="artist.name", (click)="artist.show = !artist.show")
+          | {{ artist.show ? 'Hide >' : 'Show Artist <' }}
         .feature-pane
+          label Artist
           h3 {{ artist.name }}
-          p {{ artist.bio }}
-          ng-container(*ngFor="let associate of artist.associates")
-            .small {{ associate.associativeName }}
-            a.link([routerLink]="['/search', 'artcreator:(' + associate.term + ')']") {{ associate.term }}
+          p.bio {{ artist.bio }}
+          .relations-block
+            ng-container(*ngFor="let associate of artist.associates")
+              .small.relation {{ associate.associativeName }}
+              a.link([routerLink]="['/search', 'artcreator:(' + associate.term + ')']") {{ associate.term }}
+          p.notes {{ artist.note }}
 
