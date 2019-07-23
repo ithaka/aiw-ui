@@ -74,6 +74,8 @@ export class NewIgModal implements OnInit, AfterViewInit {
   private groupUrl
   private options: any = {}
 
+  private openFromAssetPage: boolean = true
+
   constructor(
       private _assets: AssetService,
       private _auth: AuthService,
@@ -115,6 +117,7 @@ export class NewIgModal implements OnInit, AfterViewInit {
     // if an asset hasn't been injected, the component gets assets from list of selected assets
     // otherwise, the injected image group's assets will be used
     if (this.selectedAssets.length < 1) {
+      this.openFromAssetPage = false
       // Subscribe to asset selection
       this.subscriptions.push(
         this._assets.selection.pipe(
@@ -294,11 +297,37 @@ export class NewIgModal implements OnInit, AfterViewInit {
             })
           }
           else {
+            // If the request is from the asset page, log add asset to new group into Captain's Log
+            if (this.openFromAssetPage) {
+              let add_detail_view = data.items[0].zoom ? true : false
+              this._log.log({
+                eventType: 'artstor_add_asset_to_new',
+                additional_fields: {
+                  group_id: this.newGroup.id,
+                  item_id: data.items[0].id,
+                  add_detail_view: add_detail_view
+                }
+              })
+            }
+            // If the request is from the collection/search page, log save selections to new group into Captain's Log
+            else {
+              let item_ids = data.items.map(asset => {
+                return asset.id
+              })
+              this._log.log({
+                eventType: 'artstor_save_selections_to_new',
+                additional_fields: {
+                  group_id: this.newGroup.id,
+                  item_ids: item_ids
+                }
+              })
+            }
+
             // Log create group event into Captain's Log
             this._log.log({
               eventType: 'artstor_create_group',
               additional_fields: {
-                'group_id': this.newGroup.id
+                group_id: this.newGroup.id
               }
             })
 
