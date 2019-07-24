@@ -190,10 +190,17 @@ export class SearchPage implements OnInit, OnDestroy {
   public queryArtistSelfPortrait(artistName: string): void {
     let searchTerm: string = 'Self portrait of ' + artistName
     this._search.search({}, searchTerm, 0).subscribe( data => {
-      console.log('data is:- ', data)
       if(data['results'] && data['results'][0] && data['results'][0]['img']) {
         this.artist.portraitUrl = data['results'][0]['img']
         this.artist.portraitId = data['results'][0]['id']
+      } else {
+        searchTerm = 'arttitle:(' + artistName + ')'
+        this._search.search({}, searchTerm, 0).subscribe( data => {
+          if(data['results'] && data['results'][0] && data['results'][0]['img']) {
+            this.artist.portraitUrl = data['results'][0]['img']
+            this.artist.portraitId = data['results'][0]['id']
+          }
+        })
       }
     })
   }
