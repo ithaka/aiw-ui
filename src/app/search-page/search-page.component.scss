@@ -51,6 +51,13 @@
     text-align: right;
   }
 
+  img {
+    width: auto;
+    display: -webkit-box;
+    margin: 15px auto;
+    border-radius: 2px;
+  }
+
   h3 {
     font-size: 16px;
     margin-bottom: 0.5rem;

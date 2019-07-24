@@ -5,7 +5,7 @@ import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Project Dependencies
-import { AssetService, AuthService, LogService, FlagService, DomUtilityService, ScriptService, TitleService } from '../_services'
+import { AssetService, AssetSearchService, AuthService, LogService, FlagService, DomUtilityService, ScriptService, TitleService } from '../_services'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { AssetGrid } from './../asset-grid/asset-grid.component'
 import { AppConfig } from '../app.service'
@@ -37,6 +37,7 @@ export class SearchPage implements OnInit, OnDestroy {
   public artist: {
     show?: boolean,
     name?: string,
+    portraitUrl?: string,
     bio?: string,
     note?: string,
     associates?: any[]
@@ -49,6 +50,7 @@ export class SearchPage implements OnInit, OnDestroy {
         private _assets: AssetService,
         private route: ActivatedRoute,
         private _filters: AssetFiltersService,
+        private _search: AssetSearchService,
         private _flags: FlagService,
         private _router: Router,
         private _title: TitleService,
@@ -104,6 +106,9 @@ export class SearchPage implements OnInit, OnDestroy {
         params['page'] = 1;
       }
 
+      // Clear previous artist contextual info
+      this.artist = {}
+      
       // Query for contextual info if searching for other works by an artist
       if(params['term'] && params['term'].includes('artcreator:')) {
         let artistName = params['term'].replace('artcreator:(','').replace(')', '')
@@ -128,6 +133,7 @@ export class SearchPage implements OnInit, OnDestroy {
                     this.artist.note = scopeNote.scopeNoteText
                   }
               }
+              this.queryArtistSelfPortrait(artistName)
             }
           })
           .catch( error => {
@@ -178,6 +184,16 @@ export class SearchPage implements OnInit, OnDestroy {
       let htmlelement = this._dom.byId('skip-to-filter-link');
       htmlelement.focus();
     }, 100);
+  }
+
+  public queryArtistSelfPortrait(artistName: string): void {
+    let searchTerm: string = 'Self portrait of ' + artistName
+    this._search.search({}, searchTerm, 0).subscribe( data => {
+      console.log('data is:- ', data)
+      if(data['results'] && data['results'][0] && data['results'][0]['img']) {
+        this.artist.portraitUrl = data['results'][0]['img']
+      }
+    })
   }
 
   // private updateSearchInRes(value: boolean): void{
