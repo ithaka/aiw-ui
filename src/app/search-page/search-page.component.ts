@@ -38,6 +38,7 @@ export class SearchPage implements OnInit, OnDestroy {
     show?: boolean,
     name?: string,
     portraitUrl?: string,
+    portraitId?: string,
     bio?: string,
     note?: string,
     associates?: any[]
@@ -192,6 +193,7 @@ export class SearchPage implements OnInit, OnDestroy {
       console.log('data is:- ', data)
       if(data['results'] && data['results'][0] && data['results'][0]['img']) {
         this.artist.portraitUrl = data['results'][0]['img']
+        this.artist.portraitId = data['results'][0]['id']
       }
     })
   }

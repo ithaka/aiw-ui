@@ -25,7 +25,8 @@
           | {{ artist.show ? 'Hide >' : 'Show Artist <' }}
         .feature-pane
           label Artist
-          img(*ngIf="artist.portraitUrl", [src]="artist.portraitUrl")
+          a.portrait(*ngIf="artist.portraitUrl", [routerLink]="['/asset', artist.portraitId]")
+            img([src]="artist.portraitUrl")
           h3 {{ artist.name }}
           p.bio {{ artist.bio }}
           .relations-block

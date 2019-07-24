@@ -34,10 +34,15 @@
 .feature-pane {
   margin-top: 130px;
   padding: $basePadding/2;
-  border: 1px solid $color-gray-4;
+  border: 1px solid $color-gray-3;
   border-radius: 3px;
   transition: all 0.4s linear;
   transform: translateX(0px);
+
+  &:hover, &:focus {
+    // box-shadow: 0px 2px 5px 2px rgba(0,0,0,0.2);
+    border: 1px solid $color-gray-5;
+  }
 
   .collapse-pane & {
     min-width: 200px;
@@ -47,15 +52,25 @@
 
   label {
     color: $color-gray-5;
-    display: block;
+    display: inline-block;
     text-align: right;
+  }
+
+  .portrait {
+    // 
   }
 
   img {
     width: auto;
     display: -webkit-box;
     margin: 15px auto;
+    cursor: pointer;
+    display: block;
     border-radius: 2px;
+
+    &:hover, &:focus {
+      box-shadow: 0px 1px 5px 2px rgba(0,0,0,0.2);
+    }
   }
 
   h3 {
