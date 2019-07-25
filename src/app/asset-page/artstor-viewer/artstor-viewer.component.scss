@@ -58,6 +58,7 @@ $desktop: 992px;*/
     margin: 20px;
     box-shadow: 0 0 4px 1px #0000003b;
     border-radius: 4px;
+    white-space: nowrap;
 
     .btn--icon {
         height: 40px !important;
@@ -95,9 +96,13 @@ $desktop: 992px;*/
 }
 @media(max-width: 576px) {
     .asset-viewer__buttons {
-        top: calc(100% - 40px);
+        top: calc(100% - 70px);
         left: 50%;
         transform: translateX(-50%);
+
+        .fullscreen & {
+            top: calc(100% - 105px);
+        }
     }
 }
 
@@ -333,6 +338,10 @@ $desktop: 992px;*/
     padding: 20px;
     transition: transform 0.2s linear;
     transform: translateY(0px);
+
+    @media(max-width: $phone) {
+        position: fixed;
+    }
 }
 
 
