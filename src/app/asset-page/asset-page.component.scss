@@ -16,6 +16,10 @@ $titleNavBg: #eee;
         margin-left: -15px;
         margin-right: -15px;
         width: calc(100% + 30px);
+
+        .fullscreen & {
+            max-height: 100vh;
+        }
     }
 }
 
@@ -452,6 +456,12 @@ $titleNavBg: #eee;
         display: block;
         width: 120px;
         margin: auto;
+
+        .icon-direction {
+            padding: 15px;
+            background-size: 50%;
+            margin-top: -5px;
+        }
 
         .icon{
             cursor: pointer;

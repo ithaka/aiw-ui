@@ -7,6 +7,10 @@
 
 .osd-wrap > .openseadragon-container {
     min-height: 600px;
+
+    @media(max-width: $phone) {
+        min-height: 50vh;
+    }
 }
 
 .openseadragon-container {
