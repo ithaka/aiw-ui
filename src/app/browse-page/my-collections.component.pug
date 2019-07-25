@@ -9,7 +9,7 @@ nav.nav.nav-inline.browse-nav
             a.tag-link(id="{{ col.collectionid }}", title="{{ col.collectionname }}",
             [routerLink]="['/pcollection', col.collectionid]")
               span.notranslate {{ col.collectionname }}
-            span.edit(*ngIf="col.collectionid === '37436' ", (click)="showEditPCModal = true", tabIndex="0", role="button", aria-label="Add items to My Personal Collection") Edit
+            span.edit(*ngIf="col.collectionid === '37436' ", (click)="showEditPCModal = true", tabIndex="0", role="button", aria-label="Add items to My Personal Collection") Upload
       .alert.alert-info(*ngIf="!isLoggedIn")
         h3 {{ 'BROWSE.ERRORS.LOGIN_PC_HEADING' | translate }}
         br
