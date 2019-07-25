@@ -39,7 +39,7 @@ describe('AssetServiceTest', () => {
           take(1),
           map(data => {
             expect(data.page).toBe(1);
-            expect(data.size).toBe(24);
+            expect(data.size).toBe(48);
             expect(data.totalPages).toBe(1);
           }
         )).subscribe()
