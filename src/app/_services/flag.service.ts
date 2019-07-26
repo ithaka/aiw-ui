@@ -36,8 +36,11 @@ export class FlagService {
     map(res => {
       let flags = res.body
 
-      this.flags.bannerShow = flags.bannerShow
-      this.flags.bannerCopy = flags.bannerCopy
+      // Update service flags object with incoming flags
+      this.flags = {
+        ...this.flags, 
+        ...flags
+      }
 
       /**
        * EXAMPLE USE OF COUNTRY CODE ROLLOUT

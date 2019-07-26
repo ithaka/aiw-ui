@@ -77,12 +77,12 @@
           span.caption-btn
           | {{ showAssetCaption ? 'HIDE CAPTION' : 'SHOW CAPTION' }}
         .quiz-browse-cntnr(*ngIf="quizMode")
-          i.icon.icon-direction.icon-left([class.disabled]="!quizShuffle && assetNumber <= 1 ? true : false", title="Previous in results", (click)="showPrevAsset()")
-          i.icon.icon-direction.icon-right([class.disabled]="!quizShuffle && assetNumber >= totalAssetCount - restrictedAssetsCount ? true: false", title="Next in results", (click)="showNextAsset()")
-        .shuffle-cntnr(*ngIf="quizMode", [ngClass]="[ quizShuffle ? 'active' : '' ]", (click)="toggleQuizShuffle()", title="Toggle Asset Suffle")
+          i.icon.icon-direction.icon-left([class.disabled]="!quizShuffle && assetNumber <= 1 ? true : false", title="Previous in results", (tap)="showPrevAsset()")
+          i.icon.icon-direction.icon-right([class.disabled]="!quizShuffle && assetNumber >= totalAssetCount - restrictedAssetsCount ? true: false", title="Next in results", (tap)="showNextAsset()")
+        .shuffle-cntnr(*ngIf="quizMode", [ngClass]="[ quizShuffle ? 'active' : '' ]", (tap)="toggleQuizShuffle()", title="Toggle Asset Suffle")
           span.shuffle-btn
           | SHUFFLE {{ quizShuffle ? 'ON' : 'OFF' }}
-        .quiz-cntnr([ngClass]="[ quizMode ? 'active' : '' ]", (click)="toggleQuizMode()", title="{{ quizMode ? 'Deactivate Quiz Mode' : 'Activate Quiz Mode' }}")
+        .quiz-cntnr([ngClass]="[ quizMode ? 'active' : '' ]", (tap)="toggleQuizMode()", title="{{ quizMode ? 'Deactivate Quiz Mode' : 'Activate Quiz Mode' }}")
           span.quiz-btn
           | QUIZ MODE {{ quizMode ? 'ON' : 'OFF' }}
     //- Asset Metadata Column
@@ -184,9 +184,10 @@
             ng-container(*ngIf="fieldName != 'Rights' && fieldName != 'License'")
               .label([attr.id]="cleanId(fieldName)") {{ fieldName }}
               div(*ngFor="let value of assets[0].formattedMetadata[fieldName]; let i=index")
+                a.value.col-link(*ngIf="fieldName === 'Creator'", (click)="trackCreatorLink(value)", [routerLink]="['/search', 'artcreator:(' + value + ')']", [innerHTML]="value", [attr.aria-labelledby]="cleanId(fieldName)")
                 a.value.col-link(*ngIf="fieldName === 'Collection'", (click)="trackCollectionLink(cleanFieldValue(value))", [routerLink]="setCollectionLink(assets[0], value)", [innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")
-                a.value.col-link(*ngIf="fieldName === 'Subject'",(click)="trackSubjectLink(value)", [routerLink]="['/search', 'artsubject:(' + value + ')']", [innerHTML]="value", [attr.aria-labelledby]="cleanId(fieldName)")
-                .value(*ngIf="fieldName !== 'Collection' && fieldName !== 'Subject'", [innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")
+                a.value.col-link(*ngIf="fieldName === 'Subject'", (click)="trackSubjectLink(value)", [routerLink]="['/search', 'artsubject:(' + value + ')']", [innerHTML]="value", [attr.aria-labelledby]="cleanId(fieldName)")
+                .value(*ngIf="fieldName !== 'Collection' && fieldName !== 'Subject' && fieldName !== 'Creator'", [innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")
           .meta-block(*ngIf="assets[0].formattedMetadata.Rights && assets[0].formattedMetadata.Rights.length > 0")
             .label#Rights Rights
             div(*ngFor="let right of assets[0].formattedMetadata.Rights")

@@ -147,7 +147,7 @@ export class AssetPage implements OnInit, OnDestroy {
         page: number
     } = {
             totalPages: 1,
-            size: 24,
+            size: 48,
             page: 1
         };
     private originPage: number = 0;
@@ -268,7 +268,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     if (this.prevAssetResults.thumbnails && this.prevAssetResults.thumbnails.length > 0) {
                         let currentAssetIndex = this.currentAssetIndex();
                         if (currentAssetIndex === -1){
-                            if ( this.assetIndex % 24 === 0 ) { // Browser back button pressed
+                            if ( this.assetIndex % 48 === 0 ) { // Browser back button pressed
                                 this._assets.loadPrevAssetPage();
                             } else { // Browser next button pressed
                                 this._assets.loadNextAssetPage();
@@ -702,6 +702,11 @@ export class AssetPage implements OnInit, OnDestroy {
     trackSubjectLink(subjectName: string): void {
         this.angulartics.eventTrack.next({ properties: { event: 'metadata_subject_link', category: 'metadata', label: subjectName } });
     }
+    
+    // Track metadata creator link click
+    trackCreatorLink(creatorName: string): void {
+        this.angulartics.eventTrack.next({ properties: { event: 'metadata_creator_link', category: 'metadata', label: creatorName } });
+      }
 
     /**
      * Function called when keyboard key is pressed

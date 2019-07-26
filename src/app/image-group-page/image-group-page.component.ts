@@ -450,7 +450,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       })
       .catch( error => {
         console.error(error)
-        clearInterval(this.loadingStateInterval)
+        // Do not clear interval unless polling completes or fails
         this.pollForExportStatus()
       })
   }
@@ -487,6 +487,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         }
       }, (error) => {
         console.error('Error in check status: ', error)
+        clearInterval(this.loadingStateInterval)
       }
     )
   }
