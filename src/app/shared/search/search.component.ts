@@ -26,7 +26,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   public UserNotLoggedIn: boolean;
   private subscriptions: Subscription[] = [];
 
-  private size: number = 24;
+  private size: number = 48;
 
   // @Input()
   private searchInResults: boolean = false;

@@ -86,7 +86,7 @@ export class AppComponent {
     private _dom: DomUtilityService,
     private _ga: Angulartics2,
     angulartics2GoogleTagManager: Angulartics2GoogleTagManager,
-    private _auth: AuthService, 
+    private _auth: AuthService,
     private titleService: Title,
     private _script: ScriptService,
     private _flags: FlagService,
@@ -259,7 +259,7 @@ export class AppComponent {
     // Unsubscribe to status updates
     this.statusPageClient && this.statusPageClient.unsubscribe()
   }
-  
+
   // Close banner and save the action in local storage
   private closeBanner(): void {
     this._auth.store('bannerClosed', true)
