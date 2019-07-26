@@ -91,8 +91,7 @@ export interface FeatureFlags {
   solrMetadata?: boolean,
   // detailViews?: boolean,
   exportGoogle?: boolean,
-  relatedResFlag?: boolean,
-  searchV3?: boolean
+  relatedResFlag?: boolean
 }
 
 interface FlagServiceResponse {
