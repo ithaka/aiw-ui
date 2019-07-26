@@ -82,7 +82,6 @@ export class Asset {
             } else if(values[0]) { // otherwise make a new field (make sure the field vaue exists)
                 formattedData[data.fieldName] = values
             }
-            console.log("this is the formatteddata:", formattedData)
         }
         return formattedData
     }
