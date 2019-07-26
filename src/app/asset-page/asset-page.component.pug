@@ -186,7 +186,7 @@
               div(*ngFor="let value of assets[0].formattedMetadata[fieldName]; let i=index")
                 a.value.col-link(*ngIf="fieldName === 'Creator'", (click)="trackCreatorLink(value)", [routerLink]="['/search', 'artcreator:(' + value + ')']", [innerHTML]="value", [attr.aria-labelledby]="cleanId(fieldName)")
                 a.value.col-link(*ngIf="fieldName === 'Collection'", (click)="trackCollectionLink(cleanFieldValue(value))", [routerLink]="setCollectionLink(assets[0], value)", [innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")
-                a.value.col-link(*ngIf="fieldName === 'Subject'", (click)="trackSubjectLink(cleanFieldValue(value))", [routerLink]="['/search', 'artsubject:(' + value + ')']", [innerHTML]="value", [attr.aria-labelledby]="cleanId(fieldName)")
+                a.value.col-link(*ngIf="fieldName === 'Subject'", (click)="trackSubjectLink(value)", [routerLink]="['/search', 'artsubject:(' + value + ')']", [innerHTML]="value", [attr.aria-labelledby]="cleanId(fieldName)")
                 .value(*ngIf="fieldName !== 'Collection' && fieldName !== 'Subject' && fieldName !== 'Creator'", [innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")
           .meta-block(*ngIf="assets[0].formattedMetadata.Rights && assets[0].formattedMetadata.Rights.length > 0")
             .label#Rights Rights
