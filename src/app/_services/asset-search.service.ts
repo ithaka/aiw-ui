@@ -39,7 +39,7 @@ export class AssetSearchService {
 
   public latestSearchRequestId: string
 
-  // Used for simplify the code when we need to account for both search and search3 version 
+  // Used for simplify the code when versioning search
   private contentQueryKey: string
   private filterQueryKey: string
 
