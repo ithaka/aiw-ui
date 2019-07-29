@@ -784,7 +784,8 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         else {
             for (let col of this.collections) {
-                if(col.name === value) {
+                // Make collection links for only Public & Personal Collections
+                if(col.name === value && (col.type === '5' || col.type === '6')) {
                     switch (col.type) {
                         case '6':
                             link = ['/pcollection', col.id]
