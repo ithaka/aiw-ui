@@ -96,7 +96,7 @@
             | {{ 'ASSET_PAGE.BUTTONS.EDIT_DETAILS' | translate}}
           //- the .driver-find-group-btn class is important for the tour to find it, be careful when removing or changing it
           .dropdown.d-inline-block.driver-find-group-btn(ngbDropdown, aria-haspopup="true")
-            button#addToGroupDropdown.btn.btn-primary(ngbDropdownToggle, tabindex="2", aria-label="Add to groups", (click)="closeAddGroupTooltip()", (keyup.enter)="closeAddGroupTooltip()")
+            button#addToGroupDropdown.btn.btn-primary(ngbDropdownToggle, tabindex="2", aria-label="Add to groups")
               | {{ 'ASSET_PAGE.BUTTONS.ADD_TO_GROUP' | translate}}
               = " "
             .dropdown-menu(ngbDropdownMenu)
