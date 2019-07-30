@@ -698,6 +698,11 @@ export class AssetPage implements OnInit, OnDestroy {
       this.angulartics.eventTrack.next({ properties: { event: 'metadata_collection_link', category: 'metadata', label: collectionName } });
     }
 
+    // Track metadata subject link click
+    trackSubjectLink(subjectName: string): void {
+        this.angulartics.eventTrack.next({ properties: { event: 'metadata_subject_link', category: 'metadata', label: subjectName } });
+    }
+    
     // Track metadata creator link click
     trackCreatorLink(creatorName: string): void {
         this.angulartics.eventTrack.next({ properties: { event: 'metadata_creator_link', category: 'metadata', label: creatorName } });
