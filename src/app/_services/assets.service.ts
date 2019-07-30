@@ -450,8 +450,8 @@ export class AssetService {
     public categoryByFacet(facetName: string, collectionType ?: number): Promise<SolrFacet[]> {
       let options = { withCredentials: true };
 
-      let contentQueryKey = this._auth.useSearch3 ? 'content_set_flags' : 'content_types'
-      let filterQueryKey = this._auth.useSearch3 ? 'filter_queries' : 'filter_query'
+      let contentQueryKey = 'content_set_flags'
+      let filterQueryKey = 'filter_queries'
       let query = {
             // Base solr query
             'limit': 0,
