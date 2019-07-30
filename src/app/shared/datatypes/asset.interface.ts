@@ -78,7 +78,7 @@ export class Asset {
             let values = data.fieldValue.split(/;./g)
             // if the field exists, add to it (make sure the field value exists)
             if (formattedData[data.fieldName] && values[0]) {
-                formattedData[data.fieldName].concat(values)
+                formattedData[data.fieldName] = formattedData[data.fieldName].concat(values)
             } else if(values[0]) { // otherwise make a new field (make sure the field vaue exists)
                 formattedData[data.fieldName] = values
             }
