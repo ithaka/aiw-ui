@@ -702,7 +702,7 @@ export class AssetPage implements OnInit, OnDestroy {
     trackSubjectLink(subjectName: string): void {
         this.angulartics.eventTrack.next({ properties: { event: 'metadata_subject_link', category: 'metadata', label: subjectName } });
     }
-    
+
     // Track metadata creator link click
     trackCreatorLink(creatorName: string): void {
         this.angulartics.eventTrack.next({ properties: { event: 'metadata_creator_link', category: 'metadata', label: creatorName } });
@@ -789,19 +789,20 @@ export class AssetPage implements OnInit, OnDestroy {
         }
         else {
             for (let col of this.collections) {
-                // Make collection links for only Public & Personal Collections
-                if(col.name === value && (col.type === '5' || col.type === '6')) {
-                    switch (col.type) {
+                // Collection links for Public & Personal Collections, type 5 or 6
+                if(col.name === value) {
+                  switch (col.type) {
                         case '6':
                             link = ['/pcollection', col.id]
                             break
                         case '5':
                             link = ['/collection', col.id]
                             break
-                        default:
-                            link = ['/collection', col.id]
+                        default: // Other types will override link if link has not been set
+                            if (link.length === 0) {
+                              link = ['/collection', col.id]
+                            }
                             break
-
                     }
                     return link
                 }
