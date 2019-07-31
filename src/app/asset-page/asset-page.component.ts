@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, HostListener, ElementRef, PLATFORM_ID, Inject } from '@angular/core'
-import { ActivatedRoute, Params, Router } from '@angular/router'
+import { ActivatedRoute, Params, Router, Route } from '@angular/router'
 import { Meta } from '@angular/platform-browser'
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
@@ -41,9 +41,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     @ViewChild(ArtstorViewerComponent) public assetViewer
 
-  @ViewChild("copyUrlInput", {read: ElementRef}) generatedImgURLElement: ElementRef
-
-
+    @ViewChild("copyUrlInput", {read: ElementRef}) generatedImgURLElement: ElementRef
 
     public user: any
     public userSessionFresh: boolean = false
@@ -63,6 +61,9 @@ export class AssetPage implements OnInit, OnDestroy {
     public downloadViewReady: boolean = false
     public showExitEdit: boolean = false
     public showDeletePCModal: boolean = false
+
+    // Collection link router values
+    public collectionLinks: CollectionLink[]
 
     // Rights Statements values
     public rightsText: string = ''
@@ -560,7 +561,13 @@ export class AssetPage implements OnInit, OnDestroy {
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
+            // set publicDownload bool
+            asset.publicDownload = this.setPublicDownload()
+
             this.updateMetadataFromLocal(this._localPC.getAsset(parseInt(this.assets[0].SSID)))
+
+            // Procure array of router links to loop over in the template
+            this.collectionLinks = this.mapCollectionLinks(asset, this.collections)
         }
         // Set download link
         this.setDownloadFull()
@@ -774,39 +781,52 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
-    * setCollectionLink
-    * Sets collection id for the Collection href
-    * A collection may be private, institutional, or public.
-    * this is called in a loop over the collections array from the template,
+    * mapCollectionLinks
     * @param asset
-    * @param value - the current collection name in the iteration over the asset's collections
-    * @param col - the current collection object in the iteration over the asset's collections
-    * @return router link array value
+    * @param collections - the current collection object in the iteration over the asset's collections
+    * @return CollectionLink[]
     */
-    setCollectionLink(asset: Asset, value: string, col): any[] {
-      asset.publicDownload = this.setPublicDownload()
+    mapCollectionLinks(asset: Asset, collections: any[]): CollectionLink[] {
 
-      // 103 Collection Id routes to /category/<categoryId>, some of the collections have collectionId of NaN,
-      // check the id in the collections array instead
-      if (String(asset.collectionId) === '103' || String(asset.collections[0].id) === '103') {
-        return ['/category', String(asset.categoryId)]
+      function typeFilter(type: string) {
+        return collections.filter(c => { return c.type === type })[0].length
       }
-      else {
-        if(col.name === value) {
-          // Collection links for Public & Personal Collections, type 5 or 6
-          if (col.type === '5' || col.type === '6') {
-            return col.type === '5' ? ['/collection', col.id] : ['/pcollection', col.id]
-          }
-          // Collection links for institutional, type 2 - only if not also public, type 5
-          else if (col.type === '2' && !asset.publicDownload) {
-            return ['/collection', col.id]
-          }
-          // Collection types where we don't need a special condition
-          else {
-            return ['/collection', col.id]
-          }
+
+      let links = []
+      let justOne: boolean = collections.length === 1
+
+      if (justOne) {
+        let col = collections[0]
+
+        if (col.type === '1' && col.id === '103') {
+          links.push({ displayName: col.name, route: ['/category', asset.categoryId] })
+        }
+        else if(col.type === '6') {
+          links.push({ displayName: col.name, route: ['/pcollection', col.id] })
+        }
+        else {
+          links.push({ displayName: col.name, route: ['/collection', col.id] })
         }
       }
+
+      // If collections contains type 5 Public, and 2
+      else if (typeFilter('2') && typeFilter('5')) {
+
+        let cols = collections.map(c => {
+          if (c.type === '2' || c.type === '5') {
+            return { displayName: c.name, route: ['/collection', c.id] }
+          }
+        })
+        links.push(cols)
+      }
+      // other wise, just map all multiple collections to the links array, which is multiple tpye 2s
+      else {
+        let cols = collections.map(c => {
+            return { displayName: c.name, route: ['/collection', c.id] }
+        })
+        links.push(cols)
+      }
+      return links.map(link => { return link })
     }
 
     /**
@@ -1776,4 +1796,9 @@ export class AssetPage implements OnInit, OnDestroy {
             this.assetViewer.setFullscreen(false)
         }
     }
+}
+
+interface CollectionLink {
+  displayName: string
+  route: any
 }
