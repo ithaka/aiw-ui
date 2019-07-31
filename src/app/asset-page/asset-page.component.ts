@@ -774,39 +774,44 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
-     * Sets collection id for the Collection href
-     * A collection may be private, institutional, or public.
-     * If both institional(2) and public(5), we set the link to the public collection id.
-     */
+    * setCollectionLink
+    * Sets collection id for the Collection href
+    * A collection may be private, institutional, or public.
+    * this is called in a loop over the collections array from the template,
+    * @param asset
+    * @param value - the current collection name in the iteration over the asset's collections
+    * @return router link array value
+    */
     setCollectionLink(asset: Asset, value: string): any[] {
-        let link = []
         asset.publicDownload = this.setPublicDownload()
+        // console.log(asset.collections)
+        let link = []
 
-        // 103 Collection Id routes to /category/<categoryId>, some of the collections have collectionId of NaN, check the id in the collections array instead
+        // 103 Collection Id routes to /category/<categoryId>, some of the collections have collectionId of NaN,
+        // check the id in the collections array instead
         if (String(asset.collectionId) === '103' || String(asset.collections[0].id) === '103') {
-            link = ['/category', String(asset.categoryId)]
-            return link
+            return ['/category', String(asset.categoryId)]
         }
         else {
-            for (let col of this.collections) {
-                // Collection links for Public & Personal Collections, type 5 or 6
-                if(col.name === value) {
-                  switch (col.type) {
-                        case '6':
-                            link = ['/pcollection', col.id]
-                            break
-                        case '5':
-                            link = ['/collection', col.id]
-                            break
-                        default: // Other types will override link if link has not been set
-                            if (link.length === 0) {
-                              link = ['/collection', col.id]
-                            }
-                            break
-                    }
-                    return link
-                }
-            }
+          for (let col of asset.collections) {
+
+            //if(col.name === value) {
+              // Collection links for Public & Personal Collections, type 5 or 6
+              if (col.type === '5' || col.type === '6') {
+                link = col.type === '5' ? ['/collection', col.id] : ['/pcollection', col.id]
+              }
+              // Collection links for institutional, type 2 - only if not also public, type 5
+              else if (col.type === '2' && !asset.publicDownload) {
+                link = ['/collection', col.id]
+              }
+              // Collection types where we don't need a special condition
+              else {
+                link = ['/collection', col.id]
+              }
+            //}
+            return link
+          }
+
         }
     }
 
