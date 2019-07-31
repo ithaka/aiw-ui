@@ -780,36 +780,33 @@ export class AssetPage implements OnInit, OnDestroy {
     * this is called in a loop over the collections array from the template,
     * @param asset
     * @param value - the current collection name in the iteration over the asset's collections
+    * @param col - the current collection object in the iteration over the asset's collections
     * @return router link array value
     */
     setCollectionLink(asset: Asset, value: string, col): any[] {
-        asset.publicDownload = this.setPublicDownload()
-        // console.log(asset.collections)
-        let link = []
+      asset.publicDownload = this.setPublicDownload()
 
-        // 103 Collection Id routes to /category/<categoryId>, some of the collections have collectionId of NaN,
-        // check the id in the collections array instead
-        if (String(asset.collectionId) === '103' || String(asset.collections[0].id) === '103') {
-            link = ['/category', String(asset.categoryId)]
-        }
-        else {
-
-            if(col.name === value) {
-              // Collection links for Public & Personal Collections, type 5 or 6
-              if (col.type === '5' || col.type === '6') {
-                link = col.type === '5' ? ['/collection', col.id] : ['/pcollection', col.id]
-              }
-              // Collection links for institutional, type 2 - only if not also public, type 5
-              else if (col.type === '2' && !asset.publicDownload) {
-                link = ['/collection', col.id]
-              }
-              // Collection types where we don't need a special condition
-              else {
-                link = ['/collection', col.id]
-              }
-            }
+      // 103 Collection Id routes to /category/<categoryId>, some of the collections have collectionId of NaN,
+      // check the id in the collections array instead
+      if (String(asset.collectionId) === '103' || String(asset.collections[0].id) === '103') {
+        return ['/category', String(asset.categoryId)]
+      }
+      else {
+        if(col.name === value) {
+          // Collection links for Public & Personal Collections, type 5 or 6
+          if (col.type === '5' || col.type === '6') {
+            return col.type === '5' ? ['/collection', col.id] : ['/pcollection', col.id]
           }
-          return link
+          // Collection links for institutional, type 2 - only if not also public, type 5
+          else if (col.type === '2' && !asset.publicDownload) {
+            return ['/collection', col.id]
+          }
+          // Collection types where we don't need a special condition
+          else {
+            return ['/collection', col.id]
+          }
+        }
+      }
     }
 
     /**
