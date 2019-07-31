@@ -69,9 +69,9 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
     // Required Input
     private _assetId: string = ''
     @Input() set assetId(value: string) {
-        // this.testEnv = this.testEnv // keep test environment set here
+        this.testEnv = this.testEnv // keep test environment set here
         // this.encrypted = this.encrypted
-        if (value && value != this._assetId) {
+        if (value && value !== this._assetId) {
             this._assetId = value
             if(this.initialized) {
                 this.loadAssetById(this.assetId, this.groupId)
@@ -233,6 +233,8 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
 
         this._metadata.buildAsset(assetId, {groupId, legacyFlag: this.legacyFlag, openlib: this.openLibraryFlag, encrypted: this.encrypted })
             .subscribe((asset) => {
+
+              console.log('build asset: ', asset)
                 // Replace <br/> tags from title, creator & date values with a space
                 asset.title = asset.title.replace(/<br\s*[\/]?>/gi, ' ')
                 if(asset.formattedMetadata && asset.formattedMetadata['Creator'] && asset.formattedMetadata['Creator'][0]){
@@ -436,8 +438,8 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
                 })
                 this._storage.setSession('loggedZoomAsset', value.eventSource.id)
             }
-            
-            
+
+
             this.lastZoomValue = value.zoom;
 
             // Save viewport values for downloading the view

@@ -28,6 +28,8 @@ export class MetadataService {
         }
         return metadataObservable.pipe(mergeMap((assetData: AssetData) => {
 
+            console.log('build asset : ASSET DATA:', assetData)
+
             // do we need to make an imageFpx call to get kaltura data??
             switch (assetData.object_type_id) {
             case 12:
@@ -55,7 +57,8 @@ export class MetadataService {
      * @param groupId The group from which the asset was accessed, if it exists (helps with authorization)
      */
     private getMetadata(assetId: string, { groupId, legacyFlag, openlib }): Observable<AssetData> {
-        // console.log("_metadata: getMetadata() for: " + assetId)
+        console.log("_metadata: getMetadata() for: " + assetId)
+        assetId = assetId.split(";")[0]
         let url = this._auth.getUrl() + '/v1/metadata?object_ids=' + assetId + '&legacy=' + legacyFlag
         if (groupId){
             // Groups service modifies certain access rights for shared assets
@@ -65,6 +68,8 @@ export class MetadataService {
             // Open Library IDs need to be mapped to Artstor IDs, so we need to flag for the metadata service
             url += '&openlib=' + openlib
         }
+
+        console.log('URL in getMetaData before return response')
         return this._http
             .get<MetadataResponse>( url, { headers: this._auth.getHeaders(), withCredentials: true })
             .pipe(map((res) => {
@@ -145,7 +150,7 @@ export class MetadataService {
       }
 
       /**
-       * Takes 
+       * Takes
        */
       private buildThumbnailUrl(asset: AssetData) {
         let isMultiView: boolean = !!(asset.image_compound_urls && asset.image_compound_urls.length)
