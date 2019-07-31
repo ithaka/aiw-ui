@@ -179,17 +179,20 @@
             | {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.PENDING_MESSAGE' | translate }}
           .meta-block.collection-type-display(*ngIf="collectionType")
             ang-collection-badge([collectionType]="collectionType")
-          //- Old metadata loop
+          //- Metadata loops
           .meta-block(*ngFor="let fieldName of assets[0].formattedMetadata | keys")
             ng-container(*ngIf="fieldName != 'Rights' && fieldName != 'License'")
               .label {{ fieldName }}
               div(*ngFor="let value of assets[0].formattedMetadata[fieldName]; let i=index")
+                //- Creator
                 a.value.col-link(*ngIf="fieldName === 'Creator'", [attr.id]="cleanId(fieldName)", (click)="trackCreatorLink(value)", [routerLink]="['/search', 'artcreator:(' + value + ')']", [innerHTML]="value", [attr.aria-labelledby]="cleanId(fieldName)")
+                //- Collections
                 ng-container(*ngIf="fieldName === 'Collection'")
-                  a.value.col-link(*ngFor="let col of assets[0].collections",[attr.id]="cleanId(fieldName)", (click)="trackCollectionLink(cleanFieldValue(value))", [routerLink]="setCollectionLink(assets[0], value)", [innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")
-                  br
+                  a.value.col-link(*ngFor="let col of assets[0].collections", [attr.id]="cleanId(fieldName)", (click)="trackCollectionLink(cleanFieldValue(value))", [routerLink]="setCollectionLink(assets[0], value, col)", [innerHTML]="cleanFieldValue(col.name) | linkify", [attr.aria-labelledby]="cleanId(fieldName)", style="display:block;")
+                //- Subject
                 a.value.col-link(*ngIf="fieldName === 'Subject'", [attr.id]="cleanId(fieldName)", (click)="trackSubjectLink(value)", [routerLink]="['/search', 'artsubject:(' + value + ')']", [innerHTML]="value", [attr.aria-labelledby]="cleanId(fieldName)")
                 .value(*ngIf="fieldName !== 'Collection' && fieldName !== 'Subject' && fieldName !== 'Creator'", [attr.id]="cleanId(fieldName)", [innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")
+          //- Rights
           .meta-block(*ngIf="assets[0].formattedMetadata.Rights && assets[0].formattedMetadata.Rights.length > 0")
             .label#Rights Rights
             div(*ngFor="let right of assets[0].formattedMetadata.Rights")
@@ -198,6 +201,7 @@
                 | &nbsp;
                 a.value.col-link.rights-text([innerHTML]="cleanFieldValue(right) | lowercase | linkify", [attr.href]="rightsLink", aria-label="Learn about this rights statement on rightsstatements.org", target="_blank")
               .value(*ngIf="rightsText !== right", [innerHTML]="cleanFieldValue(right) | linkify", [attr.aria-labelledby]="'Rights'")
+          //- License
           .meta-block(*ngIf="assets[0].formattedMetadata.License && assets[0].formattedMetadata.License.length > 0")
             .label#License License
             .license(*ngFor="let license of assets[0].formattedMetadata.License")
@@ -206,23 +210,22 @@
                 | &nbsp;
                 span.value.license-text([innerHTML]="cleanFieldValue(license) | lowercase | linkify", title="License")
               .value(*ngIf="licenseText !== license", [innerHTML]="cleanFieldValue(license) | linkify")
-
+          //- File Properties
           .row-hdr.pt-3(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
-          //- Loop through File Properties Array
-          //- .meta-block(*ngFor="let filePropObj of assets[0].filePropertiesArray")
-          //-   .label([attr.id]="cleanId(filePropObj.fieldName)") {{ filePropObj.fieldName }}
-          //-     .value([innerHTML]="filePropObj.fieldValue")
+          //- File Name
           .meta-block(*ngIf="assets[0].fileName")
             .label#fileName {{ 'ASSET_PAGE.METADATA_LABELS.FILE_NAME' | translate }}
               .value([innerHtml]="assets[0].fileName", aria-labelledby="fileName")
+          //- SSID
           .meta-block(*ngIf="assets[0].SSID")
             .label#ssid {{ 'ASSET_PAGE.METADATA_LABELS.SSID' | translate }}
               .value([innerHtml]="assets[0].SSID", aria-labelledby="ssid")
+          //- IAP and Report Error
           .text-left.pt-2
             a#buttonRequestIap.btn.btn-secondary.my-1(*ngIf="iapFormUrl", [attr.href]="getIapFormUrl(assets[0])", (click)="logIAP(assets[0])", title="Request Image for Academic Publishing", tabindex="8", target="_blank") {{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}
             a#buttonReportAssetError.btn.btn-secondary.my-1(*ngIf="errorFormUrl", [attr.href]="errorFormUrl", title="Report an error", tabindex="14", target="_blank") {{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}
 
-        //- Form hidden by default
+        //- Report Error Form, hidden by default
         .mt-2.d-none([class.d-block]="showEditDetails")
           button.close.mb-3((click)="showExitEdit = true", type="button", aria-label="Close")
             span(aria-hidden="true") &times;

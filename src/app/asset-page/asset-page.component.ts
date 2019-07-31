@@ -782,7 +782,7 @@ export class AssetPage implements OnInit, OnDestroy {
     * @param value - the current collection name in the iteration over the asset's collections
     * @return router link array value
     */
-    setCollectionLink(asset: Asset, value: string): any[] {
+    setCollectionLink(asset: Asset, value: string, col): any[] {
         asset.publicDownload = this.setPublicDownload()
         // console.log(asset.collections)
         let link = []
@@ -790,12 +790,11 @@ export class AssetPage implements OnInit, OnDestroy {
         // 103 Collection Id routes to /category/<categoryId>, some of the collections have collectionId of NaN,
         // check the id in the collections array instead
         if (String(asset.collectionId) === '103' || String(asset.collections[0].id) === '103') {
-            return ['/category', String(asset.categoryId)]
+            link = ['/category', String(asset.categoryId)]
         }
         else {
-          for (let col of asset.collections) {
 
-            //if(col.name === value) {
+            if(col.name === value) {
               // Collection links for Public & Personal Collections, type 5 or 6
               if (col.type === '5' || col.type === '6') {
                 link = col.type === '5' ? ['/collection', col.id] : ['/pcollection', col.id]
@@ -808,11 +807,9 @@ export class AssetPage implements OnInit, OnDestroy {
               else {
                 link = ['/collection', col.id]
               }
-            //}
-            return link
+            }
           }
-
-        }
+          return link
     }
 
     /**
