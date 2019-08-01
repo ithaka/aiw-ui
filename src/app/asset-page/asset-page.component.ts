@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, HostListener, ElementRef, PLATFORM_ID, Inject } from '@angular/core'
-import { ActivatedRoute, Params, Router, Route } from '@angular/router'
+import { ActivatedRoute, Params, Router } from '@angular/router'
 import { Meta } from '@angular/platform-browser'
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
