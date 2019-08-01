@@ -22,7 +22,7 @@ import {
     DomUtilityService,
     ScriptService
 } from '_services'
-import { CollectionTypeHandler, CollectionTypeInfo} from 'datatypes'
+import { CollectionTypeHandler, CollectionTypeInfo, CollectionLink } from 'datatypes'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
 import { APP_CONST } from '../app.constants'
 import { AppConfig } from '../app.service'
@@ -561,12 +561,14 @@ export class AssetPage implements OnInit, OnDestroy {
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
-            // Procure array of collection links to loop over in the template
-            this.collectionLinks = this.mapCollectionLinks(asset, this.collections)
             // set publicDownload bool
             asset.publicDownload = this.setPublicDownload()
 
             this.updateMetadataFromLocal(this._localPC.getAsset(parseInt(this.assets[0].SSID)))
+
+            // Procure array of collection links to loop over in the template
+            this.collectionLinks = this.mapCollectionLinks(this.assets[0], this.collections)
+            console.log('collection links!!!!', this.collectionLinks)
         }
         // Set download link
         this.setDownloadFull()
@@ -585,6 +587,8 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.assets[0].formattedMetadata.License[i] = resLicenseVal ? resLicenseVal : licenseField
             }
         }
+
+
     }
 
     /**
@@ -791,36 +795,38 @@ export class AssetPage implements OnInit, OnDestroy {
         return collections.filter(c => { return c.type === type })[0].length > 0
       }
 
-      let links: CollectionLink[]
+      let links = []
 
       // Single collection type cases, and routes
       if (collections.length === 1) {
         let col = collections[0]
 
         if (col.type === '1' && col.id === '103') {
-          links = [({ displayName: col.name, route: ['/category', asset.categoryId] })]
+          links = [{ displayName: col.name, route: ['/category', asset.categoryId] }]
         }
-        else if(col.type === '6') {
-          links = [({ displayName: col.name, route: ['/pcollection', col.id] })]
+        else if (col.type === '6') {
+          links = [{ displayName: col.name, route: ['/pcollection', col.id] }]
         }
         else {
-          links = [({ displayName: col.name, route: ['/collection', col.id] })]
+          links = [{ displayName: col.name, route: ['/collection', col.id] }]
         }
       }
-      // Collections contains type 5 Public, and 2
-      else if (typeFilter('2') && typeFilter('5')) {
+      // When collections contain type 5 and 2, or types 5 and 1 - only include type 5 in collectionLinks
+      else if ( (typeFilter('2') || typeFilter('1')) && typeFilter('5')) {
         links = collections.map(c => {
-          if (c.type === '2' || c.type === '5') {
+          if (c.type === '5') {
             return { displayName: c.name, route: ['/collection', c.id] }
           }
         })
       }
-      // Otherwise, map all multiple collections to the links array, which can be multiple type 2 institutional colllections
+      // Otherwise, map all multiple collections to the links array, which can be multiple type 2s and 6s
       else {
         links = collections.map(c => {
-          return { displayName: c.name, route: ['/collection', c.id] }
+          let routeType = c.type === '6' ? ['/pcollection', c.id] : ['/collection', c.id]
+          return { displayName: c.name, route: routeType }
         })
       }
+      console.log('Links: ', links)
       return links
     }
 
@@ -1791,9 +1797,4 @@ export class AssetPage implements OnInit, OnDestroy {
             this.assetViewer.setFullscreen(false)
         }
     }
-}
-
-interface CollectionLink {
-  displayName: string
-  route: any
 }
