@@ -505,6 +505,8 @@ export class AuthService implements CanActivate {
           }
           // Set triplet headers if available
           if (this.currentAuthHeaders) {
+            console.log("Using currentAuthHeaders")
+            console.log("Using ip:", clientIp)
             Object.keys(this.currentAuthHeaders).forEach(header => {
               headers = headers.append(header, this.currentAuthHeaders[header])
             })
@@ -696,16 +698,19 @@ export class AuthService implements CanActivate {
           this.userSessionFresh = true
 
           if (user && (this.isOpenAccess || user.status)) {
+            console.log("user info returned")
             // Clear expired session modal
             this.showUserInactiveModal.next(false)
             // Update user object
             this.saveUser(user)
           } else {
+            console.log("Log out??")
             // Clear user session (local objects and cookies)
             this.logout()
           }
           // Save session auth header values for attaching to subsequent requests
           if (headers.get('x-jstor-access-session')) {
+            console.log("Got headers!", headers.get('x-jstor-access-session'))
             this.currentAuthHeaders = {
               'x-jstor-access-session': headers.get('x-jstor-access-session'),
               'x-jstor-access-session-signature': headers.get('x-jstor-access-session-signature'),

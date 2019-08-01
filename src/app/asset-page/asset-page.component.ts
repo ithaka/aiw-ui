@@ -229,6 +229,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.user = this._auth.getUser();
+        console.log("On init, got user?", this.user)
         this.quizModeTTDismissed = this._storage.getLocal('quizModeTTDismissed') ? this._storage.getLocal('quizModeTTDismissed') : false
         this.subscriptions.push(
             this._flags.flagUpdates.subscribe((flags) => {
@@ -340,6 +341,7 @@ export class AssetPage implements OnInit, OnDestroy {
                      * (it has to first get the headers, then get the user for the headers)
                      * @todo have Auth return an appropriate user object for a cookie-less call
                      */
+                    console.log("User session fresh")
                     this.userSessionFresh = true
                 })
             )
