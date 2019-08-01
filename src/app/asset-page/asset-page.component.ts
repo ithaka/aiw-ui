@@ -792,10 +792,9 @@ export class AssetPage implements OnInit, OnDestroy {
       }
 
       let links: CollectionLink[]
-      let justOne: boolean = collections.length === 1
 
       // Single collection type cases, and routes
-      if (justOne) {
+      if (collections.length === 1) {
         let col = collections[0]
 
         if (col.type === '1' && col.id === '103') {
@@ -808,7 +807,6 @@ export class AssetPage implements OnInit, OnDestroy {
           links = [({ displayName: col.name, route: ['/collection', col.id] })]
         }
       }
-
       // Collections contains type 5 Public, and 2
       else if (typeFilter('2') && typeFilter('5')) {
         links = collections.map(c => {
