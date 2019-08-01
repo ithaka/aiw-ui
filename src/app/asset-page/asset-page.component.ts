@@ -561,13 +561,12 @@ export class AssetPage implements OnInit, OnDestroy {
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
+            // Procure array of collection links to loop over in the template
+            this.collectionLinks = this.mapCollectionLinks(asset, this.collections)
             // set publicDownload bool
             asset.publicDownload = this.setPublicDownload()
 
             this.updateMetadataFromLocal(this._localPC.getAsset(parseInt(this.assets[0].SSID)))
-
-            // Procure array of router links to loop over in the template
-            this.collectionLinks = this.mapCollectionLinks(asset, this.collections)
         }
         // Set download link
         this.setDownloadFull()
@@ -782,51 +781,49 @@ export class AssetPage implements OnInit, OnDestroy {
 
     /**
     * mapCollectionLinks
-    * @param asset
-    * @param collections - the current collection object in the iteration over the asset's collections
+    * @param asset - only used here to get asset.categoryId
+    * @param collections - this.collections
     * @return CollectionLink[]
     */
     mapCollectionLinks(asset: Asset, collections: any[]): CollectionLink[] {
 
-      function typeFilter(type: string) {
-        return collections.filter(c => { return c.type === type })[0].length
+      function typeFilter(type: string): boolean {
+        return collections.filter(c => { return c.type === type })[0].length > 0
       }
 
-      let links = []
+      let links: CollectionLink[]
       let justOne: boolean = collections.length === 1
 
+      // Single collection type cases, and routes
       if (justOne) {
         let col = collections[0]
 
         if (col.type === '1' && col.id === '103') {
-          links.push({ displayName: col.name, route: ['/category', asset.categoryId] })
+          links = [({ displayName: col.name, route: ['/category', asset.categoryId] })]
         }
         else if(col.type === '6') {
-          links.push({ displayName: col.name, route: ['/pcollection', col.id] })
+          links = [({ displayName: col.name, route: ['/pcollection', col.id] })]
         }
         else {
-          links.push({ displayName: col.name, route: ['/collection', col.id] })
+          links = [({ displayName: col.name, route: ['/collection', col.id] })]
         }
       }
 
-      // If collections contains type 5 Public, and 2
+      // Collections contains type 5 Public, and 2
       else if (typeFilter('2') && typeFilter('5')) {
-
-        let cols = collections.map(c => {
+        links = collections.map(c => {
           if (c.type === '2' || c.type === '5') {
             return { displayName: c.name, route: ['/collection', c.id] }
           }
         })
-        links.push(cols)
       }
-      // other wise, just map all multiple collections to the links array, which is multiple tpye 2s
+      // Otherwise, map all multiple collections to the links array, which can be multiple type 2 institutional colllections
       else {
-        let cols = collections.map(c => {
-            return { displayName: c.name, route: ['/collection', c.id] }
+        links = collections.map(c => {
+          return { displayName: c.name, route: ['/collection', c.id] }
         })
-        links.push(cols)
       }
-      return links.map(link => { return link })
+      return links
     }
 
     /**
