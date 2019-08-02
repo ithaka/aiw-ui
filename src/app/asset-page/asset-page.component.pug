@@ -187,8 +187,8 @@
                 //- Creator
                 a.value.col-link(*ngIf="fieldName === 'Creator'", [attr.id]="cleanId(fieldName)", (click)="trackCreatorLink(value)", [routerLink]="['/search', 'artcreator:(' + value + ')']", [innerHTML]="value", [attr.aria-labelledby]="cleanId(fieldName)")
                 //- Collections
-                ng-container(*ngIf="fieldName === 'Collection'")
-                  a.value.col-link(*ngFor="let col of collectionLinks", [attr.id]="cleanId(fieldName)", (click)="trackCollectionLink(cleanFieldValue(col.displayName))", [routerLink]="col.route", [innerHTML]="cleanFieldValue(col.displayName) | linkify", [attr.aria-labelledby]="cleanId(fieldName)", style="display:block;")
+                ng-container(*ngIf="fieldName === 'Collection' && i === 0")
+                  a.value.col-link(*ngFor="let col of assets[0].collectionLinks", [attr.id]="Collections", (click)="trackCollectionLink(cleanFieldValue(col.displayName))", [routerLink]="col.route", [innerHTML]="cleanFieldValue(col.displayName) | linkify", [attr.aria-labelledby]="Collections")
                 //- Subject
                 a.value.col-link(*ngIf="fieldName === 'Subject'", [attr.id]="cleanId(fieldName)", (click)="trackSubjectLink(value)", [routerLink]="['/search', 'artsubject:(' + value + ')']", [innerHTML]="value", [attr.aria-labelledby]="cleanId(fieldName)")
                 //- Other fields (culture, material, work type, description...etc)

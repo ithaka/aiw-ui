@@ -1,6 +1,7 @@
 // Project Dependencies
 import { AssetData, MetadataField, FileProperty, CollectionValue } from './asset.service'
 import { ImageZoomParams } from './image-group.interface';
+import { CollectionLink } from 'datatypes'
 
 export class Asset {
     id: string
@@ -21,6 +22,7 @@ export class Asset {
     qualities: string[] // IIIF quality available: https://iiif.io/api/image/2.1/#quality
     formats: string[] = ['jpg'] // IIIF formats available: https://iiif.io/api/image/2.1/#format
     collectionType: number
+    collectionLinks: CollectionLink[]
     contributinginstitutionid: number
     personalCollectionOwner: number
     // Not reliably available
@@ -105,7 +107,7 @@ export class Asset {
                 let maxSize
                 if (data.download_size && data.download_size.length > 0) {
                     let sizeValues = data.download_size.split(',')
-                    maxWidth = parseInt(sizeValues[0]) 
+                    maxWidth = parseInt(sizeValues[0])
                     maxHeight = parseInt(sizeValues[1])
                 }
                 // Check if valid sizes, otherwise use defaults (larger than 3000 may stall)

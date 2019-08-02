@@ -62,9 +62,6 @@ export class AssetPage implements OnInit, OnDestroy {
     public showExitEdit: boolean = false
     public showDeletePCModal: boolean = false
 
-    // Collection link router values
-    public collectionLinks: CollectionLink[]
-
     // Rights Statements values
     public rightsText: string = ''
     public rightsLink: string = ''
@@ -410,6 +407,8 @@ export class AssetPage implements OnInit, OnDestroy {
                         this.assetIndex = this.currentAssetIndex();
                         this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
                     }
+
+
                 }
             })
         );
@@ -567,8 +566,7 @@ export class AssetPage implements OnInit, OnDestroy {
             this.updateMetadataFromLocal(this._localPC.getAsset(parseInt(this.assets[0].SSID)))
 
             // Procure array of collection links to loop over in the template
-            this.collectionLinks = this.mapCollectionLinks(this.assets[0], this.collections)
-            console.log('collection links!!!!', this.collectionLinks)
+            asset.collectionLinks = this.mapCollectionLinks(asset, this.collections)
         }
         // Set download link
         this.setDownloadFull()
@@ -792,41 +790,37 @@ export class AssetPage implements OnInit, OnDestroy {
     mapCollectionLinks(asset: Asset, collections: any[]): CollectionLink[] {
 
       function typeFilter(type: string): boolean {
-        return collections.filter(c => { return c.type === type })[0].length > 0
+        return collections.filter(c => {
+          if (c.type == type) {
+            return c
+          }
+        }).length > 0
       }
 
       let links = []
 
-      // Single collection type cases, and routes
-      if (collections.length === 1) {
-        let col = collections[0]
-
-        if (col.type === '1' && col.id === '103') {
-          links = [{ displayName: col.name, route: ['/category', asset.categoryId] }]
-        }
-        else if (col.type === '6') {
-          links = [{ displayName: col.name, route: ['/pcollection', col.id] }]
-        }
-        else {
-          links = [{ displayName: col.name, route: ['/collection', col.id] }]
-        }
-      }
       // When collections contain type 5 and 2, or types 5 and 1 - only include type 5 in collectionLinks
-      else if ( (typeFilter('2') || typeFilter('1')) && typeFilter('5')) {
-        links = collections.map(c => {
+      if ( (typeFilter('2') || typeFilter('1')) && typeFilter('5')) {
+        let col = collections.filter(c => {
           if (c.type === '5') {
-            return { displayName: c.name, route: ['/collection', c.id] }
+            return c
           }
-        })
+        })[0]
+        links = [{ displayName: col.name, route: ['/collection', col.id] }]
       }
-      // Otherwise, map all multiple collections to the links array, which can be multiple type 2s and 6s
       else {
         links = collections.map(c => {
-          let routeType = c.type === '6' ? ['/pcollection', c.id] : ['/collection', c.id]
+          // Type 103 (ADL) routes to /category, 6 to /pcollection, otherwise /collection
+          let routeType = c.type === '6' ? ['/pcollection', c.id] : (c.type === '1' && c.id === '103') ? ['/category', asset.categoryId] : ['/collection', c.id]
+
+          // Replace 'Global Personal Collection' with 'Personal Collection'
+          if (c.type === '6' && c.id === '37436') {
+            return { displayName: 'Personal Collection', route: routeType }
+          }
+
           return { displayName: c.name, route: routeType }
         })
       }
-      console.log('Links: ', links)
       return links
     }
 
