@@ -100,9 +100,7 @@ export class AuthService implements CanActivate {
 
 
     let testHostnames = [
-      'localhost',
       'localhost:3000',
-      'localhost:4000',
       'local.artstor.org',
       'stage.artstor.org',
       'beta.stage.artstor.org',
@@ -112,6 +110,8 @@ export class AuthService implements CanActivate {
     ]
 
     let prodHostnames = [
+      'localhost',
+      'localhost:4000',
       'library.artstor.org',
       'beta.artstor.org',
       'proxy.artstor.org',
@@ -841,6 +841,7 @@ export class AuthService implements CanActivate {
     if (this.isBrowser) {
       url += '?no-cache=' + new Date().valueOf()
     }
+    console.log("🔑 Userinfo url: " + url)
     return url
   }
 
