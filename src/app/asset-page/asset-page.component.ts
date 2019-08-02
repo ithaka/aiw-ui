@@ -341,7 +341,7 @@ export class AssetPage implements OnInit, OnDestroy {
                      * (it has to first get the headers, then get the user for the headers)
                      * @todo have Auth return an appropriate user object for a cookie-less call
                      */
-                    console.log("User session fresh")
+                    console.log("User session fresh (getUserInfo)")
                     this.userSessionFresh = true
                 })
             )
@@ -358,6 +358,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.user = user
                 // userSessionFresh: Do not attempt to load asset until we know user object is fresh
                 if (!this.userSessionFresh && this._auth.userSessionFresh) {
+                    console.log("User session fresh (currentUser)")
                     this.userSessionFresh = true
                 }
             }),
@@ -460,7 +461,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
 
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
-        console.log("Handle loaded metadata for " + asset['objectId'])
+        console.log("Handle loaded metadata for " + asset.id)
         // Reset modals if new data comes in
         this.showAccessDeniedModal = false
         this.showServerErrorModal = false

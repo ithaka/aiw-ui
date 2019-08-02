@@ -55,7 +55,7 @@ export class MetadataService {
      * @param groupId The group from which the asset was accessed, if it exists (helps with authorization)
      */
     private getMetadata(assetId: string, { groupId, legacyFlag, openlib }): Observable<AssetData> {
-        // console.log("_metadata: getMetadata() for: " + assetId)
+        console.log("_metadata: getMetadata() for: " + assetId)
         let url = this._auth.getUrl() + '/v1/metadata?object_ids=' + assetId + '&legacy=' + legacyFlag
         if (groupId){
             // Groups service modifies certain access rights for shared assets
@@ -65,9 +65,12 @@ export class MetadataService {
             // Open Library IDs need to be mapped to Artstor IDs, so we need to flag for the metadata service
             url += '&openlib=' + openlib
         }
+        console.log("🧩 Metadata request URL: " + url)
         return this._http
             .get<MetadataResponse>( url, { headers: this._auth.getHeaders(), withCredentials: true })
             .pipe(map((res) => {
+                console.log("Metadata result?" + res.total)
+                console.log(res.metadata[0])
                 if (!res.metadata[0]) {
                     throw new Error('Unable to load metadata!')
                 }
@@ -77,7 +80,7 @@ export class MetadataService {
                     assetData.groupId = groupId
                 }
                 return assetData
-        }))
+        }, err=> { console.log("Metdata call ERROR", err.status) }))
     }
 
     /**
