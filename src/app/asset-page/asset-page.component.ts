@@ -407,8 +407,6 @@ export class AssetPage implements OnInit, OnDestroy {
                         this.assetIndex = this.currentAssetIndex();
                         this.assetNumber = this._assets.currentLoadedParams.page ? this.assetIndex + 1 + ((this._assets.currentLoadedParams.page - 1) * this._assets.currentLoadedParams.size) : this.assetIndex + 1;
                     }
-
-
                 }
             })
         );
@@ -585,8 +583,6 @@ export class AssetPage implements OnInit, OnDestroy {
                 this.assets[0].formattedMetadata.License[i] = resLicenseVal ? resLicenseVal : licenseField
             }
         }
-
-
     }
 
     /**
