@@ -495,9 +495,13 @@ export class AuthService implements CanActivate {
           } else if (req.headers['forwarded']) {
             clientIp = req.headers['forwarded']
             console.log("Forwarded: " + clientIp)
+          } else if (req.headers['x-forwarded-for']) {
+            clientIp = req.headers['x-forwarded-for']
+            console.log("x-forwarded-for: " + clientIp)
           } else {
             clientIp = req.ip
             if(clientIp === '::1') {
+            if(['::1','::ffff:127.0.0.1'].includes(clientIp)) {
               // Local ipv6 requests
               // Assign a regular, non-vpn address for local dev
               clientIp = "65.128.116.207" // Minneapolis IP
