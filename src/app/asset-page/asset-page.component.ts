@@ -22,7 +22,7 @@ import {
     DomUtilityService,
     ScriptService
 } from '_services'
-import { CollectionTypeHandler, CollectionTypeInfo, CollectionLink } from 'datatypes'
+import { CollectionTypeHandler, CollectionTypeInfo } from 'datatypes'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
 import { APP_CONST } from '../app.constants'
 import { AppConfig } from '../app.service'
