@@ -74,6 +74,8 @@ export class SearchPage implements OnInit, OnDestroy {
       )
     );
 
+    this._script.loadScript('ethnio')
+
   } // OnInit
 
   ngOnDestroy() {
