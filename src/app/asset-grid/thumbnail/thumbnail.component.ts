@@ -1,5 +1,6 @@
 import { Router } from '@angular/router'
 import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core'
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 import { AssetThumbnail } from 'datatypes'
 import { Angulartics2 } from 'angulartics2'
@@ -65,7 +66,8 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     private _assets: AssetService,
     private _search: AssetSearchService,
     private router: Router,
-    private _thumbnail: ThumbnailService
+    private _thumbnail: ThumbnailService,
+    private sanitizer: DomSanitizer
   ) {
    }
 
@@ -97,6 +99,13 @@ export class ThumbnailComponent implements OnInit, OnChanges {
       this.angulartics.eventTrack.next({ properties: { event: 'view cluster', label: this.thumbnail.id } })
     }
     this.router.navigate(urlParams)
+  }
+
+  /**
+   * Allows image blobs, such as detailed views, to load directly
+   */
+  assumeSafe(imageUrl) : SafeUrl {
+    return this.sanitizer.bypassSecurityTrustUrl(imageUrl)
   }
 
   /**
