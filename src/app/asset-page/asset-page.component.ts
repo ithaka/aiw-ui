@@ -22,7 +22,7 @@ import {
     DomUtilityService,
     ScriptService
 } from '_services'
-import { CollectionTypeHandler, CollectionTypeInfo} from 'datatypes'
+import { CollectionTypeHandler, CollectionTypeInfo, CollectionLink } from 'datatypes'
 import { LocalPCService, LocalPCAsset } from '../_local-pc-asset.service'
 import { APP_CONST } from '../app.constants'
 import { AppConfig } from '../app.service'
@@ -41,9 +41,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     @ViewChild(ArtstorViewerComponent) public assetViewer
 
-  @ViewChild("copyUrlInput", {read: ElementRef}) generatedImgURLElement: ElementRef
-
-
+    @ViewChild("copyUrlInput", {read: ElementRef}) generatedImgURLElement: ElementRef
 
     public user: any
     public userSessionFresh: boolean = false
@@ -560,7 +558,13 @@ export class AssetPage implements OnInit, OnDestroy {
             }
             // Assign collections array for this asset. Provided in metadata
             this.collections = asset.collections
+            // set publicDownload bool
+            asset.publicDownload = this.setPublicDownload()
+
             this.updateMetadataFromLocal(this._localPC.getAsset(parseInt(this.assets[0].SSID)))
+
+            // Procure array of collection links to loop over in the template
+            asset.collectionLinks = this.mapCollectionLinks(asset, this.collections)
         }
         // Set download link
         this.setDownloadFull()
@@ -702,7 +706,7 @@ export class AssetPage implements OnInit, OnDestroy {
     trackSubjectLink(subjectName: string): void {
         this.angulartics.eventTrack.next({ properties: { event: 'metadata_subject_link', category: 'metadata', label: subjectName } });
     }
-    
+
     // Track metadata creator link click
     trackCreatorLink(creatorName: string): void {
         this.angulartics.eventTrack.next({ properties: { event: 'metadata_creator_link', category: 'metadata', label: creatorName } });
@@ -774,38 +778,46 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
-     * Sets collection id for the Collection href
-     * A collection may be private, institutional, or public.
-     * If both institional(2) and public(5), we set the link to the public collection id.
-     */
-    setCollectionLink(asset: Asset, value: string): any[] {
-        let link = []
-        asset.publicDownload = this.setPublicDownload()
+    * mapCollectionLinks
+    * @param asset - only used here to get asset.categoryId
+    * @param collections - this.collections
+    * @return CollectionLink[]
+    */
+    mapCollectionLinks(asset: Asset, collections: any[]): CollectionLink[] {
 
-        // 103 Collection Id routes to /category/<categoryId>, some of the collections have collectionId of NaN, check the id in the collections array instead
-        if (String(asset.collectionId) === '103' || String(asset.collections[0].id) === '103') {
-            link = ['/category', String(asset.categoryId)]
-            return link
-        }
-        else {
-            for (let col of this.collections) {
-                if(col.name === value) {
-                    switch (col.type) {
-                        case '6':
-                            link = ['/pcollection', col.id]
-                            break
-                        case '5':
-                            link = ['/collection', col.id]
-                            break
-                        default:
-                            link = ['/collection', col.id]
-                            break
+      function typeFilter(type: string): boolean {
+        return collections.filter(c => {
+          if (c.type == type) {
+            return c
+          }
+        }).length > 0
+      }
 
-                    }
-                    return link
-                }
-            }
-        }
+      let links = []
+
+      // When collections contain type 5 and 2, or types 5 and 1 - only include type 5 in collectionLinks
+      if ( (typeFilter('2') || typeFilter('1')) && typeFilter('5')) {
+        let col = collections.filter(c => {
+          if (c.type === '5') {
+            return c
+          }
+        })[0]
+        links = [{ displayName: col.name, route: ['/collection', col.id] }]
+      }
+      else {
+        links = collections.map(c => {
+          // Type 103 (ADL) routes to /category, 6 to /pcollection, otherwise /collection
+          let routeType = c.type === '6' ? ['/pcollection', c.id] : (c.type === '1' && c.id === '103') ? ['/category', asset.categoryId] : ['/collection', c.id]
+
+          // Replace 'Global Personal Collection' with 'Personal Collection'
+          if (c.type === '6' && c.id === '37436') {
+            return { displayName: 'Personal Collection', route: routeType }
+          }
+
+          return { displayName: c.name, route: routeType }
+        })
+      }
+      return links
     }
 
     /**

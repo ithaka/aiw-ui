@@ -1,6 +1,7 @@
 // Project Dependencies
 import { AssetData, MetadataField, FileProperty, CollectionValue } from './asset.service'
 import { ImageZoomParams } from './image-group.interface';
+import { CollectionLink } from 'datatypes'
 
 export class Asset {
     id: string
@@ -21,6 +22,7 @@ export class Asset {
     qualities: string[] // IIIF quality available: https://iiif.io/api/image/2.1/#quality
     formats: string[] = ['jpg'] // IIIF formats available: https://iiif.io/api/image/2.1/#format
     collectionType: number
+    collectionLinks: CollectionLink[]
     contributinginstitutionid: number
     personalCollectionOwner: number
     // Not reliably available
@@ -74,6 +76,11 @@ export class Asset {
             if (data.link) {
                 data.fieldValue = data.link
             }
+
+            // If license value is `ADL Terms and Conditions` then replace it with bolierplate text
+            if (data.fieldName === 'License' && data.fieldValue === 'ADL Terms and Conditions') {
+                data.fieldValue = 'Use of this image is in accordance with the <a href="https://www.artstor.org/artstor-terms/" target="_blank">Artstor Terms & Conditions</a>'
+            }
             // Split by semicolons without removing semicolon
             let values = data.fieldValue.split(/;./g)
             // if the field exists, add to it (make sure the field value exists)
@@ -82,6 +89,11 @@ export class Asset {
             } else if(values[0]) { // otherwise make a new field (make sure the field vaue exists)
                 formattedData[data.fieldName] = values
             }
+        }
+
+        // If the asset doesn't have a license field then display bilerplate for license field.
+        if(!formattedData['License']) {
+            formattedData['License'] = ['Use of this image is in accordance with the <a href="https://www.artstor.org/artstor-terms/" target="_blank">Artstor Terms & Conditions</a>']
         }
         return formattedData
     }
@@ -105,7 +117,7 @@ export class Asset {
                 let maxSize
                 if (data.download_size && data.download_size.length > 0) {
                     let sizeValues = data.download_size.split(',')
-                    maxWidth = parseInt(sizeValues[0]) 
+                    maxWidth = parseInt(sizeValues[0])
                     maxHeight = parseInt(sizeValues[1])
                 }
                 // Check if valid sizes, otherwise use defaults (larger than 3000 may stall)
