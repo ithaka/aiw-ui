@@ -14,6 +14,13 @@ export class LogService {
   ) { }
 
   public log(message: LogMessage): void { // message is only typed as any because we want to log anything that is sent
+    /**
+     * Note: The Artstor UI Logger service auto attaches to log events:
+     * - Institution ID
+     * - User Profile ID
+     * - Username
+     * Repo: https://github.com/ithaka/artstor-log-service
+     */
     this._http.post<LogResponse>(
       [this._auth.getUrl(), 'v1', 'log'].join('/'),
       message,

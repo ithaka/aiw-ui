@@ -154,7 +154,7 @@ export class GroupService {
             this.hasPrivateGroupSource.next(false) 
         } else {
             // forceReassess should fallback to querying the group service
-            this.http.get(this.groupUrl + '?size=1&level=private', this.options)
+            this.http.get(this.groupUrl + '?size=1&level=created', this.options)
             .toPromise()
             .then( res => {
                 if (res['total'] > 0) {

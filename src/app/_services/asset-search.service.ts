@@ -39,7 +39,7 @@ export class AssetSearchService {
 
   public latestSearchRequestId: string
 
-  // Used for simplify the code when we need to account for both search and search3 version 
+  // Used for simplify the code when versioning search
   private contentQueryKey: string
   private filterQueryKey: string
 
@@ -54,8 +54,8 @@ export class AssetSearchService {
   }
 
   private initQuery(keyword: string, pageSize, startIndex) {
-    this.contentQueryKey = this._auth.useSearch3 ? 'content_set_flags' : 'content_types'
-    this.filterQueryKey = this._auth.useSearch3 ? 'filter_queries' : 'filter_query'
+    this.contentQueryKey = 'content_set_flags'
+    this.filterQueryKey = 'filter_queries'
 
     let query = {
       'limit': pageSize,
@@ -215,8 +215,8 @@ export class AssetSearchService {
    * Uses wildcard search to retrieve filters
    */
   public getFacets() {
-    this.contentQueryKey = this._auth.useSearch3 ? 'content_set_flags' : 'content_types'
-    this.filterQueryKey = this._auth.useSearch3 ? 'filter_queries' : 'filter_query'
+    this.contentQueryKey = 'content_set_flags'
+    this.filterQueryKey = 'filter_queries'
     let query = {
       'limit': 0,
       'start': 1,
@@ -240,7 +240,7 @@ export class AssetSearchService {
           {
             'name': 'artclassification_str',
             'mincount': 1,
-            'limit': 17
+            'limit': 30
           }
           // {
           //   "name" : "artcollectiontitle_str",
@@ -432,7 +432,7 @@ export class AssetSearchService {
    * @param assetId The id of the desired asset
    */
   public getAssetById(assetId: string, ssid?: boolean): Observable<AssetThumbnail> {
-    this.contentQueryKey = this._auth.useSearch3 ? 'content_set_flags' : 'content_types'
+    this.contentQueryKey = 'content_set_flags'
 
     let assetQuery: SearchRequest
     assetQuery['query'] = ssid ? 'ssid:' + assetId : assetId

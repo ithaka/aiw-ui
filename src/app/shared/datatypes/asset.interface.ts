@@ -1,6 +1,7 @@
 // Project Dependencies
 import { AssetData, MetadataField, FileProperty, CollectionValue } from './asset.service'
 import { ImageZoomParams } from './image-group.interface';
+import { CollectionLink } from 'datatypes'
 
 export class Asset {
     id: string
@@ -21,6 +22,7 @@ export class Asset {
     qualities: string[] // IIIF quality available: https://iiif.io/api/image/2.1/#quality
     formats: string[] = ['jpg'] // IIIF formats available: https://iiif.io/api/image/2.1/#format
     collectionType: number
+    collectionLinks: CollectionLink[]
     contributinginstitutionid: number
     personalCollectionOwner: number
     // Not reliably available
@@ -74,12 +76,13 @@ export class Asset {
             if (data.link) {
                 data.fieldValue = data.link
             }
-
-            // if the field exists, add to it (make sure the field vaue exists)
-            if (formattedData[data.fieldName] && data.fieldValue) {
-                formattedData[data.fieldName].push(data.fieldValue)
-            } else if(data.fieldValue) { // otherwise make a new field (make sure the field vaue exists)
-                formattedData[data.fieldName] = [data.fieldValue]
+            // Split by semicolons without removing semicolon
+            let values = data.fieldValue.split(/;./g)
+            // if the field exists, add to it (make sure the field value exists)
+            if (formattedData[data.fieldName] && values[0]) {
+                formattedData[data.fieldName] = formattedData[data.fieldName].concat(values)
+            } else if(values[0]) { // otherwise make a new field (make sure the field vaue exists)
+                formattedData[data.fieldName] = values
             }
         }
         return formattedData
@@ -104,7 +107,7 @@ export class Asset {
                 let maxSize
                 if (data.download_size && data.download_size.length > 0) {
                     let sizeValues = data.download_size.split(',')
-                    maxWidth = parseInt(sizeValues[0]) 
+                    maxWidth = parseInt(sizeValues[0])
                     maxHeight = parseInt(sizeValues[1])
                 }
                 // Check if valid sizes, otherwise use defaults (larger than 3000 may stall)

@@ -85,7 +85,7 @@ export class AssetService {
         page: number
     } = {
         totalPages: 1,
-        size: 24,
+        size: 48,
         page: 1
     };
     private paginationSource = new BehaviorSubject<any>(this.paginationValue);
@@ -107,7 +107,7 @@ export class AssetService {
     private urlParams: any;
     private defaultUrlParams: any = {
             term: '',
-            size: 24,
+            size: 48,
             page: 1,
             startDate: 0,
             endDate: 0,
@@ -450,8 +450,8 @@ export class AssetService {
     public categoryByFacet(facetName: string, collectionType ?: number): Promise<SolrFacet[]> {
       let options = { withCredentials: true };
 
-      let contentQueryKey = this._auth.useSearch3 ? 'content_set_flags' : 'content_types'
-      let filterQueryKey = this._auth.useSearch3 ? 'filter_queries' : 'filter_query'
+      let contentQueryKey = 'content_set_flags'
+      let filterQueryKey = 'filter_queries'
       let query = {
             // Base solr query
             'limit': 0,
