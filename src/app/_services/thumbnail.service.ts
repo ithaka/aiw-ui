@@ -51,12 +51,14 @@ export class ThumbnailService {
       }
       // Use the compound media thumbnail url where sequenceNum equals 1
       if (cleanedAsset && cleanedAsset.compound_media_json && cleanedAsset.compound_media_json.objects) {
-        let compoundAsset = cleanedAsset.compound_media_json.objects.filter((asset) => {
-          if (asset['sequenceNum'] === 1 || asset['sequenceNum'] === 0 )
-          return asset
+        // If sequenceNum is available prefer 0 or 1 (first in the sequence)
+        // If sequenceNum aren't available, just show first object
+        let compoundAssets = cleanedAsset.compound_media_json.objects.sort((a,b) => {
+          return a['sequenceNum'] - b['sequenceNum'] 
         })
-        if (compoundAsset[0]) {
-          cleanedAsset.thumbnailUrls.push(this._auth.getThumbHostname(true) + compoundAsset[0].thumbnailSizeOnePath)
+        // Use first asset in ordered array as thumbnail
+        if (compoundAssets[0]) {
+          cleanedAsset.thumbnailUrls.push(this._auth.getThumbHostname(true) + compoundAssets[0].thumbnailSizeOnePath)
         }
       }
       else { // make the thumbnail urls and add them to the array
