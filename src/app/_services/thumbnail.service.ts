@@ -1,4 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { DomSanitizer } from '@angular/platform-browser'
 
 // Project Dependencies
 import { AuthService } from './auth.service'
@@ -8,7 +10,7 @@ import { AssetThumbnail, RawItemAsset, CollectionTypeHandler, CollectionTypeInfo
 @Injectable()
 export class ThumbnailService {
 
-  constructor(private _auth: AuthService) {
+  constructor(private _auth: AuthService, private _http: HttpClient) {
 
   }
   
@@ -170,13 +172,35 @@ export class ThumbnailService {
 
   /**
    * Generate Thumbnail URL for detailed view using the zoom property of the thumbnail
+   * @note This actually updates the thumbnail ASYNC once the blob has been retrieved
+   *       - and clears image url in the mean time
    */
-  public makeDetailViewThmb(thumbnailObj: AssetThumbnail): string{
+  public makeDetailViewThmb(thumbnailObj: AssetThumbnail): string {
     let thumbURL: string = ''
     let tileSourceHostname = this._auth.getIIIFUrl()
     let imgURL = thumbnailObj.thumbnailImgUrl.replace('/thumb/imgstor/size0', '').replace('.jpg', '.fpx')
     thumbURL = tileSourceHostname + '/iiif/fpx' + imgURL + '/' + thumbnailObj.zoom.viewerX + ',' + thumbnailObj.zoom.viewerY + ',' + thumbnailObj.zoom.pointWidth + ',' + thumbnailObj.zoom.pointHeight + '/,115/0/default.jpg'
-    return thumbURL
+
+    /**
+     * Get image blob, using AUTH tokens
+     * - This is done because IIIF calls now require authorization
+     * - ASYNC updates the AssetThumbnail
+     */
+    this._http.get(thumbURL, {
+        responseType: 'blob',
+        headers: new HttpHeaders(<any>this._auth.currentAuthHeaders)
+      }).toPromise().then(
+      imageBlob => {
+        console.log("blob received:", imageBlob)
+        thumbnailObj.img = URL.createObjectURL(imageBlob)
+      })
+      .catch(err => {
+        console.log("Error fetching blob for detail view thumbnail")
+        console.log(err)
+        // return thumbURL
+      })
+    // Temporarily return an empty image source
+    return ''
   }
 
     /**
