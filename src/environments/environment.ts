@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   API_URL: 'https://stage.artstor.org',
+  SSR_API_URL: 'https://stage.artstor.org',
   FORUM_URL: 'https://test.forum.jstor.org',
   STOR_URL: 'https://stor.stage.artstor.org/stor',
   GAPI_TEST: [
