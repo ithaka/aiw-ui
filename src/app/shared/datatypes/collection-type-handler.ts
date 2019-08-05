@@ -66,3 +66,12 @@ export interface CollectionTypeInfo {
   badgeText: string
   type: number
 }
+
+/**
+ * CollectionLink type
+ * Used in AssetPage component array of collectionLinks
+ */
+export interface CollectionLink {
+  displayName: string
+  route: any
+}
