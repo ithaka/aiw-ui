@@ -97,7 +97,11 @@ export class AuthService implements CanActivate {
     this.solrUrl = '/api/search/v3.0/search'
     // Variables set via environment rather than hostname
     this.baseUrl =  environment.API_URL + '/api'
-
+    // If server-side, use absolute URL
+    if (!this.isBrowser) {
+      this.baseUrl = environment.SSR_API_URL + '/api'
+      this.hostname = environment.SSR_API_URL
+    }
 
     let testHostnames = [
       'localhost',
@@ -129,6 +133,7 @@ export class AuthService implements CanActivate {
 
     // Check domain
     if (  new RegExp(prodHostnames.join('|')).test(this.clientHostname)  ) {
+      console.info('Using Prod Endpoints (Relative)')
       // Explicit live endpoints
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = '/api/search/v3.0/search'
@@ -138,7 +143,7 @@ export class AuthService implements CanActivate {
       console.info('Using Prod Endpoints (Absolute)')
       // Prod/Lively endpoints
       this.hostname = '//library.artstor.org'
-      // this.baseUrl =  '//library.artstor.org/api'
+      this.baseUrl =  'https://library.artstor.org/api'
       this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1'
       this.solrUrl = this.hostname + '/api/search/v3.0/search'
       this.ENV = 'prod'
@@ -147,7 +152,6 @@ export class AuthService implements CanActivate {
       // Test Endpoints
       this.hostname = '//stage.artstor.org'
       this.subdomain = 'stage'
-      // this.baseUrl = '//stage.artstor.org/api'
       this.thumbUrl = '//mdxstage.artstor.org'
       this.compoundUrl = '//stor.stage.artstor.org/stor'
       this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1'
