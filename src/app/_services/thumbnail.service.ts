@@ -11,7 +11,7 @@ export class ThumbnailService {
   constructor(private _auth: AuthService) {
 
   }
-  
+
   /**
    * Transforms object:
    * SEARCH/Solr record --> AIW AssetThumbnail
@@ -19,8 +19,8 @@ export class ThumbnailService {
   public searchAssetToThumbnail(asset: RawSearchAsset): AssetThumbnail {
       let cleanedSSID: string = asset.doi.substr(asset.doi.lastIndexOf('.') + 1) // split the ssid off the doi
       let cleanedMedia: MediaObject
-      if (asset && asset.media && typeof asset.media == 'string') { 
-        cleanedMedia = JSON.parse(asset.media) 
+      if (asset && asset.media && typeof asset.media == 'string') {
+        cleanedMedia = JSON.parse(asset.media)
       }
       // Map RawSearchAsset fields to AssetThumbnail
       let cleanedAsset: AssetThumbnail = {
@@ -52,7 +52,8 @@ export class ThumbnailService {
       // Use the compound media thumbnail url where sequenceNum equals 1
       if (cleanedAsset && cleanedAsset.compound_media_json && cleanedAsset.compound_media_json.objects) {
         let compoundAsset = cleanedAsset.compound_media_json.objects.filter((asset) => {
-          return asset['sequenceNum'] === 1
+          if (asset['sequenceNum'] === 1 || asset['sequenceNum'] === 0 )
+          return asset
         })
         if (compoundAsset[0]) {
           cleanedAsset.thumbnailUrls.push(this._auth.getThumbHostname(true) + compoundAsset[0].thumbnailSizeOnePath)
@@ -77,7 +78,7 @@ export class ThumbnailService {
    * Transforms object:
    * Group/Item service result --> AIW AssetThumbnail
    */
-  public itemAssetToThumbnail(item: RawItemAsset): AssetThumbnail 
+  public itemAssetToThumbnail(item: RawItemAsset): AssetThumbnail
   {
     // Map RawItemAsset fields to AssetThumbnail
     let cleanedAsset: AssetThumbnail = {
@@ -136,7 +137,7 @@ export class ThumbnailService {
   /**
    * Decorate with media type flags
    * - Should not be referenced outside of the service, instead use public transform functions
-   * @param thumbnail 
+   * @param thumbnail
    */
   private attachMediaFlags(thumbnail: AssetThumbnail): AssetThumbnail {
     // Compound 'multiview' assets for image groups, assigned in assets service
@@ -213,7 +214,7 @@ export class ThumbnailService {
     } else {
       imagePath = thumbData.thumbnail_url // Passed back by metadata service
     }
-    // Test for full url 
+    // Test for full url
     receivedFullUrl = /\/\/[\W\D]*(artstor.org)/.test(imagePath)
     // Multiviews and downgraded views receive FULL URLS via "thumbnail_url"
     // Group list service returns full urls as thumbnailImgUrl
