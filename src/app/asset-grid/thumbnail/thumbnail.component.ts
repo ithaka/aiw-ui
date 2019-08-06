@@ -44,6 +44,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   @Input()
   public editMode: boolean
 
+  public src: SafeUrl
   // Keeps the track of multiViewItems count associated with the current asset
   public multiviewItemCount: number = 0
   public isMultiView: boolean = false
@@ -84,6 +85,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     if (changes.largeThmbView){
       this.thumbnail.size = changes.largeThmbView.currentValue ? 2 : 1
       this.thumbnail.img = this._thumbnail.getThumbnailImg(this.thumbnail)
+      this.src = this.assumeSafe(this.thumbnail.img)
     }
   }
 
@@ -127,7 +129,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     if (this.thumbnail.size > 0) {
       this.thumbnail.size--
       this.thumbnail.img = this._thumbnail.getThumbnailImg(this.thumbnail)
-      console.log("New img url:", this.thumbnail.img)
+      this.src = this.assumeSafe(this.thumbnail.img)
     }
   }
 
