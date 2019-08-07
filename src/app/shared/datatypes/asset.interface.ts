@@ -82,7 +82,7 @@ export class Asset {
                 data.fieldValue = 'Use of this image is in accordance with the <a href="https://www.artstor.org/artstor-terms/" target="_blank">Artstor Terms & Conditions</a>'
             }
             // Split by semicolons without removing semicolon
-            let values = data.fieldValue.split(/;./g)
+            let values = data.fieldValue.split('|')
             // if the field exists, add to it (make sure the field value exists)
             if (formattedData[data.fieldName] && values[0]) {
                 formattedData[data.fieldName] = formattedData[data.fieldName].concat(values)
