@@ -6,6 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser'
 import { AuthService } from './auth.service'
 import { RawSearchAsset, MediaObject } from './asset-search.service'
 import { AssetThumbnail, RawItemAsset, CollectionTypeHandler, CollectionTypeInfo } from 'datatypes'
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class ThumbnailService {
@@ -184,26 +185,28 @@ export class ThumbnailService {
     let imgURL = thumbnailObj.thumbnailImgUrl.replace('/thumb/imgstor/size0', '').replace('.jpg', '.fpx')
     thumbURL = tileSourceHostname + '/iiif/fpx' + imgURL + '/' + thumbnailObj.zoom.viewerX + ',' + thumbnailObj.zoom.viewerY + ',' + thumbnailObj.zoom.pointWidth + ',' + thumbnailObj.zoom.pointHeight + '/,115/0/default.jpg'
 
-    /**
-     * Get image blob, using AUTH tokens
-     * - This is done because IIIF calls now require authorization
-     * - ASYNC updates the AssetThumbnail
-     */
-    this._http.get(thumbURL, {
-        responseType: 'blob',
-        headers: new HttpHeaders(<any>this._auth.currentAuthHeaders)
-      }).toPromise().then(
-      imageBlob => {
-        console.log("blob received:", imageBlob)
-        thumbnailObj.img = URL.createObjectURL(imageBlob)
-      })
-      .catch(err => {
-        console.log("Error fetching blob for detail view thumbnail")
-        console.log(err)
-        // return thumbURL
-      })
-    // Temporarily return an empty image source
-    return ''
+    return thumbURL
+  }
+
+  /**
+   * Get Image Blob
+   * - Utility for fetching blob and returning as url object
+   * - Used to pass security headers
+   * This is done because IIIF calls now require authorization
+   */
+  public getImageSecurely(url: string): Promise<any> {
+
+    return this._http.get(url, {
+     responseType: 'blob',
+     headers: new HttpHeaders(<any>this._auth.currentAuthHeaders)
+   }).pipe(map(
+    imageBlob => {
+      return URL.createObjectURL(imageBlob)
+    },
+    err => {
+      console.log("Error fetching blob for detail view thumbnail")
+      console.log(err)
+    })).toPromise()
   }
 
     /**
