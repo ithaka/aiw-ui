@@ -332,7 +332,7 @@ You should now be able to open the site locally as:
 
 # Local development on Https
 
-Go to ssl directory under project root and execute the following steps.
+From the `/ssl` directory under project root, execute the following steps:
 
 Generate private key:
 ```bash
@@ -359,7 +359,7 @@ Create a pem file:
 openssl x509 -in private.crt -out private.pem -outform PEM
 ```
 
-Finally, from the project root run  `yarn dev:https`  to start local development on https
+Finally, from the project root run  `yarn dev:ssl`  to start local development on https at `https://localhost:3000`
 
 ---
 
