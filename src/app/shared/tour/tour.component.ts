@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, PLATFORM_ID, Inject  } from '@angular/core'
+import { Component, Input, OnInit, PLATFORM_ID, Inject, ViewChild, ElementRef } from '@angular/core'
 // TO-DO: Import driver only on the clientside
 // Maybe use their CDN? https://github.com/kamranahmedse/driver.js
 import * as Driver from '../../../../node_modules/driver.js/dist/driver.min.js'
@@ -20,6 +20,8 @@ import {  } from '../../shared'
     public startModalShow: boolean = false
 
     @Input() public steps: TourStep[]
+
+    @ViewChild("startTourButton", { read: ElementRef }) startTourButton: ElementRef
 
     private driver: any
     private isBrowser
@@ -128,6 +130,29 @@ import {  } from '../../shared'
      */
     public closeTourModal(): void {
       this.startModalShow = false
+    }
+
+    /**
+     * Opens the tour models and places focus on the start button.
+     */
+    public openTourModal(): void {
+        this.startModalShow = true;
+        setTimeout(() => {
+          this.focusElement(this.startTourButton.nativeElement)
+        }, 0)
+      }
+
+    /**
+     * Force focus upon a key event
+     * @param event keydown/click event
+     * @param element element to focus
+     */
+    public focusElement(element, event?: Event) {
+      if (event) {
+        event.stopPropagation()
+        event.preventDefault()
+      }
+      element.focus()
     }
 
     /**

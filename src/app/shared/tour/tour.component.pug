@@ -1,13 +1,30 @@
-a.contextual-help(title="How do I use image groups?", (click)="startModalShow=true", (keyup.enter)="startModalShow=true", target="_blank", tabindex="3", aria-label="Learn more about how to use image groups with our tour.") ?
-.modal(tabindex="-1", [class.show]="startModalShow")
-    .modal-dialog(role="document")
-        .modal-content
-            .modal-header
-                h4.modal-title We've made some updates to groups!
-                button.close(type="button", (click)="closeTourModal()", aria-label="Close")
-                    span(aria-hidden="true") &times;
-            .modal-body
-                p We've made a few adjustments to give you a better experience with your groups. Take the tour to learn more about the changes. 
-            .modal-footer
-                button.btn.btn-secondary(tabindex="4", (click)="closeTourModal()") NOT NOW
-                button.btn.btn-primary(tabindex="3", (click)="$event.stopPropagation();startTour()") TAKE THE TOUR
+a.contextual-help(title="How do I use image groups?", (click)="openTourModal()", (keyup.enter)="openTourModal()", target="_blank", tabindex="3", aria-label="Learn more about how to use image groups with our tour.") ?
+.modal(tabindex="-1", [class.show]="startModalShow", (keydown.esc)="closeTourModal()")
+  .modal-dialog(role="document")
+    .modal-content
+      .modal-header
+        h4.modal-title We've made some updates to groups!
+        button.close(
+          #closeTourButton
+          type="button",
+          (click)="closeTourModal()",
+          (keydown.tab)="focusElement(startTourButton, $event)",
+          (keydown.shift.tab)="focusElement(notNowButton, $event)"
+          aria-label="Close"
+        )
+          span(aria-hidden="true") &times;
+      .modal-body
+        p We've made a few adjustments to give you a better experience with your groups. Take the tour to learn more about the changes.
+      .modal-footer
+        button.btn.btn-secondary(
+          #notNowButton
+          (click)="closeTourModal()",
+          (keydown.tab) = "focusElement(closeTourButton, $event)",
+          (keydown.shift.tab)="focusElement(startTourButton, $event)"
+        ) NOT NOW
+        button.btn.btn-primary(
+          #startTourButton,
+          (click)="$event.stopPropagation();startTour()",
+          (keydown.tab)="focusElement(notNowButton, $event)",
+          (keydown.shift.tab)="focusElement(closeTourButton, $event)"
+        ) TAKE THE TOUR
