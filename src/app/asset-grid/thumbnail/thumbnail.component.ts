@@ -26,8 +26,18 @@ import { AssetService, AssetSearchService, ThumbnailService } from 'app/_service
   `]
 })
 export class ThumbnailComponent implements OnInit, OnChanges {
-  @Input()
-  public thumbnail: AssetThumbnail
+  // private _thumb: AssetThumbnail
+  @Input() 
+  public thumbnail: AssetThumbnail 
+  // {
+  //   console.log("Set thumbnail!")
+  //   this._thumb = thumb
+  //   this.thumbnail.img = this._thumbnail.getThumbnailImg(this.thumbnail)
+  //   this.src = this.assumeSafe(this.thumbnail.img)
+  // }
+  // get thumbnail(): AssetThumbnail {
+  //   return this._thumb
+  // }
 
   @Input() // allResults index for reorder
   public itemIndex: number
@@ -78,6 +88,15 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     this.isDowngradedMedia = this.thumbnail.isDowngradedMedia
     this.multiviewItemCount = this.thumbnail.multiviewItemCount
     this.thumbnailAlt = this.thumbnail.thumbnailAlt
+    this.src = this.assumeSafe(this.thumbnail.img)
+
+    if (this.thumbnail.img === '') {
+      setTimeout(() => {
+        console.log("re-assess")
+        // wait for blobb
+        this.src = this.assumeSafe(this.thumbnail.img)
+      }, 3000)
+    }
   }
 
   // Fires when the component input(s) (i.e largeThmbView) changes - Updates the thumbnailSize based on largeThmbView current value
