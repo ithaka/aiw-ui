@@ -487,7 +487,10 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         }
       }, (error) => {
         console.error('Error in check status: ', error)
+        clearInterval(this.exportStatusInterval)
         clearInterval(this.loadingStateInterval)
+        this.exportLoadingStateopts.state = LoadingState.error
+        this.exportLoadingStateopts.errorType = 'server'
       }
     )
   }
