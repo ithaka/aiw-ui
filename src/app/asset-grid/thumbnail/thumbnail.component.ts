@@ -78,6 +78,8 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     this.isDowngradedMedia = this.thumbnail.isDowngradedMedia
     this.multiviewItemCount = this.thumbnail.multiviewItemCount
     this.thumbnailAlt = this.thumbnail.thumbnailAlt
+    // Init image src
+    this.evaluateImageSrc()
   }
 
   // Fires when the component input(s) (i.e largeThmbView) changes - Updates the thumbnailSize based on largeThmbView current value
@@ -85,7 +87,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     if (changes.largeThmbView){
       this.thumbnail.size = changes.largeThmbView.currentValue ? 2 : 1
       this.thumbnail.img = this._thumbnail.getThumbnailImg(this.thumbnail)
-      this.src = this.assumeSafe(this.thumbnail.img)
+      this.evaluateImageSrc()
     }
   }
 
@@ -111,6 +113,23 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   }
 
   /**
+   * re-evaluate src for Thumbnail <img>
+   */
+  evaluateImageSrc(): void {
+    if (this.thumbnail.img.indexOf('/iiif/') > -1) {
+      this._thumbnail.getImageSecurely(this.thumbnail.img)
+        .then(img => {
+          this.src = this.assumeSafe(img)
+        })
+        .catch(err => {
+          // Error handling
+        })
+    } else {
+      this.src = this.assumeSafe(this.thumbnail.img)
+    }
+  }
+
+  /**
    * Determine if asset is IAP
    * @param assetId this should be the asset's id, but if it's undefined, return false
    */
@@ -129,7 +148,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     if (this.thumbnail.size > 0) {
       this.thumbnail.size--
       this.thumbnail.img = this._thumbnail.getThumbnailImg(this.thumbnail)
-      this.src = this.assumeSafe(this.thumbnail.img)
+      this.evaluateImageSrc()
     }
   }
 
