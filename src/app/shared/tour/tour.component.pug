@@ -1,4 +1,12 @@
-a.contextual-help(title="How do I use image groups?", (click)="openTourModal()", (keyup.enter)="openTourModal()", target="_blank", tabindex="3", aria-label="Learn more about how to use image groups with our tour.") ?
+a.contextual-help(
+  #openTourLink
+  title="How do I use image groups?",
+  (click)="openTourModal()",
+  (keyup.enter)="openTourModal()",
+  target="_blank",
+  tabindex="3",
+  aria-label="Learn more about how to use image groups with our tour."
+) ?
 .modal(tabindex="-1", [class.show]="startModalShow", (keydown.esc)="closeTourModal()")
   .modal-dialog(role="document")
     .modal-content

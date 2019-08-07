@@ -22,8 +22,10 @@ import {  } from '../../shared'
     @Input() public steps: TourStep[]
 
     @ViewChild("startTourButton", { read: ElementRef }) startTourButton: ElementRef
+    @ViewChild("openTourLink", { read: ElementRef }) openTourLink: ElementRef
 
-    private driver: any
+
+  private driver: any
     private isBrowser
 
     constructor(
@@ -130,6 +132,7 @@ import {  } from '../../shared'
      */
     public closeTourModal(): void {
       this.startModalShow = false
+      this.openTourLink.nativeElement.focus()
     }
 
     /**
