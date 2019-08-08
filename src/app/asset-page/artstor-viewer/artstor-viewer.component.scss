@@ -540,6 +540,8 @@ background:  #000 !important;
     border-bottom-color: $color-gray-7;
 }
 
+// PDF Viewer styling
+
 .pdf-viewer-container{
     position: relative;
     height: 90vh;
@@ -550,7 +552,26 @@ background:  #000 !important;
     pdf-viewer {
         display: block;
     }
-    .page-info {
-        padding-bottom: 10px;
+
+    .asset-viewer__edge-arrows {
+        top: 50%;
+        transform: translateY(-50%);
     }
+
+    .page-info {
+        padding: 7px 10px;
+        position: absolute;
+        bottom: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(66, 66, 66, 0.6);
+        color: #fff;
+        border-radius: 6px;
+    }
+}
+
+.ng2-pdf-viewer-container {
+    height: 90vh;
+    width: 100%;
+    min-height: 90vh;
 }
