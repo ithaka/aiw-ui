@@ -45,10 +45,10 @@
 
   <!--Load Google Translate before other javascript-->
   <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-  
+
   <!-- Google Search Console verification -->
   <meta name="google-site-verification" content="I2cWM2atN4ZtS5JQsMwBOlcC8zUEt5L74_MxJjqKcjg" />
-  
+
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
@@ -135,6 +135,26 @@
       display: none !important;
     }
   </style>
+
+  <!-- AppD EUM -->
+  <script charset='UTF-8'>
+    var hostname = window.location.hostname,
+      nonProdHosts = ['stage.artstor.org', 'localhost', '127.0.0.1'],
+      prodKey = 'AD-AAB-AAM-TVS',
+      testKey = 'AD-AAB-AAM-TWZ';
+
+    window['adrum-start-time'] = new Date().getTime();
+    (function(config){
+      config.appKey = nonProdHosts.includes(hostname) ? testKey : prodKey;
+      config.adrumExtUrlHttp = 'http://cdn.appdynamics.com';
+      config.adrumExtUrlHttps = 'https://cdn.appdynamics.com';
+      config.beaconUrlHttp = 'http://col.eum-appdynamics.com';
+      config.beaconUrlHttps = 'https://col.eum-appdynamics.com';
+      config.xd = {enable : false};
+    })(window['adrum-config'] || (window['adrum-config'] = {}));
+  </script>
+  <script src='//cdn.appdynamics.com/adrum/adrum-4.5.9.2098.js'></script>
+
 </head>
 <body>
   <noscript>
