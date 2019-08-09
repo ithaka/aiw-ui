@@ -196,22 +196,24 @@ export class AppComponent {
           // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
           if (this.shouldShowChat(window.location.href) && this._app.config.showZendeskWidget) {
             this._script.loadScript('zendesk')
-              .then( () => {
-                zE(() => {
-                  $zopim(() => {
-                    $zopim.livechat.setOnConnected(() => {
-                      // Sometimes the user navigates away from a page containing the chat widget
-                      // but it hasn't loaded yet. Need to check once more after it loads to ensure
-                      // we still should display it.
-                      if (this.shouldShowChat(window.location.href)) {
-                        this.showZendeskChat()
-                      } else {
-                        this.hideZendeskChat()
-                      }
+              .then( data => {
+                if (data['status'] !== "server_rendered") {
+                  zE(() => {
+                    $zopim(() => {
+                      $zopim.livechat.setOnConnected(() => {
+                        // Sometimes the user navigates away from a page containing the chat widget
+                        // but it hasn't loaded yet. Need to check once more after it loads to ensure
+                        // we still should display it.
+                        if (this.shouldShowChat(window.location.href)) {
+                          this.showZendeskChat()
+                        } else {
+                          this.hideZendeskChat()
+                        }
+                      })
                     })
-                  })
-                });
-                })
+                  });
+                }
+              })
               .catch( error => console.error(error) )
           } else {
             this.hideZendeskChat()
