@@ -807,7 +807,7 @@ export class AssetPage implements OnInit, OnDestroy {
       else {
         links = collections.map(c => {
 
-          let isADL = c.type === '1' && c.id === '103'
+          let isADL: boolean = c.type === '1' && c.id === '103'
           // Type 103 (ADL) routes to /category, 6 to /pcollection, otherwise /collection
           let routeType = c.type === '6' ? ['/pcollection', c.id] : isADL ? ['/category', asset.categoryId] : ['/collection', c.id]
 
