@@ -64,10 +64,10 @@ On Mac, we recommended installing Node, NPM, and Yarn with [Homebrew](http://bre
 Instructions for Mac:
 ```bash
 # clone the project
-git clone https://github.com/ithaka/ang-ui.git
+git clone https://github.com/ithaka/aiw-ui.git
 
 # change directory to our repo
-cd ang-ui
+cd aiw-ui
 
 # install node, npm, and yarn with Homebrew
 brew install node yarn
@@ -89,10 +89,10 @@ Access at [http://localhost:3000](http://localhost:3000) in your browser.
 ## File Structure
 Component approach! The goal is flat and modular. This is the new standard for developing Angular apps and a great way to ensure maintainable code by encapsulation of our behavior logic. A component is basically a self contained app usually in a single file or a folder with each concern as a file: style, template, specs, e2e, and component class. Here's how it looks:
 ```
-angular2-webpack-starter/
+aiw-ui/
  ├──config/                    * our configuration
  |   ├──helpers.js             * helper functions for our configuration files
- |   ├──spec-bundle.js         * ignore this magic that sets up our angular 2 testing environment
+ |   ├──spec-bundle.js         * ignore this magic that sets up our angular 2+ testing environment
  |   ├──karma.conf.js          * karma config for our unit tests
  │
  ├──src/                       * our application source files
@@ -542,6 +542,5 @@ declare var $: any;
 * How do I start the app when I get `EACCES` and `EADDRINUSE` errors?
   * The `EADDRINUSE` error means the port `3000` is currently being used and `EACCES` is lack of permission for webpack to build files to `./dist/`
 * node-pre-gyp ERR in npm install (Windows)
- * install Python x86 version between 2.5 and 3.0 on windows see issue [#626](https://github.com/AngularClass/angular2-webpack-starter/issues/626)
 
 
