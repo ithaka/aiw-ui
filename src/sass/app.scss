@@ -341,3 +341,8 @@ body body{
     left: calc(50% - 0.4rem);
   }
 }
+
+// Hide Zendesk Chat until it is ready to be displayed
+.zopim {
+  display: none;
+}
