@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = (env) => {
   let appdynamicsName = (env == 'prod' ? 'Artstor_PROD' : 'Artstor_TEST')
@@ -22,6 +23,7 @@ module.exports = (env) => {
       rules: [{ test: /\.ts$/, loader: 'ts-loader' }]
     },
     plugins: [
+      new Dotenv()
       // Temporary Fix for issue: https://github.com/angular/angular/issues/11580
       // for 'WARNING Critical dependency: the request of a dependency is an expression'
       new webpack.ContextReplacementPlugin(
@@ -40,13 +42,13 @@ module.exports = (env) => {
         entryOnly: true,
         banner: `
         require("appdynamics").profile({
-          controllerHostName: 'Ithaka.saas.appdynamics.com',
-          controllerPort: 443, 
+          controllerHostName: '${process.env.APPD_CONTROLLER_HOST_NAME}',
+          controllerPort: 443,
           controllerSslEnabled: true,  // Set to true if controllerPort is SSL
           accountName: 'Ithaka', // Required for SaaS accounts
-          accountAccessKey: '8e51d6a16fb3', // Required for SaaS accounts
+          accountAccessKey: '${process.env.APPD_ACCESS_KEY}', // Required for SaaS accounts
           applicationName: '${appdynamicsName}',
-          tierName: 'artstor-ui-ssr', 
+          tierName: 'artstor-ui-ssr',
           nodeName: 'artstor-ui-ssr-01'
         });
         `
