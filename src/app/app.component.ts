@@ -198,9 +198,9 @@ export class AppComponent {
             this._script.loadScript('zendesk')
               .then( data => {
                 if (data['status'] !== "server_rendered") {
-                  zE(() => {
-                    $zopim(() => {
-                      $zopim.livechat.setOnConnected(() => {
+                  window['zE'](() => {
+                    window['$zopim'](() => {
+                      window['$zopim'].livechat.setOnConnected(() => {
                         // Sometimes the user navigates away from a page containing the chat widget
                         // but it hasn't loaded yet. Need to check once more after it loads to ensure
                         // we still should display it.
