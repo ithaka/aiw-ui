@@ -197,7 +197,6 @@ export class AppComponent {
           if (this.shouldShowChat(window.location.href) && this._app.config.showZendeskWidget) {
             this._script.loadScript('zendesk')
               .then( data => {
-                if (data['status'] !== "server_rendered") {
                   window['zE'](() => {
                     window['$zopim'](() => {
                       window['$zopim'].livechat.setOnConnected(() => {
@@ -212,7 +211,6 @@ export class AppComponent {
                       })
                     })
                   });
-                }
               })
               .catch( error => console.error(error) )
           } else {
@@ -246,8 +244,8 @@ export class AppComponent {
     let zendeskElements = this._dom.bySelectorAll('.zopim')
 
     if (zendeskElements && zendeskElements.length > 1) {
-      zendeskElements[0]['style']['display'] = 'none'
-      zendeskElements[1]['style']['display'] = 'none'
+      zendeskElements[0]['style']['display'] = 'none' // ChatWidgetButton
+      zendeskElements[1]['style']['display'] = 'none' // ChatWidgetWindow
     }
   }
 
@@ -255,7 +253,7 @@ export class AppComponent {
     let zendeskElements = this._dom.bySelectorAll('.zopim')
 
     if (zendeskElements && zendeskElements.length > 1) {
-      zendeskElements[0]['style']['display'] = 'block'
+      zendeskElements[0]['style']['display'] = 'block' // ChatWidgetButton
     }
   }
 
