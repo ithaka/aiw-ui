@@ -21,7 +21,7 @@ div
               .col-sm-7
                 h1#pageTitle.h1--title-block {{ colName }}
               .col-sm-5
-                button.btn.btn-secondary((click)="showEditPCModal = true", tabIndex="0", role="button", aria-label="Add items to My Personal Collection") Upload Images to Collection
+                button.btn.btn-secondary((click)="showEditPCModal = true", tabIndex="0", role="button", aria-label="Add items to My Personal Collection") Upload
             p#pageDescription.page__description(#colDesc="", [innerHtml]="colDescription | linkify", [class.limit]="descCollapsed")
             .expander.link--action.small([class.hidden]="colDesc.clientHeight < 75", [class.collapsed]="descCollapsed", (click)="descCollapsed = !descCollapsed", [innerHtml]="descCollapsed ? 'More' : 'Less'", role="button") More
           .col-sm-3(*ngIf="colThumbnail.length > 0")
