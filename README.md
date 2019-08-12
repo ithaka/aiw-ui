@@ -64,16 +64,16 @@ On Mac, we recommended installing Node, NPM, and Yarn with [Homebrew](http://bre
 Instructions for Mac:
 ```bash
 # clone the project
-git clone https://github.com/ithaka/ang-ui.git
+git clone https://github.com/ithaka/aiw-ui.git
 
 # change directory to our repo
-cd ang-ui
+cd aiw-ui
 
 # install node, npm, and yarn with Homebrew
 brew install node yarn
 
 # Install global build packages
-yarn global add webpack webpack-dev-server karma karma-cli protractor typescript rimraf phantomjs-prebuilt
+yarn global add typescript rimraf
 
 # install the repo with npm
 yarn install
@@ -82,25 +82,23 @@ yarn install
 yarn start
 
 ```
-Access at [http://0.0.0.0:3000](http://0.0.0.0:3000) or [http://localhost:3000](http://localhost:3000) in your browser. 
+Access at [http://localhost:3000](http://localhost:3000) in your browser. 
 
 ---
 
 ## File Structure
 Component approach! The goal is flat and modular. This is the new standard for developing Angular apps and a great way to ensure maintainable code by encapsulation of our behavior logic. A component is basically a self contained app usually in a single file or a folder with each concern as a file: style, template, specs, e2e, and component class. Here's how it looks:
 ```
-angular2-webpack-starter/
+aiw-ui/
  ├──config/                    * our configuration
  |   ├──helpers.js             * helper functions for our configuration files
- |   ├──spec-bundle.js         * ignore this magic that sets up our angular 2 testing environment
+ |   ├──spec-bundle.js         * ignore this magic that sets up our angular 2+ testing environment
  |   ├──karma.conf.js          * karma config for our unit tests
- |   ├──protractor.conf.js     * protractor config for our end-to-end tests
- │   ├──webpack.dev.js         * our development webpack config
- │   ├──webpack.prod.js        * our production webpack config
- │   └──webpack.test.js        * our testing webpack config
  │
  ├──src/                       * our application source files
- |   ├──main.ts        * our entry file for our browser environment
+ |   ├──main.ts                * our entry file for our browser environment
+ │   │
+ │   ├──environments/          * runtime environment variables (integrated via angular.json replacements)
  │   │
  |   ├──index.html             * Index.html: where we generate our index page
  │   │
@@ -123,14 +121,22 @@ angular2-webpack-starter/
  │   └──assets/                * static assets are served here
  │       ├──icon/              * our list of icons from www.favicon-generator.org
  │       ├──service-worker.js  * ignore this. Web App service worker that's not complete yet
- │       └──humans.txt          * for humans to know who the developers are
+ │       └──humans.txt         * for humans to know who the developers are
  │
+ ├──src/                       * our application source files
+ |   ├──server.ts              * Node.js/SSR server app entry point
+ │   └──package.json           * used to list packages that should be installed on SSR Docker image
  │
- ├──build.sh                   * build script for deployment to Sagoku
+ ├──angular.json               * Angular configuration file
+ ├──build.sh                   * (OLD) static app build script for deployment to Sagoku
+ ├──Dockerfile                 * Node.js server Dockerfile configuration
+ ├──deploy-ssr.sh              * Script for triggering deployment on Sagoku (used in deploy commands)
+ ├──docker-build-image.sh      * Script for building docker image and uploading for use
  ├──tslint.json                * typescript lint config
  ├──typedoc.json               * typescript documentation generator
  ├──tsconfig.json              * config that webpack uses for typescript
  ├──package.json               * what npm uses to manage it's dependencies
+ ├──webpack.server.config.js   * config for Node.js app bundling
  └──webpack.config.js          * webpack main configuration file
 
 ```
@@ -142,31 +148,42 @@ angular2-webpack-starter/
 See [Quick Start](#quick-start)
 
 ## Running the app
-After you have installed all dependencies you can now run the app. Run `npm run server` to start a local server using `webpack-dev-server` which will watch, build (in-memory), and reload for you. The port will be displayed to you as `http://0.0.0.0:3000` (or if you prefer IPv6, if you're using `express` server, then it's `http://[::1]:3000/`).
+After you have installed all dependencies you can now run the app. Run `yarn dev` or `yarn dev:ssl` to start a local server using Angular CLI which will watch, build (in-memory), and reload for you. The port will be displayed to you as `http://localhost:3000`.
 
-### server
+### developing the static app
 ```bash
 # development
-npm run server
+yarn run dev
+yarn run dev:ssl
 # production
-npm run build:prod
-npm run server:prod
+yarn run build:prod
 ```
 
 ### build files
 ```bash
 # development
-npm run build:dev
+yarn run build
 # production
-npm run build:prod
+yarn run build:prod
 ```
 
-### watch and build files
+### build Node.js/SSR app
 ```bash
-npm run watch
+# development
+yarn run build:ssr
+# production
+yarn run build:ssr:prod
 ```
 
-### run tests
+### run Node.js/SSR app
+```bash
+# development
+yarn run serve:ssr
+# production
+yarn run serve:ssr:start
+```
+
+### run unit tests
 ```bash
 npm run test
 ```
@@ -174,30 +191,6 @@ npm run test
 ### watch and run our tests
 ```bash
 npm run watch:test
-```
-
-### run end-to-end tests
-```bash
-# make sure you have your server running in another terminal
-npm run e2e
-```
-
-### run webdriver (for end-to-end)
-```bash
-npm run webdriver:update
-npm run webdriver:start
-```
-
-### run Protractor's elementExplorer (for end-to-end)
-```bash
-npm run webdriver:start
-# in another terminal
-npm run e2e:live
-```
-
-### build Docker
-```bash
-npm run build:docker
 ```
 
 ---
@@ -210,70 +203,8 @@ Configuration files live in `config/` for webpack, karma, and protractor.
 ---
 
 # Environment Variables
-We manager our environment variables at runtime using webpack. To add or update variables, you will need to:
+We manager our environment variables at runtime using Angular CLI and simple files in `/src/environments`. Build/deployment variables can be handled in a `.env` file that is not committed to the repository.
 
-1. Edit the constants and custom plugin in the respective Webpack config (eg. /config/webpack.dev.js):
-```
-/**
- * Webpack Constants
- */
-const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
-const API_URL = process.env.API_URL = 'localhost';
-const HMR = helpers.hasProcessFlag('hot');
-const METADATA = webpackMerge(commonConfig.metadata, {
-  host: 'localhost',
-  API_URL: API_URL,
-  port: 8080,
-  ENV: ENV,
-  HMR: HMR
-});
-
-```
-
-In the plugin section, add the new entry in the list:
-
-```
-plugins: [
-
-    /**
-     * Plugin: DefinePlugin
-     * Description: Define free variables.
-     * Useful for having development builds with debug logging or adding global constants.
-     *
-     * Environment helpers
-     *
-     * See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
-     */
-    // NOTE: when adding more properties, make sure you include them in custom-typings.d.ts
-    new DefinePlugin({
-      'ENV': JSON.stringify(METADATA.ENV),
-      'API_URL': JSON.stringify(METADATA.API_URL),
-      'HMR': METADATA.HMR,
-      'process.env': {
-        'ENV': JSON.stringify(METADATA.ENV),
-        'NODE_ENV': JSON.stringify(METADATA.ENV),
-        'HMR': METADATA.HMR,
-        'API_URL' : JSON.stringify(METADATA.API_URL),
-      }
-    }),
-  ],
-  ```
-
-And to allow access to the variable within the app, we'll need to let Typescript know it exists using 
- /src/custom-typings.d.ts :
-
-```
-// Extra variables that live on Global that will be replaced by webpack DefinePlugin
-declare var ENV: string;
-declare var HMR: boolean;
-declare var API_URL: string;
-
-interface GlobalEnvironment {
-  ENV;
-  HMR;
-  API_URL;
-}
-```
 
 ---
 
@@ -611,6 +542,5 @@ declare var $: any;
 * How do I start the app when I get `EACCES` and `EADDRINUSE` errors?
   * The `EADDRINUSE` error means the port `3000` is currently being used and `EACCES` is lack of permission for webpack to build files to `./dist/`
 * node-pre-gyp ERR in npm install (Windows)
- * install Python x86 version between 2.5 and 3.0 on windows see issue [#626](https://github.com/AngularClass/angular2-webpack-starter/issues/626)
 
 

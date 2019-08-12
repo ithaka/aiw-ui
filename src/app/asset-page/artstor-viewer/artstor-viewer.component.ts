@@ -302,11 +302,20 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
      * Initialize PDF viewer variables
      */
     private loadPdfViewer(asset: Asset): void {
-        // Ensure PDF url is served over HTTPS, like our app (avoids "mixed active content" error)
-        this.pdfViewerOpts['url'] = asset.downloadLink.replace('http://', 'https://')
-        this.pdfViewerOpts['withCredentials'] = true
-        // Set viewer state
-        this.state = viewState.pdfReady
+        let url = asset.thumbnail_url.replace('http://', 'https://').replace('size4', 'link')
+        this._http.get(url).toPromise()
+            .then(res => {
+                console.log("PDF Link:", res)
+                // Ensure PDF url is served over HTTPS, like our app (avoids "mixed active content" error)
+                this.pdfViewerOpts['url'] = res['link']
+                this.pdfViewerOpts['withCredentials'] = true
+                // Set viewer state
+                this.state = viewState.pdfReady
+            })
+            .catch(err => {
+                this.state = viewState.thumbnailFallback
+            })
+        
     }
 
     /**
