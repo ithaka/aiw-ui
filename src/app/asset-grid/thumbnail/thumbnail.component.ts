@@ -1,5 +1,6 @@
 import { Router } from '@angular/router'
 import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core'
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 import { AssetThumbnail } from 'datatypes'
 import { Angulartics2 } from 'angulartics2'
@@ -43,6 +44,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   @Input()
   public editMode: boolean
 
+  public src: SafeUrl
   // Keeps the track of multiViewItems count associated with the current asset
   public multiviewItemCount: number = 0
   public isMultiView: boolean = false
@@ -65,7 +67,8 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     private _assets: AssetService,
     private _search: AssetSearchService,
     private router: Router,
-    private _thumbnail: ThumbnailService
+    private _thumbnail: ThumbnailService,
+    private sanitizer: DomSanitizer
   ) {
    }
 
@@ -75,6 +78,8 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     this.isDowngradedMedia = this.thumbnail.isDowngradedMedia
     this.multiviewItemCount = this.thumbnail.multiviewItemCount
     this.thumbnailAlt = this.thumbnail.thumbnailAlt
+    // Init image src
+    this.evaluateImageSrc()
   }
 
   // Fires when the component input(s) (i.e largeThmbView) changes - Updates the thumbnailSize based on largeThmbView current value
@@ -82,6 +87,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     if (changes.largeThmbView){
       this.thumbnail.size = changes.largeThmbView.currentValue ? 2 : 1
       this.thumbnail.img = this._thumbnail.getThumbnailImg(this.thumbnail)
+      this.evaluateImageSrc()
     }
   }
 
@@ -97,6 +103,30 @@ export class ThumbnailComponent implements OnInit, OnChanges {
       this.angulartics.eventTrack.next({ properties: { event: 'view cluster', label: this.thumbnail.id } })
     }
     this.router.navigate(urlParams)
+  }
+
+  /**
+   * Allows image blobs, such as detailed views, to load directly
+   */
+  assumeSafe(imageUrl) : SafeUrl {
+    return this.sanitizer.bypassSecurityTrustUrl(imageUrl)
+  }
+
+  /**
+   * re-evaluate src for Thumbnail <img>
+   */
+  evaluateImageSrc(): void {
+    if (this.thumbnail.img.indexOf('/iiif/') > -1) {
+      this._thumbnail.getImageSecurely(this.thumbnail.img)
+        .then(img => {
+          this.src = this.assumeSafe(img)
+        })
+        .catch(err => {
+          // Error handling
+        })
+    } else {
+      this.src = this.assumeSafe(this.thumbnail.img)
+    }
   }
 
   /**
@@ -118,7 +148,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     if (this.thumbnail.size > 0) {
       this.thumbnail.size--
       this.thumbnail.img = this._thumbnail.getThumbnailImg(this.thumbnail)
-      console.log("New img url:", this.thumbnail.img)
+      this.evaluateImageSrc()
     }
   }
 

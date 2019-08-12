@@ -17,9 +17,9 @@
                   button.dropdown-item([disabled]="activeSort.index == '4'", (click)="changeSortOpt('4', 'Recently Added')", tabindex="3") Recently Added
                   button.dropdown-item([disabled]="activeSort.index == '0'", (click)="changeSortOpt('0', 'Relevance')", tabindex="3") Relevance
               li.pagesizelist.dropdown(ngbDropdown)
-                button#pagesizedropdownMenu.btn.btn-link(ngbDropdownToggle, tabindex="3", (focus)="closeGridDropdowns()", attr.aria-label="{{ pagination.size ? pagination.size : '24' }} Images per page") Images/page:
+                button#pagesizedropdownMenu.btn.btn-link(ngbDropdownToggle, tabindex="3", (focus)="closeGridDropdowns()", attr.aria-label="{{ pagination.size ? pagination.size : '48' }} Images per page") Images/page:
                   = " "
-                  span.value {{ pagination.size ? pagination.size : '24' }}
+                  span.value {{ pagination.size ? pagination.size : '48' }}
                 .dropdown-menu(ngbDropdownMenu, aria-labelledby="pagesizedropdownMenu")
                   label.sr-only(for="pagesizeOpt1") Display 24 images per page
                   button.dropdown-item#pagesizeOpt1([disabled]="pagination.size == 24", (click)="changePageSize(24)", tabindex="3") 24

@@ -113,10 +113,6 @@ export class NavMenu implements OnInit, OnDestroy {
         }
       )).subscribe(),
 
-      // Set _auth flag for version 3 search based on featureFlag
-      this._flags.flagUpdates.subscribe((flags) => {
-        this._auth.useSearch3 = flags.searchV3 ? true : false
-      }),
       // Route params subscription
       this.route.params.subscribe((routeParams) => {
         this.params = routeParams

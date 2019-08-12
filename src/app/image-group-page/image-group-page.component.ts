@@ -456,6 +456,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   }
 
   private pollForExportStatus(): void {
+    // Check right away before polling, to see if there is a generic error
+    this.checkExportStatus(this.ig.id)
     // When the server timesout or there is an error begin polling on export status every 15s
     this.exportStatusInterval = setInterval( () => {
       this.checkExportStatus(this.ig.id)
@@ -487,7 +489,10 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         }
       }, (error) => {
         console.error('Error in check status: ', error)
+        clearInterval(this.exportStatusInterval)
         clearInterval(this.loadingStateInterval)
+        this.exportLoadingStateopts.state = LoadingState.error
+        this.exportLoadingStateopts.errorType = 'server'
       }
     )
   }

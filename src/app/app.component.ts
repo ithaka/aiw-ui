@@ -86,7 +86,7 @@ export class AppComponent {
     private _dom: DomUtilityService,
     private _ga: Angulartics2,
     angulartics2GoogleTagManager: Angulartics2GoogleTagManager,
-    private _auth: AuthService, 
+    private _auth: AuthService,
     private titleService: Title,
     private _script: ScriptService,
     private _flags: FlagService,
@@ -153,7 +153,6 @@ export class AppComponent {
       else if (event instanceof NavigationEnd) {
         if (isPlatformBrowser(this.platformId)) {
           let event_url_array = event.url.split('/')
-          let zendeskElements = this._dom.bySelectorAll('.zopim')
           let path = event.urlAfterRedirects
           // Properties of "pageGTM" need to match vars set in Google Tag Manager
           let pageGTMVars = {
@@ -195,21 +194,27 @@ export class AppComponent {
           }
 
           // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
-          if (this.showChatWidget(window.location.href) && this._app.config.showZendeskWidget) {
+          if (this.shouldShowChat(window.location.href) && this._app.config.showZendeskWidget) {
             this._script.loadScript('zendesk')
               .then( data => {
-                if (data['status'] === 'loaded'){
-                } else if (data['status'] === 'already_loaded'){ // if the widget script has already been loaded then just show the widget
-                  zendeskElements[0]['style']['display'] = 'block'
-                }
+                  window['zE'](() => {
+                    window['$zopim'](() => {
+                      window['$zopim'].livechat.setOnConnected(() => {
+                        // Sometimes the user navigates away from a page containing the chat widget
+                        // but it hasn't loaded yet. Need to check once more after it loads to ensure
+                        // we still should display it.
+                        if (this.shouldShowChat(window.location.href)) {
+                          this.showZendeskChat()
+                        } else {
+                          this.hideZendeskChat()
+                        }
+                      })
+                    })
+                  });
               })
               .catch( error => console.error(error) )
           } else {
-            // If Zendesk chat is loaded, hide it
-            if (zendeskElements && zendeskElements.length > 1) {
-              zendeskElements[0]['style']['display'] = 'none'
-              zendeskElements[1]['style']['display'] = 'none'
-            }
+            this.hideZendeskChat()
           }
         }
       }
@@ -232,6 +237,23 @@ export class AppComponent {
             this.statusPageClient = StatusPage( this._auth.getEnv() === 'test' ? STATUS_PAGE_CMP_ID_STAGE : STATUS_PAGE_CMP_ID_PROD, { environment: this._auth.getEnv() } )
             this.subscribeToStatus()
           })
+    }
+  }
+
+  private hideZendeskChat() {
+    let zendeskElements = this._dom.bySelectorAll('.zopim')
+
+    if (zendeskElements && zendeskElements.length > 1) {
+      zendeskElements[0]['style']['display'] = 'none' // ChatWidgetButton
+      zendeskElements[1]['style']['display'] = 'none' // ChatWidgetWindow
+    }
+  }
+
+  private showZendeskChat() {
+    let zendeskElements = this._dom.bySelectorAll('.zopim')
+
+    if (zendeskElements && zendeskElements.length > 1) {
+      zendeskElements[0]['style']['display'] = 'block' // ChatWidgetButton
     }
   }
 
@@ -259,7 +281,7 @@ export class AppComponent {
     // Unsubscribe to status updates
     this.statusPageClient && this.statusPageClient.unsubscribe()
   }
-  
+
   // Close banner and save the action in local storage
   private closeBanner(): void {
     this._auth.store('bannerClosed', true)
@@ -308,10 +330,10 @@ export class AppComponent {
   }
 
   // Show the chat widget on: 'login', 'browse/library', or 'browse/groups/public'
-  private showChatWidget(eventUrl: string): boolean {
+  private shouldShowChat(eventUrl: string): boolean {
       if (eventUrl.indexOf('browse/library') > -1 ||
           eventUrl.indexOf('browse/groups/public') > -1 ||
-          eventUrl.indexOf('login') > -1) {
+          eventUrl.indexOf('/login') > -1) {
            return true
         }
       else {
