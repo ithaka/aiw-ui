@@ -33,6 +33,9 @@ import 'blob-polyfill';
 // Typescript emit helpers polyfill
 import 'ts-helpers';
 
+// HammerJS for gestures
+import 'hammerjs';
+
 // Env vars
 import { environment } from './environments/environment';
 

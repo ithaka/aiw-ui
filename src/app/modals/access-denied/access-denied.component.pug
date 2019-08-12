@@ -8,4 +8,4 @@
       .modal-footer
         button.btn.btn-secondary((click)="exitFullScreen.emit()", [routerLink]="['/home']") Return to Home
         button.btn.btn-primary(*ngIf="isLoggedIn && showSkipAsset", (click)="skipAsset.emit()") Skip Asset
-        button.btn.btn-primary(*ngIf="!isLoggedIn && !showSkipAsset", (click)="stashThenRoute('/login')") Login
+        button.btn.btn-primary(*ngIf="!isLoggedIn && !showSkipAsset", (click)="stashThenRoute('/login')") Log in

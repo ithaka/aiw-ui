@@ -39,7 +39,7 @@ export class AssetFiltersService {
             }
         },
         page : 1,
-        size : 24,
+        size : 48,
         sort: '0'
     };
 

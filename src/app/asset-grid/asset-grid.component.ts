@@ -153,13 +153,13 @@ export class AssetGrid implements OnInit, OnDestroy {
     page: number
   } = {
     totalPages: 1,
-    size: 24,
+    size: 48,
     page: 1
   };
 
   private UrlParams: any = {
     term: '',
-    size: 24,
+    size: 48,
     page: 1,
     startDate: 0,
     endDate: 0,
@@ -204,7 +204,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   ) {
       this.siteID = this._appConfig.config.siteID;
       let prefs = this._auth.getFromStorage('prefs')
-      if (prefs && prefs.pageSize && prefs.pageSize != 24) {
+      if (prefs && prefs.pageSize && prefs.pageSize != 48) {
         this.pagination.size = prefs.pageSize
         this._router.navigate(
           ['.', this._toolbox.addToParams({ size: prefs.pageSize }, this.route.snapshot.params )],

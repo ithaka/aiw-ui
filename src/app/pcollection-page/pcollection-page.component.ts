@@ -40,7 +40,6 @@ export class PCollectionPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = []
   private unaffiliatedUser: boolean = false
 
-
   public showEditPCModal: boolean = false
 
   constructor(
