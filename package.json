@@ -54,9 +54,9 @@
     "webpack:server:prod": "npm run webpack:server -- --env=prod"
   },
   "dependencies": {
-    "@angular-devkit/build-angular": "^0.10.3",
+    "@angular-devkit/build-angular": "0.10.7",
     "@angular-devkit/build-ng-packagr": "~0.10.0",
-    "@angular-devkit/build-optimizer": "^0.10.3",
+    "@angular-devkit/build-optimizer": "0.10.7",
     "@angular-devkit/core": "^7.3.0",
     "@angular/animations": "7.2.14",
     "@angular/cli": "7.3.8",
