@@ -1,5 +1,0 @@
-{
-  "typescript.tsdk": "node_modules/typescript/lib/",
-  "telemetry.enableCrashReporter": false,
-  "telemetry.enableTelemetry": false
-}
