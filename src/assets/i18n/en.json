@@ -684,7 +684,7 @@
       "DELETE_SELECTIONS": "Delete selections from group",
       "DESELECT": "Deselect all",
       "EDIT": "Edit group info",
-      "SAVE": "Save group as...",
+      "SAVE": "Copy group",
       "DELETE_GROUP": "Delete group",
       "ADD_IMGS_PC": "Upload images to Personal Collection"
     },
