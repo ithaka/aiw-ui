@@ -818,9 +818,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
           // Replace type 1 name 'Artstor Collections' collection name with fieldName from metadata
           if (isADL) {
-            c.name = asset.formattedMetadata.Collection.map(field => {
-              return field
-            })[0]
+            c.name = asset.formattedMetadata.Collection[0]
           }
 
           return { displayName: c.name, route: routeType }
