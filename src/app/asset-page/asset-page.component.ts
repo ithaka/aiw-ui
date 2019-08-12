@@ -806,12 +806,19 @@ export class AssetPage implements OnInit, OnDestroy {
       }
       else {
         links = collections.map(c => {
+
+          let isADL: boolean = c.type === '1' && c.id === '103'
           // Type 103 (ADL) routes to /category, 6 to /pcollection, otherwise /collection
-          let routeType = c.type === '6' ? ['/pcollection', c.id] : (c.type === '1' && c.id === '103') ? ['/category', asset.categoryId] : ['/collection', c.id]
+          let routeType = c.type === '6' ? ['/pcollection', c.id] : isADL ? ['/category', asset.categoryId] : ['/collection', c.id]
 
           // Replace 'Global Personal Collection' with 'Personal Collection'
           if (c.type === '6' && c.id === '37436') {
             return { displayName: 'Personal Collection', route: routeType }
+          }
+
+          // Replace type 1 name 'Artstor Collections' collection name with fieldName from metadata
+          if (isADL) {
+            c.name = asset.formattedMetadata.Collection[0]
           }
 
           return { displayName: c.name, route: routeType }
