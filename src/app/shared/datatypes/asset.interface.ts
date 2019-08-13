@@ -82,7 +82,7 @@ export class Asset {
                 data.fieldValue = 'Use of this image is in accordance with the <a href="https://www.artstor.org/artstor-terms/" target="_blank">Artstor Terms & Conditions</a>'
             }
             
-            let values = Array.isArray(data.fieldValue) ? data.fieldValue : [data.fieldValue]
+            let values: string[] = [data.fieldValue]
             // if the field exists, add to it (make sure the field value exists)
             if (formattedData[data.fieldName] && values[0]) {
                 // Concatenate other found values for the field
