@@ -24,7 +24,7 @@
     "@angular-devkit/core" "7.3.8"
     rxjs "6.3.3"
 
-"@angular-devkit/build-angular@0.10.8":
+"@angular-devkit/build-angular@0.11.0":
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/@angular-devkit/build-angular/-/build-angular-0.11.0.tgz#6dd1c5b340ab883f744d51973957f80dd397c852"
   integrity sha512-KNbVqApCfLNw7qG0i7nbirisePzcUBmqb5YJGMOEoB1pWASwGke2H/3NMTyJEDHtGDg5DdWuVvyoyXaGEKMoJg==
@@ -87,7 +87,7 @@
     rxjs "6.3.3"
     semver "5.5.1"
 
-"@angular-devkit/build-optimizer@0.10.8", "@angular-devkit/build-optimizer@0.11.0":
+"@angular-devkit/build-optimizer@0.11.0":
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/@angular-devkit/build-optimizer/-/build-optimizer-0.11.0.tgz#3da812b922930bf991a928d7fcf554d813a02ee6"
   integrity sha512-a7nIw6bN/kO77NnWoLzuoEep8jVSDxDyXZZMjvv2+bdcnua1rsScuJKII5PjGIjIucLNUJRwdHQFovVDXRMCPQ==
