@@ -436,10 +436,9 @@ export class AssetSearchService {
 
     let assetQuery: SearchRequest = {
       'query': ssid ? 'ssid:' + assetId : assetId,
-      'limit': 1
+      'limit': 1, // Required by search
+      [this.contentQueryKey]: ['art']
     }
-    // assetQuery['query'] = ssid ? 'ssid:' + assetId : assetId
-    assetQuery[this.contentQueryKey] = ['art']
 
     return this._http.post<SearchResponse>(
       this._auth.getSearchUrl(),
