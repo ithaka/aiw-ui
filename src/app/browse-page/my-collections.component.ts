@@ -91,7 +91,7 @@ export class MyCollectionsComponent implements OnInit {
           this.pcollections = res
 
           tempMyCol = this.pcollections.filter((col) => { return col.collectionid === '37436' })[0] // My PC object
-          tempMyCol.collectionname = 'My Personal Collection' // Change name from 'Global'
+          tempMyCol.collectionname = 'Personal Collection' // Change name from 'Global'
           this.pcollections = this.pcollections.filter((col) => { return col.collectionid !== '37436' }) // filter out initial My PC object
           this.pcollections.unshift(tempMyCol) // prepend My PC object back to pcollections
 

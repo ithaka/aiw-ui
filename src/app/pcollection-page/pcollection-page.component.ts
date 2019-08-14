@@ -102,8 +102,8 @@ export class PCollectionPage implements OnInit, OnDestroy {
                   throw new Error('No data!');
                 }
 
-                // If Global Personal Collection, rename as "My Personal Collection"
-                this.colName = this.colId == '37436' ? 'My Personal Collection' : data['collectionname'];
+                // If Global Personal Collection, rename as "Personal Collection"
+                this.colName = this.colId == '37436' ? 'Personal Collection' : data['collectionname'];
                 this.colDescription = data['blurburl'];
                 this.colThumbnail = data['leadImageURL'] ? data['leadImageURL'] : data['bigimageurl'];
 
