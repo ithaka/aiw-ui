@@ -23,6 +23,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
   public descCollapsed: boolean = true
   public showAccessDeniedModal: boolean = false
   public showDeleteSuccessBanner: boolean = false
+  public showEditPCModal: boolean = false
 
   public publishingAssets: any = {
     ssids: [],
@@ -39,8 +40,6 @@ export class PCollectionPage implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = []
   private unaffiliatedUser: boolean = false
-
-  public showEditPCModal: boolean = false
 
   constructor(
     private _assets: AssetService,
