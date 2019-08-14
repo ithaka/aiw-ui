@@ -7,7 +7,7 @@ export const ScriptStore: Scripts[] = [
   // Zendesk chat widget
   { name: 'zendesk', src: '../../assets/js/zendesk.js' },
   // Ethnio, current survey: search
-  { name: 'ethnio-survey', src: '//ethn.io/34465.js' },
+  // { name: 'ethnio-survey', src: '//ethn.io/34465.js' },
   // Google API (Auth, Slides)
   { name: 'gapi', src: 'https://apis.google.com/js/api.js' }
 ];
