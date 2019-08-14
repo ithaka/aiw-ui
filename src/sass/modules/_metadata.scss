@@ -25,13 +25,13 @@
     letter-spacing: 0;
     padding: 2px 0;
 
-    & a{
+    & a, &.col-link {
         text-decoration: underline !important;
         color: #0039c6 !important;
         // display: block;
     }
 
-    &.col-link span {
+    &.meta-link span {
         text-decoration: none !important;
     }
 }

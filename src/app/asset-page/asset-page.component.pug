@@ -185,7 +185,7 @@
               .label {{ fieldName }}
               ng-container(*ngFor="let value of assets[0].formattedMetadata[fieldName]; let i=index")
                 //- Creator
-                .value.col-link(
+                .value.meta-link(
                   *ngIf="fieldName === 'Creator'", 
                   [attr.id]="cleanId(fieldName)", 
                   (click)="trackCreatorLink(value)", 
@@ -196,9 +196,9 @@
                 //- Collections
                 ng-container(*ngIf="fieldName === 'Collection' && i === 0")
                   div(*ngFor="let col of assets[0].collectionLinks")
-                    a.value.col-link(id="collection-link", (click)="trackCollectionLink(cleanFieldValue(col.displayName))", [routerLink]="col.route", [innerHTML]="cleanFieldValue(col.displayName) | linkify", [attr.aria-labelledby]="Collections")
+                    a.value.meta-link.col-link(id="collection-link", (click)="trackCollectionLink(cleanFieldValue(col.displayName))", [routerLink]="col.route", [innerHTML]="cleanFieldValue(col.displayName) | linkify", [attr.aria-labelledby]="Collections")
                 //- Subject
-                a.value.col-link(
+                a.value.meta-link(
                   *ngIf="fieldName === 'Subject'", 
                   [attr.id]="cleanId(fieldName)", 
                   (click)="trackSubjectLink(value)", 
@@ -215,7 +215,7 @@
               span(*ngIf="rightsText === right")
                 img.rights-icon([attr.src]="rightsImg", [attr.alt]="right")
                 | &nbsp;
-                a.value.col-link.rights-text([innerHTML]="cleanFieldValue(right) | lowercase | linkify", [attr.href]="rightsLink", aria-label="Learn about this rights statement on rightsstatements.org", target="_blank")
+                a.value.meta-link.rights-text([innerHTML]="cleanFieldValue(right) | lowercase | linkify", [attr.href]="rightsLink", aria-label="Learn about this rights statement on rightsstatements.org", target="_blank")
               .value(*ngIf="rightsText !== right", [innerHTML]="cleanFieldValue(right) | linkify", [attr.aria-labelledby]="'Rights'")
           //- License
           .meta-block(*ngIf="assets[0].formattedMetadata.License && assets[0].formattedMetadata.License.length > 0")
