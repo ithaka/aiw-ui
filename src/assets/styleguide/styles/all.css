@@ -7898,7 +7898,7 @@ img.no-stretch {
 .card-text li {
   cursor: pointer; }
 
-.edit .card--asset {
+.card--asset {
   opacity: 0.9; }
 
 .draggable .card--asset:hover {

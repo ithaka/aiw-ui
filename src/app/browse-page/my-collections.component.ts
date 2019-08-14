@@ -39,9 +39,6 @@ export class MyCollectionsComponent implements OnInit {
 
   ngOnInit() {
 
-    // Set page title
-    this._title.setSubtitle('Browse My Collections')
-
     // Subscribe to User object updates
     this.subscriptions.push(
       this._auth.currentUser.pipe(
