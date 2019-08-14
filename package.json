@@ -1,6 +1,6 @@
 {
   "name": "avatar",
-  "version": "2.6.11",
+  "version": "2.6.12",
   "description": "Front End for the Artstor Digital Library",
   "author": "Artstor Team Air",
   "license": "MIT",
@@ -54,9 +54,9 @@
     "webpack:server:prod": "npm run webpack:server -- --env=prod"
   },
   "dependencies": {
-    "@angular-devkit/build-angular": "^0.10.3",
+    "@angular-devkit/build-angular": "0.11.0",
     "@angular-devkit/build-ng-packagr": "~0.10.0",
-    "@angular-devkit/build-optimizer": "^0.10.3",
+    "@angular-devkit/build-optimizer": "0.11.0",
     "@angular-devkit/core": "^7.3.0",
     "@angular/animations": "7.2.14",
     "@angular/cli": "7.3.8",
