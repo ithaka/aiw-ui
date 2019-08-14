@@ -17,7 +17,7 @@ export class FilterLinkPipe implements PipeTransform {
         let linkHtml = ''
         values.forEach((value, index) => {
             if (index == (values.length - 1)) restoreChar = ''
-            linkHtml += `<a href="/#/search;${filterKey}:(${value})">${value}</a>${restoreChar}<span>&ensp;</span>`
+            linkHtml += `<a href="/#/search/${filterKey}:(${value})">${value}</a>${restoreChar}<span>&ensp;</span>`
         })
         return linkHtml
     }
