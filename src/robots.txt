@@ -1,6 +1,8 @@
 Sitemap: https://library.artstor.org/sitemap.xml
 User-agent: *
 Allow: /asset
+Allow: /public
+Allow: /object
 Allow: /collection
 Allow: /category
 Disallow: /browse
