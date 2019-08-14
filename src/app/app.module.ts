@@ -126,6 +126,7 @@ import { GroupsRouteResolver } from './browse-page/groups-redirect.service'
 import { HTTP_INTERCEPTORS } from '@angular/common/http'
 import { UnauthorizedInterceptor } from './interceptors'
 
+import { FilterLinkPipe } from './shared/filter-link.pipe'
 import { LinkifyPipe } from './shared/linkify.pipe'
 import { KeysPipe } from './shared/keys.pipe'
 import { CustomUrlSerializer } from './shared/custom-url-serializer'
@@ -229,6 +230,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DownloadLimitModal,
     EditPersonalCollectionModal,
     FeaturedComponent,
+    FilterLinkPipe,
     Footer,
     GeneralSearchComponent,
     GroupTitleComponent,

@@ -183,16 +183,31 @@
           .meta-block(*ngFor="let fieldName of assets[0].formattedMetadata | keys")
             ng-container(*ngIf="fieldName != 'Rights' && fieldName != 'License'")
               .label {{ fieldName }}
-              div(*ngFor="let value of assets[0].formattedMetadata[fieldName]; let i=index")
+              ng-container(*ngFor="let value of assets[0].formattedMetadata[fieldName]; let i=index")
                 //- Creator
-                a.value.col-link(*ngIf="fieldName === 'Creator'", [attr.id]="cleanId(fieldName)", (click)="trackCreatorLink(value)", [routerLink]="['/search', 'artcreator:(' + value + ')']", [innerHTML]="value", [attr.aria-labelledby]="cleanId(fieldName)")
+                .value.col-link(
+                  *ngIf="fieldName === 'Creator'", 
+                  [attr.id]="cleanId(fieldName)", 
+                  (click)="trackCreatorLink(value)", 
+                  [innerHTML]="value | filterLink:'artcreator'", 
+                  [attr.aria-labelledby]="cleanId(fieldName)"
+                )
+                  //- [routerLink]="['/search', 'artcreator:(' + value + ')']", 
                 //- Collections
                 ng-container(*ngIf="fieldName === 'Collection' && i === 0")
-                  a.value.col-link(*ngFor="let col of assets[0].collectionLinks", id="collection-link", (click)="trackCollectionLink(cleanFieldValue(col.displayName))", [routerLink]="col.route", [innerHTML]="cleanFieldValue(col.displayName) | linkify", [attr.aria-labelledby]="Collections")
+                  div(*ngFor="let col of assets[0].collectionLinks")
+                    a.value.col-link(id="collection-link", (click)="trackCollectionLink(cleanFieldValue(col.displayName))", [routerLink]="col.route", [innerHTML]="cleanFieldValue(col.displayName) | linkify", [attr.aria-labelledby]="Collections")
                 //- Subject
-                a.value.col-link(*ngIf="fieldName === 'Subject'", [attr.id]="cleanId(fieldName)", (click)="trackSubjectLink(value)", [routerLink]="['/search', 'artsubject:(' + value + ')']", [innerHTML]="value", [attr.aria-labelledby]="cleanId(fieldName)")
+                a.value.col-link(
+                  *ngIf="fieldName === 'Subject'", 
+                  [attr.id]="cleanId(fieldName)", 
+                  (click)="trackSubjectLink(value)", 
+                  [innerHTML]="value | filterLink:'artsubject'", 
+                  [attr.aria-labelledby]="cleanId(fieldName)"
+                )
                 //- Other fields (culture, material, work type, description...etc)
-                .value(*ngIf="fieldName !== 'Collection' && fieldName !== 'Subject' && fieldName !== 'Creator'", [attr.id]="cleanId(fieldName)", [innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")
+                div(*ngIf="fieldName !== 'Collection' && fieldName !== 'Subject' && fieldName !== 'Creator'")  
+                  .value([attr.id]="cleanId(fieldName)", [innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")
           //- Rights
           .meta-block(*ngIf="assets[0].formattedMetadata.Rights && assets[0].formattedMetadata.Rights.length > 0")
             .label#Rights Rights
