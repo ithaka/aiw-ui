@@ -850,8 +850,9 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
   /**
-   * Returns the Creative Commons license text if the provided license text is for Creative Commons.
-   * Otherwise returns false.
+   * Returns the license text if the provided string matches one that is for Creative Commons.
+   * Otherwise returns false. The comparison made on provided string is case-insensitive and
+   * ignores non-alphanumeric characters.
    * @param {string} licenseText
    */
     public isCreativeCommonsLicense(licenseText: string): any {
