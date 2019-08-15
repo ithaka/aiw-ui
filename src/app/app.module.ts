@@ -94,23 +94,23 @@ import { SkyBannerComponent } from './sky-banner/sky-banner.component'
 
 
 // Application wide providers
-import { 
+import {
   AccountService,
-  AssetSearchService, 
+  AssetSearchService,
   AssetService,
   AuthService,
-  CollectionService, 
+  CollectionService,
   DomUtilityService,
   FlagService,
   GroupService,
   ImageGroupService,
-  InstitutionService, 
+  InstitutionService,
   LogService,
-  MetadataService, 
+  MetadataService,
   PersonalCollectionService,
   ScriptService,
-  SlidesService, 
-  ThumbnailService, 
+  SlidesService,
+  ThumbnailService,
   TitleService,
   ToolboxService
 } from './_services'
@@ -189,7 +189,6 @@ const APP_PROVIDERS = [
   { provide: HTTP_INTERCEPTORS, useClass: UnauthorizedInterceptor, multi: true },
   // Sentry error reporting
   { provide: ErrorHandler, useClass: SentryErrorHandler }
-  // { provide: RouteReuseStrategy, useClass: CustomReuseStrategy } // to be implemented later
 ];
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -197,7 +196,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 /**
- * `AppModule` is the main entry point into Angular2's bootstraping process
+ * `AppModule` is the main entry point into Angular's bootstraping process
  */
 @NgModule({
   declarations: [
