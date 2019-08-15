@@ -10,7 +10,7 @@ div
             ang-search([allowSearchInRes]="true")
         .row.pb-4
           .col-sm-10
-            h1#pageTitle.h1--title-block {{ colName }}
+            h1#pageTitle.page__title {{ colName }}
             p#pageDescription.page__description(#colDesc="", [innerHtml]="colDescription | linkify", [class.limit]="descCollapsed")
             .expander.link--action.small([class.hidden]="colDesc.clientHeight < 75", [class.collapsed]="descCollapsed", (click)="descCollapsed = !descCollapsed", [innerHtml]="descCollapsed ? 'More' : 'Less'", role="button") More
           .col-sm-2
