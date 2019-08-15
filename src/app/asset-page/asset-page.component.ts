@@ -850,7 +850,7 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
   /**
-   * Returns the Creative Commons license text if the provided string is for Creative Commons.
+   * Returns the Creative Commons license text if the provided license text is for Creative Commons.
    * Otherwise returns false.
    * @param {string} licenseText
    */
