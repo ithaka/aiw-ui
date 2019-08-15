@@ -434,9 +434,11 @@ export class AssetSearchService {
   public getAssetById(assetId: string, ssid?: boolean): Observable<AssetThumbnail> {
     this.contentQueryKey = 'content_set_flags'
 
-    let assetQuery: SearchRequest
-    assetQuery['query'] = ssid ? 'ssid:' + assetId : assetId
-    assetQuery[this.contentQueryKey] = ['art']
+    let assetQuery: SearchRequest = {
+      'query': ssid ? 'ssid:' + assetId : assetId,
+      'limit': 1, // Required by search
+      [this.contentQueryKey]: ['art']
+    }
 
     return this._http.post<SearchResponse>(
       this._auth.getSearchUrl(),

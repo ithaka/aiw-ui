@@ -456,7 +456,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
 
     handleLoadedMetadata(asset: Asset, assetIndex: number) {
-        console.log("Handle loaded metadata for " + asset['objectId'])
+        console.log("Handle loaded metadata for " + asset.id)
         // Reset modals if new data comes in
         this.showAccessDeniedModal = false
         this.showServerErrorModal = false
