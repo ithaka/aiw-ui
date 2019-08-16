@@ -140,15 +140,8 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
 
     public pdfCurrentPage: number = 1
     public pdfTotalPages: number = 1
-    public pdfZoomValue: number = 0.53
-    public pdfViewerOpts: any = {
-        // Example links for testing
-        // url: '/assets/ANG-NewAPIrequestsfromtheAIRteam-270217-0740-16.pdf'
-        // url: 'https://vadimdez.github.io/ng2-pdf-viewer/assets/pdf-test.pdf',
-        // url: 'https://stage.artstor.org/media/1003032929/20',
-        // url: '',
-        // withCredentials: true
-    }
+    public pdfZoomValue: number = .5
+    public pdfViewerOpts: any = {}
 
     constructor(
         private _http: HttpClient, // TODO: move _http into a service
@@ -315,7 +308,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
             .catch(err => {
                 this.state = viewState.thumbnailFallback
             })
-        
+
     }
 
     /**
@@ -448,8 +441,8 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
                 })
                 this._storage.setSession('loggedZoomAsset', value.eventSource.id)
             }
-            
-            
+
+
             this.lastZoomValue = value.zoom;
 
             // Save viewport values for downloading the view
