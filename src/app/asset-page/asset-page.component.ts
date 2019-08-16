@@ -849,21 +849,27 @@ export class AssetPage implements OnInit, OnDestroy {
       return false
     }
 
-    public isCreativeCommonsLicense(license_text: string): any {
-        // Handle extra spaces and differences in punctuation in License fields
-        // by doing uppercase comparison of alphanumeric chars only
-        let reg = /[^a-zA-Z0-9]/
+  /**
+   * Returns the license text if the provided string matches one that is for Creative Commons.
+   * Otherwise returns false. The comparison made on provided string is case-insensitive and
+   * ignores non-alphanumeric characters.
+   * @param {string} licenseText
+   */
+    public isCreativeCommonsLicense(licenseText: string): any {
+        const licenseToUse = licenses.find((currentLicense) => {
+          const candidateLicenseName = currentLicense.name.replace(/\W/g, '').toUpperCase(),
+                actualLicenseName = licenseText.replace(/\W/g, '').toUpperCase()
 
-        for (let i = 0; i < licenses.length; i++) {
-            if ((licenses[i].name.split(reg).join('').toUpperCase() === license_text.split(reg).join('').toUpperCase()) || (licenses[i].html === license_text)) {
-                this.licenseText = licenses[i].name
-                this.licenseLink = licenses[i].link
-                this.licenseImg = licenses[i].img
+          return candidateLicenseName === actualLicenseName || currentLicense.html === licenseText
+        })
 
-                return this.licenseText
-            }
+        if (licenseToUse) {
+          this.licenseText = licenseToUse.name
+          this.licenseLink = licenseToUse.link
+          this.licenseImg = licenseToUse.img
         }
-        return
+
+        return this.licenseText ? this.licenseText : false
     }
 
     private handleSkipAsset(): void {

@@ -1,17 +1,5 @@
 @import '../../../sass/core/variables';
 
-
-.title {
-  font-family: Verdana;
-  font-size: 24px;
-  font-weight: bold;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  color: $color-gray-7;
-}
-
 .group-border {
   margin-top: 2rem;
   margin-bottom: 3rem;
@@ -41,7 +29,7 @@
   @media (max-width: 767.98px) {
     min-height: 101px;
   }
-  
+
   @media (max-width: 575.98px) {
     min-height: 40px;
   }

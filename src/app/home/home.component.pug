@@ -12,13 +12,13 @@
         p.small(*ngIf="siteID!='SAHARA' && _auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.PUBLIC' | translate")
       .col-sm-5.search-highlight
         ang-search#mainContent([UserNotLoggedIn]="_auth.isPublicOnly()")
-        
+
     //- Featured Collections
     ang-featured
 
     .row
       .col-sm-3(*ngIf="showHomePromo")
-        a#imagePromoSpaceLink.card.hidden-xs-down([attr.href]=" 'HOME.AD.LINK' | translate ", target="_blank", tabindex="4", aria-label="New in Artstor: you can now upload your own images with Personal Collections to Artstor and add them to your image groups. Go to Browse > My Collections to get started, or press enter for more information")
+        a#imagePromoSpaceLink.card.hidden-xs-down([attr.href]=" 'HOME.AD.LINK' | translate ", target="_blank", tabindex="4", aria-label="Save and download detail views announcement")
           img#home-promo.card-img.no-stretch([attr.src]="'HOME.AD.IMG_SOURCE' | translate", [attr.alt]="'HOME.AD.ALT_TEXT' | translate", aria-hidden="true")
         .card([class.pt-4]="showHomePromo")
       .col-sm-6(*ngIf="showBlog")
@@ -57,4 +57,4 @@
             li.list-group-item.small
               a.link--action(href="mailto:sahara@sah.org", [innerHtml]="'HOME.QUESTIONS.SAHARA_QUESTIONS' | translate")
             li.list-group-item.small
-              a.link--action(href="mailto:support@artstor.org", [innerHtml]="'HOME.QUESTIONS.ARTSTOR_QUESTIONS' | translate") 
+              a.link--action(href="mailto:support@artstor.org", [innerHtml]="'HOME.QUESTIONS.ARTSTOR_QUESTIONS' | translate")

@@ -74,8 +74,8 @@ $desktop: 992px;*/
             height: 24px !important;
         }
     }
-    // When remove from comparison icon is by itself and needs a full border-radius
-    .btn--icon.standalone-remove-icon {
+    // When remove from comparison, or present icon is by itself and needs a full border-radius
+    .btn--icon.standalone-remove-icon, .btn--icon.standalone-present-icon {
         border-radius: 4px;
       }
 

@@ -248,20 +248,13 @@
     }
 }
 
-.edit{
-    text-indent: 0;
-    cursor: pointer;
-    background: rgba(100, 99, 100, 0.25);
-    color: #fff;
-    display: inline-block;
-    padding: 2px 4px;
-    border-radius: 2px;
-    overflow: hidden;
-    margin: 0 5px -1px 5px;
-    letter-spacing: 0.5px;
-    vertical-align: bottom;
-
-    &:hover{
-        background: rgba(100, 99, 100, 0.55);
-    }
+#button--pcupload {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 11px;
+  margin: 0px 8px;
+  margin-top: -1px;
+  padding: 0px 12px;
+  height: 24px;
+  line-height: inherit;
 }
+

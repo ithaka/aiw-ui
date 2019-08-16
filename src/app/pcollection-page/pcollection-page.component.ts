@@ -23,6 +23,7 @@ export class PCollectionPage implements OnInit, OnDestroy {
   public descCollapsed: boolean = true
   public showAccessDeniedModal: boolean = false
   public showDeleteSuccessBanner: boolean = false
+  public showEditPCModal: boolean = false
 
   public publishingAssets: any = {
     ssids: [],
@@ -30,6 +31,10 @@ export class PCollectionPage implements OnInit, OnDestroy {
   }
   public pub_que_count: number = 0
   public pub_failure_count: number = 0
+
+  public closeUploadPCModal(): void {
+    this.showEditPCModal = false
+  }
 
   private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
   private options = { headers: this.header, withCredentials: true }; // Create a request option
@@ -100,8 +105,8 @@ export class PCollectionPage implements OnInit, OnDestroy {
                   throw new Error('No data!');
                 }
 
-                // If Global Personal Collection, rename as "My Personal Collection"
-                this.colName = this.colId == '37436' ? 'My Personal Collection' : data['collectionname'];
+                // If Global Personal Collection, rename as "Personal Collection"
+                this.colName = this.colId == '37436' ? 'Personal Collection' : data['collectionname'];
                 this.colDescription = data['blurburl'];
                 this.colThumbnail = data['leadImageURL'] ? data['leadImageURL'] : data['bigimageurl'];
 
