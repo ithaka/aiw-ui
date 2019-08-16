@@ -52,8 +52,8 @@ export class BrowsePage implements OnInit, OnDestroy {
             map(userObj => {
                 this.user = userObj
             },
-            (err) => { 
-                console.error(err) 
+            (err) => {
+                console.error(err)
             }
         )).subscribe()
     )
@@ -104,7 +104,7 @@ export class BrowsePage implements OnInit, OnDestroy {
 
     if (this.browseOpts.myCol && !this._auth.isPublicOnly()){
         let obj = {
-            label : 'My Collections',
+            label : 'Personal Collections',
             id: '4',
             link: 'mycollections'
         }

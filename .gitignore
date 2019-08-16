@@ -80,3 +80,5 @@ docker-compose.yml
 
 # dotenv-webpack
 .env
+
+.vscode/settings.json

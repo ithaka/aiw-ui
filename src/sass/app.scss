@@ -184,6 +184,18 @@ span.active {
     }
 }
 
+// Image Group, and Personal Collection page title style
+.page__title {
+  font-family: Verdana;
+  font-size: 24px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: $color-gray-7;
+}
+
 .page__description, .page__description * {
       padding-top: $baseLineHeight/2;
       font-size: 12px !important;
