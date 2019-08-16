@@ -14,7 +14,7 @@ div
             p#pageDescription.page__description(#colDesc="", [innerHtml]="colDescription | linkify", [class.limit]="descCollapsed")
             .expander.link--action.small([class.hidden]="colDesc.clientHeight < 75", [class.collapsed]="descCollapsed", (click)="descCollapsed = !descCollapsed", [innerHtml]="descCollapsed ? 'More' : 'Less'", role="button") More
           .col-sm-2
-            button.btn.btn-secondary((click)="showEditPCModal = true", tabIndex="0", role="button", aria-label="Add items to Personal Collection") Upload
+            button.btn.btn-secondary.float-right((click)="showEditPCModal = true", tabIndex="0", role="button", aria-label="Add items to Personal Collection") Upload
         .row.alert.alert-info.alert-dismissible(*ngIf="pub_que_count > 0 && publishingAssets.showPublishingMsgs")
           b Processing&nbsp;
           | {{pub_que_count}} image(s) in the queue. Thank you for your patience.&nbsp;
@@ -29,3 +29,4 @@ div
             span(aria-hidden="true") &times;
         ang-asset-grid([actionOptions]="{collection: true}", [assetCount]="assetCount", [hasMaxAssetLimit]="true")
   ang-access-denied-modal(*ngIf="showAccessDeniedModal")
+ang-edit-personal-collection(*ngIf="showEditPCModal", (closeModal)="closeUploadPCModal()", [colId]="editTagId")

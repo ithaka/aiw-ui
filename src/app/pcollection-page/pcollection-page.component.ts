@@ -32,6 +32,10 @@ export class PCollectionPage implements OnInit, OnDestroy {
   public pub_que_count: number = 0
   public pub_failure_count: number = 0
 
+  public closeUploadPCModal(): void {
+    this.showEditPCModal = false
+  }
+
   private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
   private options = { headers: this.header, withCredentials: true }; // Create a request option
 
