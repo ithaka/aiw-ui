@@ -125,7 +125,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
     private removableAsset: boolean = false
     private subscriptions: Subscription[] = []
     // private fallbackFailed: boolean = false
-    private tileSource: string | string[]
+    private tileSource: string[]
     public lastZoomValue: number
     // private showCaption: boolean = true
     private autoZoomFinished: boolean = false
@@ -284,8 +284,28 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
      */
     private loadIIIF(): void {
         if (this.asset.tileSource) {
+          debugger;
+          if (this.asset.tileSource.length > 1) {
+            this.tileSource = this.asset.tileSource.map((tileUrl) => {
+              return new OpenSeadragon.TileSource ({
+                url: tileUrl,
+                loadTilesWithAjax: true,
+                ajaxHeaders: this._auth.currentAuthHeaders,
+                success: (readySource) => {
+                  // The readySource here is the one we actually need to use (as it has the proper
+                  // tile width/height props set). As a result we must wait for all the
+                  // tiles sources to load. This seems quite unperformant, and hacky to do.
+                  console.log(readySource)
+                }
+              })
+            })
+          } else {
+            // The old way
             this.tileSource = this.asset.tileSource
-            this.loadOpenSea()
+          }
+
+          debugger;
+          this.loadOpenSea()
         } else {
             this.state = viewState.thumbnailFallback
         }
@@ -395,8 +415,8 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
             // visibilityRatio: 0.2, // Determines percentage of background that has to be covered by the image while panning
             // debugMode: true,
             preserveImageSizeOnResize: this.zoom && this.zoom.viewerX ? true : false,
-            ajaxHeaders: this._auth.currentAuthHeaders,
-            loadTilesWithAjax: true
+            // ajaxHeaders: this._auth.currentAuthHeaders,
+            // loadTilesWithAjax: true
         });
 
         // ---- Use handler in case other error crops up
