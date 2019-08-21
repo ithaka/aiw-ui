@@ -116,13 +116,16 @@ export class ThumbnailComponent implements OnInit, OnChanges {
    * re-evaluate src for Thumbnail <img>
    */
   evaluateImageSrc(): void {
+    debugger;
     if (this.thumbnail.img.indexOf('/iiif/') > -1) {
       this._thumbnail.getImageSecurely(this.thumbnail.img)
         .then(img => {
+          debugger
           this.src = this.assumeSafe(img)
         })
         .catch(err => {
           // Error handling
+          console.log(err)
         })
     } else {
       this.src = this.assumeSafe(this.thumbnail.img)

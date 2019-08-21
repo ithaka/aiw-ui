@@ -57,7 +57,7 @@ export class ThumbnailService {
         // If sequenceNum is available prefer 0 or 1 (first in the sequence)
         // If sequenceNum aren't available, just show first object
         let compoundAssets = cleanedAsset.compound_media_json.objects.sort((a,b) => {
-          return a['sequenceNum'] - b['sequenceNum'] 
+          return a['sequenceNum'] - b['sequenceNum']
         })
         // Use first asset in ordered array as thumbnail
         if (compoundAssets[0]) {
@@ -196,11 +196,13 @@ export class ThumbnailService {
    */
   public getImageSecurely(url: string): Promise<any> {
 
+    debugger;
     return this._http.get(url, {
      responseType: 'blob',
      headers: new HttpHeaders(<any>this._auth.currentAuthHeaders)
    }).pipe(map(
     imageBlob => {
+      debugger;
       return URL.createObjectURL(imageBlob)
     },
     err => {
@@ -216,6 +218,7 @@ export class ThumbnailService {
    * @todo SIMPLIFY this function once it is ONLY used with AssetThumbnail objects
    */
   public makeThumbUrl(thumbData: any, size?: number): string {
+    debugger;
     let imagePath: string
     let isMultiView: boolean
     let isThumbnailImgUrl: boolean
