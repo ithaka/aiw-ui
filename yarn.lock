@@ -6890,9 +6890,9 @@ opener@~1.4.0:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/opener/-/opener-1.4.3.tgz#5c6da2c5d7e5831e8ffa3964950f8d6674ac90b8"
 
-openseadragon@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/openseadragon/-/openseadragon-2.4.0.tgz#d0b28b37a953602c82432a0dbd8a3779dadf756f"
+"openseadragon@git://github.com/ithaka/openseadragon.git#master":
+  version "2.4.1"
+  resolved "git://github.com/ithaka/openseadragon.git#a39d20bd70cee75845fb4716f4bd3e19d417590c"
 
 opn@5.3.0:
   version "5.3.0"
