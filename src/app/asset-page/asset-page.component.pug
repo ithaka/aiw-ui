@@ -221,11 +221,11 @@
           .meta-block(*ngIf="assets[0].formattedMetadata.License && assets[0].formattedMetadata.License.length > 0")
             .label#License License
             .license(*ngFor="let license of assets[0].formattedMetadata.License")
-              a(*ngIf="licenseText === license", [attr.href]="licenseLink", aria-label="Learn about this license statement on creativecommons.org", target="_blank")
+              a([attr.href]="licenseLink", aria-label="Learn about this license statement on creativecommons.org", target="_blank")
                 img.license-icon([attr.src]="licenseImg", [attr.alt]="license", title="License")
                 | &nbsp;
                 span.value.license-text([innerHTML]="cleanFieldValue(license) | lowercase | linkify", title="License")
-              .value(*ngIf="licenseText !== license", [innerHTML]="cleanFieldValue(license) | linkify")
+            .value([innerHTML]="cleanFieldValue('Use of this image is in accordance with the <a href=`https://www.artstor.org/artstor-terms/` target=`_blank` >Artstor Terms & Conditions</a>') | linkify")
           //- File Properties
           .row-hdr.pt-3(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
           //- File Name

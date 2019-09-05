@@ -68,7 +68,6 @@ export class AssetPage implements OnInit, OnDestroy {
     public rightsImg: string = ''
 
     // License Statements values
-    public licenseText: string = ''
     public licenseLink: string = ''
     public licenseImg: string = ''
 
@@ -864,12 +863,11 @@ export class AssetPage implements OnInit, OnDestroy {
         })
 
         if (licenseToUse) {
-          this.licenseText = licenseToUse.name
           this.licenseLink = licenseToUse.link
           this.licenseImg = licenseToUse.img
         }
 
-        return this.licenseText ? this.licenseText : false
+        return licenseToUse && licenseToUse.name ? licenseToUse.name : false
     }
 
     private handleSkipAsset(): void {
