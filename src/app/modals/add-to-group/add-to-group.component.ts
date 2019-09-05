@@ -51,6 +51,10 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     recentGroups: false,
     allGroups: false
   }
+  public error: any = {
+    recentGroups: false,
+    allGroups: false
+  }
 
   public detailViewBounds: ImageZoomParams = {}
   public selectedGroup: any = {}
@@ -341,6 +345,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
           })
           .catch( error => {
             console.error(error)
+            this.error.recentGroups = true
             this.loading.recentGroups = false
           })
         } else {
@@ -392,6 +397,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
           })
           .catch( error => {
             console.error(error)
+            this.error.allGroups = true
             this.loading.allGroups = false
           })
         } else { // Incase the result has 0 groups
