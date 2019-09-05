@@ -341,6 +341,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
           })
           .catch( error => {
             console.error(error)
+            this.loading.recentGroups = false
           })
         } else {
           this.loading.recentGroups = false
@@ -391,6 +392,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
           })
           .catch( error => {
             console.error(error)
+            this.loading.allGroups = false
           })
         } else { // Incase the result has 0 groups
           this.loading.allGroups = false
