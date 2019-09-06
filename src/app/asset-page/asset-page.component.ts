@@ -67,11 +67,6 @@ export class AssetPage implements OnInit, OnDestroy {
     public rightsLink: string = ''
     public rightsImg: string = ''
 
-    // License Statements values
-    public licenseText: string = ''
-    public licenseLink: string = ''
-    public licenseImg: string = ''
-
     // Toast Variables
     public showToast: boolean = false
     public toastType: string = ''
@@ -579,8 +574,7 @@ export class AssetPage implements OnInit, OnDestroy {
             // Loop over License fields and set license statement values via isCreativeCommonsLicense
             for (let i = 0; i < this.assets[0].formattedMetadata.License.length; i++) {
                 let licenseField = this.assets[0].formattedMetadata.License[i]
-                let resLicenseVal = this.isCreativeCommonsLicense(licenseField)
-                this.assets[0].formattedMetadata.License[i] = resLicenseVal ? resLicenseVal : licenseField
+                this.assets[0].formattedMetadata.License[i] = this.isCreativeCommonsLicense(licenseField)
             }
         }
     }
@@ -864,12 +858,14 @@ export class AssetPage implements OnInit, OnDestroy {
         })
 
         if (licenseToUse) {
-          this.licenseText = licenseToUse.name
-          this.licenseLink = licenseToUse.link
-          this.licenseImg = licenseToUse.img
+            return {
+                licenseText: licenseToUse.name,
+                licenseLink: licenseToUse.link,
+                licenseImg: licenseToUse.img
+            }
         }
 
-        return this.licenseText ? this.licenseText : false
+        return false
     }
 
     private handleSkipAsset(): void {
