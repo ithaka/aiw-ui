@@ -40,7 +40,8 @@ export class Nav implements OnInit, OnDestroy {
   public showLoginTooltip = true;
   public loginTooltipOptions = {
     heading: 'Access content from the world\'s top museums, artists, libraries and more...',
-    bodyText: 'You currently only have access to Public Collections. Log in to view hundreds of curated collections from Artstor.'
+    bodyText: 'You currently only have access to Public Collections. Log in to view hundreds of curated collections from Artstor.',
+    tabIndex: 1
   };
 
   // TypeScript public modifiers
