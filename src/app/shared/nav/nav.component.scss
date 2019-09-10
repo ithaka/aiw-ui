@@ -60,8 +60,8 @@ $loginPanelMobileHeight: 0;
     position: relative;
     min-height: $loginPanelMobileHeight;
     // max-height: $loginPanelMobileHeight;
-    overflow: hidden;
     height: 100%;
+    z-index: 9999;
 
     @media (max-width: $phone) {
         max-height: 0;
@@ -73,6 +73,26 @@ $loginPanelMobileHeight: 0;
     }
 
     background: $loginPanelBg;
+
+  &__tooltip-container {
+    align-items: center;
+    display: inline-flex;
+    flex-direction: column;
+    position: relative;
+    margin-right: .25rem;
+  }
+
+  &__tooltip {
+    display: inline-flex;
+    justify-content: center;
+    position: absolute;
+    bottom: -.5rem;
+    text-align: left;
+
+    .tooltip-container {
+      left: auto;
+    }
+  }
 }
 
 .login-panel__status {
@@ -85,6 +105,7 @@ $loginPanelMobileHeight: 0;
     white-space: nowrap;
     overflow-x: hidden;
     text-overflow: ellipsis;
+    margin-bottom: .25rem;
 }
 
 .login-panel__links {

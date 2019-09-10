@@ -37,6 +37,12 @@ export class Nav implements OnInit, OnDestroy {
   public showAppliedFlags: boolean = false
   public appliedFlags: string[] = []
 
+  public showLoginTooltip = true;
+  public loginTooltipOptions = {
+    heading: 'Access content from the world\'s top museums, artists, libraries and more...',
+    bodyText: 'You currently only have access to Public Collections. Log in to view hundreds of curated collections from Artstor.'
+  };
+
   // TypeScript public modifiers
   constructor(
     public _app: AppConfig,
@@ -178,6 +184,10 @@ export class Nav implements OnInit, OnDestroy {
   inactiveUsrLogOut(): void{
     this._auth.resetIdleWatcher();
     this.showinactiveUserLogoutModal = false;
+  }
+
+  closeLoginTooltip() {
+    this.showLoginTooltip = false;
   }
 
 }
