@@ -8,7 +8,7 @@ export const licenses = [
       img: 'https://licensebuttons.net/l/by/4.0/88x31.png'
     },
     { name: 'Creative Commons: Free Reuse (CC0)',
-      link: 'https://creativecommons.org/share-your-work/public-domain/cc0/',
+      link: 'https://creativecommons.org/publicdomain/zero/1.0/',
       img: 'https://licensebuttons.net/l/zero/1.0/88x31.png'
     },
     { name: 'Creative Commons: Attribution-ShareAlike',
