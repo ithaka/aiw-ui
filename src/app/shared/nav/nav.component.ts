@@ -8,6 +8,7 @@ import * as Sentry from '@sentry/browser';
 // Project Dependencies
 import { AppConfig } from '../../app.service'
 import { AssetService, AuthService, FlagService, Toast, ToastService, ToolboxService } from 'app/_services'
+import { Angulartics2 } from "angulartics2";
 
 @Component({
   selector: 'nav-bar',
@@ -47,6 +48,7 @@ export class Nav implements OnInit, OnDestroy {
   // TypeScript public modifiers
   constructor(
     public _app: AppConfig,
+    private angulartics: Angulartics2,
     private _auth: AuthService,
     private _assets: AssetService,
     private _router: Router,
@@ -187,8 +189,13 @@ export class Nav implements OnInit, OnDestroy {
     this.showinactiveUserLogoutModal = false;
   }
 
+  trackLoginButtonClick() {
+    this.angulartics.eventTrack.next({ properties: { event: 'loginButtonClicked', category: 'click', label: 'New Login Button' } })
+  }
+
   closeLoginTooltip() {
     this.showLoginTooltip = false;
+    this.angulartics.eventTrack.next({ properties: { event: 'loginPromptClosed', category: 'close', label: 'Login Prompt' } })
   }
 
 }

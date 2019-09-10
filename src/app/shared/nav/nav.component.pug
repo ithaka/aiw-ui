@@ -29,7 +29,7 @@ header.navbar.navbar-light
               #navMessageInstitution.login-panel__institution(*ngIf="!_auth.isPublicOnly() && (institutionObj.displayName || institutionObj.institutionName)") Access provided by {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
               div
                 div(*ngIf="!ipAuthed", class="login-panel__tooltip-container")
-                  button.btn.btn-primary#nav-login((click)="navigateAndSaveRoute('/login')" tabindex="1") Log in
+                  button.btn.btn-primary#nav-login((click)="trackLoginButtonClick(); navigateAndSaveRoute('/login')" tabindex="1") Log in
                   ang-promo-tooltip(*ngIf="showLoginTooltip", class="login-panel__tooltip", [options]="loginTooltipOptions", (close)="closeLoginTooltip()")
                 ng-container(*ngIf="ipAuthed")
                   a.link#nav-login((click)="navigateAndSaveRoute('/login')" tabindex="1") Log in
