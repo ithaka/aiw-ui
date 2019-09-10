@@ -9,6 +9,7 @@ import * as Sentry from '@sentry/browser';
 import { AppConfig } from '../../app.service'
 import { AssetService, AuthService, FlagService, Toast, ToastService, ToolboxService } from 'app/_services'
 import { Angulartics2 } from "angulartics2";
+import { ArtstorStorageService } from "../../../../projects/artstor-storage/src/lib/artstor-storage.service";
 
 @Component({
   selector: 'nav-bar',
@@ -38,7 +39,7 @@ export class Nav implements OnInit, OnDestroy {
   public showAppliedFlags: boolean = false
   public appliedFlags: string[] = []
 
-  public showLoginTooltip = true;
+  public hideLoginTooltip = true;
   public loginTooltipOptions = {
     heading: 'Access content from the world\'s top museums, artists, libraries and more...',
     bodyText: 'You currently only have access to Public Collections. Log in to view hundreds of curated collections from Artstor.',
@@ -54,6 +55,7 @@ export class Nav implements OnInit, OnDestroy {
     private _router: Router,
     private route: ActivatedRoute,
     private location: Location,
+    private _storage: ArtstorStorageService,
     private _toasts: ToastService,
     private _flags: FlagService
   ) {
@@ -158,6 +160,8 @@ export class Nav implements OnInit, OnDestroy {
         }
       )
     );
+
+    this.hideLoginTooltip = !!this._storage.getSession('hideLoginTooltip');
   }
 
   ngOnDestroy() {
@@ -194,7 +198,8 @@ export class Nav implements OnInit, OnDestroy {
   }
 
   closeLoginTooltip() {
-    this.showLoginTooltip = false;
+    this.hideLoginTooltip = true;
+    this._storage.setSession('hideLoginTooltip', this.hideLoginTooltip);
     this.angulartics.eventTrack.next({ properties: { event: 'loginPromptClosed', category: 'close', label: 'Login Prompt' } })
   }
 
