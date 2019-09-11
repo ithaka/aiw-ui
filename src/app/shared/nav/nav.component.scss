@@ -57,6 +57,7 @@ $loginPanelCollapseHeight: $navBarHeight;
 $loginPanelMobileHeight: 0;
 
 .login-panel {
+    white-space: nowrap;
     position: relative;
     min-height: $loginPanelMobileHeight;
     // max-height: $loginPanelMobileHeight;
@@ -89,6 +90,7 @@ $loginPanelMobileHeight: 0;
     position: absolute;
     bottom: -.5rem;
     text-align: left;
+    white-space: normal;
 
     .tooltip-container {
       left: auto;
@@ -110,7 +112,6 @@ $loginPanelMobileHeight: 0;
 
 .login-panel__institution {
     font-weight: bold;
-    white-space: nowrap;
     overflow-x: hidden;
     text-overflow: ellipsis;
 }
