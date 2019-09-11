@@ -27,8 +27,8 @@
                       | It looks like you have not created a group yet! Please try creating a group first.
                   .no-result-row(*ngIf="error.recentGroups")
                     .alert.alert-warning
-                      b Error
-                      | There is an error loading your recent groups.
+                      b Error:
+                      | Unable to load groups at this time. Please try again later.
                   .row.no-gutters(*ngFor="let recentGroup of recentGroups", [ngClass]="{ 'selectedGroup' : recentGroup.selected }", [attr.id]="recentGroup.id", (click)="selectGroup(recentGroup, 'recent');groupSelectKeyDown($event, recentGroup.selected)", (keydown.enter)="selectGroup(recentGroup, 'recent')", (keydown.space)="$event.stopPropagation(); $event.preventDefault(); selectGroup(recentGroup, 'recent')", (keydown)="groupSelectKeyDown($event, recentGroup.selected)", tabindex="10", [attr.aria-label]="recentGroup.name + ', ' + (recentGroup.selected ? 'selected' : 'unselected') + ', press enter or spacebar to ' + (recentGroup.selected ? 'unselect' : 'select') + ' this group'")
                     .col-3
                       .ig-thmbnail-wrapper
@@ -47,8 +47,8 @@
                     b.no-result-msg Sorry, we couldn’t find any groups related to your search. Please try a different search.
                   .no-result-row(*ngIf="error.allGroups")
                     .alert.alert-warning
-                      b Error
-                      | There is an error loading your groups.
+                      b Error:
+                      | Unable to load groups at this time. Please try again later.
                   .row.no-gutters(*ngFor="let group of allGroups", [ngClass]="{ 'selectedGroup' : group.selected }", [attr.id]="group.id", (click)="selectGroup(group, 'all');groupSelectKeyDown($event, group.selected)", (keydown.enter)="selectGroup(group, 'all')", (keydown.space)="$event.stopPropagation(); $event.preventDefault(); selectGroup(group, 'all')", (keydown)="groupSelectKeyDown($event, group.selected)", tabindex="10", [attr.aria-label]="group.name + ', ' + (group.selected ? 'selected' : 'unselected') + ', press enter or spacebar to ' + (group.selected ? 'unselect' : 'select') + ' this group'")
                     .col-3
                       .ig-thmbnail-wrapper
