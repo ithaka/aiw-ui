@@ -10,6 +10,7 @@ import { Router } from '@angular/router'
 import { AssetService, GroupService, AuthService, DomUtilityService, ThumbnailService, LogService } from '_services'
 import { ImageGroup, ImageZoomParams, Asset } from 'datatypes'
 import { ToastService } from 'app/_services'
+import { group } from "@angular/animations";
 
 @Component({
   selector: 'ang-add-to-group',
@@ -312,51 +313,61 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     }, 100)
   }
 
+
+
+  private loadGroupThumbnails(groups) {
+    let itemIds = groups.map(group => {
+      if(group.items.length > 0){
+        return group.items[0]
+      }
+    })
+
+    if(itemIds.length !== 0) {
+      this._assets.getAllThumbnails({ itemIds })
+        .then( allThumbnails => {
+          allThumbnails.forEach( thmbObj => {
+            for (let group of groups) {
+              if(group.items[0] && group.items[0] === thmbObj.id){
+                group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
+                group['compoundmediaCount'] = thmbObj['compoundmediaCount']
+              }
+            }
+          })
+
+          this.recentGroups = groups
+        })
+        .catch( error => {
+          console.error(error)
+          this.error.recentGroups = true
+        })
+    }
+  }
+
+  // Maybe some rought steps?
+  // Step 1) Get all the groups from network call
+  // Step 2) Take all the groups and get first image id of each
+  // Step 3) Given all the image ids make network call to get thumbnails
+  // Step 4) For all groups inject the thumbnailImgUrl and compoundmediaCount
+  // Step 5) Set the 'recentGroups'
+
   private loadRecentGroups(): void{
     this.loading.recentGroups = true
+    debugger;
     this._group.getAll(
-      'created', 3, 1, [], '', '', 'date', 'desc'
-    ).pipe(
-    take(1),
-      map(data => {
-        let itemIds = []
-        for(let group of data.groups) {
-          if(group.items.length > 0){
-            itemIds.push(group.items[0])
-          }
-        }
-
-        // Check the length of itemIds to remove invalid call with object_id=null
-        if(itemIds.length !== 0) {
-          this._assets.getAllThumbnails({ itemIds })
-          .then( allThumbnails => {
-            allThumbnails = allThumbnails.map( thmbObj => {
-              for (let group of data.groups) {
-                if(group.items[0] && group.items[0] === thmbObj.id){
-                  group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
-                  group['compoundmediaCount'] = thmbObj['compoundmediaCount']
-                }
-              }
-              return thmbObj
-            })
-
-            this.recentGroups = data.groups
-            this.loading.recentGroups = false
-          })
-          .catch( error => {
-            console.error(error)
-            this.error.recentGroups = true
-            this.loading.recentGroups = false
-          })
-        } else {
-          this.loading.recentGroups = false
-        }
+      'created', 3, 1, [], '', '', 'date', 'desc')
+      .pipe(take(1))
+      .subscribe(groupList => {
+        this.loadGroupThumbnails(groupList.groups)
       },
       (error) => {
-        console.error(error)
+        console.log("ERRRROR!")
+        this.error.recentGroups = true
+      },
+      () => {
+        console.log("Complete!")
         this.loading.recentGroups = false
       }
-    )).subscribe()
+    )
   }
 
   private loadMyGroups(): void{
@@ -479,7 +490,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
             add_detail_view: add_detail_view
         }
       })
-    } 
+    }
     // If the request is from the collection/search page, log save selections to existing group into Captain's Log
     else {
       let item_ids = this.selectedAssets.map(asset => {
