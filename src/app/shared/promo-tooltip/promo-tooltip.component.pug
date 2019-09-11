@@ -1,10 +1,11 @@
-.tooltip-container(tabindex="2", [ngClass]="{ 'quiz-tooltip': options.badge && options.badge === 'STUDY' }")
-  button.close(type="button", (click)="close.emit()", aria-label="Close")
+.tooltip-container(tabindex="{{ options.tabIndex }}", [ngClass]="{ 'quiz-tooltip': options.badge && options.badge === 'STUDY' }")
+  button.close(type="button", (click)="close.emit()", aria-label="Close Tooltip", tabindex="{{ options.tabIndex }}")
     span(aria-hidden="true") &times;
   .new-badge(*ngIf="options.badge") {{ options.badge }}
   .heading {{ options.heading }}
   .body-text {{ options.bodyText }}
-  .links
-    a(tabindex="2", [attr.aria-label]="options.dismissText + '! Hit enter or escape to close this tooltip.'", (click)="close.emit()", (keyup.esc)="close.emit()", (keyup.enter)="close.emit()") {{ options.dismissText }}
-    span
-    a(tabindex="2", aria-label="Learn more. Hit enter to be open a new tab to an Artstor support page.", [href]="options.learnMoreURL", target="_blank", (click)="close.emit()", (keyup.enter)="close.emit()") Learn More
+  .links(*ngIf="options.dismissText || options.learnMoreURL")
+    a(*ngIf="options.dismissText", tabindex="{{ options.tabIndex }}", [attr.aria-label]="options.dismissText + '! Hit enter or escape to close this tooltip.'", (click)="close.emit()", (keyup.esc)="close.emit()", (keyup.enter)="close.emit()") {{ options.dismissText }}
+    ng-container(*ngIf="options.learnMoreURL")
+      span
+      a(tabindex="{{ options.tabIndex }}", aria-label="Learn more. Hit enter to open a new tab to an Artstor support page.", [href]="options.learnMoreURL", target="_blank", (click)="close.emit()", (keyup.enter)="close.emit()") Learn More

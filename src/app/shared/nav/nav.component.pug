@@ -27,9 +27,12 @@ header.navbar.navbar-light
             .login-panel__status(*ngIf="!user.isLoggedIn")
               b(*ngIf="_auth.isPublicOnly()") Welcome to Artstor's public collections!
               #navMessageInstitution.login-panel__institution(*ngIf="!_auth.isPublicOnly() && (institutionObj.displayName || institutionObj.institutionName)") Access provided by {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
-              div
-                a.link#nav-login((click)="navigateAndSaveRoute('/login')" tabindex="1") Log in
+              .login-panel__with-tooltip
+                div(*ngIf="!ipAuthed", class="login-panel__tooltip-container")
+                  button.btn.btn-primary#nav-login((click)="trackLoginButtonClick(); navigateAndSaveRoute('/login')" tabindex="1") Log in
+                  ang-promo-tooltip(*ngIf="!hideLoginTooltip", class="login-panel__tooltip", [options]="loginTooltipOptions", (close)="closeLoginTooltip()")
                 ng-container(*ngIf="ipAuthed")
+                  a.link#nav-login((click)="navigateAndSaveRoute('/login')" tabindex="1") Log in
                   span &nbsp;or&nbsp;
                   a.link#nav-register((click)="navigateAndSaveRoute('/register')", tabindex="1") Register
                 span(*ngIf="_auth.isPublicOnly()") &nbsp;to access the core collections.

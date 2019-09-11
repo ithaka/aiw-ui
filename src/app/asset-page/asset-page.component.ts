@@ -316,7 +316,8 @@ export class AssetPage implements OnInit, OnDestroy {
                         heading: 'Quiz Mode',
                         bodyText: 'Test your skills to see if you can identify the items in this group without looking at the captions.',
                         learnMoreURL: 'https://support.artstor.org/?article=quiz-mode-in-fullscreen',
-                        dismissText: 'Try it'
+                        dismissText: 'Try it',
+                        tabIndex: 2
                     }
                 } else {
                     this.studyMode = false
