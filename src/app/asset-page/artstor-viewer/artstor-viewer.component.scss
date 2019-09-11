@@ -54,7 +54,7 @@ $desktop: 992px;*/
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1000;
+    z-index: 3001;
     margin: 20px;
     box-shadow: 0 0 4px 1px #0000003b;
     border-radius: 4px;
@@ -110,7 +110,7 @@ $desktop: 992px;*/
     position: absolute;
     bottom: 215px;
     right: 15px;
-    z-index: 1000;
+    z-index: 3001;
     padding: 0px;
 }
 
@@ -188,7 +188,7 @@ $desktop: 992px;*/
     position: absolute;
     left: 21px;
     bottom: 147px;
-    z-index: 1000;
+    z-index: 3001;
     color: #fff;
     font-family: Verdana;
 }
@@ -239,7 +239,7 @@ $desktop: 992px;*/
     min-height: 100%;
     height: 100%;
     width: 100%;
-    z-index: 1;
+    z-index: 3000;
     padding: 0px;
 }
 .asset-viewer.fullscreen .item  {
