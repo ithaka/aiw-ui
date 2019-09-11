@@ -65,6 +65,7 @@ $loginPanelMobileHeight: 0;
 
     @media (max-width: $phone) {
         max-height: 0;
+        overflow: hidden;
     }
 
     @media (min-width: 768px) {
