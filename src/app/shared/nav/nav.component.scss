@@ -94,6 +94,13 @@ $loginPanelMobileHeight: 0;
       left: auto;
     }
   }
+
+  &__with-tooltip {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-top: .5rem;
+  }
 }
 
 .login-panel__status {
@@ -106,7 +113,6 @@ $loginPanelMobileHeight: 0;
     white-space: nowrap;
     overflow-x: hidden;
     text-overflow: ellipsis;
-    margin-bottom: .5rem;
 }
 
 .login-panel__links {
