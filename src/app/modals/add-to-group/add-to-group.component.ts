@@ -346,18 +346,17 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
   private loadRecentGroups(): void {
     this.loading.recentGroups = true
 
-    // Very helpful: https://medium.com/@luukgruijs/understanding-rxjs-map-mergemap-switchmap-and-concatmap-833fc1fb09ff
-    this._group.getAll('created', 3, 1, [], '', '', 'date', 'desc')
-      .pipe(
-        map((response: GroupList) => response.groups),
-        mergeMap(groups => from(this.injectThumbnails(groups))
-      )
-    ).subscribe(
+    this.loadGroups(
+      3,
+      1,
+      '',
+      'date',
+      'desc',
       (groups) => {
         this.recentGroups = groups
       },
       (error) => {
-        console.error('Error loading image groups', error)
+        console.error('Error loading recent image groups', error)
         this.error.recentGroups = true
       },
       () => {
@@ -365,32 +364,43 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
       })
   }
 
-  private loadMyGroups(): void{
+  private loadMyGroups() {
     this.loading.allGroups = true
     let timeStamp = this.allGroupSearchTS
 
-    this._group.getAll('created', this.groupsPageSize, this.groupsCurrentPage, [], this.groupSearchTerm, '', 'alpha', 'asc')
-      .pipe(
-        map((response: GroupList) => {
-          this.totalGroups = response.total // TODO seems like we can do this anywhere don't let it hold us back from consolidating with recent groups
-
-          return response.groups
-        }),
-        mergeMap(groups => from(this.injectThumbnails(groups))
-        )
-      ).subscribe(
+    this.loadGroups(
+      this.groupsPageSize,
+      this.groupsCurrentPage,
+      this.groupSearchTerm,
+      'alpha',
+      'asc',
       (groups) => {
-        if(timeStamp === this.allGroupSearchTS) {
+        if (timeStamp === this.allGroupSearchTS) {
           this.allGroups = this.allGroups.concat(groups)
         }
       },
       (error) => {
-        console.error('Error loading image groups', error)
+        console.error('Error loading all image groups', error)
         this.error.allGroups = true
       },
       () => {
         this.loading.allGroups = false
       })
+  }
+
+  private loadGroups(amount, pageNumber, query, sortBy, order, onSuccess, onFailure, onComplete): void{
+    this._group.getAll('created', amount, pageNumber, [], query, '', sortBy, order)
+      .pipe(
+        map((response: GroupList) => {
+          this.totalGroups = response.total
+          return response.groups
+        }),
+        mergeMap(groups => from(this.injectThumbnails(groups))
+        )
+      ).subscribe(
+      (groups) => onSuccess(groups),
+      (error) => onFailure(error),
+      () => onComplete())
   }
 
   private selectGroup(selectedGroup: any, type: string): void{
