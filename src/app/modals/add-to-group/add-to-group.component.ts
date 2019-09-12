@@ -314,7 +314,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private injectThumbnails(groups) {
-    let itemIds = groups.filter(group => group.items.length > 0).map(group => group.items[0])
+    const itemIds = groups.filter(group => group.items.length > 0).map(group => group.items[0])
 
       return this._assets.getAllThumbnails({ itemIds })
         .then( thumbnails => {
@@ -325,7 +325,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
         })
         .then(thumbnailMap => {
           return groups.map(group => {
-            let groupClone: any = {...group}
+            const groupClone: any = {...group}
 
             if(groupClone.items.length > 0) {
               let firstItemId: string = group.items[0],
