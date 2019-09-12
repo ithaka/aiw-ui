@@ -11,6 +11,7 @@ import { AssetService, GroupService, AuthService, DomUtilityService, ThumbnailSe
 import { ImageGroup, ImageZoomParams, Asset } from 'datatypes'
 import { ToastService } from 'app/_services'
 import { GroupList } from "shared";
+import { Observable } from "rxjs/Rx";
 
 @Component({
   selector: 'ang-add-to-group',
@@ -346,22 +347,17 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     this.loading.recentGroups = true
     this.error.recentGroups = false
 
-    this.loadGroups(
-      3,
-      1,
-      '',
-      'date',
-      'desc',
+    this.loadGroups(3, 1, '', 'date', 'desc').subscribe(
       (groups) => {
         this.recentGroups = groups
       },
       (error) => {
         console.error('Error loading recent image groups', error)
         this.error.recentGroups = true
-      },
-      () => {
-        this.loading.recentGroups = false
-      })
+      }
+    ).add(() => {
+      this.loading.recentGroups = false
+    })
   }
 
   private loadMyGroups() {
@@ -370,12 +366,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
 
     let timeStamp = this.allGroupSearchTS
 
-    this.loadGroups(
-      this.groupsPageSize,
-      this.groupsCurrentPage,
-      this.groupSearchTerm,
-      'alpha',
-      'asc',
+    this.loadGroups(this.groupsPageSize, this.groupsCurrentPage, this.groupSearchTerm, 'alpha', 'asc').subscribe(
       (groups) => {
         if (timeStamp === this.allGroupSearchTS) {
           this.allGroups = this.allGroups.concat(groups)
@@ -384,25 +375,21 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
       (error) => {
         console.error('Error loading all image groups', error)
         this.error.allGroups = true
-      },
-      () => {
-        this.loading.allGroups = false
-      })
+      }
+    ).add(() => {
+      this.loading.allGroups = false
+    })
   }
 
-  private loadGroups(amount, pageNumber, query, sortBy, order, onSuccess, onFailure, onComplete): void{
-    this._group.getAll('created', amount, pageNumber, [], query, '', sortBy, order)
+  private loadGroups(amount, pageNumber, query, sortBy, order): Observable<any> {
+    return this._group.getAll('created', amount, pageNumber, [], query, '', sortBy, order)
       .pipe(
         map((response: GroupList) => {
           this.totalGroups = response.total
           return response.groups
         }),
-        mergeMap(groups => from(this.injectThumbnails(groups))
-        )
-      ).subscribe(
-      (groups) => onSuccess(groups),
-      (error) => onFailure(error)
-    ).add(() => onComplete())
+        mergeMap(groups => from(this.injectThumbnails(groups)))
+      )
   }
 
   private selectGroup(selectedGroup: any, type: string): void{
