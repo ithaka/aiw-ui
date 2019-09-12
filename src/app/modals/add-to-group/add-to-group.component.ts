@@ -1,8 +1,8 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core'
 import { NgForm } from '@angular/forms'
-import { BehaviorSubject, Observable, Subscription, from } from 'rxjs'
+import { Subscription, from } from 'rxjs'
 import { map, take, mergeMap } from 'rxjs/operators'
-import { CompleterService, CompleterData } from 'ng2-completer'
+import { CompleterService } from 'ng2-completer'
 import { Angulartics2 } from 'angulartics2'
 import { Router } from '@angular/router'
 
@@ -10,7 +10,6 @@ import { Router } from '@angular/router'
 import { AssetService, GroupService, AuthService, DomUtilityService, ThumbnailService, LogService } from '_services'
 import { ImageGroup, ImageZoomParams, Asset } from 'datatypes'
 import { ToastService } from 'app/_services'
-import { group } from "@angular/animations";
 import { GroupList } from "shared";
 
 @Component({
