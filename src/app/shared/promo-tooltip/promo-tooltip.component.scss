@@ -124,6 +124,9 @@ $tooltip-width: 295px;
   }
 
   .close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 3rem;
     line-height: 1rem;
     position: absolute;
@@ -132,9 +135,9 @@ $tooltip-width: 295px;
     width: 3rem;
 
     span {
-      color: $color-white;
-      font-weight: 100;
-      font-size: 18px;
+      width: 1.5rem;
+      height: 1.5rem;
+      display: block;
     }
   }
 }
