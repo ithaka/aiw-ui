@@ -82,7 +82,7 @@ $tooltip-width: 295px;
 
   .heading {
     font-family: Verdana;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     margin-bottom: 8px;
     margin-right: 1.5rem;
@@ -95,10 +95,14 @@ $tooltip-width: 295px;
     font-weight: normal;
     line-height: normal;
     margin-bottom: 14px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 
   .links {
-    
+
     a {
       font-family: Verdana;
       font-size: 14px;
