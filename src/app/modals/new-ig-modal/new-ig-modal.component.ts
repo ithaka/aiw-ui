@@ -400,7 +400,6 @@ export class NewIgModal implements OnInit, AfterViewInit {
   /**
    * Updates a group's public property. Should only be called for artstor users.
    * @param group the image group which needs the public property changed
-   * @param isPublic the value to set the public property to
    */
   private changeGlobalSetting(group: ImageGroup): void {
 
