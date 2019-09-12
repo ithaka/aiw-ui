@@ -345,6 +345,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
 
   private loadRecentGroups(): void {
     this.loading.recentGroups = true
+    this.error.recentGroups = false
 
     this.loadGroups(
       3,
@@ -366,6 +367,8 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
 
   private loadMyGroups() {
     this.loading.allGroups = true
+    this.error.allGroups = false
+
     let timeStamp = this.allGroupSearchTS
 
     this.loadGroups(
@@ -399,8 +402,8 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
         )
       ).subscribe(
       (groups) => onSuccess(groups),
-      (error) => onFailure(error),
-      () => onComplete())
+      (error) => onFailure(error)
+    ).add(() => onComplete())
   }
 
   private selectGroup(selectedGroup: any, type: string): void{
