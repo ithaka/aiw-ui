@@ -346,6 +346,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
   private loadRecentGroups(): void {
     this.loading.recentGroups = true
 
+    // Very helpful: https://medium.com/@luukgruijs/understanding-rxjs-map-mergemap-switchmap-and-concatmap-833fc1fb09ff
     this._group.getAll('created', 3, 1, [], '', '', 'date', 'desc')
       .pipe(
         map((response: GroupList) => response.groups),
@@ -353,7 +354,6 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
       )
     ).subscribe(
       (groups) => {
-        console.log(groups)
         this.recentGroups = groups
       },
       (error) => {
@@ -369,52 +369,28 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     this.loading.allGroups = true
     let timeStamp = this.allGroupSearchTS
 
-    this._group.getAll(
-      'created', this.groupsPageSize, this.groupsCurrentPage, [], this.groupSearchTerm, '', 'alpha', 'asc'
-    ).pipe(
-      take(1),
-      map(data  => {
-        this.totalGroups = data.total
-        let groups = data.groups || []
-        let itemIds = []
-        for(let group of data.groups) {
-          if(group.items.length > 0){
-            itemIds.push(group.items[0])
-          }
-        }
-        // Check the length of itemIds to remove invalid call with object_id=null
-        if(itemIds.length > 0 && groups.length > 0) {
-          this._assets.getAllThumbnails({ itemIds })
-          .then( allThumbnails => {
-            allThumbnails = allThumbnails.map( thmbObj => {
-              for (let group of data.groups) {
-                if(group.items[0] && group.items[0] === thmbObj.id){
-                  group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
-                  group['compoundmediaCount'] = thmbObj['compoundmediaCount']
-                }
-              }
-              return thmbObj
-            })
+    this._group.getAll('created', this.groupsPageSize, this.groupsCurrentPage, [], this.groupSearchTerm, '', 'alpha', 'asc')
+      .pipe(
+        map((response: GroupList) => {
+          this.totalGroups = response.total // TODO seems like we can do this anywhere don't let it hold us back from consolidating with recent groups
 
-            if(timeStamp === this.allGroupSearchTS) {
-              this.allGroups = this.allGroups.concat(data.groups)
-            }
-            this.loading.allGroups = false
-          })
-          .catch( error => {
-            console.error(error)
-            this.error.allGroups = true
-            this.loading.allGroups = false
-          })
-        } else { // Incase the result has 0 groups
-          this.loading.allGroups = false
+          return response.groups
+        }),
+        mergeMap(groups => from(this.injectThumbnails(groups))
+        )
+      ).subscribe(
+      (groups) => {
+        if(timeStamp === this.allGroupSearchTS) {
+          this.allGroups = this.allGroups.concat(groups)
         }
       },
       (error) => {
-        console.error(error)
+        console.error('Error loading image groups', error)
+        this.error.allGroups = true
+      },
+      () => {
         this.loading.allGroups = false
-      }
-    )).subscribe()
+      })
   }
 
   private selectGroup(selectedGroup: any, type: string): void{
