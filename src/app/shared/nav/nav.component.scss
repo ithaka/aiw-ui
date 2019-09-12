@@ -62,7 +62,7 @@ $loginPanelMobileHeight: 0;
     min-height: $loginPanelMobileHeight;
     // max-height: $loginPanelMobileHeight;
     height: 100%;
-    z-index: 9999;
+    z-index: 2001;
 
     @media (max-width: $phone) {
         max-height: 0;
