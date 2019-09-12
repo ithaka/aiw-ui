@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core'
 import { NgForm } from '@angular/forms'
-import { BehaviorSubject, Observable, Subscription } from 'rxjs'
-import { map, take } from 'rxjs/operators'
+import { BehaviorSubject, Observable, Subscription, from } from 'rxjs'
+import { map, take, mergeMap } from 'rxjs/operators'
 import { CompleterService, CompleterData } from 'ng2-completer'
 import { Angulartics2 } from 'angulartics2'
 import { Router } from '@angular/router'
@@ -11,6 +11,7 @@ import { AssetService, GroupService, AuthService, DomUtilityService, ThumbnailSe
 import { ImageGroup, ImageZoomParams, Asset } from 'datatypes'
 import { ToastService } from 'app/_services'
 import { group } from "@angular/animations";
+import { GroupList } from "shared";
 
 @Component({
   selector: 'ang-add-to-group',
@@ -313,61 +314,55 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     }, 100)
   }
 
+  private injectThumbnails(groups) {
+    let itemIds = groups.filter(group => group.items.length > 0).map(group => group.items[0])
 
+      return this._assets.getAllThumbnails({ itemIds })
+        .then( thumbnails => {
+          return thumbnails.reduce((thumbnailMap, thumbnail) => {
+            thumbnailMap[thumbnail.id] = thumbnail
+            return thumbnailMap
+          }, {})
+        })
+        .then(thumbnailMap => {
+          return groups.map(group => {
+            let groupClone: any = {...group}
 
-  private loadGroupThumbnails(groups) {
-    let itemIds = groups.map(group => {
-      if(group.items.length > 0){
-        return group.items[0]
-      }
-    })
+            if(groupClone.items.length > 0) {
+              let firstItemId: string = group.items[0],
+                  firstItemThumbnail: any = thumbnailMap[firstItemId]
 
-    if(itemIds.length !== 0) {
-      this._assets.getAllThumbnails({ itemIds })
-        .then( allThumbnails => {
-          allThumbnails.forEach( thmbObj => {
-            for (let group of groups) {
-              if(group.items[0] && group.items[0] === thmbObj.id){
-                group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
-                group['compoundmediaCount'] = thmbObj['compoundmediaCount']
-              }
+                if(firstItemThumbnail) {
+                  groupClone.thumbnailImgUrl = firstItemThumbnail.thumbnailImgUrl
+                  groupClone.compoundmediaCount = firstItemThumbnail.compoundmediaCount
+                }
             }
-          })
 
-          this.recentGroups = groups
+            return groupClone
+          })
         })
-        .catch( error => {
-          console.error(error)
-          this.error.recentGroups = true
-        })
-    }
   }
 
-  // Maybe some rought steps?
-  // Step 1) Get all the groups from network call
-  // Step 2) Take all the groups and get first image id of each
-  // Step 3) Given all the image ids make network call to get thumbnails
-  // Step 4) For all groups inject the thumbnailImgUrl and compoundmediaCount
-  // Step 5) Set the 'recentGroups'
-
-  private loadRecentGroups(): void{
+  private loadRecentGroups(): void {
     this.loading.recentGroups = true
-    debugger;
-    this._group.getAll(
-      'created', 3, 1, [], '', '', 'date', 'desc')
-      .pipe(take(1))
-      .subscribe(groupList => {
-        this.loadGroupThumbnails(groupList.groups)
+
+    this._group.getAll('created', 3, 1, [], '', '', 'date', 'desc')
+      .pipe(
+        map((response: GroupList) => response.groups),
+        mergeMap(groups => from(this.injectThumbnails(groups))
+      )
+    ).subscribe(
+      (groups) => {
+        console.log(groups)
+        this.recentGroups = groups
       },
       (error) => {
-        console.log("ERRRROR!")
+        console.error('Error loading image groups', error)
         this.error.recentGroups = true
       },
       () => {
-        console.log("Complete!")
         this.loading.recentGroups = false
-      }
-    )
+      })
   }
 
   private loadMyGroups(): void{
