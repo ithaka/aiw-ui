@@ -352,7 +352,6 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
         this.recentGroups = groups
       },
       (error) => {
-        console.error('Error loading recent image groups', error)
         this.error.recentGroups = true
       }
     ).add(() => {
@@ -373,7 +372,6 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
         }
       },
       (error) => {
-        console.error('Error loading all image groups', error)
         this.error.allGroups = true
       }
     ).add(() => {
