@@ -194,13 +194,13 @@ export class Nav implements OnInit, OnDestroy {
   }
 
   trackLoginButtonClick() {
-    this.angulartics.eventTrack.next({ properties: { event: 'loginButtonClicked', category: 'click', label: 'New Login Button' } })
+    this.angulartics.eventTrack.next({ properties: { event: 'New Login Button', category: 'click', label: 'loginButtonClicked' } })
   }
 
   closeLoginTooltip() {
     this.hideLoginTooltip = true;
     this._storage.setSession('hideLoginTooltip', this.hideLoginTooltip);
-    this.angulartics.eventTrack.next({ properties: { event: 'loginPromptClosed', category: 'close', label: 'Login Prompt' } })
+    this.angulartics.eventTrack.next({ properties: { event: 'Login Prompt', category: 'close', label: 'loginPromptClosed'  } })
   }
 
 }
