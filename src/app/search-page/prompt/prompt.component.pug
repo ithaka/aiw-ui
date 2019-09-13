@@ -6,7 +6,7 @@
       div(style="margin-bottom:2px;")
         p#promptText These are images in public collections. There's more content available for participating institutions.
       div
-        a([routerLink]="['/login']", (click)="trackUnaffiliatedInstLogin()") Log in through your institution to begin
+        a((click)="navigateAndSaveRoute('/login');trackUnaffiliatedInstLogin()") Log in through your institution to begin
     .col-sm-3
       .mobile--hide
         .row
