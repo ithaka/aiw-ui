@@ -403,6 +403,10 @@ export class AssetService {
             let options = { withCredentials: true };
 
             let loadBatch = (i) => {
+                if(itemIds.length === 0) {
+                  resolve([])
+                }
+
                 let countEnd = i + maxCount
                 let objectIdTerm: string = igId ? '&object_ids=' : '&object_id=' // the group version of the call takes object_ids instead of object_id
 
@@ -714,7 +718,7 @@ export class AssetService {
             } else {
                 dateObj = {
                     modified : false,
-                    earliest : {                   
+                    earliest : {
                         era : 'BCE'
                     },
                     latest : {

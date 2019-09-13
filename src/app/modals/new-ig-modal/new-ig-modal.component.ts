@@ -259,8 +259,8 @@ export class NewIgModal implements OnInit, AfterViewInit {
           }
         )).subscribe()
       // if an Artstor user, make sure the public property is set correctly
-      if (this.isArtstorUser) {
-        this.changeGlobalSetting(group, formValue.artstorPermissions == 'global')
+      if (this.isArtstorUser && formValue.artstorPermissions === 'global') {
+        this.changeGlobalSetting(group)
       }
     }
     else {
@@ -282,8 +282,8 @@ export class NewIgModal implements OnInit, AfterViewInit {
           this._assets.clearSelectMode.next(true)
 
           // if an Artstor user, make sure the public property is set correctly
-          if (this.isArtstorUser) {
-            this.changeGlobalSetting(this.newGroup, formValue.artstorPermissions == 'global')
+          if (this.isArtstorUser && formValue.artstorPermissions === 'global') {
+            this.changeGlobalSetting(this.newGroup)
           }
 
           if (this.copyIG && this.ig && this.ig.id) {
@@ -400,11 +400,10 @@ export class NewIgModal implements OnInit, AfterViewInit {
   /**
    * Updates a group's public property. Should only be called for artstor users.
    * @param group the image group which needs the public property changed
-   * @param isPublic the value to set the public property to
    */
-  private changeGlobalSetting(group: ImageGroup, isPublic: boolean): void {
+  private changeGlobalSetting(group: ImageGroup): void {
 
-    this._group.updateIgPublic(group.id, isPublic).pipe(
+    this._group.updateIgPublic(group.id).pipe(
       take(1),
       map(res => {
         // not really sure what to do here?

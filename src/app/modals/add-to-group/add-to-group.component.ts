@@ -1,8 +1,8 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core'
 import { NgForm } from '@angular/forms'
-import { BehaviorSubject, Observable, Subscription } from 'rxjs'
-import { map, take } from 'rxjs/operators'
-import { CompleterService, CompleterData } from 'ng2-completer'
+import { Subscription, from } from 'rxjs'
+import { map, take, mergeMap } from 'rxjs/operators'
+import { CompleterService } from 'ng2-completer'
 import { Angulartics2 } from 'angulartics2'
 import { Router } from '@angular/router'
 
@@ -10,6 +10,8 @@ import { Router } from '@angular/router'
 import { AssetService, GroupService, AuthService, DomUtilityService, ThumbnailService, LogService } from '_services'
 import { ImageGroup, ImageZoomParams, Asset } from 'datatypes'
 import { ToastService } from 'app/_services'
+import { GroupList } from "shared";
+import { Observable } from "rxjs/Rx";
 
 @Component({
   selector: 'ang-add-to-group',
@@ -48,6 +50,10 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
   public totalGroups: number = 0
 
   public loading: any = {
+    recentGroups: false,
+    allGroups: false
+  }
+  public error: any = {
     recentGroups: false,
     allGroups: false
   }
@@ -308,99 +314,80 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
     }, 100)
   }
 
-  private loadRecentGroups(): void{
-    this.loading.recentGroups = true
-    this._group.getAll(
-      'created', 3, 1, [], '', '', 'date', 'desc'
-    ).pipe(
-    take(1),
-      map(data => {
-        let itemIds = []
-        for(let group of data.groups) {
-          if(group.items.length > 0){
-            itemIds.push(group.items[0])
-          }
-        }
+  private injectThumbnails(groups) {
+    const itemIds = groups.filter(group => group.items.length > 0).map(group => group.items[0])
 
-        // Check the length of itemIds to remove invalid call with object_id=null
-        if(itemIds.length !== 0) {
-          this._assets.getAllThumbnails({ itemIds })
-          .then( allThumbnails => {
-            allThumbnails = allThumbnails.map( thmbObj => {
-              for (let group of data.groups) {
-                if(group.items[0] && group.items[0] === thmbObj.id){
-                  group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
-                  group['compoundmediaCount'] = thmbObj['compoundmediaCount']
+      return this._assets.getAllThumbnails({ itemIds })
+        .then( thumbnails => {
+          return thumbnails.reduce((thumbnailMap, thumbnail) => {
+            thumbnailMap[thumbnail.id] = thumbnail
+            return thumbnailMap
+          }, {})
+        })
+        .then(thumbnailMap => {
+          return groups.map(group => {
+            const groupClone: any = {...group}
+
+            if(groupClone.items.length > 0) {
+              let firstItemId: string = group.items[0],
+                  firstItemThumbnail: any = thumbnailMap[firstItemId]
+
+                if(firstItemThumbnail) {
+                  groupClone.thumbnailImgUrl = firstItemThumbnail.thumbnailImgUrl
+                  groupClone.compoundmediaCount = firstItemThumbnail.compoundmediaCount
                 }
-              }
-              return thmbObj
-            })
+            }
 
-            this.recentGroups = data.groups
-            this.loading.recentGroups = false
+            return groupClone
           })
-          .catch( error => {
-            console.error(error)
-          })
-        } else {
-          this.loading.recentGroups = false
-        }
-      },
-      (error) => {
-        console.error(error)
-        this.loading.recentGroups = false
-      }
-    )).subscribe()
+        })
   }
 
-  private loadMyGroups(): void{
+  private loadRecentGroups(): void {
+    this.loading.recentGroups = true
+    this.error.recentGroups = false
+
+    this.loadGroups(3, 1, '', 'date', 'desc').subscribe(
+      (groups) => {
+        this.recentGroups = groups
+      },
+      (error) => {
+        this.error.recentGroups = true
+      }
+    ).add(() => {
+      this.loading.recentGroups = false
+    })
+  }
+
+  private loadMyGroups() {
     this.loading.allGroups = true
+    this.error.allGroups = false
+
     let timeStamp = this.allGroupSearchTS
 
-    this._group.getAll(
-      'created', this.groupsPageSize, this.groupsCurrentPage, [], this.groupSearchTerm, '', 'alpha', 'asc'
-    ).pipe(
-      take(1),
-      map(data  => {
-        this.totalGroups = data.total
-        let groups = data.groups || []
-        let itemIds = []
-        for(let group of data.groups) {
-          if(group.items.length > 0){
-            itemIds.push(group.items[0])
-          }
-        }
-        // Check the length of itemIds to remove invalid call with object_id=null
-        if(itemIds.length > 0 && groups.length > 0) {
-          this._assets.getAllThumbnails({ itemIds })
-          .then( allThumbnails => {
-            allThumbnails = allThumbnails.map( thmbObj => {
-              for (let group of data.groups) {
-                if(group.items[0] && group.items[0] === thmbObj.id){
-                  group['thumbnailImgUrl'] = thmbObj['thumbnailImgUrl']
-                  group['compoundmediaCount'] = thmbObj['compoundmediaCount']
-                }
-              }
-              return thmbObj
-            })
-
-            if(timeStamp === this.allGroupSearchTS) {
-              this.allGroups = this.allGroups.concat(data.groups)
-            }
-            this.loading.allGroups = false
-          })
-          .catch( error => {
-            console.error(error)
-          })
-        } else { // Incase the result has 0 groups
-          this.loading.allGroups = false
+    this.loadGroups(this.groupsPageSize, this.groupsCurrentPage, this.groupSearchTerm, 'alpha', 'asc').subscribe(
+      (groups) => {
+        if (timeStamp === this.allGroupSearchTS) {
+          this.allGroups = this.allGroups.concat(groups)
         }
       },
       (error) => {
-        console.error(error)
-        this.loading.allGroups = false
+        this.error.allGroups = true
       }
-    )).subscribe()
+    ).add(() => {
+      this.loading.allGroups = false
+    })
+  }
+
+  private loadGroups(amount, pageNumber, query, sortBy, order): Observable<any> {
+    return this._group.getAll('created', amount, pageNumber, [], query, '', sortBy, order)
+      .pipe(
+        map((response: GroupList) => {
+          this.totalGroups = response.total
+          return response.groups
+        }),
+        mergeMap(groups => from(this.injectThumbnails(groups)))
+      )
   }
 
   private selectGroup(selectedGroup: any, type: string): void{
@@ -471,7 +458,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
             add_detail_view: add_detail_view
         }
       })
-    } 
+    }
     // If the request is from the collection/search page, log save selections to existing group into Captain's Log
     else {
       let item_ids = this.selectedAssets.map(asset => {
