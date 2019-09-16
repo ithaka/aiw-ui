@@ -10,4 +10,4 @@
         p(*ngIf="_auth.isPublicOnly()", [innerHtml]="'LOGIN_REQUIRED_MODAL.PROMPT_NO_REGISTER' | translate")
       .modal-footer
         button.btn.btn-secondary(type="button", (click)="closeModal.emit()") Cancel
-        button.btn.btn-primary((click)="goToLogin()") Go To Login
+        button.btn.btn-primary((click)="goToLogin()") Log In
