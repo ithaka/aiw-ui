@@ -371,7 +371,7 @@
   "BROWSE_GROUPS" : "Browse Groups",
   "LOGIN_REQUIRED_MODAL": {
     "HEADING": "User account required",
-    "PROMPT": "Please log in to your account or <a href=\"/#/register\" class=\"link\">Register</a> to complete this action.<br/><br/>Registering for an Artstor account lets you access your groups, download and save items to groups, export presentations, and share groups with other Artstor users.",
+    "PROMPT": "<b>Please log in to your account or <a href=\"/#/register\" class=\"link\">Register</a> to complete this action.</b><br/><br/>Registering for an Artstor account lets you access your groups, download and save items to groups, export presentations, and share groups with other Artstor users.",
     "PROMPT_NO_REGISTER": "Please log in to save images."
   },
   "MODAL" :{
