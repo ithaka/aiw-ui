@@ -186,27 +186,27 @@
               ng-container(*ngFor="let value of assets[0].formattedMetadata[fieldName]; let i=index")
                 //- Creator
                 .value.meta-link(
-                  *ngIf="fieldName === 'Creator'", 
-                  [attr.id]="cleanId(fieldName)", 
-                  (click)="trackCreatorLink(value)", 
-                  [innerHTML]="value | filterLink:'artcreator'", 
+                  *ngIf="fieldName === 'Creator'",
+                  [attr.id]="cleanId(fieldName)",
+                  (click)="trackCreatorLink(value)",
+                  [innerHTML]="value | filterLink:'artcreator'",
                   [attr.aria-labelledby]="cleanId(fieldName)"
                 )
-                  //- [routerLink]="['/search', 'artcreator:(' + value + ')']", 
+                  //- [routerLink]="['/search', 'artcreator:(' + value + ')']",
                 //- Collections
                 ng-container(*ngIf="fieldName === 'Collection' && i === 0")
                   div(*ngFor="let col of assets[0].collectionLinks")
                     a.value.meta-link.col-link(id="collection-link", (click)="trackCollectionLink(cleanFieldValue(col.displayName))", [routerLink]="col.route", [innerHTML]="cleanFieldValue(col.displayName) | linkify", [attr.aria-labelledby]="Collections")
                 //- Subject
                 a.value.meta-link(
-                  *ngIf="fieldName === 'Subject'", 
-                  [attr.id]="cleanId(fieldName)", 
-                  (click)="trackSubjectLink(value)", 
-                  [innerHTML]="value | filterLink:'artsubject'", 
+                  *ngIf="fieldName === 'Subject'",
+                  [attr.id]="cleanId(fieldName)",
+                  (click)="trackSubjectLink(value)",
+                  [innerHTML]="value | filterLink:'artsubject'",
                   [attr.aria-labelledby]="cleanId(fieldName)"
                 )
                 //- Other fields (culture, material, work type, description...etc)
-                div(*ngIf="fieldName !== 'Collection' && fieldName !== 'Subject' && fieldName !== 'Creator'")  
+                div(*ngIf="fieldName !== 'Collection' && fieldName !== 'Subject' && fieldName !== 'Creator'")
                   .value([attr.id]="cleanId(fieldName)", [innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")
           //- Rights
           .meta-block(*ngIf="assets[0].formattedMetadata.Rights && assets[0].formattedMetadata.Rights.length > 0")
@@ -224,7 +224,7 @@
               a(*ngIf="license", [attr.href]="license.licenseLink", aria-label="Learn about this license statement on creativecommons.org", target="_blank")
                 img.license-icon([attr.src]="license.licenseImg", [attr.alt]="license.licenseText", title="License")
                 | &nbsp;
-                span.value.license-text([innerHTML]="cleanFieldValue(license.licenseText) | lowercase | linkify", title="License")
+                span.value.license-text([innerHTML]="cleanFieldValue(license.licenseText) | linkify", title="License")
             .value([innerHTML]="cleanFieldValue('Use of this image is in accordance with the <a href=`https://www.artstor.org/artstor-terms/` target=`_blank` >Artstor Terms & Conditions</a>') | linkify")
           //- File Properties
           .row-hdr.pt-3(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
