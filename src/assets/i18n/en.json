@@ -555,60 +555,60 @@
         "VIEW_BLOG_LINK": "Read more on the blog"
       },
       "COLLECTIONS": [{
-          "SUBHEADING": "American Painting at the IMA",
-          "DESCRIPTION": "An alternative look at the canon",
-          "CAPTION": "Edward Moran, The Valley in the Sea, 1862. Image and original data provided by the Indianapolis Museum of Art at Newfields.",
-          "LINK": "https://www.artstor.org/2019/05/21/american-art-at-the-indianapolis-museum-of-art-at-newfields/",
-          "IMG_SOURCE": "/assets/img/featured-collections/ima_moran.jpg",
-          "LINK_TITLE": "American Painting at the IMA",
-          "ALT_TEXT": "American Painting at the IMA"
+          "SUBHEADING": "Copyright in Artstor",
+          "DESCRIPTION": "Learn more with our guide",
+          "CAPTION": "Artstor LibGuides",
+          "LINK": "http://artstor.libguides.com/Copyright-in-Artstor/",
+          "IMG_SOURCE": "/assets/img/featured-collections/Copyright_LibGuide.jpg",
+          "LINK_TITLE": "Copyright in Artstor",
+          "ALT_TEXT": "Copyright in Artstor"
         },
         {
-          "SUBHEADING": "American Studies in Artstor",
-          "DESCRIPTION": "A guide to our collections",
-          "CAPTION": "Dorothea Lange, Migrant Mother Series, 1936. Image and original data from Eyes of the Nation: A Visual History of the United States (Library of Congress).",
-          "LINK": "http://artstor.libguides.com/c.php?g=807677&p=5764951",
-          "IMG_SOURCE": "/assets/img/featured-collections/loc_lange.jpg",
-          "LINK_TITLE": "American Studies in Artstor",
-          "ALT_TEXT": "American Studies in Artstor"
+          "SUBHEADING": "Browsing Artstor Just Got Easier",
+          "DESCRIPTION": "Browse works by a single creator or subject",
+          "CAPTION": "Diego Rivera. At the Fountain Near Toledo. 1913. © 2012 Artists Rights Society (ARS), New York. Image: Bob Schalkwijk/INBA",
+          "LINK": "https://www.artstor.org/2019/08/26/browsing-artstor-just-got-easier/",
+          "IMG_SOURCE": "/assets/img/featured-collections/Schalkwijk_Rivera.jpg",
+          "LINK_TITLE": "Browsing Artstor Just Got Easier",
+          "ALT_TEXT": "Browsing Artstor Just Got Easier"
         },
         {
-          "SUBHEADING": "Sweet Fortunes: Sugar, Race, Art, & Patronage in the Americas",
-          "DESCRIPTION": "A group of images for use in teaching",
-          "CAPTION": "Joseph Ferdinand Keppler, The bosses of the Senate, 1889. Image and original data from the Carnegie Arts of the United States.",
-          "LINK": "/#/group/589495",
-          "IMG_SOURCE": "/assets/img/featured-collections/carnegie_puck.jpg",
-          "LINK_TITLE": "Sweet Fortunes: Sugar, Race, Art, & Patronage in the Americas",
-          "ALT_TEXT": "Sweet Fortunes: Sugar, Race, Art, & Patronage in the Americas"
+          "SUBHEADING": "Pioneers of the Deep",
+          "DESCRIPTION": "Early Americans fathom the ocean",
+          "CAPTION": "James M. Summerville, Christian Schuselle. Ocean Life. c 1859. Image and data courtesy the Metropolitan Museum of Art. Public Domain.",
+          "LINK": "https://www.artstor.org/2019/08/09/pioneers-of-the-deep-early-americans-fathom-the-ocean/",
+          "IMG_SOURCE": "/assets/img/featured-collections/Met_Ocean.jpg",
+          "LINK_TITLE": "Pioneers of the Deep",
+          "ALT_TEXT": "Pioneers of the Deep"
         }
       ],
       "PUBLIC_COLLECTIONS": [
         {
-          "SUBHEADING": "Guantanamo Bay Images",
-          "DESCRIPTION": "Artworks made by current and former detainees",
-          "CAPTION": "Untitled. Muhammad Ansi. 2015.  Image courtesy of Guantanamo Bay Images.",
-          "LINK": "/#/collection/87731784",
-          "IMG_SOURCE": "/assets/img/featured-collections/hand_guantanamo.jpg",
-          "LINK_TITLE": "Guantanamo Bay Images",
-          "ALT_TEXT": "Guantanamo Bay Images"
+          "SUBHEADING": "Copyright in Artstor",
+          "DESCRIPTION": "Learn more with our guide",
+          "CAPTION": "Artstor LibGuides",
+          "LINK": "http://artstor.libguides.com/Copyright-in-Artstor",
+          "IMG_SOURCE": "/assets/img/featured-collections/Copyright_LibGuide.jpg",
+          "LINK_TITLE": "Copyright in Artstor",
+          "ALT_TEXT": "Copyright in Artstor"
         },
         {
-          "SUBHEADING": "Cornell: Persuasive Cartography: The PJ Mode Collection",
-          "DESCRIPTION": "Maps intended primarily to influence opinion",
-          "CAPTION": "Serio-Comic War Map. Fred W. Rose. 1877. Image courtesy of Cornell: Persuasive Cartography: The PJ Mode Collection.",
-          "LINK": "/#/collection/87730456 ",
-          "IMG_SOURCE": "/assets/img/featured-collections/map_cornell.jpg",
-          "LINK_TITLE": "Cornell: Persuasive Cartography: The PJ Mode Collection",
-          "ALT_TEXT": "Cornell: Persuasive Cartography: The PJ Mode Collection"
+          "SUBHEADING": "Browsing Artstor Just Got Easier",
+          "DESCRIPTION": "Browse works by a single creator or subject",
+          "CAPTION": "Diego Rivera. At the Fountain Near Toledo. 1913. © 2012 Artists Rights Society (ARS), New York. Image: Bob Schalkwijk/INBA",
+          "LINK": "https://www.artstor.org/2019/08/26/browsing-artstor-just-got-easier/",
+          "IMG_SOURCE": "/assets/img/featured-collections/Schalkwijk_Rivera.jpg",
+          "LINK_TITLE": "Browsing Artstor Just Got Easier",
+          "ALT_TEXT": "Browsing Artstor Just Got Easier"
         },
         {
-          "SUBHEADING": "Bard College: Montgomery Place Violetta White Delafield Mushroom Drawings",
-          "DESCRIPTION": "Botanical watercolors",
-          "CAPTION": "Pholiota squarrosa. Delafield, Violetta White. 1900. Image courtesy of Bard College: Montgomery Place Violetta White Delafield Mushroom Drawings.",
-          "LINK": "/#/collection/87732479",
-          "IMG_SOURCE": "/assets/img/featured-collections/mushroom_bard.jpg",
-          "LINK_TITLE": "Bard College: Montgomery Place Violetta White Delafield Mushroom Drawings",
-          "ALT_TEXT": "Bard College: Montgomery Place Violetta White Delafield Mushroom Drawings"
+          "SUBHEADING": "Pioneers of the Deep",
+          "DESCRIPTION": "Early Americans fathom the ocean",
+          "CAPTION": "James M. Summerville, Christian Schuselle. Ocean Life. c 1859. Image and data courtesy the Metropolitan Museum of Art. Public Domain.",
+          "LINK": "https://www.artstor.org/2019/08/09/pioneers-of-the-deep-early-americans-fathom-the-ocean/",
+          "IMG_SOURCE": "/assets/img/featured-collections/Met_Ocean.jpg",
+          "LINK_TITLE": "Pioneers of the Deep",
+          "ALT_TEXT": "Pioneers of the Deep"
         }
       ]
     },
