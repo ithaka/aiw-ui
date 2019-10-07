@@ -47,6 +47,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   errors = {};
   public results: any[] = [];
   public visibleResults: any[] = [];
+  public invisibleResults: any[] = [];
   filters = [];
   public editMode: boolean = false;
   public reorderMode: boolean = false;
@@ -655,6 +656,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.allResults = allThumbnails
           this.results = this.allResults.slice(0)
           this.visibleResults = this.results.filter(asset => asset.status !== 'not-available')
+          this.invisibleResults = this.results.filter(asset => asset.status === 'not-available')
         })
         .catch( error => {
           this.isLoading = false;
@@ -700,11 +702,11 @@ export class AssetGrid implements OnInit, OnDestroy {
   }
 
   private saveReorder(): void {
-    this.isLoading = true;
-    this.results = this.visibleResults
+    this.isLoading = true
+    this.results = this.visibleResults.concat(this.invisibleResults)
     this.allResults = this.results
 
-    let newItemsArray: any[] = [];
+    let newItemsArray: any[] = []
     // Construct the updated array of item objects containing id and zoom if avilable
     for (let i = 0; i < this.allResults.length; i++) {
       if ('id' in this.allResults[i]) {
