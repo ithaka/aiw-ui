@@ -654,11 +654,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.isLoading = false;
           this.allResults = allThumbnails
           this.results = this.allResults.slice(0)
-          this.visibleResults = []
-          for (let i = 0; i < this.results.length; i++) {
-              if (this.results[i].status !== 'not-available')
-                this.visibleResults.push(this.results[i])
-            }
+          this.visibleResults = this.results.filter(asset => asset.status !== 'not-available')
         })
         .catch( error => {
           this.isLoading = false;
