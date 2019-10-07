@@ -655,8 +655,18 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.isLoading = false;
           this.allResults = allThumbnails
           this.results = this.allResults.slice(0)
-          this.visibleResults = this.results.filter(asset => asset.status !== 'not-available')
-          this.invisibleResults = this.results.filter(asset => asset.status === 'not-available')
+
+          // Construct visible results and invisible results for reordering mode
+          this.visibleResults = []
+          this.invisibleResults = []
+          this.results.forEach(asset => {
+            if (asset.status === 'not-available') {
+              this.invisibleResults.push(asset)
+            }
+            else {
+              this.visibleResults.push(asset)
+            }
+          })
         })
         .catch( error => {
           this.isLoading = false;
