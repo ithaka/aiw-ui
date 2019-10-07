@@ -46,6 +46,7 @@ export class AssetGrid implements OnInit, OnDestroy {
   public showAdvancedModal: boolean = false;
   errors = {};
   public results: any[] = [];
+  public visibleResults: any[] = [];
   filters = [];
   public editMode: boolean = false;
   public reorderMode: boolean = false;
@@ -653,6 +654,11 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.isLoading = false;
           this.allResults = allThumbnails
           this.results = this.allResults.slice(0)
+          this.visibleResults = []
+          for (let i = 0; i < this.results.length; i++) {
+              if (this.results[i].status !== 'not-available')
+                this.visibleResults.push(this.results[i])
+            }
         })
         .catch( error => {
           this.isLoading = false;
@@ -699,6 +705,7 @@ export class AssetGrid implements OnInit, OnDestroy {
 
   private saveReorder(): void {
     this.isLoading = true;
+    this.results = this.visibleResults
     this.allResults = this.results
 
     let newItemsArray: any[] = [];
@@ -754,22 +761,22 @@ export class AssetGrid implements OnInit, OnDestroy {
       switch(event.key) {
 
         case "ArrowRight": {
-          let removed = this.results.splice(index, 1)
-          this.results.splice(index + 1, 0, removed[0])
-          this.arrowReorderMessage = 'moved to position ' + (index + 2) + ' of ' + this.results.length // aria live region message
+          let removed = this.visibleResults.splice(index, 1)
+          this.visibleResults.splice(index + 1, 0, removed[0])
+          this.arrowReorderMessage = 'moved to position ' + (index + 2) + ' of ' + this.visibleResults.length // aria live region message
           break
         }
         case "ArrowLeft": {
           if (index > 0) {
-            let removed = this.results.splice(index, 1)
-            this.results.splice(index - 1, 0, removed[0])
+            let removed = this.visibleResults.splice(index, 1)
+            this.visibleResults.splice(index - 1, 0, removed[0])
 
             setTimeout(() => {
               let id = 'item-' + (index - 1)
               this._dom.byId(id).focus()
             }, 100)
 
-            this.arrowReorderMessage = 'moved to position ' + (index) + ' of ' + this.results.length // aria live region message
+            this.arrowReorderMessage = 'moved to position ' + (index) + ' of ' + this.visibleResults.length // aria live region message
           }
           break
         }
