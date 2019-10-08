@@ -16,7 +16,7 @@
               label(for="inputLastName") {{ 'ACCOUNT.UPDATE_FORM.LAST_NAME' | translate }}
               input#inputLastName.form-control([formControl]="accountUpdateForm.controls['lastName']", type="text", tabindex="0")
             .form-group
-              label(for="selectUserDept") {{ 'ACCOUNT.UPDATE_FORM.ROLE' | translate }}
+              label(for="selectUserRole") {{ 'ACCOUNT.UPDATE_FORM.ROLE' | translate }}
               select#selectUserRole.form-control.custom-select([formControl]="accountUpdateForm.controls['departmentRole']", tabindex="0")
                 option(*ngFor="let role of userRoles", [ngValue]="role.id") {{ role.desc }}
             .form-group

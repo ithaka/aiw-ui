@@ -25,7 +25,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 // Directives
-import { ClickOutsideDirective } from './_directives';
+import { ClickOutsideDirective, FocusTrapDirective } from './_directives';
 import { MediumEditorDirective } from 'angular2-medium-editor';
 
 // ng2-idle
@@ -278,7 +278,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ToastComponent,
     PromptComponent,
     TypeIdPipe,
-    UploaderComponent
+    UploaderComponent,
+    FocusTrapDirective
   ],
   imports: [ // import Angular's modules
     BrowserModule.withServerTransition({ appId: 'avatar' }),

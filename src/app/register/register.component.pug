@@ -50,7 +50,7 @@
                 .has-danger(*ngIf="submitted && registerForm.hasError('passwordMismatch')")
                   p#errPasswordMismatch.form-control-feedback {{ 'REGISTER.ERRORS.PASSWORD_MISMATCH' | translate }}
               .form-group
-                label(for="selectUserDept") Role at Institution
+                label(for="selectUserRole") Role at Institution
                 select#selectUserRole.form-control.custom-select([formControl]="registerForm.controls['role']", tabindex="0", aria-label="Role at Institution: Choose your role from the following options")
                   option(*ngFor="let role of userRoles", [ngValue]="role.id") {{ role.desc }}
                 .has-danger(*ngIf="submitted && registerForm.controls['role'].hasError('required')")
