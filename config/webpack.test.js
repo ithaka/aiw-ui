@@ -152,7 +152,7 @@ module.exports = function (options) {
          */
         {
           test: /\.(pug|jade)$/,
-          loader: ['raw-loader', 'pug-html-loader']
+          use: [{loader: 'raw-loader'}, {loader: 'pug-html-loader'}]
         },
 
         /**
