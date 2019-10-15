@@ -326,7 +326,7 @@ export class GroupService {
      * @returns Observable resolved with { success: boolean, message: string }
      */
     public updateIgPublic(igId: string) {
-        let reqUrl = [this.groupV1, igId, 'admin', 'public'].join('/')
+        let reqUrl = [this.groupUrl, igId, 'admin', 'public'].join('/')
         let body = { public: true }
 
         return this.http.put(
