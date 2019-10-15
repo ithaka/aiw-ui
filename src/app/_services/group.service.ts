@@ -13,7 +13,6 @@ export class GroupService {
 
     private groupUrl: string
     private groupV1: string
-    private groupV2: string
     private options: {}
 
     public hasPrivateGroup: Observable<any>
@@ -30,7 +29,6 @@ export class GroupService {
          * Pending each group call to be update and moved to /v2
          */
         this.groupV1 = environment.API_URL + '/api/v1/group'
-        this.groupV2 = environment.API_URL + '/api/v2/group'
         this.options = { withCredentials: true }
         this.hasPrivateGroup = this.hasPrivateGroupSource.asObservable()
     }
@@ -328,7 +326,7 @@ export class GroupService {
      * @returns Observable resolved with { success: boolean, message: string }
      */
     public updateIgPublic(igId: string) {
-        let reqUrl = [this.groupV2, igId, 'admin', 'public'].join('/')
+        let reqUrl = [this.groupUrl, igId, 'admin', 'public'].join('/')
         let body = { public: true }
 
         return this.http.put(
