@@ -2,6 +2,7 @@
 export const environment = {
   production: false,
   API_URL: '',
+  SSR_API_URL: '',
   FORUM_URL: 'http://test.forum.jstor.org',
   STOR_URL: '//stor.stage.artstor.org/stor',
   GAPI_TEST: [
