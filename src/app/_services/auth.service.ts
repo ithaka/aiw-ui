@@ -130,7 +130,7 @@ export class AuthService implements CanActivate {
       'localhost',
       'localhost:3000'
     ]
-    let isProdHostname = new RegExp(prodHostnames.join('|')).test(this.clientHostname) 
+    let isProdHostname = new RegExp(prodHostnames.join('|')).test(this.clientHostname)
 
     // Static app Prod handling
     if (isProdHostname) {
@@ -206,7 +206,7 @@ export class AuthService implements CanActivate {
        * - Poll /userinfo every 15min
        * - Refreshs AccessToken with IAC
        */
-      const userInfoInterval = 15 * 1000 * 60 * 60
+      const userInfoInterval = 15 * 1000 * 60
       // Run every X mins
       setInterval(() => {
         this.refreshUserSession(true)
