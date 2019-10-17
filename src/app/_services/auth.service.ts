@@ -206,7 +206,7 @@ export class AuthService implements CanActivate {
        * - Poll /userinfo every 15min
        * - Refreshs AccessToken with IAC
        */
-      const userInfoInterval = 15 * 1000 * 60
+      const userInfoInterval = .5 * 1000 * 60
       // Run every X mins
       setInterval(() => {
         this.refreshUserSession(true)
@@ -230,6 +230,7 @@ export class AuthService implements CanActivate {
 
      this.idle.onIdleEnd.pipe(
        map(() => {
+         console.log("idle end")
          this.idleState = 'No longer idle.';
          // We want to ensure a user is refreshed as soon as they return to the tab
          this.refreshUserSession(true)
@@ -237,6 +238,7 @@ export class AuthService implements CanActivate {
 
      this.idle.onTimeout.pipe(
        map(() => {
+         console.log("Timed out!")
          let user = this.getUser();
          // console.log(user);
          if (user && user.isLoggedIn){
@@ -251,6 +253,7 @@ export class AuthService implements CanActivate {
 
      this.idle.onIdleStart.pipe(
        map(() => {
+         console.log("idle start!")
          this.idleState = 'You\'ve gone idle!';
          let currentDateTime = new Date().toUTCString();
          this._storage.setLocal('userGoneIdleAt', currentDateTime);
