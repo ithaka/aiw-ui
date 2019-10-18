@@ -81,6 +81,15 @@ export class AppComponent {
     '/printpreview' : { name: 'print preview group', section: 'content', type: 'browse' },
   }
 
+  // url hash which should show chat widget
+  private validChatUrls: Array<string> = [
+    '#/login',
+    '#/browse/library',
+    '#/browse/institution',
+    '#/browse/mycollections',
+    '#/browse/commons'
+  ]
+
   constructor(
     public _app: AppConfig,
     private _dom: DomUtilityService,
@@ -194,25 +203,26 @@ export class AppComponent {
           }
 
           // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
-          if (this.shouldShowChat(window.location.href) && this._app.config.showZendeskWidget) {
+          if (this.shouldShowChat(window.location.hash)) {
+            this.showZendeskChat();
             this._script.loadScript('zendesk')
-              .then( data => {
-                  window['zE'](() => {
-                    window['$zopim'](() => {
-                      window['$zopim'].livechat.setOnConnected(() => {
-                        // Sometimes the user navigates away from a page containing the chat widget
-                        // but it hasn't loaded yet. Need to check once more after it loads to ensure
-                        // we still should display it.
-                        if (this.shouldShowChat(window.location.href)) {
-                          this.showZendeskChat()
-                        } else {
-                          this.hideZendeskChat()
-                        }
-                      })
+              .then(data => {
+                window['zE'](() => {
+                  window['$zopim'](() => {
+                    window['$zopim'].livechat.setOnConnected(() => {
+                      // Sometimes the user navigates away from a page containing the chat widget
+                      // but it hasn't loaded yet. Need to check once more after it loads to ensure
+                      // we still should display it.
+                      if (this.shouldShowChat(window.location.hash)) {
+                        this.showZendeskChat()
+                      } else {
+                        this.hideZendeskChat()
+                      }
                     })
-                  });
+                  })
+                });
               })
-              .catch( error => console.error(error) )
+              .catch(error => console.error(error))
           } else {
             this.hideZendeskChat()
           }
@@ -241,19 +251,16 @@ export class AppComponent {
   }
 
   private hideZendeskChat() {
-    let zendeskElements = this._dom.bySelectorAll('.zopim')
-
-    if (zendeskElements && zendeskElements.length > 1) {
-      zendeskElements[0]['style']['display'] = 'none' // ChatWidgetButton
-      zendeskElements[1]['style']['display'] = 'none' // ChatWidgetWindow
+    let zendDeskElement = this._dom.byId('launcher')
+    if (zendDeskElement) {
+      zendDeskElement.style.display = 'none';
     }
   }
 
   private showZendeskChat() {
-    let zendeskElements = this._dom.bySelectorAll('.zopim')
-
-    if (zendeskElements && zendeskElements.length > 1) {
-      zendeskElements[0]['style']['display'] = 'block' // ChatWidgetButton
+    let zendDeskElement = this._dom.byId('launcher')
+    if (zendDeskElement) {
+      zendDeskElement.style.display = 'initial';
     }
   }
 
@@ -329,15 +336,8 @@ export class AppComponent {
     this.meta.updateTag({ property: 'og:image', content: '/assets/img/logo-v1-1.png' }, 'property="og:image"')
   }
 
-  // Show the chat widget on: 'login', 'browse/library', or 'browse/groups/public'
+  // Show the chat widget on: '#/login', '#/browse/library', etc,...
   private shouldShowChat(eventUrl: string): boolean {
-      if (eventUrl.indexOf('browse/library') > -1 ||
-          eventUrl.indexOf('browse/groups/public') > -1 ||
-          eventUrl.indexOf('/login') > -1) {
-           return true
-        }
-      else {
-        return false
-      }
+    return (this._app.config.showZendeskWidget && this.validChatUrls.includes(eventUrl));
   }
 }
