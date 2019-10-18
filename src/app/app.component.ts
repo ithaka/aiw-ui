@@ -260,7 +260,7 @@ export class AppComponent {
   private showZendeskChat() {
     let zendDeskElement = this._dom.byId('launcher')
     if (zendDeskElement) {
-      zendDeskElement.style.display = null;
+      zendDeskElement.style.display = 'initial';
     }
   }
 
