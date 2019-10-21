@@ -11,7 +11,7 @@ export const WLV_ARTSTOR = {
     logoUrl: "/assets/img/logo-v1-1.png",
     contributingInstFilters : [],
     isOpenAccess: true,
-    showZendeskWidget: false,
+    showZendeskWidget: true,
     footerLinks: [
         "ABOUT",
         "GETTING_STARTED",
