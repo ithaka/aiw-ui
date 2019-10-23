@@ -14,7 +14,8 @@ import {
   GroupService,
   DomUtilityService,
   ToastService,
-  FlagService
+  FlagService,
+  ScriptService
 } from '_services'
 import { LoadingStateOptions, LoadingState } from './../modals/loading-state/loading-state.component'
 import { ImageGroup } from 'datatypes'
@@ -90,13 +91,15 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     private _storage: ArtstorStorageService,
     private _dom: DomUtilityService,
     private _toasts: ToastService,
-    private _flags: FlagService
-
+    private _flags: FlagService,
+    private _script: ScriptService
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
 
   ngOnInit() {
+    // Insights team survey 10-23
+    this._script.loadScript('ethnio-survey')
 
     if (this.unaffiliatedUser) {
       this.showAccessDeniedModal = true
