@@ -203,6 +203,14 @@ a.list-group-item, a.list-group-item-action, a.btn  {
   }
 }
 
+.link--button {
+  @extend .link;
+  -webkit-appearance: none;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
 .form-text {
   font-size: 12px;
   

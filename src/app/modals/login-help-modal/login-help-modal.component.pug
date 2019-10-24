@@ -1,0 +1,16 @@
+#helpModal.modal.fade.show
+  .modal-dialog((keydown.esc)="closeModal.emit()", focusTrap)
+    .modal-content
+      .modal-header
+        h5 {{ 'ACCESS_HELP_MODAL.HEADING' | translate }}
+        button.close((click)="closeModal.emit()" type="button",
+          [attr.aria-label]="'ACCESS_HELP_MODAL.CLOSE' | translate"
+        )
+          span(aria-hidden="true") &times;
+      .modal-body([innerHtml]="'ACCESS_HELP_MODAL.PROMPT' | translate", tabindex="0")
+      .modal-footer
+        button#btnLoginDismissHelp.btn.btn-primary(
+          (click)="closeModal.emit()" type="button",
+          [attr.aria-label]="'ACCESS_HELP_MODAL.CLOSE' | translate",
+          [innerHtml]="'ACCESS_HELP_MODAL.DISMISS' | translate"
+        )
