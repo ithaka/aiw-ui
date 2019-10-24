@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Component, ElementRef, OnInit, OnDestroy, ViewChild } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Location } from '@angular/common'
 import { Angulartics2 } from 'angulartics2'
@@ -44,6 +44,9 @@ export class Login implements OnInit, OnDestroy {
 
   public showRegister: boolean = false
   public showHelpModal: boolean = false
+
+  @ViewChild('showHelpModalLink', {read: ElementRef}) showHelpModalLink: ElementRef<HTMLElement>;
+  @ViewChild('showLoginResetModalLink', {read: ElementRef}) showLoginResetModalLink: ElementRef<HTMLElement>;
 
   public username: string = '';
 
