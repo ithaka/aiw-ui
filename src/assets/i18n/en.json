@@ -463,7 +463,8 @@
   "ACCESS_HELP_MODAL": {
     "HEADING": "How do I get access?",
     "PROMPT": "<p>Access is provided to <a href=\"http://www.artstor.org/content/subscribers\" class=\"link\">subscribing institutions</a></p><p>If you belong to a subscribing institution, find out how to <a href=\"http://support.artstor.org/?article=remote-and-proxy-access\" class=\"link\">use remote access methods</a></p><p>If your institution is not a subscriber, find out <a href=\"http://www.artstor.org/trial\" class=\"link\">how they can be</a></p>",
-    "DISMISS": "Ok"
+    "DISMISS": "Ok",
+    "CLOSE": "Close Access Help Modal"
   },
   "ACCESS_DENIED_MODAL": {
     "HEADING": "Content Unavailable",

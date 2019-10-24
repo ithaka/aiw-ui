@@ -63,14 +63,7 @@ ang-pwd-reset-modal(
   [username]="username", 
   [systemRequest]="systemPwdReset", 
   (closeModal)="systemPwdReset = false; showPwdModal = false"
+ang-login-help-modal(
+  *ngIf="showHelpModal",
+  (closeModal)="showHelpModal = false; showHelpModalLink.focus()"
 )
-#helpModal.modal([ngClass]="{'show': showHelpModal }")
-  .modal-dialog
-    .modal-content
-      .modal-header
-        h5 {{ 'ACCESS_HELP_MODAL.HEADING' | translate }}
-        button.close((click)="showHelpModal = false" type="button" tabindex="1")
-          span(aria-hidden="true") &times;
-      .modal-body([innerHtml]="'ACCESS_HELP_MODAL.PROMPT' | translate")
-      .modal-footer
-        button#btnLoginDismissHelp.btn.btn-primary((click)="showHelpModal = false" tabindex="1") {{ 'ACCESS_HELP_MODAL.DISMISS' | translate }}
