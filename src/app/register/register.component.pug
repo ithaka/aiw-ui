@@ -101,7 +101,7 @@
               | {{ 'REGISTER.PRIVACY_DISCLAIMER' | translate }}
             | Already registered?
             = " "
-            a#linkLoginResetModal.link((click)="navigateToLogin()", tabindex="1") Log in
+            button#linkLoginResetModal.link--button((click)="navigateToLogin()", tabindex="0") Log in
             br
-            a#linkRegisterHelp.link(href="http://support.artstor.org/?article=register-for-an-artstor-account", target="_blank", tabindex="1") Help
+            a#linkRegisterHelp.link(href="http://support.artstor.org/?article=register-for-an-artstor-account", target="_blank", tabindex="0") Help
   ang-register-jstor-modal(*ngIf="showJstorModal", (closeModal)="closeJstorModal($event)")
