@@ -1,6 +1,6 @@
 import { Subscription } from "rxjs"
 import { map, take } from 'rxjs/operators'
-import { Component, OnInit } from "@angular/core"
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core"
 import { Router } from "@angular/router"
 
 // Project Dependencies
@@ -35,6 +35,8 @@ export class AccountPage implements OnInit {
   // update form select field values
  public userDepts: UserRolesAndDepts[] = []
  public userRoles: UserRolesAndDepts[] = []
+
+  @ViewChild('changePasswordButton', {read: ElementRef}) changePasswordButton: ElementRef<HTMLElement>;
 
   constructor(
     private _account: AccountService,
