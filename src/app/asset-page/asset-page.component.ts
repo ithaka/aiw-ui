@@ -221,9 +221,6 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        // Insights team survey 10-23
-        this._script.loadScript('ethnio-survey')
-
         this.user = this._auth.getUser();
         this.quizModeTTDismissed = this._storage.getLocal('quizModeTTDismissed') ? this._storage.getLocal('quizModeTTDismissed') : false
         this.subscriptions.push(
