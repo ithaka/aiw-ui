@@ -125,7 +125,8 @@ export class ThumbnailService {
     if (thumbnail.status != 'not-available' && thumbnail.isDetailView && !thumbnail.isDowngradedMedia) {
       return this.makeDetailViewThmb(thumbnail)
     } else if (thumbnail.isMultiView || (thumbnail.isDetailView && thumbnail.isDowngradedMedia)) {
-      return thumbnail.thumbnailImgUrl
+      let imgPath = thumbnail.size ? thumbnail.thumbnailImgUrl.replace(/(size)[0-4]/g, 'size' + thumbnail.size) : thumbnail.thumbnailImgUrl
+      return imgPath
     } else if (thumbnail.status != 'not-available') {
       return this.makeThumbUrl(thumbnail)
     } else {
