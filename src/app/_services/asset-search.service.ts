@@ -38,6 +38,7 @@ export class AssetSearchService {
   ]
 
   public latestSearchRequestId: string
+  public ab_segments: any
 
   // Used for simplify the code when versioning search
   private contentQueryKey: string
@@ -379,6 +380,10 @@ export class AssetSearchService {
         let cleanedResults: AssetThumbnail[] = res.results.map((item) => {
           return this._thumbnail.searchAssetToThumbnail(item)
         })
+
+        // Build a mapping between the artstorid and ab_segment for logging
+        this.ab_segments = new Map()
+        res.results.forEach((result) => { this.ab_segments.set(result['artstorid'], result['ab_segment'])})
 
         // create the cleaned response to pass to caller
         let searchResponse: SearchResponse = Object.assign({}, res, { results: cleanedResults })

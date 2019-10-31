@@ -44,4 +44,5 @@ interface LogMessage {
   item_id?: string
   referring_requestid?: string
   additional_fields?: any
+  ab_segments?: any
 }
