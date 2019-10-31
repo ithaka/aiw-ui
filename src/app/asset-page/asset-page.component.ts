@@ -513,6 +513,7 @@ export class AssetPage implements OnInit, OnDestroy {
                     this._log.log({
                         eventType: 'artstor_item_view',
                         referring_requestid: this._search.latestSearchRequestId,
+                        ab_segments: [ this._search.ab_segments.get(this.assets[0]['id']) ],
                         item_id: this.assets[0]['id']
                     })
                 }
