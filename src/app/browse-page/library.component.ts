@@ -167,7 +167,6 @@ export class LibraryComponent implements OnInit {
       if (storageBrwseColObj === null){
         storageBrwseColObj = {}
       }
-      //Here
       // Get facets from Solr/search
       this._assets.categoryByFacet(facetType, 1)
       .then( (facetData) => {

@@ -36,7 +36,6 @@ export class TagsService {
       colTypeValue = 5
     }
 
-    //Here
     if (colTypeValue) {
       // Use SOLR to load collection list by faceting on collectiontypenameid and filtering on colTypeValue
       return this._assets.categoryByFacet('collectiontypenameid', colTypeValue)
