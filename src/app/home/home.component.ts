@@ -124,10 +124,16 @@ export class Home implements OnInit, OnDestroy {
      * Subscribe to user object
      * and fetch collections list only after we have the user object returned
      */
+    let allInstitutionIds = {};
+
     this.subscriptions.push(
-      this._auth.currentUser.pipe(
-        map(userObj => {
-          if (userObj.institutionId && (this.instCollections.length === 0)) {
+        this._auth.currentUser.pipe(
+            map(userObj => {
+              let userObjInstitutionId = userObj.institutionId,
+                  shouldGetCollectionsFromSearchService = userObjInstitutionId && (this.instCollections.length === 0) && !(userObjInstitutionId in allInstitutionIds);
+
+              if (shouldGetCollectionsFromSearchService) {
+                allInstitutionIds[userObjInstitutionId] = userObjInstitutionId;
 
             let queryType = {};
             if (this._auth.isPublicOnly()) {
