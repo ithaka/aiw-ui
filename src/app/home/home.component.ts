@@ -142,16 +142,7 @@ export class Home implements OnInit, OnDestroy {
             else {
               queryType['type'] = "institution"
             }
-
-            this._tags.initTags(queryType)
-              .then((tags) => {
-                this.instCollections = tags;
-                this.loaders['instCollections'] = false;
-              })
-              .catch((err) => {
-                console.error(err);
-              });
-
+            this.instCollections = this.fetchInitTags(queryType)
           }
         },
         err => {
@@ -204,6 +195,17 @@ export class Home implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
+  private fetchInitTags(queryType: {}): any {
+    this._tags.initTags(queryType)
+      .then((tags) => {
+        return tags
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
+  
   /**
    * Gets client information for support email
    * @requires browser

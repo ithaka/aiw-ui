@@ -451,6 +451,7 @@ export class AssetService {
 
 
 
+    //Here as well
     public categoryByFacet(facetName: string, collectionType ?: number): Promise<SolrFacet[]> {
       let options = { withCredentials: true };
 

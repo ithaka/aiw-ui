@@ -54,6 +54,7 @@ export class AssetSearchService {
     this.showCollectionType = this._app.config.advSearch.showCollectionTypeFacet
   }
 
+  //HERE
   private initQuery(keyword: string, pageSize, startIndex) {
     this.contentQueryKey = 'content_set_flags'
     this.filterQueryKey = 'filter_queries'
