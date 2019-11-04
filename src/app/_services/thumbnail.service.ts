@@ -8,6 +8,13 @@ import { RawSearchAsset, MediaObject } from './asset-search.service'
 import { AssetThumbnail, RawItemAsset, CollectionTypeHandler, CollectionTypeInfo } from 'datatypes'
 import { map } from 'rxjs/operators';
 
+/**
+   * Regex to match thumbnail size from thumbnail image url:
+   * Thumbnail image size can be any of the size1, size2, size3, size4, based on
+   * If the large thumbnail image fails to load, we fallback to smaller thumbnail image
+   */
+const thumbnailSizeRegex = /(size)[0-4]/g
+
 @Injectable()
 export class ThumbnailService {
 
@@ -125,7 +132,8 @@ export class ThumbnailService {
     if (thumbnail.status != 'not-available' && thumbnail.isDetailView && !thumbnail.isDowngradedMedia) {
       return this.makeDetailViewThmb(thumbnail)
     } else if (thumbnail.isMultiView || (thumbnail.isDetailView && thumbnail.isDowngradedMedia)) {
-      return thumbnail.thumbnailImgUrl
+      let imgPath = thumbnail.size ? thumbnail.thumbnailImgUrl.replace(thumbnailSizeRegex, 'size' + thumbnail.size) : thumbnail.thumbnailImgUrl
+      return imgPath
     } else if (thumbnail.status != 'not-available') {
       return this.makeThumbUrl(thumbnail)
     } else {
@@ -255,7 +263,7 @@ export class ThumbnailService {
     }
     else if (imagePath) {
       if (size) {
-        imagePath = imagePath.replace(/(size)[0-4]/g, 'size' + size);
+        imagePath = imagePath.replace(thumbnailSizeRegex, 'size' + size);
       }
       // Ensure relative
       if (imagePath.indexOf('artstor.org') > -1) {
