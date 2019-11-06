@@ -8,8 +8,8 @@ form((ngSubmit)="login(user)")
       span([innerHtml]="'LOGIN.REG_LOGIN.PASSWORD_LABEL' | translate")
       input#inputLoginPassword.form-control([(ngModel)]="user.password" name="password" type="password" placeholder="Password" aria-label="Artstor password, required" tabindex="1")
     #errorMsg.form-text.text-danger(
-      *ngIf="errorMsg",
-      [innerHtml]="errorMsg | translate"
+      [innerHtml]="errorMsg | translate",
+      aria-live="assertive"
     )
     p.form-text.text-danger(*ngIf="forcePwdRst", [innerHtml]="'LOGIN.REG_LOGIN.FORCE_PW_RESET_MSG' | translate")
   p.notranslate([innerHtml]=" copyBase + 'LOGIN.TERMS' | translate ")
