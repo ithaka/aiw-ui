@@ -38,7 +38,7 @@ export class AssetSearchService {
   ]
 
   public latestSearchRequestId: string
-  public ab_segments: any
+  public ab_segments: any = new Map()
 
   // Used for simplify the code when versioning search
   private contentQueryKey: string
@@ -382,7 +382,6 @@ export class AssetSearchService {
         })
 
         // Build a mapping between the artstorid and ab_segment for logging
-        this.ab_segments = new Map()
         res.results.forEach((result) => { this.ab_segments.set(result['artstorid'], result['ab_segment'])})
 
         // create the cleaned response to pass to caller
