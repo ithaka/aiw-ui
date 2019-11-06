@@ -381,7 +381,8 @@ export class AssetSearchService {
           return this._thumbnail.searchAssetToThumbnail(item)
         })
 
-        // Build a mapping between the artstorid and ab_segment for logging
+        // Build a mapping between the artstorid and ab_segment for logging. Reinitialize on each request.
+        this.ab_segments = new Map();
         res.results.forEach((result) => { this.ab_segments.set(result['artstorid'], result['ab_segment'])})
 
         // create the cleaned response to pass to caller
