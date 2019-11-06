@@ -1,15 +1,15 @@
-import {Component, OnInit, OnDestroy, PLATFORM_ID, Inject, Injector} from '@angular/core'
-import {Router} from '@angular/router'
-import {Subscription} from 'rxjs'
-import {map} from 'rxjs/operators'
-import {DeviceDetectorModule, DeviceDetectorService} from 'ngx-device-detector'
-import {isPlatformBrowser} from '@angular/common'
+import { Component, OnInit, OnDestroy, PLATFORM_ID, Inject, Injector } from '@angular/core'
+import { Router } from '@angular/router'
+import { Subscription } from 'rxjs'
+import { map } from 'rxjs/operators'
+import { DeviceDetectorModule, DeviceDetectorService } from 'ngx-device-detector'
+import { isPlatformBrowser } from '@angular/common'
 
 // Project Dependencies
-import {AssetService, AuthService, DomUtilityService} from '_services'
-import {AppConfig} from '../app.service'
-import {Featured} from './featured'
-import {TagsService} from '../browse-page/tags.service';
+import { AssetService, AuthService, DomUtilityService } from '_services'
+import { AppConfig } from '../app.service'
+import { Featured } from './featured'
+import { TagsService } from '../browse-page/tags.service';
 
 declare var initPath: string
 
@@ -26,7 +26,7 @@ declare var initPath: string
 export class Home implements OnInit, OnDestroy {
 
   // Set our default values
-  localState = {value: ''}
+  localState = { value: '' }
   collections = []
   instCollections = []
   institution: any = {}
@@ -84,7 +84,7 @@ export class Home implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       // Provide redirects for initPath detected in index.html from inital load
       if (initPath) {
-        this._router.navigateByUrl(initPath, {replaceUrl: true})
+        this._router.navigateByUrl(initPath, { replaceUrl: true })
           .then(result => {
             // Clear variable to prevent further redirects
             initPath = null
@@ -96,10 +96,10 @@ export class Home implements OnInit, OnDestroy {
       let req = this.injector.get('request');
       let ssrRoutes = ['/public/', '/object/']
 
-      ssrRoutes.forEach(route => {
+      ssrRoutes.forEach (route => {
         if (req && req.url && req.url.indexOf(route) >= 0) {
           let assetId = req.url.replace(route, '')
-          this._router.navigate([route, assetId], {skipLocationChange: true})
+          this._router.navigate([route, assetId], { skipLocationChange: true })
             .then(result => {
               console.log(`Handled ${route} route clean url complete: ${result}`)
             })
@@ -138,10 +138,20 @@ export class Home implements OnInit, OnDestroy {
               let queryType = {};
               if (this._auth.isPublicOnly()) {
                 queryType['type'] = "commons"
-              } else {
+              }
+              else {
                 queryType['type'] = "institution"
               }
-              this.instCollections = this.fetchInitTags(queryType)
+
+              this._tags.initTags(queryType)
+                .then((tags) => {
+                  this.instCollections = tags;
+                  this.loaders['instCollections'] = false;
+                })
+                .catch((err) => {
+                  console.error(err);
+                });
+
             }
           },
           err => {
@@ -157,20 +167,20 @@ export class Home implements OnInit, OnDestroy {
         .then((blogPosts) => {
           if (Array.isArray(blogPosts)) {
             // Format blogPosts to extract excerpt if its not available
-            for (let blogPost of blogPosts) {
-              if (blogPost['content'] && blogPost['content']['rendered']) {
+            for(let blogPost of blogPosts) {
+              if(blogPost['content'] && blogPost['content']['rendered']) {
                 let excerpt: string = '<div>'
                 let tempElement = document.createElement('div')
                 tempElement.innerHTML = blogPost['content']['rendered']
                 let pTags = tempElement.querySelectorAll('p')
-                for (let i = 0; i < 10; i++) {
-                  if (pTags[i] && pTags[i].innerText.length > 120) {
+                for(let i = 0; i < 10; i++) {
+                  if(pTags[i] && pTags[i].innerText.length > 120) {
                     excerpt += pTags[i].innerText.replace('Content:', '')
                     break
                   }
                 }
                 excerpt += '</div>'
-                if (blogPost['excerpt'] && blogPost['excerpt']['rendered'] === '') {
+                if(blogPost['excerpt'] && blogPost['excerpt']['rendered'] === '') {
                   blogPost['excerpt']['rendered'] = excerpt
                 }
               }
@@ -179,7 +189,7 @@ export class Home implements OnInit, OnDestroy {
             this.blogPosts = blogPosts
           }
           this.blogLoading = false
-        })
+        } )
         .catch((error) => {
           console.log(error)
           this.blogLoading = false
@@ -191,21 +201,8 @@ export class Home implements OnInit, OnDestroy {
   } // OnInit
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub) => {
-      sub.unsubscribe();
-    });
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
-
-  private fetchInitTags(queryType: {}): any {
-    this._tags.initTags(queryType)
-      .then((tags) => {
-        return tags
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
-
 
   /**
    * Gets client information for support email
