@@ -881,11 +881,9 @@ export class AssetPage implements OnInit, OnDestroy {
       if (this.showAccessDeniedModal) {
         reasonForAuth = ['not_authorized']
         hasAccess = false
-      }
-      else if (this._auth.isPublicOnly()) {
+      } else if (this._auth.isPublicOnly()) {
         reasonForAuth = ['authorization_not_required']
-      }
-      else if (this.user.isLoggedIn || this.user.status) {
+      } else if (this.user.isLoggedIn || this.user.status) {
         reasonForAuth = ['license']
       }
 
