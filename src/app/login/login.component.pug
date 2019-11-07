@@ -44,7 +44,7 @@
               [fieldTabindex]="1",
               aria-live="polite",
             )
-            .login-errorMsg(*ngIf="instErrorMsg") {{ instErrorMsg | translate }}
+            .login-errorMsg(aria-live="assertive") {{ instErrorMsg | translate }}
           .form-group
             p.notranslate([innerHtml]="'LOGIN.TERMS' | translate")
             p.small {{ 'LOGIN.INSTITUTION_LOGIN.LIST_INFO' | translate }}
