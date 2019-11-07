@@ -28,7 +28,7 @@ export class LogService {
     ).pipe(
       take(1),
       map(res => {
-        console.log(res)
+        console.log("response", res, 'LOG MESSAGE: ', message)
       }, (err) => {
         console.error(err)
       })).subscribe()
