@@ -896,8 +896,7 @@ export class AssetPage implements OnInit, OnDestroy {
         item_id: asset.id,
         additional_fields: {
           has_access: hasAccess,
-          reason_for_authorization: reasonForAuth,
-          entitlement_map: {}
+          reason_for_authorization: reasonForAuth
         }
       })
     }
