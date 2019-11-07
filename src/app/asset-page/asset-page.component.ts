@@ -464,7 +464,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 // here is where we make the "access denied" modal appear
                 if (!this.encryptedAccess) {
                     this.showAccessDeniedModal = true
-                    this.trackItemView(this.assets[0])
+                    this.trackItemView(asset)
                 } else {
                     console.error('Failed to load externally shared asset', err)
                     this.showServerErrorModal = true
@@ -867,22 +867,25 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
-     * logItemView
+     * trackItemView
+     * Builds and sends captain's log event for 'artstor_item_view'
+     * @param asset
+     * @returns void
      */
 
     private trackItemView(asset: Asset): void {
 
-      let reasonForAuth
-      let deniedAccess = this.showAccessDeniedModal === true
-      let hasAccess = (this.user.isLoggedIn || this.user.isPublic) && !deniedAccess
+      let reasonForAuth: string[]
+      let hasAccess: boolean = true
 
-      if (deniedAccess) {
+      if (this.showAccessDeniedModal) {
         reasonForAuth = ['not_authorized']
+        hasAccess = false
       }
-      if (this.user.isPublic) {
+      else if (this._auth.isPublicOnly()) {
         reasonForAuth = ['authorization_not_required']
       }
-      if (this.user.isLoggedIn) {
+      else if (this.user.isLoggedIn || this.user.status) {
         reasonForAuth = ['license']
       }
 
@@ -894,7 +897,7 @@ export class AssetPage implements OnInit, OnDestroy {
         additional_fields: {
           has_access: hasAccess,
           reason_for_authorization: reasonForAuth,
-          entitelment_map: {}
+          entitlement_map: {}
         }
       })
     }
