@@ -464,6 +464,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 // here is where we make the "access denied" modal appear
                 if (!this.encryptedAccess) {
                     this.showAccessDeniedModal = true
+                    this.trackItemView(asset)
                 } else {
                     console.error('Failed to load externally shared asset', err)
                     this.showServerErrorModal = true
@@ -510,12 +511,7 @@ export class AssetPage implements OnInit, OnDestroy {
                 // only log the event if the asset came from search, and therefore has an artstorid
                 if (this.assets[0]['id']) {
                     // log the event connecting the search to the asset clicked
-                    this._log.log({
-                        eventType: 'artstor_item_view',
-                        referring_requestid: this._search.latestSearchRequestId,
-                        ab_segments: [ this._search.ab_segments.get(this.assets[0]['id']) ],
-                        item_id: this.assets[0]['id']
-                    })
+                    this.trackItemView(this.assets[0])
                 }
 
                 // Split existing collection urls in the metadata so that urls can be linked separately
@@ -870,6 +866,40 @@ export class AssetPage implements OnInit, OnDestroy {
         return false
     }
 
+    /**
+     * trackItemView
+     * Builds and sends captain's log event for 'artstor_item_view'
+     * @param asset
+     * @returns void
+     */
+
+    private trackItemView(asset: Asset): void {
+
+      let reasonForAuth: string[]
+      let hasAccess: boolean = true
+
+      if (this.showAccessDeniedModal) {
+        reasonForAuth = ['not_authorized']
+        hasAccess = false
+      } else if (this._auth.isPublicOnly()) {
+        reasonForAuth = ['authorization_not_required']
+      } else if (this.user.isLoggedIn || this.user.status) {
+        reasonForAuth = ['license']
+      }
+
+      this._log.log({
+        eventType: 'artstor_item_view',
+        referring_requestid: this._search.latestSearchRequestId,
+        ab_segments: [this._search.ab_segments.get(asset.id)],
+        item_id: asset.id,
+        additional_fields: {
+          has_access: hasAccess,
+          reason_for_authorization: reasonForAuth
+        }
+      })
+    }
+
+
     private handleSkipAsset(): void {
         if (this.browseAssetDirection === 'prev') {
             this.showPrevAsset()
@@ -926,16 +956,6 @@ export class AssetPage implements OnInit, OnDestroy {
                         assetFound = true
                     }
                 }
-
-
-                // if (this.assetIds.indexOf(this.prevAssetResults.thumbnails[i].id) > -1) {
-                //     this.prevAssetResults.thumbnails[i].selected = true
-                //     assetIndex = i
-                //     assetFound = true
-                // }
-                // else {
-                //     this.prevAssetResults.thumbnails[i].selected = false
-                // }
             }
         }
         assetIndex = assetFound ? assetIndex : -1
@@ -1198,29 +1218,7 @@ export class AssetPage implements OnInit, OnDestroy {
             }
             add = false
         }
-        // remove from assets (only if it contains more than one asset)
-        // this.assets.forEach((viewAsset, i) => {
-        //     if ([viewAsset.id, viewAsset['artstorid'], viewAsset['objectId']].indexOf(asset.id) > -1 && this.assets.length > 1) {
-        //         asset.selected = false;
-        //         this.assets.splice(i, 1);
-        //         add = false;
-        //         // Set 'selected' to 'false' for the asset in asset drawer
-        //         this.prevAssetResults.thumbnails.forEach((thumbnail, i) => {
-        //             if (asset.id == thumbnail.id) {
-        //                 thumbnail.selected = false;
-        //             }
-        //         });
 
-        //         // Once the primary asset (assets[0]) is removed change the URL (navigate) to the new primary asset
-        //         // if (i === 0) {
-        //         //     this._router.navigate(['/asset', this.assetIds[0]]);
-        //         // }
-
-        //         // Remove the zoom object for the asset
-        //         // this.indexZoomMap.splice(i, 1)
-
-        //     }
-        // })
         if (this.assets.length >= 10) {
             add = false;
             // TO-DO: Show Error message
