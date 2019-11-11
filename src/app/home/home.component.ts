@@ -66,10 +66,10 @@ export class Home implements OnInit, OnDestroy {
     // this makes the window always render scrolled to the top
     this._router.events.pipe(
       map(() => {
-        // Dummy scrollTo method created for server rendered domino window object
-        window.scrollTo(0, 0);
-      }
-    )).subscribe()
+          // Dummy scrollTo method created for server rendered domino window object
+          window.scrollTo(0, 0);
+        }
+      )).subscribe()
 
     this.showBlog = this._appConfig.config.showHomeBlog
     this.showPrivateCollections = this._appConfig.config.browseOptions.myCol
@@ -103,7 +103,7 @@ export class Home implements OnInit, OnDestroy {
             .then(result => {
               console.log(`Handled ${route} route clean url complete: ${result}`)
             })
-          }
+        }
       })
     }
 
@@ -112,9 +112,9 @@ export class Home implements OnInit, OnDestroy {
     this.subscriptions.push(
       this._auth.getInstitution().pipe(
         map(institutionObj => {
-          this.institution = institutionObj
-        }
-      )).subscribe()
+            this.institution = institutionObj
+          }
+        )).subscribe()
     )
 
     this.loaders['collections'] = true;
@@ -124,70 +124,76 @@ export class Home implements OnInit, OnDestroy {
      * Subscribe to user object
      * and fetch collections list only after we have the user object returned
      */
+    let allInstitutionIds = {};
+
     this.subscriptions.push(
       this._auth.currentUser.pipe(
         map(userObj => {
-          if (userObj.institutionId && (this.instCollections.length === 0)) {
+            let userObjInstitutionId = userObj.institutionId,
+              shouldGetCollectionsFromSearchService = userObjInstitutionId && (this.instCollections.length === 0) && !(userObjInstitutionId in allInstitutionIds);
 
-            let queryType = {};
-            if (this._auth.isPublicOnly()) {
-              queryType['type'] = "commons"
+            if (shouldGetCollectionsFromSearchService) {
+              allInstitutionIds[userObjInstitutionId] = userObjInstitutionId;
+
+              let queryType = {};
+              if (this._auth.isPublicOnly()) {
+                queryType['type'] = "commons"
+              }
+              else {
+                queryType['type'] = "institution"
+              }
+
+              this._tags.initTags(queryType)
+                .then((tags) => {
+                  this.instCollections = tags;
+                  this.loaders['instCollections'] = false;
+                })
+                .catch((err) => {
+                  console.error(err);
+                });
+
             }
-            else {
-              queryType['type'] = "institution"
-            }
-
-            this._tags.initTags(queryType)
-              .then((tags) => {
-                this.instCollections = tags;
-                this.loaders['instCollections'] = false;
-              })
-              .catch((err) => {
-                console.error(err);
-              });
-
+          },
+          err => {
+            console.error('Failed to load user object', err)
           }
-        },
-        err => {
-          console.error('Failed to load user object', err)
-        }
-      )).subscribe()
+        )).subscribe()
     ) // end push
 
     // Set session info for Email Artstor link
     if (isPlatformBrowser(this.platformId)) {
       // Load blog posts for home page
       this._assets.getBlogEntries()
-      .then((blogPosts) => {
-        if (Array.isArray(blogPosts)) {
-          // Format blogPosts to extract excerpt if its not available
-          for(let blogPost of blogPosts) {
-            if(blogPost['content'] && blogPost['content']['rendered']) {
-              let excerpt: string = '<div>'
-              let tempElement = document.createElement('div')
-              tempElement.innerHTML = blogPost['content']['rendered']
-              let pTags = tempElement.querySelectorAll('p')
-              for(let i = 0; i < 10; i++) {
-                if(pTags[i] && pTags[i].innerText.length > 120) {
-                  excerpt += pTags[i].innerText.replace('Content:', '')
-                  break
+        .then((blogPosts) => {
+          if (Array.isArray(blogPosts)) {
+            // Format blogPosts to extract excerpt if its not available
+            for(let blogPost of blogPosts) {
+              if(blogPost['content'] && blogPost['content']['rendered']) {
+                let excerpt: string = '<div>'
+                let tempElement = document.createElement('div')
+                tempElement.innerHTML = blogPost['content']['rendered']
+                let pTags = tempElement.querySelectorAll('p')
+                for(let i = 0; i < 10; i++) {
+                  if(pTags[i] && pTags[i].innerText.length > 120) {
+                    excerpt += pTags[i].innerText.replace('Content:', '')
+                    break
+                  }
+                }
+                excerpt += '</div>'
+                if(blogPost['excerpt'] && blogPost['excerpt']['rendered'] === '') {
+                  blogPost['excerpt']['rendered'] = excerpt
                 }
               }
-              excerpt += '</div>'
-              if(blogPost['excerpt'] && blogPost['excerpt']['rendered'] === '') {
-                blogPost['excerpt']['rendered'] = excerpt
-              }
             }
-          }
 
-          this.blogPosts = blogPosts
-        }
-        this.blogLoading = false
-      } )
-      .catch((error) => {
-        console.log(error)
-        this.blogLoading = false
-      });
+            this.blogPosts = blogPosts
+          }
+          this.blogLoading = false
+        } )
+        .catch((error) => {
+          console.log(error)
+          this.blogLoading = false
+        });
       // Device info for contact form
       this.fetchDeviceInfo()
     }
