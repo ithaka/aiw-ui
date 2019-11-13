@@ -21,6 +21,10 @@ export class AgreeModalComponent implements OnInit {
   @Output()
   acceptedTerms = new EventEmitter(true)
 
+  /** download image or download view **/
+  @Input()
+  downloadType: string
+
   @Input()
   downloadUrl: string
   /** The value of the download attribute for Download View **/
