@@ -113,7 +113,7 @@ export class AssetPage implements OnInit, OnDestroy {
     // Used for agree modal input, changes based on selection
     private downloadUrl: any
     private downloadName: string
-    private downloadType: string
+    private downloadType: string = "image"
     public errorFormUrl: string
     public iapFormUrl: string
 
@@ -682,14 +682,14 @@ export class AssetPage implements OnInit, OnDestroy {
 
     // Track download file
     trackDownloadImage(): void {
-        this.trackItemDownload(this.assets[0], 'image')
-        this.angulartics.eventTrack.next({ properties: { event: 'downloadAsset', category: 'download', label: this.assets[0].id } });
+        this.downloadType = "image"
+        this.trackItemDownload(this.assets[0])
     }
 
     // Track download view
     trackDownloadView(): void {
-        this.trackItemDownload(this.assets[0], 'view')
-        this.angulartics.eventTrack.next({ properties: { event: 'downloadView', category: 'download', label: this.assets[0].id } });
+      this.downloadType = "view"
+      this.trackItemDownload(this.assets[0])
     }
 
     // Track metadata collection link click
@@ -877,7 +877,7 @@ export class AssetPage implements OnInit, OnDestroy {
    * @returns void
    */
 
-  private trackEvent(asset: Asset, event: string): void {
+  private trackEvent(asset: Asset, eventType: string): void {
     let reasonForAuth: string[]
     let hasAccess: boolean = true
 
@@ -890,10 +890,12 @@ export class AssetPage implements OnInit, OnDestroy {
       reasonForAuth = ['license']
     }
 
+    const abSegments = this._search.ab_segments.get(asset.id)
+
     this._log.log({
-      eventType: event,
+      eventType: eventType,
       referring_requestid: this._search.latestSearchRequestId,
-      ab_segments: [this._search.ab_segments.get(asset.id)],
+      ab_segments: abSegments ? [abSegments] : [],
       item_id: asset.id,
       additional_fields: {
         has_access: hasAccess,
@@ -914,23 +916,19 @@ export class AssetPage implements OnInit, OnDestroy {
 
   /**
    * trackItemDownload
-   * Builds and sends captain's log event for 'artstor_download_single_image'
+   * Builds and sends captain's log and Google Analytics events for item downloads.
    * @param asset
-   * @param downloadType
    * @returns void
    */
 
-    private trackItemDownload(asset: Asset, downloadType: string): void {
-      let event: string
-      if(downloadType == 'view') {
-        event = 'artstor_image_download_view'
-      }
-      else {
-        event = 'artstor_download_single_image'
-      }
+    private trackItemDownload(asset: Asset): void {
+      debugger;
+      const eventType = this.downloadType === "image" ? "artstor_download_single_image" : "artstor_image_download_view"
+      this.trackEvent(asset, eventType)
 
-      this.trackEvent(asset, event)
-    }
+      const gaEvent = this.downloadType === "image" ? "downloadAsset" : "downloadView";
+      this.angulartics.eventTrack.next({ properties: { event: gaEvent, category: 'download', label: this.assets[0].id } });
+  }
 
     private handleSkipAsset(): void {
         if (this.browseAssetDirection === 'prev') {
@@ -1824,17 +1822,11 @@ export class AssetPage implements OnInit, OnDestroy {
    * logs event
    * @param: downloadType
    */
-  public handleAcceptance(downloadType: string): void {
-      // what about download view?
-      this.acceptedTerms = true
+  public handleAcceptance(): void {
+    this.acceptedTerms = true
 
-      if(downloadType == 'view') {
-        this.trackDownloadView()
-      }
-      else {
-        this.trackDownloadImage()
-      }
-    }
+    this.trackItemDownload(this.assets[0])
+}
 
     /**
      * Exits viewer if available and fullscreen

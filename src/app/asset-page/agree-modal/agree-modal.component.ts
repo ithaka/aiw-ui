@@ -21,10 +21,6 @@ export class AgreeModalComponent implements OnInit {
   @Output()
   acceptedTerms = new EventEmitter(true)
 
-  /** download image or download view **/
-  @Input()
-  downloadType: string
-
   @Input()
   downloadUrl: string
   /** The value of the download attribute for Download View **/
@@ -33,9 +29,6 @@ export class AgreeModalComponent implements OnInit {
   /** Is this MS IE or Edge? */
   @Input()
   isMSAgent: boolean
-  /** Asset.setDownloadView */
-  @Input()
-  setDownloadView: () => void
 
   @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef;
 
