@@ -922,7 +922,6 @@ export class AssetPage implements OnInit, OnDestroy {
    */
 
     private trackItemDownload(asset: Asset): void {
-      debugger;
       const eventType = this.downloadType === "image" ? "artstor_download_single_image" : "artstor_image_download_view"
       this.trackEvent(asset, eventType)
 
