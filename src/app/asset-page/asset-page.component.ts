@@ -657,10 +657,9 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     setDownloadImage(): void {
         this.downloadUrl = this.generatedFullURL
+        this.showAgreeModal = true
         this.downloadName = 'download'
         this.downloadType = 'image'
-
-        this.showAgreeModal = true
     }
 
     /**
@@ -674,22 +673,21 @@ export class AssetPage implements OnInit, OnDestroy {
             // - Binder prefers lowercase service this.downloadUrl params
             this.downloadUrl = this.downloadUrl + '&groupid=' + this.assetGroupId
         }
+        this.showAgreeModal = true
         this.downloadName = 'download.jpg'
         this.downloadType = 'view'
-
-        this.showAgreeModal = true
     }
 
     // Track download file
     trackDownloadImage(): void {
         this.downloadType = "image"
-        this.trackItemDownload(this.assets[0])
+        this.trackItemDownload()
     }
 
     // Track download view
     trackDownloadView(): void {
       this.downloadType = "view"
-      this.trackItemDownload(this.assets[0])
+      this.trackItemDownload()
     }
 
     // Track metadata collection link click
@@ -873,7 +871,7 @@ export class AssetPage implements OnInit, OnDestroy {
    * trackEvent
    * send captain's log events associated with asset
    * @param asset
-   * @param event
+   * @param eventType
    * @returns void
    */
 
@@ -917,16 +915,17 @@ export class AssetPage implements OnInit, OnDestroy {
   /**
    * trackItemDownload
    * Builds and sends captain's log and Google Analytics events for item downloads.
-   * @param asset
    * @returns void
    */
 
-    private trackItemDownload(asset: Asset): void {
+    private trackItemDownload(): void {
+      let asset = this.assets[0]
+
       const eventType = this.downloadType === "image" ? "artstor_download_single_image" : "artstor_image_download_view"
       this.trackEvent(asset, eventType)
 
       const gaEvent = this.downloadType === "image" ? "downloadAsset" : "downloadView";
-      this.angulartics.eventTrack.next({ properties: { event: gaEvent, category: 'download', label: this.assets[0].id } });
+      this.angulartics.eventTrack.next({ properties: { event: gaEvent, category: 'download', label: asset.id } });
   }
 
     private handleSkipAsset(): void {
@@ -1824,7 +1823,7 @@ export class AssetPage implements OnInit, OnDestroy {
   public handleAcceptance(): void {
     this.acceptedTerms = true
 
-    this.trackItemDownload(this.assets[0])
+    this.trackItemDownload()
 }
 
     /**
