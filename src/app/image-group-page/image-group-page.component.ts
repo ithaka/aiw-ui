@@ -15,7 +15,8 @@ import {
   DomUtilityService,
   ToastService,
   FlagService,
-  ScriptService
+  ScriptService,
+  LogService
 } from '_services'
 import { LoadingStateOptions, LoadingState } from './../modals/loading-state/loading-state.component'
 import { ImageGroup } from 'datatypes'
@@ -92,7 +93,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     private _dom: DomUtilityService,
     private _toasts: ToastService,
     private _flags: FlagService,
-    private _script: ScriptService
+    private _script: ScriptService,
+    private _log: LogService,
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
@@ -353,6 +355,37 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     }
   }
 
+  private trackBulkDownload(eventType: string): void {
+    // let reasonForAuth: string[]
+    // let hasAccess: boolean = true
+
+    // if (this.showAccessDeniedModal) {
+    //   reasonForAuth = ['not_authorized']
+    //   hasAccess = false
+    // } else if (this._auth.isPublicOnly()) {
+    //   reasonForAuth = ['authorization_not_required']
+    // } else if (this.user.isLoggedIn || this.user.status) {
+    //   reasonForAuth = ['license']
+    // }
+
+
+    // TODO Do we need to distinguish between regular images and views?
+    // TODO what about all the auth fields?
+
+    this._log.log({
+      eventType: eventType,
+      // referring_requestid: this._search.latestSearchRequestId, TODO?
+      // item_id: asset.id, TODO does this need to be an array? Can artstor-logger-service handle that?
+      additional_fields: {
+        igName: this.ig.name,
+        igId: this.ig.id,
+        // dois: [], TODO do we need a list of dois or are the image ids okay (ex. "AMICO_BOSTON_103831517")
+        // images: "?", TODO do we need this string?
+
+      }
+    })
+  }
+
   /**
    * getPPt/getZIP loading time
    */
@@ -396,6 +429,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
           this.exportLoadingStateopts.progress = 100
           this.exportLoadingStateopts.state = LoadingState.completed
+          this.trackBulkDownload("artstor_download_pptx")
+
           // On success fade out the component after 5 sec & begin download
           setTimeout(() => {
             this.closeExportLoadingState()
@@ -441,6 +476,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
           this.exportLoadingStateopts.progress = 100
           this.exportLoadingStateopts.state = LoadingState.completed
+          this.trackBulkDownload("artstor_download_zip")
+
           // On success fade out the component after 5 sec & begin download
           setTimeout(() => {
             this.closeExportLoadingState()
