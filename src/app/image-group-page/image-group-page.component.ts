@@ -290,32 +290,34 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           this.showTermsConditions = true;
         }
         else {
-          let downloadLink, zipDownloadLink = ''
-          // If user has agreed, we should trigger download directly
-          switch (exportType) {
-            case 'ppt': {
-              // Perform PPT download action
-              this.getPPT()
-              break
-            }
-            case 'GoogleSlides': {
-              if(this._storage.getSession('GAuthed')) {
-                // Export to GS and show loading state
-                console.log('Export to GS and show loading state')
-              } else {
-                this.showGoogleAuth = true
+          this._ig.getImageIdsToDownload(this.ig)
+            .then((imageIdsToDownload) => {
+              // If user has agreed, we should trigger download directly
+              switch (exportType) {
+                case 'ppt': {
+                  // Perform PPT download action
+                  this.getPPT(imageIdsToDownload)
+                  break
+                }
+                case 'GoogleSlides': {
+                  if(this._storage.getSession('GAuthed')) {
+                    // Export to GS and show loading state
+                    console.log('Export to GS and show loading state')
+                  } else {
+                    this.showGoogleAuth = true
+                  }
+                  break
+                }
+                case 'zip': {
+                  // Perform ZIP download action
+                  this.getZIP(imageIdsToDownload)
+                  break
+                }
+                default: {
+                  break
+                }
               }
-              break
-            }
-            case 'zip': {
-              // Perform ZIP download action
-              this.getZIP()
-              break
-            }
-            default: {
-                break
-            }
-          }
+              })
         }
       } else {
         console.error("showDownloadModal() Expected a valid export type, received: " + exportType)
@@ -355,33 +357,13 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     }
   }
 
-  private trackBulkDownload(eventType: string): void {
-    // let reasonForAuth: string[]
-    // let hasAccess: boolean = true
-
-    // if (this.showAccessDeniedModal) {
-    //   reasonForAuth = ['not_authorized']
-    //   hasAccess = false
-    // } else if (this._auth.isPublicOnly()) {
-    //   reasonForAuth = ['authorization_not_required']
-    // } else if (this.user.isLoggedIn || this.user.status) {
-    //   reasonForAuth = ['license']
-    // }
-
-
-    // TODO Do we need to distinguish between regular images and views?
-    // TODO what about all the auth fields?
-
+  private trackBulkDownload(eventType: string, imageIdsDownloaded): void {
     this._log.log({
       eventType: eventType,
-      // referring_requestid: this._search.latestSearchRequestId, TODO?
-      // item_id: asset.id, TODO does this need to be an array? Can artstor-logger-service handle that?
       additional_fields: {
         igName: this.ig.name,
         igId: this.ig.id,
-        // dois: [], TODO do we need a list of dois or are the image ids okay (ex. "AMICO_BOSTON_103831517")
-        // images: "?", TODO do we need this string?
-
+        item_ids: imageIdsDownloaded
       }
     })
   }
@@ -398,11 +380,12 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     return totalTime/intervals
   }
 
-  private getPPT(): void{
+  private getPPT(imageIdsToDownload: string[]): void{
     this.exportLoadingStateopts = {
       exportType: 'ppt',
       state: LoadingState.loading,
-      progress: 0
+      progress: 0,
+      imageIdsToDownload: imageIdsToDownload
     }
     this.showExportLoadingState = true
 
@@ -413,7 +396,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
 
     let downloadLink: string = ''
-    this._ig.getDownloadLink(this.ig, false)
+    this._ig.getDownloadLink(this.ig, imageIdsToDownload,  false)
       .then( data => {
 
         // Handle 200 Response with "status": "FAILED"
@@ -429,7 +412,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
           this.exportLoadingStateopts.progress = 100
           this.exportLoadingStateopts.state = LoadingState.completed
-          this.trackBulkDownload("artstor_download_pptx")
+          this.trackBulkDownload("artstor_download_pptx", imageIdsToDownload)
 
           // On success fade out the component after 5 sec & begin download
           setTimeout(() => {
@@ -446,22 +429,23 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       })
   }
 
-  private getZIP(): void{
+  private getZIP(imageIdsToDownload: string[]): void{
     this.exportLoadingStateopts = {
       exportType: 'zip',
       state: LoadingState.loading,
-      progress: 0
+      progress: 0,
+      imageIdsToDownload: imageIdsToDownload
     }
     this.showExportLoadingState = true
 
     // Mimmic loading behaviour in intervals
     this.loadingStateInterval = setInterval(() => {
       this.exportLoadingStateopts.progress += 5
-    }, this.getProgressIntervals(this.ig.items.length, 20))
+    }, this.getProgressIntervals(imageIdsToDownload.length, 20))
 
 
     let zipDownloadLink: string = ''
-    this._ig.getDownloadLink(this.ig, true)
+    this._ig.getDownloadLink(this.ig, imageIdsToDownload, true)
       .then( data => {
         // Handle 200 Response with "status": "FAILED"
         if (data.status === 'FAILED') {
@@ -476,7 +460,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
           this.exportLoadingStateopts.progress = 100
           this.exportLoadingStateopts.state = LoadingState.completed
-          this.trackBulkDownload("artstor_download_zip")
+          debugger;
+          this.trackBulkDownload("artstor_download_zip", imageIdsToDownload)
 
           // On success fade out the component after 5 sec & begin download
           setTimeout(() => {
@@ -512,6 +497,11 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
           this.exportLoadingStateopts.progress = 100
           this.exportLoadingStateopts.state = LoadingState.completed
+
+          const eventType = this.exportLoadingStateopts.exportType === "zip" ? "artstor_download_zip" : "artstor_download_pptx"
+          const imageIdsDownloaded = this.exportLoadingStateopts.imageIdsToDownload
+          this.trackBulkDownload(eventType, imageIdsDownloaded)
+
           // On success fade out the component after 5 sec & begin download
           setTimeout(() => {
             this.closeExportLoadingState()

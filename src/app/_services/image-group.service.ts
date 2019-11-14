@@ -17,6 +17,9 @@ import { ImageGroup, ImageGroupDescription } from './../shared'
  *
  */
 
+// The max number of images the user is able to bulk export.
+const MAX_DOWNLOAD_AMOUNT = 150;
+
 @Injectable()
 export class ImageGroupService {
   private proxyUrl = '';
@@ -83,8 +86,25 @@ export class ImageGroupService {
     this.igDownloadTrigger.emit('GoogleSlides');
   }
 
+  /**
+   * Given the image group determine the ids that are to be download given the user's access.
+   */
+  public getImageIdsToDownload(group: ImageGroup) {
+
+    /**
+     * We're using this as an auth check - instead of simply using all of the group.items strings and calling for downloads,
+     *  which was allowing restricted assets to be downloaded, we first ask for each assets' thumbnail, which will ensure
+     *  that only assets which the user has access to are returned
+     */
+
+    return this._assets.getAllThumbnails({ itemObjs: group.items }, group.id)
+      .then((thumbnails) => {
+        return thumbnails.slice(0, MAX_DOWNLOAD_AMOUNT).map((thumbnail) => thumbnail.id)
+      })
+  }
+
   /** Gets the link at which the resource can be downloaded. Will be set to the "accept" button's download property */
-  public getDownloadLink(group: ImageGroup, zip ?: boolean): Promise<any> {
+  public getDownloadLink(group: ImageGroup, imageIdsToDownload: string[], zip ?: boolean): Promise<any> {
     let header = new HttpHeaders().set('content-type', 'application/x-www-form-urlencoded')
     let options = { headers: header, withCredentials: true }
     let useLegacyMetadata: boolean = true
@@ -98,45 +118,31 @@ export class ImageGroupService {
       format = 'zip'
     }
 
-    /**
-     * We're using this as an auth check - instead of simply using all of the group.items strings and calling for downloads,
-     *  which was allowing restricted assets to be downloaded, we first ask for each assets' thumbnail, which will ensure
-     *  that only assets which the user has access to are returned
-     */
-    return this._assets.getAllThumbnails({ itemObjs: group.items }, group.id)
-    .then((thumbnails) => {
-      let imgDownloadStrings: string[] = []
-
-      thumbnails.forEach((thumbnail, index) => {
-        let imgStr: string = [(index + 1), thumbnail.id, '1024x1024'].join(':')
-        thumbnail.status == 'available' && imgDownloadStrings.push(imgStr)
-      })
-
-      data = {
-          igName: group.name,
-          images: imgDownloadStrings.join(',')
-      }
-
-      return data
+    const imageDownloadStrings = imageIdsToDownload.map((imageId, index) => {
+      return `${index+1}:${imageId}:'1024x1024'`
     })
-    .then((data) => {
-      let groupExportUrl = url + '/' + format + '/' + group.id + '/' + useLegacyMetadata + '?springBoot=true'
 
-      // Return request that provides file URL
-      return this.http
-        .post(groupExportUrl, this._auth.formEncode(data), options)
-        .timeout(20000) // Timeout after 20s
-        .toPromise()
+    data = {
+      igName: group.name,
+      images: imageDownloadStrings.join(',')
+    }
 
-    })
-    .then((res) => {
-      // Make authorization call to increment download count after successful response is received
-      this.http
-      .get(url + '/auth/' + group.id + '/true', options)
+    debugger;
+
+    let groupExportUrl = url + '/' + format + '/' + group.id + '/' + useLegacyMetadata + '?springBoot=true'
+
+    // Return request that provides file URL
+    return this.http
+      .post(groupExportUrl, this._auth.formEncode(data), options)
+      .timeout(20000) // Timeout after 20s
       .toPromise()
+      .then((res) => {
+        // Make authorization call to increment download count after successful response is received
+        this.http
+          .get(url + '/auth/' + group.id + '/true', options)
 
-      return res
-    })
+        return res
+      })
   }
 
   /** Checks for the export status of the specified group */
