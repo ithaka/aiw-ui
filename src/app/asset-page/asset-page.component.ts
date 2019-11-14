@@ -657,9 +657,9 @@ export class AssetPage implements OnInit, OnDestroy {
      */
     setDownloadImage(): void {
         this.downloadUrl = this.generatedFullURL
-        this.showAgreeModal = true
         this.downloadName = 'download'
-        this.downloadType = 'image'
+
+        this.showAgreeModal = true
     }
 
     /**
@@ -673,21 +673,9 @@ export class AssetPage implements OnInit, OnDestroy {
             // - Binder prefers lowercase service this.downloadUrl params
             this.downloadUrl = this.downloadUrl + '&groupid=' + this.assetGroupId
         }
-        this.showAgreeModal = true
         this.downloadName = 'download.jpg'
-        this.downloadType = 'view'
-    }
 
-    // Track download file
-    trackDownloadImage(): void {
-        this.downloadType = "image"
-        this.trackItemDownload()
-    }
-
-    // Track download view
-    trackDownloadView(): void {
-      this.downloadType = "view"
-      this.trackItemDownload()
+        this.showAgreeModal = true
     }
 
     // Track metadata collection link click
@@ -874,7 +862,6 @@ export class AssetPage implements OnInit, OnDestroy {
    * @param eventType
    * @returns void
    */
-
   private trackEvent(asset: Asset, eventType: string): void {
     let reasonForAuth: string[]
     let hasAccess: boolean = true
@@ -901,6 +888,7 @@ export class AssetPage implements OnInit, OnDestroy {
       }
     })
   }
+
   /**
    * trackItemView
      * Builds and sends captain's log event for 'artstor_item_view'
@@ -915,18 +903,17 @@ export class AssetPage implements OnInit, OnDestroy {
   /**
    * trackItemDownload
    * Builds and sends captain's log and Google Analytics events for item downloads.
+   * @param asset
    * @returns void
    */
 
-    private trackItemDownload(): void {
-      let asset = this.assets[0]
+    private trackItemDownload(asset: Asset): void {
+        const eventType = this.downloadType === "image" ? "artstor_download_single_image" : "artstor_image_download_view"
+        this.trackEvent(asset, eventType)
 
-      const eventType = this.downloadType === "image" ? "artstor_download_single_image" : "artstor_image_download_view"
-      this.trackEvent(asset, eventType)
-
-      const gaEvent = this.downloadType === "image" ? "downloadAsset" : "downloadView";
-      this.angulartics.eventTrack.next({ properties: { event: gaEvent, category: 'download', label: asset.id } });
-  }
+        const gaEvent = this.downloadType === "image" ? "downloadAsset" : "downloadView";
+        this.angulartics.eventTrack.next({ properties: { event: gaEvent, category: 'download', label: asset.id } });
+    }
 
     private handleSkipAsset(): void {
         if (this.browseAssetDirection === 'prev') {
@@ -1823,9 +1810,24 @@ export class AssetPage implements OnInit, OnDestroy {
   public handleAcceptance(): void {
     this.acceptedTerms = true
 
-    this.trackItemDownload()
+    this.trackItemDownload(this.assets[0])
 }
 
+  private handleDownloadClick(downloadType): void {
+    this.downloadType = downloadType
+
+    let asset: Asset
+    asset = this.assets[0]
+    if((asset.publicDownload || !asset.disableDownload) && this.acceptedTerms) {
+      this.trackItemDownload(asset)
+    } else {
+      if(downloadType === 'image') {
+        this.setDownloadImage()
+      } else {
+        this.setDownloadView()
+      }
+    }
+  }
     /**
      * Exits viewer if available and fullscreen
      */
