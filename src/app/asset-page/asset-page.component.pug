@@ -124,8 +124,8 @@
               h6.dropdown-header(*ngIf="assets[0].disableDownload") Item not available for download
               a#downloadAssetLink.dropdown-item(download,
                 [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? generatedFullURL : null",
-                (click)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadImage() : setDownloadImage()",
-                (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadImage() : setDownloadImage()",
+                (click)="handleDownloadClick('image')",
+                (keydown.enter)="handleDownloadClick('image')",
                 (keyup.arrowdown)="downloadOptsArrowDown($event.target)",
                 (keyup.arrowup)="downloadOptsArrowUp($event.target)",
                 [class.disabled]="assets[0].disableDownload",
@@ -138,8 +138,8 @@
                 | &nbsp;Download item
               a#downloadViewLink.dropdown-item(
                 [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? downloadViewLink : null",
-                (click)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadView() : setDownloadView()",
-                (keydown.enter)="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? trackDownloadView() : setDownloadView()",
+                (click)="handleDownloadClick('view')",
+                (keydown.enter)="handleDownloadClick('view')",
                 (keyup.arrowup)="downloadOptsArrowUp($event.target)",
                 [class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'",
                 target="_blank",
