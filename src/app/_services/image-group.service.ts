@@ -121,7 +121,7 @@ export class ImageGroupService {
     }
 
     const imageDownloadStrings = imageIdsToDownload.map((imageId, index) => {
-      return `${index+1}:${imageId}:'1024x1024'`
+      return `${index+1}:${imageId}:1024x1024`
     })
 
     data = {
