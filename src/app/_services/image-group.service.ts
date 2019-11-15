@@ -8,6 +8,7 @@ import 'rxjs/add/operator/timeout';
 import { AuthService } from './auth.service'
 import { AssetService } from './assets.service'
 import { ImageGroup, ImageGroupDescription } from './../shared'
+import { SupportedExportTypes } from "../modals";
 
 /**
  *
@@ -75,11 +76,12 @@ export class ImageGroupService {
   }
 
   public triggerPPTExport(): void {
-    this.igDownloadTrigger.emit('ppt');
+    this.igDownloadTrigger.emit(SupportedExportTypes.PPTX);
   }
 
   public triggerZIPExport(): void {
-    this.igDownloadTrigger.emit('zip');
+    debugger;
+    this.igDownloadTrigger.emit(SupportedExportTypes.ZIP);
   }
 
   public triggerGoogleSlides(): void {
@@ -110,21 +112,14 @@ export class ImageGroupService {
    * @param group - The image group to download images from
    * @param imageIdsToDownload - A list of image ids to be downloaded from the group. This can be a
    *        subset of the images found in group.items because either access issues or download limit.
-   * @param zip - True if the intended download format is zip. False for pptx.
+   * @param format - The format for the export
    */
-  public getDownloadLink(group: ImageGroup, imageIdsToDownload: string[], zip ?: boolean): Promise<any> {
+  public getDownloadLink(group: ImageGroup, imageIdsToDownload: string[], format : SupportedExportTypes): Promise<any> {
     let header = new HttpHeaders().set('content-type', 'application/x-www-form-urlencoded')
     let options = { headers: header, withCredentials: true }
     let useLegacyMetadata: boolean = true
     let url = this._auth.getHostname() + '/api/group/export'
-    let format: string
     let data: any
-
-    if (!zip) {
-      format = 'pptx'
-    } else {
-      format = 'zip'
-    }
 
     const imageDownloadStrings = imageIdsToDownload.map((imageId, index) => {
       return `${index+1}:${imageId}:1024x1024`

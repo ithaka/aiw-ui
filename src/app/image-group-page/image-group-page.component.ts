@@ -18,7 +18,11 @@ import {
   ScriptService,
   LogService
 } from '_services'
-import { LoadingStateOptions, LoadingState } from './../modals/loading-state/loading-state.component'
+import {
+  LoadingStateOptions,
+  LoadingState,
+  SupportedExportTypes
+} from './../modals/loading-state/loading-state.component'
 import { ImageGroup } from 'datatypes'
 
 @Component({
@@ -27,8 +31,6 @@ import { ImageGroup } from 'datatypes'
   templateUrl: './image-group-page.component.pug'
 })
 
-const DOWNLOAD_PPTX_EVENTTYPE = "artstor_download_pptx"
-const DOWNLOAD_ZIP_EVENTTYPE = "artstor_download_zip"
 
 export class ImageGroupPage implements OnInit, OnDestroy {
   public ig: ImageGroup = <ImageGroup>{};
@@ -210,10 +212,9 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this._ig.igDownloadTrigger.pipe(
-      map(event => { // right now event will be undefined, it is just a dumb trigger
-        // make sure we have the info we need
+      map(exportType => {
         if (id) {
-          this.showDownloadModal(event);
+          this.showDownloadModal(exportType);
         }
       })).subscribe()
     )
@@ -282,45 +283,16 @@ export class ImageGroupPage implements OnInit, OnDestroy {
    * - If the user is logged in but has met download limit -> download limit modal
    * - If the user is logged in and is allowed to download the image group -> download modal
    */
-  private showDownloadModal(exportType: string) {
-    // the template will not show the button if there is not an ig.igName and ig.igDownloadInfo
-    // if the user is logged in and the download info is available
+  private showDownloadModal(exportType: SupportedExportTypes) {
     if (this.user.isLoggedIn) {
       // If we specify an export type, trigger terms and conditions modal if user hasn't agreed
-      if (exportType && exportType.length) {
-        this.exportType = exportType;
+      if (exportType) {
         if (!this._storage.getSession('termAgreed')) {
+          // Need to show the terms and conditions modal. Set the exportType so we can remember.
+          this.exportType = exportType
           this.showTermsConditions = true;
-        }
-        else {
-          this._ig.getImageIdsToDownload(this.ig)
-            .then((imageIdsToDownload) => {
-              // If user has agreed, we should trigger download directly
-              switch (exportType) {
-                case 'ppt': {
-                  // Perform PPT download action
-                  this.getPPT(imageIdsToDownload)
-                  break
-                }
-                case 'GoogleSlides': {
-                  if(this._storage.getSession('GAuthed')) {
-                    // Export to GS and show loading state
-                    console.log('Export to GS and show loading state')
-                  } else {
-                    this.showGoogleAuth = true
-                  }
-                  break
-                }
-                case 'zip': {
-                  // Perform ZIP download action
-                  this.getZIP(imageIdsToDownload)
-                  break
-                }
-                default: {
-                  break
-                }
-              }
-              })
+        } else {
+          this.exportGroup(exportType)
         }
       } else {
         console.error("showDownloadModal() Expected a valid export type, received: " + exportType)
@@ -331,36 +303,42 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     }
   }
 
-  private exportGroup(event: any): void {
+  private exportGroup(exportType: SupportedExportTypes): void {
     this.showTermsConditions = false
 
-    switch (event) {
-      case 'ppt': {
-        // Perform PPT download action
-        this.getPPT()
-        break
-      }
-      case 'GoogleSlides': {
-        if(this._storage.getSession('GAuthed')) {
-          // Export to GS and show loading state
-          console.log('Export to GS and show loading state')
-        } else {
-          this.showGoogleAuth = true
+    this._ig.getImageIdsToDownload(this.ig)
+      .then((imageIdsToDownload) => {
+        // If user has agreed, we should trigger download directly
+        switch (exportType) {
+          case SupportedExportTypes.PPTX: {
+            // Perform PPT download action
+            this.executeBulkExport(imageIdsToDownload, SupportedExportTypes.PPTX)
+            break
+          }
+          case 'GoogleSlides': {
+            if(this._storage.getSession('GAuthed')) {
+              // Export to GS and show loading state
+              console.log('Export to GS and show loading state')
+            } else {
+              this.showGoogleAuth = true
+            }
+            break
+          }
+          case SupportedExportTypes.ZIP: {
+            // Perform ZIP download action
+            this.executeBulkExport(imageIdsToDownload, SupportedExportTypes.ZIP)
+            break
+          }
+          default: {
+            break
+          }
         }
-        break
-      }
-      case 'zip': {
-        // Perform ZIP download action
-        this.getZIP()
-        break
-      }
-      default: {
-          break
-      }
-    }
+      })
   }
 
-  private trackBulkDownload(eventType: string, imageIdsDownloaded): void {
+  private trackBulkDownload(exportType: SupportedExportTypes, imageIdsDownloaded): void {
+    const eventType = exportType === SupportedExportTypes.ZIP ? "artstor_download_zip" : "artstor_download_pptx"
+
     this._log.log({
       eventType: eventType,
       additional_fields: {
@@ -381,103 +359,6 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     totalTime += itemCount*500
     // Divide by intervals
     return totalTime/intervals
-  }
-
-  private getPPT(imageIdsToDownload: string[]): void{
-    this.exportLoadingStateopts = {
-      exportType: 'ppt',
-      state: LoadingState.loading,
-      progress: 0,
-      imageIdsToDownload: imageIdsToDownload
-    }
-    this.showExportLoadingState = true
-
-    // Mimmic loading behaviour in intervals
-    this.loadingStateInterval = setInterval(() => {
-      this.exportLoadingStateopts.progress += 5
-    }, this.getProgressIntervals(this.ig.items.length, 20))
-
-
-    let downloadLink: string = ''
-    this._ig.getDownloadLink(this.ig, imageIdsToDownload,  false)
-      .then( data => {
-
-        // Handle 200 Response with "status": "FAILED"
-        if (data.status === "FAILED") {
-          console.error('Export Failed:- ', data)
-          clearInterval(this.loadingStateInterval)
-          this.pollForExportStatus()
-        }
-
-        else if (data.path && this.showExportLoadingState) {
-          downloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/')
-          clearInterval(this.loadingStateInterval)
-
-          this.exportLoadingStateopts.progress = 100
-          this.exportLoadingStateopts.state = LoadingState.completed
-          this.trackBulkDownload(DOWNLOAD_PPTX_EVENTTYPE, imageIdsToDownload)
-
-          // On success fade out the component after 5 sec & begin download
-          setTimeout(() => {
-            this.closeExportLoadingState()
-            this.downLoadFile(this.ig.name, downloadLink)
-          }, 5000)
-        }
-
-      })
-      .catch( error => {
-        console.error(error)
-        clearInterval(this.loadingStateInterval)
-        this.pollForExportStatus()
-      })
-  }
-
-  private getZIP(imageIdsToDownload: string[]): void{
-    this.exportLoadingStateopts = {
-      exportType: 'zip',
-      state: LoadingState.loading,
-      progress: 0,
-      imageIdsToDownload: imageIdsToDownload
-    }
-    this.showExportLoadingState = true
-
-    // Mimmic loading behaviour in intervals
-    this.loadingStateInterval = setInterval(() => {
-      this.exportLoadingStateopts.progress += 5
-    }, this.getProgressIntervals(imageIdsToDownload.length, 20))
-
-
-    let zipDownloadLink: string = ''
-    this._ig.getDownloadLink(this.ig, imageIdsToDownload, true)
-      .then( data => {
-        // Handle 200 Response with "status": "FAILED"
-        if (data.status === 'FAILED') {
-          console.error('Export Failed:- ', data)
-          clearInterval(this.loadingStateInterval)
-          this.pollForExportStatus()
-        }
-
-        else if (data.path && this.showExportLoadingState) {
-          zipDownloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/')
-          clearInterval(this.loadingStateInterval)
-
-          this.exportLoadingStateopts.progress = 100
-          this.exportLoadingStateopts.state = LoadingState.completed
-          debugger;
-          this.trackBulkDownload(DOWNLOAD_ZIP_EVENTTYPE, imageIdsToDownload)
-
-          // On success fade out the component after 5 sec & begin download
-          setTimeout(() => {
-            this.closeExportLoadingState()
-            this.downLoadFile(this.ig.name, zipDownloadLink)
-          }, 5000)
-        }
-      })
-      .catch( error => {
-        console.error(error)
-        // Do not clear interval unless polling completes or fails
-        this.pollForExportStatus()
-      })
   }
 
   private pollForExportStatus(): void {
@@ -501,9 +382,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           this.exportLoadingStateopts.progress = 100
           this.exportLoadingStateopts.state = LoadingState.completed
 
-          const eventType = this.exportLoadingStateopts.exportType === "zip" ? DOWNLOAD_ZIP_EVENTTYPE : DOWNLOAD_PPTX_EVENTTYPE
           const imageIdsDownloaded = this.exportLoadingStateopts.imageIdsToDownload
-          this.trackBulkDownload(eventType, imageIdsDownloaded)
+          this.trackBulkDownload(this.exportLoadingStateopts.exportType, imageIdsDownloaded)
 
           // On success fade out the component after 5 sec & begin download
           setTimeout(() => {
@@ -562,5 +442,57 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     downloadLinkElement.click()
     downloadLinkElement.remove()
   }
+
+  /**
+   * Performs the bulk export. Currently supported formats: zip and pptx.
+   * @param imageIdsToDownload - List of image ids to be bulk exported
+   * @param exportType - The export type. Supports either 'zip' or 'pptx'
+   */
+  private executeBulkExport(imageIdsToDownload: string[], exportType: SupportedExportTypes): void{
+    this.exportLoadingStateopts = {
+      exportType: exportType,
+      state: LoadingState.loading,
+      progress: 0,
+      imageIdsToDownload: imageIdsToDownload
+    }
+    this.showExportLoadingState = true
+
+    // Mimmic loading behaviour in intervals
+    this.loadingStateInterval = setInterval(() => {
+      this.exportLoadingStateopts.progress += 5
+    }, this.getProgressIntervals(imageIdsToDownload.length, 20))
+
+
+    this._ig.getDownloadLink(this.ig, imageIdsToDownload, exportType)
+      .then( data => {
+        // Handle 200 Response with "status": "FAILED"
+        if (data.status === 'FAILED') {
+          console.error('Export Failed:- ', data)
+          clearInterval(this.loadingStateInterval)
+          this.pollForExportStatus()
+        }
+
+        else if (data.path && this.showExportLoadingState) {
+          let downloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/')
+          clearInterval(this.loadingStateInterval)
+
+          this.exportLoadingStateopts.progress = 100
+          this.exportLoadingStateopts.state = LoadingState.completed
+          this.trackBulkDownload(exportType, imageIdsToDownload)
+
+          // On success fade out the component after 5 sec & begin download
+          setTimeout(() => {
+            this.closeExportLoadingState()
+            this.downLoadFile(this.ig.name, downloadLink)
+          }, 5000)
+        }
+      })
+      .catch( error => {
+        console.error(error)
+        // Do not clear interval unless polling completes or fails
+        this.pollForExportStatus()
+      })
+  }
+
 
 }

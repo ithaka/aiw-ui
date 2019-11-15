@@ -212,12 +212,12 @@
   },
   "LOADING_STATE": {
     "LOADING_MSG" : {
-      "PPT": "Exporting your group to PowerPoint…",
+      "PPTX": "Exporting your group to PowerPoint…",
       "GS": "Exporting your group to Google Slides…",
       "ZIP": "Compressing your group as a ZIP file…"
     },
     "COMPLETED_MSG" : {
-      "PPT": "<b>Done!</b> Your Powerpoint file will begin downloading soon…",
+      "PPTX": "<b>Done!</b> Your Powerpoint file will begin downloading soon…",
       "GS": "Your Google Slides presentation will open in a new tab…",
       "ZIP": "<b>Done!</b> Your ZIP file will begin downloading soon…"
     },
