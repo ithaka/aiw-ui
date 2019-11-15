@@ -80,7 +80,7 @@
     "INST404": "There was a problem identifying your institution. Please contact your institution admin to report this error, and to learn more about off-campus access.",
     "USER404": "Step 2 of 2 (required): Link to an existing Artstor account or register for a new one.",
     "2010": "This account is already linked to an Artstor account.",
-    "2020": "There was an error linking your institutional account. The session may have expired, please try again.",
+    "2020": "Your institution has not completed account setup for SAML. Please contact your librarian or <a href=\"mailto:support@artstor.org\" class=\"link\" target=\"_blank\">support@artstor.org</a>.",
     "2040": "This account is associated with another institution. Please create a new account.",
     "2050": "Your institution was not found.",
     "2060": "Invalid email address or password. Try again.",
@@ -117,7 +117,7 @@
       "DEPARTMENT": "Academic Department",
       "SUBMIT_BUTTON": "Save updates",
       "SUCCESS_MESSAGE": "Your account was updated successfully",
-      "FAILURE_MESSAGE": "An error occured while updating your account. Please try again, or contact support."
+      "FAILURE_MESSAGE": "An error occurred while updating your account. Please try again, or contact support."
     },
     "CHANGE_PASSWORD_LINK": "Change Password",
     "ACCOUNT_HELP_LINK": "Account Help"
