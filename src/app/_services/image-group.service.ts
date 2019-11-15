@@ -99,7 +99,9 @@ export class ImageGroupService {
 
     return this._assets.getAllThumbnails({ itemObjs: group.items }, group.id)
       .then((thumbnails) => {
-        return thumbnails.slice(0, MAX_DOWNLOAD_AMOUNT).map((thumbnail) => thumbnail.id)
+        return thumbnails.slice(0, MAX_DOWNLOAD_AMOUNT)
+          .filter((thumbnail) => thumbnail.status === "available")
+          .map((thumbnail) => thumbnail.id)
       })
   }
 
