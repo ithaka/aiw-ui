@@ -80,7 +80,6 @@ export class ImageGroupService {
   }
 
   public triggerZIPExport(): void {
-    debugger;
     this.igDownloadTrigger.emit(SupportedExportTypes.ZIP);
   }
 
