@@ -123,9 +123,9 @@
             .dropdown-menu.download-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
               h6.dropdown-header(*ngIf="assets[0].disableDownload") Item not available for download
               a#downloadAssetLink.dropdown-item(download,
-                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? generatedFullURL : null",
-                (click)="handleDownloadClick('image')",
-                (keydown.enter)="handleDownloadClick('image')",
+                [attr.href]="userHasAcceptedTerms() ? generatedFullURL : null",
+                (click)="handleDownloadImageClick()",
+                (keydown.enter)="handleDownloadImageClick()",
                 (keyup.arrowdown)="downloadOptsArrowDown($event.target)",
                 (keyup.arrowup)="downloadOptsArrowUp($event.target)",
                 [class.disabled]="assets[0].disableDownload",
@@ -137,9 +137,9 @@
                 i.icon.icon-download
                 | &nbsp;Download item
               a#downloadViewLink.dropdown-item(
-                [attr.href]="((assets[0].publicDownload || !assets[0].disableDownload) && acceptedTerms) ? downloadViewLink : null",
-                (click)="handleDownloadClick('view')",
-                (keydown.enter)="handleDownloadClick('view')",
+                [attr.href]="userHasAcceptedTerms() ? downloadViewLink : null",
+                (click)="handleDownloadViewClick()",
+                (keydown.enter)="handleDownloadViewClick()",
                 (keyup.arrowup)="downloadOptsArrowUp($event.target)",
                 [class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'",
                 target="_blank",

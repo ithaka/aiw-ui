@@ -652,10 +652,9 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
-     * Function called if not yet agreed to download image
-     * - sets url used by agree modal
+     * Sets up the agree modal for when downloading a single image.
      */
-    setDownloadImage(): void {
+    showAgreeModalForDownloadImage(): void {
         this.downloadUrl = this.generatedFullURL
         this.downloadName = 'download'
 
@@ -663,19 +662,18 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     /**
-     * Function called if not yet agreed to download image view
-     * - sets url used by agree modal
+     * Sets up the agree modal for when downloading an image view.
      */
-    setDownloadView(): void {
-        this.downloadUrl = this.downloadViewLink
-        if (this.assetGroupId && this.downloadUrl.indexOf("/media/") === -1 ) {
-            // Group id needs to be passed to allow download for images accessed via groups
-            // - Binder prefers lowercase service this.downloadUrl params
-            this.downloadUrl = this.downloadUrl + '&groupid=' + this.assetGroupId
-        }
-        this.downloadName = 'download.jpg'
+    showAgreeModalForDownloadView() {
+      this.downloadUrl = this.downloadViewLink
+      if (this.assetGroupId && this.downloadUrl.indexOf("/media/") === -1 ) {
+        // Group id needs to be passed to allow download for images accessed via groups
+        // - Binder prefers lowercase service this.downloadUrl params
+        this.downloadUrl = this.downloadUrl + '&groupid=' + this.assetGroupId
+      }
+      this.downloadName = 'download.jpg'
 
-        this.showAgreeModal = true
+      this.showAgreeModal = true
     }
 
     // Track metadata collection link click
@@ -863,18 +861,8 @@ export class AssetPage implements OnInit, OnDestroy {
    * @returns void
    */
   private trackEvent(asset: Asset, eventType: string): void {
-    let reasonForAuth: string[]
-    let hasAccess: boolean = true
-
-    if (this.showAccessDeniedModal) {
-      reasonForAuth = ['not_authorized']
-      hasAccess = false
-    } else if (this._auth.isPublicOnly()) {
-      reasonForAuth = ['authorization_not_required']
-    } else if (this.user.isLoggedIn || this.user.status) {
-      reasonForAuth = ['license']
-    }
-
+    const hasAccess = !this.showAccessDeniedModal
+    const reasonForAuth = this.showAccessDeniedModal ? "not_authorized" : "license"
     const abSegments = this._search.ab_segments.get(asset.id)
 
     this._log.log({
@@ -884,7 +872,7 @@ export class AssetPage implements OnInit, OnDestroy {
       item_id: asset.id,
       additional_fields: {
         has_access: hasAccess,
-        reason_for_authorization: reasonForAuth
+        reason_for_authorization: [reasonForAuth]
       }
     })
   }
@@ -1811,23 +1799,37 @@ export class AssetPage implements OnInit, OnDestroy {
     this.acceptedTerms = true
 
     this.trackItemDownload(this.assets[0])
-}
+  }
+
+  public userHasAcceptedTerms() {
+    let asset = this.assets[0]
+
+    return (asset.publicDownload || !asset.disableDownload) && this.acceptedTerms
+  }
 
   private handleDownloadClick(downloadType): void {
     this.downloadType = downloadType
+    let asset = this.assets[0]
 
-    let asset: Asset
-    asset = this.assets[0]
-    if((asset.publicDownload || !asset.disableDownload) && this.acceptedTerms) {
+    if(this.userHasAcceptedTerms()) {
       this.trackItemDownload(asset)
     } else {
-      if(downloadType === 'image') {
-        this.setDownloadImage()
+      if(downloadType === "image") {
+        this.showAgreeModalForDownloadImage()
       } else {
-        this.setDownloadView()
+        this.showAgreeModalForDownloadView()
       }
     }
   }
+
+    public handleDownloadViewClick() {
+      this.handleDownloadClick('view')
+    }
+
+    public handleDownloadImageClick() {
+      this.handleDownloadClick('image')
+    }
+
     /**
      * Exits viewer if available and fullscreen
      */
