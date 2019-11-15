@@ -25,6 +25,9 @@ import {
 } from './../modals/loading-state/loading-state.component'
 import { ImageGroup } from 'datatypes'
 
+const PROGRESS_INTERVALS = 20
+const PROGRESS_INCREMENT = 5
+
 @Component({
   selector: 'ang-image-group',
   styleUrls: [ './image-group-page.component.scss' ],
@@ -453,8 +456,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
     // Mimmic loading behaviour in intervals
     this.loadingStateInterval = setInterval(() => {
-      this.exportLoadingStateopts.progress += 5
-    }, this.getProgressIntervals(imageIdsToDownload.length, 20))
+      this.exportLoadingStateopts.progress += PROGRESS_INCREMENT
+    }, this.getProgressIntervals(imageIdsToDownload.length, PROGRESS_INTERVALS))
 
 
     this._ig.getDownloadLink(this.ig, imageIdsToDownload, exportType)
