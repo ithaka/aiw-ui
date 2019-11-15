@@ -310,11 +310,10 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       .then((imageIdsToDownload) => {
         // If user has agreed, we should trigger download directly
         switch (exportType) {
-          case SupportedExportTypes.PPTX: {
-            // Perform PPT download action
+          case SupportedExportTypes.PPTX:
+          case SupportedExportTypes.ZIP:
             this.executeBulkExport(imageIdsToDownload, SupportedExportTypes.PPTX)
             break
-          }
           case 'GoogleSlides': {
             if(this._storage.getSession('GAuthed')) {
               // Export to GS and show loading state
@@ -322,11 +321,6 @@ export class ImageGroupPage implements OnInit, OnDestroy {
             } else {
               this.showGoogleAuth = true
             }
-            break
-          }
-          case SupportedExportTypes.ZIP: {
-            // Perform ZIP download action
-            this.executeBulkExport(imageIdsToDownload, SupportedExportTypes.ZIP)
             break
           }
           default: {
