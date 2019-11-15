@@ -105,7 +105,13 @@ export class ImageGroupService {
       })
   }
 
-  /** Gets the link at which the resource can be downloaded. Will be set to the "accept" button's download property */
+  /**
+   * Gets the link at which the resource can be downloaded. Will be set to the "accept" button's download property.
+   * @param group - The image group to download images from
+   * @param imageIdsToDownload - A list of image ids to be downloaded from the group. This can be a
+   *        subset of the images found in group.items because either access issues or download limit.
+   * @param zip - True if the intended download format is zip. False for pptx.
+   */
   public getDownloadLink(group: ImageGroup, imageIdsToDownload: string[], zip ?: boolean): Promise<any> {
     let header = new HttpHeaders().set('content-type', 'application/x-www-form-urlencoded')
     let options = { headers: header, withCredentials: true }
@@ -128,8 +134,6 @@ export class ImageGroupService {
       igName: group.name,
       images: imageDownloadStrings.join(',')
     }
-
-    debugger;
 
     let groupExportUrl = url + '/' + format + '/' + group.id + '/' + useLegacyMetadata + '?springBoot=true'
 

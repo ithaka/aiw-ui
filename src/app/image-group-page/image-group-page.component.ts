@@ -27,6 +27,9 @@ import { ImageGroup } from 'datatypes'
   templateUrl: './image-group-page.component.pug'
 })
 
+const DOWNLOAD_PPTX_EVENTTYPE = "artstor_download_pptx"
+const DOWNLOAD_ZIP_EVENTTYPE = "artstor_download_zip"
+
 export class ImageGroupPage implements OnInit, OnDestroy {
   public ig: ImageGroup = <ImageGroup>{};
 
@@ -412,7 +415,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
           this.exportLoadingStateopts.progress = 100
           this.exportLoadingStateopts.state = LoadingState.completed
-          this.trackBulkDownload("artstor_download_pptx", imageIdsToDownload)
+          this.trackBulkDownload(DOWNLOAD_PPTX_EVENTTYPE, imageIdsToDownload)
 
           // On success fade out the component after 5 sec & begin download
           setTimeout(() => {
@@ -461,7 +464,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           this.exportLoadingStateopts.progress = 100
           this.exportLoadingStateopts.state = LoadingState.completed
           debugger;
-          this.trackBulkDownload("artstor_download_zip", imageIdsToDownload)
+          this.trackBulkDownload(DOWNLOAD_ZIP_EVENTTYPE, imageIdsToDownload)
 
           // On success fade out the component after 5 sec & begin download
           setTimeout(() => {
@@ -498,7 +501,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           this.exportLoadingStateopts.progress = 100
           this.exportLoadingStateopts.state = LoadingState.completed
 
-          const eventType = this.exportLoadingStateopts.exportType === "zip" ? "artstor_download_zip" : "artstor_download_pptx"
+          const eventType = this.exportLoadingStateopts.exportType === "zip" ? DOWNLOAD_ZIP_EVENTTYPE : DOWNLOAD_PPTX_EVENTTYPE
           const imageIdsDownloaded = this.exportLoadingStateopts.imageIdsToDownload
           this.trackBulkDownload(eventType, imageIdsDownloaded)
 
