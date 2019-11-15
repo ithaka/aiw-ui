@@ -315,7 +315,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
         switch (exportType) {
           case SupportedExportTypes.PPTX:
           case SupportedExportTypes.ZIP:
-            this.executeBulkExport(imageIdsToDownload, SupportedExportTypes.PPTX)
+            this.executeBulkExport(imageIdsToDownload, exportType)
             break
           case 'GoogleSlides': {
             if(this._storage.getSession('GAuthed')) {
