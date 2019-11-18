@@ -82,7 +82,7 @@ export class ImageGroupService {
   }
 
   public triggerGoogleSlides(): void {
-    this.igDownloadTrigger.emit('GoogleSlides');
+    this.igDownloadTrigger.emit(SupportedExportTypes.GOOGLE_SLIDES);
   }
 
   /**

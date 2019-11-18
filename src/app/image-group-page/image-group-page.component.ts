@@ -317,7 +317,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           case SupportedExportTypes.ZIP:
             this.executeBulkExport(imageIdsToDownload, exportType)
             break
-          case 'GoogleSlides': {
+          case SupportedExportTypes.GOOGLE_SLIDES: {
             if(this._storage.getSession('GAuthed')) {
               // Export to GS and show loading state
               console.log('Export to GS and show loading state')

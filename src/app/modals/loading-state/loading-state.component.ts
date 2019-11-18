@@ -66,5 +66,6 @@ export enum LoadingState {
 
 export enum SupportedExportTypes {
   ZIP = 'zip',
-  PPTX = 'pptx'
+  PPTX = 'pptx',
+  GOOGLE_SLIDES = 'GoogleSlides'
 }
