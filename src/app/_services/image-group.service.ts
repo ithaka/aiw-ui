@@ -18,8 +18,6 @@ import { SupportedExportTypes } from "../modals";
  *
  */
 
-// The max number of images the user is able to bulk export.
-const MAX_DOWNLOAD_AMOUNT = 150;
 
 @Injectable()
 export class ImageGroupService {
@@ -100,8 +98,7 @@ export class ImageGroupService {
 
     return this._assets.getAllThumbnails({ itemObjs: group.items }, group.id)
       .then((thumbnails) => {
-        return thumbnails.slice(0, MAX_DOWNLOAD_AMOUNT)
-          .filter((thumbnail) => thumbnail.status === "available")
+        return thumbnails.filter((thumbnail) => thumbnail.status === "available")
           .map((thumbnail) => thumbnail.id)
       })
   }

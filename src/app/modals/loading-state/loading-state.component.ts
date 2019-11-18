@@ -56,7 +56,6 @@ export interface LoadingStateOptions {
   state: LoadingState,
   progress?: number // percentage value
   errorType?: string
-  imageIdsToDownload?: string[]
 }
 
 export enum LoadingState {

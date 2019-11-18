@@ -333,19 +333,6 @@ export class ImageGroupPage implements OnInit, OnDestroy {
       })
   }
 
-  private trackBulkDownload(exportType: SupportedExportTypes, imageIdsDownloaded): void {
-    const eventType = exportType === SupportedExportTypes.ZIP ? "artstor_download_zip" : "artstor_download_pptx"
-
-    this._log.log({
-      eventType: eventType,
-      additional_fields: {
-        igName: this.ig.name,
-        igId: this.ig.id,
-        item_ids: imageIdsDownloaded
-      }
-    })
-  }
-
   /**
    * getPPt/getZIP loading time
    */
@@ -367,26 +354,27 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     }, 15000)
   }
 
+  private handleBulkDownloadSuccess(response) {
+    this.exportLoadingStateopts.progress = 100
+    this.exportLoadingStateopts.state = LoadingState.completed
+    clearInterval(this.loadingStateInterval)
+
+    let downloadLink = this._auth.getThumbHostname() + response.path.replace('/nas/', '/thumb/')
+
+    // On success fade out the component after 5 sec & begin download
+    setTimeout(() => {
+      this.closeExportLoadingState()
+      this.downLoadFile(this.ig.name, downloadLink)
+    }, 5000)
+  }
+
   private checkExportStatus(groupId: string): void {
     this._ig.checkExportStatus(groupId).subscribe(
       (response) => {
         console.log('The response is: ', response)
         if(response.status && response.status === 'COMPLETED') {
           clearInterval(this.exportStatusInterval)
-          clearInterval(this.loadingStateInterval)
-          let downloadLink = this._auth.getThumbHostname() + response.path.replace('/nas/', '/thumb/')
-
-          this.exportLoadingStateopts.progress = 100
-          this.exportLoadingStateopts.state = LoadingState.completed
-
-          const imageIdsDownloaded = this.exportLoadingStateopts.imageIdsToDownload
-          this.trackBulkDownload(this.exportLoadingStateopts.exportType, imageIdsDownloaded)
-
-          // On success fade out the component after 5 sec & begin download
-          setTimeout(() => {
-            this.closeExportLoadingState()
-            this.downLoadFile(this.ig.name, downloadLink)
-          }, 5000)
+          this.handleBulkDownloadSuccess(response)
         } else if(response.status && response.status === "FAILED") { // There was a server error while exporting group, allow user to try again
           console.error("Export Status Failed")
           clearInterval(this.exportStatusInterval)
@@ -449,8 +437,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     this.exportLoadingStateopts = {
       exportType: exportType,
       state: LoadingState.loading,
-      progress: 0,
-      imageIdsToDownload: imageIdsToDownload
+      progress: 0
     }
     this.showExportLoadingState = true
 
@@ -461,27 +448,16 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
 
     this._ig.getDownloadLink(this.ig, imageIdsToDownload, exportType)
-      .then( data => {
+      .then( response => {
         // Handle 200 Response with "status": "FAILED"
-        if (data.status === 'FAILED') {
-          console.error('Export Failed:- ', data)
+        if (response.status === 'FAILED') {
+          console.error('Export Failed:- ', response)
           clearInterval(this.loadingStateInterval)
           this.pollForExportStatus()
         }
 
-        else if (data.path && this.showExportLoadingState) {
-          let downloadLink = this._auth.getThumbHostname() + data.path.replace('/nas/', '/thumb/')
-          clearInterval(this.loadingStateInterval)
-
-          this.exportLoadingStateopts.progress = 100
-          this.exportLoadingStateopts.state = LoadingState.completed
-          this.trackBulkDownload(exportType, imageIdsToDownload)
-
-          // On success fade out the component after 5 sec & begin download
-          setTimeout(() => {
-            this.closeExportLoadingState()
-            this.downLoadFile(this.ig.name, downloadLink)
-          }, 5000)
+        else if (response.path && this.showExportLoadingState) {
+          this.handleBulkDownloadSuccess(response)
         }
       })
       .catch( error => {
