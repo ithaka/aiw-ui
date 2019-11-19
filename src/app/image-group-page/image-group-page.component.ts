@@ -215,9 +215,9 @@ export class ImageGroupPage implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this._ig.igDownloadTrigger.pipe(
-      map(exportType => {
+      map((exportType) => {
         if (id) {
-          this.showDownloadModal(exportType);
+          this.showDownloadModal(<SupportedExportTypes> exportType);
         }
       })).subscribe()
     )
