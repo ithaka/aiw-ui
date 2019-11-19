@@ -75,7 +75,7 @@ export class TermsAndConditionsComponent implements OnInit, AfterViewInit {
   }
 
   // Closes the IG T&C modal and passes the exportType back to parent component
-  public hideModal(event: any): void {
-    this.closeModal.emit(event)
+  public hideModal(exportType: string): void {
+    this.closeModal.emit(exportType)
   }
 }

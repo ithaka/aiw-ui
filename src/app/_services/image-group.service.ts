@@ -8,6 +8,7 @@ import 'rxjs/add/operator/timeout';
 import { AuthService } from './auth.service'
 import { AssetService } from './assets.service'
 import { ImageGroup, ImageGroupDescription } from './../shared'
+import { SupportedExportTypes } from "../modals";
 
 /**
  *
@@ -16,6 +17,7 @@ import { ImageGroup, ImageGroupDescription } from './../shared'
  * THIS SERVICE IS DEPRECATED
  *
  */
+
 
 @Injectable()
 export class ImageGroupService {
@@ -72,71 +74,72 @@ export class ImageGroupService {
   }
 
   public triggerPPTExport(): void {
-    this.igDownloadTrigger.emit('ppt');
+    this.igDownloadTrigger.emit(SupportedExportTypes.PPTX);
   }
 
   public triggerZIPExport(): void {
-    this.igDownloadTrigger.emit('zip');
+    this.igDownloadTrigger.emit(SupportedExportTypes.ZIP);
   }
 
   public triggerGoogleSlides(): void {
-    this.igDownloadTrigger.emit('GoogleSlides');
+    this.igDownloadTrigger.emit(SupportedExportTypes.GOOGLE_SLIDES);
   }
 
-  /** Gets the link at which the resource can be downloaded. Will be set to the "accept" button's download property */
-  public getDownloadLink(group: ImageGroup, zip ?: boolean): Promise<any> {
-    let header = new HttpHeaders().set('content-type', 'application/x-www-form-urlencoded')
-    let options = { headers: header, withCredentials: true }
-    let useLegacyMetadata: boolean = true
-    let url = this._auth.getHostname() + '/api/group/export'
-    let format: string
-    let data: any
-
-    if (!zip) {
-      format = 'pptx'
-    } else {
-      format = 'zip'
-    }
+  /**
+   * Given the image group determine the ids that are to be download given the user's access.
+   */
+  public getImageIdsToDownload(group: ImageGroup) {
 
     /**
      * We're using this as an auth check - instead of simply using all of the group.items strings and calling for downloads,
      *  which was allowing restricted assets to be downloaded, we first ask for each assets' thumbnail, which will ensure
      *  that only assets which the user has access to are returned
      */
+
     return this._assets.getAllThumbnails({ itemObjs: group.items }, group.id)
-    .then((thumbnails) => {
-      let imgDownloadStrings: string[] = []
-
-      thumbnails.forEach((thumbnail, index) => {
-        let imgStr: string = [(index + 1), thumbnail.id, '1024x1024'].join(':')
-        thumbnail.status == 'available' && imgDownloadStrings.push(imgStr)
+      .then((thumbnails) => {
+        return thumbnails.filter((thumbnail) => thumbnail.status === "available")
+          .map((thumbnail) => thumbnail.id)
       })
+  }
 
-      data = {
-          igName: group.name,
-          images: imgDownloadStrings.join(',')
-      }
+  /**
+   * Gets the link at which the resource can be downloaded. Will be set to the "accept" button's download property.
+   * @param group - The image group to download images from
+   * @param imageIdsToDownload - A list of image ids to be downloaded from the group. This can be a
+   *        subset of the images found in group.items because either access issues or download limit.
+   * @param format - The format for the export
+   */
+  public getDownloadLink(group: ImageGroup, imageIdsToDownload: string[], format : SupportedExportTypes): Promise<any> {
+    let header = new HttpHeaders().set('content-type', 'application/x-www-form-urlencoded')
+    let options = { headers: header, withCredentials: true }
+    let useLegacyMetadata: boolean = true
+    let url = this._auth.getHostname() + '/api/group/export'
+    let data: any
 
-      return data
+    const imageDownloadStrings = imageIdsToDownload.map((imageId, index) => {
+      return `${index+1}:${imageId}:1024x1024`
     })
-    .then((data) => {
-      let groupExportUrl = url + '/' + format + '/' + group.id + '/' + useLegacyMetadata + '?springBoot=true'
 
-      // Return request that provides file URL
-      return this.http
-        .post(groupExportUrl, this._auth.formEncode(data), options)
-        .timeout(20000) // Timeout after 20s
-        .toPromise()
+    data = {
+      igName: group.name,
+      images: imageDownloadStrings.join(',')
+    }
 
-    })
-    .then((res) => {
-      // Make authorization call to increment download count after successful response is received
-      this.http
-      .get(url + '/auth/' + group.id + '/true', options)
+    let groupExportUrl = url + '/' + format + '/' + group.id + '/' + useLegacyMetadata + '?springBoot=true'
+
+    // Return request that provides file URL
+    return this.http
+      .post(groupExportUrl, this._auth.formEncode(data), options)
+      .timeout(20000) // Timeout after 20s
       .toPromise()
+      .then((res) => {
+        // Make authorization call to increment download count after successful response is received
+        this.http
+          .get(url + '/auth/' + group.id + '/true', options)
 
-      return res
-    })
+        return res
+      })
   }
 
   /** Checks for the export status of the specified group */

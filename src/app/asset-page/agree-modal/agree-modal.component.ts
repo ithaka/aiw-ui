@@ -29,9 +29,6 @@ export class AgreeModalComponent implements OnInit {
   /** Is this MS IE or Edge? */
   @Input()
   isMSAgent: boolean
-  /** Asset.setDownloadView */
-  @Input()
-  setDownloadView: () => void
 
   @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef;
 

@@ -52,7 +52,7 @@ export class LoadingStateComponent implements OnInit, AfterViewInit {
 
 
 export interface LoadingStateOptions {
-  exportType: string,
+  exportType: SupportedExportTypes,
   state: LoadingState,
   progress?: number // percentage value
   errorType?: string
@@ -62,4 +62,10 @@ export enum LoadingState {
   loading, // 0
   completed, // 1
   error // 2
+}
+
+export enum SupportedExportTypes {
+  ZIP = 'zip',
+  PPTX = 'pptx',
+  GOOGLE_SLIDES = 'GoogleSlides'
 }
