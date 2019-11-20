@@ -309,28 +309,24 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   private exportGroup(exportType: SupportedExportTypes): void {
     this.showTermsConditions = false
 
-    this._ig.getImageIdsToDownload(this.ig)
-      .then((imageIdsToDownload) => {
-        // If user has agreed, we should trigger download directly
-        switch (exportType) {
-          case SupportedExportTypes.PPTX:
-          case SupportedExportTypes.ZIP:
-            this.executeBulkExport(imageIdsToDownload, exportType)
-            break
-          case SupportedExportTypes.GOOGLE_SLIDES: {
-            if(this._storage.getSession('GAuthed')) {
-              // Export to GS and show loading state
-              console.log('Export to GS and show loading state')
-            } else {
-              this.showGoogleAuth = true
-            }
-            break
-          }
-          default: {
-            break
-          }
+    switch (exportType) {
+      case SupportedExportTypes.PPTX:
+      case SupportedExportTypes.ZIP:
+        this.executeBulkExport(this.ig, exportType)
+        break
+      case SupportedExportTypes.GOOGLE_SLIDES: {
+        if(this._storage.getSession('GAuthed')) {
+          // Export to GS and show loading state
+          console.log('Export to GS and show loading state')
+        } else {
+          this.showGoogleAuth = true
         }
-      })
+        break
+      }
+      default: {
+        break
+      }
+    }
   }
 
   /**
@@ -368,6 +364,13 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     }, 5000)
   }
 
+  private handleBulkDownloadFailure() {
+    clearInterval(this.exportStatusInterval)
+    clearInterval(this.loadingStateInterval)
+    this.exportLoadingStateopts.state = LoadingState.error
+    this.exportLoadingStateopts.errorType = 'server'
+  }
+
   private checkExportStatus(groupId: string): void {
     this._ig.checkExportStatus(groupId).subscribe(
       (response) => {
@@ -376,18 +379,10 @@ export class ImageGroupPage implements OnInit, OnDestroy {
           clearInterval(this.exportStatusInterval)
           this.handleBulkDownloadSuccess(response)
         } else if(response.status && response.status === "FAILED") { // There was a server error while exporting group, allow user to try again
-          console.error("Export Status Failed")
-          clearInterval(this.exportStatusInterval)
-          clearInterval(this.loadingStateInterval)
-          this.exportLoadingStateopts.state = LoadingState.error
-          this.exportLoadingStateopts.errorType = 'server'
+          this.handleBulkDownloadFailure()
         }
       }, (error) => {
-        console.error('Error in check status: ', error)
-        clearInterval(this.exportStatusInterval)
-        clearInterval(this.loadingStateInterval)
-        this.exportLoadingStateopts.state = LoadingState.error
-        this.exportLoadingStateopts.errorType = 'server'
+        this.handleBulkDownloadFailure()
       }
     )
   }
@@ -428,12 +423,18 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     downloadLinkElement.remove()
   }
 
+  private initializeProgressBar(intervals) {
+    this.loadingStateInterval = setInterval(() => {
+      this.exportLoadingStateopts.progress += PROGRESS_INCREMENT
+    }, this.getProgressIntervals(intervals, PROGRESS_INTERVALS))
+  }
+
   /**
    * Performs the bulk export. Currently supported formats: zip and pptx.
-   * @param imageIdsToDownload - List of image ids to be bulk exported
+   * @param imageGroup - The image group to be bulk exported
    * @param exportType - The export type. Supports either 'zip' or 'pptx'
    */
-  private executeBulkExport(imageIdsToDownload: string[], exportType: SupportedExportTypes): void{
+  private executeBulkExport(imageGroup: ImageGroup, exportType: SupportedExportTypes): void{
     this.exportLoadingStateopts = {
       exportType: exportType,
       state: LoadingState.loading,
@@ -441,29 +442,31 @@ export class ImageGroupPage implements OnInit, OnDestroy {
     }
     this.showExportLoadingState = true
 
-    // Mimmic loading behaviour in intervals
-    this.loadingStateInterval = setInterval(() => {
-      this.exportLoadingStateopts.progress += PROGRESS_INCREMENT
-    }, this.getProgressIntervals(imageIdsToDownload.length, PROGRESS_INTERVALS))
+    this._ig.getImageIdsToDownload(imageGroup)
+      .then(imageIdsToDownload => {
+        this.initializeProgressBar(imageIdsToDownload.length)
 
+        this._ig.getDownloadLink(this.ig, imageIdsToDownload, exportType)
+          .then( response => {
+            // Handle 200 Response with "status": "FAILED"
+            if (response.status === 'FAILED') {
+              console.error('Export Failed:- ', response)
+              clearInterval(this.loadingStateInterval)
+              this.pollForExportStatus()
+            }
 
-    this._ig.getDownloadLink(this.ig, imageIdsToDownload, exportType)
-      .then( response => {
-        // Handle 200 Response with "status": "FAILED"
-        if (response.status === 'FAILED') {
-          console.error('Export Failed:- ', response)
-          clearInterval(this.loadingStateInterval)
-          this.pollForExportStatus()
-        }
-
-        else if (response.path && this.showExportLoadingState) {
-          this.handleBulkDownloadSuccess(response)
-        }
+            else if (response.path && this.showExportLoadingState) {
+              this.handleBulkDownloadSuccess(response)
+            }
+          })
+          .catch( error => {
+            console.error(error)
+            // Do not clear interval unless polling completes or fails
+            this.pollForExportStatus()
+          })
       })
-      .catch( error => {
-        console.error(error)
-        // Do not clear interval unless polling completes or fails
-        this.pollForExportStatus()
+      .catch(() => {
+        this.handleBulkDownloadFailure()
       })
   }
 
