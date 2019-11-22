@@ -474,7 +474,7 @@ export class AssetPage implements OnInit, OnDestroy {
         // here is where we make the "access denied" modal appear
         if (!this.encryptedAccess) {
           this.showAccessDeniedModal = true
-          this.trackItemView(this.assetIds[0])
+          this.trackItemView()
         } else {
           console.error('Failed to load externally shared asset', err)
           this.showServerErrorModal = true
@@ -520,8 +520,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // only log the event if the asset came from search, and therefore has an artstorid
         if (this.assets[0]['id']) {
-          // log the event connecting the search to the asset clicked
-          this.trackItemView(this.assetIds[0])
+          this.trackItemView()
         }
 
         // Split existing collection urls in the metadata so that urls can be linked separately
@@ -905,15 +904,17 @@ export class AssetPage implements OnInit, OnDestroy {
 
   /**
    * trackEvent
-   * send captain's log events associated with asset
-   * @param assetId
-   * @param eventType
+   * send captain's log event for the current asset
+   * @param eventType - The eventtype to log
    * @returns void
    */
-  private trackEvent(assetId: string, eventType: string): void {
+  private trackEvent(eventType: string): void {
     const hasAccess = !this.showAccessDeniedModal
     const reasonForAuth = this.showAccessDeniedModal ? "not_authorized" : "license"
+    const assetId = this.assetIds[0]
     const abSegments = this._search.ab_segments.get(assetId)
+    const authorizedAsset = this.assets[0]
+    const doi = authorizedAsset ? authorizedAsset.doi : null
 
     this._log.log({
       eventType: eventType,
@@ -922,7 +923,8 @@ export class AssetPage implements OnInit, OnDestroy {
       item_id: assetId,
       additional_fields: {
         has_access: hasAccess,
-        reason_for_authorization: [reasonForAuth]
+        reason_for_authorization: [reasonForAuth],
+        ...doi && {doi: doi}
       }
     })
   }
@@ -930,12 +932,11 @@ export class AssetPage implements OnInit, OnDestroy {
   /**
    * trackItemView
    * Builds and sends captain's log event for 'artstor_item_view'
-   * @param assetId
    * @returns void
    */
 
-  private trackItemView(assetId: string): void {
-    this.trackEvent(assetId, 'artstor_item_view')
+  private trackItemView(): void {
+    this.trackEvent('artstor_item_view')
   }
 
   /**
@@ -947,7 +948,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
   private trackItemDownload(assetId: string): void {
     const eventType = this.downloadType === "image" ? "artstor_download_single_image" : "artstor_image_download_view"
-    this.trackEvent(assetId, eventType)
+    this.trackEvent(eventType)
 
     const gaEvent = this.downloadType === "image" ? "downloadAsset" : "downloadView";
     this.angulartics.eventTrack.next({

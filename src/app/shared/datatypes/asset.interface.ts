@@ -12,6 +12,7 @@ export class Asset {
     thumbnail_url: string
     thumbnail_size: number = 2
     kalturaUrl: string
+    doi: string
     // Download attributes
     downloadMaxWidth: number = 0
     downloadMaxHeight: number = 0
@@ -81,13 +82,13 @@ export class Asset {
             if (data.fieldName === 'License' && data.fieldValue === 'ADL Terms and Conditions') {
                 data.fieldValue = 'Use of this image is in accordance with the <a href="https://www.artstor.org/artstor-terms/" target="_blank">Artstor Terms & Conditions</a>'
             }
-            
+
             let values: string[] = [data.fieldValue]
             // if the field exists, add to it (make sure the field value exists)
             if (formattedData[data.fieldName] && values[0]) {
                 // Concatenate other found values for the field
                 formattedData[data.fieldName] = formattedData[data.fieldName].concat(values)
-            } else if(values[0]) { 
+            } else if(values[0]) {
                 // otherwise make a new field (make sure the field vaue exists)
                 formattedData[data.fieldName] = values
             }
@@ -225,6 +226,7 @@ export class Asset {
             this.formattedMetadata = this.formatMetadata(data.metadata_json)
         }
         this.id = data.object_id
+        this.doi = data.doi
         this.typeId = data.object_type_id
         this.title = data.title
         this.categoryId = data.category_id
@@ -322,6 +324,7 @@ export interface MetadataResponse {
   export interface AssetData {
     groupId?: string
     SSID?: string
+    doi?: string
     category_id: string
     category_name: string
     collections: CollectionValue[]
