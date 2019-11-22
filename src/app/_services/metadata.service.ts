@@ -117,6 +117,7 @@ export class MetadataService {
         return {
             object_id: data.object_id,
             SSID: data.SSID,
+            doi: data.doi,
             category_id: data.category_id,
             category_name: data.category_name,
             collections: data.collections,
@@ -145,7 +146,7 @@ export class MetadataService {
       }
 
       /**
-       * Takes 
+       * Takes
        */
       private buildThumbnailUrl(asset: AssetData) {
         let isMultiView: boolean = !!(asset.image_compound_urls && asset.image_compound_urls.length)
@@ -190,6 +191,7 @@ export interface MetadataResponse {
   export interface AssetData {
     groupId?: string
     SSID?: string
+    doi?: string
     category_id: string
     category_name: string
     collections: CollectionValue[]
