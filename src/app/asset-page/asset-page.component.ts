@@ -924,10 +924,10 @@ export class AssetPage implements OnInit, OnDestroy {
       referring_requestid: this._search.latestSearchRequestId,
       ab_segments: abSegments ? [abSegments] : [],
       item_id: assetId,
+      ...doi && {doi: [doi]},
       additional_fields: {
         has_access: hasAccess,
         reason_for_authorization: [reasonForAuth],
-        ...doi && {doi: doi}
       }
     })
   }
