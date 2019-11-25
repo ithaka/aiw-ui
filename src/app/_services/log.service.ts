@@ -42,6 +42,7 @@ interface LogResponse {
 interface LogMessage {
   eventType: string
   item_id?: string
+  doi?: string[]
   referring_requestid?: string
   additional_fields?: any
   ab_segments?: any
