@@ -701,7 +701,7 @@ export class AssetService {
                 }
             });
 
-            if (params['startDate'] && params['endDate']){
+            if (params['startDate'] || params['endDate']){
                 dateObj = {
                     modified : true,
                     earliest : {

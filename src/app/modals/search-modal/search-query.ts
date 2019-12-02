@@ -95,9 +95,13 @@ export class SearchQueryUtil {
   public generateFilters(appliedFilters: any, dateFilter: any): any {
     let filterParams = {}
 
-    if (dateFilter['startDate'] && dateFilter['endDate']) {
+    if (dateFilter['startDate']) {
       // Pass BCE dates as negative numbers
       filterParams['startDate'] = dateFilter['startDate'] * (dateFilter['startEra'] == 'BCE' ? -1 : 1)
+    }
+
+    if (dateFilter['endDate']) {
+      // Pass BCE dates as negative numbers
       filterParams['endDate'] = dateFilter['endDate'] * (dateFilter['endEra'] == 'BCE' ? -1 : 1)
     }
 
