@@ -183,10 +183,14 @@ export class AssetSearchService {
 
     if (filterOptions.dateFacet.modified) {
       filterOptions.earliestDate = filterOptions.dateFacet.earliest.date;
-      filterOptions.earliestDate = (filterOptions.dateFacet.earliest.era == 'BCE') ? (parseInt(filterOptions.earliestDate) * -1).toString() : filterOptions.earliestDate.toString();
+      if (!isNaN(filterOptions.earliestDate)) {
+        filterOptions.earliestDate = (filterOptions.dateFacet.earliest.era == 'BCE') ? (parseInt(filterOptions.earliestDate) * -1).toString() : filterOptions.earliestDate.toString();
+      }
 
       filterOptions.latestDate = filterOptions.dateFacet.latest.date;
-      filterOptions.latestDate = (filterOptions.dateFacet.latest.era == 'BCE') ? (parseInt(filterOptions.latestDate) * -1).toString() : filterOptions.latestDate.toString();
+      if (!isNaN(filterOptions.latestDate)) {
+        filterOptions.latestDate = (filterOptions.dateFacet.latest.era == 'BCE') ? (parseInt(filterOptions.latestDate) * -1).toString() : filterOptions.latestDate.toString();
+      }
 
       query[this.filterQueryKey].push('year:[' + filterOptions.earliestDate + ' TO ' + filterOptions.latestDate + ']')
     }

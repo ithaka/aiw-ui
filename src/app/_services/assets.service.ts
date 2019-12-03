@@ -705,12 +705,12 @@ export class AssetService {
                 dateObj = {
                     modified : true,
                     earliest : {
-                        date : Math.abs(params['startDate']),
-                        era : params['startDate'] < 0 ? 'BCE' : 'CE'
+                        date : isNaN(params['startDate']) ? params['startDate'] : Math.abs(params['startDate']),
+                        era : isNaN(params['startDate']) ? 'BCE' : (params['startDate'] < 0 ? 'BCE' : 'CE')
                     },
                     latest : {
-                        date : Math.abs(params['endDate']),
-                        era : params['endDate'] < 0 ? 'BCE' : 'CE'
+                        date : isNaN(params['endDate']) ? params['endDate'] : Math.abs(params['endDate']),
+                        era :  isNaN(params['endDate']) ? 'CE' : (params['endDate'] < 0 ? 'BCE' : 'CE')
                     }
                 }
                 this._filters.setAvailable('dateObj', dateObj);

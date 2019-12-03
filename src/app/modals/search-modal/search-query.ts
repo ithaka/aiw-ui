@@ -98,11 +98,15 @@ export class SearchQueryUtil {
     if (dateFilter['startDate']) {
       // Pass BCE dates as negative numbers
       filterParams['startDate'] = dateFilter['startDate'] * (dateFilter['startEra'] == 'BCE' ? -1 : 1)
+    } else {
+      filterParams['startDate'] = '*'
     }
 
     if (dateFilter['endDate']) {
       // Pass BCE dates as negative numbers
       filterParams['endDate'] = dateFilter['endDate'] * (dateFilter['endEra'] == 'BCE' ? -1 : 1)
+    } else {
+      filterParams['endDate'] = '*'
     }
 
     // Put filters into an object with field name as key
