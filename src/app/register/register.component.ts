@@ -197,7 +197,7 @@ export class RegisterComponent implements OnInit {
    * Navigates to correct page for login depending on whether or not shiboleth params exist
    */
   public navigateToLogin(): void {
-    if (this.shibParameters && this.shibParameters.email) {
+    if (this.shibParameters && (this.shibParameters.email || this.shibParameters.samlTokenId)) {
       this._router.navigate(['/link', this.shibParameters])
     } else {
       this._router.navigate(['/login'])
