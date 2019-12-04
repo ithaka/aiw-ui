@@ -260,8 +260,10 @@ export class SearchModal implements OnInit, AfterViewInit {
       }
     }
     // Apply date filter
-    if(filterParams["startDate"] && filterParams["endDate"]) {
+    if(filterParams["startDate"]) {
       queryParams["startDate"] = filterParams["startDate"]
+    }
+    if(filterParams["endDate"]) {
       queryParams["endDate"] = filterParams["endDate"]
     }
     // Track in angulartics
@@ -306,7 +308,7 @@ export class SearchModal implements OnInit, AfterViewInit {
       } else {
         termOperator = ' AND '
       }
-      
+
       for(let orQuerySegment of orQuerySegments) {
         if( orQuerySegment.indexOf(':') > -1 ) { // Its a filter query
           let key = orQuerySegment.split(':')[0]
