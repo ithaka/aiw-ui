@@ -13,7 +13,8 @@ export const environment = {
     "AIzaSyDHAAKMjGUxxQbZCeHJDCpAeLmQ2A7HqOI",
     ['https://slides.googleapis.com/$discovery/rest?version=v1'],
     'https://www.googleapis.com/auth/presentations'
-  ]
+  ],
+  SENTRY_ENV: 'dev'
 };
 
 /*
