@@ -14,7 +14,7 @@ export const environment = {
     ['https://slides.googleapis.com/$discovery/rest?version=v1'],
     'https://www.googleapis.com/auth/presentations'
   ],
-  SENTRY_ENV: 'test'
+  SENTRY_ENV: 'dev'
 };
 
 /*
