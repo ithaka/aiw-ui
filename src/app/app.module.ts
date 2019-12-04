@@ -12,6 +12,7 @@ import { DatePipe, isPlatformBrowser } from '@angular/common'
  * Platform and Environment providers/directives/pipes
  */
 import { ENV_PROVIDERS } from './environment';
+import { environment } from "environments/environment"
 import { ROUTES } from './app.routes';
 
 // UI modules
@@ -144,7 +145,8 @@ import { version } from '../../package.json'
  */
 Sentry.init({
   dsn: 'https://9ef1f98534914bf6826e202370d1f627@sentry.io/209953',
-  release: 'artstor-ui@' + version
+  release: 'artstor-ui@' + version,
+  environment: environment.SENTRY_ENV
 });
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {

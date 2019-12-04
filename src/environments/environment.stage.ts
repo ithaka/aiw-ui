@@ -7,5 +7,6 @@ export const environment = {
   SSR_API_URL: 'https://stage.artstor.org',
   FORUM_URL: 'http://new.forum.jstor.org',
   STOR_URL: '//stor.stage.artstor.org/stor',
-  GAPI_TEST: ['', '', [''], '']
+  GAPI_TEST: ['', '', [''], ''],
+  SENTRY_ENV: 'test'
 };
