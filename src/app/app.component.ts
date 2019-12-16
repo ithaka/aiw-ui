@@ -1,7 +1,8 @@
 /*
  * Angular 2 decorators and services
  */
-import { Component, ViewEncapsulation, PLATFORM_ID, Inject } from '@angular/core'
+import { Component, ViewEncapsulation, PLATFORM_ID, Inject, Renderer2 } from '@angular/core'
+import { DOCUMENT } from '@angular/common'
 import { Angulartics2GoogleTagManager } from 'angulartics2/gtm'
 import { Title, Meta } from '@angular/platform-browser'
 import { Router, NavigationStart, NavigationEnd } from '@angular/router'
@@ -102,6 +103,8 @@ export class AppComponent {
     private router: Router,
     private translate: TranslateService,
     private meta: Meta,
+    private _renderer2: Renderer2,
+    @Inject(DOCUMENT) private _document: Document,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // console.info("Constructing app component")
@@ -239,6 +242,25 @@ export class AppComponent {
     })).subscribe()
   }
 
+  initPerimeterX() {
+    let perimeterXScript = this._renderer2.createElement('script');
+    perimeterXScript.type = `text/javascript`;
+    perimeterXScript.text = `
+      // Script to initialize PerimeterX
+      (function(){
+        window._pxAppId = 'PXTjKaL4b3';
+        // Custom parameters
+        // window._pxParam1 = "<param1>";
+        var p = document.getElementsByTagName('script')[0],
+          s = document.createElement('script');
+        s.async = 1;
+        s.src = '/TjKaL4b3/init.js';
+        p.parentNode.insertBefore(s,p);
+      }());
+      `;
+    this._renderer2.appendChild(this._document.head, perimeterXScript);
+  }
+
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       // Setup statusPageClient & subscribe to any status updates to show banner
@@ -248,6 +270,8 @@ export class AppComponent {
             this.subscribeToStatus()
           })
     }
+
+    this.initPerimeterX();
   }
 
   private hideZendeskChat() {
