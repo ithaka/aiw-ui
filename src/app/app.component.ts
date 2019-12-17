@@ -244,6 +244,7 @@ export class AppComponent {
 
   initPerimeterX() {
     let perimeterXScript = this._renderer2.createElement('script');
+    perimeterXScript.id = 'px-js';
     perimeterXScript.type = `text/javascript`;
     perimeterXScript.text = `
       // Script to initialize PerimeterX
