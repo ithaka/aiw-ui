@@ -85,8 +85,10 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
         map(res => {
           this.serviceStatus.isLoading = false
           if (res.success && res.token) {
-            // Make sure to explicitly replace '+' with '%2b' in the token
-            this.shareLink = [protocol, document.location.host, groupPath, ig.id, '?token=', encodeURIComponent(res.token).replace(new RegExp('\\+', 'g'), '%2b')].join('')
+            // First encode the URI component, then if necessary replace '%20' with '%2b' so the token can be redeemed
+            const encodedToken = encodeURIComponent(res.token)
+            const validToken = encodedToken.replace(new RegExp('%20', 'g'), '%2b')
+            this.shareLink = [protocol, document.location.host, groupPath, ig.id, '?token=', validToken].join('')
           } else {
             this.serviceStatus.tokenError = true
           }
