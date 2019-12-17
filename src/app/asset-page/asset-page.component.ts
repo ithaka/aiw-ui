@@ -911,10 +911,10 @@ export class AssetPage implements OnInit, OnDestroy {
   private trackEvent(eventType: string): void {
     const hasAccess = !this.showAccessDeniedModal
     const reasonForAuth = this.showAccessDeniedModal ? "not_authorized" : "license"
-    const assetId = this.assetIds[0]
-    const abSegments = this._search.ab_segments.get(assetId)
     const authorizedAsset = this.assets[0]
+    const assetId = authorizedAsset ? authorizedAsset.id : this.assetIds[0]
     const doi = authorizedAsset ? authorizedAsset.doi : null
+    const abSegments = this._search.ab_segments.get(assetId)
 
     this._log.log({
       eventType: eventType,
