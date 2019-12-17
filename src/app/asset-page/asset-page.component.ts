@@ -925,6 +925,7 @@ export class AssetPage implements OnInit, OnDestroy {
       additional_fields: {
         has_access: hasAccess,
         reason_for_authorization: [reasonForAuth],
+        fullUrl: this._router.url
       }
     })
   }
