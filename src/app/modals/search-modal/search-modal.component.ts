@@ -240,7 +240,7 @@ export class SearchModal implements OnInit, AfterViewInit {
     }
     // Build Solr query string from filters
     for(let key in filterParams) {
-      if(key !== 'startDate' && key !== 'endDate') {
+      if(key !== 'startDate' && key !== 'endDate' && key !== 'geography') {
         if (orQuery.length > 0) {
           orQuery += ' AND ('
         } else {
@@ -265,6 +265,12 @@ export class SearchModal implements OnInit, AfterViewInit {
     }
     if(filterParams["endDate"]) {
       queryParams["endDate"] = filterParams["endDate"]
+    }
+    if (filterParams['geography']) {
+      queryParams['geography'] = []
+      for (let efq of filterParams['geography'].split('|')) {
+        queryParams['geography'].push(efq)
+      }
     }
     // Track in angulartics
     this.angulartics.eventTrack.next({ properties: { event: 'advSearch', category: 'search', label: advQuery } })
@@ -295,6 +301,11 @@ export class SearchModal implements OnInit, AfterViewInit {
       this.loadingFilters = false
       return
     }
+    let geography: string = routeParams['geography']
+    if (geography) {
+      appliedFiltersObj['geography'] = geography.startsWith('[') ? JSON.parse(geography) : geography
+    }
+
     // Process advance search query string
     // - clean out wrapping parenthesis for OR queries
     query = query.replace(/\(|\)/g, '')
@@ -334,8 +345,7 @@ export class SearchModal implements OnInit, AfterViewInit {
     // Used to determine if generateSelectedFilters will be called or not, should only be called if we have a tri-state checkbox checked
     let updateSelectedFilters: boolean = false
     for (let key in routeParams){
-      let switchCaseValue: string = ( key === 'collectiontypes' || key === 'geography' ) ? 'colTypeGeo' : key
-      switch ( switchCaseValue ){
+      switch ( key ){
         case 'term': { // Update the advanceQueries Array as per the term param
           this.updateAdvanceQueries( routeParams )
           break
@@ -362,9 +372,10 @@ export class SearchModal implements OnInit, AfterViewInit {
             updateFilterObj && (updateFilterObj.checked = true)
           }
           updateSelectedFilters = true
+          break
         }
 
-        case 'colTypeGeo': {
+        case 'collectiontypes': {
           let filters = routeParams[key].split('|')
           for (let filter of filters){
             let filterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === key )
@@ -389,6 +400,42 @@ export class SearchModal implements OnInit, AfterViewInit {
             }
           }
           updateSelectedFilters = true
+          break
+        }
+
+        case 'geography': {
+          let filterGroup = this.availableFilters.find(filterGroup => filterGroup.name === key)
+          if (filterGroup) {
+            let geography = routeParams[key];
+            let selections = [];
+            if (typeof geography === 'string') {
+              selections.push(geography)
+            } else {
+              selections = geography
+            }
+            for (let efq of selections) {
+              let updtFilterObj = filterGroup.values.find(filterObj => filterObj.efq === efq)
+              if (updtFilterObj) { // If match is found at the parent node level
+                updtFilterObj.checked = true
+                if (updtFilterObj.children && updtFilterObj.children.length > 0) {
+                  for (let child of updtFilterObj.children) {
+                    child.checked = true
+                  }
+                }
+              } else { // If we don't find a match at parent node level then search for a match in children nodes
+                for (let value of filterGroup.values) {
+                  if (value.children && value.children.length > 0) {
+                    let updtFilterObj = value.children.find(filterObj => filterObj.efq === efq)
+                    if (updtFilterObj) {
+                      updtFilterObj.checked = true
+                      break
+                    }
+                  }
+                }
+              }
+            }
+          }
+          break
         }
 
         case 'collections': {
@@ -403,6 +450,7 @@ export class SearchModal implements OnInit, AfterViewInit {
             }
           }
           updateSelectedFilters = true
+          break
         }
       }
     }
@@ -476,6 +524,7 @@ export class SearchModal implements OnInit, AfterViewInit {
                 checked: false,
                 name: facet.name === 'collectiontypes' ? this.filterNameMap['collectiontypes'][facetName] : facetName,
                 count: facet.values[i].count,
+                efq: facet.values[i].efq,
                 value: facetName,
                 children: []
               }
@@ -505,6 +554,7 @@ export class SearchModal implements OnInit, AfterViewInit {
             checked: false,
             name: geoObj.name,
             count: geoObj.count,
+            efq: geoObj.efq,
             value: geoObj.name,
             children: []
           }
@@ -514,6 +564,7 @@ export class SearchModal implements OnInit, AfterViewInit {
               checked: false,
               name: child.name,
               count: child.count,
+              efq: child.efq,
               value: child.name
             }
 
@@ -627,21 +678,23 @@ export class SearchModal implements OnInit, AfterViewInit {
     for ( let filterGroup of this.availableFilters ) {
       for ( let filter of filterGroup.values ){
         // If the parent node is checked just push the selected filter object for the parent itself, no need to check the children
+        let selectedFilterObject: SelectedFilter = {} as SelectedFilter
         if ( filter.checked ){
-          let selectedFilterObject: SelectedFilter = {} as SelectedFilter
           selectedFilterObject.group = filterGroup.name
           selectedFilterObject.value = filter.value
-          selectedFiltersArray.push( selectedFilterObject )
+          selectedFilterObject.efq = filter.efq
         }
         else if ( filter.children ){ // If the parent is not checked then check the children and push thier selected filter objects individually
           for ( let child of filter.children ){
             if ( child.checked ){
-              let selectedFilterObject: SelectedFilter = {} as SelectedFilter
               selectedFilterObject.group = filterGroup.name === 'collectiontypes' ? 'collections' : filterGroup.name
               selectedFilterObject.value = child.value
-              selectedFiltersArray.push( selectedFilterObject )
+              selectedFilterObject.efq = child.efq
             }
           }
+        }
+        if ( Object.entries(selectedFilterObject).length) {
+          selectedFiltersArray.push( selectedFilterObject )
         }
       }
     }
@@ -670,6 +723,7 @@ interface FacetObject {
   value: string,
   checked: boolean,
   count: number,
+  efq: string,
   children?: Array<FacetObject>
 }
 interface FacetGroup {
@@ -678,5 +732,6 @@ interface FacetGroup {
 }
 interface SelectedFilter {
   group: string,
-  value: string
+  value: string,
+  efq: string
 }
