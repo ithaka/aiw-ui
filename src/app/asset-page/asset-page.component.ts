@@ -902,6 +902,20 @@ export class AssetPage implements OnInit, OnDestroy {
     return false
   }
 
+  private getReasonForAuth() {
+    if(this.showAccessDeniedModal) {
+      return "not_authorized"
+    } else {
+      if(this.assetGroupId) {
+        return "image_group"
+      } else if(this.encryptedAccess) {
+        return "encrypted_access"
+      } else {
+        return "license"
+      }
+    }
+  }
+
   /**
    * trackEvent
    * send captain's log event for the current asset
@@ -910,24 +924,25 @@ export class AssetPage implements OnInit, OnDestroy {
    */
   private trackEvent(eventType: string): void {
     const hasAccess = !this.showAccessDeniedModal
-    const reasonForAuth = this.showAccessDeniedModal ? "not_authorized" : "license"
     const authorizedAsset = this.assets[0]
     const assetId = authorizedAsset ? authorizedAsset.id : this.assetIds[0]
     const doi = authorizedAsset ? authorizedAsset.doi : null
     const abSegments = this._search.ab_segments.get(assetId)
 
-    this._log.log({
-      eventType: eventType,
-      referring_requestid: this._search.latestSearchRequestId,
-      ab_segments: abSegments ? [abSegments] : [],
-      item_id: assetId,
-      ...doi && {doi: [doi]},
-      additional_fields: {
-        has_access: hasAccess,
-        reason_for_authorization: [reasonForAuth],
-        fullUrl: this._router.url
-      }
-    })
+    if(this.isBrowser) {
+      this._log.log({
+        eventType: eventType,
+        referring_requestid: this._search.latestSearchRequestId,
+        ab_segments: abSegments ? [abSegments] : [],
+        item_id: assetId,
+        ...doi && {doi: [doi]},
+        additional_fields: {
+          has_access: hasAccess,
+          reason_for_authorization: [this.getReasonForAuth()],
+          fullUrl: this._router.url
+        }
+      })
+    }
   }
 
   /**
