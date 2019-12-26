@@ -65,7 +65,7 @@ $desktop: 992px;*/
         width: 40px !important;
         border: 1px solid $color-gray-3 !important;
 
-        &:hover {
+        &:hover, &:focus {
             background-color: $color-gray-3 !important;
         }
 
