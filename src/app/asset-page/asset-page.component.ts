@@ -1904,6 +1904,12 @@ export class AssetPage implements OnInit, OnDestroy {
     this.trackItemDownload(this.assetIds[0])
   }
 
+  public getTitleAndResults(): string {
+    const title = this.assets[0] ? this.assets[0].title : ''
+    const totalAssets = this.totalAssetCount - this.restrictedAssetsCount
+    return title.concat(', result ', this.assetNumber.toString(), ' of ', totalAssets.toString())
+  }
+
   public userHasAcceptedTerms() {
     let asset = this.assets[0]
 
