@@ -17,7 +17,7 @@ export class GenerateCitation implements OnInit, AfterViewInit {
 
   @Input() private asset: Asset /** the asset in question */
 
-  @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef;
+  @ViewChild("generateCitationTitle", {read: ElementRef}) generateCitationTitleElement: ElementRef;
 
   // Prefer saving links to HTTPS
   private reqProtocol = 'https://'
@@ -38,11 +38,6 @@ export class GenerateCitation implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    if (this.modalElement && this.modalElement.nativeElement){
-      this.modalElement.nativeElement.focus()
-    }
-
     this.generateCitations(this.asset)
     this._log.log({
       eventType: 'artstor_citation',
@@ -56,8 +51,12 @@ export class GenerateCitation implements OnInit, AfterViewInit {
 
   // Set initial focus on the modal Title h1
   public startModalFocus() {
-    let modalStartFocus: HTMLElement = <HTMLElement>this._dom.byId('generate-citation-title')
-    modalStartFocus.focus()
+    // let modalStartFocus: HTMLElement = <HTMLElement>this._dom.byId('generate-citation-title')
+    // modalStartFocus.focus()
+
+    if (this.generateCitationTitleElement && this.generateCitationTitleElement.nativeElement){
+      this.generateCitationTitleElement.nativeElement.focus()
+    }
   }
 
   /**

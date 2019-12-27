@@ -2,7 +2,7 @@
   .modal-dialog(role="dialog", (keydown.esc)="hideModal($event)")
     .modal-content
       .modal-header
-        h4.modal-title#term-condition-title(tabindex="0", (keydown.shift.tab)="hideModal($event)") {{ 'IMAGE_GROUP_PAGE.TERMS_AND_CONDITIONS.TITLE' | translate }}
+        h4.modal-title(#termConditionTitle, tabindex="0", (keydown.shift.tab)="hideModal($event)") {{ 'IMAGE_GROUP_PAGE.TERMS_AND_CONDITIONS.TITLE' | translate }}
         button.close#term-condition-close((click)="hideModal($event)", aria-label="Close")
           span(aria-hidden="true") &times;
       .modal-body

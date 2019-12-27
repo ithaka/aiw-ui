@@ -7,7 +7,7 @@
         #modalHeader,
         tabindex="1",
         (keydown.tab)="focusElement(firstField, $event)",
-        (keydown.shit.tab)="focusElement(confirmButton, $event)"
+        (keydown.shift.tab)="focusElement(confirmButton, $event)"
       )
         h4.modal-title(*ngIf="!copyIG && !editIG") {{ 'NEW_GROUP_MODAL.CREATE_TITLE' | translate }}
         h4.modal-title(*ngIf="copyIG") {{ 'NEW_GROUP_MODAL.COPY_TITLE' | translate }}

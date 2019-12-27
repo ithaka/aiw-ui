@@ -14,7 +14,7 @@ export class ShareLinkModal implements OnInit, AfterViewInit {
 
   @Input() public asset: any;
   @Output() public closeModal: EventEmitter<any> = new EventEmitter();
-  @ViewChild("share-ig-link-title", {read: ElementRef}) shareLinkTitleElement: ElementRef;
+  @ViewChild("shareImgLinkTitle", {read: ElementRef}) shareLinkTitleElement: ElementRef;
   private shareLink: string = '';
   private genImgMode: string = 'half';
 

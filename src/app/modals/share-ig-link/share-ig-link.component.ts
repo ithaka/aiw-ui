@@ -26,7 +26,7 @@ export class ShareIgLinkModal implements OnInit, AfterViewInit {
 
   @Input() private ig: ImageGroup /** the image group in question */
 
-  @ViewChild("share-ig-link-title", {read: ElementRef}) shareLinkTitleElement: ElementRef
+  @ViewChild("shareIgLinkTitle") shareLinkTitleElement: ElementRef;
 
   constructor(
     private _group: GroupService,

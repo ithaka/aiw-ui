@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input, EventEmitter, ElementRef, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, Output, Input, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 
 // Project Dependencies
 import { AuthService, DomUtilityService } from '_services'
@@ -9,7 +9,7 @@ import { Asset } from './../asset'
   templateUrl: 'agree-modal.component.pug',
   styleUrls: [ './agree-modal.component.scss' ]
 })
-export class AgreeModalComponent implements OnInit {
+export class AgreeModalComponent implements AfterViewInit {
 
   /** Causes modal to be hidden */
   @Output()
@@ -30,20 +30,21 @@ export class AgreeModalComponent implements OnInit {
   @Input()
   isMSAgent: boolean
 
-  @ViewChild("modal", {read: ElementRef}) modalElement: ElementRef;
+  @ViewChild("agreeModalTitle", {read: ElementRef}) modalTitleElement: ElementRef;
 
   constructor(
     private _auth: AuthService,
     private _dom: DomUtilityService
   ) { }
 
-  ngOnInit() {
-    // Set focus to the modal to make the links in the modal first thing to tab for accessibility
-    // TO-DO: Only reference document client-side
-    // let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('modal');
-    // htmlelement.focus()
-    if (this.modalElement && this.modalElement.nativeElement){
-      this.modalElement.nativeElement.focus()
+  ngAfterViewInit() {
+    this.startModalFocus()
+  }
+
+  // Set initial focus on the modal Title h4
+  public startModalFocus() {
+    if (this.modalTitleElement && this.modalTitleElement.nativeElement){
+      this.modalTitleElement.nativeElement.focus()
     }
   }
 
