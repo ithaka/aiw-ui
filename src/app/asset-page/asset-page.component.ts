@@ -1907,7 +1907,8 @@ export class AssetPage implements OnInit, OnDestroy {
   public getTitleAndResults(): string {
     const title = this.assets[0] ? this.assets[0].title : ''
     const totalAssets = this.totalAssetCount - this.restrictedAssetsCount
-    return title.concat(', result ', this.assetNumber.toString(), ' of ', totalAssets.toString())
+    const base_title = title.concat(', result ', this.assetNumber.toString(), ' of ', totalAssets.toString())
+    return this.isFullscreen ? base_title.concat(" - Full Screen Mode") : base_title
   }
 
   public userHasAcceptedTerms() {

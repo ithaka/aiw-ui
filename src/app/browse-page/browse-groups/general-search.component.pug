@@ -1,5 +1,6 @@
 .form-group
   .input-group
+    .label.sr-only#search-label(for="inputSearchTerm", innerHTML="Search for groups by title or tag")
     //- the .driver-find-inputbox class is important for the tour to find it, be careful when removing or changing it
     input#inputSearchTerm.form-control.has-icon.driver-find-inputbox([(ngModel)]="term", (keyup)="startSearch=false;", (keyup.enter)="conductSearch()", aria-describedby="search-label", type="text", placeholder="Search for groups by title or tag...", data-sc="search: simple keyword", tabindex="3")
     i#iconClearSearch.icon.icon-close.form-control__icon(*ngIf="term && !loadingGrps", (click)="term=''; startSearch=false; clearGrpSearch.emit()", placement="bottom", ngbTooltip="Clear search", role="button", tabindex="3", (keyup.enter)="term=''; startSearch=false; clearGrpSearch.emit()", aria-label="Clear search")
