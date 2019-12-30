@@ -94,8 +94,8 @@ export class ToolboxService {
                 wscript.SendKeys("{F11}");
             }
         }
-        let htmlelement: HTMLElement = <HTMLElement>document.getElementsByClassName('btn--zoomIn')[0];
-        htmlelement.focus();
+        let ZoomInElement: HTMLElement = <HTMLElement>document.getElementsByClassName('btn--zoomIn')[0];
+        ZoomInElement.focus();
     }
 
     /**
