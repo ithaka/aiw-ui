@@ -22,7 +22,7 @@
       //- for accessibility so that page has title
       h1.sr-only([innerHTML]="getTitleAndResults()")
       //- Asset Viewer Row
-      .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8', showAssetDrawer && isFullscreen ? 'drawer' : '' ]")
+      .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-12', showAssetDrawer && isFullscreen ? 'drawer' : '' ]")
         ng-container(*ngIf="userSessionFresh")
           //- Artstor Viewer
           artstor-viewer(
