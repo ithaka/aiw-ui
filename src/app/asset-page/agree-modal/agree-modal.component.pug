@@ -2,7 +2,7 @@
   .modal-dialog(role="document")
     .modal-content
       .modal-header
-        h4.modal-title Terms and Conditions of Use
+        h4.modal-title(#agreeModalTitle, tabindex="0") Terms and Conditions of Use
         button.close(type="button", (click)="closeModal.emit()", aria-label="Close")
           span(aria-hidden="true") &times;
       .notranslate.modal-body
@@ -14,4 +14,4 @@
           a.link(href="http://support.artstor.org/?article=embedded-metadata", name="Embedded metadata viewing help", target="_blank") click here.
       .modal-footer
         button.btn.btn-secondary(type="button", (click)="closeModal.emit()") I reject
-        a.btn.btn-primary((click)="agree()", [href]="downloadUrl", target="_blank") I accept
+        a.btn.btn-primary((click)="agree()", [href]="downloadUrl", target="_blank", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()") I accept
