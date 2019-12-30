@@ -1920,6 +1920,13 @@ export class AssetPage implements OnInit, OnDestroy {
     this.trackItemDownload(this.assetIds[0])
   }
 
+  public getTitleAndResults(): string {
+    const title = this.assets[0] ? this.assets[0].title : ''
+    const totalAssets = this.totalAssetCount - this.restrictedAssetsCount
+    const base_title = title.concat(', result ', this.assetNumber.toString(), ' of ', totalAssets.toString())
+    return this.isFullscreen ? base_title.concat(" - Full Screen Mode") : base_title
+  }
+
   public userHasAcceptedTerms() {
     let asset = this.assets[0]
 
