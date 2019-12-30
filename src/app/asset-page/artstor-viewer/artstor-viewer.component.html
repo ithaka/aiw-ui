@@ -28,13 +28,13 @@
     </div>
     <!--Viewer Buttons-->
     <div *ngIf="!thumbnailMode">
-        <div class="button-group asset-viewer__buttons" id="imageButtons-{{ osdViewerId }}">
-            <button class="btn btn--icon btn--zoomIn" [class.aiw-hidden]="state != 1" id="zoomIn-{{ osdViewerId}}" [ngbTooltip]="zoomInTooltip" placement="bottom"><i class="icon icon-zoom-in"></i></button>
-            <button class="btn btn--icon btn--zoomOut" [class.aiw-hidden]="state != 1" id="zoomOut-{{ osdViewerId }}" [ngbTooltip]="zoomOutTooltip" placement="bottom"><i class="icon icon-zoom-out"></i></button>
-            <button class="btn btn--icon btn--zoomFit" [class.aiw-hidden]="state != 1" id="zoomFit-{{ osdViewerId }}" [ngbTooltip]="fitToViewTooltip" placement="bottom"><i class="icon icon-fit-to-view"></i></button>
-            <button class="btn btn--icon btn--fullScreen" [class.standalone-present-icon]="state != 1" *ngIf="!isFullscreen" id="fullScreen-{{ osdViewerId }}" (click)="togglePresentationMode()" [ngbTooltip]="presentTooltip" placement="bottom"><i class="icon icon-present"></i></button>
-            <button class="btn btn--icon" [class.standalone-remove-icon]="state != 1" *ngIf="isFullscreen && assetCompareCount > 1" (click)="removeAsset.emit(asset)" [ngbTooltip]="removeCompTooltip" placement="bottom"><i class="icon icon-remove-from-comparison"></i></button>
-        </div>
+      <div class="button-group asset-viewer__buttons" id="imageButtons-{{ osdViewerId }}">
+        <button class="btn btn--icon btn--zoomIn" [class.aiw-hidden]="state != 1" id="zoomIn-{{ osdViewerId}}" [ngbTooltip]="zoomInTooltip" aria-label="Zoom in" placement="bottom"><i class="icon icon-zoom-in"></i></button>
+        <button class="btn btn--icon btn--zoomOut" [class.aiw-hidden]="state != 1" id="zoomOut-{{ osdViewerId }}" [ngbTooltip]="zoomOutTooltip" aria-label="Zoom out" placement="bottom"><i class="icon icon-zoom-out"></i></button>
+        <button class="btn btn--icon btn--zoomFit" [class.aiw-hidden]="state != 1" id="zoomFit-{{ osdViewerId }}" [ngbTooltip]="fitToViewTooltip" aria-label="Fit to view" placement="bottom"><i class="icon icon-fit-to-view"></i></button>
+        <button class="btn btn--icon btn--fullScreen" [class.standalone-present-icon]="state != 1" *ngIf="!isFullscreen" id="fullScreen-{{ osdViewerId }}" aria-label="Full screen" (click)="togglePresentationMode()" [ngbTooltip]="presentTooltip" placement="bottom"><i class="icon icon-present"></i></button>
+        <button class="btn btn--icon" [class.standalone-remove-icon]="state != 1" *ngIf="isFullscreen && assetCompareCount > 1" (click)="removeAsset.emit(asset)" aria-label="Remove from comparison" [ngbTooltip]="removeCompTooltip" placement="bottom"><i class="icon icon-remove-from-comparison"></i></button>
+      </div>
 
         <ng-template #zoomInTooltip><div>Zoom in</div></ng-template>
         <ng-template #zoomOutTooltip><div>Zoom out</div></ng-template>
