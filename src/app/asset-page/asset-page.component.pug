@@ -10,7 +10,7 @@
             span.d-none.d-md-inline-block {{ 'ASSET_PAGE.LINKS.BACK' | translate}}
         .col-sm-8.col-md-offset-2.col-lg-9.col-lg-offset-1
           .title-wrap(*ngIf="assets[0]", tabindex="1")
-            .title.text-truncate([innerHTML]="assets[0].title ? assets[0].title : ''", attr.aria-label="{{assets[0].title ? assets[0].title : ''}}, result {{assetNumber}} of {{totalAssetCount - restrictedAssetsCount}}")
+            .title.text-truncate([innerHTML]="assets[0].title ? assets[0].title : ''", [attr.aria-label]="getTitleAndResults()")
             //- Pagination
             .paginator
               i.icon.icon-direction.icon-left(title="Previous in results", (click)="showPrevAsset()", (keyup.enter)="showPrevAsset()", [class.disabled]="assetNumber <= 1", [attr.tabindex]="assetNumber <= 1 ? -1 : 1", aria-label="Previous item, press enter to go to previous result item. You can also use left and right arrow keys to navigate between result items.", role="button")
@@ -19,7 +19,7 @@
               span#assetPageCount.font-weight-bold {{ totalAssetCount - restrictedAssetsCount }}
               i.icon.icon-direction.icon-right(title="Next in results", (click)="showNextAsset()", (keyup.enter)="showNextAsset()", [class.disabled]="assetNumber >= totalAssetCount - restrictedAssetsCount", [attr.tabindex]="assetNumber >= totalAssetCount - restrictedAssetsCount ? -1 : 1", aria-label="Next item, press enter to go to next result item. You can also use left and right arrow keys to navigate between result items.", role="button")
     //- for accessibility so that page has title
-    h1.sr-only(*ngIf="isFullscreen") Full screen mode
+    h1.sr-only([innerHTML]="getTitleAndResults()")
     //- Asset Viewer Row
     .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8', showAssetDrawer && isFullscreen ? 'drawer' : '' ]")
       ng-container(*ngIf="userSessionFresh")
