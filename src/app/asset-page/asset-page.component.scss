@@ -5,6 +5,10 @@ $titleNavBg: #eee;
 // Avoid asset viewer bumping into the footer
 .asset-page{
     margin-bottom: 4em;
+
+    #artstor-viewer {
+        padding: 0;
+    }
 }
 
 .asset-col {

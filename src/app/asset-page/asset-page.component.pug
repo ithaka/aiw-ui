@@ -18,73 +18,108 @@
               span.font-weight-normal &nbsp;of&nbsp;
               span#assetPageCount.font-weight-bold {{ totalAssetCount - restrictedAssetsCount }}
               i.icon.icon-direction.icon-right(title="Next in results", (click)="showNextAsset()", (keyup.enter)="showNextAsset()", [class.disabled]="assetNumber >= totalAssetCount - restrictedAssetsCount", [attr.tabindex]="assetNumber >= totalAssetCount - restrictedAssetsCount ? -1 : 1", aria-label="Next item, press enter to go to next result item. You can also use left and right arrow keys to navigate between result items.", role="button")
-    //- for accessibility so that page has title
-    h1.sr-only([innerHTML]="getTitleAndResults()")
-    //- Asset Viewer Row
-    .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-8', showAssetDrawer && isFullscreen ? 'drawer' : '' ]")
-      ng-container(*ngIf="userSessionFresh")
-        //- Artstor Viewer
-        artstor-viewer(
-            *ngFor="let assetId of (isFullscreen ? assetIds : [assetIds[0]]); let i = index",
-            [testEnv]="_auth.getEnv() === 'test'",
-            [assetId]="assetId",
-            [encrypted]="encryptedAccess",
-            [groupId]="assetGroupId",
-            [zoom]="indexZoomMap[i]",
-            (assetMetadata)="handleLoadedMetadata($event, i)",
-            [ngClass]="[ 'asset-viewer-' + assetIds.length ]",
-            (fullscreenChange)="updateFullscreenVar($event)",
-            [index]="i",
-            [assetCompareCount]="assets.length",
-            [assetNumber]="assetNumber",
-            [assetGroupCount]="totalAssetCount - restrictedAssetsCount",
-            [assets]="assets",
-            [isFullscreen]="isFullscreen",
-            [showCaption]="showAssetCaption",
-            [quizMode]="quizMode",
-            [prevAssetResults]="prevAssetResults",
-            (removeAsset)="toggleAsset($event, i)",
-            (nextPage)="showNextAsset()",
-            (prevPage)="showPrevAsset()",
-            (multiViewPageViaArrow)="multiViewPageViaArrow()",
-            (multiViewPageViaThumbnail)="multiViewPageViaThumbnail()",
-            (assetDrawer)="toggleAssetDrawer(!showAssetDrawer)",
-            [legacyFlag]="false",
-            [openLibraryFlag]="fromOpenLibrary"
+    .col-md-8#artstor-viewer
+      //- for accessibility so that page has title
+      h1.sr-only([innerHTML]="getTitleAndResults()")
+      //- Asset Viewer Row
+      .asset-col([ngClass]="[ isFullscreen ? 'fullscreen-container' : 'col-md-12', showAssetDrawer && isFullscreen ? 'drawer' : '' ]")
+        ng-container(*ngIf="userSessionFresh")
+          //- Artstor Viewer
+          artstor-viewer(
+              *ngFor="let assetId of (isFullscreen ? assetIds : [assetIds[0]]); let i = index",
+              [testEnv]="_auth.getEnv() === 'test'",
+              [assetId]="assetId",
+              [encrypted]="encryptedAccess",
+              [groupId]="assetGroupId",
+              [zoom]="indexZoomMap[i]",
+              (assetMetadata)="handleLoadedMetadata($event, i)",
+              [ngClass]="[ 'asset-viewer-' + assetIds.length ]",
+              (fullscreenChange)="updateFullscreenVar($event)",
+              [index]="i",
+              [assetCompareCount]="assets.length",
+              [assetNumber]="assetNumber",
+              [assetGroupCount]="totalAssetCount - restrictedAssetsCount",
+              [assets]="assets",
+              [isFullscreen]="isFullscreen",
+              [showCaption]="showAssetCaption",
+              [quizMode]="quizMode",
+              [prevAssetResults]="prevAssetResults",
+              (removeAsset)="toggleAsset($event, i)",
+              (nextPage)="showNextAsset()",
+              (prevPage)="showPrevAsset()",
+              (multiViewPageViaArrow)="multiViewPageViaArrow()",
+              (multiViewPageViaThumbnail)="multiViewPageViaThumbnail()",
+              (assetDrawer)="toggleAssetDrawer(!showAssetDrawer)",
+              [legacyFlag]="false",
+              [openLibraryFlag]="fromOpenLibrary"
           )
-      //- Related results from JSTOR
-      .pl-3(*ngIf="jstorResults.length > 0 && relatedResFlag")
-        .row-hdr.pt-3 Related Results from JSTOR
-        .jstor-result(*ngFor="let result of jstorResults")
-          a([attr.href]="'http://www.jstor.org/stable/' + result.doi", target="_blank", (mouseenter) ="setToolTipData(result)", [ngbTooltip]="tipContent")
-            .type {{ result.type + ': '}}
-            .label([innerHTML]="result.label")
-        a.link.small([attr.href]="'http://www.jstor.org/action/doBasicSearch?Query=' + relatedResultsQuery", target="_blank") See more Results
-      ng-template(#tipContent="", placement="right")
-        div(*ngIf="selectedJstorResult.title")
-          h3 {{ selectedJstorResult.title }}
-          .tool-tip-lbl(*ngIf="selectedJstorResult.authors") Author
-          div(*ngFor="let author of selectedJstorResult.authors") {{ author }}
-          br
-          .tool-tip-lbl(*ngIf="selectedJstorResult.publishers") Published by:
-          div(*ngFor="let publisher of selectedJstorResult.publishers") {{ publisher.publisher }}
-          br
-          div(*ngIf="selectedJstorResult.doi") Stable URL: {{ 'http://www.jstor.org/stable/' + selectedJstorResult.doi }}
+        //- Related results from JSTOR
+        .pl-3(*ngIf="jstorResults.length > 0 && relatedResFlag")
+          .row-hdr.pt-3 Related Results from JSTOR
+          .jstor-result(*ngFor="let result of jstorResults")
+            a([attr.href]="'http://www.jstor.org/stable/' + result.doi", target="_blank", (mouseenter) ="setToolTipData(result)", [ngbTooltip]="tipContent")
+              .type {{ result.type + ': '}}
+              .label([innerHTML]="result.label")
+          a.link.small([attr.href]="'http://www.jstor.org/action/doBasicSearch?Query=' + relatedResultsQuery", target="_blank") See more Results
+        ng-template(#tipContent="", placement="right")
+          div(*ngIf="selectedJstorResult.title")
+            h3 {{ selectedJstorResult.title }}
+            .tool-tip-lbl(*ngIf="selectedJstorResult.authors") Author
+            div(*ngFor="let author of selectedJstorResult.authors") {{ author }}
+            br
+            .tool-tip-lbl(*ngIf="selectedJstorResult.publishers") Published by:
+            div(*ngFor="let publisher of selectedJstorResult.publishers") {{ publisher.publisher }}
+            br
+            div(*ngIf="selectedJstorResult.doi") Stable URL: {{ 'http://www.jstor.org/stable/' + selectedJstorResult.doi }}
 
-      .col-md-12.quiz-caption-cntnr(*ngIf="isFullscreen", [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg' ]")
-        ang-promo-tooltip(*ngIf="user.isLoggedIn && !quizModeTTDismissed && studyMode", [options]="quizModeTooltipOpts", (close)="closeQuizModeTooltip()")
-        .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", (click)="showAssetCaption = !showAssetCaption", title="{{ showAssetCaption ? 'Hide Asset Meta Information' : 'Show Asset Meta Information' }}")
-          span.caption-btn
-          | {{ showAssetCaption ? 'HIDE CAPTION' : 'SHOW CAPTION' }}
-        .quiz-browse-cntnr(*ngIf="quizMode")
-          i.icon.icon-direction.icon-left([class.disabled]="!quizShuffle && assetNumber <= 1 ? true : false", title="Previous in results", (tap)="showPrevAsset()")
-          i.icon.icon-direction.icon-right([class.disabled]="!quizShuffle && assetNumber >= totalAssetCount - restrictedAssetsCount ? true: false", title="Next in results", (tap)="showNextAsset()")
-        .shuffle-cntnr(*ngIf="quizMode", [ngClass]="[ quizShuffle ? 'active' : '' ]", (tap)="toggleQuizShuffle()", title="Toggle Asset Suffle")
-          span.shuffle-btn
-          | SHUFFLE {{ quizShuffle ? 'ON' : 'OFF' }}
-        .quiz-cntnr([ngClass]="[ quizMode ? 'active' : '' ]", (tap)="toggleQuizMode()", title="{{ quizMode ? 'Deactivate Quiz Mode' : 'Activate Quiz Mode' }}")
-          span.quiz-btn
-          | QUIZ MODE {{ quizMode ? 'ON' : 'OFF' }}
+        .col-md-12.quiz-caption-cntnr(*ngIf="isFullscreen", [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg' ]")
+          ang-promo-tooltip(*ngIf="user.isLoggedIn && !quizModeTTDismissed && studyMode", [options]="quizModeTooltipOpts", (close)="closeQuizModeTooltip()")
+          .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", tabindex="0", (click)="showAssetCaption = !showAssetCaption", (keydown.enter)="showAssetCaption = !showAssetCaption", title="{{ showAssetCaption ? 'Hide Asset Meta Information' : 'Show Asset Meta Information' }}")
+            span.caption-btn
+            | {{ showAssetCaption ? 'HIDE CAPTION' : 'SHOW CAPTION' }}
+          .quiz-browse-cntnr(*ngIf="quizMode")
+            i.icon.icon-direction.icon-left([class.disabled]="!quizShuffle && assetNumber <= 1 ? true : false", title="Previous in results", tabindex="0", (tap)="showPrevAsset()", (keydown.enter)="showPrevAsset()")
+            i.icon.icon-direction.icon-right([class.disabled]="!quizShuffle && assetNumber >= totalAssetCount - restrictedAssetsCount ? true: false", title="Next in results", tabindex="0", (tap)="showNextAsset()", (keydown.enter)="showNextAsset()")
+          .shuffle-cntnr(*ngIf="quizMode", [ngClass]="[ quizShuffle ? 'active' : '' ]", tabindex="0", (tap)="toggleQuizShuffle()", (keydown.enter)="toggleQuizShuffle()", title="Toggle Asset Suffle")
+            span.shuffle-btn
+            | SHUFFLE {{ quizShuffle ? 'ON' : 'OFF' }}
+          .quiz-cntnr([ngClass]="[ quizMode ? 'active' : '' ]", tabindex="0", (tap)="toggleQuizMode()", (keydown.enter)="toggleQuizMode()", title="{{ quizMode ? 'Deactivate Quiz Mode' : 'Activate Quiz Mode' }}")
+            span.quiz-btn
+            | QUIZ MODE {{ quizMode ? 'ON' : 'OFF' }}
+
+      //- Fullscreen viewer control button
+      .fullscreen-btns.button-group(*ngIf="isFullscreen", [class.fade-out]="showAssetDrawer")
+        button.btn.btn-light(*ngIf="!quizMode", (click)="toggleAssetDrawer(!showAssetDrawer)")
+            | {{ 'ASSET_PAGE.BUTTONS.COMPARE' | translate}}
+            i.icon.icon-compare
+        button.btn.btn-light(
+            type="button",
+            (click)="exitPresentationMode()",
+            aria-label="Close",
+            title="Exit Fullscreen"
+          )
+          | Exit
+          .icon.icon-exit-fullscreen
+      //- Asset Drawer
+      .asset-drawer(*ngIf="isFullscreen", [class.slideOut]="showAssetDrawer && isFullscreen")
+        .col-sm-12
+          h3.asset-drawer__header((click)="toggleAssetDrawer(!showAssetDrawer)")
+            button.asset-drawer__close.pr-1(
+              *ngIf="isFullscreen",
+              type="button",
+              aria-label="Close",
+              style="float:left;"
+            )
+              .icon.icon-right
+            | COMPARE
+          .text-center
+            pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
+          div.pt-1.pb-3(*ngIf="prevAssetResults.thumbnails.length < 1")
+            .alert.alert-info {{ 'ASSET_PAGE.MESSAGES.NEEDASSETS' | translate}}
+          ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{ 'selected' : asset.selected || isPrimaryAsset(asset) }", (click)="toggleAsset(asset)")
+          .text-center.pt-2
+            pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
+
     //- Asset Metadata Column
     .col-md-4(*ngIf="assets[0]",[class.hidden]="isFullscreen")
       .py-3
@@ -283,37 +318,6 @@
                 button.btn.btn-secondary((click)="showDeletePCModal = true", type="button", tabindex="6", [class.loading]="deleteLoading") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_BTN' | translate }}
                 button.btn.btn-primary(type="submit", [class.loading]="isProcessing", tabindex="6") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.SAVE_BTN' | translate }}
 
-    .fullscreen-btns.button-group(*ngIf="isFullscreen", [class.fade-out]="showAssetDrawer")
-      button.btn.btn-light(*ngIf="!quizMode", (click)="toggleAssetDrawer(!showAssetDrawer)")
-          | {{ 'ASSET_PAGE.BUTTONS.COMPARE' | translate}}
-          i.icon.icon-compare
-      button.btn.btn-light(
-          type="button",
-          (click)="exitPresentationMode()",
-          aria-label="Close",
-          title="Exit Fullscreen"
-        )
-        | Exit
-        .icon.icon-exit-fullscreen
-    //- Asset Drawer
-    .asset-drawer(*ngIf="isFullscreen", [class.slideOut]="showAssetDrawer && isFullscreen")
-      .col-sm-12
-        h3.asset-drawer__header((click)="toggleAssetDrawer(!showAssetDrawer)")
-          button.asset-drawer__close.pr-1(
-            *ngIf="isFullscreen",
-            type="button",
-            aria-label="Close",
-            style="float:left;"
-          )
-            .icon.icon-right
-          | COMPARE
-        .text-center
-          pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
-        div.pt-1.pb-3(*ngIf="prevAssetResults.thumbnails.length < 1")
-          .alert.alert-info {{ 'ASSET_PAGE.MESSAGES.NEEDASSETS' | translate}}
-        ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{ 'selected' : asset.selected || isPrimaryAsset(asset) }", (click)="toggleAsset(asset)")
-        .text-center.pt-2
-          pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
 ang-agree-modal(
   *ngIf="showAgreeModal",
   (closeModal)="showAgreeModal = false",
