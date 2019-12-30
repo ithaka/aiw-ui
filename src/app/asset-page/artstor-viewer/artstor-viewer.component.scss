@@ -142,7 +142,8 @@ $desktop: 992px;*/
 }
 
 .asset-viewer__edge-arrows .btn:hover,
-.asset-viewer__edge-arrows .btn:active {
+.asset-viewer__edge-arrows .btn:active,
+.asset-viewer__edge-arrows .btn:focus {
     background: rgba(66,66,66,1.0);
 }
 
