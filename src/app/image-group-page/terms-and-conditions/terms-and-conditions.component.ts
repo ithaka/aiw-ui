@@ -26,7 +26,7 @@ export class TermsAndConditionsComponent implements OnInit, AfterViewInit {
   @Input()
   public exportType: string;
 
-  @ViewChild("termConditionTitle", {read: ElementRef}) termConditionTitleElement: ElementRef;
+  @ViewChild("termsAndConditionsTitle", {read: ElementRef}) termsAndConditionsTitleElement: ElementRef;
 
   public isLoading: boolean = false;
   public zipLoading: boolean = false;
@@ -56,8 +56,8 @@ export class TermsAndConditionsComponent implements OnInit, AfterViewInit {
   
   // Set initial focus on the modal Title h4
   public startModalFocus() {
-    if (this.termConditionTitleElement && this.termConditionTitleElement.nativeElement){
-      this.termConditionTitleElement.nativeElement.focus()
+    if (this.termsAndConditionsTitleElement && this.termsAndConditionsTitleElement.nativeElement){
+      this.termsAndConditionsTitleElement.nativeElement.focus()
     }
   }
 

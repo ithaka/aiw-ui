@@ -51,9 +51,6 @@ export class GenerateCitation implements OnInit, AfterViewInit {
 
   // Set initial focus on the modal Title h1
   public startModalFocus() {
-    // let modalStartFocus: HTMLElement = <HTMLElement>this._dom.byId('generate-citation-title')
-    // modalStartFocus.focus()
-
     if (this.generateCitationTitleElement && this.generateCitationTitleElement.nativeElement){
       this.generateCitationTitleElement.nativeElement.focus()
     }
