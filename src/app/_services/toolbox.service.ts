@@ -83,19 +83,26 @@ export class ToolboxService {
      * @note Should fire immediately within a user-event binding (click, key)
      */
     public requestFullScreen(): void {
-        let el = document.getElementById("artstor-viewer");
-        // Supports most browsers and their versions.
-        var requestMethod = el.requestFullscreen || el['webkitRequestFullscreen'] || el['mozRequestFullscreen'] || el['msRequestFullscreen'];
-        if (requestMethod) { // Native full screen.
-            requestMethod.call(el);
-        } else if (window['ActiveXObject'] && typeof window['ActiveXObject'] !== "undefined") { // Older IE.
-            var wscript = new ActiveXObject("WScript.Shell");
-            if (wscript !== null) {
-                wscript.SendKeys("{F11}");
+        // Set timeout so that the artstor-viewer element will be available by the time we request fullscreen from image group
+        setTimeout(() => {
+            let el = document.getElementById("artstor-viewer");
+            // Supports most browsers and their versions.
+            var requestMethod = el.requestFullscreen || el['webkitRequestFullscreen'] || el['mozRequestFullscreen'] || el['msRequestFullscreen'];
+            if (requestMethod) { // Native full screen.
+                requestMethod.call(el);
+            } else if (window['ActiveXObject'] && typeof window['ActiveXObject'] !== "undefined") { // Older IE.
+                var wscript = new ActiveXObject("WScript.Shell");
+                if (wscript !== null) {
+                    wscript.SendKeys("{F11}");
+                }
             }
-        }
-        let ZoomInElement: HTMLElement = <HTMLElement>document.getElementsByClassName('btn--zoomIn')[0];
-        ZoomInElement.focus();
+            let ZoomInElement: HTMLElement = <HTMLElement>document.getElementsByClassName('btn--zoomIn')[0];
+            if (ZoomInElement) {
+                ZoomInElement.focus();
+            }
+        }, 0);
+        
+        
     }
 
     /**
