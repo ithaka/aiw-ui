@@ -133,7 +133,9 @@ $iconBtnSize: $btnHeight;
      color: #333;
 
      &:hover, &:active, &:focus {
-         background: $btnLinkHoverBg;
+        background: $btnLinkHoverBg;
+        outline: -webkit-focus-ring-color auto 5px !important;
+        outline: auto 2px Highlight !important;
      }
 
      &:hover, &:active, &:focus, &:visited {

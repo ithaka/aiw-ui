@@ -69,6 +69,11 @@ $desktop: 992px;*/
             background-color: $color-gray-3 !important;
         }
 
+        &:focus {
+            outline: auto 2px Highlight !important;
+            outline: -webkit-focus-ring-color auto 5px !important;
+        }
+
         .icon {
             width: 24px !important;
             height: 24px !important;
@@ -145,6 +150,11 @@ $desktop: 992px;*/
 .asset-viewer__edge-arrows .btn:active,
 .asset-viewer__edge-arrows .btn:focus {
     background: rgba(66,66,66,1.0);
+}
+
+.asset-viewer__edge-arrows .btn:focus {
+    outline: auto 2px Highlight !important;
+    outline: -webkit-focus-ring-color auto 5px !important;
 }
 
 .asset-viewer__edge-arrows .btn--prev {
