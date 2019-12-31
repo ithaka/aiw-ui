@@ -3,6 +3,10 @@
 .openseadragon-canvas {
     outline: none !important;
     cursor: move;
+
+    &:focus {
+        outline: -webkit-focus-ring-color auto 15px !important;
+    }
 }
 
 .osd-wrap > .openseadragon-container {
