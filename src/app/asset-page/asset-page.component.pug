@@ -2,7 +2,7 @@
 .container-fluid.asset-page(*ngIf="assetIds[0]", [class.fullscreen]="isFullscreen")
   .row
     //- View prev/next asset
-    .title-nav-cntnr.col-md-12([class.hidden]="isFullscreen")
+    .title-nav-cntnr.col-md-12(*ngIf="!isFullscreen")
       .row
         .col-2
           span#previousPageLink.back-results(*ngIf="prevRouteParams.length > 0", (keyup.enter)="backToResults()", (click)="backToResults()", tabindex="1", aria-label="Back to results", role="link")
@@ -121,7 +121,7 @@
             pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
 
     //- Asset Metadata Column
-    .col-md-4(*ngIf="assets[0]",[class.hidden]="isFullscreen")
+    .col-md-4(*ngIf="assets[0] && !isFullscreen")
       .py-3
         //- If the user has not accepted the agreement, show modal when clicked, otherwise download immediately
         .btn-row

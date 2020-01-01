@@ -37,7 +37,7 @@ const STATUS_PAGE_CMP_ID_PROD: string = 'cmy3vpk5tq18'
         <button id="button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
       </div>
       <nav-bar tabindex="-1"></nav-bar>
-      <main>
+      <main id="main">
         <router-outlet></router-outlet>
       </main>
 
