@@ -4,7 +4,7 @@
     .filter-group(*ngIf="availableFilters[filterKey] && isArray(availableFilters[filterKey]) && availableFilters[filterKey].length > 0 && !(availableFilters[filterKey].length === 1 && (availableFilters[filterKey][0].name === '' || availableFilters[filterKey][0].count === 0))")
       span.filter-group__label
         h3 {{ 'FILTERS.' + filterKey | translate }}
-          a#buttonCollectionTypeClear.link--accent.small((keydown.enter)="clearAllFilterGroup(filterKey)", [tabindex]="hasAppliedFilters(filterKey) ? 2 : -1", [ngClass]="{ 'disable': !hasAppliedFilters(filterKey) }", (click)="clearAllFilterGroup(filterKey)", attr.aria-label="Clear, click to clear all selected {{ 'FILTERS.' + filterKey | translate }} filters") Clear
+          a#buttonCollectionTypeClear.link--accent.small(*ngIf="hasAppliedFilters(filterKey)", (keydown.enter)="clearAllFilterGroup(filterKey)", [tabindex]="hasAppliedFilters(filterKey) ? 2 : -1", (click)="clearAllFilterGroup(filterKey)", attr.aria-label="Clear, click to clear all selected {{ 'FILTERS.' + filterKey | translate }} filters") Clear
       //- Filters
       div(*ngFor="let facet of availableFilters[filterKey] | slice:0:17")
         //- Show filters
@@ -41,7 +41,7 @@
   .filter-group(*ngIf="availableFilters.dateObj")
     span.filter-group__label
       h3 Date
-        a#buttonDateFilterClear.link--accent.small((keydown.enter)="clearAllFilterGroup('date')", [tabindex]="hasAppliedFilters('date') ? 2 : -1", [ngClass]="{ 'disable': !hasAppliedFilters('date') }", (click)="clearAllFilterGroup('date')", aria-label="Clear, click to clear applied Date filter") Clear
+        a#buttonDateFilterClear.link--accent.small(*ngIf="hasAppliedFilters('date')", (keydown.enter)="clearAllFilterGroup('date')", [tabindex]="hasAppliedFilters('date') ? 2 : -1", (click)="clearAllFilterGroup('date')", aria-label="Clear, click to clear applied Date filter") Clear
     .date-filter-row
       input#inputDateFilterStart.form-control(tabindex="2", [(ngModel)]="availableFilters.dateObj.earliest.date", type="number", (keypress)="dateKeyPress($event)", min="0", placeholder="Start (ex: 1000)", aria-label="Start date, only include results from after this date")
       #buttonDateFilterStartBCE.side-toggle-btn(role="button", (keydown.enter)="availableFilters.dateObj.earliest.era = 'BCE'", tabindex="2", (click)="availableFilters.dateObj.earliest.era = 'BCE'", [ngClass]="{'active': availableFilters.dateObj.earliest.era == 'BCE' }", attr.aria-label="BCE, {{ availableFilters.dateObj.earliest.era == 'BCE' ? 'selected' : 'unselected' }}") BCE
