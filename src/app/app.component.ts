@@ -33,8 +33,8 @@ const STATUS_PAGE_CMP_ID_PROD: string = 'cmy3vpk5tq18'
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="closeBanner()"></ang-sky-banner>
     <div>
-      <div id="skip" tabindex="-1">
-        <button id="button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
+      <div id="skip-main-content-div" tabindex="-1">
+        <button id="skip-main-content-button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
       </div>
       <nav-bar tabindex="-1"></nav-bar>
       <main id="main">
@@ -52,6 +52,8 @@ export class AppComponent {
   public showSkyBanner: boolean = false
   public skyBannerCopy: string = ''
   public test: any = {}
+
+  private isFullscreen: boolean = false
 
   public statusPageClient: any
   /**
@@ -141,7 +143,7 @@ export class AppComponent {
 
         if (isPlatformBrowser(this.platformId)) {
           // focus on the wrapper of the "skip to main content link" everytime new page is loaded
-          let mainEl = <HTMLElement>(this._dom.byId('skip'))
+          let mainEl = <HTMLElement>(this._dom.byId('skip-main-content-div'))
           if (!(event.url.indexOf('browse') > -1) && !(event.url.indexOf('search') > -1) && !(event.url.indexOf('asset') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
             mainEl.focus()
         }
@@ -273,6 +275,53 @@ export class AppComponent {
     }
 
     this.initPerimeterX();
+
+    document.addEventListener("fullscreenchange", () => {
+      this.toggleSkipToMainContent()
+    }, false);
+  
+    document.addEventListener("mozfullscreenchange", () => {
+      this.toggleSkipToMainContent()
+    }, false);
+  
+    document.addEventListener("webkitfullscreenchange",() => {
+      this.toggleSkipToMainContent()
+    }, false);
+  
+    document.addEventListener("msfullscreenchange", () => {
+      this.toggleSkipToMainContent()
+    }, false);
+  }
+
+  private toggleSkipToMainContent() {
+    if (this.isFullscreen) {
+        this.addSkipToMainContent()
+    } else {
+      this.removeSkipToMainContent()
+    }
+    this.isFullscreen = !this.isFullscreen
+  }
+
+  private removeSkipToMainContent() {
+    let skipToMainContentButton = document.getElementById("skip-main-content-button")
+    skipToMainContentButton.remove()
+  }
+
+  private addSkipToMainContent() {
+    let skipToMainContentDiv = document.getElementById("skip-main-content-div")
+    // <button id="skip-main-content-button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
+    let skipToMainContentButton = document.createElement("button")
+    skipToMainContentButton.innerHTML = "Skip to main content"
+    skipToMainContentButton.tabIndex = 1
+    skipToMainContentButton.id = "skip-main-content-button"
+    skipToMainContentButton.setAttribute("class", "sr-only sr-only-focusable")
+    skipToMainContentButton.onclick = this.findMainContent
+    skipToMainContentButton.onkeyup = (event) => {
+      if (event.keyCode === 13) {
+        this.findMainContent()
+      }
+    }
+    skipToMainContentDiv.appendChild(skipToMainContentButton);
   }
 
   private hideZendeskChat() {
