@@ -2,7 +2,7 @@
   .modal-dialog.modal-lg(role="dialog", (keydown.esc)="closeModal.emit()")
     .modal-content
       .modal-header
-        h4#generate-citation-title.modal-title(tabindex="0", (keydown.shift.tab)="closeModal.emit()") {{ 'GENERATE_CITATION_MODAL.MAIN_HEADING' | translate }}
+        h4.modal-title(#generateCitationTitle, tabindex="0", (keydown.shift.tab)="closeModal.emit()") {{ 'GENERATE_CITATION_MODAL.MAIN_HEADING' | translate }}
         button.close(type="button", (click)="closeModal.emit()", aria-label="Close")
           span(aria-hidden="true") &times;
       .modal-body

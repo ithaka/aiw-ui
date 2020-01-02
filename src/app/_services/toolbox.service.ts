@@ -85,7 +85,7 @@ export class ToolboxService {
     public requestFullScreen(): void {
         let el = document.getElementById("main");
         // Supports most browsers and their versions.
-        var requestMethod = el.requestFullscreen || el['webkitRequestFullscreen'] || el['mozRequestFullscreen'] || el['msRequestFullscreen'];
+        var requestMethod = el.requestFullscreen || el['webkitRequestFullscreen'] || el['mozRequestFullscreen'] || el['msRequestFullscreen']
         if (requestMethod) { // Native full screen.
             requestMethod.call(el);
         } else if (window['ActiveXObject'] && typeof window['ActiveXObject'] !== "undefined") { // Older IE.

@@ -65,7 +65,7 @@ $desktop: 992px;*/
         width: 40px !important;
         border: 1px solid $color-gray-3 !important;
 
-        &:hover, &:focus {
+        &:hover {
             background-color: $color-gray-3 !important;
         }
 
@@ -147,8 +147,7 @@ $desktop: 992px;*/
 }
 
 .asset-viewer__edge-arrows .btn:hover,
-.asset-viewer__edge-arrows .btn:active,
-.asset-viewer__edge-arrows .btn:focus {
+.asset-viewer__edge-arrows .btn:active {
     background: rgba(66,66,66,1.0);
 }
 
