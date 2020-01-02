@@ -34,6 +34,7 @@ export class Nav implements OnInit, OnDestroy {
   private appConfig: any
 
   private ipAuthed: boolean = false
+  private isFullscreen: boolean = false
 
   // Flag display (dev)
   public showAppliedFlags: boolean = false
@@ -162,6 +163,22 @@ export class Nav implements OnInit, OnDestroy {
     );
 
     this.hideLoginTooltip = !!this._storage.getSession('hideLoginTooltip');
+
+    document.addEventListener("fullscreenchange", () => {
+      this.isFullscreen = !this.isFullscreen
+    }, false);
+  
+    document.addEventListener("mozfullscreenchange", () => {
+      this.isFullscreen = !this.isFullscreen
+    }, false);
+  
+    document.addEventListener("webkitfullscreenchange",() => {
+      this.isFullscreen = !this.isFullscreen
+    }, false);
+  
+    document.addEventListener("msfullscreenchange", () => {
+      this.isFullscreen = !this.isFullscreen
+    }, false);
   }
 
   ngOnDestroy() {

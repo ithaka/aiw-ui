@@ -25,6 +25,7 @@ export class Footer {
   private subscriptions: Subscription[] = []
   private user: any = {}
   private browseSec: { [key: string]: boolean } = {}
+  private isFullscreen: boolean = false
 
   // TypeScript public modifiers
   constructor(
@@ -87,6 +88,23 @@ export class Footer {
         }
       }, 1000)
     }
+
+
+    document.addEventListener("fullscreenchange", () => {
+      this.isFullscreen = !this.isFullscreen
+    }, false);
+  
+    document.addEventListener("mozfullscreenchange", () => {
+      this.isFullscreen = !this.isFullscreen
+    }, false);
+  
+    document.addEventListener("webkitfullscreenchange",() => {
+      this.isFullscreen = !this.isFullscreen
+    }, false);
+  
+    document.addEventListener("msfullscreenchange", () => {
+      this.isFullscreen = !this.isFullscreen
+    }, false);
 
   }
 
