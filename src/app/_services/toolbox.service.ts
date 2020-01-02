@@ -83,9 +83,9 @@ export class ToolboxService {
      * @note Should fire immediately within a user-event binding (click, key)
      */
     public requestFullScreen(): void {
-        let el = document.getElementById("artstor-viewer");
+        let el = document.body
         // Supports most browsers and their versions.
-        var requestMethod = el.requestFullscreen || el['webkitRequestFullscreen'] || el['mozRequestFullscreen'] || el['msRequestFullscreen'];
+        var requestMethod = el.requestFullscreen || el['webkitRequestFullscreen'] || el['mozRequestFullscreen'] || el['msRequestFullscreen']
         if (requestMethod) { // Native full screen.
             requestMethod.call(el);
         } else if (window['ActiveXObject'] && typeof window['ActiveXObject'] !== "undefined") { // Older IE.
@@ -94,8 +94,6 @@ export class ToolboxService {
                 wscript.SendKeys("{F11}");
             }
         }
-        let ZoomInElement: HTMLElement = <HTMLElement>document.getElementsByClassName('btn--zoomIn')[0];
-        ZoomInElement.focus();
     }
 
     /**
