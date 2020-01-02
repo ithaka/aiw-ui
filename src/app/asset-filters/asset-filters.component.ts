@@ -150,6 +150,9 @@ export class AssetFilters {
               } catch (err) { // param is not an array
                 parsedParam = routeParams[paramName]
               }
+              if(paramName === 'geography') {
+                parsedParam = parsedParam.split(',')
+              }
               this._filters.apply(paramName, parsedParam);
             }
         }

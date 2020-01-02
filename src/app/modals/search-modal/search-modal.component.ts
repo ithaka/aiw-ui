@@ -233,11 +233,11 @@ export class SearchModal implements OnInit, AfterViewInit {
     // Construct OR query between filters within the same filter group
     // filters across multiple filter groups will be AND-ed
     // example orQuery: paints AND artclassification_str:"Photographs" OR artclassification_str:"Paintings" OR artclassification_str:"Prints" OR artclassification_str:"photographs" AND year:[-4000 TO 1980]
-    let orQuery: string = ''
+    let orQuery: string = advQuery
     // Do not apply "* AND", Solr will treat the wildcard as a character in that case
-    if (advQuery !== '*') {
-      orQuery = advQuery
-    }
+    // if (advQuery !== '*') {
+      // orQuery = advQuery
+    // }
     // Build Solr query string from filters
     for(let key in filterParams) {
       if(key !== 'startDate' && key !== 'endDate' && key !== 'geography') {
@@ -303,7 +303,7 @@ export class SearchModal implements OnInit, AfterViewInit {
     }
     let geography: string = routeParams['geography']
     if (geography) {
-      appliedFiltersObj['geography'] = geography.startsWith('[') ? JSON.parse(geography) : geography
+      appliedFiltersObj['geography'] = geography.startsWith('[') ? JSON.parse(geography) : geography.split(',')
     }
 
     // Process advance search query string
