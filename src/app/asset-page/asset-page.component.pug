@@ -51,7 +51,8 @@
               (multiViewPageViaThumbnail)="multiViewPageViaThumbnail()",
               (assetDrawer)="toggleAssetDrawer(!showAssetDrawer)",
               [legacyFlag]="false",
-              [openLibraryFlag]="fromOpenLibrary"
+              [openLibraryFlag]="fromOpenLibrary",
+              aria-label="Use the arrow keys to move the image, press 0 to center the image, and the plus and minus keys to zoom in and out."
           )
         //- Related results from JSTOR
         .pl-3(*ngIf="jstorResults.length > 0 && relatedResFlag")
