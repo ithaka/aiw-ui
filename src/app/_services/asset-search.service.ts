@@ -148,9 +148,11 @@ export class AssetSearchService {
           }
 
           // Push filter queries into the array
-          let filterValueArray = filterValue.toString().trim().split('|')
-          for (let filterVal of filterValueArray) {
-            filterOptions.filterArray.push(currentFilter.filterGroup + ':\"' + filterVal + '\"')
+          if (!institutionalTypeFilter) {
+            let filterValueArray = filterValue.toString().trim().split('|')
+            for (let filterVal of filterValueArray) {
+              filterOptions.filterArray.push(currentFilter.filterGroup + ':\"' + filterVal + '\"')
+            }
           }
         }
       }
@@ -357,6 +359,7 @@ export class AssetSearchService {
     }
 
     this.applyFilters(query, institutionalTypeFilter, options, sortIndex, filterOptions)
+    console.log("something here for pausing");
 
     return this._http.post<RawSearchResponse>(
       this._auth.getSearchUrl(),
