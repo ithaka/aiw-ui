@@ -32,6 +32,7 @@
         ang-general-search([updateSearchTerm]="updateSearchTerm", [init]="searchTerm", [loadingGrps]="loading", (clearGrpSearch)="clearGrpSearch()", (executeSearch)="addQueryParams({ term: $event, page: 1, sort: 'relevance' }, false, true)")
       .col-sm-3
         //- Further functionality will go here
+    h1.sr-only(*ngIf="selectedFilter", [innerHTML]="selectedFilter.label")
     h3.pb-1.px-2.numResult([innerHTML]="isSearch ? numResultMsg : selectedFilter.label")
     .row.mb-3
       .col-sm-7.col-md-7.col-lg-8.pd-left

@@ -26,7 +26,7 @@ export class TermsAndConditionsComponent implements OnInit, AfterViewInit {
   @Input()
   public exportType: string;
 
-  @ViewChild("ig-download-title", {read: ElementRef}) downloadTitleElement: ElementRef;
+  @ViewChild("termsAndConditionsTitle", {read: ElementRef}) termsAndConditionsTitleElement: ElementRef;
 
   public isLoading: boolean = false;
   public zipLoading: boolean = false;
@@ -53,13 +53,11 @@ export class TermsAndConditionsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.startModalFocus()
   }
+  
   // Set initial focus on the modal Title h4
   public startModalFocus() {
-    let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('term-condition-title');
-    htmlelement.focus()
-
-    if (this.downloadTitleElement && this.downloadTitleElement.nativeElement){
-      this.downloadTitleElement.nativeElement.focus()
+    if (this.termsAndConditionsTitleElement && this.termsAndConditionsTitleElement.nativeElement){
+      this.termsAndConditionsTitleElement.nativeElement.focus()
     }
   }
 

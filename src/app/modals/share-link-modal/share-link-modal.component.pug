@@ -2,7 +2,7 @@
   .modal-dialog.modal-lg
     .modal-content
       .modal-header
-        h1#share-img-link-title(tabindex="0", (keydown.shift.tab)="closeModal.emit()") {{ 'SHARE_IMG_LINK_MODAL.MAIN_HEADING' | translate }}
+        h1(#shareImgLinkTitle, tabindex="0", (keydown.shift.tab)="closeModal.emit()") {{ 'SHARE_IMG_LINK_MODAL.MAIN_HEADING' | translate }}
         button.close(type="button", (click)="closeModal.emit()", data-dismiss="modal", aria-label="Close", tabindex="0")
           span(aria-hidden="true") &times;
       .modal-body(*ngIf="asset")
