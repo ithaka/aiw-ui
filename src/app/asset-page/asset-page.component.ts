@@ -595,6 +595,8 @@ export class AssetPage implements OnInit, OnDestroy {
         this.assets[0].formattedMetadata.License[i] = this.isCreativeCommonsLicense(licenseField)
       }
     }
+
+    this.screenReaderMessage = `Now viewing ${this.assets[0].title}`
   }
 
   /**
