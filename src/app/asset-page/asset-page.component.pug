@@ -87,53 +87,53 @@
             span.quiz-btn
             | QUIZ MODE {{ quizMode ? 'ON' : 'OFF' }}
 
-      //- Fullscreen viewer control button
-      .fullscreen-btns.button-group(*ngIf="isFullscreen", [class.fade-out]="showAssetDrawer")
-        button.btn.btn-light(*ngIf="!quizMode", (click)="toggleAssetDrawer(!showAssetDrawer)")
-            | {{ 'ASSET_PAGE.BUTTONS.COMPARE' | translate}}
-            i.icon.icon-compare
-        button.btn.btn-light(
+    //- Fullscreen viewer control button
+    .fullscreen-btns.button-group(*ngIf="isFullscreen", [class.fade-out]="showAssetDrawer")
+      button.btn.btn-light(*ngIf="!quizMode", (click)="toggleAssetDrawer(!showAssetDrawer)")
+          | {{ 'ASSET_PAGE.BUTTONS.COMPARE' | translate}}
+          i.icon.icon-compare
+      button.btn.btn-light(
+          type="button",
+          (click)="exitPresentationMode()",
+          aria-label="Close",
+          title="Exit Fullscreen"
+        )
+        | Exit
+        .icon.icon-exit-fullscreen
+    //- Asset Drawer
+    .asset-drawer(*ngIf="showAssetDrawer && isFullscreen", [class.slideOut]="showAssetDrawer && isFullscreen")
+      .col-sm-12
+        h3.asset-drawer__header((click)="toggleAssetDrawer(!showAssetDrawer)")
+          button.asset-drawer__close.pr-1(
+            *ngIf="isFullscreen",
             type="button",
-            (click)="exitPresentationMode()",
             aria-label="Close",
-            title="Exit Fullscreen"
+            style="float:left;"
           )
-          | Exit
-          .icon.icon-exit-fullscreen
-      //- Asset Drawer
-      .asset-drawer(*ngIf="showAssetDrawer && isFullscreen", [class.slideOut]="showAssetDrawer && isFullscreen")
-        .col-sm-12
-          h3.asset-drawer__header((click)="toggleAssetDrawer(!showAssetDrawer)")
-            button.asset-drawer__close.pr-1(
-              *ngIf="isFullscreen",
-              type="button",
-              aria-label="Close",
-              style="float:left;"
-            )
-              .icon.icon-right
-            | COMPARE
-          .text-center
-            pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
-          div.pt-1.pb-3(*ngIf="prevAssetResults.thumbnails.length < 1")
-            .alert.alert-info {{ 'ASSET_PAGE.MESSAGES.NEEDASSETS' | translate}}
-          ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{ 'selected' : asset.selected || isPrimaryAsset(asset) }", (click)="toggleAsset(asset)")
-          .text-center.pt-2
-            pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
+            .icon.icon-right
+          | COMPARE
+        .text-center
+          pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
+        div.pt-1.pb-3(*ngIf="prevAssetResults.thumbnails.length < 1")
+          .alert.alert-info {{ 'ASSET_PAGE.MESSAGES.NEEDASSETS' | translate}}
+        ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{ 'selected' : asset.selected || isPrimaryAsset(asset) }", (click)="toggleAsset(asset)")
+        .text-center.pt-2
+          pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
 
-      .col-md-12.quiz-caption-cntnr(*ngIf="isFullscreen", [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg' ]")
-        ang-promo-tooltip(*ngIf="user.isLoggedIn && !quizModeTTDismissed && studyMode", [options]="quizModeTooltipOpts", (close)="closeQuizModeTooltip()")
-        .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", (click)="showAssetCaption = !showAssetCaption", title="{{ showAssetCaption ? 'Hide Asset Meta Information' : 'Show Asset Meta Information' }}")
-          span.caption-btn
-          | {{ showAssetCaption ? 'HIDE CAPTION' : 'SHOW CAPTION' }}
-        .quiz-browse-cntnr(*ngIf="quizMode")
-          i.icon.icon-direction.icon-left([class.disabled]="!quizShuffle && assetNumber <= 1 ? true : false", title="Previous in results", (tap)="showPrevAsset()")
-          i.icon.icon-direction.icon-right([class.disabled]="!quizShuffle && assetNumber >= totalAssetCount - restrictedAssetsCount ? true: false", title="Next in results", (tap)="showNextAsset()")
-        .shuffle-cntnr(*ngIf="quizMode", [ngClass]="[ quizShuffle ? 'active' : '' ]", (tap)="toggleQuizShuffle()", title="Toggle Asset Suffle")
-          span.shuffle-btn
-          | SHUFFLE {{ quizShuffle ? 'ON' : 'OFF' }}
-        .quiz-cntnr([ngClass]="[ quizMode ? 'active' : '' ]", (tap)="toggleQuizMode()", title="{{ quizMode ? 'Deactivate Quiz Mode' : 'Activate Quiz Mode' }}")
-          span.quiz-btn
-          | QUIZ MODE {{ quizMode ? 'ON' : 'OFF' }}
+    .col-md-12.quiz-caption-cntnr(*ngIf="isFullscreen", [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg' ]")
+      ang-promo-tooltip(*ngIf="user.isLoggedIn && !quizModeTTDismissed && studyMode", [options]="quizModeTooltipOpts", (close)="closeQuizModeTooltip()")
+      .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", (click)="showAssetCaption = !showAssetCaption", title="{{ showAssetCaption ? 'Hide Asset Meta Information' : 'Show Asset Meta Information' }}")
+        span.caption-btn
+        | {{ showAssetCaption ? 'HIDE CAPTION' : 'SHOW CAPTION' }}
+      .quiz-browse-cntnr(*ngIf="quizMode")
+        i.icon.icon-direction.icon-left([class.disabled]="!quizShuffle && assetNumber <= 1 ? true : false", title="Previous in results", (tap)="showPrevAsset()")
+        i.icon.icon-direction.icon-right([class.disabled]="!quizShuffle && assetNumber >= totalAssetCount - restrictedAssetsCount ? true: false", title="Next in results", (tap)="showNextAsset()")
+      .shuffle-cntnr(*ngIf="quizMode", [ngClass]="[ quizShuffle ? 'active' : '' ]", (tap)="toggleQuizShuffle()", title="Toggle Asset Suffle")
+        span.shuffle-btn
+        | SHUFFLE {{ quizShuffle ? 'ON' : 'OFF' }}
+      .quiz-cntnr([ngClass]="[ quizMode ? 'active' : '' ]", (tap)="toggleQuizMode()", title="{{ quizMode ? 'Deactivate Quiz Mode' : 'Activate Quiz Mode' }}")
+        span.quiz-btn
+        | QUIZ MODE {{ quizMode ? 'ON' : 'OFF' }}
     //- Asset Metadata Column
     .col-md-4(*ngIf="assets[0] && !isFullscreen")
       .py-3
@@ -332,37 +332,6 @@
                 button.btn.btn-secondary((click)="showDeletePCModal = true", type="button", tabindex="6", [class.loading]="deleteLoading") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_BTN' | translate }}
                 button.btn.btn-primary(type="submit", [class.loading]="isProcessing", tabindex="6") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.SAVE_BTN' | translate }}
 
-    .fullscreen-btns.button-group(*ngIf="isFullscreen", [class.fade-out]="showAssetDrawer")
-      button.btn.btn-light(*ngIf="!quizMode", (click)="toggleAssetDrawer(!showAssetDrawer)")
-          | {{ 'ASSET_PAGE.BUTTONS.COMPARE' | translate}}
-          i.icon.icon-compare
-      button.btn.btn-light(
-          type="button",
-          (click)="exitPresentationMode()",
-          aria-label="Close",
-          title="Exit Fullscreen"
-        )
-        | Exit
-        .icon.icon-exit-fullscreen
-    //- Asset Drawer
-    .asset-drawer(*ngIf="isFullscreen", [class.slideOut]="showAssetDrawer && isFullscreen")
-      .col-sm-12
-        h3.asset-drawer__header((click)="toggleAssetDrawer(!showAssetDrawer)")
-          button.asset-drawer__close.pr-1(
-            *ngIf="isFullscreen",
-            type="button",
-            aria-label="Close",
-            style="float:left;"
-          )
-            .icon.icon-right
-          | COMPARE
-        .text-center
-          pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
-        div.pt-1.pb-3(*ngIf="prevAssetResults.thumbnails.length < 1")
-          .alert.alert-info {{ 'ASSET_PAGE.MESSAGES.NEEDASSETS' | translate}}
-        ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{ 'selected' : asset.selected || isPrimaryAsset(asset) }", (click)="toggleAsset(asset)")
-        .text-center.pt-2
-          pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
 ang-agree-modal(
   *ngIf="showAgreeModal",
   (closeModal)="showAgreeModal = false",
