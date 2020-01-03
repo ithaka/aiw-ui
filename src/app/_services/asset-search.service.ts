@@ -174,7 +174,6 @@ export class AssetSearchService {
       filterOptions.filterArray.push('collections:"' + colId + '"');
     }
 
-    //HERE?
     if (options.collections) {
       let colsArray = options.collections.toString().trim().split(',');
       for (let col of colsArray) { // Push each collection id seperately in the filterArray
