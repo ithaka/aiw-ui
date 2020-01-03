@@ -1891,6 +1891,19 @@ export class AssetPage implements OnInit, OnDestroy {
     return index
   }
 
+  private setFocusToArrow(): void {
+    let edgeArrowElement: HTMLElement = <HTMLElement>document.getElementsByClassName("asset-viewer__edge-arrows")[0]
+    console.log(edgeArrowElement)
+    edgeArrowElement.focus()
+  }
+
+  private setFocusToCanvas(): void {
+    let referenceStripThumbs = document.getElementsByClassName("openseadragon-container")
+    let firstThumbEl: HTMLElement = <HTMLElement>(referenceStripThumbs.item(0))
+    firstThumbEl.tabIndex = -1
+    firstThumbEl.focus()
+  }
+
   public updatePrimaryAssetZoom(): void {
     this.assets[0].zoom = this.indexZoomMap[0]
   }

@@ -21,20 +21,31 @@
     <div class="pdf-viewer-container" *ngIf="state == 6">
         <pdf-viewer [src]="pdfViewerOpts" [original-size]="false" [render-text]="true" [autoresize]="true" [show-all]="false" [page]="pdfCurrentPage" [zoom]="pdfZoomValue" (after-load-complete)="onPdfLoad($event)" (error)="onPdfError($event)"></pdf-viewer>
         <div class="asset-viewer__edge-arrows">
-            <button class="btn btn--icon btn--prev" [class.disabled]="pdfCurrentPage === 1" (click)="pdfPrevPage()"><i class="icon icon-prev--white"></i></button>
-            <button class="btn btn--icon btn--next" [class.disabled]="pdfCurrentPage === pdfTotalPages" (click)="pdfNextPage()"><i class="icon icon-next--white"></i></button>
+            <button class="btn btn--icon btn--prev" [class.aiw-hidden]="pdfCurrentPage === 1" (click)="pdfPrevPage()" tabindex="0"><i class="icon icon-prev--white"></i></button>
+            <button class="btn btn--icon btn--next" [class.aiw-hidden]="pdfCurrentPage === pdfTotalPages" (click)="pdfNextPage()" tabindex="0"><i class="icon icon-next--white"></i></button>
         </div>
         <div class="page-info">Page <b>{{ pdfCurrentPage }}</b> / <b>{{ pdfTotalPages }}</b></div>
     </div>
     <!--Viewer Buttons-->
     <div *ngIf="!thumbnailMode">
-      <div class="button-group asset-viewer__buttons" id="imageButtons-{{ osdViewerId }}">
-        <button class="btn btn--icon btn--zoomIn" [class.aiw-hidden]="state != 1" id="zoomIn-{{ osdViewerId}}" [ngbTooltip]="zoomInTooltip" aria-label="Zoom in" placement="bottom"><i class="icon icon-zoom-in"></i></button>
-        <button class="btn btn--icon btn--zoomOut" [class.aiw-hidden]="state != 1" id="zoomOut-{{ osdViewerId }}" [ngbTooltip]="zoomOutTooltip" aria-label="Zoom out" placement="bottom"><i class="icon icon-zoom-out"></i></button>
-        <button class="btn btn--icon btn--zoomFit" [class.aiw-hidden]="state != 1" id="zoomFit-{{ osdViewerId }}" [ngbTooltip]="fitToViewTooltip" aria-label="Fit to view" placement="bottom"><i class="icon icon-fit-to-view"></i></button>
-        <button class="btn btn--icon btn--fullScreen" [class.standalone-present-icon]="state != 1" *ngIf="!isFullscreen" id="fullScreen-{{ osdViewerId }}" aria-label="Full screen" (click)="togglePresentationMode()" [ngbTooltip]="presentTooltip" placement="bottom"><i class="icon icon-present"></i></button>
-        <button class="btn btn--icon" [class.standalone-remove-icon]="state != 1" *ngIf="isFullscreen && assetCompareCount > 1" (click)="removeAsset.emit(asset)" aria-label="Remove from comparison" [ngbTooltip]="removeCompTooltip" placement="bottom"><i class="icon icon-remove-from-comparison"></i></button>
-      </div>
+        <div class="fullscreen-metadata" *ngIf="isFullscreen" [class.slideAway]="!showCaption">
+            <div class="vertical-center-wrap">
+                <i class="icon icon-direction icon-left" *ngIf="assetCompareCount == 1 && !quizMode && assetNumber > 1" title="Previous in results" tabindex="0" (click)="prevPage.emit()" (keydown.enter)="prevPage.emit()"></i>
+                <div class="title" [innerHtml]="asset.title"></div>
+                <i class="icon icon-direction icon-right" *ngIf="assetCompareCount == 1 && !quizMode && assetNumber < assetGroupCount" title="Next in results" tabindex="0" (click)="nextPage.emit()" (keydown.enter)="nextPage.emit()" (keydown.tab)="setFocusToCtrBtns()"></i>
+                <div class="meta-block small">
+                    <div class="creator" [innerHtml]="asset.creator"></div>
+                    <div class="date" [innerHtml]="asset.date"></div>
+                </div>
+            </div>
+        </div>
+        <div class="button-group asset-viewer__buttons" id="imageButtons-{{ osdViewerId }}" tabindex="-1">
+            <button class="btn btn--icon btn--zoomIn" [class.aiw-hidden]="state != 1" id="zoomIn-{{ osdViewerId}}" [ngbTooltip]="zoomInTooltip" aria-label="Zoom in" placement="bottom"><i class="icon icon-zoom-in"></i></button>
+            <button class="btn btn--icon btn--zoomOut" [class.aiw-hidden]="state != 1" id="zoomOut-{{ osdViewerId }}" [ngbTooltip]="zoomOutTooltip" aria-label="Zoom out" placement="bottom"><i class="icon icon-zoom-out"></i></button>
+            <button class="btn btn--icon btn--zoomFit" [class.aiw-hidden]="state != 1" id="zoomFit-{{ osdViewerId }}" (keydown.tab)="setFocusToCompare()" [ngbTooltip]="fitToViewTooltip" aria-label="Fit to view" placement="bottom"><i class="icon icon-fit-to-view"></i></button>
+            <button class="btn btn--icon btn--fullScreen" [class.standalone-present-icon]="state != 1" *ngIf="!isFullscreen" id="fullScreen-{{ osdViewerId }}" aria-label="Full screen" (click)="togglePresentationMode()" [ngbTooltip]="presentTooltip" placement="bottom"><i class="icon icon-present"></i></button>
+            <button class="btn btn--icon" [class.standalone-remove-icon]="state != 1" *ngIf="isFullscreen && assetCompareCount > 1" (click)="removeAsset.emit(asset)" aria-label="Remove from comparison" [ngbTooltip]="removeCompTooltip" placement="bottom"><i class="icon icon-remove-from-comparison"></i></button>
+        </div>
 
         <ng-template #zoomInTooltip><div>Zoom in</div></ng-template>
         <ng-template #zoomOutTooltip><div>Zoom out</div></ng-template>
@@ -48,24 +59,14 @@
         <button class="btn btn--icon btn--prev" id="previousButton-{{ osdViewerId}}"><</button><span class="btn-divider"></span><button class="btn btn--icon btn--next" id="nextButton-{{ osdViewerId}}">></button>
         </div> -->
         <!-- Edge pagination arrow style -->
-        <div [class.aiw-hidden]="!isMultiView" class="asset-viewer__edge-arrows" id="imagePageButtons-{{ osdViewerId }}">
+        <div [class.aiw-hidden]="!isMultiView" class="asset-viewer__edge-arrows" id="imagePageButtons-{{ osdViewerId }}" tabindex="-1">
             <button [class.aiw-hidden]="multiViewPage == 1" class="btn btn--icon btn--prev" id="previousButton-{{ osdViewerId}}"><i class="icon icon-prev--white"></i></button>
-            <button [class.aiw-hidden]="multiViewPage == multiViewCount" class="btn btn--icon btn--next" id="nextButton-{{ osdViewerId}}"><i class="icon icon-next--white"></i></button>
+            <button [class.aiw-hidden]="multiViewPage == multiViewCount" class="btn btn--icon btn--next" id="nextButton-{{ osdViewerId}}" (keydown.tab)="setFocusToThumbs()"><i class="icon icon-next--white"></i></button>
         </div>
         <div *ngIf="isMultiView && assetCompareCount < 4" class="asset-viewer_multi-view-info">
         <b>{{ multiViewPage }}</b> of <b>{{ multiViewCount }}</b>
         <button *ngIf="hasMultiViewHelp()" (click)="multiViewHelp.emit()" class="help-icon">?</button>
         </div>
-        <div class="fullscreen-metadata" *ngIf="isFullscreen" [class.slideAway]="!showCaption">
-            <div class="vertical-center-wrap">
-                <i class="icon icon-direction icon-left" *ngIf="assetCompareCount == 1 && !quizMode && assetNumber > 1" title="Previous in results" tabindex="0" (click)="prevPage.emit()" (keydown.enter)="prevPage.emit()"></i>
-                <div class="title" [innerHtml]="asset.title"></div>
-                <i class="icon icon-direction icon-right" *ngIf="assetCompareCount == 1 && !quizMode && assetNumber < assetGroupCount" title="Next in results" tabindex="0" (click)="nextPage.emit()" (keydown.enter)="nextPage.emit()"></i>
-                <div class="meta-block small">
-                    <div class="creator" [innerHtml]="asset.creator"></div>
-                    <div class="date" [innerHtml]="asset.date"></div>
-                </div>
-            </div>
-        </div>
+        
     </div>
 </div>

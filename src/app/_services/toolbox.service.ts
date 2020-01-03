@@ -94,10 +94,15 @@ export class ToolboxService {
                 wscript.SendKeys("{F11}");
             }
         }
-        let ZoomInElement: HTMLElement = <HTMLElement>document.getElementsByClassName('btn--zoomIn')[0];
-        if (ZoomInElement) {
-            ZoomInElement.focus();
-        }
+        this.setFocusToCanvas();
+    }
+
+    /**
+     * Set focus to the main canvas in the viewer
+     */
+    private setFocusToCanvas(): void {
+        let canvasElement: HTMLElement = <HTMLElement>document.getElementsByClassName('openseadragon-canvas')[0];
+        canvasElement && canvasElement.focus();
     }
 
     /**

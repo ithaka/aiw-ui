@@ -407,9 +407,18 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
         });
 
         this.osdViewer.addOnceHandler("tile-drawn", () => {
-            // Get all canvas elements, first one is the big viewer canvas, second one is the navigator
+            // Get all canvas elements, first one is the main canvas, second one is the navigator
             // The canvas in the reference strip starts as the third one in the collection
             let canvasElements = document.getElementsByClassName("openseadragon-canvas")
+
+            // Set focus to the zoom in button after the main canvas
+            canvasElements.item(0).addEventListener("keydown", (event: KeyboardEvent) => {
+                if (event.keyCode === 9) {
+                    let ZoomInElement: HTMLElement = <HTMLElement>document.getElementById(`imageButtons-${this.osdViewerId}`)
+                    ZoomInElement.focus()
+                }
+            })
+
             // Loop through all canvas elements in the reference strip and add event listener to keydown enter for accessibility
             for (let i = 2; i < canvasElements.length; i++) {
                 canvasElements.item(i).addEventListener("keydown", (event: KeyboardEvent) => {
@@ -631,6 +640,25 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
             this.state = viewState.thumbnailFallback
         }
     };
+
+    private setFocusToCompare(): void {
+        let compareBtnElement: HTMLElement = <HTMLElement>document.getElementById("fullscreen-btn-group")
+        compareBtnElement && compareBtnElement.focus()
+    }
+
+    private setFocusToThumbs(): void {
+        let referenceStripThumbs = document.getElementsByClassName("openseadragon-container")
+        if (referenceStripThumbs.length > 2) {
+            let firstThumbEl: HTMLElement = <HTMLElement>(referenceStripThumbs.item(2))
+            firstThumbEl.tabIndex = -1
+            firstThumbEl.focus()
+        }
+    }
+
+    private setFocusToCtrBtns(): void {
+        let controlBtnElement: HTMLElement = <HTMLElement>document.getElementById("quiz-caption-cntnr")
+        controlBtnElement && controlBtnElement.focus()
+    }
 
     // Keep: We will want to dynamically load the Kaltura player
     // private getAndLoadKalturaId(data): void {
