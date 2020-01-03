@@ -1893,7 +1893,6 @@ export class AssetPage implements OnInit, OnDestroy {
 
   private setFocusToArrow(): void {
     let edgeArrowElement: HTMLElement = <HTMLElement>document.getElementsByClassName("asset-viewer__edge-arrows")[0]
-    console.log(edgeArrowElement)
     edgeArrowElement.focus()
   }
 
