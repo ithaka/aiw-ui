@@ -15,7 +15,7 @@ import { AppConfig } from '../app.service'
 
 // For session timeout management
 import { IdleWatcherUtil } from 'shared/idle-watcher'
-import { Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core'
+import { Idle, DEFAULT_INTERRUPTSOURCES, EventTargetInterruptSource} from '@ng-idle/core'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
 import { Angulartics2 } from 'angulartics2'
 import { environment } from 'environments/environment'
@@ -80,6 +80,12 @@ export class AuthService implements CanActivate {
     private injector: Injector,
     private angulartics: Angulartics2
   ) {
+
+    // For session timeout on user inactivity
+    this.idle.setIdle(IdleWatcherUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
+    this.idle.setTimeout(IdleWatcherUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
+    this.idle.setInterrupts([new EventTargetInterruptSource(window, 'mousemove keydown DOMMouseScroll mousewheel mousedown touchstart touchmove scroll')]);
+
     this.isBrowser = isPlatformBrowser(this.platformId)
     // Set WLV and App Config variables
     this.isOpenAccess = this._app.config.isOpenAccess
@@ -223,21 +229,15 @@ export class AuthService implements CanActivate {
   }
 
   public initIdleWatcher(): void {
-     // For session timeout on user inactivity
-     this.idle.setIdle(IdleWatcherUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
-     this.idle.setTimeout(IdleWatcherUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
-     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
-     this.idle.onIdleEnd.pipe(
-       map(() => {
+     this.idle.onIdleEnd.subscribe(() => {
          console.log("idle end")
          this.idleState = 'No longer idle.';
          // We want to ensure a user is refreshed as soon as they return to the tab
          this.refreshUserSession(true)
-       })).subscribe()
+       });
 
-     this.idle.onTimeout.pipe(
-       map(() => {
+     this.idle.onTimeout.subscribe(() => {
          console.log("Timed out!")
          let user = this.getUser();
          // console.log(user);
@@ -249,29 +249,21 @@ export class AuthService implements CanActivate {
          else{
            this.resetIdleWatcher()
          }
-       })).subscribe()
+       });
 
-     this.idle.onIdleStart.pipe(
-       map(() => {
+     this.idle.onIdleStart.subscribe(() => {
          console.log("idle start!")
          this.idleState = 'You\'ve gone idle!';
          let currentDateTime = new Date().toUTCString();
          this._storage.setLocal('userGoneIdleAt', currentDateTime);
-       })).subscribe()
+       });
 
-    this.idle.onTimeoutWarning.pipe(
-       map((countdown) => {
-         this.idleState = 'You will time out in ' + countdown + ' seconds!'
-         // console.log(this.idleState);
-       })).subscribe()
-
-     // Init idle watcher (this will also run getUserInfo)
-     this.resetIdleWatcher()
+      this.resetIdleWatcher();
   }
 
   // Reset the idle watcher
   public resetIdleWatcher(): void {
-    //this.idle.watch();
+    this.idle.watch();
     // When a user comes back, we don't want to wait for the time interval to refresh the session
     this.refreshUserSession(true)
   }
