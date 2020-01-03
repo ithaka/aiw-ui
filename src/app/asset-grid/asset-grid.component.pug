@@ -119,6 +119,7 @@
               ang-thumbnail(
                 [thumbnail]="asset", 
                 [reorderMode]="false", 
+                [compareMode]="false",
                 [editMode]="editMode", 
                 [largeThmbView]="largeThmbView"
               )
@@ -144,6 +145,7 @@
                     [itemIndex]="i",
                     [arrowReorderMode]="arrowReorderMode",
                     [reorderMode]="true",
+                    [compareMode]="false",
                     [editMode]="editMode",
                     [largeThmbView]="largeThmbView",
                     (click)="arrowReorderMode = false",

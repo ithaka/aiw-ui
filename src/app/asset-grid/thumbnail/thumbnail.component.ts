@@ -44,6 +44,9 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   @Input()
   public editMode: boolean
 
+  @Input()
+  private compareMode: boolean
+
   public src: SafeUrl
   // Keeps the track of multiViewItems count associated with the current asset
   public multiviewItemCount: number = 0
@@ -95,14 +98,16 @@ export class ThumbnailComponent implements OnInit, OnChanges {
     // Prevent the parent anchor tag from firing
     event.preventDefault()
     event.stopPropagation()
-
-    if (urlParams[0] === '/associated') {
-      this.angulartics.eventTrack.next({ properties: { event: 'view associated images', label: this.thumbnail.id } })
+    // Don't navigate to other page in compare mode
+    if (!this.compareMode) {
+      if (urlParams[0] === '/associated') {
+        this.angulartics.eventTrack.next({ properties: { event: 'view associated images', label: this.thumbnail.id } })
+      }
+      if (urlParams[0] === '/cluster') {
+        this.angulartics.eventTrack.next({ properties: { event: 'view cluster', label: this.thumbnail.id } })
+      }
+      this.router.navigate(urlParams)
     }
-    if (urlParams[0] === '/cluster') {
-      this.angulartics.eventTrack.next({ properties: { event: 'view cluster', label: this.thumbnail.id } })
-    }
-    this.router.navigate(urlParams)
   }
 
   /**
