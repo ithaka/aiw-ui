@@ -60,8 +60,7 @@
         </div> -->
         <!-- Edge pagination arrow style -->
         <div [class.aiw-hidden]="!isMultiView" class="asset-viewer__edge-arrows" id="imagePageButtons-{{ osdViewerId }}" tabindex="-1">
-            <button *ngIf="multiViewPage != multiViewCount" [class.aiw-hidden]="multiViewPage == 1" class="btn btn--icon btn--prev" id="previousButton-{{ osdViewerId }}"><i class="icon icon-prev--white"></i></button>
-            <button *ngIf="multiViewPage == multiViewCount" [class.aiw-hidden]="multiViewPage == 1" class="btn btn--icon btn--prev" id="previousButton-{{ osdViewerId }}" (keydown.tab)="setFocusToThumbs()"><i class="icon icon-prev--white"></i></button>
+            <button *ngIf="multiViewPage == multiViewCount" [class.aiw-hidden]="multiViewPage == 1" class="btn btn--icon btn--prev" id="previousButton-{{ osdViewerId }}" (keydown.tab)="multiViewPage == multiViewCount ? setFocusToThumbs() : null"><i class="icon icon-prev--white"></i></button>
             <button [class.aiw-hidden]="multiViewPage == multiViewCount" class="btn btn--icon btn--next" id="nextButton-{{ osdViewerId }}" (keydown.tab)="setFocusToThumbs()"><i class="icon icon-next--white"></i></button>
         </div>
         <div *ngIf="isMultiView && assetCompareCount < 4" class="asset-viewer_multi-view-info">
