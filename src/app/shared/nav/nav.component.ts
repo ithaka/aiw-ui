@@ -165,20 +165,25 @@ export class Nav implements OnInit, OnDestroy {
     this.hideLoginTooltip = !!this._storage.getSession('hideLoginTooltip');
 
     document.addEventListener("fullscreenchange", () => {
-      this.isFullscreen = !this.isFullscreen
+      this.toggleFullscreen();
     }, false);
   
     document.addEventListener("mozfullscreenchange", () => {
-      this.isFullscreen = !this.isFullscreen
+      this.toggleFullscreen();
     }, false);
   
     document.addEventListener("webkitfullscreenchange",() => {
-      this.isFullscreen = !this.isFullscreen
+      this.toggleFullscreen();
     }, false);
   
     document.addEventListener("msfullscreenchange", () => {
-      this.isFullscreen = !this.isFullscreen
+      this.toggleFullscreen();
     }, false);
+
+  }
+
+  private toggleFullscreen(): void {
+    this.isFullscreen = !this.isFullscreen
   }
 
   ngOnDestroy() {
