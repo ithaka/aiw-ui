@@ -140,7 +140,7 @@ export class AssetSearchService {
         for (let j = 0; j < currentFilter.filterValue.length; j++) {
           let filterValue = currentFilter.filterValue[j]
           /**
-           * In case of Inst. colType filter, also use the contributing inst. ID to filter
+           * In case of Inst. colType filter, ONLY use the contributing inst. ID to filter
            */
           if ((currentFilter.filterGroup === 'collectiontypes') && (filterValue === 2 || filterValue === 4)) {
             institutionalTypeFilter = true
@@ -174,6 +174,7 @@ export class AssetSearchService {
       filterOptions.filterArray.push('collections:"' + colId + '"');
     }
 
+    //HERE?
     if (options.collections) {
       let colsArray = options.collections.toString().trim().split(',');
       for (let col of colsArray) { // Push each collection id seperately in the filterArray
@@ -359,7 +360,6 @@ export class AssetSearchService {
     }
 
     this.applyFilters(query, institutionalTypeFilter, options, sortIndex, filterOptions)
-    console.log("something here for pausing");
 
     return this._http.post<RawSearchResponse>(
       this._auth.getSearchUrl(),
