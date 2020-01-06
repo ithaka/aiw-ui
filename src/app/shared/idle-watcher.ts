@@ -6,7 +6,7 @@ export class IdleWatcherUtil {
    */
   public static generateSessionLength(): number {
 
-    let sessionLengthInMins: number = 1
+    let sessionLengthInMins: number = 90
     let sessionLengthInSecs: number = sessionLengthInMins * 60
 
     return sessionLengthInSecs;
