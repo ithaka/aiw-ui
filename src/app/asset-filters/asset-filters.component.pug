@@ -4,7 +4,13 @@
     .filter-group(*ngIf="availableFilters[filterKey] && isArray(availableFilters[filterKey]) && availableFilters[filterKey].length > 0 && !(availableFilters[filterKey].length === 1 && (availableFilters[filterKey][0].name === '' || availableFilters[filterKey][0].count === 0))")
       span.filter-group__label
         h3 {{ 'FILTERS.' + filterKey | translate }}
-          a#buttonCollectionTypeClear.link--accent.small(*ngIf="hasAppliedFilters(filterKey)", (keydown.enter)="clearAllFilterGroup(filterKey)", [tabindex]="hasAppliedFilters(filterKey) ? 2 : -1", (click)="clearAllFilterGroup(filterKey)", attr.aria-label="Clear, click to clear all selected {{ 'FILTERS.' + filterKey | translate }} filters.") Clear
+          a#buttonCollectionTypeClear.link--accent.small(
+            *ngIf="hasAppliedFilters(filterKey)", 
+            (keydown.enter)="clearAllFilterGroup(filterKey)", 
+            [tabindex]="hasAppliedFilters(filterKey) ? 2 : -1", 
+            (click)="clearAllFilterGroup(filterKey)", 
+            attr.aria-label="Clear, click to clear all selected {{ 'FILTERS.' + filterKey | translate }} filters."
+          ) Clear
       //- Filters
       div(*ngFor="let facet of availableFilters[filterKey] | slice:0:17")
         //- Show filters
