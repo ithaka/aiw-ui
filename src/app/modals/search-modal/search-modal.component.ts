@@ -215,7 +215,46 @@ export class SearchModal implements OnInit, AfterViewInit {
     let filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
     let currentParams = this.route.snapshot.params
     let queryParams = {}
+
     // Consolidate filters with multiple applied
+    filterParams = this.combineMulitpleAppliedFilters(filterParams)
+
+    // Maintain feature flags
+    if (currentParams['featureFlag']) {
+      queryParams['featureFlag'] = currentParams['featureFlag']
+    }
+    
+    // Build Solr query string from filters
+    let orQuery: string = this.buildSolrQuery(advQuery, filterParams)
+
+    // Apply date filter
+    if(filterParams["startDate"]) {
+      queryParams["startDate"] = filterParams["startDate"]
+    }
+    if(filterParams["endDate"]) {
+      queryParams["endDate"] = filterParams["endDate"]
+    }
+
+    // Apply geography filter
+    if (filterParams['geography']) {
+      queryParams['geography'] = []
+      for (let efq of filterParams['geography'].split('|')) {
+        queryParams['geography'].push(efq)
+      }
+    }
+    
+    // Track in angulartics
+    this.angulartics.eventTrack.next({ properties: { event: 'advSearch', category: 'search', label: advQuery } })
+    // Open search page with new query
+    this._router.navigate(['/search', orQuery, queryParams])
+    // Close advance search modal
+    this.close();
+  }
+
+  /**
+   * Combine multiple applied filters, from the same filter group, seperated by a `|`
+   */
+  public combineMulitpleAppliedFilters(filterParams) {
     for (let key in filterParams) {
       let filterValue = ''
       if ( filterParams[key] instanceof Array ){
@@ -226,19 +265,17 @@ export class SearchModal implements OnInit, AfterViewInit {
         filterParams[key] = filterValue
       }
     }
-    // Maintain feature flags
-    if (currentParams['featureFlag']) {
-      queryParams['featureFlag'] = currentParams['featureFlag']
-    }
-    // Construct OR query between filters within the same filter group
-    // filters across multiple filter groups will be AND-ed
-    // example orQuery: paints AND artclassification_str:"Photographs" OR artclassification_str:"Paintings" OR artclassification_str:"Prints" OR artclassification_str:"photographs" AND year:[-4000 TO 1980]
+    return filterParams
+  }
+
+  /**
+   * Construct OR query between filters within the same filter group
+   * filters across multiple filter groups will be AND-ed
+   * example orQuery: paints AND artclassification_str:"Photographs" OR artclassification_str:"Paintings" OR artclassification_str:"Prints" OR artclassification_str:"photographs" AND year:[-4000 TO 1980]
+   */
+  public buildSolrQuery(advQuery, filterParams) {
     let orQuery: string = advQuery
-    // Do not apply "* AND", Solr will treat the wildcard as a character in that case
-    // if (advQuery !== '*') {
-      // orQuery = advQuery
-    // }
-    // Build Solr query string from filters
+    
     for(let key in filterParams) {
       if(key !== 'startDate' && key !== 'endDate' && key !== 'geography') {
         if (orQuery.length > 0) {
@@ -259,25 +296,8 @@ export class SearchModal implements OnInit, AfterViewInit {
         orQuery += ')'
       }
     }
-    // Apply date filter
-    if(filterParams["startDate"]) {
-      queryParams["startDate"] = filterParams["startDate"]
-    }
-    if(filterParams["endDate"]) {
-      queryParams["endDate"] = filterParams["endDate"]
-    }
-    if (filterParams['geography']) {
-      queryParams['geography'] = []
-      for (let efq of filterParams['geography'].split('|')) {
-        queryParams['geography'].push(efq)
-      }
-    }
-    // Track in angulartics
-    this.angulartics.eventTrack.next({ properties: { event: 'advSearch', category: 'search', label: advQuery } })
-    // Open search page with new query
-    this._router.navigate(['/search', orQuery, queryParams])
-    // Close advance search modal
-    this.close();
+
+    return orQuery
   }
 
   /**
