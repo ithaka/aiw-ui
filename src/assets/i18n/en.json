@@ -415,7 +415,7 @@
       "UPLOAD_IMGS": "Upload Images",
       "PC_DESC": "Only you can see this collection. To share these images with others at your institution, add them to a group. Learn more about Personal Collections.&nbsp; <a href=\"http://support.artstor.org/?article-category=09-using-your-own-images\", target=\"_blank\">http://support.artstor.org/?article-category=09-using-your-own-images</a>",
       "HEADING" : "Personal Collection",
-      "DESCRIPTION" : "Only you can see this collection. To share these images with others at your institution, add them to a group.<br/><a href=\"http://support.artstor.org/?article-category=09-using-your-own-images\" target=\"_blank\">Learn more about Personal Collections</a>."
+      "DESCRIPTION" : "Only you can see this collection. To share these images with others at your institution, add them to a group.<br/><a href=\"https://support.artstor.org/?article-category=09-using-your-own-images\" target=\"_blank\"><u>Learn more about Personal Collections</u></a>."
     },
     "ERRORS": {
       "LOGIN_PC_HEADING": "Login Required",

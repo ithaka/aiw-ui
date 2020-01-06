@@ -20,6 +20,7 @@ export class LibraryComponent implements OnInit {
   public unaffiliatedUser: boolean = false
 
   public loading: boolean = false;
+  public noTermMsg: boolean = false;
   public selectedBrowseId: string = '';
   public browseMenuArray: any[];
   public categoryFacets: any[]
@@ -262,10 +263,18 @@ export class LibraryComponent implements OnInit {
    * @param value The value of the parameter
    */
   private addRouteParam(key: string, value: any) {
+    this.noTermMsg = false;
     let currentParamsObj: Params = Object.assign({}, this.route.snapshot.params);
     currentParamsObj[key] = value;
-
     this.router.navigate([currentParamsObj], { relativeTo: this.route });
+  }
+
+  private filterIconClick() {
+    if(this.searchTerm) {
+      this.addRouteParam('searchTerm', this.searchTerm);
+    } else {
+      this.noTermMsg = true;
+    }
   }
 
   private getLinkParam(facetType, facetName) {
