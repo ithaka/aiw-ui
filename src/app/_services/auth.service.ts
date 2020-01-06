@@ -15,7 +15,7 @@ import { AppConfig } from '../app.service'
 
 // For session timeout management
 import { IdleWatcherUtil } from 'shared/idle-watcher'
-import { Idle, DEFAULT_INTERRUPTSOURCES, EventTargetInterruptSource} from '@ng-idle/core'
+import { Idle, EventTargetInterruptSource} from '@ng-idle/core'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
 import { Angulartics2 } from 'angulartics2'
 import { environment } from 'environments/environment'
@@ -80,11 +80,6 @@ export class AuthService implements CanActivate {
     private injector: Injector,
     private angulartics: Angulartics2
   ) {
-
-    // For session timeout on user inactivity
-    this.idle.setIdle(IdleWatcherUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
-    this.idle.setTimeout(IdleWatcherUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
-    this.idle.setInterrupts([new EventTargetInterruptSource(window, 'mousemove keydown DOMMouseScroll mousewheel mousedown touchstart touchmove scroll')]);
 
     this.isBrowser = isPlatformBrowser(this.platformId)
     // Set WLV and App Config variables
@@ -212,7 +207,7 @@ export class AuthService implements CanActivate {
        * - Poll /userinfo every 15min
        * - Refreshs AccessToken with IAC
        */
-      const userInfoInterval = .5 * 1000 * 60
+      const userInfoInterval = 15 * 1000 * 60
       // Run every X mins
       setInterval(() => {
         this.refreshUserSession(true)
@@ -229,6 +224,11 @@ export class AuthService implements CanActivate {
   }
 
   public initIdleWatcher(): void {
+
+    // For session timeout on user inactivity
+    this.idle.setIdle(IdleWatcherUtil.generateIdleTime()); // Set an idle time of 1 min, before starting to watch for timeout
+    this.idle.setTimeout(IdleWatcherUtil.generateSessionLength()); // Log user out after 90 mins of inactivity
+    this.idle.setInterrupts([new EventTargetInterruptSource(window, 'mousemove keydown DOMMouseScroll mousewheel mousedown touchstart touchmove scroll')]);
 
      this.idle.onIdleEnd.subscribe(() => {
          console.log("idle end")
