@@ -304,24 +304,12 @@ export class AppComponent {
 
   private removeSkipToMainContent() {
     let skipToMainContentButton = document.getElementById("skip-main-content-button")
-    skipToMainContentButton.remove()
+    skipToMainContentButton.tabIndex = -1
   }
 
   private addSkipToMainContent() {
-    let skipToMainContentDiv = document.getElementById("skip-main-content-div")
-    // <button id="skip-main-content-button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
-    let skipToMainContentButton = document.createElement("button")
-    skipToMainContentButton.innerHTML = "Skip to main content"
+    let skipToMainContentButton = document.getElementById("skip-main-content-button")
     skipToMainContentButton.tabIndex = 1
-    skipToMainContentButton.id = "skip-main-content-button"
-    skipToMainContentButton.setAttribute("class", "sr-only sr-only-focusable")
-    skipToMainContentButton.onclick = this.findMainContent
-    skipToMainContentButton.onkeyup = (event) => {
-      if (event.keyCode === 13) {
-        this.findMainContent()
-      }
-    }
-    skipToMainContentDiv.appendChild(skipToMainContentButton);
   }
 
   private hideZendeskChat() {
