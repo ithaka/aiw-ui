@@ -140,7 +140,7 @@ export class AssetSearchService {
         for (let j = 0; j < currentFilter.filterValue.length; j++) {
           let filterValue = currentFilter.filterValue[j]
           /**
-           * In case of Inst. colType filter, also use the contributing inst. ID to filter
+           * In case of Inst. colType filter, ONLY use the contributing inst. ID to filter
            */
           if ((currentFilter.filterGroup === 'collectiontypes') && (filterValue === 2 || filterValue === 4)) {
             institutionalTypeFilter = true
@@ -148,9 +148,11 @@ export class AssetSearchService {
           }
 
           // Push filter queries into the array
-          let filterValueArray = filterValue.toString().trim().split('|')
-          for (let filterVal of filterValueArray) {
-            filterOptions.filterArray.push(currentFilter.filterGroup + ':\"' + filterVal + '\"')
+          if (!institutionalTypeFilter) {
+            let filterValueArray = filterValue.toString().trim().split('|')
+            for (let filterVal of filterValueArray) {
+              filterOptions.filterArray.push(currentFilter.filterGroup + ':\"' + filterVal + '\"')
+            }
           }
         }
       }
