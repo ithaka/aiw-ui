@@ -223,7 +223,7 @@ export class SearchModal implements OnInit, AfterViewInit {
     if (currentParams['featureFlag']) {
       queryParams['featureFlag'] = currentParams['featureFlag']
     }
-    
+
     // Build Solr query string from filters
     let orQuery: string = this.buildSolrQuery(advQuery, filterParams)
 
@@ -242,7 +242,7 @@ export class SearchModal implements OnInit, AfterViewInit {
         queryParams['geography'].push(efq)
       }
     }
-    
+
     // Track in angulartics
     this.angulartics.eventTrack.next({ properties: { event: 'advSearch', category: 'search', label: advQuery } })
     // Open search page with new query
@@ -275,7 +275,7 @@ export class SearchModal implements OnInit, AfterViewInit {
    */
   public buildSolrQuery(advQuery, filterParams) {
     let orQuery: string = advQuery
-    
+
     for(let key in filterParams) {
       if(key !== 'startDate' && key !== 'endDate' && key !== 'geography') {
         if (orQuery.length > 0) {
@@ -311,6 +311,7 @@ export class SearchModal implements OnInit, AfterViewInit {
   /**
    * Update advanceQueries, advanceSearchDate and selected filters based on applied filters from URL
    */
+  // TODO This function needs to be smaller
   private loadAppliedFiltersFromURL(): void{
     let routeParams = this.route.snapshot.params
     // Setup selected filters object to show applied filters for edit
@@ -321,10 +322,7 @@ export class SearchModal implements OnInit, AfterViewInit {
       this.loadingFilters = false
       return
     }
-    let geography: string = routeParams['geography']
-    if (geography) {
-      appliedFiltersObj['geography'] = geography.startsWith('[') ? JSON.parse(geography) : geography.split(',')
-    }
+    this.createGeographyFilterListFromParam(routeParams, appliedFiltersObj);
 
     // Process advance search query string
     query = query.replace(/\(|\)/g, '')
@@ -384,12 +382,7 @@ export class SearchModal implements OnInit, AfterViewInit {
         case 'geography': {
           let filterGroup = this.availableFilters.find( filterGroup => filterGroup.name === key )
           if (filterGroup) {
-            let geography = routeParams[key]
-            let selections = typeof geography === 'string' ? [ geography ] : geography
-            for (let efq of selections) {
-              let updtFilterObj = filterGroup.values.find(filterObj => filterObj.efq === efq)
-              this.checkFilter(updtFilterObj, filterGroup, efq, true)
-            }
+            this.loadGeographyFilters(routeParams, key, filterGroup);
           }
           break
         }
@@ -420,9 +413,25 @@ export class SearchModal implements OnInit, AfterViewInit {
     this.loadingFilters = false
   }
 
+  private createGeographyFilterListFromParam(routeParams, appliedFiltersObj) {
+    let geography: string = routeParams['geography']
+    if (geography) {
+      appliedFiltersObj['geography'] = geography.startsWith('[') ? JSON.parse(geography) : geography.split(',')
+    }
+  }
+
+  private loadGeographyFilters(routeParams, key, filterGroup) {
+    let geography = routeParams[key]
+    let selections = typeof geography === 'string' ? [geography] : geography
+    for (let efq of selections) {
+      let updtFilterObj = filterGroup.values.find(filterObj => filterObj.efq === efq)
+      this.checkFilter(updtFilterObj, filterGroup, efq, true)
+    }
+  }
+
   /**
    * clean out wrapping parenthesis for OR queries
-   * @param query Query string from route params 
+   * @param query Query string from route params
    * @param appliedFiltersObj Applied filters object
    */
   private processAdvSrchQueryString(query, appliedFiltersObj) {
@@ -446,7 +455,7 @@ export class SearchModal implements OnInit, AfterViewInit {
         }
       }
     }
-    
+
     return appliedFiltersObj
   }
 
