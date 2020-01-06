@@ -327,34 +327,9 @@ export class SearchModal implements OnInit, AfterViewInit {
     }
 
     // Process advance search query string
-    // - clean out wrapping parenthesis for OR queries
     query = query.replace(/\(|\)/g, '')
-    let andQuerySegments = query.split(' AND ')
-    for(let andQuerySegment of andQuerySegments) {
-      let orQuerySegments = andQuerySegment.split(' OR ')
-      let termOperator = ''
+    appliedFiltersObj = this.processAdvSrchQueryString(query, appliedFiltersObj)
 
-      if( orQuerySegments.length > 1 ) {
-        termOperator = ' OR '
-      } else {
-        termOperator = ' AND '
-      }
-
-      for(let orQuerySegment of orQuerySegments) {
-        if( orQuerySegment.indexOf(':') > -1 ) { // Its a filter query
-          let key = orQuerySegment.split(':')[0]
-          let value = orQuerySegment.split(':')[1]
-          if(key === 'year') {
-            appliedFiltersObj['startDate'] = value.replace('[','').replace(']', '').split(' TO ')[0]
-            appliedFiltersObj['endDate'] = value.replace('[','').replace(']', '').split(' TO ')[1]
-          } else {
-            appliedFiltersObj[key] = appliedFiltersObj[key] ? appliedFiltersObj[key] + '|' + value.replace(/"/g, '') : value.replace(/"/g, '')
-          }
-        } else { // Its a term query
-          appliedFiltersObj['term'] = appliedFiltersObj['term'] ? appliedFiltersObj['term'] + termOperator + orQuerySegment : orQuerySegment
-        }
-      }
-    }
     // Maintain date filters via regular Asset Filters
     if (routeParams['startDate'] || routeParams['endDate']) {
       appliedFiltersObj['startDate'] = routeParams['startDate']
@@ -398,61 +373,22 @@ export class SearchModal implements OnInit, AfterViewInit {
         case 'collectiontypes': {
           let filters = routeParams[key].split('|')
           for (let filter of filters){
-            let filterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === key )
+            let filterGroup = this.availableFilters.find( filterGroup => filterGroup.name === key )
             let updtFilterObj = filterGroup.values.find( filterObj => filterObj.value === filter )
-            if ( updtFilterObj ){ // If match is found at the parent node level
-              updtFilterObj.checked = true
-              if ( updtFilterObj.children && updtFilterObj.children.length > 0 ){
-                for (let child of updtFilterObj.children){
-                  child.checked = true
-                }
-              }
-            } else{ // If we don't find a match at parent node level then search for a match in children nodes
-              for (let value of filterGroup.values){
-                if (value.children && value.children.length > 0){
-                  let updtFilterObj = value.children.find( filterObj => filterObj.value === filter )
-                  if (updtFilterObj){
-                    updtFilterObj.checked = true
-                    break
-                  }
-                }
-              }
-            }
+            this.checkFilter(updtFilterObj, filterGroup, filter, false)
           }
           updateSelectedFilters = true
           break
         }
 
         case 'geography': {
-          let filterGroup = this.availableFilters.find(filterGroup => filterGroup.name === key)
+          let filterGroup = this.availableFilters.find( filterGroup => filterGroup.name === key )
           if (filterGroup) {
-            let geography = routeParams[key];
-            let selections = [];
-            if (typeof geography === 'string') {
-              selections.push(geography)
-            } else {
-              selections = geography
-            }
+            let geography = routeParams[key]
+            let selections = typeof geography === 'string' ? [ geography ] : geography
             for (let efq of selections) {
               let updtFilterObj = filterGroup.values.find(filterObj => filterObj.efq === efq)
-              if (updtFilterObj) { // If match is found at the parent node level
-                updtFilterObj.checked = true
-                if (updtFilterObj.children && updtFilterObj.children.length > 0) {
-                  for (let child of updtFilterObj.children) {
-                    child.checked = true
-                  }
-                }
-              } else { // If we don't find a match at parent node level then search for a match in children nodes
-                for (let value of filterGroup.values) {
-                  if (value.children && value.children.length > 0) {
-                    let updtFilterObj = value.children.find(filterObj => filterObj.efq === efq)
-                    if (updtFilterObj) {
-                      updtFilterObj.checked = true
-                      break
-                    }
-                  }
-                }
-              }
+              this.checkFilter(updtFilterObj, filterGroup, efq, true)
             }
           }
           break
@@ -482,6 +418,64 @@ export class SearchModal implements OnInit, AfterViewInit {
 
     // Done loading filters and prefilling
     this.loadingFilters = false
+  }
+
+  /**
+   * clean out wrapping parenthesis for OR queries
+   * @param query Query string from route params 
+   * @param appliedFiltersObj Applied filters object
+   */
+  private processAdvSrchQueryString(query, appliedFiltersObj) {
+    let andQuerySegments = query.split(' AND ')
+    for(let andQuerySegment of andQuerySegments) {
+      let orQuerySegments = andQuerySegment.split(' OR ')
+      let termOperator = orQuerySegments.length > 1 ? ' OR ' : ' AND '
+
+      for(let orQuerySegment of orQuerySegments) {
+        if( orQuerySegment.indexOf(':') > -1 ) { // Its a filter query
+          let key = orQuerySegment.split(':')[0]
+          let value = orQuerySegment.split(':')[1]
+          if(key === 'year') {
+            appliedFiltersObj['startDate'] = value.replace('[','').replace(']', '').split(' TO ')[0]
+            appliedFiltersObj['endDate'] = value.replace('[','').replace(']', '').split(' TO ')[1]
+          } else {
+            appliedFiltersObj[key] = appliedFiltersObj[key] ? appliedFiltersObj[key] + '|' + value.replace(/"/g, '') : value.replace(/"/g, '')
+          }
+        } else { // Its a term query
+          appliedFiltersObj['term'] = appliedFiltersObj['term'] ? appliedFiltersObj['term'] + termOperator + orQuerySegment : orQuerySegment
+        }
+      }
+    }
+    
+    return appliedFiltersObj
+  }
+
+  /**
+   * Mark the filter as checked in available filters
+   * If available, child filters should also be marked checked
+   */
+  private checkFilter(updtFilterObj, filterGroup, filterValue, geographyFilter){
+    if ( updtFilterObj ){ // If match is found at the parent node level
+      updtFilterObj.checked = true
+      if ( updtFilterObj.children && updtFilterObj.children.length > 0 ){
+        for (let child of updtFilterObj.children){
+          child.checked = true
+        }
+      }
+    } else{ // If we don't find a match at parent node level then search for a match in children nodes
+      for (let value of filterGroup.values){
+        if (value.children && value.children.length > 0){
+          let updtFilterObj = value.children.find( filterObj => {
+            let match = geographyFilter ? filterObj.efq === filterValue : filterObj.value === filterValue
+            return match
+          })
+          if (updtFilterObj){
+            updtFilterObj.checked = true
+            break
+          }
+        }
+      }
+    }
   }
 
   private updateAdvanceQueries( params: any ): void{
