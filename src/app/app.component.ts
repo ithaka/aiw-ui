@@ -54,8 +54,6 @@ export class AppComponent {
   public test: any = {}
 
   public statusPageClient: any
-
-  private isFullscreen: boolean = false
   /**
    * Google Tag Manager variables
    * - In order of specificity
