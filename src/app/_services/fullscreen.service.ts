@@ -6,27 +6,22 @@ export class FullScreenService {
 
     constructor() {}
 
-    public addFullscreenListener(func?: Function) {
+    public addFullscreenListener() {
         document.addEventListener("fullscreenchange", () => {
-            func && func();
             this.toggleFullscreen();
         }, false);
      
         document.addEventListener("mozfullscreenchange", () => {
-            func && func();
             this.toggleFullscreen();
         }, false);
      
         document.addEventListener("webkitfullscreenchange",() => {
-            func && func();
             this.toggleFullscreen();
         }, false);
      
         document.addEventListener("msfullscreenchange", () => {
-            func && func();
             this.toggleFullscreen();
         }, false);
-     
     }
      
     private toggleFullscreen(): void {

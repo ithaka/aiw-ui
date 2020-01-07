@@ -33,7 +33,7 @@ const STATUS_PAGE_CMP_ID_PROD: string = 'cmy3vpk5tq18'
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="closeBanner()"></ang-sky-banner>
     <div>
-      <div id="skip-main-content-div" tabindex="-1">
+      <div *ngIf="!_fullscreen.isFullscreen" id="skip-main-content-div" tabindex="-1">
         <button id="skip-main-content-button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
       </div>
       <nav-bar tabindex="-1"></nav-bar>
@@ -277,23 +277,7 @@ export class AppComponent {
 
     this.initPerimeterX();
 
-    this._fullscreen.addFullscreenListener(() => {
-      if (this.isFullscreen) {
-        this.addSkipToMainContent()
-      } else {
-        this.removeSkipToMainContent()
-      }
-    })
-  }
-
-  private removeSkipToMainContent() {
-    let skipToMainContentButton = document.getElementById("skip-main-content-button")
-    skipToMainContentButton.tabIndex = -1
-  }
-
-  private addSkipToMainContent() {
-    let skipToMainContentButton = document.getElementById("skip-main-content-button")
-    skipToMainContentButton.tabIndex = 1
+    this._fullscreen.addFullscreenListener()
   }
 
   private hideZendeskChat() {
