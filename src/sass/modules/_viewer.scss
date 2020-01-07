@@ -3,6 +3,18 @@
 .openseadragon-canvas {
     outline: none !important;
     cursor: move;
+
+    &:focus {
+        outline: -webkit-focus-ring-color auto 15px !important;
+    }
+}
+
+.referencestrip > div > .openseadragon-container > .openseadragon-canvas {
+    opacity: 0.5 !important;
+
+    &:focus {
+        opacity: 1 !important;
+    }
 }
 
 .osd-wrap > .openseadragon-container {
