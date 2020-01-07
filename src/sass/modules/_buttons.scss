@@ -137,6 +137,10 @@ $iconBtnSize: $btnHeight;
         outline: -webkit-focus-ring-color auto 5px !important;
     }
 
+    &:-moz-focusring {
+        outline: auto 2px Highlight !important;
+    }
+
     &:hover, &:active, &:focus, &:visited {
         color: #000;
     }
