@@ -297,7 +297,7 @@
         | Exit
         .icon.icon-exit-fullscreen
     //- Asset Drawer
-    .asset-drawer(*ngIf="isFullscreen", [class.slideOut]="showAssetDrawer && isFullscreen")
+    .asset-drawer(*ngIf="showAssetDrawer && isFullscreen", [class.slideOut]="showAssetDrawer && isFullscreen")
       .col-sm-12
         h3.asset-drawer__header((click)="toggleAssetDrawer(!showAssetDrawer)")
           button.asset-drawer__close.pr-1(
