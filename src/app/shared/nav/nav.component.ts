@@ -49,6 +49,7 @@ export class Nav implements OnInit, OnDestroy {
   // TypeScript public modifiers
   constructor(
     public _app: AppConfig,
+    public _fullscreen: FullScreenService,
     private angulartics: Angulartics2,
     private _auth: AuthService,
     private _assets: AssetService,
@@ -57,8 +58,7 @@ export class Nav implements OnInit, OnDestroy {
     private location: Location,
     private _storage: ArtstorStorageService,
     private _toasts: ToastService,
-    private _flags: FlagService,
-    private _fullscreen: FullScreenService
+    private _flags: FlagService
   ) {
       // console.log("Constructing nav component...")
       this.logoUrl = this._app.config.logoUrl

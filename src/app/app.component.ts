@@ -93,6 +93,7 @@ export class AppComponent {
 
   constructor(
     public _app: AppConfig,
+    public _fullscreen: FullScreenService,
     private _dom: DomUtilityService,
     private _ga: Angulartics2,
     angulartics2GoogleTagManager: Angulartics2GoogleTagManager,
@@ -100,7 +101,6 @@ export class AppComponent {
     private titleService: Title,
     private _script: ScriptService,
     private _flags: FlagService,
-    private _fullscreen: FullScreenService,
     private router: Router,
     private translate: TranslateService,
     private meta: Meta,
