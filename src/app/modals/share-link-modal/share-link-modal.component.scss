@@ -16,7 +16,7 @@
     font-stretch: normal;
     line-height: 18px;
     padding-top: 10px;
-} 
+}
 .value{
     font-size: 13px;
     word-wrap: break-word;
@@ -24,7 +24,7 @@
 }
 .copy-clipboard{
     font-size: 12px;
-    color: #a4a4a4;
+    color: var(--blue);
     border-bottom: 1px dotted #ddd;
     display: inline-block;
     padding-bottom: 2px;
