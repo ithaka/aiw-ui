@@ -12,7 +12,7 @@ import { map, take } from 'rxjs/operators'
 // Project Dependencies
 import { AppConfig } from './app.service'
 import { isPlatformBrowser } from '@angular/common'
-import { DomUtilityService, FlagService, ScriptService, AuthService } from '_services'
+import { DomUtilityService, FlagService, FullScreenService, ScriptService, AuthService } from '_services'
 import { version } from './../../package.json'
 
 // Server only imports
@@ -33,11 +33,11 @@ const STATUS_PAGE_CMP_ID_PROD: string = 'cmy3vpk5tq18'
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="closeBanner()"></ang-sky-banner>
     <div>
-      <div id="skip" tabindex="-1">
-        <button id="button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
+      <div *ngIf="!_fullscreen.isFullscreen" id="skip-main-content-div" tabindex="-1">
+        <button id="skip-main-content-button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
       </div>
       <nav-bar tabindex="-1"></nav-bar>
-      <main>
+      <main id="main">
         <router-outlet></router-outlet>
       </main>
 
@@ -100,6 +100,7 @@ export class AppComponent {
     private titleService: Title,
     private _script: ScriptService,
     private _flags: FlagService,
+    private _fullscreen: FullScreenService,
     private router: Router,
     private translate: TranslateService,
     private meta: Meta,
@@ -141,7 +142,7 @@ export class AppComponent {
 
         if (isPlatformBrowser(this.platformId)) {
           // focus on the wrapper of the "skip to main content link" everytime new page is loaded
-          let mainEl = <HTMLElement>(this._dom.byId('skip'))
+          let mainEl = <HTMLElement>(this._dom.byId('skip-main-content-div'))
           if (!(event.url.indexOf('browse') > -1) && !(event.url.indexOf('search') > -1) && !(event.url.indexOf('asset') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
             mainEl.focus()
         }
@@ -273,6 +274,8 @@ export class AppComponent {
     }
 
     this.initPerimeterX();
+
+    this._fullscreen.addFullscreenListener()
   }
 
   private hideZendeskChat() {

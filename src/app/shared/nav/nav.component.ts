@@ -7,7 +7,7 @@ import * as Sentry from '@sentry/browser';
 
 // Project Dependencies
 import { AppConfig } from '../../app.service'
-import { AssetService, AuthService, FlagService, Toast, ToastService, ToolboxService } from 'app/_services'
+import { AssetService, AuthService, FlagService, FullScreenService, Toast, ToastService, ToolboxService } from 'app/_services'
 import { Angulartics2 } from "angulartics2";
 import { ArtstorStorageService } from "../../../../projects/artstor-storage/src/lib/artstor-storage.service";
 
@@ -57,7 +57,8 @@ export class Nav implements OnInit, OnDestroy {
     private location: Location,
     private _storage: ArtstorStorageService,
     private _toasts: ToastService,
-    private _flags: FlagService
+    private _flags: FlagService,
+    private _fullscreen: FullScreenService
   ) {
       // console.log("Constructing nav component...")
       this.logoUrl = this._app.config.logoUrl

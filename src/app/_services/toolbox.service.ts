@@ -83,7 +83,7 @@ export class ToolboxService {
      * @note Should fire immediately within a user-event binding (click, key)
      */
     public requestFullScreen(): void {
-        let el = document.body
+        let el = document.getElementById("main");
         // Supports most browsers and their versions.
         var requestMethod = el.requestFullscreen || el['webkitRequestFullscreen'] || el['mozRequestFullscreen'] || el['msRequestFullscreen']
         if (requestMethod) { // Native full screen.
