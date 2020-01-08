@@ -407,14 +407,13 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
         });
 
         this.osdViewer.addOnceHandler("tile-drawn", () => {
-            // Get all canvas elements, first one is the main canvas, second one is the navigator
-            // The canvas in the reference strip starts as the third one in the collection
-            let canvasElements = document.getElementsByClassName("openseadragon-canvas")
+            // Get all thumbnails in the reference strip
+            let canvasElements = document.querySelectorAll(".referencestrip > div > .openseadragon-container > .openseadragon-canvas");
             // Loop through all canvas elements in the reference strip and add event listener to keydown enter for accessibility
-            for (let i = 2; i < canvasElements.length; i++) {
+            for (let i = 0; i < canvasElements.length; i++) {
                 canvasElements.item(i).addEventListener("keydown", (event: KeyboardEvent) => {
                     if (event.keyCode === 13) {
-                        this.osdViewer.goToPage(i-2)
+                        this.osdViewer.goToPage(i)
                     }
                 })
             }
