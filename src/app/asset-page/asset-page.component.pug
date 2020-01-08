@@ -74,16 +74,16 @@
 
       .col-md-12.quiz-caption-cntnr(*ngIf="isFullscreen", [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg' ]")
         ang-promo-tooltip(*ngIf="user.isLoggedIn && !quizModeTTDismissed && studyMode", [options]="quizModeTooltipOpts", (close)="closeQuizModeTooltip()")
-        .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", (click)="showAssetCaption = !showAssetCaption", title="{{ showAssetCaption ? 'Hide Asset Meta Information' : 'Show Asset Meta Information' }}")
+        .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", tabindex="0", (click)="showAssetCaption = !showAssetCaption", (keydown.enter)="showAssetCaption = !showAssetCaption", title="{{ showAssetCaption ? 'Hide Asset Meta Information' : 'Show Asset Meta Information' }}")
           span.caption-btn
           | {{ showAssetCaption ? 'HIDE CAPTION' : 'SHOW CAPTION' }}
         .quiz-browse-cntnr(*ngIf="quizMode")
-          i.icon.icon-direction.icon-left([class.disabled]="!quizShuffle && assetNumber <= 1 ? true : false", title="Previous in results", (tap)="showPrevAsset()")
-          i.icon.icon-direction.icon-right([class.disabled]="!quizShuffle && assetNumber >= totalAssetCount - restrictedAssetsCount ? true: false", title="Next in results", (tap)="showNextAsset()")
-        .shuffle-cntnr(*ngIf="quizMode", [ngClass]="[ quizShuffle ? 'active' : '' ]", (tap)="toggleQuizShuffle()", title="Toggle Asset Suffle")
+          i.icon.icon-direction.icon-left([class.disabled]="!quizShuffle && assetNumber <= 1 ? true : false", title="Previous in results", tabindex="0", (tap)="showPrevAsset()", (keydown.enter)="showPrevAsset()")
+          i.icon.icon-direction.icon-right([class.disabled]="!quizShuffle && assetNumber >= totalAssetCount - restrictedAssetsCount ? true: false", title="Next in results", tabindex="0", (tap)="showNextAsset()", (keydown.enter)="showNextAsset()")
+        .shuffle-cntnr(*ngIf="quizMode", [ngClass]="[ quizShuffle ? 'active' : '' ]", tabindex="0", (tap)="toggleQuizShuffle()", (keydown.enter)="toggleQuizShuffle()", title="Toggle Asset Suffle")
           span.shuffle-btn
           | SHUFFLE {{ quizShuffle ? 'ON' : 'OFF' }}
-        .quiz-cntnr([ngClass]="[ quizMode ? 'active' : '' ]", (tap)="toggleQuizMode()", title="{{ quizMode ? 'Deactivate Quiz Mode' : 'Activate Quiz Mode' }}")
+        .quiz-cntnr([ngClass]="[ quizMode ? 'active' : '' ]", tabindex="0", (tap)="toggleQuizMode()", (keydown.enter)="toggleQuizMode()", title="{{ quizMode ? 'Deactivate Quiz Mode' : 'Activate Quiz Mode' }}")
           span.quiz-btn
           | QUIZ MODE {{ quizMode ? 'ON' : 'OFF' }}
     //- Asset Metadata Column
