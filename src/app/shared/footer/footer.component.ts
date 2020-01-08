@@ -32,7 +32,7 @@ export class Footer {
     private _app: AppConfig,
     private _router: Router,
     public _auth: AuthService,
-    private _fullscreen: FullScreenService,
+    public _fullscreen: FullScreenService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // console.log("Constructing footer...")
