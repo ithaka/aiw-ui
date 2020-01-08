@@ -25,9 +25,19 @@ $iconBtnSize: $btnHeight;
      height: $btnHeight;
      line-height: $btnHeight;
 
-     &:hover, &:focus, &:active {
+     &:hover, &:active {
         color: #fff;
         border-bottom: none;
+     }
+
+     &:focus {
+        color: #fff;
+        border-bottom: none;
+        outline: -webkit-focus-ring-color auto 5px !important;
+     }
+
+     &:-moz-focusring {
+        outline: auto 2px Highlight !important;
      }
 
      &.disabled, &:disabled {
@@ -134,11 +144,6 @@ $iconBtnSize: $btnHeight;
 
     &:hover, &:active, &:focus {
         background: $btnLinkHoverBg;
-        outline: -webkit-focus-ring-color auto 5px !important;
-    }
-
-    &:-moz-focusring {
-        outline: auto 2px Highlight !important;
     }
 
     &:hover, &:active, &:focus, &:visited {
