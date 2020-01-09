@@ -407,6 +407,9 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
         });
 
         this.osdViewer.addOnceHandler("tile-drawn", () => {
+            let mainCanvasElement = document.getElementsByClassName("openseadragon-canvas")[0];
+            mainCanvasElement.setAttribute("tabindex", "1")
+            
             // Get all thumbnails in the reference strip
             let canvasElements = document.querySelectorAll(".referencestrip > div > .openseadragon-container > .openseadragon-canvas");
             // Loop through all canvas elements in the reference strip and add event listener to keydown enter for accessibility
@@ -416,6 +419,7 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
                         this.osdViewer.goToPage(i)
                     }
                 })
+                canvasElements.item(i).setAttribute("tabindex", "4")
             }
         })
 
