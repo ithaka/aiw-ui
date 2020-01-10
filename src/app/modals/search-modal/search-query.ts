@@ -113,10 +113,11 @@ export class SearchQueryUtil {
 
     // Put filters into an object with field name as key
     for (let filter of appliedFilters) {
+      let filterValue = filter.group === 'geography' ? filter.efq : filter.value
       if (filterParams[filter.group]) {
-        filterParams[filter.group].push(filter.value)
+        filterParams[filter.group].push(filterValue)
       } else {
-        filterParams[filter.group] = [filter.value]
+        filterParams[filter.group] = [filterValue]
       }
     }
 

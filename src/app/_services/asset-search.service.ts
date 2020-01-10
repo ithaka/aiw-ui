@@ -124,7 +124,7 @@ export class AssetSearchService {
     // Loop through applied filters
     for (let i = 0; i < filterOptions.filters.length; i++) {
       let currentFilter = filterOptions.filters[i]
-
+      institutionalTypeFilter = false;
       // for these values, do nothing
       if (['collTypes', 'page', 'size', 'sort', 'startDate', 'endDate'].indexOf(currentFilter.filterGroup) > -1) {
 
@@ -139,11 +139,12 @@ export class AssetSearchService {
       } else {
         for (let j = 0; j < currentFilter.filterValue.length; j++) {
           let filterValue = currentFilter.filterValue[j]
+          institutionalTypeFilter = false;
           /**
            * In case of Inst. colType filter, ONLY use the contributing inst. ID to filter
            */
           if ((currentFilter.filterGroup === 'collectiontypes') && (filterValue === 2 || filterValue === 4)) {
-            institutionalTypeFilter = true
+            institutionalTypeFilter = true;
             filterOptions.filterArray.push('contributinginstitutionid:\"' + this._auth.getUser().institutionId.toString() + '\"')
           }
 

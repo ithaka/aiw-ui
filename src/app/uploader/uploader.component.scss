@@ -8,23 +8,23 @@
       letter-spacing: 0.5px;
   }
 
-  .my-drop-zone { 
+  .my-drop-zone {
       border: dotted 3px lightgray;
       height: auto;
       padding: 10px;
       text-align: center;
-      background-color: #fff; 
+      background-color: #fff;
 
       .inner-wrapper{
           width: 100%;
       }
 
-      &.nv-file-over { 
-          border: dotted 3px #ccefcf; 
+      &.nv-file-over {
+          border: dotted 3px #ccefcf;
       }
 
       &.error{
-          border: dotted 3px #ea4335; 
+          border: dotted 3px #ea4335;
       }
 
       .file-select-btn{
@@ -67,7 +67,8 @@
   }
   .help{
       float: right;
-      color: #9b9a9b;
+      color: var(--orange);
+      text-decoration-color: var(--orange);
 
       &:hover, &:active {
           outline: 0;
@@ -92,5 +93,5 @@
 
 .header-upload {
     display: inline-block;
-    color: gray;
+    color: var(--gray-dark);
 }

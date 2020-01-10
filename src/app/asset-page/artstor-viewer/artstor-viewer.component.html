@@ -1,7 +1,7 @@
 <div class="asset-viewer" [class.fullscreen]="isFullscreen" [class.multi-view]="isMultiView" (contextmenu)="disableContextMenu($event)">
   <!--Viewer Buttons-->
   <div *ngIf="!thumbnailMode">
-    <div class="button-group asset-viewer__buttons" id="imageButtons-{{ osdViewerId }}" tabindex="-1">
+    <div class="button-group asset-viewer__buttons" id="imageButtons-{{ osdViewerId }}">
       <button class="btn btn--icon btn--zoomIn" [class.aiw-hidden]="state != 1" id="zoomIn-{{ osdViewerId}}" [ngbTooltip]="zoomInTooltip" aria-label="Zoom in" placement="bottom"><i class="icon icon-zoom-in"></i></button>
       <button class="btn btn--icon btn--zoomOut" [class.aiw-hidden]="state != 1" id="zoomOut-{{ osdViewerId }}" [ngbTooltip]="zoomOutTooltip" aria-label="Zoom out" placement="bottom"><i class="icon icon-zoom-out"></i></button>
       <button class="btn btn--icon btn--zoomFit" [class.aiw-hidden]="state != 1" id="zoomFit-{{ osdViewerId }}" [ngbTooltip]="fitToViewTooltip" aria-label="Fit to view" placement="bottom"><i class="icon icon-fit-to-view"></i></button>
@@ -22,8 +22,8 @@
     </div> -->
     <!-- Edge pagination arrow style -->
     <div [class.aiw-hidden]="!isMultiView" class="asset-viewer__edge-arrows" id="imagePageButtons-{{ osdViewerId }}">
-      <button class="btn btn--icon btn--prev" id="previousButton-{{ osdViewerId}}" [class.aiw-hidden]="multiViewPage == 1"><i class="icon icon-prev--white"></i></button>
-      <button class="btn btn--icon btn--next" id="nextButton-{{ osdViewerId}}" [class.aiw-hidden]="multiViewPage == multiViewCount"><i class="icon icon-next--white"></i></button>
+      <button [class.aiw-hidden]="multiViewPage == 1" class="btn btn--icon btn--prev" id="previousButton-{{ osdViewerId }}"><i class="icon icon-prev--white"></i></button>
+      <button [class.aiw-hidden]="multiViewPage == multiViewCount" class="btn btn--icon btn--next" id="nextButton-{{ osdViewerId }}"><i class="icon icon-next--white"></i></button>
     </div>
     <div *ngIf="isMultiView && assetCompareCount < 4" class="asset-viewer_multi-view-info">
       <b>{{ multiViewPage }}</b> of <b>{{ multiViewCount }}</b>
@@ -31,7 +31,7 @@
     </div>
   </div>
 
-    <!-- Large thumbnail fallback
+  <!-- Large thumbnail fallback
         - Thumbnail is always showing, and hidden by other viewers placed on top
         - This allows search crawlers to find the thumbnail
         -->
@@ -53,19 +53,22 @@
     <div class="pdf-viewer-container" *ngIf="state == 6">
         <pdf-viewer [src]="pdfViewerOpts" [original-size]="false" [render-text]="true" [autoresize]="true" [show-all]="false" [page]="pdfCurrentPage" [zoom]="pdfZoomValue" (after-load-complete)="onPdfLoad($event)" (error)="onPdfError($event)"></pdf-viewer>
         <div class="asset-viewer__edge-arrows">
-            <button class="btn btn--icon btn--prev" [class.disabled]="pdfCurrentPage === 1" (click)="pdfPrevPage()"><i class="icon icon-prev--white"></i></button>
-            <button class="btn btn--icon btn--next" [class.disabled]="pdfCurrentPage === pdfTotalPages" (click)="pdfNextPage()"><i class="icon icon-next--white"></i></button>
+            <button class="btn btn--icon btn--prev" [class.aiw-hidden]="pdfCurrentPage === 1" (click)="pdfPrevPage()"><i class="icon icon-prev--white"></i></button>
+            <button class="btn btn--icon btn--next" [class.aiw-hidden]="pdfCurrentPage === pdfTotalPages" (click)="pdfNextPage()"><i class="icon icon-next--white"></i></button>
         </div>
         <div class="page-info">Page <b>{{ pdfCurrentPage }}</b> / <b>{{ pdfTotalPages }}</b></div>
     </div>
 
     <div class="fullscreen-metadata" *ngIf="!thumbnailMode && isFullscreen" [class.slideAway]="!showCaption">
-        <div class="vertical-center-wrap"><i class="icon icon-direction icon-left" *ngIf="assetCompareCount == 1 && !quizMode" [class.disabled]="assetNumber <= 1" title="Previous in results" tabindex="0" (click)="prevPage.emit()" (keydown.enter)="prevPage.emit()"></i>
-          <div class="title" [innerHtml]="asset.title"></div><i class="icon icon-direction icon-right" *ngIf="assetCompareCount == 1 && !quizMode" [class.disabled]="assetNumber >= assetGroupCount" title="Next in results" tabindex="0" (click)="nextPage.emit()" (keydown.enter)="nextPage.emit()"></i>
-          <div class="meta-block small">
-            <div class="creator" [innerHtml]="asset.creator"></div>
-            <div class="date" [innerHtml]="asset.date"></div>
-          </div>
+      <div class="vertical-center-wrap">
+        <i class="icon icon-direction icon-left" *ngIf="assetCompareCount == 1 && !quizMode && assetNumber > 1" title="Previous in results" tabindex="0" (click)="prevPage.emit()" (keydown.enter)="prevPage.emit()"></i>
+        <div class="title" [innerHtml]="asset.title"></div>
+        <i class="icon icon-direction icon-right" *ngIf="assetCompareCount == 1 && !quizMode && assetNumber < assetGroupCount" title="Next in results" tabindex="0" (click)="nextPage.emit()" (keydown.enter)="nextPage.emit()"></i>
+        <div class="meta-block small">
+          <div class="creator" [innerHtml]="asset.creator"></div>
+          <div class="date" [innerHtml]="asset.date"></div>
         </div>
       </div>
+    </div>
+
 </div>

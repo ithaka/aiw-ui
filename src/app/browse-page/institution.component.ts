@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription }   from 'rxjs';
+import { map } from 'rxjs/operators';
 
 // Project Dependencies
 import { Tag } from './tag/tag.class';
@@ -11,10 +13,13 @@ import { TagsService } from './tags.service';
   templateUrl: 'institution.component.pug',
   styleUrls: [ './browse-page.component.scss' ]
 })
-export class BrowseInstitutionComponent implements OnInit {
-public tags: Tag[] = [];
-public loading: boolean = true;
-public unaffiliatedUser: boolean = false
+export class BrowseInstitutionComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = []
+  public tags: Tag[] = [];
+  public loading: boolean = true;
+  public unaffiliatedUser: boolean = false
+  public browseLabel: string = ''
+
 
   constructor(
     private _assets: AssetService,
@@ -26,6 +31,17 @@ public unaffiliatedUser: boolean = false
   }
 
   ngOnInit() {
+    this.subscriptions.push(
+      this._auth.getInstitution().pipe(
+        map(institutionObj => {
+          let instName = institutionObj && institutionObj.shortName ? institutionObj.shortName : 'Institutional';
+          this.browseLabel = instName + ' Collections';
+        },
+        (err) => {
+          console.error('Failed to load Institution information', err)
+        }
+      )).subscribe()
+    );
     // Set page title
     this._title.setSubtitle("Browse Institutional Collections")
 
@@ -39,4 +55,8 @@ public unaffiliatedUser: boolean = false
         this.loading = false;
       });
   } // OnInit
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
 }
