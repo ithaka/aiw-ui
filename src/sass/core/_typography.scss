@@ -249,7 +249,7 @@ h1, h2, h3, h4, h5,
 
 h1, .h1 {
   @extend %Graphik-Regular-Web;
-  color: $typeAccent;
+  color: $color-black-heading;
   font-size: 18px;
   line-height: 22px;
 }
@@ -276,7 +276,7 @@ h3, .h3 {
   @extend %Graphik-Regular-Web;
   font-size: 13px;
   font-weight: bold;
-  color: #444;
+  color: $color-black-heading;
   line-height: 18px;
   margin: 2px 0;
 }
