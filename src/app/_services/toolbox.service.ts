@@ -94,15 +94,15 @@ export class ToolboxService {
                 wscript.SendKeys("{F11}");
             }
         }
-        this.setFocusToZoomBtm();
+        this.setFocusToZoomBtn();
     }
 
     /**
      * Set focus to the zoom button in the viewer
      */
-    private setFocusToZoomBtm(): void {
-        let canvasElement: HTMLElement = <HTMLElement>document.getElementsByClassName('asset-viewer__buttons')[0];
-        canvasElement && canvasElement.focus();
+    private setFocusToZoomBtn(): void {
+        let zoomInButton: HTMLElement = <HTMLElement>document.getElementsByClassName('btn--zoomIn')[0];
+      zoomInButton && zoomInButton.focus();
     }
 
     /**
