@@ -1,4 +1,4 @@
-.card-block.card-text(tabindex="3", [attr.aria-label]="thumbnail.name + ', '  + thumbnail.agent + ', ' + thumbnail.date", [attr.id]="('item-' + itemIndex)", [ngClass]="{ 'reorder--asset' : arrowReorderMode }")
+.card-block.card-text(role="link", tabindex="3", [attr.aria-label]="thumbnail.name + ', '  + thumbnail.agent + ', ' + thumbnail.date", [attr.id]="('item-' + itemIndex)", [ngClass]="{ 'reorder--asset' : arrowReorderMode }")
   .card-img-top
     //- Thumbnail Image
     img(*ngIf="src", id="{{thumbnail.id}}", [class.disablePointerEvents]="reorderMode", [attr.src]="src", (error)="thumbnailError()", [attr.alt]="thumbnailAlt", [attr.title]="thumbnailAlt", aria-role="image")
