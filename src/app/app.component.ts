@@ -5,7 +5,7 @@ import { Component, ViewEncapsulation, PLATFORM_ID, Inject, Renderer2 } from '@a
 import { DOCUMENT } from '@angular/common'
 import { Angulartics2GoogleTagManager } from 'angulartics2/gtm'
 import { Title, Meta } from '@angular/platform-browser'
-import { Router, NavigationStart, NavigationEnd } from '@angular/router'
+import { Router, NavigationStart, NavigationEnd, RouterEvent } from '@angular/router'
 import { TranslateService } from '@ngx-translate/core'
 import { map, take } from 'rxjs/operators'
 
@@ -138,8 +138,8 @@ export class AppComponent {
 
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.pipe(map(event => {
-      if (event instanceof NavigationStart) {
 
+      if (event instanceof NavigationStart) {
         if (isPlatformBrowser(this.platformId)) {
           // focus on the wrapper of the "skip to main content link" everytime new page is loaded
           let mainEl = <HTMLElement>(this._dom.byId('skip-main-content-div'))
@@ -157,15 +157,11 @@ export class AppComponent {
             this._dom.setCookie('featureflag=solrmetadata')
           }
         }
-
-        let event_url_array = event.url.split('/')
-        if (event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
-          this.titleService.setTitle(this.title)
-        }
       }
       else if (event instanceof NavigationEnd) {
         if (isPlatformBrowser(this.platformId)) {
-          let event_url_array = event.url.split('/')
+          this.updateTitle(event)
+
           let path = event.urlAfterRedirects
           // Properties of "pageGTM" need to match vars set in Google Tag Manager
           let pageGTMVars = {
@@ -241,6 +237,15 @@ export class AppComponent {
       }, (err) => {
         console.error(err)
     })).subscribe()
+  }
+
+  updateTitle(event: RouterEvent) {
+      let event_url_array = event.url.split('/')
+      if (event_url_array && (event_url_array.length > 1)){
+        if (event_url_array[1] === 'home' || event_url_array[1] !== 'asset') {
+          this.titleService.setTitle(this.title)
+        }
+      }
   }
 
   initPerimeterX() {

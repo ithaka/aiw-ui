@@ -7,7 +7,7 @@ import { throwError } from 'rxjs'
 import { map, take, catchError } from 'rxjs/operators'
 
 // Project Dependencies
-import { AuthService } from './../_services'
+import { AuthService, TitleService } from './../_services'
 import { USER_ROLES, USER_DEPTS, UserRolesAndDepts } from './user-roles'
 
 @Component({
@@ -53,6 +53,7 @@ export class RegisterComponent implements OnInit {
     private _router: Router,
     private route: ActivatedRoute,
     private angulartics: Angulartics2,
+    private _titleService: TitleService,
     _fb: FormBuilder,
   ) {
     this.registerForm = _fb.group({
@@ -96,6 +97,7 @@ export class RegisterComponent implements OnInit {
       this._auth.getUser().isLoggedIn ? this._router.navigate(['/home']) : this._router.navigate(['/login'])
     }
 
+    this._titleService.setSubtitle('Register')
   } // OnInit
 
   /** Gets called when the registration form is submitted */
