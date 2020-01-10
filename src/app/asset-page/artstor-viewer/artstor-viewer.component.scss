@@ -33,23 +33,14 @@ $desktop: 992px;*/
     overflow: hidden;
 }
 
-.asset-viewer:hover .asset-viewer__buttons  {
-    opacity: 1;
-}
-
 @media(max-width: 576px) {
     .asset-viewer {
         height: 50vh;
         min-height: 50vh;
     }
-
-    .asset-viewer .asset-viewer__buttons {
-        opacity: 1;
-    }
 }
 
 .asset-viewer__buttons {
-    opacity: 0;
     transition: opacity 0.2s linear;
     position: absolute;
     top: 0;
@@ -121,16 +112,11 @@ $desktop: 992px;*/
 
 
 .asset-viewer__edge-arrows {
-    opacity: 0;
     transition: opacity 0.2s linear;
     position: absolute;
     pointer-events: none;
     top: calc(50% - 120px);
     width: 100%;
-}
-
-.asset-viewer:hover .asset-viewer__edge-arrows {
-    opacity: 1;
 }
 
 .asset-viewer__edge-arrows .btn {
