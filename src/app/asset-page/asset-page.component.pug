@@ -285,7 +285,7 @@
                 button.btn.btn-primary(type="submit", [class.loading]="isProcessing") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.SAVE_BTN' | translate }}
 
     .fullscreen-btns.button-group(*ngIf="isFullscreen", [class.fade-out]="showAssetDrawer")
-      button.btn.btn-light(*ngIf="!quizMode", tabindex="7", (click)="toggleAssetDrawer(!showAssetDrawer)")
+      button.btn.btn-light(*ngIf="!quizMode", tabindex="2", (click)="toggleAssetDrawer(!showAssetDrawer)")
           | {{ 'ASSET_PAGE.BUTTONS.COMPARE' | translate}}
           i.icon.icon-compare
       button.btn.btn-light(
@@ -293,7 +293,7 @@
           (click)="exitPresentationMode()",
           aria-label="Close",
           title="Exit Fullscreen",
-          tabindex="7"
+          tabindex="2"
         )
         | Exit
         .icon.icon-exit-fullscreen
