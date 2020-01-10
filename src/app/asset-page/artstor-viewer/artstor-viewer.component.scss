@@ -483,7 +483,9 @@ background:  #000 !important;
     cursor: default !important;
 }
 
-.referencestrip > div[style^="background: rgb(153, 153, 153)"] canvas, .referencestrip .openseadragon-canvas:hover, :focus {
+.referencestrip > div[style^="background: rgb(153, 153, 153)"] canvas,
+.referencestrip .openseadragon-canvas:hover,
+.referencestrip .openseadragon-canvas:focus {
     /* border: 2px solid $orange !important; */
     opacity: 1 !important;
     padding: 0px !important;
