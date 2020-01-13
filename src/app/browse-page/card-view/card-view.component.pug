@@ -58,5 +58,5 @@
             ul.filter-list(#groupTagsList="")
               i(*ngIf="!group.tags.length") This group does not have any tags.
               li.filter-item(*ngFor="let tag of group.tags")
-                a.font-weight-bold((click)="selectTag(tag)", (keyup.enter)="selectTag(tag)", tabindex="3", attr.aria-label="{{ tag }}, press enter to display image groups associated with this tag.") {{ tag }}
+                a.font-weight-bold.group-tag-name((click)="selectTag(tag)", (keyup.enter)="selectTag(tag)", tabindex="3", attr.aria-label="{{ tag }}, press enter to display image groups associated with this tag.") {{ tag }}
           .expander.link--action.small([class.hidden]="groupTagsList.scrollHeight < 70", [class.collapsed]="tagsCollapsed", (click)="tagsCollapsed = !tagsCollapsed", (keyup.enter)="tagsCollapsed = !tagsCollapsed", [innerHtml]="tagsCollapsed ? 'Show all ' + group.tags.length + ' tags....' : 'Show less'", role="button", tabindex="3", [attr.aria-label]="tagsCollapsed ? 'Show all ' + group.tags.length + ' tags, press enter to view all tags associated with this group.' : 'Show less. Press enter to decrease the amount of tags displayed with this image group.'") Show all {{ group.tags.length }} tags....
