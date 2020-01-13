@@ -8,7 +8,7 @@ import { map, take } from 'rxjs/operators'
 
 // Project Dependencies
 import { AppConfig } from '../app.service'
-import { AuthService, User, AssetService, FlagService } from './../_services'
+import { AuthService, User, AssetService, FlagService, TitleService } from './../_services'
 import { environment } from 'environments/environment'
 import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api'
 
@@ -75,7 +75,8 @@ export class Login implements OnInit, OnDestroy {
     private angulartics: Angulartics2,
     public _app: AppConfig,
     private _flags: FlagService,
-    private _storage: ArtstorStorageService
+    private _storage: ArtstorStorageService,
+    private _titleService: TitleService
   ) {
     // console.log("Constructing login component...")
     this.samlAvailable = this._auth.samlAvailable
@@ -103,7 +104,7 @@ export class Login implements OnInit, OnDestroy {
     }
 
     // The true institutions call. Don't throw an error, since the above call will provide a backup
-  this._auth.getInstitutions()
+    this._auth.getInstitutions()
       .then((data) => {
         if (data['items']) {
           this.loginInstitutions = data['items'];
@@ -147,6 +148,7 @@ export class Login implements OnInit, OnDestroy {
         console.error(err)
       })).subscribe()
 
+    this._titleService.setSubtitle('Log in')
   } // OnInit
 
   ngOnDestroy() {
