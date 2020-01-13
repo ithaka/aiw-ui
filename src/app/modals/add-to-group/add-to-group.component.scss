@@ -18,7 +18,7 @@
             .preview-cntnr {
                 margin: auto;
                 position: relative;
-                
+
                 img {
                     max-width: 352px;
                     max-height: 260px;
@@ -72,11 +72,11 @@
                 font-size: 12px;
                 font-weight: 600;
                 color: $color-white !important;
-                background-color: #999;
+                background-color: var(--gray-dark);
 
                 &:hover {
                     background-color: #fafafa;
-                    color: #999 !important;
+                    color: var(--gray-dark) !important;
                 }
             }
 
@@ -194,7 +194,7 @@
                         background-color: rgba(232, 232, 232, 0.6);
                     }
                 }
-                
+
                 .loading-dots {
                     text-align: center;
                     padding: 8px 0px;

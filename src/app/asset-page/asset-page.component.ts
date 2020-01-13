@@ -194,6 +194,8 @@ export class AssetPage implements OnInit, OnDestroy {
 
   private hasPrivateGroups: boolean = true
 
+  private screenReaderMessage: String = ""
+
   constructor(public _appConfig: AppConfig,
               private _assets: AssetService,
               private _metadata: MetadataService,
@@ -593,6 +595,8 @@ export class AssetPage implements OnInit, OnDestroy {
         this.assets[0].formattedMetadata.License[i] = this.isCreativeCommonsLicense(licenseField)
       }
     }
+
+    this.screenReaderMessage = `Now viewing ${this.assets[0].title}`
   }
 
   /**
@@ -642,6 +646,7 @@ export class AssetPage implements OnInit, OnDestroy {
       if (this.presentMode || this.studyMode) {
         this.backToResults()
       }
+      this.screenReaderMessage = "Exiting full screen.";
     } else {
       // Enter Fullscreen
       // Make sure we only send one ga event when going to fullscreen mode
@@ -664,6 +669,8 @@ export class AssetPage implements OnInit, OnDestroy {
             }
           });
         }
+
+        this.screenReaderMessage = `Entering full screen. Viewing ${this.assets[0].title}`
       }
     }
     this.isFullscreen = isFullscreen

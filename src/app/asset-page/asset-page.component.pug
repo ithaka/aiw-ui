@@ -316,6 +316,7 @@
         ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{ 'selected' : asset.selected || isPrimaryAsset(asset) }", (click)="toggleAsset(asset)", (keydown.enter)="toggleAsset(asset)")
         .text-center.pt-2
           pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
+  p#screen-reader-notification-region.sr-only(role="region", aria-live="assertive", aria-atomic="true") {{ screenReaderMessage }}
 ang-agree-modal(
   *ngIf="showAgreeModal",
   (closeModal)="showAgreeModal = false",
