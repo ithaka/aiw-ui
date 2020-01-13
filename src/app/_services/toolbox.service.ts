@@ -94,6 +94,15 @@ export class ToolboxService {
                 wscript.SendKeys("{F11}");
             }
         }
+        this.setFocusToZoomBtn();
+    }
+
+    /**
+     * Set focus to the zoom button in the viewer
+     */
+    private setFocusToZoomBtn(): void {
+        let zoomInButton: HTMLElement = <HTMLElement>document.getElementsByClassName('btn--zoomIn')[0];
+      zoomInButton && zoomInButton.focus();
     }
 
     /**

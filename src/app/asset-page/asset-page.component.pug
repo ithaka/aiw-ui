@@ -285,15 +285,16 @@
                 button.btn.btn-primary(type="submit", [class.loading]="isProcessing", tabindex="6") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.SAVE_BTN' | translate }}
 
     .fullscreen-btns.button-group(*ngIf="isFullscreen", [class.fade-out]="showAssetDrawer")
-      button.btn.btn-light(*ngIf="!quizMode", (click)="toggleAssetDrawer(!showAssetDrawer)")
+      button.btn.btn-light(*ngIf="!quizMode && !showAssetDrawer", (click)="toggleAssetDrawer(!showAssetDrawer)")
           | {{ 'ASSET_PAGE.BUTTONS.COMPARE' | translate}}
           i.icon.icon-compare
       button.btn.btn-light(
-          type="button",
-          (click)="exitPresentationMode()",
-          aria-label="Close",
-          title="Exit Fullscreen"
-        )
+        *ngIf="!showAssetDrawer"
+        type="button",
+        (click)="exitPresentationMode()",
+        aria-label="Close",
+        title="Exit Fullscreen"
+      )
         | Exit
         .icon.icon-exit-fullscreen
     //- Asset Drawer
@@ -312,7 +313,7 @@
           pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
         div.pt-1.pb-3(*ngIf="prevAssetResults.thumbnails.length < 1")
           .alert.alert-info {{ 'ASSET_PAGE.MESSAGES.NEEDASSETS' | translate}}
-        ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{ 'selected' : asset.selected || isPrimaryAsset(asset) }", (click)="toggleAsset(asset)")
+        ang-thumbnail.card.card--asset(*ngFor="let asset of prevAssetResults.thumbnails", [thumbnail]="asset", [ngClass]="{ 'selected' : asset.selected || isPrimaryAsset(asset) }", (click)="toggleAsset(asset)", (keydown.enter)="toggleAsset(asset)")
         .text-center.pt-2
           pagination([pageObj]="pagination", (goToPage)="goToPage($event)", style="display:inline-block")
 ang-agree-modal(
