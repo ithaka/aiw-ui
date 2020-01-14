@@ -1,4 +1,40 @@
 <div class="asset-viewer" [class.fullscreen]="isFullscreen" [class.multi-view]="isMultiView" (contextmenu)="disableContextMenu($event)">
+  <!-- Large thumbnail fallback
+      - Thumbnail is always showing, and hidden by other viewers placed on top
+      - This allows search crawlers to find the thumbnail
+      -->
+  <div id="fallbackViewer">
+            <img class="item item--thumbnail" alt="{{ asset.title }}" [attr.src]="asset.thumbnail_url"
+                 (error)="asset.fallbackThumbnailUrl()">
+  </div>
+  <div class="more-results overlay-wrap--center" id="loader-wrapper" *ngIf="state == 0"><i
+    class="icon-asterisk icon-spin icon-large"></i></div>
+  <!-- IIIF Image Viewer-->
+  <div [class.aiw-hidden]="state != 1">
+    <div class="item osd-wrap" [attr.id]="osdViewerId" [attr.zoomValue]="lastZoomValue" role="application" attr.aria-label="Interactive image viewer. Now viewing {{ asset.title }}."></div>
+  </div>
+  <!-- Video Player-->
+  <div class="video-player" [class.aiw-hidden]="state != 2">
+    <iframe id="{{ 'kalturaIframe-' + index }}" frameborder="0"></iframe>
+  </div>
+  <!--panorama Krpano viewer-->
+  <div class="krpano-viewer osd-wrap" [class.aiw-hidden]="state != 3">
+    <div class="pano" id="pano-{{ index }}"></div>
+  </div>
+  <!-- PDF Viewer -->
+  <div class="pdf-viewer-container" *ngIf="state == 6">
+    <pdf-viewer [src]="pdfViewerOpts" [original-size]="false" [render-text]="true" [autoresize]="true"
+                [show-all]="false" [page]="pdfCurrentPage" [zoom]="pdfZoomValue"
+                (after-load-complete)="onPdfLoad($event)" (error)="onPdfError($event)"></pdf-viewer>
+    <div class="asset-viewer__edge-arrows">
+      <button class="btn btn--icon btn--prev" [class.aiw-hidden]="pdfCurrentPage === 1" (click)="pdfPrevPage()"><i
+        class="icon icon-prev--white"></i></button>
+      <button class="btn btn--icon btn--next" [class.aiw-hidden]="pdfCurrentPage === pdfTotalPages"
+              (click)="pdfNextPage()"><i class="icon icon-next--white"></i></button>
+    </div>
+    <div class="page-info">Page <b>{{ pdfCurrentPage }}</b> / <b>{{ pdfTotalPages }}</b></div>
+  </div>
+
   <!--Viewer Buttons-->
   <div *ngIf="!thumbnailMode">
     <div class="button-group asset-viewer__buttons" id="imageButtons-{{ osdViewerId }}">
@@ -30,34 +66,6 @@
       <button *ngIf="hasMultiViewHelp()" (click)="multiViewHelp.emit()" class="help-icon">?</button>
     </div>
   </div>
-
-  <!-- Large thumbnail fallback
-        - Thumbnail is always showing, and hidden by other viewers placed on top
-        - This allows search crawlers to find the thumbnail
-        -->
-    <div id="fallbackViewer"><img class="item item--thumbnail" alt="{{ asset.title }}" [attr.src]="asset.thumbnail_url" (error)="asset.fallbackThumbnailUrl()"></div>
-    <div class="more-results overlay-wrap--center" id="loader-wrapper" *ngIf="state == 0"><i class="icon-asterisk icon-spin icon-large"></i></div>
-    <!-- IIIF Image Viewer-->
-    <div [class.aiw-hidden]="state != 1">
-        <div class="item osd-wrap" [attr.id]="osdViewerId" [attr.zoomValue]="lastZoomValue"></div>
-    </div>
-    <!-- Video Player-->
-    <div class="video-player" [class.aiw-hidden]="state != 2">
-        <iframe id="{{ 'kalturaIframe-' + index }}" frameborder="0"></iframe>
-    </div>
-    <!--panorama Krpano viewer-->
-    <div class="krpano-viewer osd-wrap" [class.aiw-hidden]="state != 3">
-        <div class="pano" id="pano-{{ index }}"></div>
-    </div>
-    <!-- PDF Viewer -->
-    <div class="pdf-viewer-container" *ngIf="state == 6">
-        <pdf-viewer [src]="pdfViewerOpts" [original-size]="false" [render-text]="true" [autoresize]="true" [show-all]="false" [page]="pdfCurrentPage" [zoom]="pdfZoomValue" (after-load-complete)="onPdfLoad($event)" (error)="onPdfError($event)"></pdf-viewer>
-        <div class="asset-viewer__edge-arrows">
-            <button class="btn btn--icon btn--prev" [class.aiw-hidden]="pdfCurrentPage === 1" (click)="pdfPrevPage()"><i class="icon icon-prev--white"></i></button>
-            <button class="btn btn--icon btn--next" [class.aiw-hidden]="pdfCurrentPage === pdfTotalPages" (click)="pdfNextPage()"><i class="icon icon-next--white"></i></button>
-        </div>
-        <div class="page-info">Page <b>{{ pdfCurrentPage }}</b> / <b>{{ pdfTotalPages }}</b></div>
-    </div>
 
     <div class="fullscreen-metadata" *ngIf="!thumbnailMode && isFullscreen" [class.slideAway]="!showCaption">
       <div class="vertical-center-wrap">
