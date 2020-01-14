@@ -94,15 +94,22 @@ export class ToolboxService {
                 wscript.SendKeys("{F11}");
             }
         }
-        this.setFocusToZoomBtn();
+
+        // Added timeout before focusing content because on the image group presentation mode we
+        // need to load up openseadragon first. This also gives us a little time to announce that we
+        // are entering fullscreen
+        setTimeout(() => {
+          this.setFocusToContent();
+        }, 1000)
+
     }
 
     /**
-     * Set focus to the zoom button in the viewer
+     * Set focus to the viewer canvas
      */
-    private setFocusToZoomBtn(): void {
-        let zoomInButton: HTMLElement = <HTMLElement>document.getElementsByClassName('btn--zoomIn')[0];
-      zoomInButton && zoomInButton.focus();
+    private setFocusToContent(): void {
+        let mainContentCanvas: HTMLElement = <HTMLElement>document.getElementsByClassName('openseadragon-canvas')[0];
+        mainContentCanvas && mainContentCanvas.focus();
     }
 
     /**
@@ -119,5 +126,7 @@ export class ToolboxService {
         } else if (document.exitFullscreen) {
             document.exitFullscreen();
         }
+
+        this.setFocusToContent();
     }
 }
