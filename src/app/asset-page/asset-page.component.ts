@@ -670,7 +670,8 @@ export class AssetPage implements OnInit, OnDestroy {
           });
         }
 
-        this.screenReaderMessage = `Entering full screen. Viewing ${this.assets[0].title}`
+        let baseScreenReaderMessage = "Entering full screen."
+        this.screenReaderMessage = this.assets[0] ?  `${baseScreenReaderMessage} Viewing ${this.assets[0].title}` : baseScreenReaderMessage
       }
     }
     this.isFullscreen = isFullscreen
