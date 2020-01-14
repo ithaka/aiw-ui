@@ -225,11 +225,11 @@ ang-new-ig-modal .modal-content {
           font-size: 12px;
           font-weight: 600;
           color: $color-white !important;
-          background-color: #999;
+          background-color: var(--gray-dark);
 
           &:hover {
               background-color: #fafafa;
-              color: #999 !important;
+              color: var(--gray-dark) !important;
           }
       }
 

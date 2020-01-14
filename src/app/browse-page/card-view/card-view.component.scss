@@ -68,11 +68,11 @@ $tagLinkBg: #efefef;
     }
 
 
-    // For expand/collapse tags exceeding three lines 
+    // For expand/collapse tags exceeding three lines
     .groupTagsCntnr{
         overflow: hidden;
         padding-top: 1px;
-        
+
         &.limit{
             max-height: 4em;
             margin-bottom: 5px;
@@ -194,7 +194,7 @@ $tagLinkBg: #efefef;
 .icon {
     width: 5.5em;
     height: 7em;
-    
+
     &.img-state{
         background-size: 100%;
         position: absolute;
@@ -212,4 +212,12 @@ $tagLinkBg: #efefef;
 .cardview-text {
     padding-left: 1em;
     padding-right: 1em;
+}
+
+.group-tag-name {
+  border: 1px solid #cfcfcf;
+}
+
+.filter-item {
+  margin-top: 2px; // this is necessary to make top border of group tag visible
 }
