@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core'
+import { Component, OnInit, AfterViewInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core'
 import { Router, RouterLink } from '@angular/router'
 import { Angulartics2 } from 'angulartics2'
 
@@ -9,7 +9,7 @@ import { DomUtilityService, Toast, ToastService } from '_services'
   templateUrl: 'toast.component.pug',
   styleUrls: [ './toast.component.scss' ]
 })
-export class ToastComponent implements OnInit, OnDestroy {
+export class ToastComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input() public toast: Toast
 
@@ -47,8 +47,14 @@ export class ToastComponent implements OnInit, OnDestroy {
 
     // Assign keyboard shortcut
     this.onKeydown = this.onKeydown.bind(this)
-    window.addEventListener('keydown', this.onKeydown, true)
+    window.addEventListener('keydown', this.onKeydown, true)  
   }
+
+  ngAfterViewInit() {
+    // Focus on the toast text when the toast appear on the page to keep it from disappearing
+    let toastLinkEl = <HTMLElement>(this._dom.byId('toast-text'))
+    toastLinkEl.focus()
+  }	
 
   onKeydown(e: any) {
     // If user hits Ctrl + x, dismiss the toast
@@ -65,18 +71,15 @@ export class ToastComponent implements OnInit, OnDestroy {
   triggerDismiss() {
     // Remove the live region when the toast is gone
     this.toastLiveRegion.textContent = ''
-
+    this.hideToast = true
     this._toasts.dismissToast(this.toast.id)
   }
 
   animateDismiss() {
-    // Remove the live region when the toast is gone
-    this.toastLiveRegion.textContent = ''
-
-    this.hideToast = true
+    // Wait for 7 seconds before removing the toast
     setTimeout(() => {
-      this._toasts.dismissToast(this.toast.id, true)
-    }, 700)
+      this.triggerDismiss()
+    }, 7000)
   }
 
   /**
@@ -122,7 +125,8 @@ export class ToastComponent implements OnInit, OnDestroy {
       if (this._dom.byId("addToGroupDropdown"))
         this._dom.byId("addToGroupDropdown").focus()
 
-      this.triggerDismiss()
+      // Time and disappear
+      this.animateDismiss()
     }, 10)
   }
 
