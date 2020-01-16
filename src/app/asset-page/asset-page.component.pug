@@ -188,7 +188,7 @@
                 //- Creator
                 .value.meta-link(
                   *ngIf="fieldName === 'Creator'",
-                  [attr.id]="cleanId(fieldName)",
+                  [attr.data-qa-id]="cleanId(fieldName)",
                   (click)="trackCreatorLink(value)",
                   [innerHTML]="value | filterLink:'artcreator'",
                   [attr.aria-labelledby]="cleanId(fieldName)"
@@ -201,14 +201,14 @@
                 //- Subject
                 a.value.meta-link(
                   *ngIf="fieldName === 'Subject'",
-                  [attr.id]="cleanId(fieldName)",
+                  [attr.data-qa-id]="cleanId(fieldName)",
                   (click)="trackSubjectLink(value)",
                   [innerHTML]="value | filterLink:'artsubject'",
                   [attr.aria-labelledby]="cleanId(fieldName)"
                 )
                 //- Other fields (culture, material, work type, description...etc)
                 div(*ngIf="fieldName !== 'Collection' && fieldName !== 'Subject' && fieldName !== 'Creator'")
-                  .value([attr.id]="cleanId(fieldName)", [innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")
+                  .value([attr.data-qa-id]="cleanId(fieldName)", [innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")
           //- Rights
           .meta-block(*ngIf="assets[0].formattedMetadata.Rights && assets[0].formattedMetadata.Rights.length > 0")
             .label#Rights Rights
