@@ -7,7 +7,7 @@ import * as Sentry from '@sentry/browser';
 
 // Project Dependencies
 import { AppConfig } from '../../app.service'
-import { AssetService, AuthService, FlagService, Toast, ToastService, ToolboxService } from 'app/_services'
+import { AssetService, AuthService, FlagService, FullScreenService, Toast, ToastService, ToolboxService } from 'app/_services'
 import { Angulartics2 } from "angulartics2";
 import { ArtstorStorageService } from "../../../../projects/artstor-storage/src/lib/artstor-storage.service";
 
@@ -49,6 +49,7 @@ export class Nav implements OnInit, OnDestroy {
   // TypeScript public modifiers
   constructor(
     public _app: AppConfig,
+    public _fullscreen: FullScreenService,
     private angulartics: Angulartics2,
     private _auth: AuthService,
     private _assets: AssetService,

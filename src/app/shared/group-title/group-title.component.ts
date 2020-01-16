@@ -88,10 +88,12 @@ import { ImageGroup } from 'datatypes'
         queryParams['w'] = this.ig.items[0].zoom.pointWidth
         queryParams['h'] = this.ig.items[0].zoom.pointHeight
       }
-      // Enter fullscreen - must fire within click binding (Firefox, Safari)
-      this._toolbox.requestFullScreen()
       // Route to viewer
-      this._router.navigate(['/asset', id, queryParams]);
+      this._router.navigate(['/asset', id, queryParams])
+        .then(() => {
+          // Enter fullscreen - must fire within click binding (Firefox, Safari)
+          this._toolbox.requestFullScreen()
+        });
     }
 
 }

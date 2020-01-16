@@ -8,7 +8,7 @@
     h2 Item Details
     .table
       .meta-row.row(*ngFor="let fieldName of asset.formattedMetadata | keys")
-        .col-md-4.lbl([attr.id]="cleanId(fieldName)") {{ fieldName }}
+        .col-md-4.lbl([attr.data-qa-id]="cleanId(fieldName)") {{ fieldName }}
         .col-md-8
           .value(*ngFor="let value of asset.formattedMetadata[fieldName]")
             span([innerHTML]="cleanFieldValue(value) | linkify", [attr.aria-labelledby]="cleanId(fieldName)")

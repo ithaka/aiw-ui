@@ -83,7 +83,7 @@ export class ToolboxService {
      * @note Should fire immediately within a user-event binding (click, key)
      */
     public requestFullScreen(): void {
-        let el = document.body
+        let el = document.getElementById("main");
         // Supports most browsers and their versions.
         var requestMethod = el.requestFullscreen || el['webkitRequestFullscreen'] || el['mozRequestFullscreen'] || el['msRequestFullscreen']
         if (requestMethod) { // Native full screen.
@@ -94,6 +94,22 @@ export class ToolboxService {
                 wscript.SendKeys("{F11}");
             }
         }
+
+        // Added timeout before focusing content because on the image group presentation mode we
+        // need to load up openseadragon first. This also gives us a little time to announce that we
+        // are entering fullscreen
+        setTimeout(() => {
+          this.setFocusToContent();
+        }, 1000)
+
+    }
+
+    /**
+     * Set focus to the viewer canvas
+     */
+    private setFocusToContent(): void {
+        let mainContentCanvas: HTMLElement = <HTMLElement>document.getElementsByClassName('openseadragon-canvas')[0];
+        mainContentCanvas && mainContentCanvas.focus();
     }
 
     /**
@@ -110,5 +126,7 @@ export class ToolboxService {
         } else if (document.exitFullscreen) {
             document.exitFullscreen();
         }
+
+        this.setFocusToContent();
     }
 }

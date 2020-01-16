@@ -25,9 +25,19 @@ $iconBtnSize: $btnHeight;
      height: $btnHeight;
      line-height: $btnHeight;
 
-     &:hover, &:focus, &:active {
+     &:hover, &:active {
         color: #fff;
         border-bottom: none;
+     }
+
+     &:focus {
+        color: #fff;
+        border-bottom: none;
+        outline: -webkit-focus-ring-color auto 5px !important;
+     }
+
+     &:-moz-focusring {
+        outline: auto 2px Highlight !important;
      }
 
      &.disabled, &:disabled {
@@ -94,7 +104,7 @@ $iconBtnSize: $btnHeight;
 }
 
 
- .btn-secondary, a.btn-secondary {
+.btn-secondary, a.btn-secondary {
     background: white;
     border: solid 1px $orange;
     color: $orange;
@@ -123,92 +133,92 @@ $iconBtnSize: $btnHeight;
     }
 }
 
- .btn-dark {
-     background: #2d2d2d;
-     color: #fff;
- }
+.btn-dark {
+    background: #2d2d2d;
+    color: #fff;
+}
 
- .btn-light {
-     background: rgba(255, 255, 255, 0.98);
-     color: #333;
+.btn-light {
+    background: rgba(255, 255, 255, 0.98);
+    color: #333;
 
-     &:hover, &:active {
-         background: $btnLinkHoverBg;
-     }
+    &:hover, &:active, &:focus {
+        background: $btnLinkHoverBg;
+    }
 
-     &:hover, &:active, &:focus, &:visited {
-         color: #000;
-     }
- }
+    &:hover, &:active, &:focus, &:visited {
+        color: #000;
+    }
+}
 
- .btn:not(.btn--icon) > .icon {
+.btn:not(.btn--icon) > .icon {
     margin: 0 0.5em;
     width: 1.2em;
     height: 1.2em;
     vertical-align: middle;
     transform: translateY(-0.1em);
- }
+}
 
- .btn.btn-link, a.btn.btn-link {
-     text-transform: none !important;
-     padding: 0 6px 0 0;
-     color: #000;
-     background: none;
+.btn.btn-link, a.btn.btn-link {
+    text-transform: none !important;
+    padding: 0 6px 0 0;
+    color: #000;
+    background: none;
 
-     &.with-pad {
-        margin: 0 24px;
-     }
+    &.with-pad {
+    margin: 0 24px;
+    }
 
-     &:active {
-         text-decoration: none;
-         outline: none;
-     }
-
-     &.active{
-        color: #0039c6;
-     }
-
-    &:hover  {
+    &:active {
         text-decoration: none;
-        color: #0039c6;
         outline: none;
-        background: none;
-
-        & .value {
-            text-decoration: underline;
-        }
     }
 
-    &:focus {
-        background: none;
-        text-decoration: none;
-        color: #0039c6;
-        outline: rgb(77, 144, 254) auto 5px;
-        outline-offset: -2px;
-        background: transparent !important;
-
-        & .value {
-            text-decoration: underline;
-        }
-
-        &:-moz-focusring {
-            outline: 1px dotted;
-        }
+    &.active{
+    color: #0039c6;
     }
 
+&:hover  {
+    text-decoration: none;
+    color: #0039c6;
+    outline: none;
+    background: none;
 
-     & .value {
-         color: #000;
-         letter-spacing: 0;
-         font-weight: normal;
-     }
- }
+    & .value {
+        text-decoration: underline;
+    }
+}
 
- .btn.dropdown-toggle {
-     padding-right: 10px;
- }
+&:focus {
+    background: none;
+    text-decoration: none;
+    color: #0039c6;
+    outline: rgb(77, 144, 254) auto 5px;
+    outline-offset: -2px;
+    background: transparent !important;
 
- .btn.loading {
+    & .value {
+        text-decoration: underline;
+    }
+
+    &:-moz-focusring {
+        outline: 1px dotted;
+    }
+}
+
+
+    & .value {
+        color: #000;
+        letter-spacing: 0;
+        font-weight: normal;
+    }
+}
+
+.btn.dropdown-toggle {
+    padding-right: 10px;
+}
+
+.btn.loading {
     @extend .progress-bar-striped;
     @extend .progress-bar-animated;
     color: rgba(255,255,255,0.5);
@@ -222,9 +232,9 @@ $iconBtnSize: $btnHeight;
     &:after {
         display: none !important;
     }
- }
+}
 
- $btnBorderRadius: 4px;
+$btnBorderRadius: 4px;
 
 .btn.btn--square {
     height: $iconBtnSize;
@@ -232,7 +242,7 @@ $iconBtnSize: $btnHeight;
     padding: 0;
 }
 
- .btn.btn--icon {
+.btn.btn--icon {
     position: relative;
     cursor: pointer;
     border-radius: $btnBorderRadius;
@@ -266,32 +276,32 @@ $iconBtnSize: $btnHeight;
     &.active {
         background: rgb(200,200,200);
     }
- }
+}
 
- .button-group {
-     & .btn {
-         border-radius: 0;
-         margin: 0;
-         border-right: 1px solid rgba(0,0,0,0.05);
+.button-group {
+    & .btn {
+        border-radius: 0;
+        margin: 0;
+        border-right: 1px solid rgba(0,0,0,0.05);
 
-         &:first-of-type {
-             border-top-left-radius: $btnBorderRadius;
-             border-bottom-left-radius: $btnBorderRadius;
-         }
+        &:first-of-type {
+            border-top-left-radius: $btnBorderRadius;
+            border-bottom-left-radius: $btnBorderRadius;
+        }
 
-         &:last-of-type {
-             border-top-right-radius: $btnBorderRadius;
-             border-bottom-right-radius: $btnBorderRadius;
-             border-right: 0 solid transparent;
-         }
-     }
- }
+        &:last-of-type {
+            border-top-right-radius: $btnBorderRadius;
+            border-bottom-right-radius: $btnBorderRadius;
+            border-right: 0 solid transparent;
+        }
+    }
+}
 
- .btn-row {
-     // White space fix
-     font-size: 0;
+.btn-row {
+    // White space fix
+    font-size: 0;
 
-     & .btn {
-         margin: 4px;
-     }
- }
+    & .btn {
+        margin: 4px;
+    }
+}

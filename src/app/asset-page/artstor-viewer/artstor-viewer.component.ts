@@ -406,6 +406,19 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
             this.osdViewer.destroy();
         });
 
+        this.osdViewer.addOnceHandler("tile-drawn", () => {
+          // Get all thumbnails in the reference strip
+          let referenceStripThumbnails = document.querySelectorAll(".referencestrip .openseadragon-canvas");
+
+          referenceStripThumbnails.forEach((referenceStripThumbnail, index) => {
+            referenceStripThumbnail.addEventListener("keydown", (event: KeyboardEvent) => {
+             if (event.keyCode === 13) {
+               this.osdViewer.goToPage(index)
+             }
+           })
+          })
+        });
+
         this.osdViewer.addHandler('pan', (value: any) => {
             // Save viewport pan for downloading the view
             this.asset.viewportDimensions.center = value.center

@@ -5,14 +5,14 @@ import { Component, ViewEncapsulation, PLATFORM_ID, Inject, Renderer2 } from '@a
 import { DOCUMENT } from '@angular/common'
 import { Angulartics2GoogleTagManager } from 'angulartics2/gtm'
 import { Title, Meta } from '@angular/platform-browser'
-import { Router, NavigationStart, NavigationEnd } from '@angular/router'
+import { Router, NavigationStart, NavigationEnd, RouterEvent } from '@angular/router'
 import { TranslateService } from '@ngx-translate/core'
 import { map, take } from 'rxjs/operators'
 
 // Project Dependencies
 import { AppConfig } from './app.service'
 import { isPlatformBrowser } from '@angular/common'
-import { DomUtilityService, FlagService, ScriptService, AuthService } from '_services'
+import { DomUtilityService, FlagService, FullScreenService, ScriptService, AuthService } from '_services'
 import { version } from './../../package.json'
 
 // Server only imports
@@ -33,11 +33,11 @@ const STATUS_PAGE_CMP_ID_PROD: string = 'cmy3vpk5tq18'
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="closeBanner()"></ang-sky-banner>
     <div>
-      <div id="skip" tabindex="-1">
-        <button id="button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
+      <div *ngIf="!_fullscreen.isFullscreen" id="skip-main-content-div" tabindex="-1">
+        <button id="skip-main-content-button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
       </div>
       <nav-bar tabindex="-1"></nav-bar>
-      <main>
+      <main id="main">
         <router-outlet></router-outlet>
       </main>
 
@@ -93,6 +93,7 @@ export class AppComponent {
 
   constructor(
     public _app: AppConfig,
+    public _fullscreen: FullScreenService,
     private _dom: DomUtilityService,
     private _ga: Angulartics2,
     angulartics2GoogleTagManager: Angulartics2GoogleTagManager,
@@ -137,13 +138,14 @@ export class AppComponent {
 
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.pipe(map(event => {
-      if (event instanceof NavigationStart) {
 
+      if (event instanceof NavigationStart) {
         if (isPlatformBrowser(this.platformId)) {
           // focus on the wrapper of the "skip to main content link" everytime new page is loaded
-          let mainEl = <HTMLElement>(this._dom.byId('skip'))
-          if (!(event.url.indexOf('browse') > -1) && !(event.url.indexOf('search') > -1) && !(event.url.indexOf('asset') > -1)) // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
+          let mainEl = <HTMLElement>(this._dom.byId('skip-main-content-div'))
+          if (mainEl && !(event.url.indexOf('browse') > -1) && !(event.url.indexOf('search') > -1) && !(event.url.indexOf('asset') > -1)) { // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
             mainEl.focus()
+          }
         }
 
         // Detect featureflag=solrmetadata and set cookie
@@ -156,15 +158,11 @@ export class AppComponent {
             this._dom.setCookie('featureflag=solrmetadata')
           }
         }
-
-        let event_url_array = event.url.split('/')
-        if (event_url_array && (event_url_array.length > 1) && (event_url_array[1] !== 'asset')){
-          this.titleService.setTitle(this.title)
-        }
       }
       else if (event instanceof NavigationEnd) {
         if (isPlatformBrowser(this.platformId)) {
-          let event_url_array = event.url.split('/')
+          this.updateTitle(event)
+
           let path = event.urlAfterRedirects
           // Properties of "pageGTM" need to match vars set in Google Tag Manager
           let pageGTMVars = {
@@ -242,6 +240,15 @@ export class AppComponent {
     })).subscribe()
   }
 
+  updateTitle(event: RouterEvent) {
+      let event_url_array = event.url.split('/')
+      if (event_url_array && (event_url_array.length > 1)){
+        if (event_url_array[1] === 'home' || event_url_array[1] !== 'asset') {
+          this.titleService.setTitle(this.title)
+        }
+      }
+  }
+
   initPerimeterX() {
     let perimeterXScript = this._renderer2.createElement('script');
     perimeterXScript.id = 'px-js';
@@ -273,6 +280,8 @@ export class AppComponent {
     }
 
     this.initPerimeterX();
+
+    this._fullscreen.addFullscreenListener()
   }
 
   private hideZendeskChat() {

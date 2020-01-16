@@ -13,6 +13,7 @@ nav.nav.nav-inline.browse-nav
         button#iconSearchSubmit.icon.icon-filter.form-control__icon(*ngIf="!searchTerm || searchTerm.length == 0", (click)="filterIconClick()", tabindex="6")
       #alertNoResults.alert.alert-warning.input-group(*ngIf="!(categoryFacets | adlcolfilter:searchTerm).length && !loading", [innerHtml]="'No search results found'")
       #alertNoSearchTerm.alert.alert-warning.input-group(*ngIf="noTermMsg", [innerHtml]="'Please enter search term(s).'")
+    h1.mb-4 Artstor Digital Library
     ul.filter-list
       li.filter.filter--browse(*ngFor="let facet of categoryFacets | adlcolfilter:searchTerm; let i=index;", [class.hidden]="facet.title === '' || !facet.name")
         a.tag-link(*ngIf="facetQueryMap[facetType] == 'category'", [routerLink]="['/category', facet.name ]", tabindex="7", attr.aria-label="{{facet.title}}, which has {{facet.count}} items")

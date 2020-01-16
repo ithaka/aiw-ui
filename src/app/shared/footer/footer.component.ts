@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators'
 import { version } from '../../../../package.json'
 import { environment } from 'environments/environment'
 import { AppConfig } from 'app/app.service'
-import { AuthService } from 'app/_services'
+import { AuthService, FullScreenService } from 'app/_services'
 
 declare let google
 
@@ -32,6 +32,7 @@ export class Footer {
     private _app: AppConfig,
     private _router: Router,
     public _auth: AuthService,
+    public _fullscreen: FullScreenService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // console.log("Constructing footer...")
@@ -87,7 +88,6 @@ export class Footer {
         }
       }, 1000)
     }
-
   }
 
   private logout(): void {

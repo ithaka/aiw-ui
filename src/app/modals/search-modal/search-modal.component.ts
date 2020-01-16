@@ -215,7 +215,46 @@ export class SearchModal implements OnInit, AfterViewInit {
     let filterParams = this.queryUtil.generateFilters(this.filterSelections, this.advanceSearchDate)
     let currentParams = this.route.snapshot.params
     let queryParams = {}
+
     // Consolidate filters with multiple applied
+    filterParams = this.combineMulitpleAppliedFilters(filterParams)
+
+    // Maintain feature flags
+    if (currentParams['featureFlag']) {
+      queryParams['featureFlag'] = currentParams['featureFlag']
+    }
+
+    // Build Solr query string from filters
+    let orQuery: string = this.buildSolrQuery(advQuery, filterParams)
+
+    // Apply date filter
+    if(filterParams["startDate"]) {
+      queryParams["startDate"] = filterParams["startDate"]
+    }
+    if(filterParams["endDate"]) {
+      queryParams["endDate"] = filterParams["endDate"]
+    }
+
+    // Apply geography filter
+    if (filterParams['geography']) {
+      queryParams['geography'] = []
+      for (let efq of filterParams['geography'].split('|')) {
+        queryParams['geography'].push(efq)
+      }
+    }
+
+    // Track in angulartics
+    this.angulartics.eventTrack.next({ properties: { event: 'advSearch', category: 'search', label: advQuery } })
+    // Open search page with new query
+    this._router.navigate(['/search', orQuery, queryParams])
+    // Close advance search modal
+    this.close();
+  }
+
+  /**
+   * Combine multiple applied filters, from the same filter group, seperated by a `|`
+   */
+  public combineMulitpleAppliedFilters(filterParams) {
     for (let key in filterParams) {
       let filterValue = ''
       if ( filterParams[key] instanceof Array ){
@@ -226,21 +265,19 @@ export class SearchModal implements OnInit, AfterViewInit {
         filterParams[key] = filterValue
       }
     }
-    // Maintain feature flags
-    if (currentParams['featureFlag']) {
-      queryParams['featureFlag'] = currentParams['featureFlag']
-    }
-    // Construct OR query between filters within the same filter group
-    // filters across multiple filter groups will be AND-ed
-    // example orQuery: paints AND artclassification_str:"Photographs" OR artclassification_str:"Paintings" OR artclassification_str:"Prints" OR artclassification_str:"photographs" AND year:[-4000 TO 1980]
-    let orQuery: string = ''
-    // Do not apply "* AND", Solr will treat the wildcard as a character in that case
-    if (advQuery !== '*') {
-      orQuery = advQuery
-    }
-    // Build Solr query string from filters
+    return filterParams
+  }
+
+  /**
+   * Construct OR query between filters within the same filter group
+   * filters across multiple filter groups will be AND-ed
+   * example orQuery: paints AND artclassification_str:"Photographs" OR artclassification_str:"Paintings" OR artclassification_str:"Prints" OR artclassification_str:"photographs" AND year:[-4000 TO 1980]
+   */
+  public buildSolrQuery(advQuery, filterParams) {
+    let orQuery: string = advQuery
+
     for(let key in filterParams) {
-      if(key !== 'startDate' && key !== 'endDate') {
+      if(key !== 'startDate' && key !== 'endDate' && key !== 'geography') {
         if (orQuery.length > 0) {
           orQuery += ' AND ('
         } else {
@@ -259,19 +296,8 @@ export class SearchModal implements OnInit, AfterViewInit {
         orQuery += ')'
       }
     }
-    // Apply date filter
-    if(filterParams["startDate"]) {
-      queryParams["startDate"] = filterParams["startDate"]
-    }
-    if(filterParams["endDate"]) {
-      queryParams["endDate"] = filterParams["endDate"]
-    }
-    // Track in angulartics
-    this.angulartics.eventTrack.next({ properties: { event: 'advSearch', category: 'search', label: advQuery } })
-    // Open search page with new query
-    this._router.navigate(['/search', orQuery, queryParams])
-    // Close advance search modal
-    this.close();
+
+    return orQuery
   }
 
   /**
@@ -285,6 +311,7 @@ export class SearchModal implements OnInit, AfterViewInit {
   /**
    * Update advanceQueries, advanceSearchDate and selected filters based on applied filters from URL
    */
+  // TODO This function needs to be smaller
   private loadAppliedFiltersFromURL(): void{
     let routeParams = this.route.snapshot.params
     // Setup selected filters object to show applied filters for edit
@@ -295,35 +322,12 @@ export class SearchModal implements OnInit, AfterViewInit {
       this.loadingFilters = false
       return
     }
+    this.createGeographyFilterListFromParam(routeParams, appliedFiltersObj);
+
     // Process advance search query string
-    // - clean out wrapping parenthesis for OR queries
     query = query.replace(/\(|\)/g, '')
-    let andQuerySegments = query.split(' AND ')
-    for(let andQuerySegment of andQuerySegments) {
-      let orQuerySegments = andQuerySegment.split(' OR ')
-      let termOperator = ''
+    appliedFiltersObj = this.processAdvSrchQueryString(query, appliedFiltersObj)
 
-      if( orQuerySegments.length > 1 ) {
-        termOperator = ' OR '
-      } else {
-        termOperator = ' AND '
-      }
-
-      for(let orQuerySegment of orQuerySegments) {
-        if( orQuerySegment.indexOf(':') > -1 ) { // Its a filter query
-          let key = orQuerySegment.split(':')[0]
-          let value = orQuerySegment.split(':')[1]
-          if(key === 'year') {
-            appliedFiltersObj['startDate'] = value.replace('[','').replace(']', '').split(' TO ')[0]
-            appliedFiltersObj['endDate'] = value.replace('[','').replace(']', '').split(' TO ')[1]
-          } else {
-            appliedFiltersObj[key] = appliedFiltersObj[key] ? appliedFiltersObj[key] + '|' + value.replace(/"/g, '') : value.replace(/"/g, '')
-          }
-        } else { // Its a term query
-          appliedFiltersObj['term'] = appliedFiltersObj['term'] ? appliedFiltersObj['term'] + termOperator + orQuerySegment : orQuerySegment
-        }
-      }
-    }
     // Maintain date filters via regular Asset Filters
     if (routeParams['startDate'] || routeParams['endDate']) {
       appliedFiltersObj['startDate'] = routeParams['startDate']
@@ -334,8 +338,7 @@ export class SearchModal implements OnInit, AfterViewInit {
     // Used to determine if generateSelectedFilters will be called or not, should only be called if we have a tri-state checkbox checked
     let updateSelectedFilters: boolean = false
     for (let key in routeParams){
-      let switchCaseValue: string = ( key === 'collectiontypes' || key === 'geography' ) ? 'colTypeGeo' : key
-      switch ( switchCaseValue ){
+      switch ( key ){
         case 'term': { // Update the advanceQueries Array as per the term param
           this.updateAdvanceQueries( routeParams )
           break
@@ -362,33 +365,26 @@ export class SearchModal implements OnInit, AfterViewInit {
             updateFilterObj && (updateFilterObj.checked = true)
           }
           updateSelectedFilters = true
+          break
         }
 
-        case 'colTypeGeo': {
+        case 'collectiontypes': {
           let filters = routeParams[key].split('|')
           for (let filter of filters){
-            let filterGroup =  this.availableFilters.find( filterGroup => filterGroup.name === key )
+            let filterGroup = this.availableFilters.find( filterGroup => filterGroup.name === key )
             let updtFilterObj = filterGroup.values.find( filterObj => filterObj.value === filter )
-            if ( updtFilterObj ){ // If match is found at the parent node level
-              updtFilterObj.checked = true
-              if ( updtFilterObj.children && updtFilterObj.children.length > 0 ){
-                for (let child of updtFilterObj.children){
-                  child.checked = true
-                }
-              }
-            } else{ // If we don't find a match at parent node level then search for a match in children nodes
-              for (let value of filterGroup.values){
-                if (value.children && value.children.length > 0){
-                  let updtFilterObj = value.children.find( filterObj => filterObj.value === filter )
-                  if (updtFilterObj){
-                    updtFilterObj.checked = true
-                    break
-                  }
-                }
-              }
-            }
+            this.checkFilter(updtFilterObj, filterGroup, filter, false)
           }
           updateSelectedFilters = true
+          break
+        }
+
+        case 'geography': {
+          let filterGroup = this.availableFilters.find( filterGroup => filterGroup.name === key )
+          if (filterGroup) {
+            this.loadGeographyFilters(routeParams, key, filterGroup);
+          }
+          break
         }
 
         case 'collections': {
@@ -403,6 +399,7 @@ export class SearchModal implements OnInit, AfterViewInit {
             }
           }
           updateSelectedFilters = true
+          break
         }
       }
     }
@@ -414,6 +411,80 @@ export class SearchModal implements OnInit, AfterViewInit {
 
     // Done loading filters and prefilling
     this.loadingFilters = false
+  }
+
+  private createGeographyFilterListFromParam(routeParams, appliedFiltersObj) {
+    let geography: string = routeParams['geography']
+    if (geography) {
+      appliedFiltersObj['geography'] = geography.startsWith('[') ? JSON.parse(geography) : geography.split(',')
+    }
+  }
+
+  private loadGeographyFilters(routeParams, key, filterGroup) {
+    let geography = routeParams[key]
+    let selections = typeof geography === 'string' ? [geography] : geography
+    for (let efq of selections) {
+      let updtFilterObj = filterGroup.values.find(filterObj => filterObj.efq === efq)
+      this.checkFilter(updtFilterObj, filterGroup, efq, true)
+    }
+  }
+
+  /**
+   * clean out wrapping parenthesis for OR queries
+   * @param query Query string from route params
+   * @param appliedFiltersObj Applied filters object
+   */
+  private processAdvSrchQueryString(query, appliedFiltersObj) {
+    let andQuerySegments = query.split(' AND ')
+    for(let andQuerySegment of andQuerySegments) {
+      let orQuerySegments = andQuerySegment.split(' OR ')
+      let termOperator = orQuerySegments.length > 1 ? ' OR ' : ' AND '
+
+      for(let orQuerySegment of orQuerySegments) {
+        if( orQuerySegment.indexOf(':') > -1 ) { // Its a filter query
+          let key = orQuerySegment.split(':')[0]
+          let value = orQuerySegment.split(':')[1]
+          if(key === 'year') {
+            appliedFiltersObj['startDate'] = value.replace('[','').replace(']', '').split(' TO ')[0]
+            appliedFiltersObj['endDate'] = value.replace('[','').replace(']', '').split(' TO ')[1]
+          } else {
+            appliedFiltersObj[key] = appliedFiltersObj[key] ? appliedFiltersObj[key] + '|' + value.replace(/"/g, '') : value.replace(/"/g, '')
+          }
+        } else { // Its a term query
+          appliedFiltersObj['term'] = appliedFiltersObj['term'] ? appliedFiltersObj['term'] + termOperator + orQuerySegment : orQuerySegment
+        }
+      }
+    }
+
+    return appliedFiltersObj
+  }
+
+  /**
+   * Mark the filter as checked in available filters
+   * If available, child filters should also be marked checked
+   */
+  private checkFilter(updtFilterObj, filterGroup, filterValue, geographyFilter){
+    if ( updtFilterObj ){ // If match is found at the parent node level
+      updtFilterObj.checked = true
+      if ( updtFilterObj.children && updtFilterObj.children.length > 0 ){
+        for (let child of updtFilterObj.children){
+          child.checked = true
+        }
+      }
+    } else{ // If we don't find a match at parent node level then search for a match in children nodes
+      for (let value of filterGroup.values){
+        if (value.children && value.children.length > 0){
+          let updtFilterObj = value.children.find( filterObj => {
+            let match = geographyFilter ? filterObj.efq === filterValue : filterObj.value === filterValue
+            return match
+          })
+          if (updtFilterObj){
+            updtFilterObj.checked = true
+            break
+          }
+        }
+      }
+    }
   }
 
   private updateAdvanceQueries( params: any ): void{
@@ -476,6 +547,7 @@ export class SearchModal implements OnInit, AfterViewInit {
                 checked: false,
                 name: facet.name === 'collectiontypes' ? this.filterNameMap['collectiontypes'][facetName] : facetName,
                 count: facet.values[i].count,
+                efq: facet.values[i].efq,
                 value: facetName,
                 children: []
               }
@@ -505,6 +577,7 @@ export class SearchModal implements OnInit, AfterViewInit {
             checked: false,
             name: geoObj.name,
             count: geoObj.count,
+            efq: geoObj.efq,
             value: geoObj.name,
             children: []
           }
@@ -514,6 +587,7 @@ export class SearchModal implements OnInit, AfterViewInit {
               checked: false,
               name: child.name,
               count: child.count,
+              efq: child.efq,
               value: child.name
             }
 
@@ -627,21 +701,23 @@ export class SearchModal implements OnInit, AfterViewInit {
     for ( let filterGroup of this.availableFilters ) {
       for ( let filter of filterGroup.values ){
         // If the parent node is checked just push the selected filter object for the parent itself, no need to check the children
+        let selectedFilterObject: SelectedFilter = {} as SelectedFilter
         if ( filter.checked ){
-          let selectedFilterObject: SelectedFilter = {} as SelectedFilter
           selectedFilterObject.group = filterGroup.name
           selectedFilterObject.value = filter.value
-          selectedFiltersArray.push( selectedFilterObject )
+          selectedFilterObject.efq = filter.efq
         }
         else if ( filter.children ){ // If the parent is not checked then check the children and push thier selected filter objects individually
           for ( let child of filter.children ){
             if ( child.checked ){
-              let selectedFilterObject: SelectedFilter = {} as SelectedFilter
               selectedFilterObject.group = filterGroup.name === 'collectiontypes' ? 'collections' : filterGroup.name
               selectedFilterObject.value = child.value
-              selectedFiltersArray.push( selectedFilterObject )
+              selectedFilterObject.efq = child.efq
             }
           }
+        }
+        if ( Object.entries(selectedFilterObject).length) {
+          selectedFiltersArray.push( selectedFilterObject )
         }
       }
     }
@@ -670,6 +746,7 @@ interface FacetObject {
   value: string,
   checked: boolean,
   count: number,
+  efq: string,
   children?: Array<FacetObject>
 }
 interface FacetGroup {
@@ -678,5 +755,6 @@ interface FacetGroup {
 }
 interface SelectedFilter {
   group: string,
-  value: string
+  value: string,
+  efq: string
 }
