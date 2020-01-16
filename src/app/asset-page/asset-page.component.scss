@@ -516,7 +516,7 @@ $titleNavBg: #eee;
     margin-left: 0.15rem;
     max-width: 25rem;
     width: 100%;
-    #assetpage-btn {
+    .assetpage-btn {
         margin-left:0;
         width:6rem;
     }
@@ -535,7 +535,7 @@ $titleNavBg: #eee;
     margin-right: 0;
 }
 
-#assetpage-btn, #downloadAssetDropdown {
+.assetpage-btn, #downloadAssetDropdown {
 
     &.btn-primary {
         width: 12rem;
