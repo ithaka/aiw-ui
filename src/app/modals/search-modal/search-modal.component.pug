@@ -82,7 +82,7 @@
         .alert.alert-warning(*ngIf="error.empty", [innerHtml]="'ADVANCED_SEARCH_MODAL.ERRORS.EMPTY_SEARCH' | translate")
         .alert.alert-warning(*ngIf="error.date", [innerHtml]="'ADVANCED_SEARCH_MODAL.ERRORS.DUMB_DATE' | translate")
         label.sr-only(for="helpBtn") Help
-        button.btn.btn-link.with-pad(id="helpBtn", tabindex="0", (click)="openHelp()") {{ 'ADVANCED_SEARCH_MODAL.BUTTONS.HELP' | translate }}
+        button.btn.btn-link.with-pad(id="helpBtn", tabindex="0", (click)="openHelp()") <u> {{ 'ADVANCED_SEARCH_MODAL.BUTTONS.HELP' | translate }} </u>
         label.sr-only(for="clearBtn") Clear all search queries
         button.btn.btn-secondary(id="clearBtn", (click)="resetFilters()") {{ 'ADVANCED_SEARCH_MODAL.BUTTONS.CLEAR' | translate }}
         label.sr-only(for="searchBtn") Search
