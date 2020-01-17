@@ -30,7 +30,7 @@
             a.link(href="https://library.artstor.org") library.artstor.org
         .card-body(*ngIf="samlAvailable")
           .form-group
-            label(for="completer") {{ 'LOGIN.INSTITUTION_LOGIN.SELECT_LABEL' | translate }}
+            label(for="completerInput") {{ 'LOGIN.INSTITUTION_LOGIN.SELECT_LABEL' | translate }}
             ng2-completer#completer(
               [(ngModel)]="loginInstName",
               (keyup)="sortInstitution($event, loginInstName)",
@@ -42,6 +42,7 @@
               [textSearching]="'Searching Institutions...'",
               [clearUnselected]="true",
               [fieldTabindex]="1",
+              [inputId]="'completerInput'",
               aria-live="polite",
             )
             .login-errorMsg(aria-live="assertive") {{ instErrorMsg | translate }}
