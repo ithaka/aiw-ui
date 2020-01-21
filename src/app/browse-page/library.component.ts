@@ -24,6 +24,7 @@ export class LibraryComponent implements OnInit {
   public selectedBrowseId: string = '';
   public browseMenuArray: any[];
   public categoryFacets: any[]
+  public filteredCategoryFacets: any[]
   public hierarchicalFacets: object = {}
   public facetType: string = ''
   public errorMessage: string = ''
@@ -161,6 +162,8 @@ export class LibraryComponent implements OnInit {
         this.hierarchicalFacets = storageBrwseColObj[facetType]
       } else{
         this.categoryFacets = storageBrwseColObj[facetType]
+        // If the search term is available filter category facets on search term
+        this.filteredCategoryFacets = this.searchTerm ? this.categoryFacets.filter(item => { return item.title.match(new RegExp(this.searchTerm, "i")) ? true : false }) : this.categoryFacets
       }
       this.loading = false
     } else{
@@ -199,6 +202,8 @@ export class LibraryComponent implements OnInit {
                 this.loading = false
 
                 this.categoryFacets = categoryFacets
+                // If the search term is available filter category facets on search term
+                this.filteredCategoryFacets = this.searchTerm ? this.categoryFacets.filter(item => { return item.title.match(new RegExp(this.searchTerm, "i")) ? true : false }) : this.categoryFacets
 
                 storageBrwseColObj[facetType] = this.categoryFacets
                 this._storage.setLocal('browseColObject', storageBrwseColObj)
@@ -227,6 +232,8 @@ export class LibraryComponent implements OnInit {
           this.categoryFacets = categoryFacets.filter((category) => {
             return category.name.indexOf('|') === -1
           })
+          // If the search term is available filter category facets on search term
+          this.filteredCategoryFacets = this.searchTerm ? this.categoryFacets.filter(item => { return item.title.match(new RegExp(this.searchTerm, "i")) ? true : false }) : this.categoryFacets
 
           this.loading = false
 
@@ -240,6 +247,7 @@ export class LibraryComponent implements OnInit {
   private clearFacets(): void {
     this.hierarchicalFacets = {}
     this.categoryFacets = []
+    this.filteredCategoryFacets = this.categoryFacets
   }
 
   /**
@@ -267,14 +275,6 @@ export class LibraryComponent implements OnInit {
     let currentParamsObj: Params = Object.assign({}, this.route.snapshot.params);
     currentParamsObj[key] = value;
     this.router.navigate([currentParamsObj], { relativeTo: this.route });
-  }
-
-  private filterIconClick() {
-    if(this.searchTerm) {
-      this.addRouteParam('searchTerm', this.searchTerm);
-    } else {
-      this.noTermMsg = true;
-    }
   }
 
   private getLinkParam(facetType, facetName) {
