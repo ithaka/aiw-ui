@@ -13,6 +13,7 @@ nav.nav.nav-inline.browse-nav
       #alertNoSearchTerm.alert.alert-warning.input-group(*ngIf="noTermMsg", [innerHtml]="'Please enter search term(s).'")
     h1.mb-4 Artstor Digital Library
     ul.filter-list(role="region", id="filtered-col-list", aria-live="polite")
+      .sr-only Showing titles with your search '{{searchTermForSR}}'.
       li.filter.filter--browse(*ngFor="let facet of filteredCategoryFacets; let i=index;", [class.hidden]="facet.title === '' || !facet.name")
         a.tag-link(*ngIf="facetQueryMap[facetType] == 'category'", [routerLink]="['/category', facet.name ]", tabindex="7", attr.aria-label="{{facet.title}}, which has {{facet.count}} items")
           | {{ facet.title }} ({{facet.count}})

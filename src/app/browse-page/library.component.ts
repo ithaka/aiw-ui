@@ -21,6 +21,7 @@ export class LibraryComponent implements OnInit {
 
   public loading: boolean = false;
   public noTermMsg: boolean = false;
+  public searchTermForSR: string = '';
   public selectedBrowseId: string = '';
   public browseMenuArray: any[];
   public categoryFacets: any[]
@@ -164,6 +165,7 @@ export class LibraryComponent implements OnInit {
         this.categoryFacets = storageBrwseColObj[facetType]
         // If the search term is available filter category facets on search term
         this.filteredCategoryFacets = this.searchTerm ? this.categoryFacets.filter(item => { return item.title.match(new RegExp(this.searchTerm, "i")) ? true : false }) : this.categoryFacets
+        this.searchTermForSR = this.searchTerm
       }
       this.loading = false
     } else{
@@ -204,6 +206,7 @@ export class LibraryComponent implements OnInit {
                 this.categoryFacets = categoryFacets
                 // If the search term is available filter category facets on search term
                 this.filteredCategoryFacets = this.searchTerm ? this.categoryFacets.filter(item => { return item.title.match(new RegExp(this.searchTerm, "i")) ? true : false }) : this.categoryFacets
+                this.searchTermForSR = this.searchTerm
 
                 storageBrwseColObj[facetType] = this.categoryFacets
                 this._storage.setLocal('browseColObject', storageBrwseColObj)
@@ -234,7 +237,8 @@ export class LibraryComponent implements OnInit {
           })
           // If the search term is available filter category facets on search term
           this.filteredCategoryFacets = this.searchTerm ? this.categoryFacets.filter(item => { return item.title.match(new RegExp(this.searchTerm, "i")) ? true : false }) : this.categoryFacets
-
+          this.searchTermForSR = this.searchTerm
+          
           this.loading = false
 
           storageBrwseColObj[facetType] = this.categoryFacets
