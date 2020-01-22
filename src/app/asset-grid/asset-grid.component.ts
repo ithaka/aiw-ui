@@ -302,7 +302,6 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.activeSort.label = 'Relevance';
         }
 
-        console.log("personal collection:" + this.isPersonalCollection)
         this.isLoading = true;
       })).subscribe()
     );
