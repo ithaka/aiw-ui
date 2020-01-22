@@ -263,7 +263,11 @@ export class AuthService implements CanActivate {
 
   // Reset the idle watcher
   public resetIdleWatcher(): void {
-    this.idle.watch();
+    let user = this.getUser();
+    // After user logged out, don't track idle time
+    if (user && user.isLoggedIn) {
+      this.idle.watch();
+    }
     // When a user comes back, we don't want to wait for the time interval to refresh the session
     this.refreshUserSession(true)
   }
