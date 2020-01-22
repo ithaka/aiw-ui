@@ -13,7 +13,7 @@
                 .dropdown-menu(ngbDropdownMenu, aria-labelledby="sortdropdownMenu")
                   button.dropdown-item([disabled]="activeSort.index == '1'", (click)="changeSortOpt('1', 'Title')", tabindex="3") Title
                   button.dropdown-item([disabled]="activeSort.index == '2'", (click)="changeSortOpt('2', 'Creator')", tabindex="3") Creator
-                  button.dropdown-item([disabled]="activeSort.index == '3'", (click)="changeSortOpt('3', 'Date')", tabindex="3") Date
+                  button.dropdown-item(*ngIf="!isPersonalCollection", [disabled]="activeSort.index == '3'", (click)="changeSortOpt('3', 'Date')", tabindex="3") Date
                   button.dropdown-item([disabled]="activeSort.index == '4'", (click)="changeSortOpt('4', 'Recently Added')", tabindex="3") Recently Added
                   button.dropdown-item([disabled]="activeSort.index == '0'", (click)="changeSortOpt('0', 'Relevance')", tabindex="3") Relevance
               li.pagesizelist.dropdown(ngbDropdown)
@@ -117,9 +117,9 @@
             )
             a.card.card--asset([attr.data-id]="asset.objectId", [ngClass]="{'selected': ( isSelectedAsset(asset) > -1 ), 'lrgThmb': largeThmbView }", (click)="selectAsset(asset, $event)", (focus)="showBox($event)", (blur)="hideBox($event)", [routerLink]="editMode ? null : constructNavigationCommands(asset)", tabIndex="-1")
               ang-thumbnail(
-                [thumbnail]="asset", 
-                [reorderMode]="false", 
-                [editMode]="editMode", 
+                [thumbnail]="asset",
+                [reorderMode]="false",
+                [editMode]="editMode",
                 [largeThmbView]="largeThmbView"
               )
             .mobile--hide

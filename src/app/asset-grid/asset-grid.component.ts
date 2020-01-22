@@ -41,6 +41,7 @@ export class AssetGrid implements OnInit, OnDestroy {
     return this.totalAssets
   }
 
+  public isPersonalCollection: boolean = false;
   public searchLoading: boolean;
   public showFilters: boolean = true;
   public showAdvancedModal: boolean = false;
@@ -216,6 +217,8 @@ export class AssetGrid implements OnInit, OnDestroy {
       if (prefs && prefs.largeThumbnails) {
         this.largeThmbView = prefs.largeThumbnails
       }
+
+    this.isPersonalCollection = this._router.url.indexOf('pcollection/') > -1
   }
 
   private isBrowser: boolean = isPlatformBrowser(this.platformId)
@@ -299,6 +302,7 @@ export class AssetGrid implements OnInit, OnDestroy {
           this.activeSort.label = 'Relevance';
         }
 
+        console.log("personal collection:" + this.isPersonalCollection)
         this.isLoading = true;
       })).subscribe()
     );
