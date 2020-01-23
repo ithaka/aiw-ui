@@ -21,6 +21,6 @@
         div(*ngFor="let queueObj of uploader.queue")
           .queue-item.pb-1(*ngIf="queueObj.isReady") {{ queueObj.file.name }}
             i.icon.icon-loading
-      .file-name.error-wrap(*ngIf="invalidFiles && invalidFiles.length > 0")
+      .file-name.error-wrap(*ngIf="invalidFiles && invalidFiles.length > 0" role="alert" aria-atomic="false")
         .error-msg(*ngFor="let file of invalidFiles") "{{ file.name }}" is not a valid JPEG
   a.mt-2.link.help(href="http://support.artstor.org/?article-category=09-using-your-own-images", target="_blank", tabindex="0", (keydown.tab)="helpTabKeyDown($event)") {{ 'UPLOAD_IMAGES_MODAL.HELP' | translate }}
