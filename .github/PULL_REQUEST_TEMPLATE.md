@@ -1,12 +1,8 @@
-## Overview
-
 Resolves PROJ-XYZ
 
 ## Description
 
 Description text.
-
-----
 
 ## Checks
 
