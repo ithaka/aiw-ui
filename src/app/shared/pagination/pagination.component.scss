@@ -81,7 +81,8 @@ button.page-link {
 
     &:active, &:focus {
         box-shadow: none;
-        outline: auto 5px -webkit-focus-ring-color;
+        outline: auto;
+        outline-color: -webkit-focus-ring-color;
 
         &:-moz-focusring {
           outline: dotted 1px black !important;
