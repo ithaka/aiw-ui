@@ -80,8 +80,12 @@ button.page-link {
     }
 
     &:active, &:focus {
-        outline: none;
         box-shadow: none;
+        outline: auto 5px -webkit-focus-ring-color;
+
+        &:-moz-focusring {
+          outline: dotted 1px black !important;
+        }
     }
 }
 
