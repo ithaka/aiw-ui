@@ -7,8 +7,8 @@ import 'rxjs/add/operator/timeout';
 // Project Dependencies
 import { AuthService } from './auth.service'
 import { AssetService } from './assets.service'
-import { ImageGroup, ImageGroupDescription } from './../shared'
-import { SupportedExportTypes } from "../modals";
+import { ImageGroup, ImageGroupDescription } from './../shared/datatypes/image-group.interface'
+import { SupportedExportTypes } from "../modals/loading-state/loading-state.component";
 
 /**
  *

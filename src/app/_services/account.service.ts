@@ -4,7 +4,7 @@ import { Observable } from "rxjs"
 import { environment } from "environments/environment"
 
 // Project Dependencies
-import { AuthService } from "_services"
+import { AuthService } from "./auth.service"
 
 @Injectable()
 export class AccountService {

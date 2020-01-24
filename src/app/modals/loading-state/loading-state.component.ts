@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, AfterViewInit } from '@angular/core'
 
 // Project Dependencies
-import { DomUtilityService } from '../../_services'
+import { DomUtilityService } from '../../_services/dom-utility.service'
 
 @Component({
   selector: 'ang-loading-state',
