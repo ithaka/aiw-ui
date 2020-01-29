@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
@@ -35,10 +35,6 @@ export class RegisterComponent implements OnInit {
     shibbolethError?: string,
     shibbolethInst?: boolean
   } = {}
-
-  @ViewChild("shibbolethInstError", {read: ElementRef}) shibbolethInstError: ElementRef
-  @ViewChild("userError", {read: ElementRef}) userError: ElementRef
-  @ViewChild("registerFormElement", {read: ElementRef}) registerFormElement: ElementRef
 
   public showJstorModal: boolean = false
 
@@ -81,9 +77,11 @@ export class RegisterComponent implements OnInit {
     let email: string = this.route.snapshot.params.email
     let samlTokenId: string = this.route.snapshot.params.samlTokenId
     let type: string = this.route.snapshot.params.type
-    this.serviceErrors['shibbolethInst'] = this.route.snapshot.params.error === 'INST404'
-    this.serviceErrors['user'] = this.route.snapshot.params.error === 'USER404'
 
+    setTimeout(() => {
+      this.serviceErrors['shibbolethInst'] = this.route.snapshot.params.error === 'INST404'
+      this.serviceErrors['user'] = this.route.snapshot.params.error === 'USER404'
+    }, 2000)
 
     if (samlTokenId || type === 'shibboleth') {
       email && this.registerForm.controls.email.setValue(email) // set the email
@@ -104,34 +102,8 @@ export class RegisterComponent implements OnInit {
     this._titleService.setSubtitle('Register')
   } // OnInit
 
-  ngAfterViewInit() {
-    this.focusError(this.serviceErrors['shibbolethInst'], this.shibbolethInstError)
-    this.focusError(this.serviceErrors['user'], this.userError)
-  }
-
-  private focusError(error: boolean, el: ElementRef) {
-    if (error) {
-      if (el && el.nativeElement) {
-        this.focusErrorElement(el.nativeElement)
-      }
-    }
-  }
-
-  private focusErrorElement(el: HTMLElement) {
-    setTimeout(() => {
-      el.focus();
-    }, 1000);
-  }
-
   /** Gets called when the registration form is submitted */
   public registerSubmit(formValue: any) {
-
-    setTimeout(() => {
-      const errorMessages = this.registerFormElement.nativeElement.querySelectorAll('.has-danger')
-      if (errorMessages[0]) {
-        this.focusErrorElement(errorMessages[0])
-      }
-    }, 1000);
 
     this.registerCall = (value) => { return this._auth.registerUser(value) }
     this.serviceErrors = {}
