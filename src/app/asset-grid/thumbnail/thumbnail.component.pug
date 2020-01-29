@@ -1,7 +1,7 @@
-.card-block.card-text(role="link", tabindex="3", [attr.aria-label]="thumbnail.name + ', '  + thumbnail.agent + ', ' + thumbnail.date", [attr.id]="('item-' + itemIndex)", [ngClass]="{ 'reorder--asset' : arrowReorderMode }")
+.card-block.card-text(role="link", tabindex="3", [attr.aria-label]="thumbnail.name + ', '  + thumbnail.agent + ', ' + thumbnail.date", [attr.id]="('item-' + thumbnail.id)", [ngClass]="{ 'reorder--asset' : arrowReorderMode }")
   .card-img-top
     //- Thumbnail Image
-    img(*ngIf="src", id="{{thumbnail.id}}", [class.disablePointerEvents]="reorderMode", [attr.src]="src", (error)="thumbnailError()", [attr.alt]="thumbnailAlt", [attr.title]="thumbnailAlt", aria-role="image")
+    img(*ngIf="src", id="{{thumbnail.id}}", [class.disablePointerEvents]="reorderMode", [attr.src]="src", (error)="thumbnailError()", [attr.alt]="thumbnailAlt", [attr.title]="thumbnailAlt", role="img")
   .metadata-wrap
     //- Asset "tombstone" metadata display (Title, Creator, Date)
     span.asset-title(*ngIf="thumbnail.name", title="{{ thumbnail.name }}", [innerHTML]="thumbnail.name", aria-hidden="true")
@@ -14,7 +14,7 @@
       i.icon.icon-iap(
         *ngIf="thumbnail.iap",
         tabindex="3",
-        aria-role="button",
+        role="button",
         [ngbTooltip]="iapTooltip",
         triggers="focusin:focusout mouseenter:mouseleave",
         placement="right"
@@ -47,7 +47,7 @@
       //- Detail view icon
       i.icon(*ngIf="thumbnail.zoom", [ngClass]="[ mouseOverDetailIcon ? 'icon-detail-view-hover' : 'icon-detail-view' ]", [ngbTooltip]="tipDetailView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", tabIndex="3", (mouseover)="mouseOverDetailIcon=true", (mouseout)="mouseOverDetailIcon=false")
       //- Multi view icon
-      .multiview-indicator(*ngIf="multiviewItemCount > 1", [ngbTooltip]="tipMultiView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", title="See multiview items button icon. Press enter to click this button", tabIndex="3", aria-role="button")
+      .multiview-indicator(*ngIf="multiviewItemCount > 1", [ngbTooltip]="tipMultiView", ngbTooltip, triggers="focusin:focusout mouseenter:mouseleave", placement="right", aria-haspopup="true", title="See multiview items button icon. Press enter to click this button", tabIndex="3", role="button")
         i.icon([ngClass]="[ mouseOverMultiview ? 'icon-multiview-hover' : 'icon-multiview' ]", (mouseover)="mouseOverMultiview=true", (mouseout)="mouseOverMultiview=false")
         span.multiview-count {{multiviewItemCount}}
 

@@ -123,9 +123,9 @@
                 [largeThmbView]="largeThmbView"
               )
             .mobile--hide
-              input.check(tabIndex="3", type="checkbox", [checked]="isSelectedAsset(asset) > -1", [ngStyle]="{ 'opacity': isSelectedAsset(asset) > -1 ? '1' : '0' }", (change)="editMode = true; selectAsset(asset);")
+              input.check([attr.aria-label]="'Select asset '+ asset.name", tabIndex="3", type="checkbox", [checked]="isSelectedAsset(asset) > -1", [ngStyle]="{ 'opacity': isSelectedAsset(asset) > -1 ? '1' : '0' }", (change)="editMode = true; selectAsset(asset);")
             .mobile--show
-              input.check-mobile(type="checkbox", [checked]="isSelectedAsset(asset) > -1", (change)="editMode = true; selectAsset(asset);")
+              input.check-mobile(type="checkbox", [attr.aria-label]="'Select asset '+ asset.name", [checked]="isSelectedAsset(asset) > -1", (change)="editMode = true; selectAsset(asset);")
 
           .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
             | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}
