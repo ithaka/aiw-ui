@@ -27,5 +27,5 @@
               | {{ 'SHARE_IMG_LINK_MODAL.COPY_TO_CLIPBOARD' | translate }}
             .copy-status-msg {{ copyHTMLStatusMsg }}
       .modal-footer
-        button.btn.btn-link.with-pad((click)="showHelp()", tabindex="0") {{ 'SHARE_IMG_LINK_MODAL.HELP' | translate }}
+        a.link.help-link-text(href="https://support.artstor.org/?article=creating-links", target="_blank", tabindex="0") {{ 'SHARE_IMG_LINK_MODAL.HELP' | translate }}
         button.btn.btn-primary((click)="closeModal.emit()", tabindex="0", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()") {{ 'SHARE_IMG_LINK_MODAL.CLOSE' | translate }}
