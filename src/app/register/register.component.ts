@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
@@ -48,6 +48,8 @@ export class RegisterComponent implements OnInit {
 
   private registerCall: Function
 
+  @ViewChild("registerFormElement", {read: ElementRef}) registerFormElement: ElementRef
+
   constructor(
     private _auth: AuthService,
     private _router: Router,
@@ -77,9 +79,11 @@ export class RegisterComponent implements OnInit {
     let email: string = this.route.snapshot.params.email
     let samlTokenId: string = this.route.snapshot.params.samlTokenId
     let type: string = this.route.snapshot.params.type
-    this.serviceErrors['shibbolethInst'] = this.route.snapshot.params.error === 'INST404'
-    this.serviceErrors['user'] = this.route.snapshot.params.error === 'USER404'
 
+    setTimeout(() => {
+      this.serviceErrors['shibbolethInst'] = this.route.snapshot.params.error === 'INST404'
+      this.serviceErrors['user'] = this.route.snapshot.params.error === 'USER404'
+    }, 2000)
 
     if (samlTokenId || type === 'shibboleth') {
       email && this.registerForm.controls.email.setValue(email) // set the email
@@ -134,6 +138,18 @@ export class RegisterComponent implements OnInit {
         this.handleRegistrationResp(data)
       })).subscribe()
 
+  }
+
+  public announceErrors() {
+    setTimeout(() => {
+      const errorMessages = this.registerFormElement.nativeElement.querySelectorAll('.has-danger')
+      if (errorMessages[0]) {
+        errorMessages[0].setAttribute('role', 'alert')
+        errorMessages.forEach((msg) => {
+          msg.setAttribute('style', 'display: block')
+        })
+      }
+    }, 2000);
   }
 
   // Catch and handle Error responses from submitted register form
