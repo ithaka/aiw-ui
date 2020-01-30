@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name'
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
@@ -47,6 +47,8 @@ export class RegisterComponent implements OnInit {
   private shibErrorCodes: string[] = ['2010', '2020', '2030', '2040', '2050', '2060', '2070', '2080']
 
   private registerCall: Function
+
+  @ViewChild("registerFormElement", {read: ElementRef}) registerFormElement: ElementRef
 
   constructor(
     private _auth: AuthService,
@@ -136,6 +138,18 @@ export class RegisterComponent implements OnInit {
         this.handleRegistrationResp(data)
       })).subscribe()
 
+  }
+
+  public announceErrors() {
+    setTimeout(() => {
+      const errorMessages = this.registerFormElement.nativeElement.querySelectorAll('.has-danger')
+      if (errorMessages[0]) {
+        errorMessages[0].setAttribute('role', 'alert')
+        errorMessages.forEach((msg) => {
+          msg.setAttribute('style', 'display: block')
+        })
+      }
+    }, 2000);
   }
 
   // Catch and handle Error responses from submitted register form
