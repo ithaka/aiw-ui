@@ -65,7 +65,7 @@
             .modal-footer
               ng-container(*ngIf="!serviceResponse.success")
                 .wrapper
-                  a.help-link-icon.mr-2(href="http://support.artstor.org/?article=create-and-manage-image-groups", target="_blank", tabindex="13", aria-label="Learn more about groups", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()") ?
+                  a.help-link-icon.mr-2(href="https://support.artstor.org/?article=create-and-manage-image-groups", target="_blank", tabindex="13", aria-label="Learn more about groups", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()") ?
                   .link(*ngIf="showCreateGroup", (click)="createGroup.emit()", (keyup.enter)="createGroup.emit()", tabindex="12", aria-label="Add to New Group", role="link") Create new group
                 .wrapper
                   button.btn.btn-secondary.mr-2((click)="closeModal.emit()", type="button", data-dismiss="modal", tabindex="11", aria-label="Cancel") {{ 'ADD_TO_GROUP_MODAL.CONTROLS.CANCEL' | translate}}
