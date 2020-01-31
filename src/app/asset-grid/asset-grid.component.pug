@@ -6,7 +6,7 @@
         .row.no-gutters
           .col-12
             ng-container(*ngIf="!reorderMode")
-              li.sortlist.dropdown(*ngIf="!actionOptions.associated && !actionOptions.group", ngbDropdown)
+              div.sortlist.dropdown(*ngIf="!actionOptions.associated && !actionOptions.group", ngbDropdown)
                 button#sortdropdownMenu.btn.btn-link(ngbDropdownToggle, tabindex="3", (focus)="closeGridDropdowns()", attr.aria-label="Sort by {{ activeSort.label ? activeSort.label : 'Relevance' }}") Sort:
                   = " "
                   span.value {{ activeSort.label ? activeSort.label : 'Relevance' }}
@@ -16,7 +16,7 @@
                   button.dropdown-item(*ngIf="!isPersonalCollection", [disabled]="activeSort.index == '3'", (click)="changeSortOpt('3', 'Date')", tabindex="3") Date
                   button.dropdown-item([disabled]="activeSort.index == '4'", (click)="changeSortOpt('4', 'Recently Added')", tabindex="3") Recently Added
                   button.dropdown-item([disabled]="activeSort.index == '0'", (click)="changeSortOpt('0', 'Relevance')", tabindex="3") Relevance
-              li.pagesizelist.dropdown(ngbDropdown)
+              div.pagesizelist.dropdown(ngbDropdown)
                 button#pagesizedropdownMenu.btn.btn-link(ngbDropdownToggle, tabindex="3", (focus)="closeGridDropdowns()", attr.aria-label="{{ pagination.size ? pagination.size : '48' }} Images per page") Images/page:
                   = " "
                   span.value {{ pagination.size ? pagination.size : '48' }}
@@ -33,7 +33,7 @@
                 .icon--toggle((click)="setThumbnailSize(true)", [ngClass]="{ 'active': largeThmbView }", (keyup.enter)="setThumbnailSize(true)", tabindex="3", role="button", attr.aria-label="View larger thumbnails, {{largeThmbView ? 'selected' : 'unselected'}}")
                   i.icon.icon-large-view
               //- Select
-              li.btn.btn-link([class.disabled]="reorderMode", (click)="toggleEditMode()", style="position:relative;", [ngClass]="{'active': editMode}", (keyup.enter)="toggleEditMode()", tabindex="3", role="button", attr.aria-label="{{selectedAssets.length}} items selected, tap enter to deselect all. To take an action on these selected items, tab to the Organize menu.")
+              div.btn.btn-link([class.disabled]="reorderMode", (click)="toggleEditMode()", style="position:relative;", [ngClass]="{'active': editMode}", (keyup.enter)="toggleEditMode()", tabindex="3", role="button", attr.aria-label="{{selectedAssets.length}} items selected, tap enter to deselect all. To take an action on these selected items, tab to the Organize menu.")
                 ng-container(*ngIf="!editMode")
                   i.icon.icon-select-white
                   | Select
@@ -44,7 +44,7 @@
                     .arrow
                     .tooltip-inner Deselect all
               //- Reorder
-              li.btn.btn-link((click)="toggleReorderMode()", [ngClass]="{'active': reorderMode}", *ngIf="actionOptions.group && actionOptions.isowner", (keyup.enter)="toggleReorderMode()", tabindex="3", role="button",
+              div.btn.btn-link((click)="toggleReorderMode()", [ngClass]="{'active': reorderMode}", *ngIf="actionOptions.group && actionOptions.isowner", (keyup.enter)="toggleReorderMode()", tabindex="3", role="button",
               aria-label="Reorder the image group")
                 i.icon.icon-reorder-white
                 | Reorder
@@ -55,12 +55,12 @@
                 b Reorder Images
                 | Use the mouse to drag and drop images. For keyboard control, tab to an image, use enter to select, and the left and right arrow keys to move the image.
               //- Save Order
-              li.btn.btn-link#saveReorderButton([class.disabled]="!orderChanged", (click)="saveReorder()", (keyup.enter)="saveReorder()", tabindex="3", role="button",
+              div.btn.btn-link#saveReorderButton([class.disabled]="!orderChanged", (click)="saveReorder()", (keyup.enter)="saveReorder()", tabindex="3", role="button",
               aria-label="Save the reorder of this image group", [attr.aria-controls]="reorder-status")
                 i.icon.icon-reorder-white
                 | Save Order
               //- Cancel Reorder
-              li.btn.btn-link((click)="cancelReorder()", (keyup.enter)="cancelReorder()", tabindex="3", role="button", aria-label="Cancel the reorder of this image group")
+              div.btn.btn-link((click)="cancelReorder()", (keyup.enter)="cancelReorder()", tabindex="3", role="button", aria-label="Cancel the reorder of this image group")
                 i.icon.icon-close-white--round
                 | Cancel Reorder
             //- Asset Counts
@@ -123,9 +123,9 @@
                 [largeThmbView]="largeThmbView"
               )
             .mobile--hide
-              input.check(tabIndex="3", type="checkbox", [checked]="isSelectedAsset(asset) > -1", [ngStyle]="{ 'opacity': isSelectedAsset(asset) > -1 ? '1' : '0' }", (change)="editMode = true; selectAsset(asset);")
+              input.check([attr.aria-label]="createAssetSelectionLabel(asset)", tabIndex="3", type="checkbox", [checked]="isSelectedAsset(asset) > -1", [ngStyle]="{ 'opacity': isSelectedAsset(asset) > -1 ? '1' : '0' }", (change)="editMode = true; selectAsset(asset);")
             .mobile--show
-              input.check-mobile(type="checkbox", [checked]="isSelectedAsset(asset) > -1", (change)="editMode = true; selectAsset(asset);")
+              input.check-mobile(type="checkbox", [attr.aria-label]="createAssetSelectionLabel(asset)", [checked]="isSelectedAsset(asset) > -1", (change)="editMode = true; selectAsset(asset);")
 
           .alert.alert-warning(*ngIf="!isLoading && (searchError.length < 1) && ((isPartialPage && hasMaxAssetLimit) || searchLimitError)")
             | {{ "BROWSE.WARNINGS.ADDITIONAL_RESULTS" | translate }}

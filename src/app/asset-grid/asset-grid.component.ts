@@ -961,4 +961,8 @@ export class AssetGrid implements OnInit, OnDestroy {
   public showEditGroup(): void {
     this._ig.editGroupObservableSource.next(true)
   }
+
+  public createAssetSelectionLabel(asset): string {
+    return `Select asset "${asset.name}"`
+  }
 }
