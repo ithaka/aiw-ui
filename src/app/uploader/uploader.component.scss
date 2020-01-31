@@ -65,14 +65,9 @@
       color: #444;
       letter-spacing: 0.4px;
   }
-  .help{
-      float: right;
-      color: var(--orange);
-      text-decoration-color: var(--orange);
 
-      &:hover, &:active {
-          outline: 0;
-      }
+  .help-link-text {
+    float: right;
   }
 
 }

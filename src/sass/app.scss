@@ -353,3 +353,37 @@ body body{
     left: calc(50% - 0.4rem);
   }
 }
+
+.help-link-text {
+  margin-right: 10px !important;
+  color: var(--orange) !important;
+  text-decoration-color: var(--orange) !important;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background: none !important;
+  }
+}
+
+.help-link-icon {
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  vertical-align: middle;
+  display: inline-block;
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: $color-white !important;
+  background-color: var(--gray-dark);
+
+  &:hover,
+  &:active,
+  &:focus {
+    background: var(--gray-dark) !important;
+  }
+}

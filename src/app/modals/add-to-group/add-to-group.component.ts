@@ -135,7 +135,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
 
   // Set focus on the last modal element in tab order
   public focusLastElement(event: any) {
-    let lastElement: HTMLElement = <HTMLElement>this._dom.bySelector('.help-link')
+    let lastElement: HTMLElement = <HTMLElement>this._dom.bySelector('.help-link-icon')
     lastElement.focus()
     event.stopPropagation()
     event.preventDefault()
