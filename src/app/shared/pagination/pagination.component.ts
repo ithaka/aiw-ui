@@ -14,6 +14,8 @@ export class PaginationComponent implements OnInit {
   @Output() goToPage: EventEmitter<any> = new EventEmitter();
   @Output() paginationFocused: EventEmitter<boolean> = new EventEmitter() // Invoke pagination focused in parent component to close sort dropdown
 
+  private paginationInputId: string = `currentpageinput${Math.floor(Math.random() * 99999)}`;
+
   constructor() { }
 
   ngOnInit() {
