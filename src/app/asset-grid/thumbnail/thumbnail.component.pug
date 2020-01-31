@@ -27,7 +27,7 @@
       i.icon.icon-cluster(
         *ngIf="thumbnail.partofcluster",
         (click)="openLink($event, ['/cluster', thumbnail.clusterid, { objTitle :  thumbnail.name }])",
-        title="View related media button icon. Press enter to click this button",
+        title="View related media button icon. Press enter to click this button.",
         tabIndex="3",
         (keyup.enter)="openLink($event, ['/cluster', thumbnail.clusterid, { objTitle :  thumbnail.name }])"
       )
@@ -35,7 +35,7 @@
       i.icon.icon-collab(
         *ngIf="thumbnail.frequentlygroupedwith && thumbnail.frequentlygroupedwith.length > 0",
         (click)="openLink($event, ['/associated', thumbnail.id])",
-        title="Others are also interested in button icon. Press enter to click this button",
+        title="Others are also interested in button icon. Press enter to click this button.",
         tabIndex="3",
         (keyup.enter)="openLink($event, ['/associated', thumbnail.artstorid])"
       )
@@ -47,7 +47,8 @@
         (mouseout)="mouseOverMedia=false",
         [ngbTooltip]="mediaTooltip",
         triggers="focusin:focusout mouseenter:mouseleave",
-        placement="right"
+        placement="right",
+        [attr.title]="objectTypeId + 'asset type icon.'",
       )
       <ng-template #mediaTooltip>
         div {{thumbnail.objectTypeId | typeIdPipe:true }}
@@ -64,7 +65,7 @@
         tabIndex="3",
         (mouseover)="mouseOverDetailIcon=true",
         (mouseout)="mouseOverDetailIcon=false"
-        title="Detail view button icon. Press enter to click this button and go to the asset detail",
+        title="Detail view button icon. Press enter to click this button and go to the asset detail.",
       )
       //- Multi view icon
       .multiview-indicator(
@@ -74,7 +75,7 @@
         triggers="focusin:focusout mouseenter:mouseleave",
         placement="right",
         aria-haspopup="true",
-        title="See multiview items button icon. Press enter to click this button",
+        title="See multiview items button icon. Press enter to click this button.",
         tabIndex="3", role="button"
       )
       i.icon(
