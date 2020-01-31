@@ -60,7 +60,7 @@ export class ThumbnailComponent implements OnInit, OnChanges {
   private mouseOverMedia: boolean = false
   private mouseOverNoMedia: boolean = false
   private mouseOverDowngradedMedia: boolean = false
-  private mouseOverMultiview: boolean = false
+  public mouseOverMultiview: boolean = false
 
   constructor(
     private angulartics: Angulartics2,
