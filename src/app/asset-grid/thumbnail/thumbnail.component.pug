@@ -20,9 +20,9 @@
         placement="right"
         title="Images for academic publishing icon.",
       )
-      <ng-template #iapTooltip>
-        div Images for Academic Publishing
-      </ng-template>
+        <ng-template #iapTooltip>
+          div Images for Academic Publishing
+        </ng-template>
       //- Clustered asset (has Duplicates and Details)
       i.icon.icon-cluster(
         *ngIf="thumbnail.partofcluster",
@@ -50,9 +50,9 @@
         placement="right",
         [attr.title]="objectTypeId + 'asset type icon.'",
       )
-      <ng-template #mediaTooltip>
-        div {{thumbnail.objectTypeId | typeIdPipe:true }}
-      </ng-template>
+        <ng-template #mediaTooltip>
+          div {{thumbnail.objectTypeId | typeIdPipe:true }}
+        </ng-template>
       //- Detail view icon
       i.icon(
         *ngIf="thumbnail.zoom",
@@ -78,12 +78,12 @@
         title="See multiview items button icon. Press enter to click this button.",
         tabIndex="3", role="button"
       )
-      i.icon(
-        [ngClass]="[ mouseOverMultiview ? 'icon-multiview-hover' : 'icon-multiview' ]",
-        (mouseover)="mouseOverMultiview=true",
-        (mouseout)="mouseOverMultiview=false"
-      )
-      span.multiview-count {{multiviewItemCount}}
+        i.icon(
+          [ngClass]="[ mouseOverMultiview ? 'icon-multiview-hover' : 'icon-multiview' ]",
+          (mouseover)="mouseOverMultiview=true",
+          (mouseout)="mouseOverMultiview=false"
+        )
+        span.multiview-count {{multiviewItemCount}}
 
     <ng-template #tipMultiView>
       div This item has <br> multiple views
