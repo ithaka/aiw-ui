@@ -414,11 +414,11 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
             let referenceStripThumbnails = document.querySelectorAll(".referencestrip .openseadragon-canvas");
 
             referenceStripThumbnails.forEach((referenceStripThumbnail, index) => {
-                referenceStripThumbnail.addEventListener("keydown", (event: KeyboardEvent) => {
-                if (event.keyCode === 13) {
-                this.osdViewer.goToPage(index)
-                }
-            })
+                    referenceStripThumbnail.addEventListener("keydown", (event: KeyboardEvent) => {
+                        if (event.keyCode === 13) {
+                        this.osdViewer.goToPage(index)
+                    }
+                })
             })
         });
 
