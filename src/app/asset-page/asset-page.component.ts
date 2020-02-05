@@ -89,7 +89,6 @@ export class AssetPage implements OnInit, OnDestroy {
   public isFullscreen: boolean = false
 
   private encryptedAccess: boolean = false
-  private reasonForAuth: string = ''
   private document = document
   private URL = URL
   private navigator = navigator
@@ -452,8 +451,6 @@ export class AssetPage implements OnInit, OnDestroy {
     this.isMSAgent = this.navigator.msSaveOrOpenBlob !== undefined
 
     this._group.hasPrivateGroups()
-
-    this.reasonForAuth = this.getReasonForAuth()
   } // OnInit
 
   ngOnDestroy() {
@@ -947,7 +944,7 @@ export class AssetPage implements OnInit, OnDestroy {
         ...doi && {doi: [doi]},
         additional_fields: {
           has_access: hasAccess,
-          reason_for_authorization: [this.reasonForAuth],
+          reason_for_authorization: [this.getReasonForAuth()],
           fullUrl: this._router.url,
           institutionID: authorizedAsset.contributinginstitutionid
         }
