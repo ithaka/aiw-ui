@@ -349,7 +349,6 @@ export class AssetPage implements OnInit, OnDestroy {
       )
     }
 
-
     // sets up subscription to allResults, which is the service providing thumbnails
     this.subscriptions.push(
       this._group.hasPrivateGroup.pipe(
@@ -946,7 +945,8 @@ export class AssetPage implements OnInit, OnDestroy {
         additional_fields: {
           has_access: hasAccess,
           reason_for_authorization: [this.getReasonForAuth()],
-          fullUrl: this._router.url
+          fullUrl: this._router.url,
+          institutionID: authorizedAsset.contributinginstitutionid
         }
       })
     }
@@ -1755,14 +1755,10 @@ export class AssetPage implements OnInit, OnDestroy {
    * Add Captain's log event: Print image
    * @param asset to get the asset id and institution id to be logged
    */
-  private logPrint(asset: Asset): void {
-    this._log.log({
-      eventType: 'artstor_print_image',
-      item_id: asset.id,
-      additional_fields: {
-        institutionID: asset.contributinginstitutionid
-      }
-    })
+  private logPrint(): void {
+    if(!this.showAccessDeniedModal) {
+      this.trackEvent('artstor_print_image')
+    }
   }
 
   /**
