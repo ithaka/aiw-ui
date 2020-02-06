@@ -932,6 +932,7 @@ export class AssetPage implements OnInit, OnDestroy {
     const hasAccess = !this.showAccessDeniedModal
     const authorizedAsset = this.assets[0]
     const assetId = authorizedAsset ? authorizedAsset.id : this.assetIds[0]
+    const contrib_inst = authorizedAsset ? authorizedAsset.contributinginstitutionid : null
     const doi = authorizedAsset ? authorizedAsset.doi : null
     const abSegments = this._search.ab_segments.get(assetId)
 
@@ -946,7 +947,7 @@ export class AssetPage implements OnInit, OnDestroy {
           has_access: hasAccess,
           reason_for_authorization: [this.getReasonForAuth()],
           fullUrl: this._router.url,
-          institutionID: authorizedAsset.contributinginstitutionid
+          institutionID: contrib_inst
         }
       })
     }
