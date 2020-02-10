@@ -1,0 +1,23 @@
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 32px;
+    margin-bottom: 32px;
+    border-radius: 3px;
+    border-bottom: 1px solid #ccc;
+
+    thead {
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+
+        th {
+            padding: 10px 10px 10px;
+        }
+    }
+
+    tbody {
+        td {
+            padding: 10px 10px 10px;
+        }
+    } 
+}

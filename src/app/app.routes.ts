@@ -23,6 +23,7 @@ import { BrowseRoutes } from './browse-page/browse-page.routes'
 import { AccountPage } from './account-page/account-page.component'
 import { LegacyRouteResolver } from './legacy.service'
 import { LinkPage } from './link-page'
+import { SupportPageComponent } from './support-page/support-page.component'
 
 
 export const ROUTES: Routes = [
@@ -64,6 +65,7 @@ export const ROUTES: Routes = [
   { path: 'associated/:objectId', component: AssociatedPage, canActivate: [AuthService] },
   { path: 'associated', component: AssociatedPage, canActivate: [AuthService] },
   { path: 'register', component: RegisterComponent, canActivate: [AuthService] },
+  { path: 'support', component: SupportPageComponent },
   { path: 'link', component: LinkPage },
   { path: 'library', children: [
     { path: '**', component: NoContent, resolve: [LegacyRouteResolver] }

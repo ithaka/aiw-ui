@@ -138,7 +138,8 @@ import { LOCAL_STORAGE , WINDOW} from '@ng-toolkit/universal'
 // Error tracking utility for sentry.io
 import * as Sentry from '@sentry/browser';
 // Project Dependencies
-import { version } from '../../package.json'
+import { version } from '../../package.json';
+import { SupportPageComponent } from './support-page/support-page.component'
 
 /**
  * Sentry.io client-side reporter
@@ -291,7 +292,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     PromptComponent,
     TypeIdPipe,
     UploaderComponent,
-    FocusTrapDirective
+    FocusTrapDirective,
+    SupportPageComponent
   ],
   imports: [ // import Angular's modules
     BrowserModule.withServerTransition({ appId: 'avatar' }),
