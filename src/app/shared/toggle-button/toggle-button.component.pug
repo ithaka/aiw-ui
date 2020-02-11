@@ -1,3 +1,4 @@
 label.switch
-  input(type="checkbox")
+  input(*ngIf="checked", type="checkbox", checked)
+  input(*ngIf="!checked", type="checkbox")
   span.slider.round
