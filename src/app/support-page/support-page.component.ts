@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-support-page',
@@ -8,8 +8,5 @@ import { Component, OnInit } from '@angular/core';
 export class SupportPageComponent {
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
 }
