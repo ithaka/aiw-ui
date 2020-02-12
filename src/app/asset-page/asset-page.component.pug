@@ -74,7 +74,7 @@
 
       .col-md-12.quiz-caption-cntnr(*ngIf="isFullscreen", [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg' ]")
         ang-promo-tooltip(*ngIf="user.isLoggedIn && !quizModeTTDismissed && studyMode", [options]="quizModeTooltipOpts", (close)="closeQuizModeTooltip()")
-        .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", tabindex="0", (click)="showAssetCaption = !showAssetCaption", (keydown.enter)="showAssetCaption = !showAssetCaption", title="{{ showAssetCaption ? 'Hide Asset Meta Information' : 'Show Asset Meta Information' }}")
+        .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", tabindex="0", (tap)="showAssetCaption = !showAssetCaption", (keydown.enter)="showAssetCaption = !showAssetCaption", title="{{ showAssetCaption ? 'Hide Asset Meta Information' : 'Show Asset Meta Information' }}")
           toggle-button.pr-1([checked]="showAssetCaption")
           | {{ showAssetCaption ? 'HIDE CAPTION' : 'SHOW CAPTION' }}
         .quiz-browse-cntnr(*ngIf="quizMode")
