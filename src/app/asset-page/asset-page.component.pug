@@ -74,9 +74,9 @@
 
       .col-md-12.quiz-caption-cntnr(*ngIf="isFullscreen", [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg' ]")
         ang-promo-tooltip(*ngIf="user.isLoggedIn && !quizModeTTDismissed && studyMode", [options]="quizModeTooltipOpts", (close)="closeQuizModeTooltip()")
-        .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", tabindex="0", (tap)="showAssetCaption = !showAssetCaption", (keydown.enter)="showAssetCaption = !showAssetCaption", title="{{ showAssetCaption ? 'Hide Asset Meta Information' : 'Show Asset Meta Information' }}")
+        .caption-btn-cntnr([ngClass]="[ showAssetCaption ? 'active' : '' ]", tabindex="0", (tap)="showAssetCaption = !showAssetCaption", (keydown.enter)="showAssetCaption = !showAssetCaption", aria-live="polite", attr.aria-label="{{ showAssetCaption ? 'Show Caption On' : 'Show Caption Off' }}")
           toggle-button.pr-1([checked]="showAssetCaption")
-          | {{ showAssetCaption ? 'CAPTIONS ON' : 'CAPTIONS OFF' }}
+          | SHOW CAPTION
         .quiz-browse-cntnr(*ngIf="quizMode")
           i.icon.icon-direction.icon-left([class.disabled]="!quizShuffle && assetNumber <= 1 ? true : false", title="Previous in results", tabindex="0", (tap)="showPrevAsset()", (keydown.enter)="showPrevAsset()")
           i.icon.icon-direction.icon-right([class.disabled]="!quizShuffle && assetNumber >= totalAssetCount - restrictedAssetsCount ? true: false", title="Next in results", tabindex="0", (tap)="showNextAsset()", (keydown.enter)="showNextAsset()")
