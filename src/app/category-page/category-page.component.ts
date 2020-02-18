@@ -120,14 +120,14 @@ export class CategoryPage implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
   }
 
-  public skipToFilterSec(): void{
+  public skipToFilterSection(): void{
     window.setTimeout(() => {
       let htmlelement = this._dom.byId('skip-to-search-link');
       htmlelement.focus();
     }, 100);
   }
 
-  public skipToSearchSec(): void{
+  public skipToSearchSection(): void{
     window.setTimeout(() => {
       let htmlelement = this._dom.byId('skip-to-filter-link');
       htmlelement.focus();
