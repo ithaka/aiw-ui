@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
 export class ToggleButtonComponent {
 
   @Input()
-  private checked: boolean = false;
+  checked: boolean = false;
 
   constructor() { }
 
