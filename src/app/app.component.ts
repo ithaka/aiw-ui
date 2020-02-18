@@ -335,8 +335,9 @@ export class AppComponent {
       let htmlelement: HTMLElement = this._dom.byId('mainContent');
       let element: Element;
 
-      // On search page go to the start of filter section
-      if (this.router.url.indexOf('search') > -1){
+      // On search, collection & category pages go to the start of filter section
+      let filterUrls = ['category', 'collection', 'search']
+      if (new RegExp(filterUrls.join("|")).test(this.router.url)) {
         element = document.getElementById('skip-to-search-link');
       }
       // On group browse page go to the start of filter groups & tags section
