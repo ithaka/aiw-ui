@@ -140,6 +140,7 @@ import * as Sentry from '@sentry/browser';
 // Project Dependencies
 import { version } from '../../package.json';
 import { SupportPageComponent } from './support-page/support-page.component'
+import { ToggleButtonComponent } from './shared/toggle-button/toggle-button.component'
 
 /**
  * Sentry.io client-side reporter
@@ -293,7 +294,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     TypeIdPipe,
     UploaderComponent,
     FocusTrapDirective,
-    SupportPageComponent
+    SupportPageComponent,
+    ToggleButtonComponent
   ],
   imports: [ // import Angular's modules
     BrowserModule.withServerTransition({ appId: 'avatar' }),

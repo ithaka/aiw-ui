@@ -363,10 +363,9 @@ $titleNavBg: #eee;
     .quiz-cntnr {
         position: absolute;
         right: 15px;
-        top: 15px;
-        width: 120px;
+        top: 20px;
+        width: 130px;
         letter-spacing: 0.3px;
-        color: #c8c8c8;
         cursor: pointer;
         font-size: 12px;
         transition: 250ms all;
@@ -382,7 +381,6 @@ $titleNavBg: #eee;
         }
 
         &.active{
-            color: #000;
             top: 20px !important;
 
             .quiz-btn{
@@ -396,9 +394,8 @@ $titleNavBg: #eee;
         position: absolute;
         right: 15px;
         top: 2px;
-        width: 120px;
+        width: 130px;
         letter-spacing: 0.3px;
-        color: #c8c8c8;
         cursor: pointer;
         font-size: 12px;
 
@@ -413,8 +410,6 @@ $titleNavBg: #eee;
         }
 
         &.active {
-            color: #000;
-
             .shuffle-btn{
                 border: 1px solid #000;
                 background-color: #000;
@@ -426,9 +421,8 @@ $titleNavBg: #eee;
         position: absolute;
         left: 15px;
         top: 15px;
-        width: 120px;
+        width: 140px;
         letter-spacing: 0.3px;
-        color: #c8c8c8;
         cursor: pointer;
         font-size: 12px;
 
@@ -443,8 +437,6 @@ $titleNavBg: #eee;
         }
 
         &.active {
-            color: #000;
-
             .caption-btn{
                 border: 1px solid #000;
                 background-color: #000;
