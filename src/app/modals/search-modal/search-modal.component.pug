@@ -3,7 +3,7 @@
   .modal-dialog.modal-lg(role="dialog", (keydown.esc)="closeModal.emit()")
     .modal-content
       .modal-header
-        h1#advanced-search-title(tabindex="0", (keydown.shift.tab)="closeModal.emit()") {{ 'ADVANCED_SEARCH_MODAL.TITLE' | translate }}
+        h1#advanced-search-title(tabindex="0", (keydown.shift.tab)="focusLastElement($event)") {{ 'ADVANCED_SEARCH_MODAL.TITLE' | translate }}
         button.close(type="button", (click)="close()", data-dismiss="modal", aria-label="Close")
           span(aria-hidden="true") &times;
       .modal-body
