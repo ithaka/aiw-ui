@@ -6,7 +6,7 @@ import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetService, AuthService, CollectionService, ScriptService, TitleService  } from '_services'
+import { AssetService, AuthService, CollectionService, ScriptService, TitleService, DomUtilityService  } from '_services'
 
 @Component({
   selector: 'ang-collection-page',
@@ -41,7 +41,8 @@ export class CollectionPage implements OnInit, OnDestroy {
     private _title: TitleService,
     private _script: ScriptService,
     private _collectionService: CollectionService,
-    private meta: Meta
+    private meta: Meta,
+    private _dom: DomUtilityService
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
@@ -121,4 +122,18 @@ export class CollectionPage implements OnInit, OnDestroy {
   // private updateSearchInRes(value: boolean): void{
   //  this.searchInResults = value;
   // }
+
+  public skipToFilterSection(): void{
+    window.setTimeout(() => {
+      let htmlelement = this._dom.byId('skip-to-search-link');
+      htmlelement.focus();
+    }, 100);
+  }
+
+  public skipToSearchSection(): void{
+    window.setTimeout(() => {
+      let htmlelement = this._dom.byId('skip-to-filter-link');
+      htmlelement.focus();
+    }, 100);
+  }
 }

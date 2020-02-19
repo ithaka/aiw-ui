@@ -121,11 +121,16 @@ export class SearchModal implements OnInit, AfterViewInit {
 
   // Set initial focus on the modal Title h1
   public startModalFocus() {
-    // let modalStartFocus = <HTMLElement>this._dom.byId('advanced-search-title')
-    // modalStartFocus.focus()
-    if (this.advSearchTitleElement && this.advSearchTitleElement.nativeElement){
-      this.advSearchTitleElement.nativeElement.focus()
-    }
+    let modalStartFocus: HTMLElement = <HTMLElement>this._dom.bySelector('#advanced-search-title')
+    modalStartFocus.focus()
+  }
+
+  // Set focus on the last modal element in tab order
+  public focusLastElement(event: any) {
+    let lastElement: HTMLElement = <HTMLElement>this._dom.bySelector('#searchBtn')
+    lastElement.focus()
+    event.stopPropagation()
+    event.preventDefault()
   }
 
   public close(): void {

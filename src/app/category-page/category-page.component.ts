@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Internal Dependencies
-import { AssetService, AuthService, CollectionService, TitleService } from '_services'
+import { AssetService, AuthService, CollectionService, TitleService, DomUtilityService } from '_services'
 
 @Component({
   selector: 'ang-category-page',
@@ -41,7 +41,8 @@ export class CategoryPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private http: HttpClient,
     private _title: TitleService,
-    private meta: Meta
+    private meta: Meta,
+    private _dom: DomUtilityService
   ) {
     this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
   }
@@ -117,6 +118,20 @@ export class CategoryPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => { sub.unsubscribe(); });
+  }
+
+  public skipToFilterSection(): void{
+    window.setTimeout(() => {
+      let htmlelement = this._dom.byId('skip-to-search-link');
+      htmlelement.focus();
+    }, 100);
+  }
+
+  public skipToSearchSection(): void{
+    window.setTimeout(() => {
+      let htmlelement = this._dom.byId('skip-to-filter-link');
+      htmlelement.focus();
+    }, 100);
   }
 
 }
