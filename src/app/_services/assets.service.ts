@@ -39,6 +39,7 @@ export class AssetService {
     public pagination: Observable<any>
     public selection: Observable<any>
     public selectModeToggle: EventEmitter<any> = new EventEmitter()
+    public searchRequestIdAvailable: EventEmitter<any> = new EventEmitter()
 
 
     // Set up subject observable for previousRouteTS
@@ -840,6 +841,8 @@ export class AssetService {
                     data['count'] = data.total
                     // Set the allResults object
                     this.updateLocalResults(data)
+                    // Emit the event for search request id being available, so that it can be used in Captain's Log event
+                    this.searchRequestIdAvailable.emit()
             }, (error) => {
                     console.error(error)
                     this.allResultsSource.next({'error': error})

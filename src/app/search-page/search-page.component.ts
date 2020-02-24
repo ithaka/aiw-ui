@@ -5,7 +5,7 @@ import { Subscription }   from 'rxjs'
 import { map } from 'rxjs/operators'
 
 // Project Dependencies
-import { AssetService, AuthService, LogService, FlagService, DomUtilityService, ScriptService, TitleService } from '../_services'
+import { AssetService, AuthService, LogService, FlagService, DomUtilityService, ScriptService, TitleService, AssetSearchService } from '../_services'
 import { AssetFiltersService } from '../asset-filters/asset-filters.service'
 import { AssetGrid } from './../asset-grid/asset-grid.component'
 import { AppConfig } from '../app.service'
@@ -36,6 +36,7 @@ export class SearchPage implements OnInit, OnDestroy {
   constructor(
         public _appConfig: AppConfig,
         private _assets: AssetService,
+        private _assetSearch: AssetSearchService,
         private route: ActivatedRoute,
         private _filters: AssetFiltersService,
         private _flags: FlagService,
@@ -102,13 +103,18 @@ export class SearchPage implements OnInit, OnDestroy {
         // Remove search term value
         delete logFilters['term']
         // Post search info to Captain's Log
-        this._captainsLog.log({
-          eventType: 'artstor_search',
-          additional_fields: {
-            'searchTerm': params['term'],
-            'searchFilters': logFilters
-          }
-        })
+        this.subscriptions.push(
+          this._assets.searchRequestIdAvailable.pipe(map((abc) => {
+            this._captainsLog.log({
+              eventType: 'artstor_search',
+              referring_requestid: this._assetSearch.latestSearchRequestId,
+              additional_fields: {
+                'searchTerm': params['term'],
+                'searchFilters': logFilters
+              }
+            })
+          })).subscribe()
+        )
 
         this._title.setSubtitle( '"' + params['term'] + '"' )
         this._assets.queryAll(params, refreshSearch);
