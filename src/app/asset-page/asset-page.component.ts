@@ -928,13 +928,24 @@ export class AssetPage implements OnInit, OnDestroy {
    * @param eventType - The eventtype to log
    * @returns void
    */
-  private trackEvent(eventType: string): void {
+  private trackEvent(eventType: string, addlData: object = {}): void {
     const hasAccess = !this.showAccessDeniedModal
     const authorizedAsset = this.assets[0]
     const assetId = authorizedAsset ? authorizedAsset.id : this.assetIds[0]
     const contrib_inst = authorizedAsset ? authorizedAsset.contributinginstitutionid : null
     const doi = authorizedAsset ? authorizedAsset.doi : null
     const abSegments = this._search.ab_segments.get(assetId)
+
+    let additional_fields = {
+      has_access: hasAccess,
+      reason_for_authorization: [this.getReasonForAuth()],
+      fullUrl: this._router.url,
+      institutionID: contrib_inst
+    }
+    additional_fields = {...additional_fields, ...addlData}
+    console.log(additional_fields)
+    console.log(doi);
+    console.log(this._search.latestSearchRequestId)
 
     if(this.isBrowser) {
       this._log.log({
@@ -943,12 +954,7 @@ export class AssetPage implements OnInit, OnDestroy {
         ab_segments: abSegments ? [abSegments] : [],
         item_id: assetId,
         ...doi && {doi: [doi]},
-        additional_fields: {
-          has_access: hasAccess,
-          reason_for_authorization: [this.getReasonForAuth()],
-          fullUrl: this._router.url,
-          institutionID: contrib_inst
-        }
+        additional_fields: additional_fields
       })
     }
   }
@@ -1220,15 +1226,7 @@ export class AssetPage implements OnInit, OnDestroy {
     }
 
     // Add Captain's log event: Copy image url
-    let searchResults = this._storage.getLocal('results')
-    let requestedid = searchResults.requestId ? searchResults.requestId : null
-    this._log.log({
-      eventType: 'artstor_copy_link',
-      additional_fields: {
-        referring_requestid: requestedid,
-        item_id: asset.id
-      }
-    })
+    this.trackEvent('artstor_copy_link')
 
     setTimeout(() => {
       input.select();

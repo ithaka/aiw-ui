@@ -21,6 +21,8 @@ import { Observable } from "rxjs/Rx";
 export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
   @Output() closeModal: EventEmitter<any> = new EventEmitter()
   @Output() createGroup: EventEmitter<any> = new EventEmitter()
+  @Output() doLog: EventEmitter<any> = new EventEmitter()
+
   @Input() public copySelectionStr: string = 'ADD_TO_GROUP_MODAL.FROM_SELECTED'
   @Input() showCreateGroup: boolean = true
   @Input() public selectedAssets: Asset[] = [] // this is used in the asset page, where a single asset can be injected directly
@@ -238,6 +240,7 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
             (res) => {
               this.serviceResponse.success = true
               this._assets.clearSelectMode.next(true)
+              this.doLog.emit({group_id: this.selectedGroup.id, add_detail_view: !!this.detailPreviewURL })
               this.closeModal.emit()
               this._toasts.sendToast({
                 id: 'addToGroup',
@@ -447,20 +450,8 @@ export class AddToGroupModal implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private logAddToGroupEvent(): void {
-    // If the request is from the asset page, log add asset to existing group into Captain's Log
-    if (this.copySelectionStr === 'ADD_TO_GROUP_MODAL.FROM_ASSET') {
-      let add_detail_view = this.detailPreviewURL ? true : false
-      this._log.log({
-        eventType: 'artstor_add_asset_to_existing',
-        additional_fields: {
-            group_id: this.selectedGroup.id,
-            item_id: this.selectedAssets[0].id,
-            add_detail_view: add_detail_view
-        }
-      })
-    }
     // If the request is from the collection/search page, log save selections to existing group into Captain's Log
-    else {
+    if (this.copySelectionStr !== 'ADD_TO_GROUP_MODAL.FROM_ASSET') {
       let item_ids = this.selectedAssets.map(asset => {
         return asset.id
       })

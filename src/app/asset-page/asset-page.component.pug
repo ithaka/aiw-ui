@@ -324,11 +324,25 @@ ang-agree-modal(
   [isMSAgent]="isMSAgent"
 )
 ang-login-req-modal(*ngIf="showLoginModal", (closeModal)="showLoginModal = false")
-ang-add-to-group(*ngIf="showAddModal", [selectedAssets]="[ assets[0] ]", [copySelectionStr]=" 'ADD_TO_GROUP_MODAL.FROM_ASSET' ", (createGroup)="showCreateGroupModal = true; showAddModal = false;", (closeModal)="updatePrimaryAssetZoom(); showAddModal = false", (showToast)="handleToast($event)")
+ang-add-to-group(
+  *ngIf="showAddModal",
+  [selectedAssets]="[ assets[0] ]",
+  [copySelectionStr]=" 'ADD_TO_GROUP_MODAL.FROM_ASSET' ",
+  (createGroup)="showCreateGroupModal = true; showAddModal = false;",
+  (doLog)="trackEvent('artstor_add_asset_to_existing', $event)",
+  (closeModal)="updatePrimaryAssetZoom(); showAddModal = false",
+  (showToast)="handleToast($event)"
+)
+
 ang-new-ig-modal(*ngIf="showCreateGroupModal", [selectedAssets]="[ assets[0] ]", (addToGroup)="showAddModal = true; showCreateGroupModal = false;", (closeModal)="updatePrimaryAssetZoom(); showCreateGroupModal = false")
 ang-access-denied-modal(*ngIf="showAccessDeniedModal", [showSkipAsset]="isFullscreen && isAssetSkipable()", (skipAsset)="handleSkipAsset()", (exitFullScreen)="exitFullscreenViewer()")
 ang-server-error-modal(*ngIf="showServerErrorModal", (exitFullScreen)="exitFullscreenViewer()")
-ang-generate-citation(*ngIf="showGenerateCitation", [asset]="assets[0]", (closeModal)="showGenerateCitation = false")
+ang-generate-citation(
+  *ngIf="showGenerateCitation",
+  [asset]="assets[0]",
+  (closeModal)="showGenerateCitation = false",
+  (doLog)="trackEvent('artstor_citation')"
+)
 ang-confirm-modal(*ngIf="showExitEdit", (closeModal)="closeEditDetails($event)", title="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.TITLE' | translate }}", description="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.DESC' | translate }}", dismiss="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.CANCEL' | translate }}", primary="{{ 'ASSET_PAGE.EXIT_EDIT_CONFIRM_MODAL.CONTINUE' | translate }}")
 ang-confirm-modal(*ngIf="showDeletePCModal", (closeModal)="closeDeletePC($event)", title="{{ 'ASSET_PAGE.DELETE_PC_MODAL.TITLE' | translate }}", description="{{ 'ASSET_PAGE.DELETE_PC_MODAL.DESCRIPTION' | translate }}", primary="Confirm")
 

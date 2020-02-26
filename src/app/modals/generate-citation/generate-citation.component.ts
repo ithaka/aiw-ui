@@ -14,6 +14,7 @@ import { AppConfig } from 'app/app.service'
 export class GenerateCitation implements OnInit, AfterViewInit {
   @Output()
   public closeModal: EventEmitter<any> = new EventEmitter()
+  @Output() public doLog: EventEmitter<any> = new EventEmitter()
 
   @Input() private asset: Asset /** the asset in question */
 
@@ -39,10 +40,6 @@ export class GenerateCitation implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.generateCitations(this.asset)
-    this._log.log({
-      eventType: 'artstor_citation',
-      item_id: this.asset.id
-    })
   }
 
   ngAfterViewInit() {
@@ -122,7 +119,7 @@ export class GenerateCitation implements OnInit, AfterViewInit {
       this.chicago_citation += 'Place: ' + this.getMetaValue('Repository') + '. '
     }
     this.chicago_citation += this.reqProtocol + currentUrl + '.'
-
+    this.doLog.emit()
   }
 
   /**
