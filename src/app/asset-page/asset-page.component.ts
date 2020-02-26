@@ -943,9 +943,6 @@ export class AssetPage implements OnInit, OnDestroy {
       institutionID: contrib_inst
     }
     additional_fields = {...additional_fields, ...addlData}
-    console.log(additional_fields)
-    console.log(doi);
-    console.log(this._search.latestSearchRequestId)
 
     if(this.isBrowser) {
       this._log.log({
