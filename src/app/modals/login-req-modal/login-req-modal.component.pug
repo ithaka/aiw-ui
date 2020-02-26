@@ -2,7 +2,7 @@
   .modal-dialog(role="document", focusTrap)
     .modal-content
       .modal-header
-        h4.modal-title {{ 'LOGIN_REQUIRED_MODAL.HEADING' | translate }}
+        h4.modal-title(#loginRequiredHeader, tabindex="0",) {{ 'LOGIN_REQUIRED_MODAL.HEADING' | translate }}
         button.close(type="button", (click)="closeModal.emit()", aria-label="Close")
           span(aria-hidden="true") &times;
       .modal-body
