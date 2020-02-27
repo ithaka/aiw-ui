@@ -20,6 +20,8 @@ export class LoginReqModal {
   @Output()
   public closeModal: EventEmitter<any> = new EventEmitter();
 
+  @ViewChild("loginRequiredHeader", {read: ElementRef}) loginRequiredHeaderElement: ElementRef;
+
   constructor(
     private _router: Router,
     public _auth: AuthService,
@@ -33,6 +35,17 @@ export class LoginReqModal {
     // Set focus to the modal to make the links in the modal first thing to tab for accessibility
     // let htmlelement: HTMLElement = <HTMLElement>this._dom.byId('modal');
     // htmlelement.focus();
+  }
+
+  ngAfterViewInit() {
+    this.startModalFocus()
+  }
+
+  // Set initial focus on the modal Title h1
+  public startModalFocus() {
+    if (this.loginRequiredHeaderElement && this.loginRequiredHeaderElement.nativeElement){
+      this.loginRequiredHeaderElement.nativeElement.focus()
+    }
   }
 
   goToLogin() {
