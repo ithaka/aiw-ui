@@ -744,6 +744,20 @@ export class SearchModal implements OnInit, AfterViewInit {
       dropdown.close();
     }
   }
+
+  public skipToNextFilter(index): void{
+    window.setTimeout(() => {
+      let htmlelement = this._dom.byId('skip-to-next-filter-link-' + index);
+      htmlelement.focus();
+    }, 100);
+  }
+
+  public skipToSearchButton(): void{
+    window.setTimeout(() => {
+      let htmlelement = this._dom.byId('searchBtn');
+      htmlelement.focus();
+    }, 100);
+  }
 }
 
 interface FacetObject {

@@ -10,7 +10,7 @@
         .container-fluid
           .row
             .col-lg-6
-              h3 {{ 'ADVANCED_SEARCH_MODAL.SEARCH_HEADING' | translate }}
+              h2 {{ 'ADVANCED_SEARCH_MODAL.SEARCH_HEADING' | translate }}
               p(class="small") {{ 'ADVANCED_SEARCH_MODAL.SEARCH_DESCRIPTION' | translate }}
               .form-group(*ngFor="let query of advanceQueries; let i = index;")
                 .input-group(id="advanceQueryGroup{{i + 1}}")
@@ -39,7 +39,7 @@
                 label.sr-only(for="addQueryBtn") Add Query, add another query to search an additional field
                 button.btn.btn-secondary(id="addQueryBtn", title="Add up to 10 field queries", (click)="addAdvanceQuery()") Add Query
               .form-group.pt-3
-                h3 {{ 'ADVANCED_SEARCH_MODAL.DATE_HEADING' | translate }}
+                h2 {{ 'ADVANCED_SEARCH_MODAL.DATE_HEADING' | translate }}
                 p.small {{ 'ADVANCED_SEARCH_MODAL.DATE_DESCRIPTION' | translate }}
                 .form-card.card.dt-grp
                   .date-filter-row
@@ -57,14 +57,18 @@
                     label.sr-only(for="buttonDateFilterEndCE") CE, {{ advanceSearchDate['endEra'] == 'CE' ? 'selected' : 'unselected' }}
                     button#buttonDateFilterEndCE.side-toggle-btn((click)="advanceSearchDate['endEra'] = 'CE'", [ngClass]="{'active': advanceSearchDate['endEra'] == 'CE' }", tabIndex="0", role="button") CE
             .col-lg-6
-              h3 {{ 'ADVANCED_SEARCH_MODAL.FILTER_HEADING' | translate }}
+              h2 {{ 'ADVANCED_SEARCH_MODAL.FILTER_HEADING' | translate }}
               p.small {{ 'ADVANCED_SEARCH_MODAL.FILTER_DESCRIPTION' | translate }}
               .row.has-icon-overlay(*ngIf="loadingFilters")
                 i.icon-lg.icon-overlay--top.icon-loading-large(style="background-color:transparent;")
 
-              .form-group(*ngFor="let filterGroup of availableFilters")
+              .form-group(*ngFor="let filterGroup of availableFilters; index as i; last as isLast")
                 div(*ngIf="filterGroup.name")
-                  label {{ "FILTERS." + filterGroup.name | translate }}
+                  div(*ngIf="!isLast")
+                    button.skip-btn(id="skip-to-next-filter-link-{{i}}", (click)="skipToNextFilter(i+1)", (keyup.enter)="skipToNextFilter(i+1)", class="sr-only sr-only-focusable") This is the {{ "FILTERS." + filterGroup.name | translate }} filters section. Skip to the {{ "FILTERS." + availableFilters[i+1].name | translate }} section.
+                  div(*ngIf="isLast")
+                    button.skip-btn(id="skip-to-next-filter-link-{{i}}", (click)="skipToSearchButton()", (keyup.enter)="skipToSearchButton()", class="sr-only sr-only-focusable") This is the {{ "FILTERS." + filterGroup.name | translate }} filters section. Skip to the search button.
+                  h3 {{ "FILTERS." + filterGroup.name | translate }}
                   .form-card.card
                     ul.list-group.list-group-flush.compact
                       li.list-group-item(*ngFor="let filter of filterGroup.values")
@@ -73,8 +77,7 @@
                           label.custom-control-label((click)="toggleFilter(filter)")
                             | {{ filter.name }} {{ filter.count ? '(' + filter.count +')' : '' }}
                         ul.list-group.list-group-child(*ngIf="filter.children")
-                          li.list-group-item(*ngFor="let child of filter.children")
-                            .custom-control.custom-checkbox
+                            .custom-control.custom-checkboxli.list-group-item(*ngFor="let child of filter.children")
                               input.custom-control-input(type="checkbox", [checked]="child.checked", attr.aria-label="{{ child.name }}, which has {{ child.count }} items")
                               label.custom-control-label((click)="toggleFilter(child, filter)")
                                 | {{ child.name }} {{ child.count ? '(' + child.count +')' : '' }}
