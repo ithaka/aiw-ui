@@ -338,7 +338,8 @@
     "COLLECTION_HEADING": "Collection",
     "ERRORS": {
       "EMPTY_SEARCH": "<b>Search is Empty</b> Please add a search term or select a filter",
-      "DUMB_DATE": "<b>End Date is less than Start Date</b> End date must be greater than or equal to Start date."
+      "DUMB_DATE": "<b>End Date is less than Start Date</b> End date must be greater than or equal to Start date.",
+      "DUMB_DATE_ARIA_MESSAGE": "Error: End Date is less than Start Date. End date must be greater than or equal to Start date."
     },
     "BUTTONS":{
       "HELP": "Help",
