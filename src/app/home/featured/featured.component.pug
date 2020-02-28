@@ -1,4 +1,4 @@
-.row#featured-container.mx-0((mouseenter)="pauseSlideShow()", (mouseleave)="runSlideshow(primaryFeaturedIndex)")
+.row#featured-container.mx-0
   //- Primary Image
   .col-sm-9.featured-col#featured-primary
     ng-container(*ngFor="let i of [0,1,2]")
@@ -12,11 +12,11 @@
   //- Secondary Images
   .col-sm-3.featured-col#featured-side
     .card(*ngFor="let collection of featured; let i = index")
-      a.card__placard(*ngIf="primaryFeaturedIndex === i", (focus)="pauseSlideShow()", (focusout)="secondaryImgsFocusOut(i)", [attr.href]="featured[i].link | translate", tabindex="4", [attr.aria-label]="'Featured Collection: ' + (collection.subheading | translate) + '. Press enter to open this collection.'")
+      a.card__placard(*ngIf="primaryFeaturedIndex === i", [attr.href]="featured[i].link | translate", tabindex="4", [attr.aria-label]="'Featured Collection: ' + (collection.subheading | translate) + '. Press enter to open this collection.'")
         //- Title and description of the current primary image
         .featured-title([innerHtml]="collection.subheading | translate")
         p.featured-caption.small([innerHtml]="collection.description | translate")
-      a.link.hidden-text(*ngIf="primaryFeaturedIndex !== i", [attr.href]="featured[i].link | translate", (mouseenter)="switchFeaturedIndex(i)", (click)="switchFeaturedIndex(i)", (focus)="pauseSlideShow()", (focusout)="secondaryImgsFocusOut(i)", tabindex="4") {{ featured[i].link_title | translate}}
+      a.link.hidden-text(*ngIf="primaryFeaturedIndex !== i", [attr.href]="featured[i].link | translate", (mouseenter)="switchFeaturedIndex(i)", (click)="switchFeaturedIndex(i)", tabindex="4") {{ featured[i].link_title | translate}}
         img.no-stretch.featured-side-img([attr.src]="collection.img_src | translate",
         [attr.alt]="collection.alt | translate", [attr.title]="collection.link_title | translate", [attr.aria-label]="'Featured Collection: ' + (collection.subheading | translate) + '. Press enter to open this collection.'")
 
