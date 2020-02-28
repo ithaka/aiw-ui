@@ -2,7 +2,7 @@
   //- Primary Image
   .col-sm-9.featured-col#featured-primary
     ng-container(*ngFor="let i of [0,1,2]")
-      a.card.featured-card.hidden-text([class.fade-in]="primaryFeaturedIndex == i", [attr.href]="featured[i].link | translate", tabindex="-1" data-qa="featuredCollectionLink" style="font-sixe:0") {{ featured[i].link_title | translate }}
+      a.card.featured-card.hidden-text([class.fade-in]="primaryFeaturedIndex == i", [attr.href]="featured[i].link | translate", tabindex="-1" data-qa="featuredCollectionLink") {{ featured[i].link_title | translate }}
         img#primary-featured-img.card-img-top.no-stretch(
           [attr.src]="featured[i].img_src | translate",
           [attr.alt]="featured[i].alt | translate",
