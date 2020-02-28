@@ -77,7 +77,8 @@
                           label.custom-control-label((click)="toggleFilter(filter)")
                             | {{ filter.name }} {{ filter.count ? '(' + filter.count +')' : '' }}
                         ul.list-group.list-group-child(*ngIf="filter.children")
-                            .custom-control.custom-checkboxli.list-group-item(*ngFor="let child of filter.children")
+                          li.list-group-item(*ngFor="let child of filter.children")
+                            .custom-control.custom-checkbox
                               input.custom-control-input(type="checkbox", [checked]="child.checked", attr.aria-label="{{ child.name }}, which has {{ child.count }} items")
                               label.custom-control-label((click)="toggleFilter(child, filter)")
                                 | {{ child.name }} {{ child.count ? '(' + child.count +')' : '' }}
