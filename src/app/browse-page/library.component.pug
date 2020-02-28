@@ -8,9 +8,9 @@ nav.nav.nav-inline.browse-nav
         label.sr-only(for="browsePageFilter") Filter Collections by title, there are more than 300 collections in the Artstor Digital Library
         input#browsePageFilter.form-control.has-icon(placeholder="Filter by collection title...", tabindex="6", [(ngModel)]="searchTerm", (keydown.enter)="addRouteParam('searchTerm', searchTerm)")
         label.sr-only(for="iconSearchSubmit") Filter
-        button#iconSearchSubmit.icon.icon-filter.form-control__icon((click)="addRouteParam('searchTerm', searchTerm)", (keydown.enter)="addRouteParam('searchTerm', searchTerm)", tabindex="6")
-      #alertNoResults.alert.alert-warning.input-group(*ngIf="filteredCategoryFacets.length === 0 && !loading", [innerHtml]="'No search results found'")
-      #alertNoSearchTerm.alert.alert-warning.input-group(*ngIf="noTermMsg", [innerHtml]="'Please enter search term(s).'")
+        button#iconSearchSubmit.icon.icon-filter.form-control__icon((click)="addRouteParam('searchTerm', searchTerm)", (keydown.enter)="addRouteParam('searchTerm', searchTerm)", tabindex="6") Filter
+      #alertNoResults.alert.alert-warning.input-group(*ngIf="filteredCategoryFacets.length === 0 && !loading", [innerHtml]="'No search results found'" role="alert")
+      #alertNoSearchTerm.alert.alert-warning.input-group(*ngIf="noTermMsg", [innerHtml]="'Please enter search term(s).'" role="alert")
     h1.mb-4 Artstor Digital Library
     ul.filter-list(role="region", id="filtered-col-list", aria-live="polite")
       .sr-only Showing titles with your search '{{searchTermForSR}}'.
