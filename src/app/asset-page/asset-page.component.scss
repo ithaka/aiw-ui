@@ -536,11 +536,9 @@ $titleNavBg: #eee;
     &.btn-secondary, a.btn-secondary {
       width: 12rem;
 
-      &.dropdown-toggle {
-          &:hover, &:focus, &:active, &.active {
-              background-color: #C9510D;
-              color: white;
-          }
+      &:hover, &:focus, &:active, &.active {
+          background-color: #C9510D;
+          color: white;
       }
   }
 }
