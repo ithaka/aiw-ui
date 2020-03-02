@@ -32,44 +32,11 @@ export class FeaturedComponent implements OnInit {
   private intervalId: any
 
   constructor(
-      public _appConfig: AppConfig, 
+      public _appConfig: AppConfig,
       public _auth: AuthService,
       @Inject(PLATFORM_ID) private platformId: Object
       ) {
     this.conf = this._appConfig.config.featuredCollection // 'HOME.FEATURED' in en.json
-  }
-
-  /**
-   * runSlideShow - Start the homepage slideshow
-   * @param primary_index pass in primaryFeaturedIndex,
-   * so it is locally scoped within setInterval.
-   */
-  public runSlideshow(primary_index: number) {
-    this.primaryFeaturedIndex = primary_index
-
-    this.intervalId = setInterval(() => {
-      if (!this.skipAutoSlide) {
-        if (this.primaryFeaturedIndex === 2)
-          this.primaryFeaturedIndex = 0
-        else
-          this.primaryFeaturedIndex += 1
-      } else {
-        this.skipAutoSlide = false
-      }
-    }, 9000)
-  }
-
-  /**
-   * runSlideShow - Pause the homepage slideshow
-   */
-  public pauseSlideShow() {
-    clearInterval(this.intervalId)
-  }
-
-  public secondaryImgsFocusOut(index) {
-    if (index === 0 || index === 2) {
-      this.runSlideshow(this.primaryFeaturedIndex)
-    }
   }
 
   ngOnInit() {
@@ -91,11 +58,6 @@ export class FeaturedComponent implements OnInit {
     this.base = this.conf + '.' + this.featuredType + '.'
     this.initCollections()
 
-    // Run client-side
-    if (isPlatformBrowser(this.platformId)) {
-      // Start slideshow
-      this.runSlideshow(this.primaryFeaturedIndex)
-    }
   }
 
   /**

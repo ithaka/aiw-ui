@@ -27,6 +27,10 @@
     }
 }
 
+.no-bullets {
+  list-style: none;
+}
+
 .featured-caption {
     @extend %SansRegular;
     font-size: 10px;

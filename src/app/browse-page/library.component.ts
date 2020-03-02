@@ -238,7 +238,7 @@ export class LibraryComponent implements OnInit {
           // If the search term is available filter category facets on search term
           this.filteredCategoryFacets = this.searchTerm ? this.categoryFacets.filter(item => { return item.title.match(new RegExp(this.searchTerm, "i")) ? true : false }) : this.categoryFacets
           this.searchTermForSR = this.searchTerm
-          
+
           this.loading = false
 
           storageBrwseColObj[facetType] = this.categoryFacets
@@ -275,7 +275,7 @@ export class LibraryComponent implements OnInit {
    * @param value The value of the parameter
    */
   private addRouteParam(key: string, value: any) {
-    this.noTermMsg = false;
+    this.noTermMsg = value === "";
     let currentParamsObj: Params = Object.assign({}, this.route.snapshot.params);
     currentParamsObj[key] = value;
     this.router.navigate([currentParamsObj], { relativeTo: this.route });

@@ -9,6 +9,10 @@
     }
 }
 
+.hidden-text {
+  font-size: 0;
+}
+
 #featured-container {
     margin-bottom: 10px;
 
@@ -27,7 +31,7 @@
             &:last-child {
                 padding-bottom: 0;
             }
-            
+
             & .featured-side-img {
                 margin: auto;
                 animation: fader 1.5s;
