@@ -11,11 +11,11 @@ declare var document: any;
 export class ScriptService {
 
     private scripts: any = {};
-    private isBrowser: boolean
+    private isBrowser: boolean;
 
     constructor(private _dom: DomUtilityService, @Inject(PLATFORM_ID) private platformId: Object,) {
         // Set platform
-        this.isBrowser = isPlatformBrowser(this.platformId)
+        this.isBrowser = isPlatformBrowser(this.platformId);
         // Populate available scripts
         ScriptStore.forEach((script: any) => {
             this.scripts[script.name] = {
@@ -34,21 +34,27 @@ export class ScriptService {
 
     loadScript(name: string) {
         return new Promise((resolve, reject) => {
-            if (!this.isBrowser) {
-                resolve({script: name, loaded: false, status: 'server_rendered'})
+            if (!this.scripts[name]) {
+                reject('Script does not exist in Script Store');
+                return;
             }
+
+            if (!this.isBrowser) {
+                resolve({script: name, loaded: false, status: 'server_rendered'});
+            }
+
             if (this.scripts[name].loaded) {
                 resolve({script: name, loaded: true, status: 'already_loaded'});
-            }
-            else {
+            } else {
                 // load script
-                let script = this._dom.create('script')
-                script.type = 'text/javascript'
-                script.async = 'true'
-                script.charset = 'utf-8'
-                script.src = this.scripts[name].src
-                script.id = name
-                script.innerText = this.scripts[name].innerText || ''
+                let script = this._dom.create('script');
+                script.type = 'text/javascript';
+                script.async = 'true';
+                script.charset = 'utf-8';
+                script.src = this.scripts[name].src;
+                script.id = name;
+                script.innerText = this.scripts[name].innerText || '';
+
                 if (script.readyState) {  // IE
                     script.onreadystatechange = () => {
                         if (script.readyState === 'loaded' || script.readyState === 'complete') {
