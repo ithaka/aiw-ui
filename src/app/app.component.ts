@@ -20,8 +20,8 @@ import * as enTranslation from '../assets/i18n/en.json'
 import { Angulartics2 } from 'angulartics2';
 
 
-const STATUS_PAGE_CMP_ID_STAGE: string = 'fck7kkc59xvh'
-const STATUS_PAGE_CMP_ID_PROD: string = 'cmy3vpk5tq18'
+const STATUS_PAGE_CMP_ID_STAGE: string = 'fck7kkc59xvh';
+const STATUS_PAGE_CMP_ID_PROD: string = 'cmy3vpk5tq18';
 
 /*
  * App Component
@@ -46,14 +46,14 @@ const STATUS_PAGE_CMP_ID_PROD: string = 'cmy3vpk5tq18'
   `
 })
 export class AppComponent {
-  url = 'https://artstor.org/'
-  title = 'Artstor'
+  url = 'https://artstor.org/';
+  title = 'Artstor';
 
-  public showSkyBanner: boolean = false
-  public skyBannerCopy: string = ''
-  public test: any = {}
+  public showSkyBanner: boolean = false;
+  public skyBannerCopy: string = '';
+  public test: any = {};
 
-  public statusPageClient: any
+  public statusPageClient: any;
   /**
    * Google Tag Manager variables
    * - In order of specificity
@@ -80,7 +80,7 @@ export class AppComponent {
     '/login' : { name: 'log in', section: 'log in', type: 'admin' },
     '/register' : { name: 'register', section: 'register', type: 'admin' },
     '/printpreview' : { name: 'print preview group', section: 'content', type: 'browse' },
-  }
+  };
 
   // url hash which should show chat widget
   private validChatUrls: Array<string> = [
@@ -89,7 +89,7 @@ export class AppComponent {
     '#/browse/institution',
     '#/browse/mycollections',
     '#/browse/commons'
-  ]
+  ];
 
   constructor(
     public _app: AppConfig,
@@ -111,7 +111,7 @@ export class AppComponent {
     // console.info("Constructing app component")
     // Append timestamp param to dodge caching
     if (isPlatformBrowser(this.platformId)) {
-      let langStr = 'en.json?version=' + version
+      let langStr = 'en.json?version=' + version;
       // Use the translate loader to pull translations client-side
       this.translate.use(langStr);
       this.translate.setDefaultLang(langStr);
@@ -120,11 +120,11 @@ export class AppComponent {
     }  else {
       // Reference translation json directly server-side
       // Must be set *before* setting default
-      this.translate.setTranslation('en', enTranslation, true)
+      this.translate.setTranslation('en', enTranslation, true);
       this.translate.setDefaultLang('en');
     }
 
-    this.title = this._app.config.pageTitle
+    this.title = this._app.config.pageTitle;
 
 
     // Adding meta OGP tags
@@ -134,7 +134,7 @@ export class AppComponent {
       { property: 'og:url', content: 'https://library.artstor.org/' },
       { property: 'og:image', content: '/assets/img/logo-v1-1.png' },
       { property: 'og:type', content: 'website' }
-    ])
+    ]);
 
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.pipe(map(event => {
@@ -142,50 +142,50 @@ export class AppComponent {
       if (event instanceof NavigationStart) {
         if (isPlatformBrowser(this.platformId)) {
           // focus on the wrapper of the "skip to main content link" everytime new page is loaded
-          let mainEl = <HTMLElement>(this._dom.byId('skip-main-content-div'))
+          let mainEl = <HTMLElement>(this._dom.byId('skip-main-content-div'));
           if (mainEl && !(event.url.indexOf('browse') > -1) && !(event.url.indexOf('search') > -1) && !(event.url.indexOf('asset') > -1)) { // Don't set focus to skip to main content on browse pages so that we can easily go between browse levels
-            mainEl.focus()
+            mainEl.focus();
           }
         }
 
         // Detect featureflag=solrmetadata and set cookie
-        let routeParams = event.url.split(';')
+        let routeParams = event.url.split(';');
         for (let routeParam of routeParams) {
-          let key = routeParam.split('=')[0]
-          let value = routeParam.split('=')[1]
+          let key = routeParam.split('=')[0];
+          let value = routeParam.split('=')[1];
 
           if (key === 'featureFlag' && value === 'solrMetadata') {
-            this._dom.setCookie('featureflag=solrmetadata')
+            this._dom.setCookie('featureflag=solrmetadata');
           }
         }
       }
       else if (event instanceof NavigationEnd) {
         if (isPlatformBrowser(this.platformId)) {
-          this.updateTitle(event)
+          this.updateTitle(event);
 
-          let path = event.urlAfterRedirects
+          let path = event.urlAfterRedirects;
           // Properties of "pageGTM" need to match vars set in Google Tag Manager
           let pageGTMVars = {
             'pageName' : '',
             'siteSection': '',
             'pageType' : ''
-          }
+          };
 
           /**
            * Angulartics/Google Tag Manager
            * - Track page views with additional data in the GTM data layer
            */
-          let routes = Object.keys(this.pageNameMap)
+          let routes = Object.keys(this.pageNameMap);
           for (let i = 0; i < routes.length; i++) {
-            let route = routes[i]
+            let route = routes[i];
             // Finding matching page values
             if (path.indexOf(route) >= 0) {
-              let mapValues = this.pageNameMap[route]
+              let mapValues = this.pageNameMap[route];
               pageGTMVars = {
                 'pageName': mapValues.name,
                 'siteSection': mapValues.section,
                 'pageType' : mapValues.type
-              }
+              };
               break
             }
           }
@@ -229,7 +229,7 @@ export class AppComponent {
           }
         }
       }
-    })).subscribe()
+    })).subscribe();
 
     this._flags.getFlagsFromService().pipe(
       take(1),
@@ -241,7 +241,7 @@ export class AppComponent {
   }
 
   updateTitle(event: RouterEvent) {
-      let event_url_array = event.url.split('/')
+      let event_url_array = event.url.split('/');
       if (event_url_array && (event_url_array.length > 1)){
         if (event_url_array[1] === 'home' || event_url_array[1] !== 'asset') {
           this.titleService.setTitle(this.title)
@@ -271,29 +271,28 @@ export class AppComponent {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      this._script.loadScript('ethnio-survey');
       // Setup statusPageClient & subscribe to any status updates to show banner
       import('statuspage-client') // Load StatusPage client -side
           .then((StatusPage) => {
-            this.statusPageClient = StatusPage( this._auth.getEnv() === 'test' ? STATUS_PAGE_CMP_ID_STAGE : STATUS_PAGE_CMP_ID_PROD, { environment: this._auth.getEnv() } )
-            this.subscribeToStatus()
+            this.statusPageClient = StatusPage( this._auth.getEnv() === 'test' ? STATUS_PAGE_CMP_ID_STAGE : STATUS_PAGE_CMP_ID_PROD, { environment: this._auth.getEnv() } );
+            this.subscribeToStatus();
           })
     }
 
     this.initPerimeterX();
 
-    this._fullscreen.addFullscreenListener()
+    this._fullscreen.addFullscreenListener();
   }
 
   private hideZendeskChat() {
-    let zendDeskElement = this._dom.byId('launcher')
+    let zendDeskElement = this._dom.byId('launcher');
     if (zendDeskElement) {
       zendDeskElement.style.display = 'none';
     }
   }
 
   private showZendeskChat() {
-    let zendDeskElement = this._dom.byId('launcher')
+    let zendDeskElement = this._dom.byId('launcher');
     if (zendDeskElement) {
       zendDeskElement.style.display = 'initial';
     }
@@ -306,14 +305,14 @@ export class AppComponent {
     // Note: NOT an Observable, just a function
     this.statusPageClient.subscribe( (error, data) => {
       if (error) {
-        console.error('Error fetching AIW Banner status updates ', error)
+        console.error('Error fetching AIW Banner status updates ', error);
       } else {
-        let bannerClosed: boolean = this._auth.getFromStorage('bannerClosed')
+        let bannerClosed: boolean = this._auth.getFromStorage('bannerClosed');
         if(data.status && data.status !== 'resolved' && !bannerClosed) {
-          this.showSkyBanner = true
-          this.skyBannerCopy = data.body
+          this.showSkyBanner = true;
+          this.skyBannerCopy = data.body;
         } else {
-          this.showSkyBanner = false
+          this.showSkyBanner = false;
         }
       }
     })
@@ -321,13 +320,13 @@ export class AppComponent {
 
   ngOnDestroy() {
     // Unsubscribe to status updates
-    this.statusPageClient && this.statusPageClient.unsubscribe()
+    this.statusPageClient && this.statusPageClient.unsubscribe();
   }
 
   // Close banner and save the action in local storage
   private closeBanner(): void {
-    this._auth.store('bannerClosed', true)
-    this.showSkyBanner = false
+    this._auth.store('bannerClosed', true);
+    this.showSkyBanner = false;
   }
 
   public findMainContent(): void {
@@ -337,7 +336,7 @@ export class AppComponent {
       let element: Element;
 
       // On search, collection & category pages go to the start of filter section
-      let filterUrls = ['category', 'collection', 'search']
+      let filterUrls = ['category', 'collection', 'search'];
       if (new RegExp(filterUrls.join("|")).test(this.router.url)) {
         element = document.getElementById('skip-to-search-link');
       }
@@ -366,10 +365,10 @@ export class AppComponent {
   }
 
   private resetOgpTags(): void{
-    this.meta.updateTag({ property: 'og:title', content: 'Artstor' }, 'property="og:title"')
-    this.meta.updateTag({ property: 'og:description', content: 'The Artstor Digital Library is the most extensive image resource available for educational and scholarly use. Our collections feature visual media from leading museums, photo archives, scholars, and artists, offering many rare and important collections available nowhere else.' }, 'property="og:description"')
-    this.meta.updateTag({ property: 'og:url', content: 'https://library.artstor.org/' }, 'property="og:url"')
-    this.meta.updateTag({ property: 'og:image', content: '/assets/img/logo-v1-1.png' }, 'property="og:image"')
+    this.meta.updateTag({ property: 'og:title', content: 'Artstor' }, 'property="og:title"');
+    this.meta.updateTag({ property: 'og:description', content: 'The Artstor Digital Library is the most extensive image resource available for educational and scholarly use. Our collections feature visual media from leading museums, photo archives, scholars, and artists, offering many rare and important collections available nowhere else.' }, 'property="og:description"');
+    this.meta.updateTag({ property: 'og:url', content: 'https://library.artstor.org/' }, 'property="og:url"');
+    this.meta.updateTag({ property: 'og:image', content: '/assets/img/logo-v1-1.png' }, 'property="og:image"');
   }
 
   // Show the chat widget on: '#/login', '#/browse/library', etc,...
