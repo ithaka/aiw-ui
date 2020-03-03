@@ -87,6 +87,7 @@ export class AssetPage implements OnInit, OnDestroy {
   // Feature Flags
   public relatedResFlag: boolean = false
   public isFullscreen: boolean = false
+  public requireLoginForAdlDownload: boolean = false
 
   private encryptedAccess: boolean = false
   private document = document
@@ -235,7 +236,8 @@ export class AssetPage implements OnInit, OnDestroy {
     this.quizModeTTDismissed = this._storage.getLocal('quizModeTTDismissed') ? this._storage.getLocal('quizModeTTDismissed') : false
     this.subscriptions.push(
       this._flags.flagUpdates.subscribe((flags) => {
-        this.relatedResFlag = flags.relatedResFlag ? true : false
+        this.relatedResFlag = flags.relatedResFlag;
+        this.requireLoginForAdlDownload = flags.requireLoginForAdlDownload;
       }),
       this.route.params.subscribe((routeParams) => {
         this.assetGroupId = routeParams['groupId']

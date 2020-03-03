@@ -89,7 +89,6 @@
     //- Asset Metadata Column
     .col-md-4(*ngIf="assets[0]",[class.hidden]="isFullscreen")
       .py-3
-        //- If the user has not accepted the agreement, show modal when clicked, otherwise download immediately
         .btn-row
           //- Edit
           //- * (mouseup) is a Firefox fix for firing the copy event
@@ -118,43 +117,19 @@
                 role="button")
                 i.icon.icon-add-detail-view([class.disabled]="assetViewer.state !== 1 || multiviewItems")
                 | &nbsp;Add detail view
-          //- Download dropdown options
-          .dropdown.d-inline-block(ngbDropdown, *ngIf="assets[0].downloadLink && (user.isLoggedIn || hasExternalAccess || assets[0].publicDownload)", triggers="focusin:focusout mouseenter:mouseleave", placement="bottom", aria-haspopup="true")
-            button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="genDownloadLinks()", (keydown.enter)="genDownloadLinks()", (keyup.arrowdown)="downloadOptsArrowDown($event.target)", tabindex="2", aria-label="Download")
-              | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
-              = " "
-            .dropdown-menu.download-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
-              h6.dropdown-header(*ngIf="assets[0].disableDownload") Item not available for download
-              a#downloadAssetLink.dropdown-item(download,
-                [attr.href]="userHasAcceptedTerms() ? generatedFullURL : null",
-                (click)="handleDownloadImageClick()",
-                (keydown.enter)="handleDownloadImageClick()",
-                (keyup.arrowdown)="downloadOptsArrowDown($event.target)",
-                (keyup.arrowup)="downloadOptsArrowUp($event.target)",
-                [class.disabled]="assets[0].disableDownload",
-                title="{{ assets[0].disableDownload ? 'Image is not available for download.' : 'Image download'}}",
-                target="_blank",
-                tabindex="2",
-                aria-label="Download item",
-                role="button")
-                i.icon.icon-download
-                | &nbsp;Download item
-              a#downloadViewLink.dropdown-item(
-                [attr.href]="userHasAcceptedTerms() ? downloadViewLink : null",
-                (click)="handleDownloadViewClick()",
-                (keydown.enter)="handleDownloadViewClick()",
-                (keyup.arrowup)="downloadOptsArrowUp($event.target)",
-                [class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'",
-                target="_blank",
-                tabindex="2",
-                aria-label="Download item’s detail view",
-                role="button")
-                i.icon.icon-download-detail-view
-                | &nbsp;Download detail view
-          //- False door button if user is not logged in
-          button.assetpage-btn.btn.btn-secondary(*ngIf="assets[0].downloadLink && !(user.isLoggedIn || hasExternalAccess) && !assets[0].publicDownload", (click)="showLoginModal = true", (keydown.enter)="showLoginModal = true", tabindex="2", aria-label="Download")
-            | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
-            i#downloadAssetLink.icon.icon-download-asset-orange
+          ng-container(*ngIf="requireLoginForAdlDownload")
+            ng-container(*ngIf="user.isLoggedIn || assets[0].publicDownload")
+              ng-container(*ngTemplateOutlet="downloadDropdown")
+            ng-container(*ngIf="!user.isLoggedIn && !assets[0].publicDownload")
+              ng-container(*ngTemplateOutlet="falseDoorDownload")
+          ng-container(*ngIf="!requireLoginForAdlDownload")
+            ng-container(*ngIf="assets[0].publicDownload")
+              ng-container(*ngTemplateOutlet="downloadDropdown")
+            ng-container(*ngIf="!assets[0].publicDownload")
+              ng-container(*ngIf="(user?.status || user.isLoggedIn)")
+                ng-container(*ngTemplateOutlet="downloadDropdown")
+              ng-container(*ngIf="!(user?.status || user.isLoggedIn)")
+                ng-container(*ngTemplateOutlet="falseDoorDownload")
           .row#asset-btn
             a.assetpage-btn.btn.btn-secondary(*ngIf="assets[0]", (click)="showGenerateCitation = true", (focus)="closeDropdowns()", (keydown.enter)="showGenerateCitation = true", tabindex="2", aria-label="Cite this item", role="button")
               | {{ 'ASSET_PAGE.BUTTONS.GENERATE_CITATION' | translate}}
@@ -351,4 +326,52 @@ ang-confirm-modal(*ngIf="showDeletePCModal", (closeModal)="closeDeletePC($event)
 <ng-template #multiViewDownloadDisabled>
   div This is not available for download at this time.
 </ng-template>
+
+<ng-template #downloadDropdown>
+  .dropdown.d-inline-block(*ngIf="assets[0].downloadLink", ngbDropdown, triggers="focusin:focusout mouseenter:mouseleave", placement="bottom", aria-haspopup="true")
+    button#downloadAssetDropdown.btn.btn-secondary(ngbDropdownToggle [class.loading]="downloadLoading", (click)="genDownloadLinks()", (keydown.enter)="genDownloadLinks()", (keyup.arrowdown)="downloadOptsArrowDown($event.target)", tabindex="2", aria-label="Download")
+      | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
+      = " "
+    .dropdown-menu.download-menu(ngbDropdownMenu, aria-labelledby="dropdownBasic1")
+      h6.dropdown-header(*ngIf="assets[0].disableDownload") Item not available for download
+      a#downloadAssetLink.dropdown-item(download,
+        [attr.href]="userHasAcceptedTerms() ? generatedFullURL : null",
+        (click)="handleDownloadImageClick()",
+        (keydown.enter)="handleDownloadImageClick()",
+        (keyup.arrowdown)="downloadOptsArrowDown($event.target)",
+        (keyup.arrowup)="downloadOptsArrowUp($event.target)",
+        [class.disabled]="assets[0].disableDownload",
+        title="{{ assets[0].disableDownload ? 'Image is not available for download.' : 'Image download'}}",
+        target="_blank",
+        tabindex="2",
+        aria-label="Download item",
+        role="button")
+        i.icon.icon-download
+        | &nbsp;Download item
+      a#downloadViewLink.dropdown-item(
+        [attr.href]="userHasAcceptedTerms() ? downloadViewLink : null",
+        (click)="handleDownloadViewClick()",
+        (keydown.enter)="handleDownloadViewClick()",
+        (keyup.arrowup)="downloadOptsArrowUp($event.target)",
+        [class.disabled]="!downloadViewReady || assets[0].disableDownload || assets[0].typeName !== 'image'",
+        target="_blank",
+        tabindex="2",
+        aria-label="Download item’s detail view",
+        role="button")
+        i.icon.icon-download-detail-view
+        | &nbsp;Download detail view
+</ng-template>
+
+<ng-template #falseDoorDownload>
+  button.assetpage-btn.btn.btn-secondary(
+    *ngIf="assets[0].downloadLink",
+    (click)="showLoginModal = true",
+    (keydown.enter)="showLoginModal = true",
+    tabindex="2",
+    aria-label="Download"
+  )
+    | {{ 'ASSET_PAGE.BUTTONS.DOWNLOAD' | translate}}
+    i#downloadAssetLink.icon.icon-download-asset-orange
+</ng-template>
+
 
