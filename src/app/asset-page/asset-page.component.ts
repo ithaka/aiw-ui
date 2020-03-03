@@ -455,6 +455,27 @@ export class AssetPage implements OnInit, OnDestroy {
     this._group.hasPrivateGroups()
   } // OnInit
 
+  get showDownloadDropdown() {
+    const isLoggedIn = this.user && this.user.isLoggedIn;
+    const publicDownload = this.assets && this.assets[0] && this.assets[0].publicDownload;
+    const downloadLink = this.assets && this.assets[0] && this.assets[0].downloadLink;
+    const userStatus = this.user && this.user.status;
+
+    if (!downloadLink) {
+      return false;
+    }
+
+    if (!this.requireLoginForAdlDownload) {
+      if (!publicDownload) {
+        return userStatus || isLoggedIn;
+      }
+
+      return true;
+    }
+
+    return !!(isLoggedIn || publicDownload);
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
@@ -462,7 +483,6 @@ export class AssetPage implements OnInit, OnDestroy {
     // Clear asset info from data layer
     this.trackContentDataLayer(<Asset>{})
   }
-
 
   handleLoadedMetadata(asset: Asset, assetIndex: number) {
     console.log("Handle loaded metadata for " + asset.id)
