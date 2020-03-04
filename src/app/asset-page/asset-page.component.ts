@@ -465,15 +465,15 @@ export class AssetPage implements OnInit, OnDestroy {
       return false;
     }
 
-    if (!this.requireLoginForAdlDownload) {
-      if (!publicDownload) {
-        return userAuthedWithInstitution || isLoggedIn;
-      }
-
+    if (publicDownload) {
       return true;
     }
 
-    return !!(isLoggedIn || publicDownload);
+    if (!this.requireLoginForAdlDownload) {
+      return userAuthedWithInstitution;
+    }
+
+    return isLoggedIn;
   }
 
   ngOnDestroy() {
