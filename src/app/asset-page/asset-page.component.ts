@@ -459,7 +459,7 @@ export class AssetPage implements OnInit, OnDestroy {
     const isLoggedIn = this.user && this.user.isLoggedIn;
     const publicDownload = this.assets && this.assets[0] && this.assets[0].publicDownload;
     const downloadLink = this.assets && this.assets[0] && this.assets[0].downloadLink;
-    const userStatus = this.user && this.user.status;
+    const userAuthedWithInstitution = this.user && this.user.status;
 
     if (!downloadLink) {
       return false;
@@ -467,7 +467,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
     if (!this.requireLoginForAdlDownload) {
       if (!publicDownload) {
-        return userStatus || isLoggedIn;
+        return userAuthedWithInstitution || isLoggedIn;
       }
 
       return true;
