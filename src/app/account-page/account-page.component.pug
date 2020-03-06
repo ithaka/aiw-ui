@@ -8,7 +8,7 @@
           .form-group
             label Email Address
             p.form-control-static {{ user.username }}
-          form#accountUpdateForm([formGroup]="accountUpdateForm", (ngSubmit)="submitAccountUpdate(accountUpdateForm)")
+          form#accountUpdateForm([formGroup]="accountUpdateForm", (ngSubmit)="submitAccountUpdate(accountUpdateForm)", autocomplete="on")
             .form-group
               label(for="inputFirstName") {{ 'ACCOUNT.UPDATE_FORM.FIRST_NAME' | translate }}
               input#inputFirstName.form-control([formControl]="accountUpdateForm.controls['firstName']", type="text", tabindex="0")

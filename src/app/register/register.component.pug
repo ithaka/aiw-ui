@@ -63,7 +63,7 @@
                 ) {{ 'REGISTER.ERRORS.PASSWORD_MISMATCH' | translate }}
               .form-group
                 label(for="selectUserRole") Role at Institution
-                select#selectUserRole.form-control.custom-select([formControl]="registerForm.controls['role']", tabindex="0", aria-label="Role at Institution: Choose your role from the following options")
+                select#selectUserRole.form-control.custom-select([formControl]="registerForm.controls['role']", tabindex="0")
                   option(*ngFor="let role of userRoles", [ngValue]="role.id") {{ role.desc }}
                 p#errRoleRequired.has-danger.form-control-feedback(
                   *ngIf="submitted && registerForm.controls['role'].hasError('required')",
@@ -71,7 +71,7 @@
                 ) {{ 'REGISTER.ERRORS.INSTITUTION_ROLE_REQUIRED' | translate }}
               .form-group
                 label(for="selectUserDept") Academic Department
-                select#selectUserDept.form-control.custom-select([formControl]="registerForm.controls['dept']", tabindex="0", aria-label="Academic Department: Choose your department from the following options")
+                select#selectUserDept.form-control.custom-select([formControl]="registerForm.controls['dept']", tabindex="0")
                   option(*ngFor="let dept of userDepts", [ngValue]="dept.id") {{ dept.desc }}
                 p#errDeptRequired.has-danger.form-control-feedback(
                   *ngIf="submitted && registerForm.controls['dept'].hasError('required')",
