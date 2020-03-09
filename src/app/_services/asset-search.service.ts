@@ -218,10 +218,10 @@ export class AssetSearchService {
       }
 
       // For collection pages, if there is no search term, sort by `work_sequence_num`
-      if(options['colId'] && !options['term'] && sortIndex === '0') {
+      if((options['colId'] || options['clusterId']) && !options['term'] && sortIndex === '0') {
         query['sortorder'] = 'asc'
         query['sort'] = 'worksequence_num'
-      } 
+      }
     }
   }
 
