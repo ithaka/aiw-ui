@@ -556,61 +556,61 @@
         "BLOG_HEADING": "What's New",
         "VIEW_BLOG_LINK": "Read more on the blog"
       },
-      "COLLECTIONS": [{
-          "SUBHEADING": "Copyright in Artstor",
-          "DESCRIPTION": "Learn more with our guide",
-          "CAPTION": "Artstor LibGuides",
-          "LINK": "http://artstor.libguides.com/Copyright-in-Artstor/",
-          "IMG_SOURCE": "/assets/img/featured-collections/Copyright_LibGuide.jpg",
-          "LINK_TITLE": "Copyright in Artstor",
-          "ALT_TEXT": "Copyright in Artstor"
+      "COLLECTIONS": [
+        {
+        "SUBHEADING": "The art of medicine",
+        "DESCRIPTION": "Eakins’ medical paintings and clinical fact",
+        "CAPTION": "Thomas Eakins. The Gross Clinic, detail. 1875. Image and data provided by University of Georgia Libraries",
+        "LINK": "https://www.artstor.org/2019/12/04/the-drama-of-the-operating-theater-thomas-eakins-medical-paintings-and-clinical-fact/",
+        "IMG_SOURCE": "/assets/img/featured-collections/Carnegie_Eakins.jpg",
+        "LINK_TITLE": "Eakins’ medical paintings and clinical fact",
+        "ALT_TEXT": "Eakins’ medical paintings and clinical fact"
         },
         {
-          "SUBHEADING": "Browsing Artstor Just Got Easier",
-          "DESCRIPTION": "Browse works by a single creator or subject",
-          "CAPTION": "Diego Rivera. At the Fountain Near Toledo. 1913. © 2012 Artists Rights Society (ARS), New York. Image: Bob Schalkwijk/INBA",
-          "LINK": "https://www.artstor.org/2019/08/26/browsing-artstor-just-got-easier/",
-          "IMG_SOURCE": "/assets/img/featured-collections/Schalkwijk_Rivera.jpg",
-          "LINK_TITLE": "Browsing Artstor Just Got Easier",
-          "ALT_TEXT": "Browsing Artstor Just Got Easier"
+          "SUBHEADING": "Patent medicines and advertising cards",
+          "DESCRIPTION": "Cornell’s Oskar Diethelm Library for the History of Psychiatry",
+          "CAPTION": "Carter Medicine Company. Carter’s Little Nerve Pills. 19th century. Cornell: Oskar Diethelm Library for the History of Psychiatry",
+          "LINK": "https://www.artstor.org/2014/04/22/patent-medicines-and-advertising-cards-from-the-oskar-diethelm-library/",
+          "IMG_SOURCE": "/assets/img/featured-collections/Carnegie_Carters.jpg",
+          "LINK_TITLE": "Patent medicines and advertising cards",
+          "ALT_TEXT": "Patent medicines and advertising cards"
         },
         {
-          "SUBHEADING": "Pioneers of the Deep",
-          "DESCRIPTION": "Early Americans fathom the ocean",
-          "CAPTION": "James M. Summerville, Christian Schuselle. Ocean Life. c 1859. Image and data courtesy the Metropolitan Museum of Art. Public Domain.",
-          "LINK": "https://www.artstor.org/2019/08/09/pioneers-of-the-deep-early-americans-fathom-the-ocean/",
-          "IMG_SOURCE": "/assets/img/featured-collections/Met_Ocean.jpg",
-          "LINK_TITLE": "Pioneers of the Deep",
-          "ALT_TEXT": "Pioneers of the Deep"
+          "SUBHEADING": "Enhancing visual acuity in medical education",
+          "DESCRIPTION": "By Joseph Costello, Medical Librarian",
+          "CAPTION": "Félix Vallotton, The sick patient (Helene Chatenay), 1892. Image and original data provided by Erich Lessing Culture and Fine Arts Archives/ART RESOURCE, N.Y. artres.com",
+          "LINK": "https://www.artstor.org/2016/04/14/enhancing-visual-acuity-in-medical-education-through-the-arts/",
+          "IMG_SOURCE": "/assets/img/featured-collections/Lessing_Valloton.jpg",
+          "LINK_TITLE": "Enhancing visual acuity in medical education",
+          "ALT_TEXT": "Enhancing visual acuity in medical education"
         }
       ],
-      "PUBLIC_COLLECTIONS": [
-        {
-          "SUBHEADING": "Copyright in Artstor",
-          "DESCRIPTION": "Learn more with our guide",
-          "CAPTION": "Artstor LibGuides",
-          "LINK": "http://artstor.libguides.com/Copyright-in-Artstor",
-          "IMG_SOURCE": "/assets/img/featured-collections/Copyright_LibGuide.jpg",
-          "LINK_TITLE": "Copyright in Artstor",
-          "ALT_TEXT": "Copyright in Artstor"
+      "PUBLIC_COLLECTIONS": [{
+          "SUBHEADING": "The art of medicine",
+          "DESCRIPTION": "Eakins’ medical paintings and clinical fact",
+          "CAPTION": "Thomas Eakins. The Gross Clinic, detail. 1875. Image and data provided by University of Georgia Libraries",
+          "LINK": "https://www.artstor.org/2019/12/04/the-drama-of-the-operating-theater-thomas-eakins-medical-paintings-and-clinical-fact/",
+          "IMG_SOURCE": "/assets/img/featured-collections/Carnegie_Eakins.jpg",
+          "LINK_TITLE": "Eakins’ medical paintings and clinical fact",
+          "ALT_TEXT": "Eakins’ medical paintings and clinical fact"
         },
         {
-          "SUBHEADING": "Browsing Artstor Just Got Easier",
-          "DESCRIPTION": "Browse works by a single creator or subject",
-          "CAPTION": "Diego Rivera. At the Fountain Near Toledo. 1913. © 2012 Artists Rights Society (ARS), New York. Image: Bob Schalkwijk/INBA",
-          "LINK": "https://www.artstor.org/2019/08/26/browsing-artstor-just-got-easier/",
-          "IMG_SOURCE": "/assets/img/featured-collections/Schalkwijk_Rivera.jpg",
-          "LINK_TITLE": "Browsing Artstor Just Got Easier",
-          "ALT_TEXT": "Browsing Artstor Just Got Easier"
+          "SUBHEADING": "Patent medicines and advertising cards",
+          "DESCRIPTION": "Cornell’s Oskar Diethelm Library for the History of Psychiatry",
+          "CAPTION": "Carter Medicine Company. Carter’s Little Nerve Pills. 19th century. Cornell: Oskar Diethelm Library for the History of Psychiatry",
+          "LINK": "https://www.artstor.org/2014/04/22/patent-medicines-and-advertising-cards-from-the-oskar-diethelm-library/",
+          "IMG_SOURCE": "/assets/img/featured-collections/Carnegie_Carters.jpg",
+          "LINK_TITLE": "Patent medicines and advertising cards",
+          "ALT_TEXT": "Patent medicines and advertising cards"
         },
         {
-          "SUBHEADING": "Pioneers of the Deep",
-          "DESCRIPTION": "Early Americans fathom the ocean",
-          "CAPTION": "James M. Summerville, Christian Schuselle. Ocean Life. c 1859. Image and data courtesy the Metropolitan Museum of Art. Public Domain.",
-          "LINK": "https://www.artstor.org/2019/08/09/pioneers-of-the-deep-early-americans-fathom-the-ocean/",
-          "IMG_SOURCE": "/assets/img/featured-collections/Met_Ocean.jpg",
-          "LINK_TITLE": "Pioneers of the Deep",
-          "ALT_TEXT": "Pioneers of the Deep"
+          "SUBHEADING": "Enhancing visual acuity in medical education",
+          "DESCRIPTION": "By Joseph Costello, Medical Librarian",
+          "CAPTION": "Félix Vallotton, The sick patient (Helene Chatenay), 1892. Image and original data provided by Erich Lessing Culture and Fine Arts Archives/ART RESOURCE, N.Y. artres.com",
+          "LINK": "https://www.artstor.org/2016/04/14/enhancing-visual-acuity-in-medical-education-through-the-arts/",
+          "IMG_SOURCE": "/assets/img/featured-collections/Lessing_Valloton.jpg",
+          "LINK_TITLE": "Enhancing visual acuity in medical education",
+          "ALT_TEXT": "Enhancing visual acuity in medical education"
         }
       ]
     },
