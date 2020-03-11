@@ -586,14 +586,14 @@
         }
       ],
       "PUBLIC_COLLECTIONS": [{
-        "SUBHEADING": "The art of medicine",
-        "DESCRIPTION": "Eakins’ medical paintings and clinical fact",
-        "CAPTION": "Thomas Eakins. The Gross Clinic, detail. 1875. Image and data provided by University of Georgia Libraries",
-        "LINK": "https://www.artstor.org/2019/12/04/the-drama-of-the-operating-theater-thomas-eakins-medical-paintings-and-clinical-fact/",
-        "IMG_SOURCE": "/assets/img/featured-collections/Carnegie_Eakins.jpg",
-        "LINK_TITLE": "Eakins’ medical paintings and clinical fact",
-        "ALT_TEXT": "Eakins’ medical paintings and clinical fact"
-      },
+          "SUBHEADING": "The art of medicine",
+          "DESCRIPTION": "Eakins’ medical paintings and clinical fact",
+          "CAPTION": "Thomas Eakins. The Gross Clinic, detail. 1875. Image and data provided by University of Georgia Libraries",
+          "LINK": "https://www.artstor.org/2019/12/04/the-drama-of-the-operating-theater-thomas-eakins-medical-paintings-and-clinical-fact/",
+          "IMG_SOURCE": "/assets/img/featured-collections/Carnegie_Eakins.jpg",
+          "LINK_TITLE": "Eakins’ medical paintings and clinical fact",
+          "ALT_TEXT": "Eakins’ medical paintings and clinical fact"
+        },
         {
           "SUBHEADING": "Patent medicines and advertising cards",
           "DESCRIPTION": "Cornell’s Oskar Diethelm Library for the History of Psychiatry",
