@@ -100,6 +100,10 @@ button.dropdown-item, a.dropdown-item {
     & .icon {
         vertical-align: middle;
     }
+    &:hover, &:focus {
+      color: #fff;
+      background-color: #0039c6;
+    }
 }
 
 // Style untouched: Safari fix

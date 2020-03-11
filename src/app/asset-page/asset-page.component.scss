@@ -619,8 +619,9 @@ $titleNavBg: #eee;
         display: flex;
         align-items: center;
 
-        &:hover {
+        &:hover, &:focus {
             background-color: $color-gray-2;
+            color: inherit;
         }
 
         .icon {
