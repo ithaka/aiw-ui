@@ -486,9 +486,10 @@
   },
   "ACCESS_DENIED": "<b>Sorry, Content Unavailable:</b> If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access.",
   "NO_IG": {
-    "HEADING": "Group unavailable",
+    "HEADING_NO_EXISTS": "Group unavailable",
     "NO_EXISTS": "The group you are trying to access does not exist.",
-    "NO_ACCESS": "Please log in to see this group."
+    "HEADING_NO_ACCESS": "Please log in to see this group",
+    "NO_ACCESS": "To access this group, log in to your account or <a href=\"/#/register\" class=\"link\">register</a>. <br/>Registering for an Artstor account lets you access your groups, download and save items to groups, export presentations, and share groups with other Artstor users."
   },
   "SHARE_IG_LINK_MODAL": {
     "MAIN_HEADING": "Share link to group",

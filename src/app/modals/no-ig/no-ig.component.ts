@@ -1,7 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Location } from "@angular/common";
+import { Router } from "@angular/router";
 
 // Project Dependencies
-import { GroupService, AssetService } from '_services'
+import { GroupService, AuthService } from '_services'
 
 @Component({
   selector: 'ang-no-ig-modal',
@@ -10,15 +12,20 @@ import { GroupService, AssetService } from '_services'
     GroupService
   ]
 })
-export class NoIgModal implements OnInit {
+export class NoIgModal {
   @Input() noAccessIg: boolean;
   @Output()
   closeModal: EventEmitter<any> = new EventEmitter();
 
-  constructor() { }
+  constructor(
+    private auth: AuthService,
+    private location: Location,
+    private router: Router,
+  ) { }
 
-  ngOnInit() {
-
+  goToLogin() {
+    this.auth.store('stashedRoute', this.location.path(false));
+    this.router.navigate(['/login']);
   }
 
 }
