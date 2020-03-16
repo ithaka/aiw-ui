@@ -488,8 +488,10 @@
   "NO_IG": {
     "HEADING_NO_EXISTS": "Group unavailable",
     "NO_EXISTS": "The group you are trying to access does not exist.",
-    "HEADING_NO_ACCESS": "Please log in to see this group",
-    "NO_ACCESS": "To access this group, log in to your account or <a href=\"/#/register\" class=\"link\">register</a>. <br/>Registering for an Artstor account lets you access your groups, download and save items to groups, export presentations, and share groups with other Artstor users."
+    "HEADING_NOT_LOGGED_IN": "Please log in to see this group",
+    "NOT_LOGGED_IN": "To access this group, log in to your account or <a href=\"/#/register\" class=\"link\">register</a>. <br/>Registering for an Artstor account lets you access your groups, download and save items to groups, export presentations, and share groups with other Artstor users.",
+    "HEADING_NO_ACCESS": "Access Denied",
+    "NO_ACCESS": "You need permission to see this group. Please contact the group owner to be granted access."
   },
   "SHARE_IG_LINK_MODAL": {
     "MAIN_HEADING": "Share link to group",

@@ -1,9 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Location } from "@angular/common";
 import { Router } from "@angular/router";
 
 // Project Dependencies
 import { GroupService, AuthService } from '_services'
+import { Subscription } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: 'ang-no-ig-modal',
@@ -14,14 +16,30 @@ import { GroupService, AuthService } from '_services'
 })
 export class NoIgModal {
   @Input() noAccessIg: boolean;
-  @Output()
-  closeModal: EventEmitter<any> = new EventEmitter();
+  @Output() closeModal: EventEmitter<any> = new EventEmitter()
+
+  private subscription: Subscription;
+  public isLoggedIn: boolean;
 
   constructor(
     private auth: AuthService,
     private location: Location,
     private router: Router,
   ) { }
+
+  ngOnInit() {
+    this.subscription = this.auth.currentUser.pipe(
+      map(userObj => {
+          this.isLoggedIn = userObj.isLoggedIn;
+        },
+        (err) => console.error(err)
+      )
+    ).subscribe();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 
   goToLogin() {
     this.auth.store('stashedRoute', this.location.path(false));
