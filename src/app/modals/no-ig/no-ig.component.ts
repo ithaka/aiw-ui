@@ -4,8 +4,8 @@ import { Router } from "@angular/router";
 
 // Project Dependencies
 import { GroupService, AuthService } from '_services'
-import { Subscription } from "rxjs";
-import { map } from "rxjs/operators";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   selector: 'ang-no-ig-modal',
@@ -14,11 +14,11 @@ import { map } from "rxjs/operators";
     GroupService
   ]
 })
-export class NoIgModal {
+export class NoIgModal implements OnInit, OnDestroy {
   @Input() noAccessIg: boolean;
-  @Output() closeModal: EventEmitter<any> = new EventEmitter()
+  @Output() closeModal: EventEmitter<any> = new EventEmitter();
 
-  private subscription: Subscription;
+  private destroy$ = new Subject();
   public isLoggedIn: boolean;
 
   constructor(
@@ -28,17 +28,35 @@ export class NoIgModal {
   ) { }
 
   ngOnInit() {
-    this.subscription = this.auth.currentUser.pipe(
-      map(userObj => {
-          this.isLoggedIn = userObj.isLoggedIn;
-        },
-        (err) => console.error(err)
-      )
-    ).subscribe();
+    this.auth.currentUser.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(
+      userObj => {
+        this.isLoggedIn = userObj.isLoggedIn;
+      },
+      err => {
+        console.error(err);
+      });
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.destroy$.next(true);
+  }
+
+  get headingText() {
+    if (this.noAccessIg) {
+      return this.isLoggedIn ? 'NO_IG.HEADING_NO_ACCESS' : 'NO_IG.HEADING_NOT_LOGGED_IN';
+    }
+
+    return 'NO_IG.HEADING_NO_EXISTS';
+  }
+
+  get bodyText() {
+    if (this.noAccessIg) {
+      return this.isLoggedIn ? 'NO_IG.NO_ACCESS' : 'NO_IG.NOT_LOGGED_IN';
+    }
+
+    return 'NO_IG.NO_EXISTS';
   }
 
   goToLogin() {
