@@ -3,10 +3,10 @@
     // modal content: Is deleted, now what?
     .modal-content
       .modal-header
-        h4.modal-title([innerHtml]="noAccessIg ? ('NO_IG.HEADING_NO_ACCESS' | translate) : ('NO_IG.HEADING_NO_EXISTS' | translate)")
+        h4.modal-title([innerHtml]="headingText | translate")
       .modal-body
-        p([innerHtml]="noAccessIg ? ('NO_IG.NO_ACCESS' | translate) : ('NO_IG.NO_EXISTS' | translate)")
+        p([innerHtml]="bodyText | translate")
       .modal-footer
         a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'BROWSE_GROUPS' | translate }}
-        a.btn.btn-primary(*ngIf="!noAccessIg", [routerLink]="['/home']") {{ 'RETURN_HOME' | translate }}
-        a.btn.btn-primary(*ngIf="noAccessIg", (click)="goToLogin()") {{ 'LOGIN.LOGIN_BTN' | translate }}
+        a.btn.btn-primary(*ngIf="!noAccessIg || isLoggedIn", [routerLink]="['/home']") {{ 'RETURN_HOME' | translate }}
+        a.btn.btn-primary(*ngIf="noAccessIg && !isLoggedIn", (click)="goToLogin()") {{ 'LOGIN.LOGIN_BTN' | translate }}
