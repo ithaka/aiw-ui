@@ -456,7 +456,7 @@ export class AssetPage implements OnInit, OnDestroy {
   } // OnInit
 
   get showDownloadDropdown() {
-    const isLoggedIn = this.user && this.user.isLoggedIn;
+    const isLoggedIn = (this.user && this.user.isLoggedIn) ? true : false;
     const publicDownload = this.assets && this.assets[0] && this.assets[0].publicDownload;
     const downloadLink = this.assets && this.assets[0] && this.assets[0].downloadLink;
     const userAuthedWithInstitution = this.user && this.user.status;
