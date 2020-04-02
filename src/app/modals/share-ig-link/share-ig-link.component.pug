@@ -13,8 +13,8 @@
             .value
               textarea#copyURL(#copyURL="", readonly, [attr.aria-label]="'SHARE_IG_LINK_MODAL.TEXTAREA_ARIA_LABEL' | translate", tabindex="0") {{ shareLink }}
             .copy-clipboard((click)="copyURL.select(); document.execCommand('copy', false, null); igCopied = true;", tabindex="0", (keyup.enter)="copyURL.select(); document.execCommand('copy', false, null); igCopied = true;") Copy to Clipboard
-            .form-control-feedback(*ngIf="igCopied") {{ 'SHARE_IG_LINK_MODAL.COPY_SUCCESS' | translate }}
-            .form-control-feedback(*ngIf="serviceStatus.tokenError") {{ 'SHARE_IG_LINK_MODAL.SERVICE_ERROR' | translate }}
+            .form-control-feedback(*ngIf="igCopied", role="status", aria-live="assertive") {{ 'SHARE_IG_LINK_MODAL.COPY_SUCCESS' | translate }}
+            .form-control-feedback(*ngIf="serviceStatus.tokenError", role="status", aria-live="assertive") {{ 'SHARE_IG_LINK_MODAL.SERVICE_ERROR' | translate }}
       .modal-footer
         a.link.help-link-text(href="https://support.artstor.org/?article=creating-links", role="button", target="_blank", tabindex="0") Help
         button.btn.btn-primary((click)="closeModal.emit()", tabindex="0", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()") Close
