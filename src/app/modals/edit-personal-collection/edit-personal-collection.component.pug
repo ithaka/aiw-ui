@@ -14,7 +14,8 @@
             .form-control-feedback(*ngIf="uiMessages.imgUploadFailure") {{ 'EDIT_PC_MODAL.MESSAGES.IMG_UPLOAD_FAILURE' | translate }}
             .form-control-feedback(*ngIf="uiMessages.imgDeleteFailure") {{ 'EDIT_PC_MODAL.MESSAGES.IMG_DELETE_FAILURE' | translate }}
           .form-group.has-success(
-            *ngIf="uiMessages.imgUploadSuccess || uiMessages.imgDeleteSuccess"
+            *ngIf="uiMessages.imgUploadSuccess || uiMessages.imgDeleteSuccess",
+            role="status", aria-live="assertive"
           )
             .form-control-feedback(*ngIf="uiMessages.imgUploadSuccess") {{ 'EDIT_PC_MODAL.MESSAGES.IMG_UPLOAD_SUCCESS' | translate }}
             .form-control-feedback(*ngIf="uiMessages.imgDeleteSuccess") {{ 'EDIT_PC_MODAL.MESSAGES.IMG_DELETE_SUCCESS' | translate }}
@@ -67,7 +68,7 @@
               .form-group.has-success(
                 *ngIf="uiMessages.metadataUpdateSuccess"
               )
-                .form-control-feedback(*ngIf="uiMessages.metadataUpdateSuccess") {{ 'EDIT_PC_MODAL.MESSAGES.METADATA_UPDATE_SUCCESS' | translate }}
+                .form-control-feedback(*ngIf="uiMessages.metadataUpdateSuccess", role="status", aria-live="assertive") {{ 'EDIT_PC_MODAL.MESSAGES.METADATA_UPDATE_SUCCESS' | translate }}
       .modal-footer([ngClass]="{ 'border-none' : !editMode && (!collectionAssets || collectionAssets.length === 0) }")
         .form-group(*ngIf="editMode")
           button.btn.btn-secondary.mr-2((click)="clearSelectedAsset()", type="button", tabindex="0") {{ 'EDIT_PC_MODAL.BUTTONS.CLOSE' | translate }}
