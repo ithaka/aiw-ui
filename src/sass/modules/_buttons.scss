@@ -22,7 +22,7 @@ $iconBtnSize: $btnHeight;
      letter-spacing: 0.5px;
      border-bottom: none;
      cursor: pointer;
-     height: $btnHeight;
+     min-height: $btnHeight;
      line-height: $btnHeight;
 
      &:hover, &:active {
