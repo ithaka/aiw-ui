@@ -260,8 +260,8 @@
               .form-group
                 label(for="titleInput") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.TITLE' | translate }}
                 input#titleInput.form-control(type="text", [formControl]="editDetailsForm.controls['title']", placeholder="", spellcheck="false", tabindex="6")
-                .has-danger(*ngIf="editDetailsFormSubmitted && editDetailsForm.controls['title'].hasError('required')", role="status", aria-live="assertive")
-                  p.form-control-feedback {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.TITLE_REQUIRED_MSG' | translate }}
+                .has-danger(*ngIf="editDetailsFormSubmitted && editDetailsForm.controls['title'].hasError('required')")
+                  p.form-control-feedback(role="status", aria-live="assertive") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.TITLE_REQUIRED_MSG' | translate }}
               .form-group
                 label(for="worktypeInput") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.WORK_TYPE' | translate }}
                 input#worktypeInput.form-control(type="text", [formControl]="editDetailsForm.controls['work_type']", placeholder="", spellcheck="false", tabindex="6")
@@ -280,10 +280,10 @@
               .form-group
                 label(for="subjectInput") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.SUBJECT' | translate }}
                 input#subjectInput.form-control(type="text", [formControl]="editDetailsForm.controls['subject']", placeholder="", spellcheck="false", tabindex="6")
-              .form-group.has-danger(*ngIf="uiMessages.deleteFailure", role="status", aria-live="assertive")
-                .form-group-feedback {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_ERROR' | translate }}
-              .form-group.has-danger(*ngIf="uiMessages.saveFailure", role="status", aria-live="assertive")
-                .form-group-feedback {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.SAVE_ERROR' | translate }}
+              .form-group.has-danger(*ngIf="uiMessages.deleteFailure")
+                .form-group-feedback(role="status", aria-live="assertive") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_ERROR' | translate }}
+              .form-group.has-danger(*ngIf="uiMessages.saveFailure")
+                .form-group-feedback(role="status", aria-live="assertive") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.SAVE_ERROR' | translate }}
               .btn-row
                 button.btn.btn-secondary((click)="showDeletePCModal = true", type="button", tabindex="6", [class.loading]="deleteLoading") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_BTN' | translate }}
                 button.btn.btn-primary(type="submit", [class.loading]="isProcessing", tabindex="6") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.SAVE_BTN' | translate }}

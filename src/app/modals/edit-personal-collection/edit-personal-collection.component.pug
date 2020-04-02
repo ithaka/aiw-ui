@@ -15,10 +15,9 @@
             .form-control-feedback(*ngIf="uiMessages.imgDeleteFailure") {{ 'EDIT_PC_MODAL.MESSAGES.IMG_DELETE_FAILURE' | translate }}
           .form-group.has-success(
             *ngIf="uiMessages.imgUploadSuccess || uiMessages.imgDeleteSuccess",
-            role="status", aria-live="assertive"
           )
-            .form-control-feedback(*ngIf="uiMessages.imgUploadSuccess") {{ 'EDIT_PC_MODAL.MESSAGES.IMG_UPLOAD_SUCCESS' | translate }}
-            .form-control-feedback(*ngIf="uiMessages.imgDeleteSuccess") {{ 'EDIT_PC_MODAL.MESSAGES.IMG_DELETE_SUCCESS' | translate }}
+            .form-control-feedback(*ngIf="uiMessages.imgUploadSuccess", role="status", aria-live="assertive") {{ 'EDIT_PC_MODAL.MESSAGES.IMG_UPLOAD_SUCCESS' | translate }}
+            .form-control-feedback(*ngIf="uiMessages.imgDeleteSuccess", role="status", aria-live="assertive") {{ 'EDIT_PC_MODAL.MESSAGES.IMG_DELETE_SUCCESS' | translate }}
         .row.no-gutters
           .thmb-cntnr([ngClass]="{ 'col-md-6': editMode, 'col-md-12': !editMode }")
             ang-uploader((fileUploaded)="handleNewAssetUpload($event)", (focusOnFirstElement)="startModalFocus()", [colAssetsCount]="collectionAssets ? collectionAssets.length : 0")
