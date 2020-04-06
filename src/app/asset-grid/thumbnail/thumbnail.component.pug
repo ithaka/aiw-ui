@@ -11,18 +11,13 @@
     ang-collection-badge([collectionType]="thumbnail.collectionTypeInfo")
     .float-right
       //- IAP Icon - Is this part of Images for Academic Publishing
-      i.icon.icon-iap(
-        *ngIf="thumbnail.iap",
-        tabindex="3",
-        role="button",
-        [ngbTooltip]="iapTooltip",
-        triggers="focusin:focusout mouseenter:mouseleave",
-        placement="right"
-        title="Images for academic publishing icon.",
-      )
-        <ng-template #iapTooltip>
-          div Images for Academic Publishing
-        </ng-template>
+      pharos-tooltip(*ngIf="thumbnail.iap", placement="right", tabindex="3")
+        i.icon.icon-iap(
+          slot="target",
+          role="button",
+          title="Images for academic publishing icon.",
+        )
+        div(slot="content") Images for Academic Publishing
       //- Clustered asset (has Duplicates and Details)
       i.icon.icon-cluster(
         *ngIf="thumbnail.partofcluster",
@@ -40,54 +35,36 @@
         (keyup.enter)="openLink($event, ['/associated', thumbnail.artstorid])"
       )
       //- Media type icon (w/ tooltip)
-      i.icon(
-        *ngIf="thumbnail.objectTypeId && (thumbnail.objectTypeId != 10) && (multiviewItemCount <= 1)",
-        [ngClass]="[ mouseOverMedia ? 'icon-' + (thumbnail.objectTypeId | typeIdPipe) + '-hover' : 'icon-' + (thumbnail.objectTypeId | typeIdPipe) ]",
-        (mouseover)="mouseOverMedia=true",
-        (mouseout)="mouseOverMedia=false",
-        [ngbTooltip]="mediaTooltip",
-        triggers="focusin:focusout mouseenter:mouseleave",
-        placement="right",
-        [attr.title]="objectTypeId + 'asset type icon.'",
-      )
-        <ng-template #mediaTooltip>
-          div {{thumbnail.objectTypeId | typeIdPipe:true }}
-        </ng-template>
-      //- Detail view icon
-      i.icon(
-        *ngIf="thumbnail.zoom",
-        [ngClass]="[ mouseOverDetailIcon ? 'icon-detail-view-hover' : 'icon-detail-view' ]",
-        [ngbTooltip]="tipDetailView",
-        ngbTooltip,
-        triggers="focusin:focusout mouseenter:mouseleave",
-        placement="right",
-        aria-haspopup="true",
-        tabIndex="3",
-        (mouseover)="mouseOverDetailIcon=true",
-        (mouseout)="mouseOverDetailIcon=false"
-        title="Detail view button icon. Press enter to click this button and go to the asset detail.",
-      )
-      //- Multi view icon
-      .multiview-indicator(
-        *ngIf="multiviewItemCount > 1",
-        [ngbTooltip]="tipMultiView",
-        ngbTooltip,
-        triggers="focusin:focusout mouseenter:mouseleave",
-        placement="right",
-        aria-haspopup="true",
-        title="See multiview items button icon. Press enter to click this button.",
-        tabIndex="3", role="button"
-      )
+      pharos-tooltip(*ngIf="thumbnail.objectTypeId && (thumbnail.objectTypeId != 10) && (multiviewItemCount <= 1)", placement="right", tabindex="3")
         i.icon(
-          [ngClass]="[ mouseOverMultiview ? 'icon-multiview-hover' : 'icon-multiview' ]",
-          (mouseover)="mouseOverMultiview=true",
-          (mouseout)="mouseOverMultiview=false"
+          slot="target",
+          [ngClass]="[ mouseOverMedia ? 'icon-' + (thumbnail.objectTypeId | typeIdPipe) + '-hover' : 'icon-' + (thumbnail.objectTypeId | typeIdPipe) ]",
+          (mouseover)="mouseOverMedia=true",
+          (mouseout)="mouseOverMedia=false",
+          [attr.title]="objectTypeId + 'asset type icon.'"
         )
-        span.multiview-count {{multiviewItemCount}}
-
-    <ng-template #tipMultiView>
-      div This item has <br> multiple views
-    </ng-template>
-    <ng-template #tipDetailView>
-      div This is a saved <br> detail of the <br> original image
-    </ng-template>
+        div(slot="content") {{thumbnail.objectTypeId | typeIdPipe:true }}
+      //- Detail view icon
+      pharos-tooltip(*ngIf="thumbnail.zoom", placement="right", tabindex="3")
+        i.icon(
+          slot="target",
+          [ngClass]="[ mouseOverDetailIcon ? 'icon-detail-view-hover' : 'icon-detail-view' ]",
+          (mouseover)="mouseOverDetailIcon=true",
+          (mouseout)="mouseOverDetailIcon=false"
+          title="Detail view button icon. Press enter to click this button and go to the asset detail.",
+        )
+        div(slot="content") This is a saved <br> detail of the <br> original image
+      //- Multi view icon
+      pharos-tooltip(*ngIf="multiviewItemCount > 1", placement="right", tabindex="3")
+        .multiview-indicator(
+          slot="target",
+          title="See multiview items button icon. Press enter to click this button.",
+          role="button"
+        )
+          i.icon(
+            [ngClass]="[ mouseOverMultiview ? 'icon-multiview-hover' : 'icon-multiview' ]",
+            (mouseover)="mouseOverMultiview=true",
+            (mouseout)="mouseOverMultiview=false"
+          )
+          span.multiview-count {{multiviewItemCount}}
+        div(slot="content") This item has <br> multiple views
