@@ -1,14 +1,7 @@
-.collection-badge.my-1(
-  [ngbTooltip]="tipContent",
-  ngbTooltip,
-  container="body",
-  triggers="focusin:focusout mouseenter:mouseleave",
-  placement="right",
-  aria-haspopup="true",
-  [attr.aria-label]="collectionType.alt",
-  tabindex="3"
-) {{ collectionType.badgeText }}
-<ng-template #tipContent>
-  div([innerHtml]="collectionType.alt")
-</ng-template>
-  //- ang-tooltip(data-tooltip)
+pharos-tooltip(placement="right", tabindex="3")
+  .collection-badge.my-1(
+    slot="target"
+    aria-haspopup="true",
+    [attr.aria-label]="collectionType.alt"
+  ) {{ collectionType.badgeText }}
+  div(slot="content", [innerHtml]="collectionType.alt")
