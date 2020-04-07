@@ -3,6 +3,10 @@
     .label.sr-only#search-label(for="inputSearchTerm", innerHTML="Search for groups by title or tag")
     //- the .driver-find-inputbox class is important for the tour to find it, be careful when removing or changing it
     input#inputSearchTerm.form-control.has-icon.driver-find-inputbox([(ngModel)]="term", (keyup)="startSearch=false;", (keyup.enter)="conductSearch()", aria-describedby="search-label", type="text", placeholder="Search for groups by title or tag...", data-sc="search: simple keyword", tabindex="3")
-    i#iconClearSearch.icon.icon-close.form-control__icon(*ngIf="term && !loadingGrps", (click)="term=''; startSearch=false; clearGrpSearch.emit()", placement="bottom", ngbTooltip="Clear search", role="button", tabindex="3", (keyup.enter)="term=''; startSearch=false; clearGrpSearch.emit()", aria-label="Clear search")
-    i#iconSearchSubmit.icon.icon-search.form-control__icon(*ngIf="!term", (click)="conductSearch()", role="button", tabindex="3", (keyup.enter)="conductSearch()", aria-label="Submit search", placement="bottom", ngbTooltip="Submit search")
+    pharos-tooltip(*ngIf="term && !loadingGrps", placement="bottom", tabindex="3")
+      i#iconClearSearch.icon.icon-close.form-control__icon(slot="target", (click)="term=''; startSearch=false; clearGrpSearch.emit()", role="button", (keyup.enter)="term=''; startSearch=false; clearGrpSearch.emit()", aria-label="Clear search")
+      span(slot="content") Clear search
+    pharos-tooltip(*ngIf="!term", placement="bottom", tabindex="3")
+      i#iconSearchSubmit.icon.icon-search.form-control__icon(slot="target", (click)="conductSearch()", role="button", (keyup.enter)="conductSearch()", aria-label="Submit search")
+      span(slot="content") Submit search
   .alert.alert-warning#empty-search-alert([class.hidden]="term || !startSearch", tabindex="3", role="alert", aria-label="no search term alert") Please enter search term(s).
