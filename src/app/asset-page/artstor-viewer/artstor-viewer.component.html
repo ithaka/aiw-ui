@@ -50,12 +50,12 @@
         <button slot="target" class="btn btn--icon btn--zoomFit" [class.aiw-hidden]="state != 1" id="zoomFit-{{ osdViewerId }}"><i class="icon icon-fit-to-view"></i></button>
         <div slot="content">Fit to view</div>
       </pharos-tooltip>
-      <pharos-tooltip placement="bottom">
-        <button slot="target" class="btn btn--icon btn--fullScreen" [class.standalone-present-icon]="state != 1" *ngIf="!isFullscreen" id="fullScreen-{{ osdViewerId }}" aria-label="Full screen" (click)="togglePresentationMode()"><i class="icon icon-present"></i></button>
+      <pharos-tooltip placement="bottom" *ngIf="!isFullscreen" id="fullScreen-{{ osdViewerId }}">
+        <button slot="target" class="btn btn--icon btn--fullScreen" [class.standalone-present-icon]="state != 1" aria-label="Full screen" (click)="togglePresentationMode()"><i class="icon icon-present"></i></button>
         <div slot="content">Present</div>
       </pharos-tooltip>
-      <pharos-tooltip placement="bottom">
-        <button slot="target" class="btn btn--icon" [class.standalone-remove-icon]="state != 1" *ngIf="isFullscreen && assetCompareCount > 1" (click)="removeAsset.emit(asset)" aria-label="Remove from comparison"><i class="icon icon-remove-from-comparison"></i></button>
+      <pharos-tooltip placement="bottom" *ngIf="isFullscreen && assetCompareCount > 1">
+        <button slot="target" class="btn btn--icon" [class.standalone-remove-icon]="state != 1" (click)="removeAsset.emit(asset)" aria-label="Remove from comparison"><i class="icon icon-remove-from-comparison"></i></button>
         <div slot="content">Remove from<br>comparison</div>
       </pharos-tooltip>
     </div>
