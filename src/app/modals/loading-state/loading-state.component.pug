@@ -23,5 +23,7 @@
         .try-again-link(*ngIf="options.state === 2 && options.errorType === 'server'")
           span((click)="tryAgain()", tabindex="0", role="link") {{ 'LOADING_STATE.LINKS.TRY_AGAIN' | translate }}
 
-        button.close((click)="close()", tabindex="0", aria-label="Close", (keydown.tab)="$event.preventDefault(); startModalFocus()", placement="bottom", ngbTooltip="Cancel export", [disableTooltip]="options.state != 0")
-          span(aria-hidden="true") &times;
+        pharos-tooltip(placement="bottom", tabindex="0")
+          button.close(slot="target", (click)="close()", aria-label="Close", (keydown.tab)="$event.preventDefault(); startModalFocus()")
+            span(aria-hidden="true") &times;
+          span(slot="content") {{ options.state != 0 ? 'Close' : 'Cancel export' }}
