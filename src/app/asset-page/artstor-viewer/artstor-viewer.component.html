@@ -50,8 +50,8 @@
         <button slot="target" class="btn btn--icon btn--zoomFit" [class.aiw-hidden]="state != 1" id="zoomFit-{{ osdViewerId }}"><i class="icon icon-fit-to-view"></i></button>
         <div slot="content">Fit to view</div>
       </pharos-tooltip>
-      <pharos-tooltip placement="bottom" *ngIf="!isFullscreen" id="fullScreen-{{ osdViewerId }}">
-        <button slot="target" class="btn btn--icon btn--fullScreen" [class.standalone-present-icon]="state != 1" aria-label="Full screen" (click)="togglePresentationMode()"><i class="icon icon-present"></i></button>
+      <pharos-tooltip placement="bottom" *ngIf="!isFullscreen">
+        <button slot="target" class="btn btn--icon btn--fullScreen" [class.standalone-present-icon]="state != 1" id="fullScreen-{{ osdViewerId }}" aria-label="Full screen" (click)="togglePresentationMode()"><i class="icon icon-present"></i></button>
         <div slot="content">Present</div>
       </pharos-tooltip>
       <pharos-tooltip placement="bottom" *ngIf="isFullscreen && assetCompareCount > 1">
