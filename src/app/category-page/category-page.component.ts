@@ -31,7 +31,8 @@ export class CategoryPage implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   // private searchInResults: boolean = false;
-  private unaffiliatedUser: boolean = false
+  private unaffiliatedUser: boolean = false;
+  private showFilters: boolean = false;
 
   constructor(
     private _assets: AssetService,

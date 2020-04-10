@@ -3,7 +3,8 @@
   .container.main-content
     .row
       .col-sm-3(style="margin-top: 1rem;")
-        .mobile--hide
+        button.mobile--show.btn.btn-secondary(id="showFiltersBtn", (click)="showFilters = !showFilters") {{ showFilters ? 'Hide Filters' : 'Show Filters' }}
+        div([ngClass]="[ showFilters ? '' : 'mobile--hide']")
           button.skip-btn#skip-to-search-link((click)="skipToSearchSec()", (keyup.enter)="skipToSearchSec()", tabindex="2", class="sr-only sr-only-focusable") This is the filters section. Skip to the search results section.
           h3.browse-category {{ 'HOME.HEADINGS.FEATURED' | translate }}
           p.small(*ngIf="siteID!='SAHARA' && _auth.isPublicOnly()", [innerHtml]="'HOME.CONTENT_ACCESS.PUBLIC' | translate")
