@@ -33,6 +33,8 @@ export class SearchPage implements OnInit, OnDestroy {
 
   private userSessionFresh: boolean = false;
 
+  private showFilters: boolean = false;
+
   constructor(
         public _appConfig: AppConfig,
         private _assets: AssetService,

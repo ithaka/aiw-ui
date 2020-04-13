@@ -1,5 +1,13 @@
 
 @import '../../../node_modules/bootstrap/scss/mixins/_gradients.scss';
+@import '../../sass/core/variables';
+
+.container.main-content {
+  padding: 25px 25px 0;
+  @media (min-width: $phone) {
+    padding: 0;
+  }
+}
 
 .thumbnail-shelf {
     border-bottom: 1px solid #bebebe;
@@ -37,14 +45,14 @@ img.collection-thumb {
     z-index: 1000;
     line-height: 28px;
     margin-top: -1.3em;
-    
+
     &.collapsed {
         background-image: linear-gradient(to bottom, transparent 0%, white 50%);
     }
 }
 
 // For generate image URL Modal
-#accessDeniedModal{ 
+#accessDeniedModal{
     .modal-body{
         font-family: 'Graphik Web', sans-serif;
 
@@ -56,4 +64,10 @@ img.collection-thumb {
     .close-icon{
         cursor: pointer;
     }
+}
+
+.btn-secondary {
+  @media(max-width: $phone) {
+    margin-bottom: 20px;
+  }
 }

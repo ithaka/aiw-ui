@@ -1,5 +1,13 @@
 
 @import '../../../node_modules/bootstrap/scss/mixins/_gradients.scss';
+@import '../../sass/core/variables';
+
+.container.main-content {
+  padding: 25px 25px 0;
+  @media (min-width: $phone) {
+    padding: 0;
+  }
+}
 
 .thumbnail-shelf {
     border-bottom: 1px solid #bebebe;
@@ -16,4 +24,10 @@
 img.collection-thumb {
     max-height: 100px;
     width: auto;
+}
+
+.btn-secondary {
+  @media(max-width: $phone) {
+    margin-bottom: 20px;
+  }
 }

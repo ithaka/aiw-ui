@@ -1,7 +1,6 @@
 @import '../../../sass/core/variables';
 
 .open-modal {
-  display: none;
   @media (min-width: 768px) {
       display: block;
   }

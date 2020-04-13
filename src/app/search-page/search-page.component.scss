@@ -10,3 +10,9 @@
 .no-scroll {
   overflow: hidden;
 }
+
+.btn-secondary {
+  @media(max-width: $phone) {
+    margin-bottom: 20px;
+  }
+}

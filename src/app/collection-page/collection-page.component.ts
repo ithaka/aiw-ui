@@ -31,6 +31,7 @@ export class CollectionPage implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
   private userSessionFresh: boolean = false;
+  private showFilters: boolean = false;
 
   constructor(
     private _assets: AssetService,
