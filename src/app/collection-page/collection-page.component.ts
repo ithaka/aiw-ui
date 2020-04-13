@@ -22,6 +22,7 @@ export class CollectionPage implements OnInit, OnDestroy {
   public assetCount: number;
   public descCollapsed: boolean = true;
   public showAccessDeniedModal: boolean = false;
+  public showFilters: boolean = false;
 
   private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
   private options = { headers: this.header, withCredentials: true }; // Create a request option
@@ -31,7 +32,6 @@ export class CollectionPage implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
   private userSessionFresh: boolean = false;
-  private showFilters: boolean = false;
 
   constructor(
     private _assets: AssetService,

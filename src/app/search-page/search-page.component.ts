@@ -19,7 +19,8 @@ import { AppConfig } from '../app.service'
 
 export class SearchPage implements OnInit, OnDestroy {
 
-  public siteID: string = ''
+  public siteID: string = '';
+  public showFilters: boolean = false;
   // Add user to decide whether to show the banner
   private user: any = this._auth.getUser();
 
@@ -32,8 +33,6 @@ export class SearchPage implements OnInit, OnDestroy {
   private unaffiliatedUser: boolean = false;
 
   private userSessionFresh: boolean = false;
-
-  private showFilters: boolean = false;
 
   constructor(
         public _appConfig: AppConfig,

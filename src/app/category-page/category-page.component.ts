@@ -19,7 +19,8 @@ export class CategoryPage implements OnInit, OnDestroy {
   public catName: string;
   public catDescription: string;
   public catThumbnail: string;
-  public showAccessDeniedModal: boolean = false
+  public showAccessDeniedModal: boolean = false;
+  public showFilters: boolean = false;
 
   private header = new HttpHeaders().set('Content-Type', 'application/json'); // ... Set content type to JSON
   private options = { headers: this.header, withCredentials: true }; // Create a request option
@@ -32,7 +33,6 @@ export class CategoryPage implements OnInit, OnDestroy {
 
   // private searchInResults: boolean = false;
   private unaffiliatedUser: boolean = false;
-  private showFilters: boolean = false;
 
   constructor(
     private _assets: AssetService,
