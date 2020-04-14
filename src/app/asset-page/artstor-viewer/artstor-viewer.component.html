@@ -38,23 +38,23 @@
   <!--Viewer Buttons-->
   <div *ngIf="!thumbnailMode">
     <div class="asset-viewer__buttons" id="imageButtons-{{ osdViewerId }}">
-      <pharos-tooltip placement="bottom">
+      <pharos-tooltip placement="bottom" class="asset-viewer__buttons__button">
         <button slot="target" class="btn btn--icon btn--zoomIn" [class.aiw-hidden]="state != 1" id="zoomIn-{{ osdViewerId}}" aria-label="Zoom in"><i class="icon icon-zoom-in"></i></button>
         <div slot="content">Zoom in</div>
       </pharos-tooltip>
-      <pharos-tooltip placement="bottom">
+      <pharos-tooltip placement="bottom" class="asset-viewer__buttons__button">
         <button slot="target" class="btn btn--icon btn--zoomOut" [class.aiw-hidden]="state != 1" id="zoomOut-{{ osdViewerId }}" aria-label="Zoom out"><i class="icon icon-zoom-out"></i></button>
         <div slot="content">Zoom out</div>
       </pharos-tooltip>
-      <pharos-tooltip placement="bottom">
+      <pharos-tooltip placement="bottom" class="asset-viewer__buttons__button">
         <button slot="target" class="btn btn--icon btn--zoomFit" [class.aiw-hidden]="state != 1" id="zoomFit-{{ osdViewerId }}"><i class="icon icon-fit-to-view"></i></button>
         <div slot="content">Fit to view</div>
       </pharos-tooltip>
-      <pharos-tooltip placement="bottom" *ngIf="!isFullscreen">
+      <pharos-tooltip placement="bottom" *ngIf="!isFullscreen" class="asset-viewer__buttons__button">
         <button slot="target" class="btn btn--icon btn--fullScreen" [class.standalone-present-icon]="state != 1" id="fullScreen-{{ osdViewerId }}" aria-label="Full screen" (click)="togglePresentationMode()"><i class="icon icon-present"></i></button>
         <div slot="content">Present</div>
       </pharos-tooltip>
-      <pharos-tooltip placement="bottom" *ngIf="isFullscreen && assetCompareCount > 1">
+      <pharos-tooltip placement="bottom" *ngIf="isFullscreen && assetCompareCount > 1" class="asset-viewer__buttons__button">
         <button slot="target" class="btn btn--icon" [class.standalone-remove-icon]="state != 1" (click)="removeAsset.emit(asset)" aria-label="Remove from comparison"><i class="icon icon-remove-from-comparison"></i></button>
         <div slot="content">Remove from<br>comparison</div>
       </pharos-tooltip>
