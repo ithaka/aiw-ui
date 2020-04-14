@@ -37,7 +37,7 @@
 
   <!--Viewer Buttons-->
   <div *ngIf="!thumbnailMode">
-    <div class="button-group asset-viewer__buttons" id="imageButtons-{{ osdViewerId }}">
+    <div class="asset-viewer__buttons" id="imageButtons-{{ osdViewerId }}">
       <pharos-tooltip placement="bottom">
         <button slot="target" class="btn btn--icon btn--zoomIn" [class.aiw-hidden]="state != 1" id="zoomIn-{{ osdViewerId}}" aria-label="Zoom in"><i class="icon icon-zoom-in"></i></button>
         <div slot="content">Zoom in</div>
