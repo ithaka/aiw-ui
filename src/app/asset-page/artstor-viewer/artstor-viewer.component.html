@@ -37,19 +37,29 @@
 
   <!--Viewer Buttons-->
   <div *ngIf="!thumbnailMode">
-    <div class="button-group asset-viewer__buttons" id="imageButtons-{{ osdViewerId }}">
-      <button class="btn btn--icon btn--zoomIn" [class.aiw-hidden]="state != 1" id="zoomIn-{{ osdViewerId}}" [ngbTooltip]="zoomInTooltip" aria-label="Zoom in" placement="bottom"><i class="icon icon-zoom-in"></i></button>
-      <button class="btn btn--icon btn--zoomOut" [class.aiw-hidden]="state != 1" id="zoomOut-{{ osdViewerId }}" [ngbTooltip]="zoomOutTooltip" aria-label="Zoom out" placement="bottom"><i class="icon icon-zoom-out"></i></button>
-      <button class="btn btn--icon btn--zoomFit" [class.aiw-hidden]="state != 1" id="zoomFit-{{ osdViewerId }}" [ngbTooltip]="fitToViewTooltip" aria-label="Fit to view" placement="bottom"><i class="icon icon-fit-to-view"></i></button>
-      <button class="btn btn--icon btn--fullScreen" [class.standalone-present-icon]="state != 1" *ngIf="!isFullscreen" id="fullScreen-{{ osdViewerId }}" aria-label="Full screen" (click)="togglePresentationMode()" [ngbTooltip]="presentTooltip" placement="bottom"><i class="icon icon-present"></i></button>
-      <button class="btn btn--icon" [class.standalone-remove-icon]="state != 1" *ngIf="isFullscreen && assetCompareCount > 1" (click)="removeAsset.emit(asset)" aria-label="Remove from comparison" [ngbTooltip]="removeCompTooltip" placement="bottom"><i class="icon icon-remove-from-comparison"></i></button>
+    <div class="asset-viewer__buttons" id="imageButtons-{{ osdViewerId }}">
+      <pharos-tooltip placement="bottom" class="asset-viewer__buttons__button">
+        <button slot="target" class="btn btn--icon btn--zoomIn" [class.aiw-hidden]="state != 1" id="zoomIn-{{ osdViewerId}}" aria-label="Zoom in"><i class="icon icon-zoom-in"></i></button>
+        <div slot="content">Zoom in</div>
+      </pharos-tooltip>
+      <pharos-tooltip placement="bottom" class="asset-viewer__buttons__button">
+        <button slot="target" class="btn btn--icon btn--zoomOut" [class.aiw-hidden]="state != 1" id="zoomOut-{{ osdViewerId }}" aria-label="Zoom out"><i class="icon icon-zoom-out"></i></button>
+        <div slot="content">Zoom out</div>
+      </pharos-tooltip>
+      <pharos-tooltip placement="bottom" class="asset-viewer__buttons__button">
+        <button slot="target" class="btn btn--icon btn--zoomFit" [class.aiw-hidden]="state != 1" id="zoomFit-{{ osdViewerId }}"><i class="icon icon-fit-to-view"></i></button>
+        <div slot="content">Fit to view</div>
+      </pharos-tooltip>
+      <pharos-tooltip placement="bottom" *ngIf="!isFullscreen" class="asset-viewer__buttons__button">
+        <button slot="target" class="btn btn--icon btn--fullScreen" [class.standalone-present-icon]="state != 1" id="fullScreen-{{ osdViewerId }}" aria-label="Full screen" (click)="togglePresentationMode()"><i class="icon icon-present"></i></button>
+        <div slot="content">Present</div>
+      </pharos-tooltip>
+      <pharos-tooltip placement="bottom" *ngIf="isFullscreen && assetCompareCount > 1" class="asset-viewer__buttons__button">
+        <button slot="target" class="btn btn--icon" [class.standalone-remove-icon]="state != 1" (click)="removeAsset.emit(asset)" aria-label="Remove from comparison"><i class="icon icon-remove-from-comparison"></i></button>
+        <div slot="content">Remove from<br>comparison</div>
+      </pharos-tooltip>
     </div>
 
-    <ng-template #zoomInTooltip><div>Zoom in</div></ng-template>
-    <ng-template #zoomOutTooltip><div>Zoom out</div></ng-template>
-    <ng-template #fitToViewTooltip><div>Fit to view</div></ng-template>
-    <ng-template #presentTooltip><div>Present</div></ng-template>
-    <ng-template #removeCompTooltip><div>Remove from<br>comparison</div></ng-template>
 
     <!-- Hide if not multi view (do not use ngIf, OSD needs to bind) -->
     <!-- Bottom right arrow style -->

@@ -518,6 +518,15 @@
     pkginfo "^0.4.1"
     popsicle "^9.2.0"
 
+"@pharos/core@^0.0.6":
+  version "0.0.6"
+  resolved "https://artifactory.acorn.cirrostratus.org/artifactory/api/npm/npms/@pharos/core/-/@pharos/core-0.0.6.tgz#1e9af9dd9ff384eb43105dd6d3062f6eb84927ad"
+  integrity sha1-Hpr53Z/zhOtDEF3W0wYvbrhJJ60=
+  dependencies:
+    "@popperjs/core" "^2.1.0"
+    lit-element "^2.2.1"
+    lit-html "^1.1.2"
+
 "@pm2/agent-node@~1.1.8":
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/@pm2/agent-node/-/agent-node-1.1.8.tgz#e75bc2b5392a36f033aee20e9cb313e1744a8b5c"
@@ -568,6 +577,11 @@
     debug "^2.6.8"
     eventemitter2 "^4.1.0"
     ws "^3.0.0"
+
+"@popperjs/core@^2.1.0":
+  version "2.1.1"
+  resolved "https://artifactory.acorn.cirrostratus.org/artifactory/api/npm/npms/@popperjs/core/-/core-2.1.1.tgz#12c572ab88ef7345b43f21883fca26631c223085"
+  integrity sha1-EsVyq4jvc0W0PyGIP8omYxwiMIU=
 
 "@schematics/angular@7.3.8", "@schematics/angular@^7.0.0":
   version "7.3.8"
@@ -1112,6 +1126,10 @@
     "@webassemblyjs/ast" "1.8.5"
     "@webassemblyjs/wast-parser" "1.8.5"
     "@xtuc/long" "4.2.2"
+
+"@webcomponents/webcomponentsjs@webcomponents/webcomponentsjs":
+  version "2.2.10"
+  resolved "https://codeload.github.com/webcomponents/webcomponentsjs/tar.gz/5988103b9a5d09723196d7627b1ba3064104ae8e"
 
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
@@ -5762,6 +5780,18 @@ linkifyjs@^2.1.4:
     jquery "^3.3.1"
     react "^16.4.2"
     react-dom "^16.4.2"
+
+lit-element@^2.2.1:
+  version "2.3.1"
+  resolved "https://artifactory.acorn.cirrostratus.org/artifactory/api/npm/npms/lit-element/-/lit-element-2.3.1.tgz#73343b978fa1e73d60526c6bb6ad60f53a16c343"
+  integrity sha1-czQ7l4+h5z1gUmxrtq1g9ToWw0M=
+  dependencies:
+    lit-html "^1.1.1"
+
+lit-html@^1.1.1, lit-html@^1.1.2:
+  version "1.2.1"
+  resolved "https://artifactory.acorn.cirrostratus.org/artifactory/api/npm/npms/lit-html/-/lit-html-1.2.1.tgz#1fb933dc1e2ddc095f60b8086277d4fcd9d62cc8"
+  integrity sha1-H7kz3B4t3AlfYLgIYnfU/NnWLMg=
 
 load-json-file@^1.0.0:
   version "1.1.0"

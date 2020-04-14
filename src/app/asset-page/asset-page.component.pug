@@ -57,20 +57,20 @@
       .pl-3(*ngIf="jstorResults.length > 0 && relatedResFlag")
         .row-hdr.pt-3 Related Results from JSTOR
         .jstor-result(*ngFor="let result of jstorResults")
-          a([attr.href]="'http://www.jstor.org/stable/' + result.doi", target="_blank", (mouseenter) ="setToolTipData(result)", [ngbTooltip]="tipContent")
-            .type {{ result.type + ': '}}
-            .label([innerHTML]="result.label")
+          pharos-tooltip(placement="right", (mouseenter) ="setToolTipData(result)")
+            a(slot="target", [attr.href]="'http://www.jstor.org/stable/' + result.doi", target="_blank")
+              .type {{ result.type + ': '}}
+              .label([innerHTML]="result.label")
+            div(slot="content")
+              h3 {{ selectedJstorResult.title }}
+              .tool-tip-lbl(*ngIf="selectedJstorResult.authors") Author
+              div(*ngFor="let author of selectedJstorResult.authors") {{ author }}
+              br
+              .tool-tip-lbl(*ngIf="selectedJstorResult.publishers") Published by:
+              div(*ngFor="let publisher of selectedJstorResult.publishers") {{ publisher.publisher }}
+              br
+              div(*ngIf="selectedJstorResult.doi") Stable URL: {{ 'http://www.jstor.org/stable/' + selectedJstorResult.doi }}
         a.link.small([attr.href]="'http://www.jstor.org/action/doBasicSearch?Query=' + relatedResultsQuery", target="_blank") See more Results
-      ng-template(#tipContent="", placement="right")
-        div(*ngIf="selectedJstorResult.title")
-          h3 {{ selectedJstorResult.title }}
-          .tool-tip-lbl(*ngIf="selectedJstorResult.authors") Author
-          div(*ngFor="let author of selectedJstorResult.authors") {{ author }}
-          br
-          .tool-tip-lbl(*ngIf="selectedJstorResult.publishers") Published by:
-          div(*ngFor="let publisher of selectedJstorResult.publishers") {{ publisher.publisher }}
-          br
-          div(*ngIf="selectedJstorResult.doi") Stable URL: {{ 'http://www.jstor.org/stable/' + selectedJstorResult.doi }}
 
       .col-md-12.quiz-caption-cntnr(*ngIf="isFullscreen", [ngClass]="[ showAssetCaption ? '' : 'cntnr-bg' ]")
         ang-promo-tooltip(*ngIf="user.isLoggedIn && !quizModeTTDismissed && studyMode", [options]="quizModeTooltipOpts", (close)="closeQuizModeTooltip()")

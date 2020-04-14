@@ -200,10 +200,6 @@ img.no-stretch {
     cursor: pointer;
 }
 
-.card--asset{
-    opacity: 0.9;
-}
-
 .draggable .card--asset {
     &:hover {
       cursor: grab;
