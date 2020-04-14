@@ -1127,9 +1127,10 @@
     "@webassemblyjs/wast-parser" "1.8.5"
     "@xtuc/long" "4.2.2"
 
-"@webcomponents/webcomponentsjs@webcomponents/webcomponentsjs":
-  version "2.2.10"
-  resolved "https://codeload.github.com/webcomponents/webcomponentsjs/tar.gz/5988103b9a5d09723196d7627b1ba3064104ae8e"
+"@webcomponents/webcomponentsjs@^2.4.3":
+  version "2.4.3"
+  resolved "https://artifactory.acorn.cirrostratus.org/artifactory/api/npm/npms/@webcomponents/webcomponentsjs/-/webcomponentsjs-2.4.3.tgz#384f4f6d54563ba465fb4df21fe89e78a76fc530"
+  integrity sha1-OE9PbVRWO6Rl+03yH+ieeKdvxTA=
 
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"

@@ -3,6 +3,7 @@
 // import 'ie-shim'; // Internet Explorer 9 support
 
 // Web component polyfills for IE11
+import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js';
 import '@webcomponents/webcomponentsjs/webcomponents-loader.js';
 
 // import 'core-js/es6';
