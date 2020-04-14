@@ -2,6 +2,9 @@
 
 // import 'ie-shim'; // Internet Explorer 9 support
 
+// Web component polyfills for IE11
+import '@webcomponents/webcomponentsjs/webcomponents-loader.js';
+
 // import 'core-js/es6';
 // Added parts of es6 which are necessary for your project or your browser support requirements.
 import 'core-js/es6/symbol';

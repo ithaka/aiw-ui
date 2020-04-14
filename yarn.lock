@@ -1127,6 +1127,10 @@
     "@webassemblyjs/wast-parser" "1.8.5"
     "@xtuc/long" "4.2.2"
 
+"@webcomponents/webcomponentsjs@webcomponents/webcomponentsjs":
+  version "2.2.10"
+  resolved "https://codeload.github.com/webcomponents/webcomponentsjs/tar.gz/5988103b9a5d09723196d7627b1ba3064104ae8e"
+
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@xtuc/ieee754/-/ieee754-1.2.0.tgz#eef014a3145ae477a1cbc00cd1e552336dceb790"
