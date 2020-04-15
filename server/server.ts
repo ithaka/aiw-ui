@@ -64,6 +64,7 @@ global['HTMLElement'] = win.HTMLElement
 global['Element'] = win.Element // (PDFjs)
 global['navigator'] = win.navigator
 global['XMLHttpRequest'] = require('xmlhttprequest').XMLHttpRequest
+global['Document'] = win.Document
 /**
  * Angular Universal init
  */
