@@ -7,7 +7,7 @@ header.navbar.navbar-light(*ngIf="!_fullscreen.isFullscreen")
             img#logo.hidden-xs-down([attr.src]="logoUrl" alt="Artstor logo")
           .mobile--show
             img#logoMobile.hidden-sm-up(src="/assets/img/logo-square.png" alt="Artstor logo")
-        pharos-tooltip(*ngIf="showAppliedFlags", placement="bottom", tabindex="1")
+        pharos-tooltip.mobile--hide.nav-tooltip(*ngIf="showAppliedFlags", placement="bottom", tabindex="1")
           .btn.btn--icon(slot="target")
             .icon.icon-flag
           div(slot="content")

@@ -32,9 +32,6 @@ $navBarPad: 0.5rem;
     background-color: $navBarLightBg;
     background-clip: padding-box;
     z-index: 2000;
-    @media (min-width: $phone) {
-        z-index: 100;
-    }
 }
 
 .navbar {
@@ -69,7 +66,6 @@ $navBarPad: 0.5rem;
     z-index: 2000;
     @media (min-width: $phone) {
         position: relative;
-        z-index: 100;
     }
 }
 
