@@ -3,6 +3,9 @@
 <head>
   <!-- Run the app from the root directory -->
   <base href="/">
+  <!-- web component polyfills -->
+  <script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.4.3/custom-elements-es5-adapter.js"></script>
+  <script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.4.3/webcomponents-loader.js"></script>
   <!--Track initial URL in cases where we need to re-route legacy links-->
   <script type="text/javascript">
     var initPath = window.location.href;
