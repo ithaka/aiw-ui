@@ -83,7 +83,7 @@
                               label.custom-control-label((click)="toggleFilter(child, filter)")
                                 | {{ child.name }} {{ child.count ? '(' + child.count +')' : '' }}
       .modal-footer
-        .alert.alert-warning(*ngIf="error.empty", [innerHtml]="'ADVANCED_SEARCH_MODAL.ERRORS.EMPTY_SEARCH' | translate")
+        .alert.alert-warning(*ngIf="error.empty", [innerHtml]="'ADVANCED_SEARCH_MODAL.ERRORS.EMPTY_SEARCH' | translate" role="alert")
         .alert.alert-warning(*ngIf="error.date", [innerHtml]="'ADVANCED_SEARCH_MODAL.ERRORS.DUMB_DATE' | translate", role="alert", attr.aria-label="'ADVANCED_SEARCH_MODAL.ERRORS.DUMB_DATE'")
         label.sr-only(for="helpBtn") Help
         button.btn.btn-link.with-pad(id="helpBtn", tabindex="0", (click)="openHelp()") <u> {{ 'ADVANCED_SEARCH_MODAL.BUTTONS.HELP' | translate }} </u>
