@@ -2,6 +2,8 @@
  * # Filters
  * Search filters, primarilly link styled elements which toggle on click.
  */
+@import '../../sass/core/variables';
+
 
 $activeFilterColor: #000;
 $filterUnfocusOpacity: 0.5;
@@ -14,7 +16,7 @@ $filterBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
 .col--sliding {
 	transform: translateY(0);
 	transition: transform linear 0.3s, margin linear 0.3s;
-	
+
 	&.slide-up {
 		pointer-events: none;
 		transform: translateY(-100%);
@@ -55,7 +57,7 @@ $filterBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
 				border-bottom: 1px solid #ddd;
 			}
 		}
-	} 
+	}
 }
 
 .filter-group h2{
@@ -83,7 +85,7 @@ $filterBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
 	&.full-spacing {
 		margin-bottom: 12px;
 	}
-	
+
 	& .subtitle-alt {
 		padding: 2px;
 	}
@@ -99,7 +101,7 @@ $filterBorderStyle: 1px solid rgba(0, 0, 0, 0.15);
 
 	&.collapsed {
 		padding: 0;
-		
+
 		&:hover, &:active, &:focus {
 			.filter-group__label {
 				line-height:34px;
@@ -320,10 +322,10 @@ filter:hover .includeIcon, filter:hover .excludeIcon{
     vertical-align: top;
     margin-top: 3px;
 }
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 input[type=number] {
   -moz-appearance: textfield;
@@ -332,4 +334,27 @@ input[type=number] {
 .move-up {
 	position: relative;
     top: 8rem;
+}
+
+.date-filter-row {
+
+  input {
+    @media (max-width: 1200px) {
+      width: 100%;
+    }
+  }
+
+  .btn {
+    @media (max-width: 1200px) {
+      width: 100%;
+      border: 1px solid rgba(0, 0, 0, 0.15);;
+    }
+  }
+
+  .side-toggle-btn {
+    @media (max-width: 1200px) {
+      width: 50%;
+      border: 1px solid rgba(0, 0, 0, 0.15);;
+    }
+  }
 }
