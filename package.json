@@ -54,7 +54,9 @@
     "webpack:server:prod": "npm run webpack:server -- --env=prod"
   },
   "dependencies": {
-    "@angular-devkit/build-angular": "0.11.0",
+    "@angular-builders/custom-webpack": "^7.5.2",
+    "@angular-builders/dev-server": "^7.3.1",
+    "@angular-devkit/build-angular": "0.13.0",
     "@angular-devkit/build-ng-packagr": "~0.10.0",
     "@angular-devkit/build-optimizer": "0.11.0",
     "@angular-devkit/core": "^7.3.0",
@@ -72,6 +74,9 @@
     "@angular/platform-browser-dynamic": "7.2.14",
     "@angular/platform-server": "^7.2.14",
     "@angular/router": "7.2.14",
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
     "@ng-bootstrap/ng-bootstrap": "^4.2.2",
     "@ng-idle/core": "^6.0.0-beta.3",
     "@ng-idle/keepalive": "^6.0.0-beta.3",
@@ -101,6 +106,7 @@
     "angulartics2": "^7.5.1",
     "apply-loader": "^2.0.0",
     "assets-webpack-plugin": "^3.5.1",
+    "babel-loader": "^8.1.0",
     "blob-polyfill": "^3.0.20180112",
     "bootstrap": "^4.4.1",
     "core-js": "^2.5.4",

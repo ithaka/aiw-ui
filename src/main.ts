@@ -31,6 +31,8 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
+import '@pharos/core/web-components/pharos-tooltip';
+
 if (environment.production) {
   enableProdMode();
 }
