@@ -93,7 +93,6 @@ import { CollectionBadgeComponent } from './collection-badge'
 import { UploaderComponent } from './uploader/uploader.component'
 import { GeneralSearchComponent } from './browse-page/browse-groups/general-search.component'
 import { SkyBannerComponent } from './sky-banner/sky-banner.component'
-import '@pharos/core/web-components/pharos-tooltip'
 
 
 // Application wide providers
