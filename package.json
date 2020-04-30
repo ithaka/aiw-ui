@@ -117,7 +117,7 @@
     "hammerjs": "^2.0.8",
     "ie-shim": "^0.1.0",
     "isbot": "^2.3.0",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "json-loader": "^0.5.7",
     "linkifyjs": "^2.1.4",
     "medium-editor": "^5.23.0",
