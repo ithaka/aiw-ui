@@ -53,7 +53,7 @@
           (mouseout)="mouseOverDetailIcon=false"
           title="Detail view button icon. Press enter to click this button and go to the asset detail.",
         )
-        div(slot="content") This is a saved <br> detail of the <br> original image
+        div(slot="content") This is a saved detail of the original image
       //- Multi view icon
       pharos-tooltip(*ngIf="multiviewItemCount > 1", placement="right", tabindex="3")
         .multiview-indicator(
@@ -67,4 +67,4 @@
             (mouseout)="mouseOverMultiview=false"
           )
           span.multiview-count {{multiviewItemCount}}
-        div(slot="content") This item has <br> multiple views
+        div(slot="content") This item has multiple views
