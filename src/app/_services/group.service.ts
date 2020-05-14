@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { BehaviorSubject, Observable, Subject, pipe } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
+import { APP_CONST } from '../app.constants'
 
 // Project Dependencies
 import { environment } from 'environments/environment'
@@ -43,7 +44,7 @@ export class GroupService {
             tags = []
         }
         if (!size) {
-            size = 25
+            size = APP_CONST.IMAGE_GROUP_PAGE_SIZE
         }
         if (!pageNo) {
             pageNo = 1

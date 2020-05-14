@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { map, take, filter } from 'rxjs/operators'
 import { Angulartics2 } from 'angulartics2'
+import { APP_CONST } from '../../app.constants'
 
 // Project Dependencies
 import { AuthService, GroupService, TitleService } from '_services'
@@ -45,7 +46,7 @@ export class BrowseGroupsComponent implements OnInit {
     page: number
   } = {
     totalPages: 1,
-    size: 25,
+    size: APP_CONST.IMAGE_GROUP_PAGE_SIZE,
     page: 1
   }
 
