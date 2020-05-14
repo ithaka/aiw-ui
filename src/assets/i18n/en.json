@@ -561,59 +561,59 @@
       },
       "COLLECTIONS": [
         {
-        "SUBHEADING": "The art of medicine",
-        "DESCRIPTION": "Eakins’ medical paintings and clinical fact",
-        "CAPTION": "Thomas Eakins. The Gross Clinic, detail. 1875. Image and data provided by University of Georgia Libraries",
-        "LINK": "https://www.artstor.org/2019/12/04/the-drama-of-the-operating-theater-thomas-eakins-medical-paintings-and-clinical-fact/",
-        "IMG_SOURCE": "/assets/img/featured-collections/Carnegie_Eakins.jpg",
-        "LINK_TITLE": "Eakins’ medical paintings and clinical fact",
-        "ALT_TEXT": "Eakins’ medical paintings and clinical fact"
+        "SUBHEADING": "Pandemics and epidemics",
+        "DESCRIPTION": "From the plague to present day",
+        "CAPTION": "Abbie Trayler-Smith. Ebola healthcare worker's gloves...at the Masiaka Community Care Centre. Jan-2015. Image and data from Panos Pictures.",
+        "LINK": "https://www.artstor.org/2020/05/06/pandemics-and-epidemics/",
+        "IMG_SOURCE": "/assets/img/featured-collections/panos_epidemics.jpg",
+        "LINK_TITLE": "Pandemics and epidemics: From the plague to present day",
+        "ALT_TEXT": "Pandemics and epidemics: From the plague to present day"
         },
         {
-          "SUBHEADING": "Patent medicines and advertising cards",
-          "DESCRIPTION": "Cornell’s Oskar Diethelm Library for the History of Psychiatry",
-          "CAPTION": "Carter Medicine Company. Carter’s Little Nerve Pills. 19th century. Cornell: Oskar Diethelm Library for the History of Psychiatry",
-          "LINK": "https://www.artstor.org/2014/04/22/patent-medicines-and-advertising-cards-from-the-oskar-diethelm-library/",
-          "IMG_SOURCE": "/assets/img/featured-collections/Carnegie_Carters.jpg",
-          "LINK_TITLE": "Patent medicines and advertising cards",
-          "ALT_TEXT": "Patent medicines and advertising cards"
+          "SUBHEADING": "Museums, remotely",
+          "DESCRIPTION": "More than 100 international museums and galleries",
+          "CAPTION": "Peter Henry Emerson. Rowing Home the Schoof-Stuff. 1886. Platinum print. Image and data from The Cleveland Museum of Art. CC0 1.0.",
+          "LINK": "https://www.artstor.org/2020/03/30/museums-remotely/",
+          "IMG_SOURCE": "/assets/img/featured-collections/cleveland_museums.jpg",
+          "LINK_TITLE": "Museums, remotely",
+          "ALT_TEXT": "Museums, remotely"
         },
         {
-          "SUBHEADING": "Enhancing visual acuity in medical education",
-          "DESCRIPTION": "By Joseph Costello, Medical Librarian",
-          "CAPTION": "Félix Vallotton, The sick patient (Helene Chatenay), 1892. Image and original data provided by Erich Lessing Culture and Fine Arts Archives/ART RESOURCE, N.Y. artres.com",
-          "LINK": "https://www.artstor.org/2016/04/14/enhancing-visual-acuity-in-medical-education-through-the-arts/",
-          "IMG_SOURCE": "/assets/img/featured-collections/Lessing_Valloton.jpg",
-          "LINK_TITLE": "Enhancing visual acuity in medical education",
-          "ALT_TEXT": "Enhancing visual acuity in medical education"
+          "SUBHEADING": "Our dogged companions",
+          "DESCRIPTION": "Furry colleagues and their art counterparts",
+          "CAPTION": "Lori Lundy. Quincy “working from home.” 2020. Photograph. Image courtesy of Lori Lundy.",
+          "LINK": "https://www.artstor.org/2020/05/04/our-dogged-companions/",
+          "IMG_SOURCE": "/assets/img/featured-collections/ithaka_dog.jpg",
+          "LINK_TITLE": "Our dogged companions",
+          "ALT_TEXT": "Our dogged companions"
         }
       ],
       "PUBLIC_COLLECTIONS": [{
-          "SUBHEADING": "The art of medicine",
-          "DESCRIPTION": "Eakins’ medical paintings and clinical fact",
-          "CAPTION": "Thomas Eakins. The Gross Clinic, detail. 1875. Image and data provided by University of Georgia Libraries",
-          "LINK": "https://www.artstor.org/2019/12/04/the-drama-of-the-operating-theater-thomas-eakins-medical-paintings-and-clinical-fact/",
-          "IMG_SOURCE": "/assets/img/featured-collections/Carnegie_Eakins.jpg",
-          "LINK_TITLE": "Eakins’ medical paintings and clinical fact",
-          "ALT_TEXT": "Eakins’ medical paintings and clinical fact"
+        "SUBHEADING": "Pandemics and epidemics",
+        "DESCRIPTION": "From the plague to present day",
+        "CAPTION": "Abbie Trayler-Smith. Ebola healthcare worker's gloves...at the Masiaka Community Care Centre. Jan-2015. Image and data from Panos Pictures.",
+        "LINK": "https://www.artstor.org/2020/05/06/pandemics-and-epidemics/",
+        "IMG_SOURCE": "/assets/img/featured-collections/panos_epidemics.jpg",
+        "LINK_TITLE": "Pandemics and epidemics: From the plague to present day",
+        "ALT_TEXT": "Pandemics and epidemics: From the plague to present day"
         },
         {
-          "SUBHEADING": "Patent medicines and advertising cards",
-          "DESCRIPTION": "Cornell’s Oskar Diethelm Library for the History of Psychiatry",
-          "CAPTION": "Carter Medicine Company. Carter’s Little Nerve Pills. 19th century. Cornell: Oskar Diethelm Library for the History of Psychiatry",
-          "LINK": "https://www.artstor.org/2014/04/22/patent-medicines-and-advertising-cards-from-the-oskar-diethelm-library/",
-          "IMG_SOURCE": "/assets/img/featured-collections/Carnegie_Carters.jpg",
-          "LINK_TITLE": "Patent medicines and advertising cards",
-          "ALT_TEXT": "Patent medicines and advertising cards"
+          "SUBHEADING": "Museums, remotely",
+          "DESCRIPTION": "More than 100 international museums and galleries",
+          "CAPTION": "Peter Henry Emerson. Rowing Home the Schoof-Stuff. 1886. Platinum print. Image and data from The Cleveland Museum of Art. CC0 1.0.",
+          "LINK": "https://www.artstor.org/2020/03/30/museums-remotely/",
+          "IMG_SOURCE": "/assets/img/featured-collections/cleveland_museums.jpg",
+          "LINK_TITLE": "Museums, remotely",
+          "ALT_TEXT": "Museums, remotely"
         },
         {
-          "SUBHEADING": "Enhancing visual acuity in medical education",
-          "DESCRIPTION": "By Joseph Costello, Medical Librarian",
-          "CAPTION": "Félix Vallotton, The sick patient (Helene Chatenay), 1892. Image and original data provided by Erich Lessing Culture and Fine Arts Archives/ART RESOURCE, N.Y. artres.com",
-          "LINK": "https://www.artstor.org/2016/04/14/enhancing-visual-acuity-in-medical-education-through-the-arts/",
-          "IMG_SOURCE": "/assets/img/featured-collections/Lessing_Valloton.jpg",
-          "LINK_TITLE": "Enhancing visual acuity in medical education",
-          "ALT_TEXT": "Enhancing visual acuity in medical education"
+          "SUBHEADING": "Our dogged companions",
+          "DESCRIPTION": "Furry colleagues and their art counterparts",
+          "CAPTION": "Lori Lundy. Quincy “working from home.” 2020. Photograph. Image courtesy of Lori Lundy.",
+          "LINK": "https://www.artstor.org/2020/05/04/our-dogged-companions/",
+          "IMG_SOURCE": "/assets/img/featured-collections/ithaka_dog.jpg",
+          "LINK_TITLE": "Our dogged companions",
+          "ALT_TEXT": "Our dogged companions"
         }
       ]
     },
