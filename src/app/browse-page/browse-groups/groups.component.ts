@@ -45,7 +45,7 @@ export class BrowseGroupsComponent implements OnInit {
     page: number
   } = {
     totalPages: 1,
-    size: 48,
+    size: 25,
     page: 1
   }
 

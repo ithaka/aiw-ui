@@ -43,7 +43,7 @@ export class GroupService {
             tags = []
         }
         if (!size) {
-            size = 48
+            size = 25
         }
         if (!pageNo) {
             pageNo = 1

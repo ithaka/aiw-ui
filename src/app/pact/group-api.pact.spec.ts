@@ -182,7 +182,7 @@ describe('Group Calls #pact #group', () => {
           withRequest: {
             method: 'GET',
             path: '/api/v2/group',
-            query: 'size=48&level=private&from=0&sort=alpha&order=asc'
+            query: 'size=25&level=private&from=0&sort=alpha&order=asc'
           },
           willRespondWith: {
             status: 200,
@@ -204,7 +204,7 @@ describe('Group Calls #pact #group', () => {
 
       it('should return a list of private group objects', function(done) {
         // Run the tests
-        _groupService.getAll('private', 48, 0, [], '', '', 'alpha', 'asc')
+        _groupService.getAll('private', 25, 0, [], '', '', 'alpha', 'asc')
           .subscribe(res => {
             // Test if the response object has all the keys / properties
             let actualResKeys = Object.keys(res).sort();
