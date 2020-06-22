@@ -18,20 +18,30 @@ export class AppConfig {
   private _config
   private isBrowser
 
+  private PORTS_TO_EXCLUDE = ["80", "4000", "8080"];
+
   constructor(@Inject(PLATFORM_ID) private platformId, private injector: Injector) {
     this.isBrowser = isPlatformBrowser(platformId);
+
     // Identify hostname from request or client side
+    this.isBrowser = false;
     if (this.isBrowser) {
-      this.clientHostname = window.location.hostname
-    } else{
+      const portNum = window.location.port;
+      const hostName = window.location.hostname;
+
+      this.clientHostname = this.getHostName(hostName, portNum);
+    } else {
       let req = this.injector.get('request');
-      
-      this.clientHostname = req ? req.get('host') : '';
+
+      const requestHost = req ? req.get('host').split(":") : [""];
+      if(requestHost.length == 1) {
+        this.clientHostname = requestHost[0];
+      } else {
+        this.clientHostname = this.getHostName(requestHost[0], requestHost[1]);
+      }
       console.log("Requested from", this.clientHostname)
-      this.clientHostname = this.clientHostname.replace(':4000','')
-      this.clientHostname = this.clientHostname.replace(':8080','')
-      this.clientHostname = this.clientHostname.replace(':80','')
     }
+
     // Generic debugging between server/client rendering
     console.log("Detected hostname: " + this.clientHostname)
 
@@ -45,6 +55,12 @@ export class AppConfig {
 
   get config(): any {
     return this._config
+  }
+
+  private getHostName(hostName, portNum) {
+    return (this.PORTS_TO_EXCLUDE.includes(portNum)) ?
+      hostName :
+      `${hostName}:${portNum}`;
   }
 
   private getWLVConfig() {
