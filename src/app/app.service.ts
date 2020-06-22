@@ -24,7 +24,6 @@ export class AppConfig {
     this.isBrowser = isPlatformBrowser(platformId);
 
     // Identify hostname from request or client side
-    this.isBrowser = false;
     if (this.isBrowser) {
       this.clientHostname = this.getHostName(window.location.hostname, window.location.port);
     } else {
