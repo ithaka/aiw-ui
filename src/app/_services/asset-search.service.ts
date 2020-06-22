@@ -216,6 +216,12 @@ export class AssetSearchService {
       } else if (sortIndex == '4') {
         query['sort'] = 'updatedon_str'
       }
+
+      // For collection pages, if there is no search term, sort by `work_sequence_num`
+      if((options['colId'] || options['clusterId']) && !options['term'] && sortIndex === '0') {
+        query['sortorder'] = 'asc'
+        query['sort'] = 'worksequence_num'
+      }
     }
   }
 

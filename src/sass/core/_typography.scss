@@ -1,6 +1,6 @@
 /**
  * # Typography
- * All type styles 
+ * All type styles
  */
 
 // Sizes
@@ -111,7 +111,7 @@ $typeAccent: $red;
 //   font-weight:  400;
 //   font-style:   italic;
 //   font-stretch: normal;
-// } 
+// }
 
 // Core Type Styles
 // ----------------------------------------------------
@@ -162,7 +162,7 @@ a.link, .link {
     // border-bottom: 1px solid #8300e0;
   }
 
-  
+
 }
 
 a.list-group-item, a.list-group-item-action, a.btn  {
@@ -185,7 +185,7 @@ a.list-group-item, a.list-group-item-action, a.btn  {
   &:hover, &:focus, &:active {
     color: #000;
     text-decoration-color: #000;
-    // border-color: $brightOrange; 
+    // border-color: $brightOrange;
     // text-decoration: none;
   }
 }
@@ -213,7 +213,7 @@ a.list-group-item, a.list-group-item-action, a.btn  {
 
 .form-text {
   font-size: 12px;
-  
+
   & .link {
     text-decoration: underline !important;
     &:hover {
@@ -264,12 +264,6 @@ h2, .h2 {
   color: $typeAccent;
   font-size: 15px;
   line-height: 22px;
-
-  // &.header-button {
-  //   &:hover, &:focus {
-  //     color: $brightOrange;
-  //   }
-  // }
 }
 
 h3, .h3 {
@@ -286,8 +280,8 @@ h3, .h3 {
 }
 
 .small {
-  font-size: 11px;
-  line-height: 14px;
+  font-size: 12px;
+  line-height: 16px;
 }
 
 b {

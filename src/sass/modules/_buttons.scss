@@ -22,7 +22,7 @@ $iconBtnSize: $btnHeight;
      letter-spacing: 0.5px;
      border-bottom: none;
      cursor: pointer;
-     height: $btnHeight;
+     min-height: $btnHeight;
      line-height: $btnHeight;
 
      &:hover, &:active {
@@ -92,13 +92,8 @@ $iconBtnSize: $btnHeight;
     background: $orange;
     border-color: $orange;
 
-    &:hover {
+    &:hover, &:focus, &:active {
         background: darken($orange, 10%);
-        border-color: darken($orange, 10%);
-    }
-
-    &:focus, &:active {
-        filter: brightness(80%);
         border-color: darken($orange, 10%);
     }
 }
@@ -225,7 +220,7 @@ $iconBtnSize: $btnHeight;
     pointer-events: none;
 
     &.dropdown-toggle {
-        pointer-events: all;  
+        pointer-events: all;
     }
 
     // Hide other class

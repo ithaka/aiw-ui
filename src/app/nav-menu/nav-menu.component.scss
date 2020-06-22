@@ -29,9 +29,9 @@ $navBarPad: 0.5rem;
 }
 
 .nav {
-    z-index: 2000;
     background-color: $navBarLightBg;
     background-clip: padding-box;
+    z-index: 2000;
 }
 
 .navbar {

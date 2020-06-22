@@ -25,7 +25,7 @@
             .value
               textarea#copyChicago(#copyChicago="", readonly) {{ chicago_citation }}
             button.copy-clipboard((click)=" copyChicago.select(); document.execCommand('copy', false, null); citationCopied = true; ") {{ 'GENERATE_CITATION_MODAL.COPY_CLIPBOARD' | translate }}
-          .form-control-feedback(*ngIf="citationCopied") {{ 'GENERATE_CITATION_MODAL.COPY_SUCCESS' | translate }}
+          .form-control-feedback(*ngIf="citationCopied", role="status", aria-live="assertive") {{ 'GENERATE_CITATION_MODAL.COPY_SUCCESS' | translate }}
       .modal-footer
         a.btn.btn-link.with-pad(href="https://support.artstor.org/?article=export-citations", target="_blank") Help
         button.btn.btn-primary((click)="closeModal.emit()", (keydown.tab)="$event.stopPropagation(); $event.preventDefault(); startModalFocus()") Close

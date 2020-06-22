@@ -7,13 +7,12 @@ header.navbar.navbar-light(*ngIf="!_fullscreen.isFullscreen")
             img#logo.hidden-xs-down([attr.src]="logoUrl" alt="Artstor logo")
           .mobile--show
             img#logoMobile.hidden-sm-up(src="/assets/img/logo-square.png" alt="Artstor logo")
-        .btn.btn--icon(*ngIf="showAppliedFlags")
-          .icon.icon-flag
-          .tooltip.bs-tooltip-bottom.show-on-hover(role="tooltip")
-            .arrow
-            .tooltip-inner
-              | Applied Flags:<br/>
-              p(*ngFor="let flagKey of appliedFlags") {{ flagKey }}
+        pharos-tooltip.mobile--hide.nav-tooltip(*ngIf="showAppliedFlags", placement="bottom", tabindex="1")
+          .btn.btn--icon(slot="target")
+            .icon.icon-flag
+          div(slot="content")
+            | Applied Flags:<br/>
+            p(*ngFor="let flagKey of appliedFlags") {{ flagKey }}
       .col-4
         .login-panel(*ngIf="showLoginPanel")
           .vertical-center-wrap

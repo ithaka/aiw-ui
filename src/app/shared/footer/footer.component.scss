@@ -5,24 +5,9 @@ $linkColor : #444;
 
 .footer {
     padding: 30px 15px 60px;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 24px;
     background: $footerBg;
-    // border-top: 1px solid rgba(0, 0, 0, 0.15);
-
-    // & a {
-    //     border-bottom: none;
-    //     margin: 0 5px;
-    //     text-decoration: none;
-
-    //     &.footer-logout{
-    //         display: inline-block;
-    //         @media (min-width: 576px) {
-    //             display: none;
-    //         }
-    //     }
-    // }
-
 }
 
 

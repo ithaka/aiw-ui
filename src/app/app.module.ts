@@ -1,4 +1,4 @@
-import { ApplicationRef, NgModule, Inject, APP_ID, PLATFORM_ID, Injectable, ErrorHandler } from '@angular/core';
+import { ApplicationRef, NgModule, Inject, APP_ID, PLATFORM_ID, Injectable, ErrorHandler, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -96,24 +96,24 @@ import { SkyBannerComponent } from './sky-banner/sky-banner.component'
 
 
 // Application wide providers
-import { 
+import {
   AccountService,
-  AssetSearchService, 
+  AssetSearchService,
   AssetService,
   AuthService,
-  CollectionService, 
+  CollectionService,
   DomUtilityService,
   FlagService,
   FullScreenService,
   GroupService,
   ImageGroupService,
-  InstitutionService, 
+  InstitutionService,
   LogService,
-  MetadataService, 
+  MetadataService,
   PersonalCollectionService,
   ScriptService,
-  SlidesService, 
-  ThumbnailService, 
+  SlidesService,
+  ThumbnailService,
   TitleService,
   ToolboxService
 } from './_services'
@@ -213,6 +213,7 @@ export function HttpLoaderFactory(http: HttpClient) {
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
 @NgModule({
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
     AccessDeniedModal,
     AccountPage,

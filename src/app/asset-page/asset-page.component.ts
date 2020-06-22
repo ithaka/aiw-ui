@@ -87,6 +87,7 @@ export class AssetPage implements OnInit, OnDestroy {
   // Feature Flags
   public relatedResFlag: boolean = false
   public isFullscreen: boolean = false
+  public requireLoginForAdlDownload: boolean = false
 
   private encryptedAccess: boolean = false
   private document = document
@@ -231,11 +232,15 @@ export class AssetPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // Ethnio survey 5-22
+    this._script.loadScript('ethnio-survey')
+
     this.user = this._auth.getUser();
     this.quizModeTTDismissed = this._storage.getLocal('quizModeTTDismissed') ? this._storage.getLocal('quizModeTTDismissed') : false
     this.subscriptions.push(
       this._flags.flagUpdates.subscribe((flags) => {
-        this.relatedResFlag = flags.relatedResFlag ? true : false
+        this.relatedResFlag = flags.relatedResFlag;
+        this.requireLoginForAdlDownload = flags.requireLoginForAdlDownload;
       }),
       this.route.params.subscribe((routeParams) => {
         this.assetGroupId = routeParams['groupId']
@@ -453,6 +458,27 @@ export class AssetPage implements OnInit, OnDestroy {
     this._group.hasPrivateGroups()
   } // OnInit
 
+  get showDownloadDropdown() {
+    const isLoggedIn = (this.user && this.user.isLoggedIn) ? true : false;
+    const publicDownload = this.assets && this.assets[0] && this.assets[0].publicDownload;
+    const downloadLink = this.assets && this.assets[0] && this.assets[0].downloadLink;
+    const userAuthedWithInstitution = this.user && this.user.status;
+
+    if (!downloadLink) {
+      return false;
+    }
+
+    if (publicDownload) {
+      return true;
+    }
+
+    if (!this.requireLoginForAdlDownload) {
+      return userAuthedWithInstitution;
+    }
+
+    return isLoggedIn;
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach((sub) => {
       sub.unsubscribe();
@@ -460,7 +486,6 @@ export class AssetPage implements OnInit, OnDestroy {
     // Clear asset info from data layer
     this.trackContentDataLayer(<Asset>{})
   }
-
 
   handleLoadedMetadata(asset: Asset, assetIndex: number) {
     console.log("Handle loaded metadata for " + asset.id)

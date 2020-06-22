@@ -2,6 +2,7 @@
 
 $tagLinkBg: #efefef;
 
+
 .card-view {
     font-family: Verdana;
     box-shadow: 0 0 8px 1px #00000014;
@@ -212,6 +213,10 @@ $tagLinkBg: #efefef;
 .cardview-text {
     padding-left: 1em;
     padding-right: 1em;
+}
+
+.wrap-on-long-text {
+  word-break: break-all;
 }
 
 .group-tag-name {

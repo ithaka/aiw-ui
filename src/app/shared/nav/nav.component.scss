@@ -131,3 +131,8 @@ $loginPanelMobileHeight: 0;
   // width: -webkit-fill-available;
   width: stretch; // fill-available changed in spec to stretch
 }
+
+.nav-tooltip {
+  position: relative;
+  z-index: 3000;
+}

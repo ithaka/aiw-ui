@@ -30,52 +30,68 @@
                 input#emailInput.form-control(type="email", spellcheck="false", [formControl]="registerForm.controls['email']", tabindex="0")
                 p#errEmailRequired.has-danger.form-control-feedback(
                   *ngIf="submitted && registerForm.controls['email'].hasError('required')",
-                  [style.display]="'none'"
+                  [style.display]="'none'",
+                  role="status",
+                  aria-live="assertive"
                 ) {{ 'REGISTER.ERRORS.EMAIL_REQUIRED' | translate }}
                 p#errEmailInvalid.has-danger.form-control-feedback(
                   *ngIf="submitted && registerForm.controls['email'].hasError('emailInvalid') && !registerForm.controls['email'].hasError('required')",
-                  [style.display]="'none'"
+                  [style.display]="'none'",
+                  role="status",
+                  aria-live="assertive"
                 ) {{ 'REGISTER.ERRORS.EMAIL_INVALID' | translate }}
               .form-group
                 label(for="emailConfirmInput") Confirm Email Address
                 input#emailConfirmInput.form-control(type="email", spellcheck="false", [formControl]="registerForm.controls['emailConfirm']", tabindex="0")
                 p#errEmailMismatch.has-danger.form-control-feedback(
                   *ngIf="submitted && registerForm.hasError('emailMismatch')",
-                  [style.display]="'none'"
+                  [style.display]="'none'",
+                  role="status",
+                  aria-live="assertive"
                 ) {{ 'REGISTER.ERRORS.EMAIL_MISMATCH' | translate }}
               .form-group
                 label(for="passwordInput") Password (7 character minimum)
                 input#passwordInput.form-control(type="password", spellcheck="false", [formControl]="registerForm.controls['password']", tabindex="0")
                 p#errPasswordRequired.has-danger.form-control-feedback(
                   *ngIf="submitted && registerForm.controls['password'].hasError('required')",
-                  [style.display]="'none'"
+                  [style.display]="'none'",
+                  role="status",
+                  aria-live="assertive"
                 ) {{ 'REGISTER.ERRORS.PASSWORD_REQUIRED' | translate }}
                 p#errPasswordMinlength.has-danger.form-control-feedback(
                   *ngIf="submitted && registerForm.controls['password'].hasError('minlength')",
-                  [style.display]="'none'"
+                  [style.display]="'none'",
+                  role="status",
+                  aria-live="assertive"
                 ) {{ 'REGISTER.ERRORS.PASSWORD_MINLENGTH' | translate }}
               .form-group
                 label(for="passwordConfirmInput") Confirm Password
                 input#passwordConfirmInput.form-control(type="password", spellcheck="false", [formControl]="registerForm.controls['passwordConfirm']", tabindex="0")
                 p#errPasswordMismatch.has-danger.form-control-feedback(
                   *ngIf="submitted && registerForm.hasError('passwordMismatch')",
-                  [style.display]="'none'"
+                  [style.display]="'none'",
+                  role="status",
+                  aria-live="assertive"
                 ) {{ 'REGISTER.ERRORS.PASSWORD_MISMATCH' | translate }}
               .form-group
                 label(for="selectUserRole") Role at Institution
-                select#selectUserRole.form-control.custom-select([formControl]="registerForm.controls['role']", tabindex="0", aria-label="Role at Institution: Choose your role from the following options")
+                select#selectUserRole.form-control.custom-select([formControl]="registerForm.controls['role']", tabindex="0")
                   option(*ngFor="let role of userRoles", [ngValue]="role.id") {{ role.desc }}
                 p#errRoleRequired.has-danger.form-control-feedback(
                   *ngIf="submitted && registerForm.controls['role'].hasError('required')",
-                  [style.display]="'none'"
+                  [style.display]="'none'",
+                  role="status",
+                  aria-live="assertive"
                 ) {{ 'REGISTER.ERRORS.INSTITUTION_ROLE_REQUIRED' | translate }}
               .form-group
                 label(for="selectUserDept") Academic Department
-                select#selectUserDept.form-control.custom-select([formControl]="registerForm.controls['dept']", tabindex="0", aria-label="Academic Department: Choose your department from the following options")
+                select#selectUserDept.form-control.custom-select([formControl]="registerForm.controls['dept']", tabindex="0")
                   option(*ngFor="let dept of userDepts", [ngValue]="dept.id") {{ dept.desc }}
                 p#errDeptRequired.has-danger.form-control-feedback(
                   *ngIf="submitted && registerForm.controls['dept'].hasError('required')",
-                  [style.display]="'none'"
+                  [style.display]="'none'",
+                  role="status",
+                  aria-live="assertive"
                 ) {{ 'REGISTER.ERRORS.ACADEMIC_DEPT_REQUIRED' | translate }}
 
               .form-group
@@ -96,12 +112,14 @@
                     .terms-txt([innerHtml]="'REGISTER.TERMS' | translate ")
                 p#errTermsRequired.has-danger.form-control-feedback(
                   *ngIf="submitted && registerForm.controls['terms'].hasError('required')",
-                  [style.display]="'none'"
+                  [style.display]="'none'",
+                  role="status",
+                  aria-live="assertive"
                 ) {{ 'REGISTER.ERRORS.TERMS_REQUIRED' | translate}}
               .form-group
                 button#btnRegister.btn.btn-primary([class.loading]="isLoading", type="submit", name="action", tabindex="0") Register
               .form-group
-                ng-container(*ngIf="submitted")
+                ng-container(*ngIf="submitted", role="status", aria-live="assertive")
                   p#errDuplicateUser.has-danger.form-control-feedback(*ngIf="serviceErrors.duplicate", [innerHtml]="'REGISTER.ERRORS.EMAIL_DUPLICATE' | translate", [style.display]="'none'")
                   p#errJstorUser.has-danger.form-control-feedback(*ngIf="serviceErrors.hasJstor", [innerHtml]="'REGISTER.ERRORS.ALREADY_JSTOR' | translate", [style.display]="'none'")
                   p#errJstorUser.has-danger.form-control-feedback(*ngIf="serviceErrors.hasGoogle", [innerHtml]="'REGISTER.ERRORS.ALREADY_GOOGLE' | translate", [style.display]="'none'")

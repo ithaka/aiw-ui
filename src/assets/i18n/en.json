@@ -486,9 +486,12 @@
   },
   "ACCESS_DENIED": "<b>Sorry, Content Unavailable:</b> If you are already <a href=\"/#/login\" class=\"link\">logged in</a>, this may be due to content limitations or your institutional access.",
   "NO_IG": {
-    "HEADING": "Group unavailable",
+    "HEADING_NO_EXISTS": "Group unavailable",
     "NO_EXISTS": "The group you are trying to access does not exist.",
-    "NO_ACCESS": "Please log in to see this group."
+    "HEADING_NOT_LOGGED_IN": "Please log in to see this group",
+    "NOT_LOGGED_IN": "To access this group, log in to your account or <a href=\"/#/register\" class=\"link\">register</a>. <br/>Registering for an Artstor account lets you access your groups, download and save items to groups, export presentations, and share groups with other Artstor users.",
+    "HEADING_NO_ACCESS": "Access Denied",
+    "NO_ACCESS": "You need permission to see this group. Please contact the group owner to be granted access."
   },
   "SHARE_IG_LINK_MODAL": {
     "MAIN_HEADING": "Share link to group",
@@ -556,61 +559,62 @@
         "BLOG_HEADING": "What's New",
         "VIEW_BLOG_LINK": "Read more on the blog"
       },
-      "COLLECTIONS": [{
-          "SUBHEADING": "Copyright in Artstor",
-          "DESCRIPTION": "Learn more with our guide",
-          "CAPTION": "Artstor LibGuides",
-          "LINK": "http://artstor.libguides.com/Copyright-in-Artstor/",
-          "IMG_SOURCE": "/assets/img/featured-collections/Copyright_LibGuide.jpg",
-          "LINK_TITLE": "Copyright in Artstor",
-          "ALT_TEXT": "Copyright in Artstor"
+      "COLLECTIONS": [
+        {
+          "SUBHEADING": "Pandemics and epidemics",
+          "DESCRIPTION": "From the plague to present day",
+          "CAPTION": "Abbie Trayler-Smith. Ebola healthcare worker's gloves...at the Masiaka Community Care Centre. Jan-2015. Image and data from Panos Pictures.",
+          "LINK": "https://www.artstor.org/2020/05/06/pandemics-and-epidemics/",
+          "IMG_SOURCE": "/assets/img/featured-collections/panos_epidemics.jpg",
+          "LINK_TITLE": "Pandemics and epidemics: From the plague to present day",
+          "ALT_TEXT": "Pandemics and epidemics: From the plague to present day"
         },
         {
-          "SUBHEADING": "Browsing Artstor Just Got Easier",
-          "DESCRIPTION": "Browse works by a single creator or subject",
-          "CAPTION": "Diego Rivera. At the Fountain Near Toledo. 1913. © 2012 Artists Rights Society (ARS), New York. Image: Bob Schalkwijk/INBA",
-          "LINK": "https://www.artstor.org/2019/08/26/browsing-artstor-just-got-easier/",
-          "IMG_SOURCE": "/assets/img/featured-collections/Schalkwijk_Rivera.jpg",
-          "LINK_TITLE": "Browsing Artstor Just Got Easier",
-          "ALT_TEXT": "Browsing Artstor Just Got Easier"
+          "SUBHEADING": "Museums, remotely",
+          "DESCRIPTION": "More than 100 international museums and galleries",
+          "CAPTION": "Peter Henry Emerson. Rowing Home the Schoof-Stuff. 1886. Platinum print. Image and data from The Cleveland Museum of Art. CC0 1.0.",
+          "LINK": "https://www.artstor.org/2020/03/30/museums-remotely/",
+          "IMG_SOURCE": "/assets/img/featured-collections/cleveland_museums.jpg",
+          "LINK_TITLE": "Museums, remotely",
+          "ALT_TEXT": "Museums, remotely"
         },
         {
-          "SUBHEADING": "Pioneers of the Deep",
-          "DESCRIPTION": "Early Americans fathom the ocean",
-          "CAPTION": "James M. Summerville, Christian Schuselle. Ocean Life. c 1859. Image and data courtesy the Metropolitan Museum of Art. Public Domain.",
-          "LINK": "https://www.artstor.org/2019/08/09/pioneers-of-the-deep-early-americans-fathom-the-ocean/",
-          "IMG_SOURCE": "/assets/img/featured-collections/Met_Ocean.jpg",
-          "LINK_TITLE": "Pioneers of the Deep",
-          "ALT_TEXT": "Pioneers of the Deep"
+          "SUBHEADING": "Our dogged companions",
+          "DESCRIPTION": "Furry colleagues and their art counterparts",
+          "CAPTION": "Lori Lundy. Quincy “working from home.” 2020. Photograph. Image courtesy of Lori Lundy.",
+          "LINK": "https://www.artstor.org/2020/05/04/our-dogged-companions/",
+          "IMG_SOURCE": "/assets/img/featured-collections/ithaka_dog.jpg",
+          "LINK_TITLE": "Our dogged companions",
+          "ALT_TEXT": "Our dogged companions"
         }
       ],
       "PUBLIC_COLLECTIONS": [
         {
-          "SUBHEADING": "Copyright in Artstor",
-          "DESCRIPTION": "Learn more with our guide",
-          "CAPTION": "Artstor LibGuides",
-          "LINK": "http://artstor.libguides.com/Copyright-in-Artstor",
-          "IMG_SOURCE": "/assets/img/featured-collections/Copyright_LibGuide.jpg",
-          "LINK_TITLE": "Copyright in Artstor",
-          "ALT_TEXT": "Copyright in Artstor"
+          "SUBHEADING": "Pandemics and epidemics",
+          "DESCRIPTION": "From the plague to present day",
+          "CAPTION": "Abbie Trayler-Smith. Ebola healthcare worker's gloves...at the Masiaka Community Care Centre. Jan-2015. Image and data from Panos Pictures.",
+          "LINK": "https://www.artstor.org/2020/05/06/pandemics-and-epidemics/",
+          "IMG_SOURCE": "/assets/img/featured-collections/panos_epidemics.jpg",
+          "LINK_TITLE": "Pandemics and epidemics: From the plague to present day",
+          "ALT_TEXT": "Pandemics and epidemics: From the plague to present day"
         },
         {
-          "SUBHEADING": "Browsing Artstor Just Got Easier",
-          "DESCRIPTION": "Browse works by a single creator or subject",
-          "CAPTION": "Diego Rivera. At the Fountain Near Toledo. 1913. © 2012 Artists Rights Society (ARS), New York. Image: Bob Schalkwijk/INBA",
-          "LINK": "https://www.artstor.org/2019/08/26/browsing-artstor-just-got-easier/",
-          "IMG_SOURCE": "/assets/img/featured-collections/Schalkwijk_Rivera.jpg",
-          "LINK_TITLE": "Browsing Artstor Just Got Easier",
-          "ALT_TEXT": "Browsing Artstor Just Got Easier"
+          "SUBHEADING": "Museums, remotely",
+          "DESCRIPTION": "More than 100 international museums and galleries",
+          "CAPTION": "Peter Henry Emerson. Rowing Home the Schoof-Stuff. 1886. Platinum print. Image and data from The Cleveland Museum of Art. CC0 1.0.",
+          "LINK": "https://www.artstor.org/2020/03/30/museums-remotely/",
+          "IMG_SOURCE": "/assets/img/featured-collections/cleveland_museums.jpg",
+          "LINK_TITLE": "Museums, remotely",
+          "ALT_TEXT": "Museums, remotely"
         },
         {
-          "SUBHEADING": "Pioneers of the Deep",
-          "DESCRIPTION": "Early Americans fathom the ocean",
-          "CAPTION": "James M. Summerville, Christian Schuselle. Ocean Life. c 1859. Image and data courtesy the Metropolitan Museum of Art. Public Domain.",
-          "LINK": "https://www.artstor.org/2019/08/09/pioneers-of-the-deep-early-americans-fathom-the-ocean/",
-          "IMG_SOURCE": "/assets/img/featured-collections/Met_Ocean.jpg",
-          "LINK_TITLE": "Pioneers of the Deep",
-          "ALT_TEXT": "Pioneers of the Deep"
+          "SUBHEADING": "Our dogged companions",
+          "DESCRIPTION": "Furry colleagues and their art counterparts",
+          "CAPTION": "Lori Lundy. Quincy “working from home.” 2020. Photograph. Image courtesy of Lori Lundy.",
+          "LINK": "https://www.artstor.org/2020/05/04/our-dogged-companions/",
+          "IMG_SOURCE": "/assets/img/featured-collections/ithaka_dog.jpg",
+          "LINK_TITLE": "Our dogged companions",
+          "ALT_TEXT": "Our dogged companions"
         }
       ]
     },

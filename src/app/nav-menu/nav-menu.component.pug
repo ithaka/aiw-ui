@@ -51,6 +51,8 @@
         .nav-item(*ngIf="!mobileCollapsed")
           a.link--accent(tabindex="3", (click)="logout()", *ngIf="user.isLoggedIn") Log Out
           a.link--accent(tabindex="3", [routerLink]="['/login']", *ngIf="!user.isLoggedIn") Log In
+          span &nbsp;or&nbsp;
+          a.link--accent(tabindex="3", [routerLink]="['/register']", *ngIf="!user.isLoggedIn") Register
         .nav-item(*ngIf="!mobileCollapsed && institutionObj")
           | Institution: {{ institutionObj.shortName ? institutionObj.shortName : institutionObj.institutionName }}
 ang-delete-ig-modal(*ngIf="showDeleteIgModal", (closeModal)="showDeleteIgModal = false", [ig]="ig", [igId]="route.snapshot.params.igId", [igName]="route.snapshot.params.name")

@@ -2,8 +2,9 @@ div
   nav-menu([allowSelectAll]="true")
   .container.main-content
     .row
-      .col-sm-3
-        .mobile--hide
+      .col-sm-3(style="margin-top: 1rem;")
+        button.mobile--show.btn.btn-secondary(id="showFiltersBtn", (click)="showFilters = !showFilters") {{ showFilters ? 'Hide Filters' : 'Show Filters' }}
+        div([ngClass]="[ showFilters ? '' : 'mobile--hide']")
           div(aria-activedescendant="button")
             button.skip-btn#skip-to-search-link((click)="skipToSearchSection()", (keyup.enter)="skipToSearchSection()", tabindex="2", class="sr-only sr-only-focusable") This is the filters section. Skip to the search results section.
           h1 Filtered Search

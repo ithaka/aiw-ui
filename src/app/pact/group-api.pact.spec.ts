@@ -2,6 +2,7 @@
 import { HttpClientModule } from '@angular/common/http'
 import { TestBed, getTestBed } from '@angular/core/testing'
 import { PactWeb, Matchers } from '@pact-foundation/pact-web'
+import { APP_CONST } from '../app.constants'
 
 // Project Dependencies
 import { GroupList, ImageGroup } from '../shared'
@@ -182,7 +183,7 @@ describe('Group Calls #pact #group', () => {
           withRequest: {
             method: 'GET',
             path: '/api/v2/group',
-            query: 'size=48&level=private&from=0&sort=alpha&order=asc'
+            query: 'size=' + APP_CONST.IMAGE_GROUP_PAGE_SIZE +'&level=private&from=0&sort=alpha&order=asc'
           },
           willRespondWith: {
             status: 200,
@@ -204,7 +205,7 @@ describe('Group Calls #pact #group', () => {
 
       it('should return a list of private group objects', function(done) {
         // Run the tests
-        _groupService.getAll('private', 48, 0, [], '', '', 'alpha', 'asc')
+        _groupService.getAll('private', APP_CONST.IMAGE_GROUP_PAGE_SIZE, 0, [], '', '', 'alpha', 'asc')
           .subscribe(res => {
             // Test if the response object has all the keys / properties
             let actualResKeys = Object.keys(res).sort();

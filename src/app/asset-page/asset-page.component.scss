@@ -536,11 +536,9 @@ $titleNavBg: #eee;
     &.btn-secondary, a.btn-secondary {
       width: 12rem;
 
-      &.dropdown-toggle {
-          &:hover, &:focus, &:active, &.active {
-              background-color: #C9510D;
-              color: white;
-          }
+      &:hover, &:focus, &:active, &.active {
+          background-color: #C9510D;
+          color: white;
       }
   }
 }
@@ -621,8 +619,9 @@ $titleNavBg: #eee;
         display: flex;
         align-items: center;
 
-        &:hover {
+        &:hover, &:focus {
             background-color: $color-gray-2;
+            color: inherit;
         }
 
         .icon {

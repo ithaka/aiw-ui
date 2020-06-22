@@ -19,7 +19,8 @@ import { AppConfig } from '../app.service'
 
 export class SearchPage implements OnInit, OnDestroy {
 
-  public siteID: string = ''
+  public siteID: string = '';
+  public showFilters: boolean = false;
   // Add user to decide whether to show the banner
   private user: any = this._auth.getUser();
 
@@ -57,6 +58,9 @@ export class SearchPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // Ethnio survey 5-22
+    this._script.loadScript('ethnio-survey')
+
     // Subscribe User object updates
     this.subscriptions.push(
       this._auth.currentUser.subscribe(
