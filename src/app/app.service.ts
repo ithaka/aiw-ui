@@ -26,19 +26,19 @@ export class AppConfig {
     // Identify hostname from request or client side
     this.isBrowser = false;
     if (this.isBrowser) {
-      const portNum = window.location.port;
-      const hostName = window.location.hostname;
-
-      this.clientHostname = this.getHostName(hostName, portNum);
+      this.clientHostname = this.getHostName(window.location.hostname, window.location.port);
     } else {
       let req = this.injector.get('request');
-
-      const requestHost = req ? req.get('host').split(":") : [""];
-      if(requestHost.length == 1) {
-        this.clientHostname = requestHost[0];
-      } else {
-        this.clientHostname = this.getHostName(requestHost[0], requestHost[1]);
+      if(req) {
+        const requestHost = req.get("host").split(":");
+        this.clientHostname = (requestHost.length === 1) ?
+                                requestHost[0] :
+                                this.getHostName(requestHost[0], requestHost[1]);
       }
+      else {
+        this.clientHostname = "";
+      }
+
       console.log("Requested from", this.clientHostname)
     }
 
