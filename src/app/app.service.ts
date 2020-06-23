@@ -57,7 +57,7 @@ export class AppConfig {
   }
 
   private getHostName(hostName, portNum) {
-    return (this.PORTS_TO_EXCLUDE.includes(portNum)) ?
+    return (this.PORTS_TO_EXCLUDE.includes(portNum) || portNum.length < 1) ?
       hostName :
       `${hostName}:${portNum}`;
   }
