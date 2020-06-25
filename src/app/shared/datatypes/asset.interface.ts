@@ -63,6 +63,8 @@ export class Asset {
         panorama_xml?: string
     }
 
+     MAXIMUM_DOWNLOAD_SIZE = 3000;
+
     constructor(assetData: AssetData, IIIFUrl ?: string) {
         if (!assetData) {
             throw new Error('No data passed to construct asset')
@@ -119,16 +121,23 @@ export class Asset {
                 let maxHeight
                 let maxSize
                 if (data.download_size && data.download_size.length > 0) {
-                    let sizeValues = data.download_size.split(',')
-                    maxWidth = parseInt(sizeValues[0])
-                    maxHeight = parseInt(sizeValues[1])
+                    let sizeValues = data.download_size.split(',');
+
+                    maxWidth = Math.min(parseInt(sizeValues[0]), data.width * 2, this.MAXIMUM_DOWNLOAD_SIZE);
+                    maxHeight = Math.min(parseInt(sizeValues[1]), data.height * 2, this.MAXIMUM_DOWNLOAD_SIZE);
+                } else {
+                    maxWidth = data.width && data.width > 0 ?
+                                  Math.min(data.width * 2, this.MAXIMUM_DOWNLOAD_SIZE) :
+                                  this.MAXIMUM_DOWNLOAD_SIZE;
+                    maxHeight = data.height && data.height > 0 ?
+                                  Math.min(data.height * 2, this.MAXIMUM_DOWNLOAD_SIZE) :
+                                  this.MAXIMUM_DOWNLOAD_SIZE;
                 }
-                // Check if valid sizes, otherwise use defaults (larger than 3000 may stall)
-                if (maxWidth < 0 || maxWidth > 3000) maxWidth = 3000
-                if (maxHeight < 0 || maxHeight > 3000) maxHeight = 3000
+
                 // Set max values on Asset
                 this.downloadMaxWidth = maxWidth
                 this.downloadMaxHeight = maxHeight
+
                 // Generate IIIF size string based on orientation
                 if (data.width > data.height) {
                     // Landscape
@@ -137,6 +146,7 @@ export class Asset {
                     // Portrait
                     maxSize = ',' + maxHeight
                 }
+
                 if (Array.isArray(this.tileSource) && this.tileSource.length >= 1) {
                     // Handle Multi View downloads using IIIF
                     let url = this.tileSource[0].replace('info.json', '') + 'full/'+maxSize+'/0/' + this.iiifFilename()
