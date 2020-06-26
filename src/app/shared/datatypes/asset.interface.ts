@@ -104,8 +104,8 @@ export class Asset {
     }
 
     private getDownloadSize(downloadSize, imageSize) {
-      return Math.min(downloadSize && downloadSize > 0 ? downloadSize : this.MAXIMUM_DOWNLOAD_SIZE,
-                             imageSize && imageSize > 0 ? imageSize : this.MAXIMUM_DOWNLOAD_SIZE,
+      return Math.min(downloadSize > 0 ? downloadSize : this.MAXIMUM_DOWNLOAD_SIZE,
+                             imageSize > 0 ? imageSize : this.MAXIMUM_DOWNLOAD_SIZE,
                              this.MAXIMUM_DOWNLOAD_SIZE);
     }
 
