@@ -133,8 +133,8 @@ export class Asset {
                   downloadHeight = parseInt(sizeValues[1]);
                 }
 
-                const maxWidth = this.getDownloadSize(downloadWidth, data.width);
-                const maxHeight = this.getDownloadSize(downloadHeight, data.height);
+                const maxWidth = this.getDownloadSize(downloadWidth, data.width * 2);
+                const maxHeight = this.getDownloadSize(downloadHeight, data.height * 2);
 
                 // Set max values on Asset
                 this.downloadMaxWidth = maxWidth
