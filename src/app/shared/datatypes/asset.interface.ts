@@ -63,6 +63,8 @@ export class Asset {
         panorama_xml?: string
     }
 
+     MAXIMUM_DOWNLOAD_SIZE = 3000;
+
     constructor(assetData: AssetData, IIIFUrl ?: string) {
         if (!assetData) {
             throw new Error('No data passed to construct asset')
@@ -101,6 +103,12 @@ export class Asset {
         return formattedData
     }
 
+    private getDownloadSize(downloadSize, imageSize) {
+      return Math.min(downloadSize > 0 ? downloadSize : this.MAXIMUM_DOWNLOAD_SIZE,
+                             imageSize > 0 ? imageSize : this.MAXIMUM_DOWNLOAD_SIZE,
+                             this.MAXIMUM_DOWNLOAD_SIZE);
+    }
+
     private buildDownloadLink(data: AssetData, groupId?: string): string {
         let downloadLink: string
         switch (data.object_type_id) {
@@ -115,20 +123,23 @@ export class Asset {
                 break
             default:
                 // Determine allowable size
-                let maxWidth
-                let maxHeight
                 let maxSize
+                let downloadWidth = this.MAXIMUM_DOWNLOAD_SIZE;
+                let downloadHeight = this.MAXIMUM_DOWNLOAD_SIZE;
+
                 if (data.download_size && data.download_size.length > 0) {
-                    let sizeValues = data.download_size.split(',')
-                    maxWidth = parseInt(sizeValues[0])
-                    maxHeight = parseInt(sizeValues[1])
+                  let sizeValues = data.download_size.split(',');
+                  downloadWidth = parseInt(sizeValues[0]);
+                  downloadHeight = parseInt(sizeValues[1]);
                 }
-                // Check if valid sizes, otherwise use defaults (larger than 3000 may stall)
-                if (maxWidth < 0 || maxWidth > 3000) maxWidth = 3000
-                if (maxHeight < 0 || maxHeight > 3000) maxHeight = 3000
+
+                const maxWidth = this.getDownloadSize(downloadWidth, data.width * 2);
+                const maxHeight = this.getDownloadSize(downloadHeight, data.height * 2);
+
                 // Set max values on Asset
                 this.downloadMaxWidth = maxWidth
                 this.downloadMaxHeight = maxHeight
+
                 // Generate IIIF size string based on orientation
                 if (data.width > data.height) {
                     // Landscape
@@ -137,6 +148,7 @@ export class Asset {
                     // Portrait
                     maxSize = ',' + maxHeight
                 }
+
                 if (Array.isArray(this.tileSource) && this.tileSource.length >= 1) {
                     // Handle Multi View downloads using IIIF
                     let url = this.tileSource[0].replace('info.json', '') + 'full/'+maxSize+'/0/' + this.iiifFilename()
