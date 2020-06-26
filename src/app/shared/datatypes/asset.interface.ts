@@ -103,6 +103,12 @@ export class Asset {
         return formattedData
     }
 
+    private getDownloadSize(downloadSize, imageSize) {
+      return Math.min(downloadSize && downloadSize > 0 ? downloadSize : this.MAXIMUM_DOWNLOAD_SIZE,
+                             imageSize && imageSize > 0 ? imageSize : this.MAXIMUM_DOWNLOAD_SIZE,
+                             this.MAXIMUM_DOWNLOAD_SIZE);
+    }
+
     private buildDownloadLink(data: AssetData, groupId?: string): string {
         let downloadLink: string
         switch (data.object_type_id) {
@@ -117,22 +123,18 @@ export class Asset {
                 break
             default:
                 // Determine allowable size
-                let maxWidth
-                let maxHeight
                 let maxSize
-                if (data.download_size && data.download_size.length > 0) {
-                    let sizeValues = data.download_size.split(',');
+                let downloadWidth = this.MAXIMUM_DOWNLOAD_SIZE;
+                let downloadHeight = this.MAXIMUM_DOWNLOAD_SIZE;
 
-                    maxWidth = Math.min(parseInt(sizeValues[0]), data.width * 2, this.MAXIMUM_DOWNLOAD_SIZE);
-                    maxHeight = Math.min(parseInt(sizeValues[1]), data.height * 2, this.MAXIMUM_DOWNLOAD_SIZE);
-                } else {
-                    maxWidth = data.width && data.width > 0 ?
-                                  Math.min(data.width * 2, this.MAXIMUM_DOWNLOAD_SIZE) :
-                                  this.MAXIMUM_DOWNLOAD_SIZE;
-                    maxHeight = data.height && data.height > 0 ?
-                                  Math.min(data.height * 2, this.MAXIMUM_DOWNLOAD_SIZE) :
-                                  this.MAXIMUM_DOWNLOAD_SIZE;
+                if (data.download_size && data.download_size.length > 0) {
+                  let sizeValues = data.download_size.split(',');
+                  downloadWidth = parseInt(sizeValues[0]);
+                  downloadHeight = parseInt(sizeValues[1]);
                 }
+
+                const maxWidth = this.getDownloadSize(downloadWidth, data.width);
+                const maxHeight = this.getDownloadSize(downloadHeight, data.height);
 
                 // Set max values on Asset
                 this.downloadMaxWidth = maxWidth
