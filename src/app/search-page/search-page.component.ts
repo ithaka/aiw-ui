@@ -34,6 +34,9 @@ export class SearchPage implements OnInit, OnDestroy {
 
   private userSessionFresh: boolean = false;
 
+  private logFilters: any = {};
+  private searchTerm: string = '';
+
   constructor(
         public _appConfig: AppConfig,
         private _assets: AssetService,
@@ -75,7 +78,18 @@ export class SearchPage implements OnInit, OnDestroy {
         (err) => {
           console.error('Nav failed to load Institution information', err);
         }
-      )
+      ),
+      // Post search info to Captain's Log
+      this._assets.searchRequestIdAvailable.pipe(map((abc) => {
+        this._captainsLog.log({
+          eventType: 'artstor_search',
+          referring_requestid: this._assetSearch.latestSearchRequestId,
+          additional_fields: {
+            'searchTerm': this.searchTerm,
+            'searchFilters': this.logFilters
+          }
+        })
+      })).subscribe()
     );
 
   } // OnInit
@@ -106,19 +120,8 @@ export class SearchPage implements OnInit, OnDestroy {
         let logFilters = Object.assign({}, params)
         // Remove search term value
         delete logFilters['term']
-        // Post search info to Captain's Log
-        this.subscriptions.push(
-          this._assets.searchRequestIdAvailable.pipe(map((abc) => {
-            this._captainsLog.log({
-              eventType: 'artstor_search',
-              referring_requestid: this._assetSearch.latestSearchRequestId,
-              additional_fields: {
-                'searchTerm': params['term'],
-                'searchFilters': logFilters
-              }
-            })
-          })).subscribe()
-        )
+        this.logFilters = logFilters
+        this.searchTerm = params['term']
 
         this._title.setSubtitle( '"' + params['term'] + '"' )
         this._assets.queryAll(params, refreshSearch);
