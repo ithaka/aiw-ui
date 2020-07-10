@@ -230,7 +230,7 @@
                 img.license-icon([attr.src]="license.licenseImg", [attr.alt]="license.licenseText", title="License")
                 | &nbsp;
                 span.value.license-text([innerHTML]="cleanFieldValue(license.licenseText) | linkify", title="License")
-            .value([innerHTML]="cleanFieldValue('Use of this image is in accordance with the <a href=`https://www.artstor.org/artstor-terms/` target=`_blank` >Artstor Terms & Conditions</a>') | linkify")
+            .value([innerHTML]="cleanFieldValue('Use of this image is in accordance with the <a href=\"https://www.artstor.org/artstor-terms/\" target=\"_blank\" >Artstor Terms & Conditions</a>') | linkify")
           //- File Properties
           .row-hdr.pt-3(*ngIf="assets[0].filePropertiesArray.length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.FILE_PROPS' | translate}}
           //- File Name
