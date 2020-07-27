@@ -15,6 +15,7 @@ export const WLV_ARTSTOR = {
     footerLinks: [
         "ABOUT",
         "GETTING_STARTED",
+        "LIBGUIDE",
         "TEACHING_IDEAS",
         "STAY_INFORMED",
         "TERMS",
