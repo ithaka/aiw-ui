@@ -23,6 +23,7 @@ export class UploaderComponent implements OnInit {
   public fileOverDropZone: boolean = false
   // keep an array of files which were of invalid type
   public invalidFiles: FileLikeObject[] = []
+  public uploadErrorFiles: FileItem[] = []
 
   constructor(private _auth: AuthService) {
     this.UPLOAD_URL = [this._auth.getUrl(), 'v1', 'pcollection', 'image'].join('/')
@@ -47,6 +48,10 @@ export class UploaderComponent implements OnInit {
         resJson.src = item._file['local-src']
         resJson && this.fileUploaded.emit(resJson)
       }
+    }
+
+    this.uploader.onErrorItem = (item, response, status, headers) => {
+      this.uploadErrorFiles.push(item)
     }
 
     /**
