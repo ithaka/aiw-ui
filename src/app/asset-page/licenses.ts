@@ -33,7 +33,7 @@ export const licenses = [
     },
     { name: 'Creative Commons: Public Domain Mark',
       link: 'https://creativecommons.org/publicdomain/mark/1.0/',
-      img: 'https://licensebuttons.net/p/mark/1.0/88x31.png ',
+      img: 'https://licensebuttons.net/p/mark/1.0/88x31.png',
       html: '<a href="https://creativecommons.org/publicdomain/mark/1.0/" title="CC0 1.0 Universal (CC0 1.0) Public Domain Dedication">Public Domain</a></div>'
     },
     { name: 'Public Domain',
