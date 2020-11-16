@@ -1,5 +1,5 @@
 # Builds a Docker to deliver dist/
-FROM node:11.0
+FROM docker.artifactory.acorn.cirrostratus.org/node:11.0
 # Add environment variables
 ENV PORT=80
 ENV SAGOKU=true
