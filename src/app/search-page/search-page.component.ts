@@ -61,6 +61,9 @@ export class SearchPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // Ethnio survey 12/9
+    this._script.loadScript('ethnio-survey')
+
     // Subscribe User object updates
     this.subscriptions.push(
       this._auth.currentUser.subscribe(
