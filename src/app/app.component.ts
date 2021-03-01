@@ -270,6 +270,9 @@ export class AppComponent {
   }
 
   ngOnInit() {
+    // Sitewide survey
+    this._script.loadScript('ethnio-survey')
+
     if (isPlatformBrowser(this.platformId)) {
       // Setup statusPageClient & subscribe to any status updates to show banner
       import('statuspage-client') // Load StatusPage client -side
