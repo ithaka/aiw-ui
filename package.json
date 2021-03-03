@@ -130,7 +130,7 @@
     "ngx-tag-autocomplete": "2.0.4",
     "openseadragon": "git://github.com/ithaka/openseadragon.git#f92bfe545ca095e517a73cbe43b4e92d5a186203",
     "popper.js": "^1.14.4",
-    "pug": "^2.0.3",
+    "pug": "^3.0.1",
     "pug-loader": "^2.4.0",
     "rxjs": "^6.0.0",
     "rxjs-compat": "^6.4.0",
