@@ -139,7 +139,7 @@ export class AppComponent {
     this._flags.getFlagsFromService().pipe(
       take(1),
       map(flags => {
-        if (!flags.bannerShow) {
+        if (flags.enableOneTrust) {
             window['OptanonWrapper'] = () => {
                 window['OneTrust'].InsertScript("//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit", "body", null, null, "C0003");
                 window['OneTrust'].InsertScript("/assets/js/zendesk.js", "body", null, null, "C0003");

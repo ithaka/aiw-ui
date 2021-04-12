@@ -92,7 +92,8 @@ export interface FeatureFlags {
   // detailViews?: boolean,
   exportGoogle?: boolean,
   relatedResFlag?: boolean,
-  requireLoginForAdlDownload?: boolean
+  requireLoginForAdlDownload?: boolean,
+  enableOneTrust?: boolean
 }
 
 interface FlagServiceResponse {
