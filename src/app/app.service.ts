@@ -22,8 +22,6 @@ export class AppConfig {
 
   private PORTS_TO_EXCLUDE = ["80", "4000", "8080"];
 
-  public googleTranslateLoaded: Subject<boolean> = new Subject();
-
   constructor(@Inject(PLATFORM_ID) private platformId, private injector: Injector) {
     this.isBrowser = isPlatformBrowser(platformId);
 

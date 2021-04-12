@@ -10,8 +10,6 @@ import { environment } from 'environments/environment'
 import { AppConfig } from 'app/app.service'
 import { AuthService, FullScreenService } from 'app/_services'
 
-declare let google
-
 @Component({
   selector: 'footer',
   templateUrl: './footer.component.pug',
@@ -71,25 +69,6 @@ export class Footer {
         }
       })).subscribe()
     )
-
-    // // Workaround: Make sure Google translate has loaded
-    // // Client-only 
-    this._app.googleTranslateLoaded.subscribe ( loaded => {
-        if (loaded && isPlatformBrowser(this.platformId)) {
-            setTimeout(() => {
-                if (google && google.translate && typeof(google.translate.TranslateElement) == 'function' ) {
-                    new google.translate.TranslateElement(
-                        {
-                            pageLanguage: 'en',
-                            layout: google.translate.TranslateElement && google.translate.TranslateElement.InlineLayout.SIMPLE,
-                            autoDisplay: false
-                        },
-                        'google_translate_element'
-                    )
-                }
-            }, 1000)
-        }
-    })
   }
 
   private logout(): void {
