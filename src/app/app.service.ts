@@ -9,6 +9,8 @@ import { Injectable, Inject, PLATFORM_ID, Injector } from '@angular/core';
 import { WLV_ARTSTOR, WLV_SAHARA } from './white-label-config.ts'
 import { isPlatformBrowser } from '@angular/common';
 
+import { Subject } from 'rxjs'
+
 @Injectable()
 export class AppConfig {
   // Default values
@@ -19,6 +21,8 @@ export class AppConfig {
   private isBrowser
 
   private PORTS_TO_EXCLUDE = ["80", "4000", "8080"];
+
+  public googleTranslateLoaded: Subject<boolean> = new Subject();
 
   constructor(@Inject(PLATFORM_ID) private platformId, private injector: Injector) {
     this.isBrowser = isPlatformBrowser(platformId);

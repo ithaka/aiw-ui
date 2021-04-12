@@ -136,6 +136,58 @@ export class AppComponent {
       { property: 'og:type', content: 'website' }
     ]);
 
+    this._flags.getFlagsFromService().pipe(
+      take(1),
+      map(flags => {
+        if (!flags.bannerShow) {
+            window['OptanonWrapper'] = () => {
+                window['OneTrust'].InsertScript("//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit", "body", null, null, "C0003");
+                window['OneTrust'].InsertScript("/assets/js/zendesk.js", "body", null, null, "C0003");
+                setTimeout( () => {
+                    window['zE'](() => {
+                        window['$zopim'](() => {
+                            window['$zopim'].livechat.setOnConnected(() => {
+                                if (this.shouldShowChat(window.location.hash)) {
+                                    window['zE']('webWidget', 'show');
+                                } else {
+                                    window['zE']('webWidget', 'hide');
+                                }
+                            });
+                        });
+                    });
+                }, 1000);
+
+                this._app.googleTranslateLoaded.next(true);
+            }
+        } else {
+            let googleTranslateScript = document.createElement('script');
+            googleTranslateScript.setAttribute('src','//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit');
+            document.head.appendChild(googleTranslateScript);
+
+            let zendDeskScript = document.createElement('script');
+            zendDeskScript.setAttribute('src','/assets/js/zendesk.js');
+            document.head.appendChild(zendDeskScript);
+
+            this._app.googleTranslateLoaded.next(true);
+            
+            setTimeout(() => {
+                window['zE'](() => {
+                    window['$zopim'](() => {
+                        window['$zopim'].livechat.setOnConnected(() => {
+                            if (this.shouldShowChat(window.location.hash)) {
+                                window['zE']('webWidget', 'show');
+                            } else {
+                                window['zE']('webWidget', 'hide');
+                            }
+                        });
+                    });
+                });
+            }, 1000);
+        }
+      }, (err) => {
+        console.error(err)
+    })).subscribe()
+
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.pipe(map(event => {
 
@@ -204,40 +256,14 @@ export class AppComponent {
           }
 
           // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
-          if (this.shouldShowChat(window.location.hash)) {
-            this.showZendeskChat();
-            this._script.loadScript('zendesk')
-              .then(data => {
-                window['zE'](() => {
-                  window['$zopim'](() => {
-                    window['$zopim'].livechat.setOnConnected(() => {
-                      // Sometimes the user navigates away from a page containing the chat widget
-                      // but it hasn't loaded yet. Need to check once more after it loads to ensure
-                      // we still should display it.
-                      if (this.shouldShowChat(window.location.hash)) {
-                        this.showZendeskChat()
-                      } else {
-                        this.hideZendeskChat()
-                      }
-                    })
-                  })
-                });
-              })
-              .catch(error => console.error(error))
-          } else {
-            this.hideZendeskChat()
+          if (this.shouldShowChat(window.location.hash) && window['zE']) {
+            window['zE']('webWidget', 'show');
+          } else if(window['zE']) {
+            window['zE']('webWidget', 'hide');
           }
         }
       }
     })).subscribe();
-
-    this._flags.getFlagsFromService().pipe(
-      take(1),
-      map(flags => {
-        // don't need to handle successful response here - this just initiates the flags
-      }, (err) => {
-        console.error(err)
-    })).subscribe()
   }
 
   updateTitle(event: RouterEvent) {
@@ -282,20 +308,6 @@ export class AppComponent {
     this.initPerimeterX();
 
     this._fullscreen.addFullscreenListener();
-  }
-
-  private hideZendeskChat() {
-    let zendDeskElement = this._dom.byId('launcher');
-    if (zendDeskElement) {
-      zendDeskElement.style.display = 'none';
-    }
-  }
-
-  private showZendeskChat() {
-    let zendDeskElement = this._dom.byId('launcher');
-    if (zendDeskElement) {
-      zendDeskElement.style.display = 'initial';
-    }
   }
 
   /**

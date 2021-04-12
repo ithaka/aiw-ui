@@ -74,20 +74,22 @@ export class Footer {
 
     // // Workaround: Make sure Google translate has loaded
     // // Client-only 
-    if (isPlatformBrowser(this.platformId)) {
-      setTimeout(() => {
-        if (google && google.translate && typeof(google.translate.TranslateElement) == 'function' ) {
-          new google.translate.TranslateElement(
-              {
-                  pageLanguage: 'en',
-                  layout: google.translate.TranslateElement && google.translate.TranslateElement.InlineLayout.SIMPLE,
-                  autoDisplay: false
-              },
-              'google_translate_element'
-          )
+    this._app.googleTranslateLoaded.subscribe ( loaded => {
+        if (loaded && isPlatformBrowser(this.platformId)) {
+            setTimeout(() => {
+                if (google && google.translate && typeof(google.translate.TranslateElement) == 'function' ) {
+                    new google.translate.TranslateElement(
+                        {
+                            pageLanguage: 'en',
+                            layout: google.translate.TranslateElement && google.translate.TranslateElement.InlineLayout.SIMPLE,
+                            autoDisplay: false
+                        },
+                        'google_translate_element'
+                    )
+                }
+            }, 1000)
         }
-      }, 1000)
-    }
+    })
   }
 
   private logout(): void {
