@@ -141,7 +141,7 @@ export class AppComponent {
     this._flags.getFlagsFromService().pipe(
       take(1),
       map(flags => {
-        this.loadWidgetScripts(flags.enableOneTrust);
+        this.initializeWidgets(flags.enableOneTrust);
       }, (err) => {
         console.error(err)
     })).subscribe()
@@ -346,7 +346,7 @@ export class AppComponent {
     return (this._app.config.showZendeskWidget && this.validChatUrls.includes(eventUrl));
   }
 
-  private loadWidgetScripts(withOneTrust: boolean) {
+  private initializeWidgets(withOneTrust: boolean) {
     if (withOneTrust) {
         window['OptanonWrapper'] = () => {
             window['OneTrust'].InsertScript("//translate.google.com/translate_a/element.js?cb=googleTranslateInit", "body", null, null, "C0003");
