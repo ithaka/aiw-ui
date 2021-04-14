@@ -23,6 +23,8 @@ import { Angulartics2 } from 'angulartics2';
 const STATUS_PAGE_CMP_ID_STAGE: string = 'fck7kkc59xvh';
 const STATUS_PAGE_CMP_ID_PROD: string = 'cmy3vpk5tq18';
 
+declare let google
+
 /*
  * App Component
  * Top Level Component
@@ -136,6 +138,14 @@ export class AppComponent {
       { property: 'og:type', content: 'website' }
     ]);
 
+    this._flags.getFlagsFromService().pipe(
+      take(1),
+      map(flags => {
+        this.initializeWidgets(flags.enableOneTrust);
+      }, (err) => {
+        console.error(err)
+    })).subscribe()
+
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.pipe(map(event => {
 
@@ -204,40 +214,14 @@ export class AppComponent {
           }
 
           // On navigation end, load the zendesk chat widget if user lands on login page else hide the widget
-          if (this.shouldShowChat(window.location.hash)) {
-            this.showZendeskChat();
-            this._script.loadScript('zendesk')
-              .then(data => {
-                window['zE'](() => {
-                  window['$zopim'](() => {
-                    window['$zopim'].livechat.setOnConnected(() => {
-                      // Sometimes the user navigates away from a page containing the chat widget
-                      // but it hasn't loaded yet. Need to check once more after it loads to ensure
-                      // we still should display it.
-                      if (this.shouldShowChat(window.location.hash)) {
-                        this.showZendeskChat()
-                      } else {
-                        this.hideZendeskChat()
-                      }
-                    })
-                  })
-                });
-              })
-              .catch(error => console.error(error))
-          } else {
-            this.hideZendeskChat()
+          if (this.shouldShowChat(window.location.hash) && window['zE']) {
+            window['zE']('webWidget', 'show');
+          } else if(window['zE']) {
+            window['zE']('webWidget', 'hide');
           }
         }
       }
     })).subscribe();
-
-    this._flags.getFlagsFromService().pipe(
-      take(1),
-      map(flags => {
-        // don't need to handle successful response here - this just initiates the flags
-      }, (err) => {
-        console.error(err)
-    })).subscribe()
   }
 
   updateTitle(event: RouterEvent) {
@@ -282,20 +266,6 @@ export class AppComponent {
     this.initPerimeterX();
 
     this._fullscreen.addFullscreenListener();
-  }
-
-  private hideZendeskChat() {
-    let zendDeskElement = this._dom.byId('launcher');
-    if (zendDeskElement) {
-      zendDeskElement.style.display = 'none';
-    }
-  }
-
-  private showZendeskChat() {
-    let zendDeskElement = this._dom.byId('launcher');
-    if (zendDeskElement) {
-      zendDeskElement.style.display = 'initial';
-    }
   }
 
   /**
@@ -374,5 +344,62 @@ export class AppComponent {
   // Show the chat widget on: '#/login', '#/browse/library', etc,...
   private shouldShowChat(eventUrl: string): boolean {
     return (this._app.config.showZendeskWidget && this.validChatUrls.includes(eventUrl));
+  }
+
+  private initializeWidgets(withOneTrust: boolean) {
+    if (withOneTrust) {
+        window['OptanonWrapper'] = () => {
+            window['OneTrust'].InsertScript("//translate.google.com/translate_a/element.js?cb=googleTranslateInit", "body", null, null, "C0003");
+            window['OneTrust'].InsertScript("/assets/js/zendesk.js", "body", null, null, "C0003");
+            this.initializeChatWidget();
+        }
+    } else {
+        let googleTranslateScript = document.createElement('script');
+        googleTranslateScript.setAttribute('src','//translate.google.com/translate_a/element.js?cb=googleTranslateInit');
+        document.head.appendChild(googleTranslateScript);
+
+        let zendDeskScript = document.createElement('script');
+        zendDeskScript.setAttribute('src','/assets/js/zendesk.js');
+        document.head.appendChild(zendDeskScript);
+
+        this.initializeChatWidget();
+    }
+
+    window['googleTranslateInit'] = () => {
+        this.initializeGoogleTranslate();
+    }
+  }
+
+  private initializeChatWidget() {
+    setTimeout( () => {
+        window['zE'](() => {
+            window['$zopim'](() => {
+                window['$zopim'].livechat.setOnConnected(() => {
+                    if (this.shouldShowChat(window.location.hash)) {
+                        window['zE']('webWidget', 'show');
+                    } else {
+                        window['zE']('webWidget', 'hide');
+                    }
+                });
+            });
+        });
+    }, 1000);
+  }
+
+  private initializeGoogleTranslate() {
+    if (isPlatformBrowser(this.platformId)) {
+        setTimeout(() => {
+            if (google && google.translate && typeof(google.translate.TranslateElement) == 'function' ) {
+                new google.translate.TranslateElement(
+                    {
+                        pageLanguage: 'en',
+                        layout: google.translate.TranslateElement && google.translate.TranslateElement.InlineLayout.SIMPLE,
+                        autoDisplay: false
+                    },
+                    'google_translate_element'
+                )
+            }
+        }, 1000)
+    }
   }
 }

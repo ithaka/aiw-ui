@@ -9,6 +9,8 @@ import { Injectable, Inject, PLATFORM_ID, Injector } from '@angular/core';
 import { WLV_ARTSTOR, WLV_SAHARA } from './white-label-config.ts'
 import { isPlatformBrowser } from '@angular/common';
 
+import { Subject } from 'rxjs'
+
 @Injectable()
 export class AppConfig {
   // Default values
