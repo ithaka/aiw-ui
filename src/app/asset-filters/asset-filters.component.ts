@@ -152,7 +152,7 @@ export class AssetFilters {
               }
               // Check if there are multiple selected Geo facets.
               if(paramName === 'geography') {
-                parsedParam = parsedParam.split(',')
+                parsedParam = parsedParam
               }
               this._filters.apply(paramName, parsedParam);
             }
