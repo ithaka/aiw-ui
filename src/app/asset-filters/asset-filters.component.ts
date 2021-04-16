@@ -150,10 +150,6 @@ export class AssetFilters {
               } catch (err) { // param is not an array
                 parsedParam = routeParams[paramName]
               }
-              // Check if there are multiple selected Geo facets.
-              if(paramName === 'geography') {
-                parsedParam = parsedParam
-              }
               this._filters.apply(paramName, parsedParam);
             }
         }
