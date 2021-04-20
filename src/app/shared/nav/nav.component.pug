@@ -2,12 +2,12 @@ header.navbar.navbar-light(*ngIf="!_fullscreen.isFullscreen")
   .container(style="padding:0px;")
     .row.fit
       .col-8
-        a.navbar-brand([routerLink]="['/home']" tabindex="1")
+        a.navbar-brand([routerLink]="['/home']")
           .mobile--hide
             img#logo.hidden-xs-down([attr.src]="logoUrl" alt="Artstor logo")
           .mobile--show
             img#logoMobile.hidden-sm-up(src="/assets/img/logo-square.png" alt="Artstor logo")
-        pharos-tooltip.mobile--hide.nav-tooltip(*ngIf="showAppliedFlags", placement="bottom", tabindex="1")
+        pharos-tooltip.mobile--hide.nav-tooltip(*ngIf="showAppliedFlags", placement="bottom")
           .btn.btn--icon(slot="target")
             .icon.icon-flag
           div(slot="content")
@@ -21,19 +21,19 @@ header.navbar.navbar-light(*ngIf="!_fullscreen.isFullscreen")
               #navMessageWelcome Welcome, {{ user.username ? user.username : ''}}
               #navMessageInstitution.login-panel__institution(*ngIf="institutionObj.displayName || institutionObj.institutionName") Access provided by {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
               .login-panel__links
-                a.link--accent#nav-setting([routerLink]=" ['./account'] " routerLinkActive="active" tabindex="1") Settings
-                a.link--accent#nav-logout((click)="logout()", (keydown.enter)="logout()", tabindex="1") Log Out
+                a.link--accent#nav-setting([routerLink]=" ['./account'] " routerLinkActive="active" tabindex="0") Settings
+                a.link--accent#nav-logout((click)="logout()", (keydown.enter)="logout()", tabindex="0") Log Out
             .login-panel__status(*ngIf="!user.isLoggedIn")
               b(*ngIf="_auth.isPublicOnly()") Welcome to Artstor's public collections!
               #navMessageInstitution.login-panel__institution(*ngIf="!_auth.isPublicOnly() && (institutionObj.displayName || institutionObj.institutionName)") Access provided by {{ institutionObj.displayName ? institutionObj.displayName : institutionObj.institutionName }}
               .login-panel__with-tooltip
                 div(*ngIf="!ipAuthed", class="login-panel__tooltip-container")
-                  button.btn.btn-primary#nav-login((click)="trackLoginButtonClick(); navigateAndSaveRoute('/login')", (keydown.enter)="trackLoginButtonClick(); navigateAndSaveRoute('/login')", tabindex="1") Log in
+                  button.btn.btn-primary#nav-login((click)="trackLoginButtonClick(); navigateAndSaveRoute('/login')", (keydown.enter)="trackLoginButtonClick(); navigateAndSaveRoute('/login')", tabindex="0") Log in
                   ang-promo-tooltip(*ngIf="!hideLoginTooltip", class="login-panel__tooltip", [options]="loginTooltipOptions", (close)="closeLoginTooltip()")
                 ng-container(*ngIf="ipAuthed")
-                  a.link#nav-login((click)="navigateAndSaveRoute('/login')", (keydown.enter)="navigateAndSaveRoute('/login')", tabindex="1") Log in
+                  a.link#nav-login((click)="navigateAndSaveRoute('/login')", (keydown.enter)="navigateAndSaveRoute('/login')", tabindex="0") Log in
                   span &nbsp;or&nbsp;
-                  a.link#nav-register((click)="navigateAndSaveRoute('/register')", (keydown.enter)="navigateAndSaveRoute('/register')", tabindex="1") Register
+                  a.link#nav-register((click)="navigateAndSaveRoute('/register')", (keydown.enter)="navigateAndSaveRoute('/register')", tabindex="0") Register
                 span(*ngIf="_auth.isPublicOnly()") &nbsp;to access the core collections.
                 span(*ngIf="user.status && !user.isLoggedIn") &nbsp;to save images
 .toast-stack
