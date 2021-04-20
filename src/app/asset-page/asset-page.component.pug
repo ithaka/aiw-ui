@@ -173,7 +173,7 @@
         //-------------------
         //- Metadata Display
         //-------------------
-        div#mainContent([class.d-none]="showEditDetails", tabindex="0")
+        div#mainContent([class.d-none]="showEditDetails")
           .row-hdr.pt-3(*ngIf="(assets[0].formattedMetadata | keys).length > 0") {{ 'ASSET_PAGE.HEADER_LABELS.OBJ_DETAILS' | translate}}
           //- Alert: Metdata Processing
           .alert.alert-info(*ngIf="showMetadataPending")
@@ -238,7 +238,7 @@
               .value([innerHtml]="assets[0].SSID", aria-labelledby="ssid")
           //- IAP and Report Error
           .text-left.pt-2
-            a#buttonRequestIap.assetpage-btn.btn.btn-secondary.my-1(*ngIf="iapFormUrl", [attr.href]="getIapFormUrl(assets[0])", (click)="logIAP(assets[0])", title="Request Image for Academic Publishing", tabindex="8", target="_blank") {{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}
+            a#buttonRequestIap.assetpage-btn.btn.btn-secondary.my-1(*ngIf="iapFormUrl", [attr.href]="getIapFormUrl(assets[0])", (click)="logIAP(assets[0])", title="Request Image for Academic Publishing", target="_blank") {{'ASSET_PAGE.BUTTONS.GET_IAP' | translate}}
             a#buttonReportAssetError.assetpage-btn.btn.btn-secondary.my-1(*ngIf="errorFormUrl", [attr.href]="errorFormUrl", title="Report an error", target="_blank") {{'ASSET_PAGE.BUTTONS.REPORT_ERROR' | translate}}
             button.assetpage-btn.btn.btn-secondary.ml-2(*ngIf="user.isLoggedIn && assets[0].personalCollectionOwner === user['baseProfileId']", (click)="showDeletePCModal = true", type="button", [class.loading]="deleteLoading") {{ 'ASSET_PAGE.EDIT_DETAILS_FORM.DELETE_BTN' | translate }}
 
