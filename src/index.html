@@ -3,7 +3,7 @@
 <head>
   <!-- Run the app from the root directory -->
   <base href="/">
-  
+
   <!--Track initial URL in cases where we need to re-route legacy links-->
   <script type="text/javascript">
     var initPath = window.location.href;
@@ -133,25 +133,6 @@
       display: none !important;
     }
   </style>
-
-  <!-- AppD EUM -->
-  <script charset='UTF-8'>
-    var hostname = window.location.hostname,
-      nonProdHosts = ['stage.artstor.org', 'localhost', '127.0.0.1'],
-      prodKey = 'AD-AAB-AAM-TVS',
-      testKey = 'AD-AAB-AAM-TWZ';
-
-    window['adrum-start-time'] = new Date().getTime();
-    (function(config){
-      config.appKey = nonProdHosts.includes(hostname) ? testKey : prodKey;
-      config.adrumExtUrlHttp = 'http://cdn.appdynamics.com';
-      config.adrumExtUrlHttps = 'https://cdn.appdynamics.com';
-      config.beaconUrlHttp = 'http://col.eum-appdynamics.com';
-      config.beaconUrlHttps = 'https://col.eum-appdynamics.com';
-      config.xd = {enable : false};
-    })(window['adrum-config'] || (window['adrum-config'] = {}));
-  </script>
-  <script src='//cdn.appdynamics.com/adrum/adrum-4.5.9.2098.js'></script>
 </head>
 <body>
   <noscript>
