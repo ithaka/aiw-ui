@@ -110,6 +110,14 @@ export class AppComponent {
     @Inject(DOCUMENT) private _document: Document,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
+    this._flags.getFlagsFromService().pipe(
+      take(1),
+      map(flags => {
+        this.initializeWidgets(flags.enableOneTrust);
+      }, (err) => {
+        console.error(err)
+    })).subscribe()
+
     // console.info("Constructing app component")
     // Append timestamp param to dodge caching
     if (isPlatformBrowser(this.platformId)) {
@@ -137,14 +145,6 @@ export class AppComponent {
       { property: 'og:image', content: '/assets/img/logo-v1-1.png' },
       { property: 'og:type', content: 'website' }
     ]);
-
-    this._flags.getFlagsFromService().pipe(
-      take(1),
-      map(flags => {
-        this.initializeWidgets(flags.enableOneTrust);
-      }, (err) => {
-        console.error(err)
-    })).subscribe()
 
     // Set metatitle to "Artstor" except for asset page where metatitle is {{ Asset Title }}
     router.events.pipe(map(event => {
