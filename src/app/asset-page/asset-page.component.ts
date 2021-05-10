@@ -1118,6 +1118,14 @@ export class AssetPage implements OnInit, OnDestroy {
       // Update browse direction
       this.browseAssetDirection = 'prev'
 
+      // Add GA tracking for browse to previous item
+      this.angulartics.eventTrack.next({
+        properties: {
+          event: 'Previous item',
+          category: 'Browse item view'
+        }
+      })
+
       if (this.quizShuffle || (this.assetIndex > 0)) {
         let prevAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex - 1; // Assign random thumbnail index if quiz shuffle is true
         let queryParams = {}
@@ -1157,6 +1165,14 @@ export class AssetPage implements OnInit, OnDestroy {
     if (this.quizShuffle || (this.assetNumber < this.totalAssetCount)) {
       // Update browse direction
       this.browseAssetDirection = 'next'
+
+      // Add GA tracking for browse to next item
+      this.angulartics.eventTrack.next({
+        properties: {
+          event: 'Next item',
+          category: 'Browse item view'
+        }
+      })
 
       if ((this.prevAssetResults.thumbnails) && (this.quizShuffle || (this.assetIndex < (this.prevAssetResults.thumbnails.length - 1)))) {
         let nextAssetIndex = this.quizShuffle ? Math.floor(Math.random() * this.prevAssetResults.thumbnails.length) + 0 : this.assetIndex + 1; // Assign random thumbnail index if quiz shuffle is true
