@@ -1122,7 +1122,8 @@ export class AssetPage implements OnInit, OnDestroy {
       this.angulartics.eventTrack.next({
         properties: {
           event: 'Previous item',
-          category: 'Browse item view'
+          category: 'Browse item view',
+          label: 'previous'
         }
       })
 
@@ -1170,7 +1171,8 @@ export class AssetPage implements OnInit, OnDestroy {
       this.angulartics.eventTrack.next({
         properties: {
           event: 'Next item',
-          category: 'Browse item view'
+          category: 'Browse item view',
+          label: 'next'
         }
       })
 
