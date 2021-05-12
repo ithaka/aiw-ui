@@ -82,7 +82,7 @@ export class Asset {
 
             // If license value is `ADL Terms and Conditions` then replace it with bolierplate text
             if (data.fieldName === 'License' && data.fieldValue === 'ADL Terms and Conditions') {
-                data.fieldValue = 'Use of this image is in accordance with the <a href="https://www.artstor.org/artstor-terms/" target="_blank">Artstor Terms & Conditions</a>'
+                data.fieldValue = 'Use of this image is in accordance with the applicable <a href="https://about.jstor.org/terms/" target="_blank">Terms & Conditions</a>'
             }
 
             let values: string[] = [data.fieldValue]
@@ -98,7 +98,7 @@ export class Asset {
 
         // If the asset doesn't have a license field then display bilerplate for license field.
         if(!formattedData['License']) {
-            formattedData['License'] = ['Use of this image is in accordance with the <a href="https://www.artstor.org/artstor-terms/" target="_blank">Artstor Terms & Conditions</a>']
+            formattedData['License'] = ['Use of this image is in accordance with the applicable <a href="https://about.jstor.org/terms/" target="_blank" >Terms & Conditions</a>']
         }
         return formattedData
     }
