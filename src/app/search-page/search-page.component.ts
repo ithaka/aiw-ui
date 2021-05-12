@@ -36,6 +36,7 @@ export class SearchPage implements OnInit, OnDestroy {
 
   private logFilters: any = {};
   private searchTerm: string = '';
+  private jstorLink: string = '';
 
   constructor(
         public _appConfig: AppConfig,
@@ -119,6 +120,7 @@ export class SearchPage implements OnInit, OnDestroy {
         delete logFilters['term']
         this.logFilters = logFilters
         this.searchTerm = params['term']
+        this.jstorLink = `https://www.jstor.org/action/doBasicSearch?Query=${this.searchTerm}`
 
         this._title.setSubtitle( '"' + params['term'] + '"' )
         this._assets.queryAll(params, refreshSearch);
