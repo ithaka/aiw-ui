@@ -15,7 +15,9 @@
         h1.mobile--show Results
         button.skip-btn#skip-to-filter-link((click)="skipToFilterSec()", (keyup.enter)="skipToFilterSec()", tabindex="3", class="sr-only sr-only-focusable") This is the search results section. Skip to the filters section.
         .row.no-gutters.row--search-bar
-          #mainContent.col-md-9.search-page-highlight
+          #mainContent.col-md-7.search-page-highlight
             ang-search(*ngIf="_auth.isPublicOnly()", [allowSearchInRes]="true", [UserNotLoggedIn]="true")
             ang-search(*ngIf="siteID=='SAHARA' || !_auth.isPublicOnly()", [allowSearchInRes]="true", [UserNotLoggedIn]="false")
+          a.btn-link(*ngIf="searchTerm", [href]="jstorLink", (click)="logNavigateToJstor()" data-sc="search jstor",)
+            button.btn.btn-secondary TRY THIS SEARCH ON JSTOR
         ang-asset-grid([hasMaxAssetLimit]="true")
