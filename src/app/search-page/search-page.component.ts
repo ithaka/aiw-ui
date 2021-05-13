@@ -35,8 +35,8 @@ export class SearchPage implements OnInit, OnDestroy {
   private userSessionFresh: boolean = false;
 
   private logFilters: any = {};
-  private searchTerm: string = '';
-  private jstorLink: string = '';
+  public searchTerm: string = '';
+  public jstorLink: string = '';
 
   constructor(
         public _appConfig: AppConfig,
