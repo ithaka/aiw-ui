@@ -37,10 +37,6 @@ main {
     margin: 32px 0;
     justify-content: space-between;
 
-    a.btn-link, .btn {
-        height: 40px;
-    }
-
     @media (max-width: 1000px) {
         a.btn-link {
             margin-top: 10px;
