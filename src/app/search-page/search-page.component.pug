@@ -18,6 +18,6 @@
           #mainContent.col-md-7.search-page-highlight
             ang-search(*ngIf="_auth.isPublicOnly()", [allowSearchInRes]="true", [UserNotLoggedIn]="true")
             ang-search(*ngIf="siteID=='SAHARA' || !_auth.isPublicOnly()", [allowSearchInRes]="true", [UserNotLoggedIn]="false")
-          a.btn-link(*ngIf="searchTerm", [href]="jstorLink")
+          a.btn-link(*ngIf="searchTerm", [href]="jstorLink", (click)="logNavigateToJstor()" data-sc="search jstor",)
             button.btn.btn-secondary TRY THIS SEARCH ON JSTOR
         ang-asset-grid([hasMaxAssetLimit]="true")

@@ -149,6 +149,17 @@ export class SearchPage implements OnInit, OnDestroy {
     }, 100);
   }
 
+  public logNavigateToJstor(): void{
+    this._captainsLog.log({
+      eventType: 'jstor_search',
+      referring_requestid: this._assetSearch.latestSearchRequestId,
+      additional_fields: {
+        'searchTerm': this.searchTerm,
+        'searchFilters': this.logFilters
+      }
+    })
+  }
+
   // private updateSearchInRes(value: boolean): void{
   //  this.searchInResults = value;
   // }
