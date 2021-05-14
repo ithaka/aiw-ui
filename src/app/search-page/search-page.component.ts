@@ -120,7 +120,7 @@ export class SearchPage implements OnInit, OnDestroy {
         delete logFilters['term']
         this.logFilters = logFilters
         this.searchTerm = params['term']
-        this.jstorLink = `https://www.jstor.org/action/doBasicSearch?Query=${this.searchTerm}`
+        this.jstorLink = `https://www.jstor.org/action/doBasicSearch?Query=${this.searchTerm}&utm_source=aiw`
 
         this._title.setSubtitle( '"' + params['term'] + '"' )
         this._assets.queryAll(params, refreshSearch);
