@@ -22,7 +22,7 @@
     "LOGIN_BTN": "Log in",
     "SERVER_ERROR": "Server is not responding. Please try again later.",
     "ARCHIVED_ERROR": "That login has been disabled. Please contact your institutional contact.",
-    "TERMS": "By using Artstor Digital Library, I agree to the <a id=\"linkTermsAndConditions\" tabindex=\"1\" data-automation-component=\"artstor-login-terms\" href=\"http://www.artstor.org/terms\" class=\"link\" target=\"_blank\">Terms</a>",
+    "TERMS": "By using Artstor Digital Library, I agree to the <a id=\"linkTermsAndConditions\" tabindex=\"1\" data-automation-component=\"artstor-login-terms\" href=\"https://about.jstor.org/terms/\" class=\"link\" target=\"_blank\">Terms</a>",
     "WRONG_PASSWORD" : "Invalid email address or password. Try again.",
     "LOST_PASSWORD" : "Your password has expired. Please click \"Forgot password?\" to set a new one.",
     "INVALID_EMAIL" : "Please enter a valid email address",
@@ -72,7 +72,7 @@
     "INFO_PROMPT": "Yes, send me information about new Artstor content and tools (Optional)",
     "SURVEY_PROMPT": "Yes, send me surveys (Optional)",
     "ARTSTOR_UPDATES": "I’d like to receive updates from Artstor (webinars/newsletters/surveys).",
-    "TERMS": "I agree to the Artstor Digital Library <a id=\"linkTermsConditions\" data-automation-component=\"artstor-register-terms\" href=\"http://www.artstor.org/terms\" class=\"link bold\" target=\"_blank\">Terms</a>",
+    "TERMS": "I agree to the Artstor Digital Library <a id=\"linkTermsConditions\" data-automation-component=\"artstor-register-terms\" href=\"https://about.jstor.org/terms/\" class=\"link bold\" target=\"_blank\">Terms</a>",
     "PRIVACY_DISCLAIMER": "You may unsubscribe at any time by clicking on the provided link on any marketing message.",
     "FIELDS_REQUIRED": "Please note that all fields are required unless noted."
   },
@@ -181,13 +181,13 @@
   "IMAGE_GROUP_PAGE": {
     "IG_DOWNLOAD_MODAL": {
       "TITLE": "Export/Download Guidelines",
-      "TEXT": "<p>All logged in users may export/download up to <b>2000</b> images in a <b>120</b> day period.</p><p>For groups larger than 150, only the first 150 images are exported as presentation slides. Multimedia files are not exported to PPT or ZIP.</p><p>By accepting this download, you are agreeing to the <a href=\"http://www.artstor.org/terms\" class=\"link\" name=\"Terms and conditions of use\" target=\"_blank\">terms and conditions of use.</a></p><p>Would you like to proceed?</p>",
+      "TEXT": "<p>All logged in users may export/download up to <b>2000</b> images in a <b>120</b> day period.</p><p>For groups larger than 150, only the first 150 images are exported as presentation slides. Multimedia files are not exported to PPT or ZIP.</p><p>By accepting this download, you are agreeing to the <a href=\"https://about.jstor.org/terms/\" class=\"link\" name=\"Terms and conditions of use\" target=\"_blank\">terms and conditions of use.</a></p><p>Would you like to proceed?</p>",
       "DOWNLOAD_ERROR_BIG": "We're sorry, we were unable to generate your file. The recommended group size is under 100 images.",
       "DOWNLOAD_ERROR_SMALL": "We're sorry, we were unable to generate your file. Please try again. If the problem persists, contact us at <a href=\"mailto:support@artstor.org\" class=\"link\" target=\"_blank\">support@artstor.org</a>"
     },
     "TERMS_AND_CONDITIONS": {
       "TITLE": "Exporting Terms and Conditions",
-      "TEXT": "<p>All logged in users may export/download up to 2000 images in a 120 day period.</p><p>For groups larger than 150, only the first 150 images are exported as presentation slides. Multimedia files are not exported to PowerPoint, ZIP files and Google Slides.</p> <p>By accepting this, you are agreeing to the <a href=\"http://www.artstor.org/terms\" class=\"link\" name=\"Terms and conditions of use\" target=\"_blank\">terms and conditions of use.</a></p>",
+      "TEXT": "<p>All logged in users may export/download up to 2000 images in a 120 day period.</p><p>For groups larger than 150, only the first 150 images are exported as presentation slides. Multimedia files are not exported to PowerPoint, ZIP files and Google Slides.</p> <p>By accepting this, you are agreeing to the <a href=\"https://about.jstor.org/terms/\" class=\"link\" name=\"Terms and conditions of use\" target=\"_blank\">terms and conditions of use.</a></p>",
       "DOWNLOAD_ERROR_BIG": "We're sorry, we were unable to generate your file. The recommended group size is under 100 images.",
       "DOWNLOAD_ERROR_SMALL": "We're sorry, we were unable to generate your file. Please try again. If the problem persists, contact us at <a href=\"mailto:support@artstor.org\" class=\"link\" target=\"_blank\">support@artstor.org</a>"
     },
