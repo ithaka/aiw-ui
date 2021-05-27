@@ -108,6 +108,8 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this._script.loadScript('ethnio-survey')
+
     if (this.unaffiliatedUser) {
       this.showAccessDeniedModal = true
       return
