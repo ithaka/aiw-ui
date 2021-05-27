@@ -35,7 +35,8 @@ export class SearchPage implements OnInit, OnDestroy {
   private userSessionFresh: boolean = false;
 
   private logFilters: any = {};
-  private searchTerm: string = '';
+  public searchTerm: string = '';
+  public jstorLink: string = '';
 
   constructor(
         public _appConfig: AppConfig,
@@ -119,6 +120,7 @@ export class SearchPage implements OnInit, OnDestroy {
         delete logFilters['term']
         this.logFilters = logFilters
         this.searchTerm = params['term']
+        this.jstorLink = `https://www.jstor.org/action/doBasicSearch?Query=${this.searchTerm}&utm_source=aiw`
 
         this._title.setSubtitle( '"' + params['term'] + '"' )
         this._assets.queryAll(params, refreshSearch);
@@ -145,6 +147,17 @@ export class SearchPage implements OnInit, OnDestroy {
       let htmlelement = this._dom.byId('skip-to-filter-link');
       htmlelement.focus();
     }, 100);
+  }
+
+  public logNavigateToJstor(): void{
+    this._captainsLog.log({
+      eventType: 'jstor_search',
+      referring_requestid: this._assetSearch.latestSearchRequestId,
+      additional_fields: {
+        'searchTerm': this.searchTerm,
+        'searchFilters': this.logFilters
+      }
+    })
   }
 
   // private updateSearchInRes(value: boolean): void{

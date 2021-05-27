@@ -3,6 +3,7 @@
 <head>
   <!-- Run the app from the root directory -->
   <base href="/">
+
   <!--Track initial URL in cases where we need to re-route legacy links-->
   <script type="text/javascript">
     var initPath = window.location.href;
@@ -42,9 +43,6 @@
     }
 
   </script>
-
-  <!--Load Google Translate before other javascript-->
-  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
   <!-- Google Search Console verification -->
   <meta name="google-site-verification" content="I2cWM2atN4ZtS5JQsMwBOlcC8zUEt5L74_MxJjqKcjg" />
@@ -135,25 +133,6 @@
       display: none !important;
     }
   </style>
-
-  <!-- AppD EUM -->
-  <script charset='UTF-8'>
-    var hostname = window.location.hostname,
-      nonProdHosts = ['stage.artstor.org', 'localhost', '127.0.0.1'],
-      prodKey = 'AD-AAB-AAM-TVS',
-      testKey = 'AD-AAB-AAM-TWZ';
-
-    window['adrum-start-time'] = new Date().getTime();
-    (function(config){
-      config.appKey = nonProdHosts.includes(hostname) ? testKey : prodKey;
-      config.adrumExtUrlHttp = 'http://cdn.appdynamics.com';
-      config.adrumExtUrlHttps = 'https://cdn.appdynamics.com';
-      config.beaconUrlHttp = 'http://col.eum-appdynamics.com';
-      config.beaconUrlHttps = 'https://col.eum-appdynamics.com';
-      config.xd = {enable : false};
-    })(window['adrum-config'] || (window['adrum-config'] = {}));
-  </script>
-  <script src='//cdn.appdynamics.com/adrum/adrum-4.5.9.2098.js'></script>
 </head>
 <body>
   <noscript>
@@ -186,9 +165,6 @@
       <i class="icon-loading-large"></i>
     </div>
   </app-root>
-
-  <!-- For cookie banner -->
-  <script src="https://static.ithaka.org/gdpr-banner/js/banner.js" type="text/javascript"></script>
 
   <p id="toast-live-region" class="sr-only" role="region" aria-live="polite" aria-atomic="true"></p>
 

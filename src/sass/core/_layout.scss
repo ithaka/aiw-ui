@@ -35,6 +35,14 @@ main {
 
 .row--search-bar {
     margin: 32px 0;
+    justify-content: space-between;
+
+    @media (max-width: 1000px) {
+        a.btn-link {
+            margin-top: 10px;
+        }
+    }
+
     @media (max-width: $phone) {
         margin: 10px 0;
     }

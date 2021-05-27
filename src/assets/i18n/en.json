@@ -22,7 +22,7 @@
     "LOGIN_BTN": "Log in",
     "SERVER_ERROR": "Server is not responding. Please try again later.",
     "ARCHIVED_ERROR": "That login has been disabled. Please contact your institutional contact.",
-    "TERMS": "By using Artstor Digital Library, I agree to the <a id=\"linkTermsAndConditions\" tabindex=\"1\" data-automation-component=\"artstor-login-terms\" href=\"http://www.artstor.org/terms\" class=\"link\" target=\"_blank\">Terms</a>",
+    "TERMS": "By using Artstor Digital Library, I agree to the <a id=\"linkTermsAndConditions\" tabindex=\"1\" data-automation-component=\"artstor-login-terms\" href=\"https://about.jstor.org/terms/\" class=\"link\" target=\"_blank\">Terms</a>",
     "WRONG_PASSWORD" : "Invalid email address or password. Try again.",
     "LOST_PASSWORD" : "Your password has expired. Please click \"Forgot password?\" to set a new one.",
     "INVALID_EMAIL" : "Please enter a valid email address",
@@ -72,7 +72,7 @@
     "INFO_PROMPT": "Yes, send me information about new Artstor content and tools (Optional)",
     "SURVEY_PROMPT": "Yes, send me surveys (Optional)",
     "ARTSTOR_UPDATES": "I’d like to receive updates from Artstor (webinars/newsletters/surveys).",
-    "TERMS": "I agree to the Artstor Digital Library <a id=\"linkTermsConditions\" data-automation-component=\"artstor-register-terms\" href=\"http://www.artstor.org/terms\" class=\"link bold\" target=\"_blank\">Terms</a>",
+    "TERMS": "I agree to the Artstor Digital Library <a id=\"linkTermsConditions\" data-automation-component=\"artstor-register-terms\" href=\"https://about.jstor.org/terms/\" class=\"link bold\" target=\"_blank\">Terms</a>",
     "PRIVACY_DISCLAIMER": "You may unsubscribe at any time by clicking on the provided link on any marketing message.",
     "FIELDS_REQUIRED": "Please note that all fields are required unless noted."
   },
@@ -181,13 +181,13 @@
   "IMAGE_GROUP_PAGE": {
     "IG_DOWNLOAD_MODAL": {
       "TITLE": "Export/Download Guidelines",
-      "TEXT": "<p>All logged in users may export/download up to <b>2000</b> images in a <b>120</b> day period.</p><p>For groups larger than 150, only the first 150 images are exported as presentation slides. Multimedia files are not exported to PPT or ZIP.</p><p>By accepting this download, you are agreeing to the <a href=\"http://www.artstor.org/terms\" class=\"link\" name=\"Terms and conditions of use\" target=\"_blank\">terms and conditions of use.</a></p><p>Would you like to proceed?</p>",
+      "TEXT": "<p>All logged in users may export/download up to <b>2000</b> images in a <b>120</b> day period.</p><p>For groups larger than 150, only the first 150 images are exported as presentation slides. Multimedia files are not exported to PPT or ZIP.</p><p>By accepting this download, you are agreeing to the <a href=\"https://about.jstor.org/terms/\" class=\"link\" name=\"Terms and conditions of use\" target=\"_blank\">terms and conditions of use.</a></p><p>Would you like to proceed?</p>",
       "DOWNLOAD_ERROR_BIG": "We're sorry, we were unable to generate your file. The recommended group size is under 100 images.",
       "DOWNLOAD_ERROR_SMALL": "We're sorry, we were unable to generate your file. Please try again. If the problem persists, contact us at <a href=\"mailto:support@artstor.org\" class=\"link\" target=\"_blank\">support@artstor.org</a>"
     },
     "TERMS_AND_CONDITIONS": {
       "TITLE": "Exporting Terms and Conditions",
-      "TEXT": "<p>All logged in users may export/download up to 2000 images in a 120 day period.</p><p>For groups larger than 150, only the first 150 images are exported as presentation slides. Multimedia files are not exported to PowerPoint, ZIP files and Google Slides.</p> <p>By accepting this, you are agreeing to the <a href=\"http://www.artstor.org/terms\" class=\"link\" name=\"Terms and conditions of use\" target=\"_blank\">terms and conditions of use.</a></p>",
+      "TEXT": "<p>All logged in users may export/download up to 2000 images in a 120 day period.</p><p>For groups larger than 150, only the first 150 images are exported as presentation slides. Multimedia files are not exported to PowerPoint, ZIP files and Google Slides.</p> <p>By accepting this, you are agreeing to the <a href=\"https://about.jstor.org/terms/\" class=\"link\" name=\"Terms and conditions of use\" target=\"_blank\">terms and conditions of use.</a></p>",
       "DOWNLOAD_ERROR_BIG": "We're sorry, we were unable to generate your file. The recommended group size is under 100 images.",
       "DOWNLOAD_ERROR_SMALL": "We're sorry, we were unable to generate your file. Please try again. If the problem persists, contact us at <a href=\"mailto:support@artstor.org\" class=\"link\" target=\"_blank\">support@artstor.org</a>"
     },
@@ -446,10 +446,10 @@
       "TEACHING_IDEAS": "<a href=\"https://www.artstor.org/teach/\" class=\"link\" target=\"_blank\">Teach with Artstor</a>",
       "LIBGUIDE": "<a href=\"https://artstor.libguides.com/\" class=\"link\" target=\"_blank\">Artstor LibGuides</a>",
       "STAY_INFORMED": "<a href=\"https://www.artstor.org/newsletter/\" class=\"link\" target=\"_blank\">Newsletters</a>",
-      "TERMS": "<a href=\"https://www.artstor.org/artstor-terms\" class=\"link\" target=\"_blank\">Terms and Conditions</a>",
+      "TERMS": "<a href=\"https://about.jstor.org/terms/\" class=\"link\" target=\"_blank\">Terms and Conditions</a>",
       "PRIVACY": "<a href=\"https://www.ithaka.org/privacypolicy\" class=\"link\" target=\"_blank\">Privacy Policy</a>",
       "COOKIE_POLICY": "<a href=\"http://www.ithaka.org/cookies\" class=\"link\" target=\"_blank\">Cookie Policy</a>",
-      "COPYRIGHT": "<a href=\"http://www.artstor.org/copyright\" class=\"link\" target=\"_blank\">Copyright Concerns</a>",
+      "COPYRIGHT": "<a href=\"https://about.jstor.org/terms/#jstor-responsibility\" class=\"link\" target=\"_blank\">Copyright Concerns</a>",
       "SUPPORT": "<a href=\"http://support.artstor.org\" class=\"link\" target=\"_blank\">Support</a>",
       "SUPPORT_UNAFFILIATED": "<a href=\"//support.artstor.org/?article-category=05-public-access-to-artstor\" class=\"link\" target=\"_blank\">Support</a>",
       "ARTSTOR": "<a href=\"http://artstor.org\" class=\"link\" target=\"_blank\">Artstor.org</a>",
@@ -562,60 +562,60 @@
       },
       "COLLECTIONS": [
         {
-          "SUBHEADING": "Celebrate Black History Month",
-          "DESCRIPTION": "Explore 9 open collections",
-          "CAPTION": "Shirley Chisholm. Not dated. Copyright: Tuskegee University Archives, 2016.",
-          "LINK": "https://www.artstor.org/2021/01/29/celebrate-black-history-month-with-these-9-open-collections/",
-          "IMG_SOURCE": "/assets/img/featured-collections/tuskegee_chisholm.jpg",
-          "LINK_TITLE": "Celebrate Black History Month with these 9 open collections",
-          "ALT_TEXT": "Celebrate Black History Month with these 9 open collections"
+          "SUBHEADING": "Spring into Artstor",
+          "DESCRIPTION": "",
+          "CAPTION": "Grant Wood. Spring turning. 1936. Oil on masonite. Image and data from Reynolda House Museum of American Art.",
+          "LINK": "https://www.artstor.org/2021/05/04/spring-into-artstor/",
+          "IMG_SOURCE": "/assets/img/featured-collections/spring_wood.jpg",
+          "LINK_TITLE": "Spring into Artstor",
+          "ALT_TEXT": "Spring into Artstor"
         },
         {
-          "SUBHEADING": "Rare speeches from the Civil Rights Movement",
-          "DESCRIPTION": "Speaking to the community, 1957-1971",
-          "CAPTION": "Martin Luther King Jr. at Tuskegee Civic Association Mass Meeting, 1957. Courtesy of the Tuskegee University Archives, P.H. Polk Collection, 2017.",
-          "LINK": "https://www.artstor.org/2017/03/16/tuskegee-universitys-hidden-audio-collections/",
-          "IMG_SOURCE": "/assets/img/featured-collections/tuskegee_mlk.jpg",
-          "LINK_TITLE": "Addressing the unaddressed: Tuskegee University’s Hidden Audio Collections, 1957-1971",
-          "ALT_TEXT": "Addressing the unaddressed: Tuskegee University’s Hidden Audio Collections, 1957-1971"
+          "SUBHEADING": "A wife’s work on her husband’s archive",
+          "DESCRIPTION": "",
+          "CAPTION": "Jon Schueler. Next Summer. 1966. Oil on canvas. Image and data from the Jon Schueler Estate.",
+          "LINK": "https://www.artstor.org/2021/04/13/pleasurable-and-daunting-a-wifes-work-on-her-late-husbands-archive/",
+          "IMG_SOURCE": "/assets/img/featured-collections/summer_schueler.jpg",
+          "LINK_TITLE": "A wife’s work on her husband’s archives",
+          "ALT_TEXT": "A wife’s work on her husband’s archive"
         },
         {
-          "SUBHEADING": "Jacob Lawence’s “Migration of the Negro” series (1940-1941)",
-          "DESCRIPTION": "Examine all 60 panels together",
-          "CAPTION": "Jacob Lawrence, The Migration of the Negro Panel no. 3: In every town Negroes were leaving by the hundreds to go North and enter into Northern industry, 1940 – 1941. Image and original data provided by The Phillips Collection, &copy; 2005 Estate of Gwendolyn Knight Lawrence / Artists Rights Society (ARS)",
-          "LINK": "https://www.artstor.org/2014/09/02/together-again-the-complete-migration-series-by-jacob-lawrence/",
-          "IMG_SOURCE": "/assets/img/featured-collections/phillips_migration.jpg",
-          "LINK_TITLE": "Jacob Lawence’s “Migration of the Negro” series (1940-1941)",
-          "ALT_TEXT": "Jacob Lawence’s “Migration of the Negro” series (1940-1941)"
+          "SUBHEADING": "Arthur Szyk, soldier in art",
+          "DESCRIPTION": "",
+          "CAPTION": "Arthur Szyk. Democracy at work. 1942. Watercolor and gouache on paper. Image and data from Irvin Ungar.",
+          "LINK": "https://www.artstor.org/2021/04/28/new-in-artstor-the-arthur-szyk-collection/",
+          "IMG_SOURCE": "/assets/img/featured-collections/democracy_szyk.jpg",
+          "LINK_TITLE": "Arthur Szyk, soldier in art",
+          "ALT_TEXT": "Arthur Szyk, soldier in art"
         }
       ],
       "PUBLIC_COLLECTIONS": [
         {
-          "SUBHEADING": "Celebrate Black History Month",
-          "DESCRIPTION": "Explore 9 open collections",
-          "CAPTION": "Shirley Chisholm. Not dated. Copyright: Tuskegee University Archives, 2016.",
-          "LINK": "https://www.artstor.org/2021/01/29/celebrate-black-history-month-with-these-9-open-collections/",
-          "IMG_SOURCE": "/assets/img/featured-collections/tuskegee_chisholm.jpg",
-          "LINK_TITLE": "Celebrate Black History Month with these 9 open collections",
-          "ALT_TEXT": "Celebrate Black History Month with these 9 open collections"
+          "SUBHEADING": "Spring into Artstor",
+          "DESCRIPTION": "",
+          "CAPTION": "Grant Wood. Spring turning. 1936. Oil on masonite. Image and data from Reynolda House Museum of American Art.",
+          "LINK": "https://www.artstor.org/2021/05/04/spring-into-artstor/",
+          "IMG_SOURCE": "/assets/img/featured-collections/spring_wood.jpg",
+          "LINK_TITLE": "Spring into Artstor",
+          "ALT_TEXT": "Spring into Artstor"
         },
         {
-          "SUBHEADING": "Rare speeches from the Civil Rights Movement",
-          "DESCRIPTION": "Speaking to the community, 1957-1971",
-          "CAPTION": "Martin Luther King Jr. at Tuskegee Civic Association Mass Meeting, 1957. Courtesy of the Tuskegee University Archives, P.H. Polk Collection, 2017.",
-          "LINK": "https://www.artstor.org/2017/03/16/tuskegee-universitys-hidden-audio-collections/",
-          "IMG_SOURCE": "/assets/img/featured-collections/tuskegee_mlk.jpg",
-          "LINK_TITLE": "Addressing the unaddressed: Tuskegee University’s Hidden Audio Collections, 1957-1971",
-          "ALT_TEXT": "Addressing the unaddressed: Tuskegee University’s Hidden Audio Collections, 1957-1971"
+          "SUBHEADING": "A wife’s work on her husband’s archive",
+          "DESCRIPTION": "",
+          "CAPTION": "Jon Schueler. Next Summer. 1966. Oil on canvas. Image and data from the Jon Schueler Estate.",
+          "LINK": "https://www.artstor.org/2021/04/13/pleasurable-and-daunting-a-wifes-work-on-her-late-husbands-archive/",
+          "IMG_SOURCE": "/assets/img/featured-collections/summer_schueler.jpg",
+          "LINK_TITLE": "A wife’s work on her husband’s archive",
+          "ALT_TEXT": "A wife’s work on her husband’s archive"
         },
         {
-          "SUBHEADING": "Race, identity, and experience in American art",
-          "DESCRIPTION": "A case study for teaching with images",
-          "CAPTION": "John Lewis Krimmel, Pepper-Pot: A Scene in the Philadelphia Market, 1811. Image and data from the Philadelphia Museum of Art.",
-          "LINK": "https://www.artstor.org/2011/08/18/teaching-with-artstor-race-identity-and-experience-in-american-art/",
-          "IMG_SOURCE": "/assets/img/featured-collections/phila_pepperpot.jpg",
-          "LINK_TITLE": "Teaching with Artstor: race, identity, and experience in American art",
-          "ALT_TEXT": "Teaching with Artstor: race, identity, and experience in American art"
+          "SUBHEADING": "Arthur Szyk, soldier in art",
+          "DESCRIPTION": "",
+          "CAPTION": "Arthur Szyk. Democracy at work. 1942. Watercolor and gouache on paper. Image and data from Irvin Ungar.",
+          "LINK": "https://www.artstor.org/2021/04/28/new-in-artstor-the-arthur-szyk-collection/",
+          "IMG_SOURCE": "/assets/img/featured-collections/democracy_szyk.jpg",
+          "LINK_TITLE": "Arthur Szyk, soldier in art",
+          "ALT_TEXT": "Arthur Szyk, soldier in art"
         }
       ]
     },
