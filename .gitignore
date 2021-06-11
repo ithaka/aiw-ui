@@ -83,3 +83,6 @@ docker-compose.yml
 
 .vscode/settings.json
 .npmrc
+
+# asdf
+.tool-versions
