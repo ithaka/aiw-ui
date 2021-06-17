@@ -37,9 +37,19 @@ main {
     margin: 32px 0;
     justify-content: space-between;
 
-    @media (max-width: 1000px) {
-        a.btn-link {
-            margin-top: 10px;
+    .jstor-callout {
+        border: 1px solid #eeeeee;
+        border-radius: 2px;
+        padding: 12px 24px;
+
+        .message {
+            margin-bottom: 12px;
+        }
+    }
+
+    @media (max-width: 1200px) {
+        .jstor-callout {
+            margin: 10px 0;
         }
     }
 
