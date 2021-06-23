@@ -100,6 +100,11 @@ export class SearchPage implements OnInit, OnDestroy {
     this.route.params.subscribe( (routeParams) => {
       let params = Object.assign({}, routeParams);
 
+      // if advanced search, inject search survey script
+      if (params.advSearch) {
+        this.injectAdvancedSearchSurvey();
+      }
+
       // Find feature flags applied on route
       // - Needs to be checked before running queryAll)
       this._flags.readFlags(routeParams)
@@ -133,6 +138,15 @@ export class SearchPage implements OnInit, OnDestroy {
 
       this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
     })
+  }
+
+  private injectAdvancedSearchSurvey(): void{
+    const scriptSrc = '//ethn.io/62676.js';
+    if (document.querySelectorAll(`[src="${scriptSrc}"]`).length === 0) {
+      var script = document.createElement('script');
+      script.setAttribute('src', scriptSrc);
+      document.getElementsByTagName('head')[0].appendChild(script);
+    }
   }
 
   public skipToFilterSec(): void{

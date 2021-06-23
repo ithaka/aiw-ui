@@ -240,12 +240,6 @@ export class AssetGrid implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.pipe(
       map((params: Params) => {
-
-        // if advanced search, inject search survey script
-        if (this.route.snapshot.params.advSearch) {
-          this.injectAdvancedSearchSurvey();
-        }
-
         // Find feature flags applied on route
         this._flags.readFlags(params)
 
@@ -931,15 +925,6 @@ export class AssetGrid implements OnInit, OnDestroy {
       dropdownElement.classList.remove('show')
       dropdownElement.children[0].setAttribute('aria-expanded', 'false')
       dropdownElement.children[1].classList.remove('show')
-    }
-  }
-
-  private injectAdvancedSearchSurvey(): void{
-    const scriptSrc = '//ethn.io/62676.js';
-    if (document.querySelectorAll(`[src="${scriptSrc}"]`).length === 0) {
-      var script = document.createElement('script');
-      script.setAttribute('src', scriptSrc);
-      document.getElementsByTagName('head')[0].appendChild(script);
     }
   }
 
