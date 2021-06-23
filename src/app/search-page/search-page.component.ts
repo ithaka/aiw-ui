@@ -102,7 +102,7 @@ export class SearchPage implements OnInit, OnDestroy {
 
       // if advanced search, inject search survey script
       if (params.advSearch) {
-        this.injectAdvancedSearchSurvey();
+        this._script.loadScript('advanced-search-survey')
       }
 
       // Find feature flags applied on route
@@ -138,15 +138,6 @@ export class SearchPage implements OnInit, OnDestroy {
 
       this.unaffiliatedUser = this._auth.isPublicOnly() ? true : false
     })
-  }
-
-  private injectAdvancedSearchSurvey(): void{
-    const scriptSrc = '//ethn.io/62676.js';
-    if (document.querySelectorAll(`[src="${scriptSrc}"]`).length === 0) {
-      var script = document.createElement('script');
-      script.setAttribute('src', scriptSrc);
-      document.getElementsByTagName('head')[0].appendChild(script);
-    }
   }
 
   public skipToFilterSec(): void{
