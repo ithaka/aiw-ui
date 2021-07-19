@@ -144,14 +144,14 @@ export class SearchPage implements OnInit, OnDestroy {
     window.setTimeout(() => {
       let htmlelement = this._dom.byId('skip-to-search-link');
       htmlelement.focus();
-    }, 100);
+    }, 250);
   }
 
   public skipToSearchSec(): void{
     window.setTimeout(() => {
       let htmlelement = this._dom.byId('skip-to-filter-link');
       htmlelement.focus();
-    }, 100);
+    }, 250);
   }
 
   public logNavigateToJstor(): void{
