@@ -655,9 +655,9 @@
       ]
     },
     "AD": {
-      "LINK": "https://support.artstor.org/?article=zooming-image-details",
-      "IMG_SOURCE": "/assets/img/promo-details.jpg",
-      "ALT_TEXT": "Learn about our how to save detail views to groups."
+      "LINK": "https://www.jstor.org?utm_source=aiw",
+      "IMG_SOURCE": "/assets/img/homepage_search_promo.jpg",
+      "ALT_TEXT": "You can now search JSTOR to find Artstor images along relevant articles, books, and special collections."
     },
     "QUESTIONS": {
       "HEADING": "Questions",
