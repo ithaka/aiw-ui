@@ -21,7 +21,6 @@ export const WLV_ARTSTOR = {
         "TERMS",
         "PRIVACY",
         "COOKIE_POLICY",
-        "COOKIE_SETTINGS",
         "COPYRIGHT",
         "SUPPORT"
     ],

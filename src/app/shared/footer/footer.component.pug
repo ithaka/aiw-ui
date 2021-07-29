@@ -63,6 +63,8 @@
         .col-md-3.col-12
           ul.list-unstyled
             li(*ngFor="let link of links", [innerHtml]="'FOOTER.LINKS.' + link | translate")
+            li
+              a.link((click)="openCookieSettings()") Cookie Settings
             = " "
             //- li
             //-   a.link.footer-logout((click)="logout()", *ngIf="user && !_auth.isPublicOnly()") Log Out

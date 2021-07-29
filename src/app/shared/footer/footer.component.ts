@@ -71,6 +71,10 @@ export class Footer {
     )
   }
 
+  openCookieSettings() {
+    window['OneTrust'].ToggleInfoDisplay()
+  }
+
   private logout(): void {
     this._auth.logout()
       .then(() => {
