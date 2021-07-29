@@ -449,7 +449,7 @@
       "TERMS": "<a href=\"https://about.jstor.org/terms/\" class=\"link\" target=\"_blank\">Terms and Conditions</a>",
       "PRIVACY": "<a href=\"https://www.ithaka.org/privacypolicy\" class=\"link\" target=\"_blank\">Privacy Policy</a>",
       "COOKIE_POLICY": "<a href=\"http://www.ithaka.org/cookies\" class=\"link\" target=\"_blank\">Cookie Policy</a>",
-      "COOKIE_SETTINGS": "<a href=\"javascript:void(0)\" onclick=\"OneTrust.ToggleInfoDisplay()\">Cookie settings</a>",
+      "COOKIE_SETTINGS": "<a href=\"javascript:void(0)\" ng-click=\"OneTrust.ToggleInfoDisplay()\" class=\"link\">Cookie Settings</a>",
       "COPYRIGHT": "<a href=\"https://about.jstor.org/terms/#jstor-responsibility\" class=\"link\" target=\"_blank\">Copyright Concerns</a>",
       "SUPPORT": "<a href=\"http://support.artstor.org\" class=\"link\" target=\"_blank\">Support</a>",
       "SUPPORT_UNAFFILIATED": "<a href=\"//support.artstor.org/?article-category=05-public-access-to-artstor\" class=\"link\" target=\"_blank\">Support</a>",
