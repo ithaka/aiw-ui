@@ -562,60 +562,60 @@
       },
       "COLLECTIONS": [
         {
-          "SUBHEADING": "Juneteenth",
+          "SUBHEADING": "Back to school, REALLY!",
           "DESCRIPTION": "",
-          "CAPTION": "America Irby. Quilt. Image and data from The Museum of Fine Arts, Houston. &copy; 2016 Artists Rights Society (ARS), New York.",
-          "LINK": "https://www.artstor.org/2021/06/16/celebrating-juneteenth-with-quilts-sewing-freedom-unity-and-joy/",
-          "IMG_SOURCE": "/assets/img/featured-collections/houston_quilt.jpg",
-          "LINK_TITLE": "Juneteenth",
-          "ALT_TEXT": "Juneteenth"
+          "CAPTION": "Abbie Trayler-Smith. A pupil at the Krishna-Avanti school in Harrow, North London... 2009. Photograph. Image and data &copy; Abbie Trayler-Smith / Panos Pictures.",
+          "LINK": "https://www.artstor.org/2021/08/16/back-to-school-really/",
+          "IMG_SOURCE": "/assets/img/featured-collections/classroom_panos.jpg",
+          "LINK_TITLE": "Back to school, REALLY!",
+          "ALT_TEXT": "Back to school, REALLY!"
         },
         {
-          "SUBHEADING": "Magnum Photos '20: Protest and lockdown",
+          "SUBHEADING": "Back to the museums",
           "DESCRIPTION": "",
-          "CAPTION": "Eli Reed. USA. Houston, Texas. June 8, 2020. George Floyd's Funeral service… 2020. &copy; 2021 Eli Reed / Artists Rights Society (ARS), New York / SAIF, Paris.",
-          "LINK": "https://www.artstor.org/2021/06/08/new-nearly-5000-images-from-magnum-photos/",
-          "IMG_SOURCE": "/assets/img/featured-collections/magnum_floyd1.jpeg",
-          "LINK_TITLE": "Magnum Photos '20: Protest and lockdown",
-          "ALT_TEXT": "Magnum Photos '20: Protest and lockdown"
+          "CAPTION": "Marc Chagall. Purim. 1916-18. Painting. Image and data from the Philadelphia Museum of Art. &copy; 2021 Artists Rights Society (ARS), New York / ADAGP, Paris.",
+          "LINK": "https://www.artstor.org/2021/08/11/back-to-the-museums/",
+          "IMG_SOURCE": "/assets/img/featured-collections/chagall_pma.jpeg",
+          "LINK_TITLE": "Back to the museums",
+          "ALT_TEXT": "Back to the museums"
         },
         {
-          "SUBHEADING": "Tuskegee University's Audio Collections",
+          "SUBHEADING": "Artstor in the classroom",
           "DESCRIPTION": "",
-          "CAPTION": "Tuskegee University President Luther H. Foster singing with students. c. 1968. Image and data from the Tuskegee University Archives, P.H. Polk Collection.",
-          "LINK": "https://www.artstor.org/2017/03/16/tuskegee-universitys-hidden-audio-collections/",
-          "IMG_SOURCE": "/assets/img/featured-collections/tuskegee_foster.jpg",
-          "LINK_TITLE": "Tuskegee University's Audio Collections",
-          "ALT_TEXT": "Tuskegee University's Audio Collections"
+          "CAPTION": "Jan van Eyck. The Arnolfini Portrait, detail. 1434. Painting. Image and data from Erich Lessing Culture and Fine Arts Archives/ART RESOURCE, N.Y.",
+          "LINK": "https://www.artstor.org/2011/05/16/artstor-making-the-case-for-real-paintings-in-the-classroom/",
+          "IMG_SOURCE": "/assets/img/featured-collections/arnolfini_lessing.jpg",
+          "LINK_TITLE": "Artstor in the classroom",
+          "ALT_TEXT": "Artstor in the classroom"
         }
       ],
       "PUBLIC_COLLECTIONS": [
         {
-          "SUBHEADING": "Juneteenth",
+          "SUBHEADING": "Back to school, REALLY!",
           "DESCRIPTION": "",
-          "CAPTION": "America Irby. Quilt. Image and data from The Museum of Fine Arts, Houston. &copy; 2016 Artists Rights Society (ARS), New York.",
-          "LINK": "https://www.artstor.org/2021/06/16/celebrating-juneteenth-with-quilts-sewing-freedom-unity-and-joy/",
-          "IMG_SOURCE": "/assets/img/featured-collections/houston_quilt.jpg",
-          "LINK_TITLE": "Juneteenth",
-          "ALT_TEXT": "Juneteenth"
+          "CAPTION": "Abbie Trayler-Smith. A pupil at the Krishna-Avanti school in Harrow, North London... 2009. Photograph. Image and data &copy; Abbie Trayler-Smith / Panos Pictures.",
+          "LINK": "https://www.artstor.org/2021/08/16/back-to-school-really/",
+          "IMG_SOURCE": "/assets/img/featured-collections/classroom_panos.jpg",
+          "LINK_TITLE": "Back to school, REALLY!",
+          "ALT_TEXT": "Back to school, REALLY!"
         },
         {
-          "SUBHEADING": "Magnum Photos '20: Protest and lockdown",
+          "SUBHEADING": "Back to the museums",
           "DESCRIPTION": "",
-          "CAPTION": "Eli Reed. USA. Houston, Texas. June 8, 2020. George Floyd's Funeral service… 2020. &copy; 2021 Eli Reed / Artists Rights Society (ARS), New York / SAIF, Paris.",
-          "LINK": "https://www.artstor.org/2021/06/08/new-nearly-5000-images-from-magnum-photos/",
-          "IMG_SOURCE": "/assets/img/featured-collections/magnum_floyd1.jpeg",
-          "LINK_TITLE": "Magnum Photos '20: Protest and lockdown",
-          "ALT_TEXT": "Magnum Photos '20: Protest and lockdown"
+          "CAPTION": "Marc Chagall. Purim. 1916-18. Painting. Image and data from the Philadelphia Museum of Art. &copy; 2021 Artists Rights Society (ARS), New York / ADAGP, Paris.",
+          "LINK": "https://www.artstor.org/2021/08/11/back-to-the-museums/",
+          "IMG_SOURCE": "/assets/img/featured-collections/chagall_pma.jpeg",
+          "LINK_TITLE": "Back to the museums",
+          "ALT_TEXT": "Back to the museums"
         },
         {
-          "SUBHEADING": "Tuskegee University's Audio Collections",
+          "SUBHEADING": "Artstor in the classroom",
           "DESCRIPTION": "",
-          "CAPTION": "Tuskegee University President Luther H. Foster singing with students. c. 1968. Image and data from the Tuskegee University Archives, P.H. Polk Collection.",
-          "LINK": "https://www.artstor.org/2017/03/16/tuskegee-universitys-hidden-audio-collections/",
-          "IMG_SOURCE": "/assets/img/featured-collections/tuskegee_foster.jpg",
-          "LINK_TITLE": "Tuskegee University's Audio Collections",
-          "ALT_TEXT": "Tuskegee University's Audio Collections"
+          "CAPTION": "Jan van Eyck. The Arnolfini Portrait, detail. 1434. Painting. Image and data from Erich Lessing Culture and Fine Arts Archives/ART RESOURCE, N.Y.",
+          "LINK": "https://www.artstor.org/2011/05/16/artstor-making-the-case-for-real-paintings-in-the-classroom/",
+          "IMG_SOURCE": "/assets/img/featured-collections/arnolfini_lessing.jpg",
+          "LINK_TITLE": "Artstor in the classroom",
+          "ALT_TEXT": "Artstor in the classroom"
         }
       ]
     },
@@ -655,9 +655,9 @@
       ]
     },
     "AD": {
-      "LINK": "https://support.artstor.org/?article=zooming-image-details",
-      "IMG_SOURCE": "/assets/img/promo-details.jpg",
-      "ALT_TEXT": "Learn about our how to save detail views to groups."
+      "LINK": "https://www.jstor.org?utm_source=aiw",
+      "IMG_SOURCE": "/assets/img/homepage_search_promo.jpg",
+      "ALT_TEXT": "You can now search JSTOR to find Artstor images along relevant articles, books, and special collections."
     },
     "QUESTIONS": {
       "HEADING": "Questions",

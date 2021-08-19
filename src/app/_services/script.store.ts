@@ -9,5 +9,7 @@ export const ScriptStore: Scripts[] = [
   // Ethnio, current survey on:
   { name: 'ethnio-survey', src: '//ethn.io/12038.js' },
   // Google API (Auth, Slides)
-  { name: 'gapi', src: 'https://apis.google.com/js/api.js' }
+  { name: 'gapi', src: 'https://apis.google.com/js/api.js' },
+  // Ethnio, advanced search survey
+  { name: 'advanced-search-survey', src: '//ethn.io/62676.js'}
 ];

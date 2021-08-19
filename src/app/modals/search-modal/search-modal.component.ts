@@ -248,6 +248,8 @@ export class SearchModal implements OnInit, AfterViewInit {
       }
     }
 
+    queryParams['advSearch'] = true;
+
     // Track in angulartics
     this.angulartics.eventTrack.next({ properties: { event: 'advSearch', category: 'search', label: advQuery } })
     // Open search page with new query

@@ -100,6 +100,11 @@ export class SearchPage implements OnInit, OnDestroy {
     this.route.params.subscribe( (routeParams) => {
       let params = Object.assign({}, routeParams);
 
+      // if advanced search, inject search survey script
+      if (params.advSearch) {
+        this._script.loadScript('advanced-search-survey')
+      }
+
       // Find feature flags applied on route
       // - Needs to be checked before running queryAll)
       this._flags.readFlags(routeParams)
@@ -139,14 +144,14 @@ export class SearchPage implements OnInit, OnDestroy {
     window.setTimeout(() => {
       let htmlelement = this._dom.byId('skip-to-search-link');
       htmlelement.focus();
-    }, 100);
+    }, 250);
   }
 
   public skipToSearchSec(): void{
     window.setTimeout(() => {
       let htmlelement = this._dom.byId('skip-to-filter-link');
       htmlelement.focus();
-    }, 100);
+    }, 250);
   }
 
   public logNavigateToJstor(): void{
