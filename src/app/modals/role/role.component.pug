@@ -7,16 +7,16 @@
           span(aria-hidden="true") &times;
       .modal-body
         p([innerHtml]="'You&apos;re a...' | translate")
-        a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'Undergraduate Student' | translate }}
+        a.btn.btn-secondary((click)="saveRole('ROLE_CU_UNDERGRAD_STUDENT')") {{ 'Undergraduate Student' | translate }}
         br
-        a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'Graduate Student' | translate }}
+        a.btn.btn-secondary((click)="saveRole('ROLE_CU_GRAD_STUDENT')") {{ 'Graduate Student' | translate }}
         br
-        a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'Instructor/Faculty' | translate }}
+        a.btn.btn-secondary((click)="saveRole('ROLE_CU_FACULTY')") {{ 'Instructor/Faculty' | translate }}
         br
-        a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'K-12 Teacher' | translate }}
+        a.btn.btn-secondary((click)="saveRole('ROLE_PS_TEACHER')") {{ 'K-12 Teacher' | translate }}
         br
-        a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'Librarian' | translate }}
+        a.btn.btn-secondary((click)="saveRole('ROLE_CU_LIBRARIAN')") {{ 'Librarian' | translate }}
         br
-        a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'Other' | translate }}
+        a.btn.btn-secondary((click)="saveRole('ROLE_OTHER')") {{ 'Other' | translate }}
         br
         a.link.btn-link((click)="dismissModal()") {{ 'No thanks' | translate }}

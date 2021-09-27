@@ -20,6 +20,12 @@ export class RoleModal implements OnInit {
 
   public dismissModal(): void {
     this.closeModal.emit()
+    //set timestamp of prompted
   }
-  //no matter what we will modify account, either with role prompt time, or with role and role prompt time
+
+  public saveRole(role: string): void {
+    this.closeModal.emit()
+    //set timestamp of prompted
+    //set users new role
+  }
 }
