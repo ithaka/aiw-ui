@@ -34,7 +34,7 @@ declare let google
   encapsulation: ViewEncapsulation.None,
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="closeBanner()"></ang-sky-banner>
-    <ang-role-modal *ngIf="showRolePrompt"></ang-role-modal>
+    <ang-role-modal *ngIf="showRolePrompt" (closeModal)="showRolePrompt = false"></ang-role-modal>
     <div>
       <div *ngIf="!_fullscreen.isFullscreen" id="skip-main-content-div" tabindex="-1">
         <button id="skip-main-content-button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
@@ -276,7 +276,7 @@ export class AppComponent {
    */
   private initializeRolePrompt(): void {
     // let user = this._auth.getUser()
-    // this.showRolePrompt = this._auth.isLoggedIn() && this._iac.shouldPromptForRole(user)
+    // this.showRolePrompt = user.isLoggedIn && this._iac.shouldPromptForRole(user)
     this.showRolePrompt = true;
   }
 
