@@ -18,5 +18,8 @@ export class RoleModal implements OnInit {
 
   ngOnInit() {}
 
+  public dismissModal(): void {
+    this.closeModal.emit()
+  }
   //no matter what we will modify account, either with role prompt time, or with role and role prompt time
 }

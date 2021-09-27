@@ -3,7 +3,7 @@
     .modal-content
       .modal-header
         h4.modal-title([innerHtml]="'Complete your Profile' | translate")
-        button.close(type="button", (click)="closeModal.emit(0)", aria-label="Close")
+        button.close(type="button", (click)="dismissModal()", aria-label="Close")
           span(aria-hidden="true") &times;
       .modal-body
         p([innerHtml]="'You&apos;re a...' | translate")
@@ -19,4 +19,4 @@
         br
         a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'Other' | translate }}
         br
-        a.link(href="/", (click)="closeModal.emit(0)") {{ 'No thanks' | translate }}
+        a.link.btn-link((click)="dismissModal()") {{ 'No thanks' | translate }}
