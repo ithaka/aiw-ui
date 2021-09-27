@@ -1,0 +1,14 @@
+.modal.fade-in.show
+  .modal-dialog(role="document")
+    .modal-content
+      .modal-header
+        h4.modal-title([innerHtml]="'Complete your Profile' | translate")
+      .modal-body
+        p([innerHtml]="'Youre a ...' | translate")
+        a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'Undergraduate Student' | translate }}
+        a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'Graduate Student' | translate }}
+        a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'Instructor/Faculty' | translate }}
+        a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'K-12 Teacher' | translate }}
+        a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'Librarian' | translate }}
+        a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'Other' | translate }}
+        a.link(href="/") {{ 'No thanks' | translate }}

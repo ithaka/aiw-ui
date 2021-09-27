@@ -34,6 +34,7 @@ declare let google
   encapsulation: ViewEncapsulation.None,
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="closeBanner()"></ang-sky-banner>
+    <ang-role-modal *ngIf="showRolePrompt"></ang-role-modal>
     <div>
       <div *ngIf="!_fullscreen.isFullscreen" id="skip-main-content-div" tabindex="-1">
         <button id="skip-main-content-button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
@@ -53,6 +54,7 @@ export class AppComponent {
 
   public showSkyBanner: boolean = false;
   public skyBannerCopy: string = '';
+  public showRolePrompt: boolean = false;
   public test: any = {};
 
   public statusPageClient: any;
@@ -260,12 +262,20 @@ export class AppComponent {
           .then((StatusPage) => {
             this.statusPageClient = StatusPage( this._auth.getEnv() === 'test' ? STATUS_PAGE_CMP_ID_STAGE : STATUS_PAGE_CMP_ID_PROD, { environment: this._auth.getEnv() } );
             this.subscribeToStatus();
+            this.initializeRolePrompt();
           })
     }
 
     this.initPerimeterX();
 
     this._fullscreen.addFullscreenListener();
+  }
+
+  /**
+   * Determines whether to display role prompt
+   */
+  private initializeRolePrompt(): void {
+    this.showRolePrompt = true;
   }
 
   /**
