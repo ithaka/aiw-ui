@@ -813,6 +813,10 @@ export class AuthService implements CanActivate {
     return !(userObj && userObj.status)
   }
 
+  public isLoggedIn(): boolean {
+    let user = this.getUser()
+    return user.isLoggedIn
+  }
 
   /**
    * Deprecated: User info is now tracked in the data layer

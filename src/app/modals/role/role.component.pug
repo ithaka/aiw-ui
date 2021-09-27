@@ -3,12 +3,20 @@
     .modal-content
       .modal-header
         h4.modal-title([innerHtml]="'Complete your Profile' | translate")
+        button.close(type="button", (click)="closeModal.emit(0)", aria-label="Close")
+          span(aria-hidden="true") &times;
       .modal-body
-        p([innerHtml]="'Youre a ...' | translate")
+        p([innerHtml]="'You&apos;re a...' | translate")
         a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'Undergraduate Student' | translate }}
+        br
         a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'Graduate Student' | translate }}
+        br
         a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'Instructor/Faculty' | translate }}
+        br
         a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'K-12 Teacher' | translate }}
+        br
         a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'Librarian' | translate }}
+        br
         a.btn.btn-secondary([routerLink]="['/browse', 'groups']") {{ 'Other' | translate }}
-        a.link(href="/") {{ 'No thanks' | translate }}
+        br
+        a.link(href="/", (click)="closeModal.emit(0)") {{ 'No thanks' | translate }}
