@@ -11,20 +11,19 @@ export class IacService {
     public iacServiceAccountsUrl: string
     public iacServiceSearchUrl: string
 
-    constructor(private _http: HttpClient, private _auth: AuthService) {
+    constructor(private _http: HttpClient) {
         this.iacServiceAccountsUrl = environment.API_URL + '/account'
         this.iacServiceSearchUrl = environment.API_URL + '/search'
     }
 
-//   public shouldPromptForRole(): Observable<any> {
-        //let user = this._auth.getUser()
-        //searchForAccount(username)
-        //getAccount(accountId)
-        //check if role is set
-        //if so False
-        //if not check if user has been prompted
-        //if so False
-        //if not true
+//   public shouldPromptForRole(user: User): Observable<any> {
+//         this.searchForAccount(user.username)
+//         this.getAccount(accountId)
+//         check if role is set
+//         if so False
+//         if not check if user has been prompted
+//         if so False
+//         if not true
 //   }
 
 //   public searchForAccount(username: string): Observable<any> {
@@ -32,16 +31,29 @@ export class IacService {
         ///search/byUsername
 //   }
 
-//   public getAccount(accountId: string): Observable<any> {
-        ///account/{accountId}
-//   }
-
     public getAccount(accountId: string): Observable<any> {
         let url = this.iacServiceAccountsUrl + '/' + accountId + '?idType=externalId'
         return this._http.get(url)
     }
 
-//   public modifyAccount(accountId: string): Observable<any> {
+    // public updateRole
+    // {
+    //     "type":"INDIVIDUAL",
+    //     "preferences": {
+    //       "artstorDeptRole":"artstorDeptRole"
+    //     }
+    //   }
+
+    // public updateLastPromptedForRole
+    // {
+    //     "type":"INDIVIDUAL",
+    //     "preferences": {
+    //       "promptedForRole":"promptedForRole"
+    //     }
+    //   }
+
+//   public modifyAccount(accountId: string, query): Observable<any> {
         ///account/{accountId}
+        
 //   }
 }
