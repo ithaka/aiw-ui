@@ -1,7 +1,4 @@
-import { Router } from '@angular/router'
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core'
-
-// Project Dependencies
+import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { IacService } from '_services'
 
 @Component({
@@ -24,6 +21,7 @@ export class RoleModal implements OnInit {
   }
 
   public saveRole(role: string): void {
+    console.log(role)
     this.closeModal.emit()
     //set timestamp of prompted
     //set users new role
