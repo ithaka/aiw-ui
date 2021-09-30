@@ -377,17 +377,8 @@ export class AuthService implements CanActivate {
    * @returns boolean shouldPromptForRole
    */
   public shouldPromptForRole(): boolean {
-    //         let account = this.searchForAccount(user.username)
-    // if(this.user.username) {
-    //     let account = this.searchForAccount(this.user.username)
-    // }
-    //         // this.getAccount(account.id)
-    //         // check if role is set
-    //         // if so False
-    //         // if not check if user has been prompted
-    //         // if so False
-    //         // if not true
-    return true
+    let user = this.getUser()
+    return user && !user.hasOwnProperty('promptedForRole') && !user.hasOwnProperty('departmentRole')
 }
 
   /**
