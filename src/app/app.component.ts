@@ -12,7 +12,7 @@ import { map, take } from 'rxjs/operators'
 // Project Dependencies
 import { AppConfig } from './app.service'
 import { isPlatformBrowser } from '@angular/common'
-import { DomUtilityService, FlagService, FullScreenService, ScriptService, AuthService } from '_services'
+import { DomUtilityService, FlagService, FullScreenService, AuthService } from '_services'
 import { version } from './../../package.json'
 
 // Server only imports
@@ -103,7 +103,6 @@ export class AppComponent {
     angulartics2GoogleTagManager: Angulartics2GoogleTagManager,
     private _auth: AuthService,
     private titleService: Title,
-    private _script: ScriptService,
     private _flags: FlagService,
     private router: Router,
     private translate: TranslateService,
@@ -116,6 +115,7 @@ export class AppComponent {
       take(1),
       map(flags => {
         this.initializeWidgets(flags.enableOneTrust);
+        this.initializeRolePrompt(flags.shouldPromptForRole);
       }, (err) => {
         console.error(err)
     })).subscribe()
@@ -262,7 +262,6 @@ export class AppComponent {
           .then((StatusPage) => {
             this.statusPageClient = StatusPage( this._auth.getEnv() === 'test' ? STATUS_PAGE_CMP_ID_STAGE : STATUS_PAGE_CMP_ID_PROD, { environment: this._auth.getEnv() } );
             this.subscribeToStatus();
-            this.initializeRolePrompt();
           })
     }
 
@@ -274,10 +273,9 @@ export class AppComponent {
   /**
    * Determines whether to display role prompt
    */
-  private initializeRolePrompt(): void {
-    // let user = this._auth.getUser()
-    // this.showRolePrompt = user.isLoggedIn && this._iac.shouldPromptForRole(user)
-    this.showRolePrompt = true;
+  private initializeRolePrompt(shouldPromptForRole: boolean): void {
+    // this.showRolePrompt = this._auth.shouldPromptForRole() && shouldPromptForRole
+    this.showRolePrompt = this._auth.shouldPromptForRole()
   }
 
   /**

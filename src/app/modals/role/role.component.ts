@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core'
-import { IacService } from '_services'
+import { map, take } from 'rxjs/operators';
+import { AccountService, AuthService, User } from '_services'
 
 @Component({
   selector: 'ang-role-modal',
@@ -10,20 +11,39 @@ export class RoleModal implements OnInit {
   closeModal: EventEmitter<number> = new EventEmitter();
 
   constructor(
-    private _iac: IacService,
+    private _account: AccountService, private _auth: AuthService
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
+
+  public updateUser(updateUser) {
+    this._account.update(updateUser).pipe(
+      take(1),
+      map(res => {
+        this._auth.saveUser(updateUser)
+      },
+        err => {
+          console.error(err)
+        }
+      )).subscribe()
+  }
 
   public dismissModal(): void {
     this.closeModal.emit()
-    //set timestamp of prompted
+
+    let updateUser = this._auth.getUser()
+    updateUser.promptedForRole.setValue(Date.now())
+
+    this.updateUser(updateUser)
   }
 
   public saveRole(role: string): void {
-    console.log(role)
     this.closeModal.emit()
-    //set timestamp of prompted
-    //set users new role
+
+    let updateUser = this._auth.getUser()
+    updateUser.promptedForRole.setValue(Date.now())
+    updateUser.departmentRole.setValue(role)
+
+    this.updateUser(updateUser)
   }
 }

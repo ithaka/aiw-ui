@@ -373,6 +373,24 @@ export class AuthService implements CanActivate {
   }
 
   /**
+   * Determines whether to display a role prompt to the user
+   * @returns boolean shouldPromptForRole
+   */
+  public shouldPromptForRole(): boolean {
+    //         let account = this.searchForAccount(user.username)
+    // if(this.user.username) {
+    //     let account = this.searchForAccount(this.user.username)
+    // }
+    //         // this.getAccount(account.id)
+    //         // check if role is set
+    //         // if so False
+    //         // if not check if user has been prompted
+    //         // if so False
+    //         // if not true
+    return true
+}
+
+  /**
    * Gets the roles and departments lists, which are used in the registration page
    * @returns Observable resolved with object containing: roleArray, deptArray
    */
