@@ -274,7 +274,8 @@ export class AppComponent {
    * Determines whether to display role prompt
    */
   private initializeRolePrompt(shouldPromptForRole: boolean): void {
-    this.showRolePrompt = this._auth.shouldPromptForRole() && shouldPromptForRole
+    // this.showRolePrompt = this._auth.shouldPromptForRole() && shouldPromptForRole
+    this.showRolePrompt = shouldPromptForRole
   }
 
   /**

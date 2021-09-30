@@ -5,18 +5,12 @@
         h4.modal-title([innerHtml]="'Complete your Profile' | translate")
         button.close(type="button", (click)="dismissModal()", aria-label="Close")
           span(aria-hidden="true") &times;
-      .modal-body
+      .modal-body.btn-group-vertical
         p([innerHtml]="'You&apos;re a...' | translate")
         a.btn.btn-secondary((click)="saveRole('ROLE_CU_UNDERGRAD_STUDENT')") {{ 'Undergraduate Student' | translate }}
-        br
-        a.btn.btn-secondary((click)="saveRole('ROLE_CU_GRAD_STUDENT')") {{ 'Graduate Student' | translate }}
-        br
-        a.btn.btn-secondary((click)="saveRole('ROLE_CU_FACULTY')") {{ 'Instructor/Faculty' | translate }}
-        br
-        a.btn.btn-secondary((click)="saveRole('ROLE_PS_TEACHER')") {{ 'K-12 Teacher' | translate }}
-        br
-        a.btn.btn-secondary((click)="saveRole('ROLE_CU_LIBRARIAN')") {{ 'Librarian' | translate }}
-        br
-        a.btn.btn-secondary((click)="saveRole('ROLE_OTHER')") {{ 'Other' | translate }}
-        br
-        a.link.btn-link((click)="dismissModal()") {{ 'No thanks' | translate }}
+        a.btn.my-sm-1.btn-secondary((click)="saveRole('ROLE_CU_GRAD_STUDENT')") {{ 'Graduate Student' | translate }}
+        a.btn.my-sm-1.btn-secondary((click)="saveRole('ROLE_CU_FACULTY')") {{ 'Instructor/Faculty' | translate }}
+        a.btn.my-sm-1.btn-secondary((click)="saveRole('ROLE_PS_TEACHER')") {{ 'K-12 Teacher' | translate }}
+        a.btn.my-sm-1.btn-secondary((click)="saveRole('ROLE_CU_LIBRARIAN')") {{ 'Librarian' | translate }}
+        a.btn.my-sm-1.btn-secondary((click)="saveRole('ROLE_OTHER')") {{ 'Other' | translate }}
+        a.link.my-sm-1.btn-link((click)="dismissModal()") {{ 'No thanks' | translate }}
