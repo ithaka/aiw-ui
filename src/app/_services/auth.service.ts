@@ -378,7 +378,9 @@ export class AuthService implements CanActivate {
    */
   public shouldPromptForRole(): boolean {
     let user = this.getUser()
-    return user && (user.promptedForRole == "" && user.role == "") || (!user.hasOwnProperty("promptedForRole") && !user.hasOwnProperty("role"))
+    let userHasRole = user.hasOwnProperty("role") && user.role
+    let userHasBeenPrompted = user.hasOwnProperty("promptedForRole") && user.promptedForRole
+    return user && !userHasRole && !userHasBeenPrompted
 }
 
   /**
