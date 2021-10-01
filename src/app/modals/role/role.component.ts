@@ -32,7 +32,8 @@ export class RoleModal implements OnInit {
     this.closeModal.emit()
 
     let updateUser = this._auth.getUser()
-    updateUser.promptedForRole.setValue(Date.now())
+    let today = new Date()
+    updateUser.promptedForRole = today.toISOString()
 
     this.updateUser(updateUser)
   }
@@ -41,8 +42,9 @@ export class RoleModal implements OnInit {
     this.closeModal.emit()
 
     let updateUser = this._auth.getUser()
-    updateUser.promptedForRole.setValue(Date.now())
-    updateUser.departmentRole.setValue(role)
+    let today = new Date()
+    updateUser.promptedForRole = today.toISOString()
+    updateUser.departmentRole = role
 
     this.updateUser(updateUser)
   }

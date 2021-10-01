@@ -379,7 +379,7 @@ export class AuthService implements CanActivate {
   public shouldPromptForRole(): boolean {
     let user = this.getUser()
     return user && !user.hasOwnProperty('promptedForRole') && !user.hasOwnProperty('departmentRole')
-  }
+}
 
   /**
    * Gets the roles and departments lists, which are used in the registration page
