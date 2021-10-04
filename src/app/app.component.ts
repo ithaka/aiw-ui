@@ -55,6 +55,7 @@ export class AppComponent {
   public showSkyBanner: boolean = false;
   public skyBannerCopy: string = '';
   public showRolePrompt: boolean = false;
+  public showRolePromptFlag: boolean = false;
   public test: any = {};
 
   public statusPageClient: any;
@@ -115,9 +116,16 @@ export class AppComponent {
       take(1),
       map(flags => {
         this.initializeWidgets(flags.enableOneTrust);
-        this.initializeRolePrompt(flags.shouldPromptForRole);
+        this.showRolePromptFlag = flags.shouldPromptForRole
+        this.initializeRolePrompt(this.showRolePromptFlag)
       }, (err) => {
         console.error(err)
+      })).subscribe()
+
+    this._auth.reinitializeRolePrompt().pipe(map(reinitializeRolePrompt => {
+      if (reinitializeRolePrompt) {
+        this.initializeRolePrompt(this.showRolePromptFlag)
+      }
     })).subscribe()
 
     // console.info("Constructing app component")

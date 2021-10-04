@@ -48,6 +48,11 @@ export class AuthService implements CanActivate {
   private institutionObjValue: any = {};
   private institutionObjSource: BehaviorSubject<any> = new BehaviorSubject(this.institutionObjValue);
   private currentInstitutionObj: Observable<any> = this.institutionObjSource.asObservable();
+  
+  private reinitializeRolePromptValue: boolean = false;
+  private reinitializeRolePromptSource: BehaviorSubject<boolean> = new BehaviorSubject(this.reinitializeRolePromptValue);
+  private reinitializeRolePromptObj: Observable<any> = this.reinitializeRolePromptSource.asObservable();
+
 
   private userSource: BehaviorSubject<any> = new BehaviorSubject({});
   // private user: any = {}
@@ -282,6 +287,7 @@ export class AuthService implements CanActivate {
         take(1),
         map((res) => {
           this.refreshUserSessionInProgress = false
+          this.reinitializeRolePromptSource.next(true)
           console.info('Access Token refreshed <3')
         },
         (err) => {
@@ -314,6 +320,7 @@ export class AuthService implements CanActivate {
       // Clear observables
       this.userSource.next({})
       this.institutionObjSource.next({})
+      this.reinitializeRolePromptSource.next(false)
 
       return this.http
           .post(environment.API_URL + '/api/secure/logout', {}, options)
@@ -342,6 +349,10 @@ export class AuthService implements CanActivate {
 
   public getInstitution(): Observable<any> {
     return this.currentInstitutionObj;
+  }
+
+  public reinitializeRolePrompt(): Observable<any> {
+    return this.reinitializeRolePromptObj;
   }
 
   public setInstitution(institutionObj: any): void {
