@@ -12,7 +12,7 @@ import { map, take } from 'rxjs/operators'
 // Project Dependencies
 import { AppConfig } from './app.service'
 import { isPlatformBrowser } from '@angular/common'
-import { DomUtilityService, FlagService, FullScreenService, ScriptService, AuthService } from '_services'
+import { DomUtilityService, FlagService, FullScreenService, AuthService } from '_services'
 import { version } from './../../package.json'
 
 // Server only imports
@@ -34,6 +34,7 @@ declare let google
   encapsulation: ViewEncapsulation.None,
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="closeBanner()"></ang-sky-banner>
+    <ang-role-modal *ngIf="showRolePrompt" (closeModal)="closeRolePrompt()"></ang-role-modal>
     <div>
       <div *ngIf="!_fullscreen.isFullscreen" id="skip-main-content-div" tabindex="-1">
         <button id="skip-main-content-button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
@@ -53,6 +54,8 @@ export class AppComponent {
 
   public showSkyBanner: boolean = false;
   public skyBannerCopy: string = '';
+  public showRolePrompt: boolean = false;
+  public showRolePromptFlag: boolean = false;
   public test: any = {};
 
   public statusPageClient: any;
@@ -101,7 +104,6 @@ export class AppComponent {
     angulartics2GoogleTagManager: Angulartics2GoogleTagManager,
     private _auth: AuthService,
     private titleService: Title,
-    private _script: ScriptService,
     private _flags: FlagService,
     private router: Router,
     private translate: TranslateService,
@@ -114,8 +116,16 @@ export class AppComponent {
       take(1),
       map(flags => {
         this.initializeWidgets(flags.enableOneTrust);
+        this.showRolePromptFlag = flags.shouldPromptForRole
+        this.initializeRolePrompt(this.showRolePromptFlag)
       }, (err) => {
         console.error(err)
+      })).subscribe()
+
+    this._auth.reinitializeRolePrompt().pipe(map(reinitializeRolePrompt => {
+      if (reinitializeRolePrompt) {
+        this.initializeRolePrompt(this.showRolePromptFlag)
+      }
     })).subscribe()
 
     // console.info("Constructing app component")
@@ -269,6 +279,13 @@ export class AppComponent {
   }
 
   /**
+   * Determines whether to display role prompt
+   */
+  private initializeRolePrompt(shouldPromptForRole: boolean): void {
+    this.showRolePrompt = shouldPromptForRole && this._auth.shouldPromptForRole()
+  }
+
+  /**
    * Subscribes to StatusPage.io incident/banner updates
    */
   private subscribeToStatus(): void {
@@ -297,6 +314,10 @@ export class AppComponent {
   private closeBanner(): void {
     this._auth.store('bannerClosed', true);
     this.showSkyBanner = false;
+  }
+
+  private closeRolePrompt(): void {
+    this.showRolePrompt = false;
   }
 
   public findMainContent(): void {

@@ -1,0 +1,16 @@
+.modal.fade-in.show
+  .modal-dialog(role="document")
+    .modal-content
+      .modal-header
+        h4.modal-title([innerHtml]="'Complete your profile' | translate")
+        button.close(type="button", (click)="dismissModal()", aria-label="Close")
+          span(aria-hidden="true") &times;
+      .modal-body.btn-group-vertical
+        p([innerHtml]="'You&apos;re a...' | translate")
+        button.btn.btn-secondary((click)="saveRole('ROLE_CU_UNDERGRAD_STUDENT')") {{ 'Undergraduate Student' | translate }}
+        button.btn.my-sm-1.btn-secondary((click)="saveRole('ROLE_CU_GRAD_STUDENT')") {{ 'Graduate Student' | translate }}
+        button.btn.my-sm-1.btn-secondary((click)="saveRole('ROLE_CU_FACULTY')") {{ 'Instructor/Faculty' | translate }}
+        button.btn.my-sm-1.btn-secondary((click)="saveRole('ROLE_PS_TEACHER')") {{ 'K-12 Teacher' | translate }}
+        button.btn.my-sm-1.btn-secondary((click)="saveRole('ROLE_CU_LIBRARIAN')") {{ 'Librarian' | translate }}
+        button.btn.my-sm-1.btn-secondary((click)="saveRole('ROLE_OTHER')") {{ 'Other' | translate }}
+        a.link.my-sm-1.btn-link((click)="dismissModal()") {{ 'No thanks' | translate }}

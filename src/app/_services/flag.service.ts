@@ -93,7 +93,8 @@ export interface FeatureFlags {
   exportGoogle?: boolean,
   relatedResFlag?: boolean,
   requireLoginForAdlDownload?: boolean,
-  enableOneTrust?: boolean
+  enableOneTrust?: boolean,
+  shouldPromptForRole?: boolean
 }
 
 interface FlagServiceResponse {
