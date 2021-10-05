@@ -47,7 +47,7 @@ export class RoleModal implements OnInit {
     let updateUser = this._auth.getUser()
     let today = new Date()
     updateUser.promptedForRole = today.toISOString()
-    updateUser.departmentRole = role
+    updateUser.role = role
 
     this.updateUser(updateUser)
     this._angulartics.eventTrack.next({ properties: { event: 'role prompt', category: 'onboarding', label: role } });
