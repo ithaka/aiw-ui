@@ -1,6 +1,8 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { map, take } from 'rxjs/operators';
-import { AccountService, AuthService, User } from '_services'
+import { AccountService, AuthService } from '_services'
+import { Angulartics2 } from 'angulartics2'
+
 
 @Component({
   selector: 'ang-role-modal',
@@ -11,7 +13,7 @@ export class RoleModal implements OnInit {
   closeModal: EventEmitter<number> = new EventEmitter();
 
   constructor(
-    private _account: AccountService, private _auth: AuthService
+    private _account: AccountService, private _auth: AuthService, private _angulartics: Angulartics2,
   ) { }
 
   ngOnInit() { }
@@ -36,6 +38,7 @@ export class RoleModal implements OnInit {
     updateUser.promptedForRole = today.toISOString()
 
     this.updateUser(updateUser)
+    this._angulartics.eventTrack.next({ properties: { event: 'role prompt', category: 'onboarding', label: 'Dismissed/No Thanks' } });
   }
 
   public saveRole(role: string): void {
@@ -47,5 +50,6 @@ export class RoleModal implements OnInit {
     updateUser.departmentRole = role
 
     this.updateUser(updateUser)
+    this._angulartics.eventTrack.next({ properties: { event: 'role prompt', category: 'onboarding', label: role } });
   }
 }
