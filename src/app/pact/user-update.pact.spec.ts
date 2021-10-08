@@ -64,6 +64,10 @@ describe('PUT /api/secure/user/{{profileId}} #pact #updateuser', () => {
     {
       field: 'department',
       value: 'a new department!'
+    },
+    {
+      field: 'promptedForRole',
+      value: 'a new timestamp!'
     }
   ]
 
