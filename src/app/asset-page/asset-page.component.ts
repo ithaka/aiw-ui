@@ -499,7 +499,7 @@ export class AssetPage implements OnInit, OnDestroy {
         // here is where we make the "access denied" modal appear
         if (!this.encryptedAccess) {
           this.showAccessDeniedModal = true
-          this.trackItemView()
+          this.trackEvent('artstor_item_denied')
         } else {
           console.error('Failed to load externally shared asset', err)
           this.showServerErrorModal = true
@@ -545,7 +545,7 @@ export class AssetPage implements OnInit, OnDestroy {
 
         // only log the event if the asset came from search, and therefore has an artstorid
         if (this.assets[0]['id']) {
-          this.trackItemView()
+          this.trackEvent('artstor_item_view')
         }
 
         // Split existing collection urls in the metadata so that urls can be linked separately
@@ -978,16 +978,6 @@ export class AssetPage implements OnInit, OnDestroy {
         additional_fields: additional_fields
       })
     }
-  }
-
-  /**
-   * trackItemView
-   * Builds and sends captain's log event for 'artstor_item_view'
-   * @returns void
-   */
-
-  private trackItemView(): void {
-    this.trackEvent('artstor_item_view')
   }
 
   /**
