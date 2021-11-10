@@ -6,7 +6,7 @@ import { DeviceDetectorModule, DeviceDetectorService } from 'ngx-device-detector
 import { isPlatformBrowser } from '@angular/common'
 
 // Project Dependencies
-import { AssetService, AuthService, DomUtilityService } from '_services'
+import { AssetService, AuthService, DomUtilityService, ScriptService} from '_services'
 import { AppConfig } from '../app.service'
 import { Featured } from './featured'
 import { TagsService } from '../browse-page/tags.service';
@@ -60,7 +60,8 @@ export class Home implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object,
     private _dom: DomUtilityService,
     private _tags: TagsService,
-    private injector: Injector
+    private injector: Injector,
+    private _script: ScriptService,
   ) {
     // console.log("Constructing home component...")
     // this makes the window always render scrolled to the top
@@ -81,6 +82,8 @@ export class Home implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // Ethnio survey 11-10-21
+    this._script.loadScript('ethnio-survey')
     if (isPlatformBrowser(this.platformId)) {
       // Provide redirects for initPath detected in index.html from inital load
       if (initPath) {
