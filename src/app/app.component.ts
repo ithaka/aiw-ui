@@ -12,7 +12,7 @@ import { map, take } from 'rxjs/operators'
 // Project Dependencies
 import { AppConfig } from './app.service'
 import { isPlatformBrowser } from '@angular/common'
-import { DomUtilityService, FlagService, FullScreenService, AuthService, ScriptService} from '_services'
+import { DomUtilityService, FlagService, FullScreenService, AuthService, ScriptService } from '_services'
 import { version } from './../../package.json'
 
 // Server only imports
