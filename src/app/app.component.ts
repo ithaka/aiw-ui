@@ -109,7 +109,6 @@ export class AppComponent {
     private translate: TranslateService,
     private meta: Meta,
     private _renderer2: Renderer2,
-    private _script: ScriptService,
     @Inject(DOCUMENT) private _document: Document,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
