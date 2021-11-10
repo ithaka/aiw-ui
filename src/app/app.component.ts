@@ -109,7 +109,6 @@ export class AppComponent {
     private translate: TranslateService,
     private meta: Meta,
     private _renderer2: Renderer2,
-    private _script: ScriptService,
     @Inject(DOCUMENT) private _document: Document,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
@@ -265,8 +264,6 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    // Ethnio survey 11-10-21
-    this._script.loadScript('ethnio-survey');
     if (isPlatformBrowser(this.platformId)) {
       // Setup statusPageClient & subscribe to any status updates to show banner
       import('statuspage-client') // Load StatusPage client -side
