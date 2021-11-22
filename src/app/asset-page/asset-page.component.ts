@@ -368,7 +368,6 @@ export class AssetPage implements OnInit, OnDestroy {
         }
       }),
       this._assets.allResults.subscribe((allResults) => {
-        // console.log("allResults subscription returned")
         if (allResults.thumbnails) {
           this.prevAssetResults.thumbnails = allResults.thumbnails
           this.restrictedAssetsCount = allResults.restricted_thumbnails.length
@@ -422,7 +421,7 @@ export class AssetPage implements OnInit, OnDestroy {
     );
 
     // Get latest set of results with at least one asset
-    this.prevAssetResults = this._assets.getRecentResults()
+    this.prevAssetResults = this._assets.getRecentResults(this.assetGroupId)
 
     // Subscribe to pagination values
     this.subscriptions.push(

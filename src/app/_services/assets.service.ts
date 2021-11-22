@@ -156,9 +156,10 @@ export class AssetService {
     /**
      * Return most recent results set with at least one asset
      */
-    public getRecentResults(): any {
-        if (this._storage.getLocal('results')) {
-            return this._storage.getLocal('results')
+    public getRecentResults(igId: string): any {
+        const key = igId ? "results-" + igId : "results";
+        if (this._storage.getLocal(key)) {
+            return this._storage.getLocal(key)
         } else {
             return { thumbnails: [] }
         }
@@ -611,8 +612,11 @@ export class AssetService {
         this.allResultsSource.next(resultObj);
 
         // Set Recent Results (used by Compare Mode)
+        const igId = this.currentLoadedParams["igId"];
+        const key = igId ? "results-" + igId : "results";
+
         if (resultObj.thumbnails && resultObj.thumbnails.length > 0) {
-            this._storage.setLocal('results', resultObj)
+            this._storage.setLocal(key, resultObj)
         }
 
         if (this.paginated){
