@@ -562,60 +562,31 @@
       },
       "COLLECTIONS": [
         {
-          "SUBHEADING": "Indigenous Peoples' Day",
+          "SUBHEADING": "Giving Thanks",
           "DESCRIPTION": "",
-          "CAPTION": "Larry Towell. USA. Albuquerque, New Mexico. 2017. Powwow ground... Photograph. Image and data from Magnum Photos. &copy; Larry Towell / Artists Rights Society (ARS), New York / SAIF, Paris.",
-          "LINK": "https://www.artstor.org/2021/10/06/indigenous-peoples-day/",
-          "IMG_SOURCE": "/assets/img/featured-collections/magnum_towell.jpg",
-          "LINK_TITLE": "Indigenous Peoples' Day",
-          "ALT_TEXT": "Indigenous Peoples' Day"
+          "CAPTION": "Bob Gore. Giving Thanks, Terrier Rouge, Haiti. 10 Oct. ‘07. Image and data from Bob Gore Productions, Inc.",
+          "LINK": "https://www.artstor.org/2021/11/17/giving-thanks/",
+          "IMG_SOURCE": "/assets/img/featured-collections/gore_giving.jpg",
+          "LINK_TITLE": "Giving Thanks",
+          "ALT_TEXT": "Giving Thanks"
         },
         {
-          "SUBHEADING": "Reading the Codex Mendoza",
+          "SUBHEADING": "The gift of a pyxis",
           "DESCRIPTION": "",
-          "CAPTION": "The Codex Mendoza, pt. II., fol. 046r, detail. c. 1540s. Manuscripts. Image and data from Bodleian Library, University  of Oxford.",
-          "LINK": "https://www.artstor.org/2016/02/03/reading-the-codex-mendoza/",
-          "IMG_SOURCE": "/assets/img/featured-collections/bodleian_codex.jpg",
-          "LINK_TITLE": "Reading the Codex Mendoza",
-          "ALT_TEXT": "Reading the Codex Mendoza"
+          "CAPTION": "Umayyad. Pyxis of al-Mughira, lid. 968 C.E. Image and data from Walter B. Denny.",
+          "LINK": "https://library.artstor.org/group/836304",
+          "IMG_SOURCE": "/assets/img/featured-collections/denny_pyxis.jpg",
+          "LINK_TITLE": "The gift of a pyxis",
+          "ALT_TEXT": "The gift of a pyxis"
         },
         {
-          "SUBHEADING": "Kwakiutl Transformation Mask",
+          "SUBHEADING": "The art of plenty",
           "DESCRIPTION": "",
-          "CAPTION": "Kwakiutl, Gwa'Waenox. Transformation Mask. Image and data from American Museum of Natural History.",
-          "LINK": "https://library.artstor.org/#/group/745659;igId=745659;name=Kwakwaka%E2%80%99wakw%20Kwakiutl.%20Transformation%20mask%2016;size=24",
-          "IMG_SOURCE": "/assets/img/featured-collections/AMNH_mask.jpg",
-          "LINK_TITLE": "Kwakiutl Transformation Mask",
-          "ALT_TEXT": "Kwakiutl Transformation Mask"
-        }
-      ],
-      "PUBLIC_COLLECTIONS": [
-        {
-          "SUBHEADING": "Indigenous Peoples' Day",
-          "DESCRIPTION": "",
-          "CAPTION": "Larry Towell. USA. Albuquerque, New Mexico. 2017. Powwow ground... Photograph. Image and data from Magnum Photos. &copy; Larry Towell / Artists Rights Society (ARS), New York / SAIF, Paris.",
-          "LINK": "https://www.artstor.org/2021/10/06/indigenous-peoples-day/",
-          "IMG_SOURCE": "/assets/img/featured-collections/magnum_towell.jpg",
-          "LINK_TITLE": "Indigenous Peoples' Day",
-          "ALT_TEXT": "Indigenous Peoples' Day"
-        },
-        {
-          "SUBHEADING": "Reading the Codex Mendoza",
-          "DESCRIPTION": "",
-          "CAPTION": "The Codex Mendoza, pt. II., fol. 046r, detail. c. 1540s. Manuscripts. Image and data from Bodleian Library, University  of Oxford.",
-          "LINK": "https://www.artstor.org/2016/02/03/reading-the-codex-mendoza/",
-          "IMG_SOURCE": "/assets/img/featured-collections/bodleian_codex.jpg",
-          "LINK_TITLE": "Reading the Codex Mendoza",
-          "ALT_TEXT": "Reading the Codex Mendoza"
-        },
-        {
-          "SUBHEADING": "Kwakiutl Transformation Mask",
-          "DESCRIPTION": "",
-          "CAPTION": "Kwakiutl, Gwa'Waenox. Transformation Mask. Image and data from American Museum of Natural History.",
-          "LINK": "https://library.artstor.org/#/group/745659;igId=745659;name=Kwakwaka%E2%80%99wakw%20Kwakiutl.%20Transformation%20mask%2016;size=24",
-          "IMG_SOURCE": "/assets/img/featured-collections/AMNH_mask.jpg",
-          "LINK_TITLE": "Kwakiutl Transformation Mask",
-          "ALT_TEXT": "Kwakiutl Transformation Mask"
+          "CAPTION": "Jan Davidsz. de Heem. Still Life with Fruit and Lobster. 17th century. Image and data from the Bildarchiv Preußischer Kulturbesitz.",
+          "LINK": "https://www.artstor.org/2018/11/19/the-art-of-plenty-in-praise-of-still-life-painting/",
+          "IMG_SOURCE": "/assets/img/featured-collections/kulturbesitz_plenty.jpg",
+          "LINK_TITLE": "The art of plenty",
+          "ALT_TEXT": "The art of plenty"
         }
       ]
     },
