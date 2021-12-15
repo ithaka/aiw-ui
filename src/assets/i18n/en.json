@@ -562,31 +562,31 @@
       },
       "COLLECTIONS": [
         {
-          "SUBHEADING": "Giving Thanks",
+          "SUBHEADING": "Celebrations of light",
           "DESCRIPTION": "",
-          "CAPTION": "Bob Gore. Giving Thanks, Terrier Rouge, Haiti. 10 Oct. ‘07. Image and data from Bob Gore Productions, Inc.",
-          "LINK": "https://www.artstor.org/2021/11/17/giving-thanks/",
-          "IMG_SOURCE": "/assets/img/featured-collections/gore_giving.jpg",
-          "LINK_TITLE": "Giving Thanks",
-          "ALT_TEXT": "Giving Thanks"
+          "CAPTION": "North Indian, Uttar Pradesh. Ladies celebrating Diwali. C. 1760. Image and data from The Cleveland Museum of Art.",
+          "LINK": "https://www.artstor.org/2021/12/09/celebrations-of-light/",
+          "IMG_SOURCE": "/assets/img/featured-collections/cleveland_diwali.jpg",
+          "LINK_TITLE": "Celebrations of light",
+          "ALT_TEXT": "Celebrations of light"
         },
         {
-          "SUBHEADING": "The gift of a pyxis",
+          "SUBHEADING": "Northern Light",
           "DESCRIPTION": "",
-          "CAPTION": "Umayyad. Pyxis of al-Mughira, lid. 968 C.E. Image and data from Walter B. Denny.",
-          "LINK": "https://library.artstor.org/group/836304",
-          "IMG_SOURCE": "/assets/img/featured-collections/denny_pyxis.jpg",
-          "LINK_TITLE": "The gift of a pyxis",
-          "ALT_TEXT": "The gift of a pyxis"
+          "CAPTION": "Frederic Edwin Church. The Iceberg. c. 1875. The Iceberg. Image and data from the Terra Foundation for American Art.",
+          "LINK": "https://www.artstor.org/2017/01/28/frederic-edwin-churchs-the-icebergs-and-the-tragedy-of-the-arctic-sublime/",
+          "IMG_SOURCE": "/assets/img/featured-collections/terra_iceberg.jpg",
+          "LINK_TITLE": "Northern Light",
+          "ALT_TEXT": "Northern Light"
         },
         {
-          "SUBHEADING": "The art of plenty",
+          "SUBHEADING": "Machu Picchu, city of Solstice",
           "DESCRIPTION": "",
-          "CAPTION": "Jan Davidsz. de Heem. Still Life with Fruit and Lobster. 17th century. Image and data from the Bildarchiv Preußischer Kulturbesitz.",
-          "LINK": "https://www.artstor.org/2018/11/19/the-art-of-plenty-in-praise-of-still-life-painting/",
-          "IMG_SOURCE": "/assets/img/featured-collections/kulturbesitz_plenty.jpg",
-          "LINK_TITLE": "The art of plenty",
-          "ALT_TEXT": "The art of plenty"
+          "CAPTION": "Elizabeth Barlow Rogers. Machu Picchu, View of Huayna Picchu. 15th-16th century, image 1999. Image and data from the Foundation for Landscape Studies.",
+          "LINK": "https://library.artstor.org/#/asset/AROGERSIG_10312566626",
+          "IMG_SOURCE": "/assets/img/featured-collections/landscape_picchu.jpg",
+          "LINK_TITLE": "Machu Picchu, city of Solstice",
+          "ALT_TEXT": "Machu Picchu, city of Solstice"
         }
       ]
     },
