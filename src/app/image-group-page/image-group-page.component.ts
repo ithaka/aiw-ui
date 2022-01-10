@@ -108,7 +108,7 @@ export class ImageGroupPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Ethnio survey 11-10-21
+    // Ethnio survey 1-10-22
     this._script.loadScript('ethnio-survey')
 
     if (this.unaffiliatedUser) {

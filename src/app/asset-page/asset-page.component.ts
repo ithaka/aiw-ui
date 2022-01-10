@@ -232,7 +232,7 @@ export class AssetPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Ethnio survey 11-10-21
+    // Ethnio survey 1-10-22
     this._script.loadScript('ethnio-survey')
 
     this.user = this._auth.getUser();

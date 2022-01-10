@@ -82,8 +82,6 @@ export class Home implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Ethnio survey 11-10-21
-    this._script.loadScript('ethnio-survey')
     if (isPlatformBrowser(this.platformId)) {
       // Provide redirects for initPath detected in index.html from inital load
       if (initPath) {
