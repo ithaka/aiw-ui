@@ -562,31 +562,31 @@
       },
       "COLLECTIONS": [
         {
-          "SUBHEADING": "Celebrations of light",
+          "SUBHEADING": "Black History Month",
           "DESCRIPTION": "",
-          "CAPTION": "North Indian, Uttar Pradesh. Ladies celebrating Diwali. C. 1760. Image and data from The Cleveland Museum of Art.",
-          "LINK": "https://www.artstor.org/2021/12/09/celebrations-of-light/",
-          "IMG_SOURCE": "/assets/img/featured-collections/cleveland_diwali.jpg",
-          "LINK_TITLE": "Celebrations of light",
-          "ALT_TEXT": "Celebrations of light"
+          "CAPTION": "Bob Gore. Woman with altered colored American flag. Ancestor tribute. August 2008. Image and data &copy; Bob Gore Productions, Inc.",
+          "LINK": "https://www.artstor.org/2022/01/24/discover-black-history-with-artstor-and-jstor-collections/",
+          "IMG_SOURCE": "/assets/img/featured-collections/gore_altered_flag.jpg",
+          "LINK_TITLE": "Black History Month",
+          "ALT_TEXT": "Black History Month"
         },
         {
-          "SUBHEADING": "Northern Light",
+          "SUBHEADING": "Schomburg Center for Research in Black Culture",
           "DESCRIPTION": "",
-          "CAPTION": "Frederic Edwin Church. The Iceberg. c. 1875. The Iceberg. Image and data from the Terra Foundation for American Art.",
-          "LINK": "https://www.artstor.org/2017/01/28/frederic-edwin-churchs-the-icebergs-and-the-tragedy-of-the-arctic-sublime/",
-          "IMG_SOURCE": "/assets/img/featured-collections/terra_iceberg.jpg",
-          "LINK_TITLE": "Northern Light",
-          "ALT_TEXT": "Northern Light"
+          "CAPTION": "Crowds at the Lafayette Theater in Harlem at the opening of “Macbeth.” 1936. Image and data from The New York Public Library.",
+          "LINK": "https://www.artstor.org/2022/01/25/a-a-schomburg-collector-of-lost-histories/",
+          "IMG_SOURCE": "/assets/img/featured-collections/newyorkpubliclibrary_macbeth.jpg",
+          "LINK_TITLE": "Schomburg Center for Research in Black Culture",
+          "ALT_TEXT": "Schomburg Center for Research in Black Culture"
         },
         {
-          "SUBHEADING": "Machu Picchu, city of Solstice",
+          "SUBHEADING": "National Museum of African American History & Culture",
           "DESCRIPTION": "",
-          "CAPTION": "Elizabeth Barlow Rogers. Machu Picchu, View of Huayna Picchu. 15th-16th century, image 1999. Image and data from the Foundation for Landscape Studies.",
-          "LINK": "https://library.artstor.org/#/group/839408",
-          "IMG_SOURCE": "/assets/img/featured-collections/landscape_picchu.jpg",
-          "LINK_TITLE": "Machu Picchu, city of Solstice",
-          "ALT_TEXT": "Machu Picchu, city of Solstice"
+          "CAPTION": "Pauline Powell Burns. Violets. c. 1890. Image and data from the Smithsonian National Museum of African American History and Culture.",
+          "LINK": "https://www.artstor.org/2022/01/14/new-nearly-2500-open-images-from-the-smithsonian-national-museum-of-african-american-history-and-culture/",
+          "IMG_SOURCE": "/assets/img/featured-collections/smithsonian_violets.jpg",
+          "LINK_TITLE": "National Museum of African American History & Culture",
+          "ALT_TEXT": "National Museum of African American History & Culture"
         }
       ]
     },
