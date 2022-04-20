@@ -562,31 +562,31 @@
       },
       "COLLECTIONS": [
         {
-          "SUBHEADING": "Women’s History Month",
+          "SUBHEADING": "Earth Day",
           "DESCRIPTION": "",
-          "CAPTION": " Bain News Service. Woman suffrage pageant. May 1913. Photograph. Image and data from Eyes of the Nation: A Visual History of the United States (Library of Congress).",
-          "LINK": "https://www.artstor.org/2022/02/25/illuminate-womens-history-month-with-artstor-and-jstor/",
-          "IMG_SOURCE": "/assets/img/featured-collections/loceon_suffrage.jpg",
-          "LINK_TITLE": "Women’s History Month",
-          "ALT_TEXT": "Women’s History Month"
+          "CAPTION": "Ami Vitale. A field of blue… 2008. Photograph. © Ami Vitale / Panos Pictures.",
+          "LINK": "https://www.artstor.org/2022/04/11/explore-earth-day-with-artstor-and-jstor-environmental-studies-and-the-biosphere/",
+          "IMG_SOURCE": "/assets/img/featured-collections/APANOSIG_10313564464.jpg",
+          "LINK_TITLE": "Earth Day",
+          "ALT_TEXT": "Earth Day"
         },
         {
-          "SUBHEADING": "Genius has no gender",
+          "SUBHEADING": "Flora and Fauna",
           "DESCRIPTION": "",
-          "CAPTION": "Artemisia Gentileschi. Esther before Ahasuerus. Oil on canvas. Image and data from the Metropolitan Museum of Art.",
-          "LINK": "https://www.artstor.org/2022/03/01/genius-has-no-gender1-rethinking-the-old-master-moniker/",
-          "IMG_SOURCE": "/assets/img/featured-collections/mma_artemisia.jpg",
-          "LINK_TITLE": "Genius has no gender",
-          "ALT_TEXT": "Genius has no gender"
+          "CAPTION": "Asterope sapphira. Collected 1936. Image and data from the Peabody Museum of Natural History (Yale University).",
+          "LINK": "https://www.artstor.org/2019/04/22/artstor-celebrates-the-earth-flora-fauna-and-natural-phenomena/",
+          "IMG_SOURCE": "/assets/img/featured-collections/AYALE_PEABODYIG_10313277595.jpg",
+          "LINK_TITLE": "Flora and Fauna",
+          "ALT_TEXT": "Flora and Fauna"
         },
         {
-          "SUBHEADING": "Meret Oppenheim, iconoclast",
+          "SUBHEADING": "Arctic Glaciers",
           "DESCRIPTION": "",
-          "CAPTION": "Meret Oppenheim. Object. 1936. Image and data from the Museum of Modern Art.",
-          "LINK": "https://library.artstor.org/#/group/841414;name=Oppenheim,%20Meret.%20Object%20and%20Other%20Works%20%2020",
-          "IMG_SOURCE": "/assets/img/featured-collections/amoma_meret.jpg",
-          "LINK_TITLE": "Meret Oppenheim, iconoclast",
-          "ALT_TEXT": "Meret Oppenheim, iconoclast"
+          "CAPTION": "Across the top of Muir Glacier. Lantern slide. Image and data from Cornell University Library.",
+          "LINK": "https://www.artstor.org/2017/04/27/science-and-history-converge-in-cornells-glacier-photographs/",
+          "IMG_SOURCE": "/assets/img/featured-collections/SS7730735_7730735_10351775.jpg",
+          "LINK_TITLE": "Arctic Glaciers",
+          "ALT_TEXT": "Arctic Glaciers"
         }
       ]
     },
