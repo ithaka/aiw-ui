@@ -143,6 +143,11 @@ import { version } from '../../package.json';
 import { SupportPageComponent } from './support-page/support-page.component'
 import { ToggleButtonComponent } from './shared/toggle-button/toggle-button.component'
 
+
+//import browser animation module
+//run yarn add animate.css to install
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+
 /**
  * Sentry.io client-side reporter
  * > Reports to "artstor-ui" project
@@ -326,7 +331,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     NgbModule.forRoot(), // Ng Bootstrap Import
     NgIdleKeepaliveModule.forRoot(),
-    SortablejsModule.forRoot({ animation: 150 })
+    SortablejsModule.forRoot({ animation: 150 }),
+    BrowserAnimationsModule
   ],
   exports: [
     RouterModule
