@@ -39,6 +39,10 @@ import 'hammerjs';
 // Env vars
 import { environment } from './environments/environment';
 
+//web animations for older browsers
+// run yarn add web-animations-js to install
+import 'web-animations-js';
+
 if (environment.production) {
   // Production
 

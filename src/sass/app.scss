@@ -125,7 +125,18 @@ span.active {
   /* Used to replicate ng-hide functionality:
     [class.hidden]="variable"
   */
-  display: none !important;
+  //display: none !important; Revert to this after breaking out components
+
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 1s, opacity 1s linear;
+  z-index: 0;
+}
+
+.visible {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 2s linear;
 }
 
 .main-content {
@@ -386,4 +397,8 @@ body body{
   &:focus {
     background: var(--gray-dark) !important;
   }
+}
+
+#dropdown-container{
+
 }

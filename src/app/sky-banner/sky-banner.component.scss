@@ -13,8 +13,9 @@
     margin: 0;
     text-align: center;
   }
-  
-  background: #adadeb;
+
+  background: black;
+  color: white;
   box-shadow: 0 1px 6px 0 rgba(0,0,0,0.1);
   z-index: 9000;
   position: relative;
@@ -28,7 +29,7 @@
     background: #eee;
     bottom: 0;
     box-shadow: 0 -1px 6px 0 rgba(0,0,0,0.1);
-    
+
     & p {
       font-size: 12px;
       line-height: 15px;
@@ -40,5 +41,11 @@
 .close {
   position: absolute;
   top: 13px;
-  right: 15px;
+  right: 150px;
+  color:white !important;
+  background-color: transparent;
+  padding: 2px;
+  font-family: 'Aria', Helvetica, sans-serif;
+  font-size: 14px;
+  text-shadow: none;
 }
