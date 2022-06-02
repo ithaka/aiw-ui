@@ -562,31 +562,31 @@
       },
       "COLLECTIONS": [
         {
-          "SUBHEADING": "Earth Day",
+          "SUBHEADING": "Photography on Artstor & JSTOR",
           "DESCRIPTION": "",
-          "CAPTION": "Ami Vitale. A field of blue… 2008. Photograph. © Ami Vitale / Panos Pictures.",
-          "LINK": "https://www.artstor.org/2022/04/11/explore-earth-day-with-artstor-and-jstor-environmental-studies-and-the-biosphere/",
-          "IMG_SOURCE": "/assets/img/featured-collections/APANOSIG_10313564464.jpg",
-          "LINK_TITLE": "Earth Day",
-          "ALT_TEXT": "Earth Day"
+          "CAPTION": "Frank Cancian. Shooting back. 1971. Photograph. © 2001 Frank Cancian. University of California Irvine Libraries",
+          "LINK": "https://www.artstor.org/2022/05/17/explore-a-world-of-photography-with-artstor-and-jstor/",
+          "IMG_SOURCE": "/assets/img/featured-collections/fcdpa_shootingBack.jpg",
+          "LINK_TITLE": "Photography on Artstor & JSTOR",
+          "ALT_TEXT": "Photography on Artstor & JSTOR"
         },
         {
-          "SUBHEADING": "Flora and Fauna",
+          "SUBHEADING": "Drawn with light",
           "DESCRIPTION": "",
-          "CAPTION": "Asterope sapphira. Collected 1936. Image and data from the Peabody Museum of Natural History (Yale University).",
-          "LINK": "https://www.artstor.org/2019/04/22/artstor-celebrates-the-earth-flora-fauna-and-natural-phenomena/",
-          "IMG_SOURCE": "/assets/img/featured-collections/AYALE_PEABODYIG_10313277595.jpg",
-          "LINK_TITLE": "Flora and Fauna",
-          "ALT_TEXT": "Flora and Fauna"
+          "CAPTION": "Abbie Trayler-Smith. The sun sets… 2005. Photograph. © Abbie Trayler-Smith / Panos Pictures.",
+          "LINK": "https://library.artstor.org/group/839661",
+          "IMG_SOURCE": "/assets/img/featured-collections/panos_sunset.jpg",
+          "LINK_TITLE": "Drawn with light",
+          "ALT_TEXT": "Drawn with light"
         },
         {
-          "SUBHEADING": "Arctic Glaciers",
+          "SUBHEADING": "New from Magnum Photos",
           "DESCRIPTION": "",
-          "CAPTION": "Across the top of Muir Glacier. Lantern slide. Image and data from Cornell University Library.",
-          "LINK": "https://www.artstor.org/2017/04/27/science-and-history-converge-in-cornells-glacier-photographs/",
-          "IMG_SOURCE": "/assets/img/featured-collections/SS7730735_7730735_10351775.jpg",
-          "LINK_TITLE": "Arctic Glaciers",
-          "ALT_TEXT": "Arctic Glaciers"
+          "CAPTION": "Bruno Barbey. Sichuan province. Leshan. The foot of a Buddhist statue, …8th century… 1980. Photograph. © 2022 Bruno Barbey / Magnum Photos / Artists Rights Society (ARS), New York / SAIF, Paris.",
+          "LINK": "https://www.artstor.org/2022/04/28/new-5000-images-from-magnum-photos-2/",
+          "IMG_SOURCE": "/assets/img/featured-collections/magnum_foot.jpg",
+          "LINK_TITLE": "New from Magnum Photos",
+          "ALT_TEXT": "New from Magnum Photos"
         }
       ]
     },
