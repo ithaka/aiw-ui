@@ -7789,9 +7789,10 @@ opener@~1.4.0:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/opener/-/opener-1.4.3.tgz#5c6da2c5d7e5831e8ffa3964950f8d6674ac90b8"
 
-"openseadragon@git://github.com/ithaka/openseadragon.git#f92bfe545ca095e517a73cbe43b4e92d5a186203":
+openseadragon@2.4.1:
   version "2.4.1"
-  resolved "git://github.com/ithaka/openseadragon.git#f92bfe545ca095e517a73cbe43b4e92d5a186203"
+  resolved "https://registry.yarnpkg.com/openseadragon/-/openseadragon-2.4.1.tgz#91fda5245558f5e4f939c2173bdf582359154b21"
+  integrity sha512-7fWUnCkGvWcnoRxqeXcg4bSLPApWbI0hHumEZF8K2pziMfPNjvvHL5XB4oQeT2XfrGKfaasVrPe2XqhAr5kogA==
 
 opn@5.4.0:
   version "5.4.0"
