@@ -35,6 +35,7 @@ declare let google
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="closeBanner()"></ang-sky-banner>
     <ang-role-modal *ngIf="showRolePrompt" (closeModal)="closeRolePrompt()"></ang-role-modal>
+    <ang-aji-intercept-modal *ngIf="showAJIIntercept" (closeModal)="closeAJIIntercept()"></ang-aji-intercept-modal>
     <div>
       <div *ngIf="!_fullscreen.isFullscreen" id="skip-main-content-div" tabindex="-1">
         <button id="skip-main-content-button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
@@ -56,6 +57,8 @@ export class AppComponent {
   public skyBannerCopy: string = '';
   public showRolePrompt: boolean = false;
   public showRolePromptFlag: boolean = false;
+  public showAJIIntercept: boolean = true;
+  public showAJIInterceptFlag: boolean = true;
   public test: any = {};
 
   public statusPageClient: any;

@@ -69,6 +69,7 @@ import { LoginFormComponent } from './login-form'
 import {
   AccessDeniedModal,
   AddToGroupModal,
+  AJIInterceptModal,
   ChangePasswordModal,
   ConfirmModal,
   DeleteIgModal,
@@ -218,6 +219,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AccessDeniedModal,
     AccountPage,
+    AJIInterceptModal,
     EditPersonalCollectionModal,
     AddToGroupModal,
     AgreeModalComponent,
