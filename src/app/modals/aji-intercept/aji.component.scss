@@ -85,6 +85,7 @@ $pharos-font-family-sans-serif: GT America Standard,Helvetica,Helvetica Neue,Ari
 
         padding: $pharos-spacing-one-quarter-x $pharos-spacing-three-quarters-x;
         border-radius: $pharos-radius-base-standard;
+        border: 2px solid black;
         cursor: pointer;
         display: flex;
         align-items: center;
