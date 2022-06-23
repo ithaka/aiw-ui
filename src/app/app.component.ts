@@ -19,8 +19,6 @@ import { version } from './../../package.json'
 import * as enTranslation from '../assets/i18n/en.json'
 import { Angulartics2 } from 'angulartics2';
 
-// import '@pharos/core/web-components/pharos-button';
-
 
 const STATUS_PAGE_CMP_ID_STAGE: string = 'fck7kkc59xvh';
 const STATUS_PAGE_CMP_ID_PROD: string = 'cmy3vpk5tq18';
