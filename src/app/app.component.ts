@@ -19,6 +19,8 @@ import { version } from './../../package.json'
 import * as enTranslation from '../assets/i18n/en.json'
 import { Angulartics2 } from 'angulartics2';
 
+// import '@pharos/core/web-components/pharos-button';
+
 
 const STATUS_PAGE_CMP_ID_STAGE: string = 'fck7kkc59xvh';
 const STATUS_PAGE_CMP_ID_PROD: string = 'cmy3vpk5tq18';
@@ -57,7 +59,7 @@ export class AppComponent {
   public skyBannerCopy: string = '';
   public showRolePrompt: boolean = false;
   public showRolePromptFlag: boolean = false;
-  public showAJIIntercept: boolean = true;
+  public showAJIIntercept: boolean = false;
   public showAJIInterceptFlag: boolean = true;
   public test: any = {};
 
@@ -121,6 +123,7 @@ export class AppComponent {
         this.initializeWidgets(flags.enableOneTrust);
         this.showRolePromptFlag = flags.shouldPromptForRole
         this.initializeRolePrompt(this.showRolePromptFlag)
+        this.initializAJIIntercept(this.showAJIInterceptFlag)
       }, (err) => {
         console.error(err)
       })).subscribe()
@@ -288,6 +291,13 @@ export class AppComponent {
     this.showRolePrompt = shouldPromptForRole && this._auth.shouldPromptForRole()
   }
 
+   /**
+   * Determines whether to display the AJI Intercept
+   */
+    private initializAJIIntercept(showAJIIntercept: boolean): void {
+      this.showAJIIntercept = this.showAJIInterceptFlag && this._auth.showAJIIntercept()
+    }
+
   /**
    * Subscribes to StatusPage.io incident/banner updates
    */
@@ -321,6 +331,10 @@ export class AppComponent {
 
   private closeRolePrompt(): void {
     this.showRolePrompt = false;
+  }
+
+  private closeAJIIntercept(): void {
+    this.showAJIIntercept = false;
   }
 
   public findMainContent(): void {

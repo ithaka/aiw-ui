@@ -2,6 +2,22 @@
   .modal-dialog(role="document")
     .modal-content
       .modal-header
-        h4.modal-title([innerHtml]="'AJI INTERCEPT' | translate")
         button.close(type="button", (click)="dismissModal()", aria-label="Close")
           span(aria-hidden="true") &times;
+      .modal-body
+        img(src="/assets/img/artstor-jstor-logo.svg", alt="Artstor JSTOR Logo")
+        div([innerHtml]="'Artstor is moving to JSTOR' | translate", tabindex="0", class="main-callout")
+        div(class="aji-separator-left")
+        div(class="aji-separator-right")
+        div([innerHtml]="'Discover the benefits of researching and teaching with images on JSTOR.' | translate", class="main-text")
+      .modal-footer.flex-column
+        button.primary(
+          (click)="closeModal.emit()" type="button",
+          [attr.aria-label]="'Try it now' | translate",
+          [innerHtml]="'Try it now' | translate",
+        )
+        button.secondary(
+          (click)="closeModal.emit()" type="button",
+          [attr.aria-label]="'Remind me later' | translate",
+          [innerHtml]="'Remind me later' | translate",
+        )
