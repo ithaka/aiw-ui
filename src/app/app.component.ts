@@ -123,6 +123,7 @@ export class AppComponent {
         this.initializeWidgets(flags.enableOneTrust);
         this.showRolePromptFlag = flags.shouldPromptForRole
         this.initializeRolePrompt(this.showRolePromptFlag)
+        this.showAJIInterceptFlag = flags.showAJIInterceptFlag
         this.initializAJIIntercept(this.showAJIInterceptFlag)
       }, (err) => {
         console.error(err)

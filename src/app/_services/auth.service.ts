@@ -401,7 +401,7 @@ export class AuthService implements CanActivate {
    public showAJIIntercept(): boolean {
     let user = this.getUser()
     let institution = this.institutionObjSource.value
-    return true || user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
+    return user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
   }
 
   /**
