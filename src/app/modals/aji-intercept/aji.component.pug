@@ -12,12 +12,12 @@
         div([innerHtml]="'Discover the benefits of researching and teaching with images on JSTOR.' | translate", class="main-text")
       .modal-footer.flex-column
         button.primary(
-          (click)="closeModal.emit()" type="button",
+          (click)="tryItNow()" type="button",
           [attr.aria-label]="'Try it now' | translate",
           [innerHtml]="'Try it now' | translate",
         )
         button.secondary(
-          (click)="closeModal.emit()" type="button",
+          (click)="dismissModal()" type="button",
           [attr.aria-label]="'Remind me later' | translate",
           [innerHtml]="'Remind me later' | translate",
         )

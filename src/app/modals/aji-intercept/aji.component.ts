@@ -18,4 +18,8 @@ export class AJIInterceptModal implements OnInit {
   public dismissModal(): void {
     this.closeModal.emit()
   }
+
+  public tryItNow(): void {
+    window.location.href = "https://www.jstor.org/artstor" 
+  }
 }
