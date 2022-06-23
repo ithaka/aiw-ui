@@ -60,7 +60,7 @@ export class AppComponent {
   public showRolePrompt: boolean = false;
   public showRolePromptFlag: boolean = false;
   public showAJIIntercept: boolean = false;
-  public showAJIInterceptFlag: boolean = true;
+  public showAJIInterceptFlag: boolean = false;
   public test: any = {};
 
   public statusPageClient: any;
