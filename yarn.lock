@@ -242,11 +242,12 @@
   dependencies:
     tslib "^1.9.0"
 
-"@angular/core@^7.2.14":
-  version "7.2.14"
-  resolved "https://registry.npmjs.org/@angular/core/-/core-7.2.14.tgz"
+"@angular/core@^11.0.5":
+  version "11.0.5"
+  resolved "https://registry.yarnpkg.com/@angular/core/-/core-11.0.5.tgz#b8c448c3cd4f6dae7327cc1ba4ee2aa29c8dbc26"
+  integrity sha512-XAXWQi7R3ucZXQwx9QK5jSKJeQyRJ53u2dQDpr7R5stzeCy1a5hrNOkZLg9zOTTPcth/6+FrOrRZP9SMdxtw3w==
   dependencies:
-    tslib "^1.9.0"
+    tslib "^2.0.0"
 
 "@angular/forms@7.2.14":
   version "7.2.14"
@@ -8157,20 +8158,6 @@ phantomjs-prebuilt@^2.1.7:
     request-progress "^2.0.1"
     which "^1.2.10"
 
-pharos-tree@~0.0.0:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/pharos-tree/-/pharos-tree-0.0.1.tgz#f3aa0390b1babd170ac72b633fc74bea8b8ed275"
-  integrity sha512-0rPZxtjZN0em8cqzz5hUQuWxlEmwxLslJH0n6Cw1nUQkLyZjUOv1Bgzy8+YA6a4bNSdQldYcchIZe4A9fRJ9Cw==
-  dependencies:
-    through2 "^0.5.1"
-
-pharos@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/pharos/-/pharos-0.0.1.tgz#e1a8fa2cf6d9ab6a12421bdca688217cca5c4f92"
-  integrity sha512-UHAQRjLjEJrlIGOmCpiLUpZgwWUqIhhqA4Sq2MyvLlL7XgS8kX+XH+keyzSv2x45SMKNs2cg3WEKUDkxMpOHCw==
-  dependencies:
-    pharos-tree "~0.0.0"
-
 pidusage@^2.0.14:
   version "2.0.17"
   resolved "https://registry.npmjs.org/pidusage/-/pidusage-2.0.17.tgz"
@@ -8887,7 +8874,7 @@ readable-stream@^3.0.6:
     string_decoder "^1.1.1"
     util-deprecate "^1.0.1"
 
-readable-stream@~1.0.17, readable-stream@~1.0.2:
+readable-stream@~1.0.2:
   version "1.0.34"
   resolved "https://registry.npmjs.org/readable-stream/-/readable-stream-1.0.34.tgz"
   dependencies:
@@ -10316,14 +10303,6 @@ through2@2.0.1:
     readable-stream "~2.0.0"
     xtend "~4.0.0"
 
-through2@^0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/through2/-/through2-0.5.1.tgz#dfdd012eb9c700e2323fd334f38ac622ab372da7"
-  integrity sha512-zexCrAOTbjkBCXGyozn7hhS3aEaqdrc59mAD2E3dKYzV1vFuEGQ1hEDJN2oQMQFwy4he2zyLqPZV+AlfS8ZWJA==
-  dependencies:
-    readable-stream "~1.0.17"
-    xtend "~3.0.0"
-
 through2@^2.0.0:
   version "2.0.5"
   resolved "https://registry.npmjs.org/through2/-/through2-2.0.5.tgz"
@@ -10518,14 +10497,19 @@ tsickle@>=0.29.0:
     mkdirp "^0.5.1"
     source-map "^0.7.3"
 
-tslib@1.9.3, tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
+tslib@1.9.3:
   version "1.9.3"
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.9.3.tgz"
 
-tslib@^1.7.1:
+tslib@^1.7.1, tslib@^1.8.0, tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
   version "1.10.0"
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.10.0.tgz"
   integrity sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==
+
+tslib@^2.0.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
+  integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
 
 tslint-loader@^3.6.0:
   version "3.6.0"
@@ -11339,11 +11323,6 @@ xregexp@4.0.0:
 xtend@^4.0.0, xtend@~4.0.0, xtend@~4.0.1:
   version "4.0.1"
   resolved "https://registry.npmjs.org/xtend/-/xtend-4.0.1.tgz"
-
-xtend@~3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/xtend/-/xtend-3.0.0.tgz#5cce7407baf642cba7becda568111c493f59665a"
-  integrity sha512-sp/sT9OALMjRW1fKDlPeuSZlDQpkqReA0pyJukniWbTGoEKefHxhGJynE3PNhUMlcM8qWIjPwecwCw4LArS5Eg==
 
 xxhashjs@^0.2.1:
   version "0.2.2"
