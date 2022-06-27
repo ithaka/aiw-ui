@@ -361,7 +361,7 @@ export class AuthService implements CanActivate {
     return this.reinitializeRolePromptObj;
   }
 
-  public reinitializAJIIntercept(): Observable<any> {
+  public reinitializeAJIIntercept(): Observable<any> {
     return this.reinitializeAJIInterceptObj;
   }
 
