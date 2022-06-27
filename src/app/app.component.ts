@@ -133,9 +133,9 @@ export class AppComponent {
       }
     })).subscribe()
 
-    this._auth.reinitializAJIIntercept().pipe(map(reinitializeAJIIntercept => {
+    this._auth.reinitializeAJIIntercept().pipe(map(reinitializeAJIIntercept => {
       if (reinitializeAJIIntercept) {
-        this.initializAJIIntercept(this.showAJIInterceptFlag)
+        this.initializeAJIIntercept(this.showAJIInterceptFlag)
       }
     })).subscribe()
 
