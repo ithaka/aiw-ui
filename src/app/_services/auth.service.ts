@@ -53,6 +53,10 @@ export class AuthService implements CanActivate {
   private reinitializeRolePromptSource: BehaviorSubject<boolean> = new BehaviorSubject(this.reinitializeRolePromptValue);
   private reinitializeRolePromptObj: Observable<any> = this.reinitializeRolePromptSource.asObservable();
 
+  private reinitializeAJIInterceptValue: boolean = false;
+  private reinitializeAJIInterceptSource: BehaviorSubject<boolean> = new BehaviorSubject(this.reinitializeAJIInterceptValue);
+  private reinitializeAJIInterceptObj: Observable<any> = this.reinitializeAJIInterceptSource.asObservable();
+
 
   private userSource: BehaviorSubject<any> = new BehaviorSubject({});
   // private user: any = {}
@@ -288,6 +292,7 @@ export class AuthService implements CanActivate {
         map((res) => {
           this.refreshUserSessionInProgress = false
           this.reinitializeRolePromptSource.next(true)
+          this.reinitializeAJIInterceptSource.next(true)
           console.info('Access Token refreshed <3')
         },
         (err) => {
@@ -321,6 +326,7 @@ export class AuthService implements CanActivate {
       this.userSource.next({})
       this.institutionObjSource.next({})
       this.reinitializeRolePromptSource.next(false)
+      this.reinitializeAJIInterceptSource.next(false)
 
       return this.http
           .post(environment.API_URL + '/api/secure/logout', {}, options)
@@ -353,6 +359,10 @@ export class AuthService implements CanActivate {
 
   public reinitializeRolePrompt(): Observable<any> {
     return this.reinitializeRolePromptObj;
+  }
+
+  public reinitializeAJIIntercept(): Observable<any> {
+    return this.reinitializeAJIInterceptObj;
   }
 
   public setInstitution(institutionObj: any): void {
@@ -401,6 +411,9 @@ export class AuthService implements CanActivate {
    public showAJIIntercept(): boolean {
     let user = this.getUser()
     let institution = this.institutionObjSource.value
+    if (this.getFromStorage('AJIInterceptClosed')) {
+      return false
+    }
     return user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
   }
 
@@ -581,7 +594,7 @@ export class AuthService implements CanActivate {
       return this._storage.getLocal('user') ? this._storage.getLocal('user') : {};
   }
 
-  /** Stores an object in local storage for you - your welcome */
+  /** Stores an object in local storage for you */
   public store(key: string, value: any): void {
       if (key != 'user' && key != 'token') {
           this._storage.setLocal(key, value);
