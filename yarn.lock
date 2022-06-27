@@ -4470,11 +4470,9 @@ events@^3.0.0:
   resolved "https://registry.npmjs.org/events/-/events-3.0.0.tgz"
 
 eventsource@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.npmjs.org/eventsource/-/eventsource-1.0.7.tgz"
-  integrity sha512-4Ln17+vVT0k8aWq+t/bF5arcS3EpT9gYtW66EPacdj/mAFevznsnyoHLPy2BA8gbIQeIHoPsvwmfBftfcG//BQ==
-  dependencies:
-    original "^1.0.0"
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/eventsource/-/eventsource-1.1.2.tgz#bc75ae1c60209e7cb1541231980460343eaea7c2"
+  integrity sha512-xAH3zWhgO2/3KIniEKYPr8plNSzlGINOUqYj0m0u7AB81iRw8b/3E73W6AuU+6klLbaSFmZnaETQ2lXPfAydrA==
 
 evp_bytestokey@^1.0.0, evp_bytestokey@^1.0.3:
   version "1.0.3"
@@ -7813,13 +7811,6 @@ optionator@^0.8.1:
     type-check "~0.3.2"
     wordwrap "~1.0.0"
 
-original@^1.0.0:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/original/-/original-1.0.2.tgz"
-  integrity sha512-hyBVl6iqqUOJ8FqRe+l/gS8H+kKYjrEndd5Pm1MfBtsEKA038HkkdbAl/72EAXGyonD/PFsvmVG+EvcIpliMBg==
-  dependencies:
-    url-parse "^1.4.3"
-
 os-browserify@^0.3.0:
   version "0.3.0"
   resolved "https://registry.npmjs.org/os-browserify/-/os-browserify-0.3.0.tgz"
@@ -8156,20 +8147,6 @@ phantomjs-prebuilt@^2.1.7:
     request "^2.81.0"
     request-progress "^2.0.1"
     which "^1.2.10"
-
-pharos-tree@~0.0.0:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/pharos-tree/-/pharos-tree-0.0.1.tgz#f3aa0390b1babd170ac72b633fc74bea8b8ed275"
-  integrity sha512-0rPZxtjZN0em8cqzz5hUQuWxlEmwxLslJH0n6Cw1nUQkLyZjUOv1Bgzy8+YA6a4bNSdQldYcchIZe4A9fRJ9Cw==
-  dependencies:
-    through2 "^0.5.1"
-
-pharos@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/pharos/-/pharos-0.0.1.tgz#e1a8fa2cf6d9ab6a12421bdca688217cca5c4f92"
-  integrity sha512-UHAQRjLjEJrlIGOmCpiLUpZgwWUqIhhqA4Sq2MyvLlL7XgS8kX+XH+keyzSv2x45SMKNs2cg3WEKUDkxMpOHCw==
-  dependencies:
-    pharos-tree "~0.0.0"
 
 pidusage@^2.0.14:
   version "2.0.17"
@@ -8887,7 +8864,7 @@ readable-stream@^3.0.6:
     string_decoder "^1.1.1"
     util-deprecate "^1.0.1"
 
-readable-stream@~1.0.17, readable-stream@~1.0.2:
+readable-stream@~1.0.2:
   version "1.0.34"
   resolved "https://registry.npmjs.org/readable-stream/-/readable-stream-1.0.34.tgz"
   dependencies:
@@ -10316,14 +10293,6 @@ through2@2.0.1:
     readable-stream "~2.0.0"
     xtend "~4.0.0"
 
-through2@^0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/through2/-/through2-0.5.1.tgz#dfdd012eb9c700e2323fd334f38ac622ab372da7"
-  integrity sha512-zexCrAOTbjkBCXGyozn7hhS3aEaqdrc59mAD2E3dKYzV1vFuEGQ1hEDJN2oQMQFwy4he2zyLqPZV+AlfS8ZWJA==
-  dependencies:
-    readable-stream "~1.0.17"
-    xtend "~3.0.0"
-
 through2@^2.0.0:
   version "2.0.5"
   resolved "https://registry.npmjs.org/through2/-/through2-2.0.5.tgz"
@@ -11339,11 +11308,6 @@ xregexp@4.0.0:
 xtend@^4.0.0, xtend@~4.0.0, xtend@~4.0.1:
   version "4.0.1"
   resolved "https://registry.npmjs.org/xtend/-/xtend-4.0.1.tgz"
-
-xtend@~3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/xtend/-/xtend-3.0.0.tgz#5cce7407baf642cba7becda568111c493f59665a"
-  integrity sha512-sp/sT9OALMjRW1fKDlPeuSZlDQpkqReA0pyJukniWbTGoEKefHxhGJynE3PNhUMlcM8qWIjPwecwCw4LArS5Eg==
 
 xxhashjs@^0.2.1:
   version "0.2.2"
