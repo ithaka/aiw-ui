@@ -95,6 +95,7 @@ export interface FeatureFlags {
   requireLoginForAdlDownload?: boolean,
   enableOneTrust?: boolean,
   shouldPromptForRole?: boolean
+  showAJIInterceptFlag?: boolean
 }
 
 interface FlagServiceResponse {

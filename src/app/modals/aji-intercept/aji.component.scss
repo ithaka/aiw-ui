@@ -1,0 +1,133 @@
+@import '../../../sass/core/variables';
+
+$pharos-spacing-one-quarter-x: 4px;	
+$pharos-spacing-three-quarters-x: 12px;	
+$pharos-radius-base-standard: 2px;
+$pharos-color-text-white: #ffffff;
+$pharos-color-interactive-primary: #990000;
+$pharos-color-interactive-secondary: #000000;
+$pharos-color-interactive-tertiary: #ffffff;
+$pharos-color-ui-10: #ffffff;
+$pharos-color-ui-20:#f2f1ed;
+$pharos-color-ui-30: #eae8e1;
+$pharos-color-ui-40: #d1cfc7;
+$pharos-color-text-base: #000000;
+$pharos-font-family-sans-serif: GT America Standard,Helvetica,Helvetica Neue,Arial,Segoe UI,Roboto,Droid Sans,sans-serif;
+
+.modal-header {
+    border-bottom: none;
+}
+
+.modal-body {
+    img {
+        padding-bottom: 2rem;
+    }
+    text-align: center;
+}
+
+.main-callout {
+    font-family: 'Ivar Display';
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 42px;
+    letter-spacing: -0.01em;
+    text-align: center;
+    padding-bottom: 1rem;
+}
+
+.main-text {
+    font-family: $pharos-font-family-sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 25px;
+    /* or 156% */
+
+    text-align: center;
+    letter-spacing: -0.01em;
+
+    color: #000000;
+}
+
+.modal-footer {
+    border-top: none;
+    padding-bottom: 2rem;
+
+    button {
+        &.primary {
+            color: $pharos-color-text-white;
+            background-color: $pharos-color-interactive-primary;
+            border-color: $pharos-color-interactive-primary;
+
+            &:hover:not([disabled]),
+            &:active:not([disabled]) {
+                color: $pharos-color-interactive-primary;
+                background-color: transparent;
+                border-color: $pharos-color-interactive-primary;
+            }
+        }
+
+        &.secondary {
+            color: $pharos-color-text-base;
+            background-color: transparent;
+            border-color: $pharos-color-ui-40; 
+
+            &:hover:not([disabled]),
+            &:active:not([disabled]) {
+                color: $pharos-color-interactive-primary;
+                background-color: $pharos-color-interactive-tertiary;
+                border-color: $pharos-color-interactive-primary;
+            }
+        }
+        &:hover:not([disabled]),
+        &:active:not([disabled]) {
+            padding: calc($pharos-spacing-one-quarter-x - 1px);
+        }
+
+        padding: $pharos-spacing-one-quarter-x $pharos-spacing-three-quarters-x;
+        border-radius: $pharos-radius-base-standard;
+        border: 2px solid black;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        margin-bottom: 1rem;
+        appearance: none;
+        font-family: $pharos-font-family-sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+    }
+}
+
+.aji-separator-left {
+    position: absolute;
+    right: 50.44%;
+    top: 46.51%;
+    bottom: 52.96%;
+
+    background: #000000;
+    height: 4px;
+    width: 185px;
+    border-radius: 0px;
+
+}
+
+.aji-separator-right {
+    position: absolute;
+    left: 49.56%;
+    right: 38.03%;
+    top: 46.51%;
+    bottom: 52.96%;
+    
+    background: #990000;
+    height: 4px;
+    width: 185px;
+    border-radius: 0px;
+
+}
+
+.artstor-jstor-logo{
+    background-image: url("/assets/img/artstor-jstor-logo.svg");
+}

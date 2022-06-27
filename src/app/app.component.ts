@@ -35,6 +35,7 @@ declare let google
   template: `
     <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="closeBanner()"></ang-sky-banner>
     <ang-role-modal *ngIf="showRolePrompt" (closeModal)="closeRolePrompt()"></ang-role-modal>
+    <ang-aji-intercept-modal *ngIf="showAJIIntercept" (closeModal)="closeAJIIntercept()"></ang-aji-intercept-modal>
     <div>
       <div *ngIf="!_fullscreen.isFullscreen" id="skip-main-content-div" tabindex="-1">
         <button id="skip-main-content-button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
@@ -56,6 +57,8 @@ export class AppComponent {
   public skyBannerCopy: string = '';
   public showRolePrompt: boolean = false;
   public showRolePromptFlag: boolean = false;
+  public showAJIIntercept: boolean = false;
+  public showAJIInterceptFlag: boolean = false;
   public test: any = {};
 
   public statusPageClient: any;
@@ -118,6 +121,8 @@ export class AppComponent {
         this.initializeWidgets(flags.enableOneTrust);
         this.showRolePromptFlag = flags.shouldPromptForRole
         this.initializeRolePrompt(this.showRolePromptFlag)
+        this.showAJIInterceptFlag = flags.showAJIInterceptFlag
+        this.initializAJIIntercept(this.showAJIInterceptFlag)
       }, (err) => {
         console.error(err)
       })).subscribe()
@@ -285,6 +290,13 @@ export class AppComponent {
     this.showRolePrompt = shouldPromptForRole && this._auth.shouldPromptForRole()
   }
 
+   /**
+   * Determines whether to display the AJI Intercept
+   */
+    private initializAJIIntercept(showAJIIntercept: boolean): void {
+      this.showAJIIntercept = this.showAJIInterceptFlag && this._auth.showAJIIntercept()
+    }
+
   /**
    * Subscribes to StatusPage.io incident/banner updates
    */
@@ -318,6 +330,10 @@ export class AppComponent {
 
   private closeRolePrompt(): void {
     this.showRolePrompt = false;
+  }
+
+  private closeAJIIntercept(): void {
+    this.showAJIIntercept = false;
   }
 
   public findMainContent(): void {

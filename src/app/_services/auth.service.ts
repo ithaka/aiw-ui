@@ -392,7 +392,17 @@ export class AuthService implements CanActivate {
     let userHasRole = user.hasOwnProperty("role") && user.role
     let userHasBeenPrompted = user.hasOwnProperty("promptedForRole") && user.promptedForRole
     return user && user.isLoggedIn && !userHasRole && !userHasBeenPrompted
-}
+  }
+
+  /**
+   * Determines whether to display an aji intercept to the user
+   * @returns boolean showAJIIntercept
+   */
+   public showAJIIntercept(): boolean {
+    let user = this.getUser()
+    let institution = this.institutionObjSource.value
+    return user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
+  }
 
   /**
    * Gets the roles and departments lists, which are used in the registration page
