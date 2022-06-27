@@ -133,6 +133,12 @@ export class AppComponent {
       }
     })).subscribe()
 
+    this._auth.reinitializAJIIntercept().pipe(map(reinitializeAJIIntercept => {
+      if (reinitializeAJIIntercept) {
+        this.initializAJIIntercept(this.showAJIInterceptFlag)
+      }
+    })).subscribe()
+
     // console.info("Constructing app component")
     // Append timestamp param to dodge caching
     if (isPlatformBrowser(this.platformId)) {
