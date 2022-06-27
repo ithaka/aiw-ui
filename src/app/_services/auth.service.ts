@@ -594,7 +594,7 @@ export class AuthService implements CanActivate {
       return this._storage.getLocal('user') ? this._storage.getLocal('user') : {};
   }
 
-  /** Stores an object in local storage for you - your'e welcome */
+  /** Stores an object in local storage for you */
   public store(key: string, value: any): void {
       if (key != 'user' && key != 'token') {
           this._storage.setLocal(key, value);
