@@ -49,7 +49,8 @@ module.exports = (env) => {
           accountAccessKey: '${process.env.APPD_ACCESS_KEY}', // Required for SaaS accounts
           applicationName: '${appdynamicsName}',
           tierName: 'artstor-ui-ssr',
-          nodeName: 'artstor-ui-ssr-01'
+          nodeName: 'artstor-ui-ssr-01',
+          uniqueHostId: '${process.env.SGK_INSTANCE_ID}'
         });
         `
       })
