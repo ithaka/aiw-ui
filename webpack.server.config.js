@@ -50,7 +50,7 @@ module.exports = (env) => {
           applicationName: '${appdynamicsName}',
           tierName: 'artstor-ui-ssr',
           nodeName: 'artstor-ui-ssr-01',
-          uniqueHostId: '${process.env.SGK_INSTANCE_ID}
+          uniqueHostId: '${process.env.SGK_INSTANCE_ID}'
         });
         `
       })
