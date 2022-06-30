@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { NavigationEnd, Router, RouteReuseStrategy, RouterModule, UrlSerializer, PreloadAllModules } from '@angular/router';
 // import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { DatePipe, isPlatformBrowser } from '@angular/common'
 
@@ -304,6 +305,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   imports: [ // import Angular's modules
     BrowserModule.withServerTransition({ appId: 'avatar' }),
+    BrowserAnimationsModule,
     PdfViewerModule,
     FormsModule,
     ReactiveFormsModule,

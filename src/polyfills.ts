@@ -36,6 +36,9 @@ import 'ts-helpers';
 // HammerJS for gestures
 import 'hammerjs';
 
+// Animation on older browsers
+import 'web-animations-js';
+
 // Env vars
 import { environment } from './environments/environment';
 
