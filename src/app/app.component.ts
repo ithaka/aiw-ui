@@ -33,7 +33,6 @@ declare let google
   selector: 'app-root',
   encapsulation: ViewEncapsulation.None,
   template: `
-    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="closeBanner()"></ang-sky-banner>
     <ang-role-modal *ngIf="showRolePrompt" (closeModal)="closeRolePrompt()"></ang-role-modal>
     <ang-aji-intercept-modal *ngIf="showAJIIntercept" (closeModal)="closeAJIIntercept()"></ang-aji-intercept-modal>
     <div>
@@ -41,6 +40,8 @@ declare let google
         <button id="skip-main-content-button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
       </div>
       <nav-bar tabindex="-1"></nav-bar>
+      <ang-sky-banner *ngIf="showSkyBanner" (dropBanner)="dropBanner()"></ang-sky-banner>
+      <ang-drop-banner *ngIf="showDropDownBanner"></ang-drop-banner>
       <main id="main">
         <router-outlet></router-outlet>
       </main>
@@ -54,11 +55,11 @@ export class AppComponent {
   title = 'Artstor';
 
   public showSkyBanner: boolean = false;
-  public skyBannerCopy: string = '';
   public showRolePrompt: boolean = false;
   public showRolePromptFlag: boolean = false;
   public showAJIIntercept: boolean = false;
   public showAJIInterceptFlag: boolean = false;
+  public showDropDownBanner: boolean = false;
   public test: any = {};
 
   public statusPageClient: any;
@@ -314,8 +315,8 @@ export class AppComponent {
       } else {
         let bannerClosed: boolean = this._auth.getFromStorage('bannerClosed');
         if(data.status && data.status !== 'resolved' && !bannerClosed) {
+          // Can use this._auth.showAJIIntercept() to ensure user is authenticated and move the logic to closeAJIIntercept()
           this.showSkyBanner = true;
-          this.skyBannerCopy = data.body;
         } else {
           this.showSkyBanner = false;
         }
@@ -329,9 +330,11 @@ export class AppComponent {
   }
 
   // Close banner and save the action in local storage
-  private closeBanner(): void {
-    this._auth.store('bannerClosed', true);
-    this.showSkyBanner = false;
+  private dropBanner(): void {
+    // this._auth.store('bannerClosed', true); uncomment after testing
+    // this.showSkyBanner = false; uncomment after testing
+
+    this.showDropDownBanner = !this.showDropDownBanner;
   }
 
   private closeRolePrompt(): void {
