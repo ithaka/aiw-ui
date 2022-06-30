@@ -1,4 +1,4 @@
- @import './../../sass/core/variables';
+ @import '../../../sass/core/variables';
 
 $pharos-spacing-one-quarter-x: 4px;
 $pharos-spacing-three-quarters-x: 12px;
@@ -32,7 +32,7 @@ $pharos-color-text-base: #000000;
  @keyframes dropdown {
    from { visibility: hidden;
           opacity: 0;
-          transform: translateY(-20%);
+          transform: translateY(-10%);
         }
    to {
       visibility: visible;
@@ -60,16 +60,25 @@ $pharos-color-text-base: #000000;
 }
 
 .grid-container {
-  display: grid;
-  grid-template-columns: auto 30% auto;
-  grid-gap: 10px;
+  display: flex;
+  flex-direction: row;
+  //grid-gap: 10px;
   padding: 10px;
 
+  //@media (max-width: $phone) {
+  //  //position: fixed;
+  //  background: red;
+  //  //bottom: 0;
+  //  flex-direction: column;
+  //
+  //}
 
   & img {
     margin: 0 20px;
     vertical-align: middle;
     max-height: 100%;
+
+
   }
 
 }
@@ -95,7 +104,7 @@ div .center{
 div .right {
   display: flex;
   align-items: center;
-  margin: 10px;
+  padding: 50px;
 }
 
 button {
@@ -111,4 +120,9 @@ button {
       border-color: $pharos-color-interactive-primary;
     }
   }
+}
+
+p {
+   text-align: justify !important;
+    text-justify: inter-word !important;
 }

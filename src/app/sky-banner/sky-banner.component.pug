@@ -1,3 +1,5 @@
 .banner.banner-sky.vertical-center
-    p([innerHtml]="'Artstor is moving to JSTOR.' | translate")
-    button([innerHtml]="'Learn more' | translate", (click)="dropBanner.emit()", aria-label="Close")
+  h2.hidden Notification Banner
+  p([innerHtml]="textValue | translate")
+  button.close(type="button", (click)="closeBanner.emit()", aria-label="Close")
+    span(aria-hidden="true") &times;

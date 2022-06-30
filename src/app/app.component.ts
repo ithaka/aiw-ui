@@ -33,6 +33,7 @@ declare let google
   selector: 'app-root',
   encapsulation: ViewEncapsulation.None,
   template: `
+    <ang-sky-banner *ngIf="showSkyBanner" [textValue]="skyBannerCopy" (closeBanner)="closeBanner()"></ang-sky-banner>
     <ang-role-modal *ngIf="showRolePrompt" (closeModal)="closeRolePrompt()"></ang-role-modal>
     <ang-aji-intercept-modal *ngIf="showAJIIntercept" (closeModal)="closeAJIIntercept()"></ang-aji-intercept-modal>
     <div>
@@ -40,7 +41,7 @@ declare let google
         <button id="skip-main-content-button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
       </div>
       <nav-bar tabindex="-1"></nav-bar>
-      <ang-sky-banner *ngIf="showSkyBanner" (dropBanner)="dropBanner()"></ang-sky-banner>
+      <ang-static-banner *ngIf="showStaticBanner" (dropBanner)="dropBanner()"></ang-static-banner>
       <ang-drop-banner *ngIf="showDropDownBanner"></ang-drop-banner>
       <main id="main">
         <router-outlet></router-outlet>
@@ -59,7 +60,9 @@ export class AppComponent {
   public showRolePromptFlag: boolean = false;
   public showAJIIntercept: boolean = false;
   public showAJIInterceptFlag: boolean = false;
+  public showStaticBanner: boolean = false;
   public showDropDownBanner: boolean = false;
+  public skyBannerCopy: string = "";
   public test: any = {};
 
   public statusPageClient: any;
@@ -282,6 +285,7 @@ export class AppComponent {
           .then((StatusPage) => {
             this.statusPageClient = StatusPage( this._auth.getEnv() === 'test' ? STATUS_PAGE_CMP_ID_STAGE : STATUS_PAGE_CMP_ID_PROD, { environment: this._auth.getEnv() } );
             this.subscribeToStatus();
+            this.initializePostLoginBanner(); //will move to close AJI intercept function block
           })
     }
 
@@ -304,7 +308,17 @@ export class AppComponent {
       this.showAJIIntercept = this.showAJIInterceptFlag && this._auth.showAJIIntercept()
     }
 
-  /**
+   /**
+   * Determines whether to display the post login banner
+   */
+   private initializePostLoginBanner(){
+     // this._auth.store('bannerClosed', true); to see static banner closed status
+     // will need to check opening conditions wrt AJI Intercept
+     this.showStaticBanner = true;
+
+   }
+
+    /**
    * Subscribes to StatusPage.io incident/banner updates
    */
   private subscribeToStatus(): void {
@@ -315,8 +329,8 @@ export class AppComponent {
       } else {
         let bannerClosed: boolean = this._auth.getFromStorage('bannerClosed');
         if(data.status && data.status !== 'resolved' && !bannerClosed) {
-          // Can use this._auth.showAJIIntercept() to ensure user is authenticated and move the logic to closeAJIIntercept()
           this.showSkyBanner = true;
+          this.skyBannerCopy = data.body;
         } else {
           this.showSkyBanner = false;
         }
@@ -330,10 +344,14 @@ export class AppComponent {
   }
 
   // Close banner and save the action in local storage
-  private dropBanner(): void {
-    // this._auth.store('bannerClosed', true); uncomment after testing
-    // this.showSkyBanner = false; uncomment after testing
+  private closeBanner(): void {
+    this._auth.store('bannerClosed', true);
+    this.showSkyBanner = false;
+  }
 
+
+  // Open-close dropDown tray
+  private dropBanner(): void {
     this.showDropDownBanner = !this.showDropDownBanner;
   }
 

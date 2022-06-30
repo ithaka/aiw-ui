@@ -7,7 +7,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class SkyBannerComponent implements OnInit {
 
-  @Output() dropBanner: EventEmitter<any> = new EventEmitter()
+  @Output() closeBanner: EventEmitter<any> = new EventEmitter()
+
+  // I just put a bland initial value in, but this should be overwritten by the input
+  @Input() textValue: string = "Welcome to Artstor. We're glad you're here."
 
   constructor() { }
 

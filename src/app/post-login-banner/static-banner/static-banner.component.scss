@@ -1,0 +1,66 @@
+ @import './../../../sass/core/variables';
+
+$pharos-spacing-one-quarter-x: 4px;
+$pharos-spacing-three-quarters-x: 12px;
+$pharos-radius-base-standard: 2px;
+$pharos-color-text-white: #ffffff;
+$pharos-color-interactive-primary: #990000;
+$pharos-color-interactive-secondary: #000000;
+$pharos-color-interactive-tertiary: #ffffff;
+$pharos-color-ui-10: #ffffff;
+$pharos-color-ui-20:#f2f1ed;
+$pharos-color-ui-30: #eae8e1;
+$pharos-color-ui-40: #d1cfc7;
+$pharos-color-text-base: #000000;
+
+.vertical-center {
+  min-height: 50px;
+
+  display: flex;
+  align-items: center;
+}
+
+.banner-static {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background: black;
+  box-shadow: 0 1px 6px 0 rgba(0,0,0,0.1);
+  z-index: 9000;
+  position: relative;
+  width: 100%;
+  padding: 10px 50px;
+  align-items: center;
+
+  & div {
+    text-align: center;
+    color:white;
+  }
+
+  @media (max-width: $phone) {
+    position: fixed;
+    z-index: 9500;
+    bottom: 0;
+    box-shadow: 0 -1px 6px 0 rgba(0,0,0,0.1);
+
+    & p {
+      font-size: 12px;
+      line-height: 15px;
+      padding: 6px 0;
+    }
+  }
+}
+
+.banner {
+  animation: fadein 4s;
+}
+@keyframes fadein {
+  from { opacity: 0}
+  to   { opacity: 1}
+}
+
+button {
+  color: $pharos-color-text-white;
+  background-color: #000000;
+  width: fit-content;
+}

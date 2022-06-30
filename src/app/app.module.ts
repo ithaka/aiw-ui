@@ -95,7 +95,7 @@ import { CollectionBadgeComponent } from './collection-badge'
 import { UploaderComponent } from './uploader/uploader.component'
 import { GeneralSearchComponent } from './browse-page/browse-groups/general-search.component'
 import { SkyBannerComponent } from './sky-banner/sky-banner.component'
-import { dropBannerComponent } from "./drop-banner/drop-banner.component"
+import { dropBannerComponent } from "./post-login-banner/drop-banner/drop-banner.component"
 
 
 // Application wide providers
@@ -144,6 +144,7 @@ import * as Sentry from '@sentry/browser';
 import { version } from '../../package.json';
 import { SupportPageComponent } from './support-page/support-page.component'
 import { ToggleButtonComponent } from './shared/toggle-button/toggle-button.component'
+import { staticBannerComponent } from './post-login-banner/static-banner/static-banner.component';
 
 /**
  * Sentry.io client-side reporter
@@ -247,6 +248,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DeleteIgModal,
     DownloadLimitModal,
     dropBannerComponent,
+    staticBannerComponent,
     EditPersonalCollectionModal,
     FeaturedComponent,
     FilterLinkPipe,
