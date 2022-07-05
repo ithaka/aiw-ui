@@ -145,6 +145,7 @@ import { version } from '../../package.json';
 import { SupportPageComponent } from './support-page/support-page.component'
 import { ToggleButtonComponent } from './shared/toggle-button/toggle-button.component'
 import { staticBannerComponent } from './post-login-banner/static-banner/static-banner.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 /**
  * Sentry.io client-side reporter
@@ -308,6 +309,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   imports: [ // import Angular's modules
     BrowserModule.withServerTransition({ appId: 'avatar' }),
+    BrowserAnimationsModule,
     PdfViewerModule,
     FormsModule,
     ReactiveFormsModule,
