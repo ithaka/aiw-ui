@@ -314,7 +314,10 @@ export class AppComponent {
    private initializePostLoginBanner(){
      // this._auth.store('bannerClosed', true); to see static banner closed status
      // will need to check opening conditions wrt AJI Intercept
-     this.showStaticBanner = true;
+     if(this.showAJIIntercept == false){
+       this.showStaticBanner = this.showAJIInterceptFlag && this._auth.showPostLoginBanner()
+     }
+
 
    }
 

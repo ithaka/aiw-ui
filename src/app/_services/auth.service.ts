@@ -48,7 +48,7 @@ export class AuthService implements CanActivate {
   private institutionObjValue: any = {};
   private institutionObjSource: BehaviorSubject<any> = new BehaviorSubject(this.institutionObjValue);
   private currentInstitutionObj: Observable<any> = this.institutionObjSource.asObservable();
-  
+
   private reinitializeRolePromptValue: boolean = false;
   private reinitializeRolePromptSource: BehaviorSubject<boolean> = new BehaviorSubject(this.reinitializeRolePromptValue);
   private reinitializeRolePromptObj: Observable<any> = this.reinitializeRolePromptSource.asObservable();
@@ -414,6 +414,17 @@ export class AuthService implements CanActivate {
     if (this.getFromStorage('AJIInterceptClosed')) {
       return false
     }
+    return user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
+  }
+
+  /**
+   *  Determines whether to display post-login banner to the user
+   *  @returns boolean showPostLoginBanner
+   */
+  public showPostLoginBanner(): boolean {
+    let user = this.getUser()
+    let institution = this.institutionObjSource.value
+
     return user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
   }
 
