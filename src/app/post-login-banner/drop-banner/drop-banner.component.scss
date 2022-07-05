@@ -61,7 +61,7 @@ $pharos-color-text-base: #000000;
    }
 
    @media (max-width: $phone) {
-    justify-content: space-between;
+    justify-content: center;
     flex-direction: column;
 
      & .separator {
