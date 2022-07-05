@@ -71,22 +71,29 @@ $pharos-color-text-base: #000000;
  }
 
  @keyframes dropdown {
-   from { visibility: hidden;
+   0% { visibility: hidden;
           opacity: 0;
           transform: translateY(-10%);
         }
-   to {
+   100% {
       visibility: visible;
       opacity: 1;
       transform: translateY(0%);
    }
+   0% { visibility: hidden;
+          opacity: 0;
+          transform: translateY(-10%);
+        }
+
  }
 
+
+
   @keyframes fadein {
-   from { visibility: hidden;
+   0% { visibility: hidden;
           opacity: 0;
         }
-   to {
+   100% {
       visibility: visible;
       opacity: 1;
    }

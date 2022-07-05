@@ -285,7 +285,7 @@ export class AppComponent {
           .then((StatusPage) => {
             this.statusPageClient = StatusPage( this._auth.getEnv() === 'test' ? STATUS_PAGE_CMP_ID_STAGE : STATUS_PAGE_CMP_ID_PROD, { environment: this._auth.getEnv() } );
             this.subscribeToStatus();
-            this.initializePostLoginBanner(); //will move to close AJI intercept function block
+            this.initializePostLoginBanner();
           })
     }
 
@@ -364,6 +364,7 @@ export class AppComponent {
 
   private closeAJIIntercept(): void {
     this.showAJIIntercept = false;
+    this.initializePostLoginBanner();
   }
 
   public findMainContent(): void {
