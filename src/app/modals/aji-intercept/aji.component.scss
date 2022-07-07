@@ -1,7 +1,7 @@
 @import '../../../sass/core/variables';
 
-$pharos-spacing-one-quarter-x: 4px;
-$pharos-spacing-three-quarters-x: 12px;
+$pharos-spacing-one-quarter-x: 4px;	
+$pharos-spacing-three-quarters-x: 12px;	
 $pharos-radius-base-standard: 2px;
 $pharos-color-text-white: #ffffff;
 $pharos-color-interactive-primary: #990000;
@@ -70,7 +70,7 @@ $pharos-font-family-sans-serif: GT America Standard,Helvetica,Helvetica Neue,Ari
         &.secondary {
             color: $pharos-color-text-base;
             background-color: transparent;
-            border-color: $pharos-color-ui-40;
+            border-color: $pharos-color-ui-40; 
 
             &:hover:not([disabled]),
             &:active:not([disabled]) {
@@ -120,7 +120,7 @@ $pharos-font-family-sans-serif: GT America Standard,Helvetica,Helvetica Neue,Ari
     right: 38.03%;
     top: 46.51%;
     bottom: 52.96%;
-
+    
     background: #990000;
     height: 4px;
     width: 185px;
@@ -130,8 +130,4 @@ $pharos-font-family-sans-serif: GT America Standard,Helvetica,Helvetica Neue,Ari
 
 .artstor-jstor-logo{
     background-image: url("/assets/img/artstor-jstor-logo.svg");
-}
-
-.modal-content {
-  animation: none !important;
 }
