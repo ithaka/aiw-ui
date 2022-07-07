@@ -372,7 +372,6 @@ export class AuthService implements CanActivate {
   }
 
   public reinitializePostLoginBanner(): Observable<any> {
-    console.log("helloThere", this.reinitializePostLoginBannerObj)
     return this.reinitializePostLoginBannerObj;
   }
 
