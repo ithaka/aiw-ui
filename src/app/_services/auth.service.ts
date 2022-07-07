@@ -57,6 +57,10 @@ export class AuthService implements CanActivate {
   private reinitializeAJIInterceptSource: BehaviorSubject<boolean> = new BehaviorSubject(this.reinitializeAJIInterceptValue);
   private reinitializeAJIInterceptObj: Observable<any> = this.reinitializeAJIInterceptSource.asObservable();
 
+  private reinitializePostLoginBannerValue: boolean = false;
+  private reinitializePostLoginBannerSource: BehaviorSubject<boolean> = new BehaviorSubject(this.reinitializePostLoginBannerValue);
+  private reinitializePostLoginBannerObj: Observable<any> = this.reinitializePostLoginBannerSource.asObservable();
+
 
   private userSource: BehaviorSubject<any> = new BehaviorSubject({});
   // private user: any = {}
@@ -363,6 +367,11 @@ export class AuthService implements CanActivate {
 
   public reinitializeAJIIntercept(): Observable<any> {
     return this.reinitializeAJIInterceptObj;
+  }
+
+  public reinitializePostLoginBanner(): Observable<any> {
+    console.log("helloThere", this.reinitializePostLoginBannerObj)
+    return this.reinitializePostLoginBannerObj;
   }
 
   public setInstitution(institutionObj: any): void {

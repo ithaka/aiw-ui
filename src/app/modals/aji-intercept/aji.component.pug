@@ -1,6 +1,6 @@
 .modal.fade-in.show
   .modal-dialog(role="document")
-    .modal-content
+    .modal-content(@slideIn)
       .modal-header
         button.close(type="button", (click)="dismissModal()", aria-label="Close")
           span(aria-hidden="true") &times;
