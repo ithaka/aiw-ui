@@ -48,7 +48,7 @@ export class AuthService implements CanActivate {
   private institutionObjValue: any = {};
   private institutionObjSource: BehaviorSubject<any> = new BehaviorSubject(this.institutionObjValue);
   private currentInstitutionObj: Observable<any> = this.institutionObjSource.asObservable();
-  
+
   private reinitializeRolePromptValue: boolean = false;
   private reinitializeRolePromptSource: BehaviorSubject<boolean> = new BehaviorSubject(this.reinitializeRolePromptValue);
   private reinitializeRolePromptObj: Observable<any> = this.reinitializeRolePromptSource.asObservable();
@@ -56,6 +56,10 @@ export class AuthService implements CanActivate {
   private reinitializeAJIInterceptValue: boolean = false;
   private reinitializeAJIInterceptSource: BehaviorSubject<boolean> = new BehaviorSubject(this.reinitializeAJIInterceptValue);
   private reinitializeAJIInterceptObj: Observable<any> = this.reinitializeAJIInterceptSource.asObservable();
+
+  private reinitializePostLoginBannerValue: boolean = false;
+  private reinitializePostLoginBannerSource: BehaviorSubject<boolean> = new BehaviorSubject(this.reinitializePostLoginBannerValue);
+  private reinitializePostLoginBannerObj: Observable<any> = this.reinitializePostLoginBannerSource.asObservable();
 
 
   private userSource: BehaviorSubject<any> = new BehaviorSubject({});
@@ -293,6 +297,7 @@ export class AuthService implements CanActivate {
           this.refreshUserSessionInProgress = false
           this.reinitializeRolePromptSource.next(true)
           this.reinitializeAJIInterceptSource.next(true)
+          this.reinitializePostLoginBannerSource.next(true)
           console.info('Access Token refreshed <3')
         },
         (err) => {
@@ -327,6 +332,7 @@ export class AuthService implements CanActivate {
       this.institutionObjSource.next({})
       this.reinitializeRolePromptSource.next(false)
       this.reinitializeAJIInterceptSource.next(false)
+      this.reinitializePostLoginBannerSource.next(false)
 
       return this.http
           .post(environment.API_URL + '/api/secure/logout', {}, options)
@@ -363,6 +369,10 @@ export class AuthService implements CanActivate {
 
   public reinitializeAJIIntercept(): Observable<any> {
     return this.reinitializeAJIInterceptObj;
+  }
+
+  public reinitializePostLoginBanner(): Observable<any> {
+    return this.reinitializePostLoginBannerObj;
   }
 
   public setInstitution(institutionObj: any): void {
@@ -414,6 +424,17 @@ export class AuthService implements CanActivate {
     if (this.getFromStorage('AJIInterceptClosed')) {
       return false
     }
+    return user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
+  }
+
+  /**
+   *  Determines whether to display post-login banner to the user
+   *  @returns boolean showPostLoginBanner
+   */
+  public showPostLoginBanner(): boolean {
+    let user = this.getUser()
+    let institution = this.institutionObjSource.value
+
     return user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
   }
 

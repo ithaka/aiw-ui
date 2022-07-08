@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { AuthService } from '_services'
-import {animate, state, style, transition, trigger} from "@angular/animations";
+import {animate, style, transition, trigger} from "@angular/animations"
 
 
 @Component({
@@ -8,10 +8,20 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
   templateUrl: 'aji.component.pug',
   styleUrls: [ 'aji.component.scss' ],
   animations: [
-    trigger('fade', [
-      state('void', style({opacity: 0})),
-      transition(':enter, :leave', [
-        animate(2000)
+    trigger("slideIn", [
+      transition(":enter", [
+        style({opacity: 0, transform: "translateY(-10%)"}), //apply default styles before animation starts
+        animate(
+          "1000ms ease-in-out",
+          style({opacity: 1, transform: "translateY(0%)"})
+        )
+      ]),
+      transition(":leave", [
+        style({opacity: 1, transform: "translateY(0%)"}), //apply default styles before animation starts
+        animate(
+          "750ms ease-in-out",
+          style({opacity: 0, transform: "translateY(-10%)"})
+        )
       ])
     ])
   ]

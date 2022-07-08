@@ -41,6 +41,8 @@ declare let google
         <button id="skip-main-content-button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
       </div>
       <nav-bar tabindex="-1"></nav-bar>
+      <ang-static-banner *ngIf="showPostLoginBanner" (dropBanner)="dropBanner()"></ang-static-banner>
+      <ang-drop-banner *ngIf="showDropDownBanner"></ang-drop-banner>
       <main id="main">
         <router-outlet></router-outlet>
       </main>
@@ -54,11 +56,13 @@ export class AppComponent {
   title = 'Artstor';
 
   public showSkyBanner: boolean = false;
-  public skyBannerCopy: string = '';
   public showRolePrompt: boolean = false;
   public showRolePromptFlag: boolean = false;
   public showAJIIntercept: boolean = false;
   public showAJIInterceptFlag: boolean = false;
+  public showPostLoginBanner: boolean = false;
+  public showDropDownBanner: boolean = false;
+  public skyBannerCopy: string = "";
   public test: any = {};
 
   public statusPageClient: any;
@@ -136,6 +140,12 @@ export class AppComponent {
     this._auth.reinitializeAJIIntercept().pipe(map(reinitializeAJIIntercept => {
       if (reinitializeAJIIntercept) {
         this.initializeAJIIntercept(this.showAJIInterceptFlag)
+      }
+    })).subscribe()
+
+    this._auth.reinitializePostLoginBanner().pipe(map(reinitializePostLoginBanner => {
+      if (reinitializePostLoginBanner) {
+        this.initializePostLoginBanner()
       }
     })).subscribe()
 
@@ -303,7 +313,20 @@ export class AppComponent {
       this.showAJIIntercept = this.showAJIInterceptFlag && this._auth.showAJIIntercept()
     }
 
-  /**
+   /**
+   * Determines whether to display the post login banner
+   */
+   private initializePostLoginBanner(): void{
+     // this._auth.store('bannerClosed', true); to see static banner closed status
+     // will need to check opening conditions wrt AJI Intercept
+     if(this.showAJIIntercept == false){
+       this.showPostLoginBanner = this.showAJIInterceptFlag && this._auth.showPostLoginBanner()
+     }
+
+
+   }
+
+    /**
    * Subscribes to StatusPage.io incident/banner updates
    */
   private subscribeToStatus(): void {
@@ -334,12 +357,19 @@ export class AppComponent {
     this.showSkyBanner = false;
   }
 
+
+  // Open-close dropDown tray
+  private dropBanner(): void {
+    this.showDropDownBanner = !this.showDropDownBanner;
+  }
+
   private closeRolePrompt(): void {
     this.showRolePrompt = false;
   }
 
   private closeAJIIntercept(): void {
     this.showAJIIntercept = false;
+    this.showPostLoginBanner = true;
   }
 
   public findMainContent(): void {
