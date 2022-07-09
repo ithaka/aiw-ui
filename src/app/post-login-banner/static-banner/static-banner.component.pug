@@ -1,3 +1,9 @@
 .banner.banner-static
-    div([innerHtml]="'Artstor is moving to JSTOR.' | translate")
-    button([innerHtml]="'Learn more' | translate", (click)="dropBanner.emit()", aria-label="Close")
+    div.container
+      div.headings
+        img.info(src="/assets/img/exclamation-inverse.png", alt="info")
+        div([innerHtml]="'Artstor is moving to JSTOR.' | translate")
+      button.expand((click)="dropBanner.emit()", aria-label="Close")
+        div([innerHtml]=" 'Learn more' | translate" )
+        img.chevron(id="chevron", src="/assets/img/chevron-down.svg", alt="chevron-down")
+

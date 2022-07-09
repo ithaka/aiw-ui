@@ -360,7 +360,14 @@ export class AppComponent {
 
   // Open-close dropDown tray
   private dropBanner(): void {
+    let chevron = document.getElementById("chevron");
     this.showDropDownBanner = !this.showDropDownBanner;
+    if (this.showDropDownBanner == true) {
+      chevron.classList.add("rotate")
+    }
+    else{
+      chevron.classList.remove("rotate")
+    }
   }
 
   private closeRolePrompt(): void {

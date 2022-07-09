@@ -16,46 +16,35 @@ $pharos-color-text-base: #000000;
 .drop-tray{
   background:white;
   color:black;
-  box-shadow: 0 1px 6px 0 rgba(0,0,0,0.1);
+  box-shadow: 0px 0px 10px 0px #D1CFC7;
   z-index: 9000;
   position: absolute;
   padding: 5px 15px;
   width: 100%;
-  box-shadow: 0px 3px 3px 3px #888888;
-
-  & p {
-   text-align: justify !important;
-    text-justify: inter-word !important;
-  }
-
-  @media (max-width: $phone) {
-    position: fixed;
-    z-index: 9500;
-    bottom: 5%;
-    box-shadow: 0 -1px 6px 0 rgba(0, 0, 0, 0.1);
-    animation: fadein 2s;
-  }
-
-    }
+}
 
  .wrapper {
   display: flex;
   width: 100%;
-  padding: 10px 0;
-  justify-content: center;
+  height: 100%;
+  padding: 10px 0px;
+  justify-content: space-between;
   flex-direction: row;
    vertical-align: middle;
   align-items: center;
 
-   & div {
-     padding: 0 1rem;
+   & .mainContent {
+     padding: 0px 1.5rem;
      color: black;
-     max-width: 50%;
+     max-width: 70%;
 
      & h1 {
        font-family: 'Ivar Display';
-       font-size: 20px;
+       font-size: 25px;
+       font-weight: bold;
        color: black;
+       margin-bottom: 0.5rem;
+
      }
    }
 
@@ -66,36 +55,15 @@ $pharos-color-text-base: #000000;
      & .separator {
        transform: rotate(-0.25turn);
      }
+
+     .mainContent {
+      max-width: 70%;
+      padding: 0;
+      justify-content: start;
+      margin-bottom: 1rem;
+     }
   }
  }
-
-  @keyframes fadein {
-   0% { visibility: hidden;
-          opacity: 0;
-        }
-   100% {
-      visibility: visible;
-      opacity: 1;
-   }
- }
-
-
-.banner-divider-top{
-  position: absolute;
-  left: 20%;
-  width: 4px;
-  height: 50%;
-  background: #000000;
-}
-
-.banner-divider-bottom{
-  position: absolute;
-  right: calc( 80% - 4px );
-  top: 49%;
-  width: 4px;
-  height: 50%;
-  background: #990000;
-}
 
 button {
 
@@ -112,4 +80,59 @@ button {
       border-color: $pharos-color-interactive-primary;
     }
   }
+}
+
+.separator-container {
+  display: flex;
+  flex-direction: column;
+  height: 150px;
+
+  .banner-separator-top {
+    background: #000000;
+    height: 50%;
+    width: 4px;
+    border-radius: 0px;
+
+}
+
+  .banner-separator-bottom {
+      background: #990000;
+      height: 50%;
+      width: 4px;
+      border-radius: 0px;
+
+  }
+
+  @media(max-width: $phone){
+      display: flex;
+      flex-direction: row;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      justify-content: center;
+      width: 70%;
+      height: 14px;
+
+      .banner-separator-top {
+        background: #000000;
+        height: 4px;
+        width: 50%;
+        border-radius: 0px;
+
+      }
+
+      .banner-separator-bottom {
+          background: #990000;
+          height: 4px;
+          width: 50%;
+          border-radius: 0px;
+      }
+  }
+}
+
+.logo {
+  margin-right: $pharos-spacing-one-quarter-x;
+}
+
+.container {
+  padding: 0 !important;
 }

@@ -37,7 +37,7 @@ import 'ts-helpers';
 import 'hammerjs';
 
 // Animation on older browsers
-import 'web-animations-js';
+// import 'web-animations-js';
 
 // Env vars
 import { environment } from './environments/environment';

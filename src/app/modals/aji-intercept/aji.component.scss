@@ -2,6 +2,8 @@
 
 $pharos-spacing-one-quarter-x: 4px;
 $pharos-spacing-three-quarters-x: 12px;
+$pharos-spacing-one-x: 16px;
+$pharos-spacing-one-and-a-half-x: 24px;
 $pharos-radius-base-standard: 2px;
 $pharos-color-text-white: #ffffff;
 $pharos-color-interactive-primary: #990000;
@@ -58,6 +60,7 @@ $pharos-font-family-sans-serif: GT America Standard,Helvetica,Helvetica Neue,Ari
             color: $pharos-color-text-white;
             background-color: $pharos-color-interactive-primary;
             border-color: $pharos-color-interactive-primary;
+            margin-bottom: $pharos-spacing-one-and-a-half-x;
 
             &:hover:not([disabled]),
             &:active:not([disabled]) {
@@ -101,31 +104,25 @@ $pharos-font-family-sans-serif: GT America Standard,Helvetica,Helvetica Neue,Ari
     }
 }
 
-.aji-separator-left {
-    position: absolute;
-    right: 50.44%;
-    top: 46.51%;
-    bottom: 52.96%;
+.separator-container {
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 
+  .aji-separator-left {
     background: #000000;
     height: 4px;
-    width: 185px;
+    width: 45%;
     border-radius: 0px;
-
 }
 
-.aji-separator-right {
-    position: absolute;
-    left: 49.56%;
-    right: 38.03%;
-    top: 46.51%;
-    bottom: 52.96%;
-
-    background: #990000;
-    height: 4px;
-    width: 185px;
-    border-radius: 0px;
-
+  .aji-separator-right {
+      background: #990000;
+      height: 4px;
+      width: 45%;
+      border-radius: 0px;
+  }
 }
 
 .artstor-jstor-logo{
@@ -134,4 +131,34 @@ $pharos-font-family-sans-serif: GT America Standard,Helvetica,Helvetica Neue,Ari
 
 .modal-content {
   animation: none !important;
+}
+
+.main-text {
+  max-width: 350px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.modal-footer.flex-column {
+  @media(max-width: $phone){
+    display: flex !important;
+  }
+}
+
+.close{
+  color: #000000 !important;
+  padding: 1.5rem;
+  font-size: 24px;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close:hover {
+  color: #990000 !important;
+  background: #f2f1ed !important;
+  cursor: pointer;
 }
