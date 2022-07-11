@@ -66,12 +66,16 @@ $pharos-color-text-base: #000000;
   }
 }
 
-img {
-  padding: 0rem 0.2rem;
+.chevron {
+  margin-left: 0.5rem;
   transition: 0.5s;
 }
 
 .rotate {
   transform: rotate(180deg);
   -webkit-transform: rotate(180deg);
+}
+
+.info-icon {
+  margin-right: 0.5rem;
 }

@@ -1,7 +1,7 @@
 .banner.banner-static
     div.container
       div.headings
-        img.info(src="/assets/img/exclamation-inverse.png", alt="info")
+        img.info-icon(src="/assets/img/exclamation-inverse.png", alt="info")
         div([innerHtml]="'Artstor is moving to JSTOR.' | translate")
       button.expand((click)="dropBanner.emit()", aria-label="Close")
         div([innerHtml]=" 'Learn more' | translate" )
