@@ -362,12 +362,7 @@ export class AppComponent {
   private dropBanner(): void {
     let chevron = document.getElementById("chevron");
     this.showDropDownBanner = !this.showDropDownBanner;
-    if (this.showDropDownBanner == true) {
-      chevron.classList.add("rotate")
-    }
-    else{
-      chevron.classList.remove("rotate")
-    }
+    chevron.classList.toggle("rotate");
   }
 
   private closeRolePrompt(): void {
