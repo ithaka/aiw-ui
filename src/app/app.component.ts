@@ -127,6 +127,7 @@ export class AppComponent {
         this.initializeRolePrompt(this.showRolePromptFlag)
         this.showAJIInterceptFlag = flags.showAJIInterceptFlag
         this.initializeAJIIntercept(this.showAJIInterceptFlag)
+        this.initializePostLoginBanner()
       }, (err) => {
         console.error(err)
       })).subscribe()
@@ -317,11 +318,8 @@ export class AppComponent {
    * Determines whether to display the post login banner
    */
    private initializePostLoginBanner(): void{
-     // this._auth.store('bannerClosed', true); to see static banner closed status
-     // will need to check opening conditions wrt AJI Intercept
-     if(this.showAJIIntercept == false){
-       this.showPostLoginBanner = this.showAJIInterceptFlag && this._auth.showPostLoginBanner()
-     }
+     this.showPostLoginBanner = this.showAJIInterceptFlag && this._auth.showPostLoginBanner()
+
 
 
    }
