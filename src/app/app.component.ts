@@ -319,8 +319,6 @@ export class AppComponent {
    */
    private initializePostLoginBanner(): void{
      this.showPostLoginBanner = this.showAJIInterceptFlag && this._auth.showPostLoginBanner()
-
-
    }
 
     /**
