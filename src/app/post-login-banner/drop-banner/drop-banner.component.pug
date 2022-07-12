@@ -1,9 +1,12 @@
 div.drop-tray(@trayAnimation)
-  .wrapper
-    img(src="/assets/img/artstor-jstor-logo.svg", alt="Artstor JSTOR Logo")
-    img.separator(src="/assets/img/dividing-bar.svg")
-    div
-      h1([innerHtml]="'Get excited!' | translate")
-      p([innerHtml]="'The Artstor images and resources you know and value are ready for you on JSTOR, and more content and capabilities are on the way. Try the new experience and begin your transition today. Artstor will be available in its current form at least through summer 2023.' | translate")
-    a( href="https://www.jstor.org")
-      button.try-now([innerHtml]="'Try now' | translate")
+  .container
+    .wrapper
+      img.logo(src="/assets/img/artstor-jstor-logo.svg", alt="Artstor JSTOR Logo")
+      div.separator-container
+            div.banner-separator-top
+            div.banner-separator-bottom
+      div.mainContent
+        h1([innerHtml]="'Lorem Ipsum' | translate")
+        p([innerHtml]="'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' | translate")
+      a( href="https://www.jstor.org")
+        button.try-now([innerHtml]="'Try now' | translate")

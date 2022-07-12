@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { AuthService } from '_services'
-import {animate, style, transition, trigger} from "@angular/animations";
+import {animate, style, transition, trigger} from "@angular/animations"
 
 
 @Component({
