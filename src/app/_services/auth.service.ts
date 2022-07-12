@@ -434,8 +434,10 @@ export class AuthService implements CanActivate {
   public showPostLoginBanner(): boolean {
     let user = this.getUser()
     let institution = this.institutionObjSource.value
+    let ajiInterceptWasClosed = this.getFromStorage('AJIInterceptClosed')
+    let userIsLoggedInJstorUser = user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
 
-    return user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
+    return ajiInterceptWasClosed && userIsLoggedInJstorUser
   }
 
   /**
