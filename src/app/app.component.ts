@@ -321,7 +321,6 @@ export class AppComponent {
      this.showPostLoginBanner = this.showAJIInterceptFlag && this._auth.showPostLoginBanner()
 
 
-
    }
 
     /**
