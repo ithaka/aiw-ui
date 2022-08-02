@@ -52,16 +52,16 @@ export class AJIInterceptModal implements OnInit {
   public dismissModal(): void {
     this._auth.store('AJIInterceptClosed', true);
     this.closeModal.emit()
-  }
-
-  public remindMeLater(): void {
-    this._auth.store('AJIInterceptClosed', true);
-    this.closeModal.emit()
     let updateUser = this._auth.getUser()
     if(updateUser.preferences.hasOwnProperty("showAJIModalAndBanner")){
       updateUser.preferences.showAJIModalAndBanner = false
       this.updateUser(updateUser)
     }
+  }
+
+  public remindMeLater(): void {
+    this._auth.store('AJIInterceptClosed', true);
+    this.closeModal.emit()
   }
 
   public tryItNow(): void {
