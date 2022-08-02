@@ -421,10 +421,11 @@ export class AuthService implements CanActivate {
    public showAJIIntercept(): boolean {
     let user = this.getUser()
     let institution = this.institutionObjSource.value
+    let showIntercept = user.preference.showAJIModalAndBanner ? user.preference.hasOwnProperty('showAJIModalAndBanner') : false
     if (this.getFromStorage('AJIInterceptClosed')) {
       return false
     }
-    return user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
+    return user && user.isLoggedIn && showIntercept && institution.institutionName && institution.institutionName == 'JSTOR'
   }
 
   /**
@@ -433,11 +434,12 @@ export class AuthService implements CanActivate {
    */
   public showPostLoginBanner(): boolean {
     let user = this.getUser()
+    let showBanner = user.preference.showAJIModalAndBanner ? user.preference.hasOwnProperty('showAJIModalAndBanner') : false
     let institution = this.institutionObjSource.value
     let ajiInterceptWasClosed = this.getFromStorage('AJIInterceptClosed')
     let userIsLoggedInJstorUser = user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
 
-    return ajiInterceptWasClosed && userIsLoggedInJstorUser
+    return ajiInterceptWasClosed && showBanner && userIsLoggedInJstorUser
   }
 
   /**

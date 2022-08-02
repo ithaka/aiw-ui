@@ -8,5 +8,7 @@ div.drop-tray(@trayAnimation)
       div.mainContent
         h1([innerHtml]="'Lorem Ipsum' | translate")
         p([innerHtml]="'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' | translate")
-      a( href="https://www.jstor.org")
-        button.try-now([innerHtml]="'Try now' | translate")
+      a( href="https://www.jstor.org/artstor")
+        button.try-now([innerHtml]="'Try now' | translate",
+        id="drop-down-try-now",
+        data-sc="post-login-drop-down")

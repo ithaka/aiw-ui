@@ -2,7 +2,11 @@
   .modal-dialog(role="document")
     .modal-content(@slideIn)
       .modal-header
-        button.close(type="button", (click)="dismissModal()", aria-label="Close")
+        button.close(type="button",
+        (click)="dismissModal()",
+        aria-label="Close",
+        id="aji-close",
+        data-sc="aji-intercept")
           span(aria-hidden="true") &times;
       .modal-body
         img(src="/assets/img/artstor-jstor-logo.svg", alt="Artstor JSTOR Logo")
@@ -16,10 +20,14 @@
           (click)="tryItNow()" type="button",
           [attr.aria-label]="'Try it now' | translate",
           [innerHtml]="'Try it now' | translate",
+          id="aji-try-now",
+          data-sc="aji-intercept"
         )
         button.secondary(
-          (click)="dismissModal()" type="button",
+          (click)="remindMeLater()" type="button",
           [attr.aria-label]="'Remind me later' | translate",
           [innerHtml]="'Remind me later' | translate",
+          id="aji-remind-me-later",
+          data-sc="aji-intercept"
         )
 
