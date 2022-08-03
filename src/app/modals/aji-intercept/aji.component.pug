@@ -6,7 +6,7 @@
         (click)="dismissModal()",
         aria-label="Close",
         id="aji-close",
-        data-sc="aji-intercept")
+        data-sc="aji-intercept-close")
           span(aria-hidden="true") &times;
       .modal-body
         img(src="/assets/img/artstor-jstor-logo.svg", alt="Artstor JSTOR Logo")
@@ -21,13 +21,13 @@
           [attr.aria-label]="'Try it now' | translate",
           [innerHtml]="'Try it now' | translate",
           id="aji-try-now",
-          data-sc="aji-intercept"
+          data-sc="aji-intercept-try-now"
         )
         button.secondary(
           (click)="remindMeLater()" type="button",
           [attr.aria-label]="'Remind me later' | translate",
           [innerHtml]="'Remind me later' | translate",
           id="aji-remind-me-later",
-          data-sc="aji-intercept"
+          data-sc="aji-intercept-remind-me-later"
         )
 
