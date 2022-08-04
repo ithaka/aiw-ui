@@ -424,7 +424,7 @@ export class AuthService implements CanActivate {
     if (this.getFromStorage('AJIInterceptClosed')) {
       return false
     }
-    return user && user.isLoggedIn && user.preferences.hasOwnProperty('showAJIModalOrBanner') && user.preferences.showAJIModalOrBanner
+    return user && user.isLoggedIn && user.preferences.hasOwnProperty('showAJIModalOrBanner') && user.preferences.showAJIModalOrBanner == "true"
   }
 
   /**
