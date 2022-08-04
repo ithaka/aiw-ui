@@ -17,8 +17,7 @@ export class AccountService {
       "departmentRole",
       "department",
       "promptedForRole",
-      "showAJIModal",
-      "showBanner",
+      "showAJIModalOrBanner",
       /**
        * the proceeding two fields are used for testing. In order to create a pact that tests
        *  invalid field errors, we allow these two fields to be passed. Their names are not field
@@ -56,8 +55,7 @@ interface User {
   username: string
   baseProfileId: number
   promptedForRole: Date
-  showAJIModal: boolean
-  showBanner: boolean
+  showAJIModalOrBanner: boolean
 }
 
 interface UpdateUserResponse {}
