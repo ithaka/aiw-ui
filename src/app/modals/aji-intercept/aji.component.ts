@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core'
-import { AuthService } from '_services'
+import { AccountService, AuthService } from '_services'
 import {animate, style, transition, trigger} from "@angular/animations"
+import { map, take } from 'rxjs/operators';
 
 
 @Component({
@@ -31,17 +32,40 @@ export class AJIInterceptModal implements OnInit {
   closeModal: EventEmitter<number> = new EventEmitter();
 
   constructor(
-    private _auth: AuthService,
+    private _auth: AuthService, private _account: AccountService
   ) { }
 
   ngOnInit() { }
 
+  public updateUser(updateUser) {
+    this._account.update(updateUser).pipe(
+      take(1),
+      map(res => {
+        this._auth.saveUser(updateUser)
+      },
+        err => {
+          console.error(err)
+        }
+      )).subscribe()
+  }
+
   public dismissModal(): void {
+    this._auth.store('AJIInterceptClosed', true);
+    this.closeModal.emit()
+    let updateUser = this._auth.getUser()
+    if(updateUser.preferences.hasOwnProperty("showAJIModalOrBanner")){
+      updateUser.preferences.showAJIModalOrBanner = false
+      this.updateUser(updateUser)
+    }
+  }
+
+  public remindMeLater(): void {
     this._auth.store('AJIInterceptClosed', true);
     this.closeModal.emit()
   }
 
   public tryItNow(): void {
     window.location.href = "https://www.jstor.org/artstor"
+    this.dismissModal()
   }
 }

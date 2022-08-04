@@ -137,3 +137,13 @@ button {
 .container {
   padding: 0 !important;
 }
+
+.link {
+  cursor: pointer;
+
+  &:hover{
+    color: #990000;
+    text-decoration: underline;
+    text-decoration-color: #990000;
+  }
+}

@@ -162,3 +162,14 @@ $pharos-font-family-sans-serif: GT America Standard,Helvetica,Helvetica Neue,Ari
   background: #f2f1ed !important;
   cursor: pointer;
 }
+
+.link {
+  cursor: pointer;
+  color: #000000;
+
+  &:hover{
+    color: #990000;
+    text-decoration: underline;
+    text-decoration-color: #990000;
+  }
+}
