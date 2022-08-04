@@ -66,5 +66,6 @@ export class AJIInterceptModal implements OnInit {
 
   public tryItNow(): void {
     window.location.href = "https://www.jstor.org/artstor"
+    this.dismissModal()
   }
 }
