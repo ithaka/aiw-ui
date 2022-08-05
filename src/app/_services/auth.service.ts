@@ -420,6 +420,7 @@ export class AuthService implements CanActivate {
    */
    public showAJIIntercept(): boolean {
     let user = this.getUser()
+    console.log("from aji method:", user)
     // let institution = this.institutionObjSource.value
     if (this.getFromStorage('AJIInterceptClosed')) {
       return false
@@ -433,6 +434,7 @@ export class AuthService implements CanActivate {
    */
   public showPostLoginBanner(): boolean {
     let user = this.getUser()
+    console.log("from banner method:", user)
     // let institution = this.institutionObjSource.value
     let ajiInterceptWasClosed = this.getFromStorage('AJIInterceptClosed')
     // let userIsLoggedInJstorUser = user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
