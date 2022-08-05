@@ -53,8 +53,8 @@ export class AJIInterceptModal implements OnInit {
     this._auth.store('AJIInterceptClosed', true);
     this.closeModal.emit()
     let updateUser = this._auth.getUser()
-    if(updateUser.preferences.hasOwnProperty("showAJIModalOrBanner")){
-      updateUser.preferences.showAJIModalOrBanner = false
+    if(updateUser.hasOwnProperty("showAJIModalOrBanner")){
+      updateUser.preferences.showAJIModalOrBanner = "false"
       this.updateUser(updateUser)
     }
   }
