@@ -437,7 +437,7 @@ export class AuthService implements CanActivate {
     let ajiInterceptWasClosed = this.getFromStorage('AJIInterceptClosed')
     // let userIsLoggedInJstorUser = user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
 
-    return ajiInterceptWasClosed && user && user.isLoggedIn && user.preferences.hasOwnProperty('showAJIModalOrBanner')
+    return user && user.isLoggedIn && user.preferences.hasOwnProperty('showAJIModalOrBanner') && ajiInterceptWasClosed
   }
 
   /**
