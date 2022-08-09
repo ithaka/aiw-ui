@@ -435,11 +435,11 @@ export class AuthService implements CanActivate {
   public showPostLoginBanner(): boolean {
     let user = this.getUser()
     // let institution = this.institutionObjSource.value
-    let ajiInterceptWasClosed = this.getFromStorage('AJIInterceptClosed') ? !this.getFromStorage('AJIInterceptClosed') == null : false
+    let ajiInterceptWasClosed = this.getFromStorage('AJIInterceptClosed')
     console.log("from banner method:", "ajiFlagStatus", ajiInterceptWasClosed, user)
     // let userIsLoggedInJstorUser = user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
 
-    return user && user.isLoggedIn && user.hasOwnProperty('showAJIModalOrBanner') && ajiInterceptWasClosed
+    return user && user.isLoggedIn && user.hasOwnProperty('showAJIModalOrBanner') && ajiInterceptWasClosed == true
   }
 
   /**
