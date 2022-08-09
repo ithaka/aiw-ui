@@ -425,7 +425,7 @@ export class AuthService implements CanActivate {
     if (this.getFromStorage('AJIInterceptClosed')) {
       return false
     }
-    return user && user.isLoggedIn && user.hasOwnProperty('showAJIModalOrBanner') && user.showAJIModalOrBanner == "true"
+    return user && user.isLoggedIn && user.hasOwnProperty('showAJIModalOrBanner') && user.showAJIModalOrBanner
   }
 
   /**
@@ -434,12 +434,12 @@ export class AuthService implements CanActivate {
    */
   public showPostLoginBanner(): boolean {
     let user = this.getUser()
-    console.log("from banner method:", user)
     // let institution = this.institutionObjSource.value
     let ajiInterceptWasClosed = this.getFromStorage('AJIInterceptClosed')
+    console.log("from banner method:", "ajiFlagStatus", ajiInterceptWasClosed, user)
     // let userIsLoggedInJstorUser = user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
 
-    return user && user.isLoggedIn && user.hasOwnProperty('showAJIModalOrBanner') && ajiInterceptWasClosed
+    return user && user.isLoggedIn && ajiInterceptWasClosed == true
   }
 
   /**

@@ -55,7 +55,7 @@ interface User {
   username: string
   baseProfileId: number
   promptedForRole: Date
-  showAJIModalOrBanner: string
+  showAJIModalOrBanner: boolean
 }
 
 interface UpdateUserResponse {}
