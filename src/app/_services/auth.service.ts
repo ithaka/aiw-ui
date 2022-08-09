@@ -439,7 +439,7 @@ export class AuthService implements CanActivate {
     console.log("from banner method:", "ajiFlagStatus", ajiInterceptWasClosed, user)
     // let userIsLoggedInJstorUser = user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
 
-    return user && user.isLoggedIn && user.hasOwnProperty('showAJIModalOrBanner') && ajiInterceptWasClosed == true
+    return user && user.isLoggedIn && ajiInterceptWasClosed == true
   }
 
   /**
