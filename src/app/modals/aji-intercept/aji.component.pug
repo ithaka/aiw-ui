@@ -3,7 +3,7 @@
     .modal-content(@slideIn)
       .modal-header
         button.close(type="button",
-        (click)="dismissModal()",
+        (click)="closeAji()",
         aria-label="Close",
         id="aji-close",
         data-sc="aji-intercept-close")
@@ -16,18 +16,18 @@
         div([innerHtml]="'Artstor is moving to JSTOR' | translate", tabindex="0", class="main-callout")
         div.main-text
           span([innerHtml]="'Teach with images by ' | translate")
-          a.link(href="https://www.jstor.org/copygroups", [innerHtml]="'copying your image groups' | translate")
+          a.link((click)="copyGroups()", [innerHtml]="'copying your image groups' | translate")
           span([innerHtml]="' or start a search on JSTOR.' | translate")
       .modal-footer.flex-column
         button.primary(
-          (click)="tryItNow()" type="button",
+          (click)="tryItNow()", type="button",
           [attr.aria-label]="'Try searching now' | translate",
           [innerHtml]="'Try searching now' | translate",
           id="aji-try-now",
           data-sc="aji-intercept-try-now"
         )
         button.secondary(
-          (click)="remindMeLater()" type="button",
+          (click)="remindMeLater()", type="button",
           [attr.aria-label]="'Remind me later' | translate",
           [innerHtml]="'Remind me later' | translate",
           id="aji-remind-me-later",

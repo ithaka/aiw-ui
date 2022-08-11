@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { AccountService, AuthService } from '_services'
 import {animate, style, transition, trigger} from "@angular/animations"
 import { map, take } from 'rxjs/operators';
+import {Angulartics2} from "angulartics2";
 
 
 @Component({
@@ -32,7 +33,7 @@ export class AJIInterceptModal implements OnInit {
   closeModal: EventEmitter<number> = new EventEmitter();
 
   constructor(
-    private _auth: AuthService, private _account: AccountService
+    private _auth: AuthService, private _account: AccountService, private _angulartics: Angulartics2
   ) { }
 
   ngOnInit() { }
@@ -53,19 +54,30 @@ export class AJIInterceptModal implements OnInit {
     this._auth.store('AJIInterceptClosed', true);
     this.closeModal.emit()
     let updateUser = this._auth.getUser()
-    if(updateUser.hasOwnProperty("showAJIModalOrBanner")){
-      updateUser.showAJIModalOrBanner = false
-      this.updateUser(updateUser)
-    }
+    updateUser.showAJIModalOrBanner = "banner_only"
+    this.updateUser(updateUser)
   }
 
   public remindMeLater(): void {
     this._auth.store('AJIInterceptClosed', true);
     this.closeModal.emit()
+    // fire remind me later event here => event.modal-remind-later-btn
   }
 
   public tryItNow(): void {
-    window.location.href = "https://www.jstor.org/artstor"
+    window.open("https://www.jstor.org/artstor", '_blank')
     this.dismissModal()
+    // fire try it now event here => event.modal-search-btn
+  }
+
+  public closeAji(): void {
+    this.dismissModal();
+    // fire modal close event here => event.modal-close-btn
+    this._angulartics.eventTrack.next({ properties: { event: 'modal-close-btn', category: 'AJI Modal', action: "AJI Modal Closed", label: "AJI Modal Closed "} });
+  }
+
+  public copyGroups(): void {
+    window.open("https://www.jstor.org/copygroups", '_blank')
+    // copy group event here => event.modal-copy-groups-link
   }
 }
