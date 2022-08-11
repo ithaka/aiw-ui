@@ -8,10 +8,11 @@ div.drop-tray(@trayAnimation)
       div.mainContent
         h1([innerHtml]="'Artstor is moving to JSTOR' | translate")
         div.copy
-        span([innerHtml]="'Artstor images and resources are now ready so get started by ' | translate")
+        span([innerHtml]="'Artstor images and resources are now ready to use so get started by ' | translate")
         a.link((click)="bannerCopyGroup()", [innerHtml]="'copying your image groups' | translate")
-        span([innerHtml]="' or you can start a search on JSTOR. ' | translate")
+        span([innerHtml]="' or searching for images on JSTOR. ' | translate")
         a.link((click)="readMore()", [innerHtml]="'Read more' | translate")
+        span([innerHtml]="'.' | translate")
       button.try-now((click)="searchNow()",
       [innerHtml]="'Try searching now' | translate",
       id="drop-down-try-now",

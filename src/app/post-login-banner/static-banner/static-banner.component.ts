@@ -9,6 +9,8 @@ export class staticBannerComponent implements OnInit {
 
   @Output() dropBanner: EventEmitter<any> = new EventEmitter()
 
+  @Input() bannerButtonText: string = ""
+
   constructor() { }
 
   ngOnInit() { }

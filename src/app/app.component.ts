@@ -41,7 +41,7 @@ declare let google
         <button id="skip-main-content-button" (click)="findMainContent()" (keyup.enter)="findMainContent()" tabindex="1" class="sr-only sr-only-focusable"> Skip to main content </button>
       </div>
       <nav-bar tabindex="-1"></nav-bar>
-      <ang-static-banner *ngIf="showPostLoginBanner" (dropBanner)="dropBanner()"></ang-static-banner>
+      <ang-static-banner *ngIf="showPostLoginBanner" (dropBanner)="dropBanner()" [bannerButtonText]="bannerButtonText"></ang-static-banner>
       <ang-drop-banner *ngIf="showDropDownBanner"></ang-drop-banner>
       <main id="main">
         <router-outlet></router-outlet>
@@ -62,6 +62,7 @@ export class AppComponent {
   public showAJIInterceptFlag: boolean = false;
   public showPostLoginBanner: boolean = false;
   public showDropDownBanner: boolean = false;
+  public bannerButtonText: string = "Learn more";
   public skyBannerCopy: string = "";
   public test: any = {};
 
@@ -361,12 +362,12 @@ export class AppComponent {
     let buttonText = document.getElementById("button-text");
     this.showDropDownBanner = !this.showDropDownBanner;
     if(this.showDropDownBanner){
-      buttonText.classList.toggle("clear");
-      // insert drop down open event here => event.banner-open-btn
+      this.bannerButtonText = "Close";
+      // insert drop-down open event here => event.banner-open-btn
     }
     else{
-      buttonText.classList.toggle("clear");
-      // insert drop down close event here => event.banner-close-btn
+      this.bannerButtonText = "Learn more";
+      // insert drop-down close event here => event.banner-close-btn
     }
     chevron.classList.toggle("rotate");
   }
