@@ -53,19 +53,29 @@ export class AJIInterceptModal implements OnInit {
     this._auth.store('AJIInterceptClosed', true);
     this.closeModal.emit()
     let updateUser = this._auth.getUser()
-    if(updateUser.hasOwnProperty("showAJIModalOrBanner")){
-      updateUser.showAJIModalOrBanner = false
-      this.updateUser(updateUser)
-    }
+    updateUser.showAJIModalOrBanner = "banner_only"
+    this.updateUser(updateUser)
   }
 
   public remindMeLater(): void {
     this._auth.store('AJIInterceptClosed', true);
     this.closeModal.emit()
+    // fire remind me later event here => event.modal-remind-later-btn
   }
 
   public tryItNow(): void {
-    window.location.href = "https://www.jstor.org/artstor"
+    window.open("https://www.jstor.org/artstor", '_blank')
     this.dismissModal()
+    // fire try it now event here => event.modal-search-btn
+  }
+
+  public closeAji(): void {
+    this.dismissModal();
+    // fire modal close event here => event.modal-close-btn
+  }
+
+  public copyGroups(): void {
+    window.open("https://www.jstor.org/copygroups", '_blank')
+    // copy group event here => event.modal-copy-groups-link
   }
 }

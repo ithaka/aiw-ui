@@ -68,7 +68,7 @@ $pharos-color-text-base: #000000;
 
 .chevron {
   margin-left: 0.5rem;
-  transition: 0.5s;
+  transition: 750ms;
 }
 
 .rotate {
@@ -78,4 +78,13 @@ $pharos-color-text-base: #000000;
 
 .info-icon {
   margin-right: 0.5rem;
+}
+
+button-text {
+  transition: 750ms;
+  border: none;
+}
+
+.clear {
+  color: transparent;
 }

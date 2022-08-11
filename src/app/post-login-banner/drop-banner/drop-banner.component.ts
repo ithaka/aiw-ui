@@ -30,4 +30,18 @@ export class dropBannerComponent implements OnInit {
   constructor() { }
 
   ngOnInit() { }
+
+  public bannerCopyGroup(): void {
+    window.open("https://www.jstor.org/copygroups", '_blank')
+    // insert copy group event => event.banner-copy-groups-link
+  }
+  public readMore(): void {
+    window.open("https://www.jstor.org/artstor", '_blank')
+    // fire try now event => event.banner-welcome-mat-link
+  }
+
+  public searchNow(): void {
+    window.open("https://www.jstor.org/images", '_blank')
+    // search event here => event.banner-search-btn
+  }
 }

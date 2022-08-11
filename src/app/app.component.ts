@@ -312,6 +312,7 @@ export class AppComponent {
    */
     private initializeAJIIntercept(showAJIIntercept: boolean): void {
       this.showAJIIntercept = this.showAJIInterceptFlag && this._auth.showAJIIntercept()
+     // if this.showAJIIntercept is true, include modal shown to user event here
     }
 
    /**
@@ -319,6 +320,7 @@ export class AppComponent {
    */
    private initializePostLoginBanner(): void{
      this.showPostLoginBanner = this.showAJIInterceptFlag && this._auth.showPostLoginBanner()
+     // if this.showPostLoginBanner is true, include banner shown to user event here
    }
 
     /**
@@ -356,7 +358,16 @@ export class AppComponent {
   // Open-close dropDown tray
   private dropBanner(): void {
     let chevron = document.getElementById("chevron");
+    let buttonText = document.getElementById("button-text");
     this.showDropDownBanner = !this.showDropDownBanner;
+    if(this.showDropDownBanner){
+      buttonText.classList.toggle("clear");
+      // insert drop down open event here => event.banner-open-btn
+    }
+    else{
+      buttonText.classList.toggle("clear");
+      // insert drop down close event here => event.banner-close-btn
+    }
     chevron.classList.toggle("rotate");
   }
 
