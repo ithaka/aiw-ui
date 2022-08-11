@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core'
 import { AccountService, AuthService } from '_services'
 import {animate, style, transition, trigger} from "@angular/animations"
 import { map, take } from 'rxjs/operators';
+import {Angulartics2} from "angulartics2";
 
 
 @Component({
@@ -32,7 +33,7 @@ export class AJIInterceptModal implements OnInit {
   closeModal: EventEmitter<number> = new EventEmitter();
 
   constructor(
-    private _auth: AuthService, private _account: AccountService
+    private _auth: AuthService, private _account: AccountService, private _angulartics: Angulartics2
   ) { }
 
   ngOnInit() { }
@@ -72,6 +73,7 @@ export class AJIInterceptModal implements OnInit {
   public closeAji(): void {
     this.dismissModal();
     // fire modal close event here => event.modal-close-btn
+    this._angulartics.eventTrack.next({ properties: { event: 'modal-close-btn', category: 'AJI Modal', action: "AJI Modal Closed", label: "AJI Modal Closed "} });
   }
 
   public copyGroups(): void {
