@@ -314,6 +314,9 @@ export class AppComponent {
     private initializeAJIIntercept(showAJIIntercept: boolean): void {
       this.showAJIIntercept = this.showAJIInterceptFlag && this._auth.showAJIIntercept()
      // if this.showAJIIntercept is true, include modal shown to user event here
+     if(this.showAJIIntercept){
+       this._ga.eventTrack.next({ properties: { event: 'modal-shown', category: 'Intercept Modal', label: "AJI Modal Shown"} });
+     }
     }
 
    /**
@@ -321,7 +324,10 @@ export class AppComponent {
    */
    private initializePostLoginBanner(): void{
      this.showPostLoginBanner = this.showAJIInterceptFlag && this._auth.showPostLoginBanner()
-     // if this.showPostLoginBanner is true, include banner shown to user event here
+     // if this.showPostLoginBanner is true, include banner shown to user event here // event is tracked as Event Action
+     if(this.showPostLoginBanner){
+       this._ga.eventTrack.next({ properties: { event: 'banner-shown', category: 'Post Login Banner', label: "Post Login Banner Shown"} });
+     }
    }
 
     /**
@@ -359,15 +365,14 @@ export class AppComponent {
   // Open-close dropDown tray
   private dropBanner(): void {
     let chevron = document.getElementById("chevron");
-    let buttonText = document.getElementById("button-text");
     this.showDropDownBanner = !this.showDropDownBanner;
     if(this.showDropDownBanner){
       this.bannerButtonText = "Close";
-      // insert drop-down open event here => event.banner-open-btn
+      this._ga.eventTrack.next({ properties: { event: 'banner-open-btn', category: 'Post Login Banner', label: "Learn More Button Clicked"} });
     }
     else{
       this.bannerButtonText = "Learn more";
-      // insert drop-down close event here => event.banner-close-btn
+      this._ga.eventTrack.next({ properties: { event: 'banner-close-btn', category: 'Post Login Banner', label: "Close Button Clicked"} });
     }
     chevron.classList.toggle("rotate");
   }

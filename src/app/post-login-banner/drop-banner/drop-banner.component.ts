@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {animate, style, transition, trigger} from "@angular/animations";
+import {Angulartics2} from "angulartics2";
 
 @Component({
   selector: 'ang-drop-banner',
@@ -27,21 +28,22 @@ import {animate, style, transition, trigger} from "@angular/animations";
 
 export class dropBannerComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _angulartics: Angulartics2) {}
 
   ngOnInit() { }
 
   public bannerCopyGroup(): void {
     window.open("https://www.jstor.org/copygroups", '_blank')
-    // insert copy group event => event.banner-copy-groups-link
+    this._angulartics.eventTrack.next({ properties: { event: 'banner-copy-groups-link', category: 'Drop Down Banner', label: "Copy Groups Link Clicked"} });
   }
   public readMore(): void {
     window.open("https://www.jstor.org/artstor", '_blank')
-    // fire try now event => event.banner-welcome-mat-link
+    this._angulartics.eventTrack.next({ properties: { event: 'banner-welcome-mat-link', category: 'Drop Down Banner', label: "Welcome Mat Link Clicked"} });
   }
 
   public searchNow(): void {
     window.open("https://www.jstor.org/images", '_blank')
-    // search event here => event.banner-search-btn
+    this._angulartics.eventTrack.next({ properties: { event: 'banner-search-btn', category: 'Drop Down Banner', label: "Search Button Clicked"} });
+
   }
 }
