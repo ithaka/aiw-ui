@@ -313,9 +313,8 @@ export class AppComponent {
    */
     private initializeAJIIntercept(showAJIIntercept: boolean): void {
       this.showAJIIntercept = this.showAJIInterceptFlag && this._auth.showAJIIntercept()
-     // if this.showAJIIntercept is true, include modal shown to user event here
      if(this.showAJIIntercept){
-       this._ga.eventTrack.next({ properties: { event: 'modal-shown', category: 'Intercept Modal', label: "AJI Modal Shown"} });
+       this._ga.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "modal-displayed"} });
      }
     }
 
@@ -323,10 +322,9 @@ export class AppComponent {
    * Determines whether to display the post login banner
    */
    private initializePostLoginBanner(): void{
-     this.showPostLoginBanner = this.showAJIInterceptFlag && this._auth.showPostLoginBanner()
-     // if this.showPostLoginBanner is true, include banner shown to user event here // event is tracked as Event Action
+     this.showPostLoginBanner = this.showAJIInterceptFlag && !this.showAJIIntercept && this._auth.showPostLoginBanner()
      if(this.showPostLoginBanner){
-       this._ga.eventTrack.next({ properties: { event: 'banner-shown', category: 'Post Login Banner', label: "Post Login Banner Shown"} });
+       this._ga.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "post-login-banner-shown"} });
      }
    }
 
@@ -368,11 +366,11 @@ export class AppComponent {
     this.showDropDownBanner = !this.showDropDownBanner;
     if(this.showDropDownBanner){
       this.bannerButtonText = "Close";
-      this._ga.eventTrack.next({ properties: { event: 'banner-open-btn', category: 'Post Login Banner', label: "Learn More Button Clicked"} });
+      this._ga.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "post-login-banner-open-btn"} });
     }
     else{
       this.bannerButtonText = "Learn more";
-      this._ga.eventTrack.next({ properties: { event: 'banner-close-btn', category: 'Post Login Banner', label: "Close Button Clicked"} });
+      this._ga.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: 'post-login-banner-close-btn'} });
     }
     chevron.classList.toggle("rotate");
   }
@@ -383,7 +381,8 @@ export class AppComponent {
 
   private closeAJIIntercept(): void {
     this.showAJIIntercept = false;
-    this.showPostLoginBanner = true;
+    this.initializePostLoginBanner()
+    // this.showPostLoginBanner = true;
   }
 
   public findMainContent(): void {

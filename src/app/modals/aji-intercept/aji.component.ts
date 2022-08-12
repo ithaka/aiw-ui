@@ -61,26 +61,22 @@ export class AJIInterceptModal implements OnInit {
   public remindMeLater(): void {
     this._auth.store('AJIInterceptClosed', true);
     this.closeModal.emit()
-    // fire remind me later event here => event.modal-remind-later-btn
-    this._angulartics.eventTrack.next({ properties: { event: 'modal-remind-later-btn', category: 'Intercept Modal', label: "Remind Me Later Button Clicked"} });
+    this._angulartics.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "modal-remind-later-btn"} });
   }
 
   public tryItNow(): void {
     window.open("https://www.jstor.org/artstor", '_blank')
     this.dismissModal()
-    // fire try it now event here => event.modal-search-btn
-    this._angulartics.eventTrack.next({ properties: { event: 'modal-search-btn', category: 'Intercept Modal', label: "Search Button Clicked"} });
+    this._angulartics.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "modal-search-btn"} });
   }
 
   public closeAji(): void {
     this.dismissModal();
-    // fire modal close event here => event.modal-close-btn
-    this._angulartics.eventTrack.next({ properties: { event: 'modal-close-btn', category: 'Intercept Modal', label: "AJI Modal Closed"} });
+    this._angulartics.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "modal-close-btn"} });
   }
 
   public copyGroups(): void {
     window.open("https://www.jstor.org/copygroups", '_blank')
-    // copy group event here => event.modal-copy-groups-link
-    this._angulartics.eventTrack.next({ properties: { event: 'modal-copy-groups-link', category: 'Intercept Modal', label: "Copy Groups Link Clicked"} });
+    this._angulartics.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "modal-copy-groups-link"} });
   }
 }

@@ -34,16 +34,17 @@ export class dropBannerComponent implements OnInit {
 
   public bannerCopyGroup(): void {
     window.open("https://www.jstor.org/copygroups", '_blank')
-    this._angulartics.eventTrack.next({ properties: { event: 'banner-copy-groups-link', category: 'Drop Down Banner', label: "Copy Groups Link Clicked"} });
+    //{ event: 'aji modal banner', category: 'onboarding', label: "post-login-banner-shown"}
+    this._angulartics.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "drop-banner-copy-groups-link"} });
   }
   public readMore(): void {
     window.open("https://www.jstor.org/artstor", '_blank')
-    this._angulartics.eventTrack.next({ properties: { event: 'banner-welcome-mat-link', category: 'Drop Down Banner', label: "Welcome Mat Link Clicked"} });
+    this._angulartics.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "drop-banner-welcome-mat-link"} });
   }
 
   public searchNow(): void {
     window.open("https://www.jstor.org/images", '_blank')
-    this._angulartics.eventTrack.next({ properties: { event: 'banner-search-btn', category: 'Drop Down Banner', label: "Search Button Clicked"} });
+    this._angulartics.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "drop-banner-search-btn"} });
 
   }
 }
