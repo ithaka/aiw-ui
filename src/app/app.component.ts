@@ -313,15 +313,19 @@ export class AppComponent {
    */
     private initializeAJIIntercept(showAJIIntercept: boolean): void {
       this.showAJIIntercept = this.showAJIInterceptFlag && this._auth.showAJIIntercept()
-     // if this.showAJIIntercept is true, include modal shown to user event here
+     if(this.showAJIIntercept){
+       this._ga.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "modal-displayed"} });
+     }
     }
 
    /**
    * Determines whether to display the post login banner
    */
    private initializePostLoginBanner(): void{
-     this.showPostLoginBanner = this.showAJIInterceptFlag && this._auth.showPostLoginBanner()
-     // if this.showPostLoginBanner is true, include banner shown to user event here
+     this.showPostLoginBanner = this.showAJIInterceptFlag && !this.showAJIIntercept && this._auth.showPostLoginBanner()
+     if(this.showPostLoginBanner){
+       this._ga.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "post-login-banner-shown"} });
+     }
    }
 
     /**
@@ -359,15 +363,14 @@ export class AppComponent {
   // Open-close dropDown tray
   private dropBanner(): void {
     let chevron = document.getElementById("chevron");
-    let buttonText = document.getElementById("button-text");
     this.showDropDownBanner = !this.showDropDownBanner;
     if(this.showDropDownBanner){
       this.bannerButtonText = "Close";
-      // insert drop-down open event here => event.banner-open-btn
+      this._ga.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "post-login-banner-open-btn"} });
     }
     else{
       this.bannerButtonText = "Learn more";
-      // insert drop-down close event here => event.banner-close-btn
+      this._ga.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: 'post-login-banner-close-btn'} });
     }
     chevron.classList.toggle("rotate");
   }
@@ -378,7 +381,8 @@ export class AppComponent {
 
   private closeAJIIntercept(): void {
     this.showAJIIntercept = false;
-    this.showPostLoginBanner = true;
+    this.initializePostLoginBanner()
+    // this.showPostLoginBanner = true;
   }
 
   public findMainContent(): void {
