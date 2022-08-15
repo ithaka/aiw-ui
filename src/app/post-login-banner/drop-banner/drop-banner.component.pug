@@ -9,9 +9,9 @@ div.drop-tray(@trayAnimation)
         h1([innerHtml]="'Artstor is moving to JSTOR' | translate")
         div.copy
         span([innerHtml]="'Artstor images and resources are now ready to use so get started by ' | translate")
-        a.link((click)="bannerCopyGroup()", [innerHtml]="'copying your image groups' | translate")
+        a.link(id="banner-copy-group-link", (click)="bannerCopyGroup()", [innerHtml]="'copying your image groups' | translate")
         span([innerHtml]="' or searching for images on JSTOR. ' | translate")
-        a.link((click)="readMore()", [innerHtml]="'Read more' | translate")
+        a.link(id="banner-read-more",(click)="readMore()", [innerHtml]="'Read more' | translate")
         span([innerHtml]="'.' | translate")
       button.try-now((click)="searchNow()",
       [innerHtml]="'Try searching now' | translate",

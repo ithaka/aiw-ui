@@ -16,7 +16,7 @@
         div([innerHtml]="'Artstor is moving to JSTOR' | translate", tabindex="0", class="main-callout")
         div.main-text
           span([innerHtml]="'Teach with images by ' | translate")
-          a.link((click)="copyGroups()", [innerHtml]="'copying your image groups' | translate")
+          a.link(id="modal-copy-group-link",(click)="copyGroups()", [innerHtml]="'copying your image groups' | translate")
           span([innerHtml]="' or start a search on JSTOR.' | translate")
       .modal-footer.flex-column
         button.primary(
