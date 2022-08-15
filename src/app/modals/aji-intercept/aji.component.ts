@@ -68,7 +68,7 @@ export class AJIInterceptModal implements OnInit {
   }
 
   public tryItNow(): void {
-    window.open("https://www.jstor.org/artstor", '_blank')
+    window.open("https://www.jstor.org/images", '_blank')
     this.dismissModal()
     this._angulartics.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "modal-search-btn"} });
   }
