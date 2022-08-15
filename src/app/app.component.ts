@@ -313,9 +313,9 @@ export class AppComponent {
    */
     private initializeAJIIntercept(showAJIIntercept: boolean): void {
       this.showAJIIntercept = this.showAJIInterceptFlag && this._auth.showAJIIntercept()
-     if(this.showAJIIntercept){
-       this._ga.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "modal-displayed"} });
-     }
+     // if(this.showAJIIntercept){
+     //   this._ga.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "modal-displayed"} });
+     // }
     }
 
    /**
@@ -323,9 +323,9 @@ export class AppComponent {
    */
    private initializePostLoginBanner(): void{
      this.showPostLoginBanner = this.showAJIInterceptFlag && !this.showAJIIntercept && this._auth.showPostLoginBanner()
-     if(this.showPostLoginBanner){
-       this._ga.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "post-login-banner-shown"} });
-     }
+     // if(this.showPostLoginBanner){
+     //   this._ga.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "post-login-banner-shown"} });
+     // }
    }
 
     /**
@@ -381,8 +381,7 @@ export class AppComponent {
 
   private closeAJIIntercept(): void {
     this.showAJIIntercept = false;
-    this.initializePostLoginBanner()
-    // this.showPostLoginBanner = true;
+    this.showPostLoginBanner = true;
   }
 
   public findMainContent(): void {

@@ -420,11 +420,12 @@ export class AuthService implements CanActivate {
    */
    public showAJIIntercept(): boolean {
     let user = this.getUser()
+    let showModal = user.showAJIModalOrBanner == "both" || user.showAJIModalOrBanner == "remind_later"
     // let institution = this.institutionObjSource.value
     if (this.getFromStorage('AJIInterceptClosed')) {
       return false
     }
-    return user && user.isLoggedIn && user.showAJIModalOrBanner == "both"
+    return user && user.isLoggedIn && showModal
   }
 
   /**
@@ -433,11 +434,13 @@ export class AuthService implements CanActivate {
    */
   public showPostLoginBanner(): boolean {
     let user = this.getUser()
+    console.log("userObj", user)
+    let showBanner = user.showAJIModalOrBanner == "banner_only" || user.showAJIModalOrBanner == "remind_later"
     // let institution = this.institutionObjSource.value
     let ajiInterceptWasClosed = this.getFromStorage('AJIInterceptClosed') == true
     // let userIsLoggedInJstorUser = user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
 
-    return user && user.isLoggedIn && user.showAJIModalOrBanner == "banner_only"
+    return user && user.isLoggedIn && showBanner
   }
 
   /**

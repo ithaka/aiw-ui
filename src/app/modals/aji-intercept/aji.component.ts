@@ -61,6 +61,9 @@ export class AJIInterceptModal implements OnInit {
   public remindMeLater(): void {
     this._auth.store('AJIInterceptClosed', true);
     this.closeModal.emit()
+    let updateUser = this._auth.getUser()
+    updateUser.showAJIModalOrBanner = "remind_later"
+    this.updateUser(updateUser)
     this._angulartics.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "modal-remind-later-btn"} });
   }
 
