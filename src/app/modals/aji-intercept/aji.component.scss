@@ -21,8 +21,11 @@ $pharos-font-family-sans-serif: GT America Standard,Helvetica,Helvetica Neue,Ari
 }
 
 .modal-body {
-    img {
-        padding-bottom: 2rem;
+    .artstor-jstor-logo {
+        padding-bottom: 1rem;
+      margin-right: 1.5rem;
+        height: 50%;
+        width: 50%;
     }
     text-align: center;
 }
@@ -34,7 +37,7 @@ $pharos-font-family-sans-serif: GT America Standard,Helvetica,Helvetica Neue,Ari
     line-height: 42px;
     letter-spacing: -0.01em;
     text-align: center;
-    padding-bottom: 1rem;
+    padding: 0.5rem 0;
 }
 
 .main-text {
@@ -123,10 +126,6 @@ $pharos-font-family-sans-serif: GT America Standard,Helvetica,Helvetica Neue,Ari
       width: 45%;
       border-radius: 0px;
   }
-}
-
-.artstor-jstor-logo{
-    background-image: url("/assets/img/artstor-jstor-logo.svg");
 }
 
 .modal-content {

@@ -40,10 +40,14 @@ $pharos-color-text-base: #000000;
 
      & h1 {
        font-family: 'Ivar Display';
-       font-size: 25px;
+       font-size: 30px;
        font-weight: bold;
        color: black;
        margin-bottom: 0.5rem;
+
+       @media(max-width: $phone){
+         font-size: 25px;
+        }
 
      }
    }
@@ -132,6 +136,13 @@ button {
 
 .logo {
   margin-right: $pharos-spacing-one-quarter-x;
+  height: 25%;
+  width: 25%;
+
+  @media(max-width: $phone){
+    height: 60%;
+    width: 60%;
+  }
 }
 
 .container {
