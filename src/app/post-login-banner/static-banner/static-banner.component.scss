@@ -60,6 +60,9 @@ $pharos-color-text-base: #000000;
   justify-content: space-evenly;
   width: fit-content;
   align-items: center;
+  @media(max-width: $phone){
+    align-items: flex-start;
+  }
 
   div {
     margin-right: 0.2rem;
@@ -78,4 +81,7 @@ $pharos-color-text-base: #000000;
 
 .info-icon {
   margin-right: 0.5rem;
+  @media(max-width:$phone){
+    padding-top: 0.25rem
+  }
 }
