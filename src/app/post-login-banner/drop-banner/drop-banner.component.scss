@@ -40,10 +40,14 @@ $pharos-color-text-base: #000000;
 
      & h1 {
        font-family: 'Ivar Display';
-       font-size: 25px;
+       font-size: 30px;
        font-weight: bold;
        color: black;
        margin-bottom: 0.5rem;
+
+       @media(max-width: $phone){
+         font-size: 25px;
+        }
 
      }
    }
@@ -70,15 +74,19 @@ button {
   &.try-now {
     color: $pharos-color-text-white;
     background-color: $pharos-color-interactive-primary;
-    border-color: $pharos-color-interactive-primary;
+    border:none;
     width: fit-content;
     white-space: nowrap;
+    padding: 0.5rem;
+    @media(max-width:$phone){
+      margin: .25rem 0;
+    }
 
     &:hover:not([disabled]),
     &:active:not([disabled]) {
       color: $pharos-color-interactive-primary;
       background-color: transparent;
-      border-color: $pharos-color-interactive-primary;
+      border: 1px solid $pharos-color-interactive-primary;
     }
   }
 }
@@ -131,7 +139,14 @@ button {
 }
 
 .logo {
-  margin-right: $pharos-spacing-one-quarter-x;
+  margin-right: 1.25rem;
+  height: 20%;
+  width: 20%;
+
+  @media(max-width: $phone){
+    height: 60%;
+    width: 60%;
+  }
 }
 
 .container {
