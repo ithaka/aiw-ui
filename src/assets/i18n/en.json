@@ -562,31 +562,31 @@
       },
       "COLLECTIONS": [
         {
-          "SUBHEADING": "Open content on Hispanic Heritage",
+          "SUBHEADING": "Painting for peace",
           "DESCRIPTION": "",
-          "CAPTION": "Classics Car Club: Alphonso Nixon’s 1964 Thunderbird. 2019. From the San Diego Low Rider Project.",
-          "LINK": "https://www.artstor.org/2022/08/25/28-open-collections-for-hispanic-heritage-month/",
-          "IMG_SOURCE": "/assets/img/featured-collections/san_diego_thunderbird.jpg",
-          "LINK_TITLE": "Open content on Hispanic Heritage",
-          "ALT_TEXT": "Open content on Hispanic Heritage"
+          "CAPTION": "Henri Rousseau. War. 1898. Oil on canvas. Musée d'Orsay. Image and data from SCALA.",
+          "LINK": "https://www.artstor.org/2022/10/13/painting-for-peace-art-exposes-the-cruelty-of-war/",
+          "IMG_SOURCE": "/assets/img/featured-collections/scala_rousseau.jpg",
+          "LINK_TITLE": "Painting for peace",
+          "ALT_TEXT": "Painting for peace"
         },
         {
-          "SUBHEADING": "Teaching Hispanic Heritage",
+          "SUBHEADING": "Student activism",
           "DESCRIPTION": "",
-          "CAPTION": "Rubén Durán. Creole Influence (Carnival in Dominican Republic). 2009-2010. Santo Domingo, Image and data from Houston Community College.",
-          "LINK": "https://www.artstor.org/2020/08/25/teaching-hispanic-heritage-month-with-artstor/",
-          "IMG_SOURCE": "/assets/img/featured-collections/houston_carnival.jpg",
-          "LINK_TITLE": "Teaching Hispanic Heritage",
-          "ALT_TEXT": "Teaching Hispanic Heritage"
+          "CAPTION": "Danny Lyon. Civil Rights movement. Danville, Virginia. 1963. Student Nonviolent Coordinating Committee members Ivanhoe Donaldson, Marion Barry and James Forman .... © Danny Lyon / Magnum Photos.",
+          "LINK": "https://www.artstor.org/2022/08/10/say-it-loud-the-powerful-voice-of-student-activism/",
+          "IMG_SOURCE": "/assets/img/featured-collections/magnum_civil_rights.jpg",
+          "LINK_TITLE": "Student activism",
+          "ALT_TEXT": "Student activism"
         },
         {
-          "SUBHEADING": "Diego’s self-portraits",
+          "SUBHEADING": "Painter of Ukraine",
           "DESCRIPTION": "",
-          "CAPTION": "Diego M. Rivera, Self Portrait, 1941. Image and data from Detroit Institute of Arts, © 2021 Artists Rights Society (ARS), New York.",
-          "LINK": "https://www.artstor.org/2016/01/20/diego-rivera-the-artist-through-his-own-eyes/",
-          "IMG_SOURCE": "/assets/img/featured-collections/detroit_diego_rivera.jpg",
-          "LINK_TITLE": "Diego’s self-portraits",
-          "ALT_TEXT": "Diego’s self-portraits"
+          "CAPTION": "Arkhip Kuindzhi. The Rainbow. 1900-1905. Oil on canvas. State Russian Museum. Image and data from SCALA, Florence.",
+          "LINK": "https://www.artstor.org/2022/07/13/arkhip-kuindzhi-beloved-son-and-painter-of-ukraine/",
+          "IMG_SOURCE": "/assets/img/featured-collections/scala_rainbow.jpg",
+          "LINK_TITLE": "Painter of Ukraine",
+          "ALT_TEXT": "Painter of Ukraine"
         }
       ]
     },
