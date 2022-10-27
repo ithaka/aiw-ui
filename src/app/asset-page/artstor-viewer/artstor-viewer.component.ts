@@ -143,6 +143,8 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
     public pdfZoomValue: number = .5
     public pdfViewerOpts: any = {}
 
+    private triedRedraw: boolean = false
+
     constructor(
         private _http: HttpClient, // TODO: move _http into a service
         private _log: LogService,
@@ -470,12 +472,18 @@ export class ArtstorViewerComponent implements OnInit, OnDestroy {
 
         this.osdViewer.addOnceHandler('tile-load-failed', (e: Event) => {
             console.warn("OSD Loading tiles failed:", e)
-            this.state = viewState.thumbnailFallback
-            this.osdViewer.destroy();
+
+            if (!this.triedRedraw) {
+                this.triedRedraw = true
+                this.osdViewer.forceRedraw()
+            } else {
+                this.state = viewState.thumbnailFallback
+                this.osdViewer.destroy()
+            }  
         })
 
         this.osdViewer.addOnceHandler('ready', () => {
-            console.info("Tiles are ready");
+            console.info("Tiles are ready")
             this.state = viewState.openSeaReady
         })
 
