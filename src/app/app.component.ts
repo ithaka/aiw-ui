@@ -112,6 +112,7 @@ export class AppComponent {
     angulartics2GoogleTagManager: Angulartics2GoogleTagManager,
     private _auth: AuthService,
     private titleService: Title,
+    private _script: ScriptService,
     private _flags: FlagService,
     private router: Router,
     private translate: TranslateService,
@@ -287,6 +288,9 @@ export class AppComponent {
   }
 
   ngOnInit() {
+    // Ethnio survey 10-31-22
+    this._script.loadScript('ethnio-survey')
+
     if (isPlatformBrowser(this.platformId)) {
       // Setup statusPageClient & subscribe to any status updates to show banner
       import('statuspage-client') // Load StatusPage client -side
