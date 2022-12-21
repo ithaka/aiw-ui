@@ -562,31 +562,31 @@
       },
       "COLLECTIONS": [
         {
-          "SUBHEADING": "Painting for peace",
+          "SUBHEADING": "A Global New Year",
           "DESCRIPTION": "",
-          "CAPTION": "Henri Rousseau. War. 1898. Oil on canvas. Musée d'Orsay. Image and data from SCALA.",
-          "LINK": "https://www.artstor.org/2022/10/13/painting-for-peace-art-exposes-the-cruelty-of-war/",
-          "IMG_SOURCE": "/assets/img/featured-collections/scala_rousseau.jpg",
-          "LINK_TITLE": "Painting for peace",
-          "ALT_TEXT": "Painting for peace"
+          "CAPTION": "Hiroshige. Untitled (Two Rabbits… and Full Moon). c. 1849-1851. Woodcut. Image and data from the Fine Arts Museums of San Francisco.",
+          "LINK": "https://www.artstor.org/2022/12/13/chasing-the-new-year-around-the-globe/",
+          "IMG_SOURCE": "/assets/img/featured-collections/famsf_rabbits.jpg",
+          "LINK_TITLE": "A Global New Year",
+          "ALT_TEXT": "A Global New Year"
         },
         {
-          "SUBHEADING": "Student activism",
+          "SUBHEADING": "The Little Ice Age",
           "DESCRIPTION": "",
-          "CAPTION": "Danny Lyon. Civil Rights movement. Danville, Virginia. 1963. Student Nonviolent Coordinating Committee members Ivanhoe Donaldson, Marion Barry and James Forman .... © Danny Lyon / Magnum Photos.",
-          "LINK": "https://www.artstor.org/2022/08/10/say-it-loud-the-powerful-voice-of-student-activism/",
-          "IMG_SOURCE": "/assets/img/featured-collections/magnum_civil_rights.jpg",
-          "LINK_TITLE": "Student activism",
-          "ALT_TEXT": "Student activism"
+          "CAPTION": "Pieter Brueghel I. Return of the Hunters. 1565. Oil on oak. Kunsthistorisches Museum Vienna. Image and data from Erich Lessing Culture and Fine Arts Archives/ART RESOURCE, N.Y. ",
+          "LINK": "https://www.artstor.org/2019/01/31/picturing-the-little-ice-age/",
+          "IMG_SOURCE": "/assets/img/featured-collections/erich-lessing-culture_hunters.jpg",
+          "LINK_TITLE": "The Little Ice Age",
+          "ALT_TEXT": "The Little Ice Age"
         },
         {
-          "SUBHEADING": "Painter of Ukraine",
+          "SUBHEADING": "Still Life",
           "DESCRIPTION": "",
-          "CAPTION": "Arkhip Kuindzhi. The Rainbow. 1900-1905. Oil on canvas. State Russian Museum. Image and data from SCALA, Florence.",
-          "LINK": "https://www.artstor.org/2022/07/13/arkhip-kuindzhi-beloved-son-and-painter-of-ukraine/",
-          "IMG_SOURCE": "/assets/img/featured-collections/scala_rainbow.jpg",
-          "LINK_TITLE": "Painter of Ukraine",
-          "ALT_TEXT": "Painter of Ukraine"
+          "CAPTION": "Jan Davidsz. de Heem. Still Life with Fruit and Lobster. 17th century. Oil on canvas. Image and data from Bildarchiv Preußischer Kulturbesitz.",
+          "LINK": "https://www.artstor.org/2018/11/19/the-art-of-plenty-in-praise-of-still-life-painting/",
+          "IMG_SOURCE": "/assets/img/featured-collections/berlin_fruit.jpg",
+          "LINK_TITLE": "Still Life",
+          "ALT_TEXT": "Still Life"
         }
       ]
     },
