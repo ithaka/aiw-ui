@@ -1,24 +1,24 @@
-import { Injectable, Inject, PLATFORM_ID, Injector } from "@angular/core";
-import { Location, isPlatformBrowser } from "@angular/common";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Injectable, Inject, PLATFORM_ID, Injector } from '@angular/core';
+import { Location, isPlatformBrowser } from '@angular/common';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {
   CanActivate,
   Router,
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
-} from "@angular/router";
-import { Observable, BehaviorSubject, Subject, from } from "rxjs";
-import { map, take, catchError } from "rxjs/operators";
+} from '@angular/router';
+import { Observable, BehaviorSubject, Subject, from } from 'rxjs';
+import { map, take, catchError } from 'rxjs/operators';
 
 // Project dependencies
-import { AppConfig } from "../app.service";
+import { AppConfig } from '../app.service';
 
 // For session timeout management
-import { IdleWatcherUtil } from "shared/idle-watcher";
-import { Idle, EventTargetInterruptSource } from "@ng-idle/core";
-import { ArtstorStorageService } from "../../../projects/artstor-storage/src/public_api";
-import { Angulartics2 } from "angulartics2";
-import { environment } from "environments/environment";
+import { IdleWatcherUtil } from 'shared/idle-watcher';
+import { Idle, EventTargetInterruptSource } from '@ng-idle/core';
+import { ArtstorStorageService } from '../../../projects/artstor-storage/src/public_api';
+import { Angulartics2 } from 'angulartics2';
+import { environment } from 'environments/environment';
 /**
  * Controls authorization through IP address and locally stored user object
  */
@@ -42,7 +42,7 @@ export class AuthService implements CanActivate {
   private compoundUrl: string;
   private IIIFUrl: string;
   private logUrl: string;
-  private groupUrl = "";
+  private groupUrl = '';
   private solrUrl: string;
 
   private institutionObjValue: any = {};
@@ -73,7 +73,7 @@ export class AuthService implements CanActivate {
   private userSource: BehaviorSubject<any> = new BehaviorSubject({});
   // private user: any = {}
 
-  private idleState: string = "Not started.";
+  private idleState: string = 'Not started.';
 
   private isOpenAccess: boolean;
 
@@ -84,8 +84,8 @@ export class AuthService implements CanActivate {
    * - 'no-store' > 'no-cache' in denying caching
    */
   private userInfoHeader: HttpHeaders = new HttpHeaders().set(
-    "Cache-Control",
-    "no-store, no-cache"
+    'Cache-Control',
+    'no-store, no-cache'
   );
 
   private refreshUserSessionInProgress: boolean = false;
@@ -107,116 +107,116 @@ export class AuthService implements CanActivate {
     // Set WLV and App Config variables
     this.isOpenAccess = this._app.config.isOpenAccess;
     this.clientHostname = this._app.clientHostname;
-    console.log("_auth start Client hostname: " + this.clientHostname);
+    console.log('_auth start Client hostname: ' + this.clientHostname);
     // Initialize observables
     this.currentUser = this.userSource.asObservable();
     // Default to relative or prod endpoints
-    this.ENV = "prod";
-    this.hostname = "";
-    this.thumbUrl = "//mdxdv.artstor.org";
-    this.compoundUrl = "//stor.artstor.org/stor";
-    this.IIIFUrl = "https://stor.artstor.org";
-    this.subdomain = "library";
-    this.solrUrl = "/api/search/v3.0/search";
+    this.ENV = 'prod';
+    this.hostname = '';
+    this.thumbUrl = '//mdxdv.artstor.org';
+    this.compoundUrl = '//stor.artstor.org/stor';
+    this.IIIFUrl = 'https://stor.artstor.org';
+    this.subdomain = 'library';
+    this.solrUrl = '/api/search/v3.0/search';
     // Variables set via environment rather than hostname
-    this.baseUrl = environment.API_URL + "/api";
+    this.baseUrl = environment.API_URL + '/api';
     // If server-side, use absolute URL
     if (!this.isBrowser) {
-      this.baseUrl = environment.SSR_API_URL + "/api";
+      this.baseUrl = environment.SSR_API_URL + '/api';
       this.hostname = environment.SSR_API_URL;
     }
 
     let testHostnames = [
-      "localhost",
-      "localhost:3000",
-      "localhost:4000",
-      "local.artstor.org",
-      "stage.artstor.org",
-      "beta.stage.artstor.org",
+      'localhost',
+      'localhost:3000',
+      'localhost:4000',
+      'local.artstor.org',
+      'stage.artstor.org',
+      'beta.stage.artstor.org',
       // test.artstor subdomain is used for WLVs
-      "test.artstor.org",
-      "test.cirrostratus.org",
+      'test.artstor.org',
+      'test.cirrostratus.org',
     ];
 
     let prodHostnames = [
-      "library.artstor.org",
-      "beta.artstor.org",
-      "proxy.artstor.org",
+      'library.artstor.org',
+      'beta.artstor.org',
+      'proxy.artstor.org',
       // prod.artstor subdomain is used for WLVs
-      "prod.artstor.org",
-      "sahara.artstor.org",
+      'prod.artstor.org',
+      'sahara.artstor.org',
     ];
 
     let samlHostnames = [
-      "library.artstor.org",
-      "stage.artstor.org",
-      "localhost",
-      "localhost:3000",
+      'library.artstor.org',
+      'stage.artstor.org',
+      'localhost',
+      'localhost:3000',
     ];
-    let isProdHostname = new RegExp(prodHostnames.join("|")).test(
+    let isProdHostname = new RegExp(prodHostnames.join('|')).test(
       this.clientHostname
     );
 
     // Static app Prod handling
     if (isProdHostname) {
-      console.info("Using Prod Endpoints (Relative)");
+      console.info('Using Prod Endpoints (Relative)');
       // Explicit live endpoints
-      this.logUrl = "//ang-ui-logger.apps.prod.cirrostratus.org/api/v1";
-      this.solrUrl = "/api/search/v3.0/search";
-      this.ENV = "prod";
+      this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
+      this.solrUrl = '/api/search/v3.0/search';
+      this.ENV = 'prod';
     }
     // Cirrostratus or server-side handling
     if (
-      this.clientHostname.indexOf("prod.cirrostratus.org") > -1 ||
+      this.clientHostname.indexOf('prod.cirrostratus.org') > -1 ||
       (isProdHostname && !this.isBrowser)
     ) {
-      console.info("Using Prod Endpoints (Absolute)");
+      console.info('Using Prod Endpoints (Absolute)');
       // Prod/Lively endpoints
-      this.hostname = "//library.artstor.org";
-      this.baseUrl = "https://library.artstor.org/api";
-      this.logUrl = "//ang-ui-logger.apps.prod.cirrostratus.org/api/v1";
-      this.solrUrl = this.hostname + "/api/search/v3.0/search";
-      this.ENV = "prod";
-    } else if (new RegExp(testHostnames.join("|")).test(this.clientHostname)) {
-      console.info("Using Test Endpoints (Absolute)");
+      this.hostname = '//library.artstor.org';
+      this.baseUrl = 'https://library.artstor.org/api';
+      this.logUrl = '//ang-ui-logger.apps.prod.cirrostratus.org/api/v1';
+      this.solrUrl = this.hostname + '/api/search/v3.0/search';
+      this.ENV = 'prod';
+    } else if (new RegExp(testHostnames.join('|')).test(this.clientHostname)) {
+      console.info('Using Test Endpoints (Absolute)');
       // Test Endpoints
-      this.hostname = "//stage.artstor.org";
-      this.subdomain = "stage";
-      this.thumbUrl = "//mdxstage.artstor.org";
-      this.compoundUrl = "//stor.stage.artstor.org/stor";
-      this.logUrl = "//ang-ui-logger.apps.test.cirrostratus.org/api/v1";
-      this.solrUrl = "/api/search/v3.0/search";
-      this.IIIFUrl = "https://stor.stage.artstor.org";
-      this.ENV = "test";
+      this.hostname = '//stage.artstor.org';
+      this.subdomain = 'stage';
+      this.thumbUrl = '//mdxstage.artstor.org';
+      this.compoundUrl = '//stor.stage.artstor.org/stor';
+      this.logUrl = '//ang-ui-logger.apps.test.cirrostratus.org/api/v1';
+      this.solrUrl = '/api/search/v3.0/search';
+      this.IIIFUrl = 'https://stor.stage.artstor.org';
+      this.ENV = 'test';
     }
 
     // Set Saml availability
-    if (new RegExp(samlHostnames.join("|")).test(this.clientHostname)) {
+    if (new RegExp(samlHostnames.join('|')).test(this.clientHostname)) {
       this.samlAvailable = true;
     }
 
     // Additional Local dev domains
-    if (this.clientHostname.indexOf("local.sahara") > -1) {
-      this.hostname = "//sahara.beta.stage.artstor.org";
-      this.ENV = "test";
+    if (this.clientHostname.indexOf('local.sahara') > -1) {
+      this.hostname = '//sahara.beta.stage.artstor.org';
+      this.ENV = 'test';
     }
 
     // SSR routing WORKAROUND
-    if (this.clientHostname.indexOf("beta.stage.artstor.org") > -1) {
-      this.hostname = "//beta.stage.artstor.org";
-      this.ENV = "test";
-    } else if (this.clientHostname.indexOf("beta.artstor.org") > -1) {
-      this.hostname = "//beta.artstor.org";
-      this.ENV = "prod";
+    if (this.clientHostname.indexOf('beta.stage.artstor.org') > -1) {
+      this.hostname = '//beta.stage.artstor.org';
+      this.ENV = 'test';
+    } else if (this.clientHostname.indexOf('beta.artstor.org') > -1) {
+      this.hostname = '//beta.artstor.org';
+      this.ENV = 'prod';
     }
 
     // Sahara routing WORKAROUND
-    if (this.clientHostname.indexOf("sahara.beta.stage.artstor.org") > -1) {
-      this.hostname = "//sahara.beta.stage.artstor.org";
-      this.ENV = "test";
+    if (this.clientHostname.indexOf('sahara.beta.stage.artstor.org') > -1) {
+      this.hostname = '//sahara.beta.stage.artstor.org';
+      this.ENV = 'test';
     }
-    if (this.clientHostname.indexOf("sahara.prod.artstor.org") > -1) {
-      this.hostname = "//sahara.prod.artstor.org/";
+    if (this.clientHostname.indexOf('sahara.prod.artstor.org') > -1) {
+      this.hostname = '//sahara.prod.artstor.org/';
     }
 
     // Local routing should point to full URL
@@ -224,17 +224,17 @@ export class AuthService implements CanActivate {
     if (
       new RegExp(
         [
-          "cirrostratus.org",
-          "localhost",
-          "local.",
-          "beta.stage.artstor.org",
-          "sahara.beta.stage.artstor.org",
-          "sahara.prod.artstor.org",
-        ].join("|")
+          'cirrostratus.org',
+          'localhost',
+          'local.',
+          'beta.stage.artstor.org',
+          'sahara.beta.stage.artstor.org',
+          'sahara.prod.artstor.org',
+        ].join('|')
       ).test(this.clientHostname)
     ) {
       //this.baseUrl = this.hostname + '/api'
-      this.solrUrl = this.hostname + "/api/search/v3.0/search";
+      this.solrUrl = this.hostname + '/api/search/v3.0/search';
     }
 
     // Set idle timer and auth heartbeat when loaded in Browser
@@ -254,14 +254,14 @@ export class AuthService implements CanActivate {
 
     // Initialize user and institution objects from localstorage
     this.userSource.next(this.getUser());
-    let institution = this._storage.getLocal("institution");
+    let institution = this._storage.getLocal('institution');
     if (institution) {
       this.institutionObjSource.next(institution);
     }
 
     // SSR Logging
     console.log(
-      "Auth service Base url: " + this.baseUrl + ", Hostname: " + this.hostname
+      'Auth service Base url: ' + this.baseUrl + ', Hostname: ' + this.hostname
     );
   }
 
@@ -272,35 +272,35 @@ export class AuthService implements CanActivate {
     this.idle.setInterrupts([
       new EventTargetInterruptSource(
         window,
-        "mousemove keydown DOMMouseScroll mousewheel mousedown touchstart touchmove scroll"
+        'mousemove keydown DOMMouseScroll mousewheel mousedown touchstart touchmove scroll'
       ),
     ]);
 
     this.idle.onIdleEnd.subscribe(() => {
-      console.log("idle end");
-      this.idleState = "No longer idle.";
+      console.log('idle end');
+      this.idleState = 'No longer idle.';
       // We want to ensure a user is refreshed as soon as they return to the tab
       this.refreshUserSession(true);
     });
 
     this.idle.onTimeout.subscribe(() => {
-      console.log("Timed out!");
+      console.log('Timed out!');
       let user = this.getUser();
       // console.log(user);
       if (user && user.isLoggedIn) {
         this.expireSession();
         this.showUserInactiveModal.next(true);
-        this.idleState = "Timed out!";
+        this.idleState = 'Timed out!';
       } else {
         this.resetIdleWatcher();
       }
     });
 
     this.idle.onIdleStart.subscribe(() => {
-      console.log("idle start!");
-      this.idleState = "You've gone idle!";
+      console.log('idle start!');
+      this.idleState = 'You've gone idle!';
       let currentDateTime = new Date().toUTCString();
-      this._storage.setLocal("userGoneIdleAt", currentDateTime);
+      this._storage.setLocal('userGoneIdleAt', currentDateTime);
     });
 
     this.resetIdleWatcher();
@@ -333,11 +333,11 @@ export class AuthService implements CanActivate {
             this.reinitializeRolePromptSource.next(true);
             this.reinitializeAJIInterceptSource.next(true);
             this.reinitializePostLoginBannerSource.next(true);
-            console.info("Access Token refreshed <3");
+            console.info('Access Token refreshed <3');
           },
           (err) => {
             this.refreshUserSessionInProgress = false;
-            console.error("Access Token refresh failed </3", err);
+            console.error('Access Token refresh failed </3', err);
           }
         )
       )
@@ -352,19 +352,19 @@ export class AuthService implements CanActivate {
     //this.idle.stop()
 
     let header = new HttpHeaders().set(
-      "Content-Type",
-      "application/x-www-form-urlencoded"
+      'Content-Type',
+      'application/x-www-form-urlencoded'
     ); // ... Set content type to JSON
     let options = { headers: header, withCredentials: true };
     // Clear in-memory object
     // delete this.currentAuthHeaders
     // Clear local user object, and other settings
-    let quizModeTTDismissed = this._storage.getLocal("quizModeTTDismissed");
+    let quizModeTTDismissed = this._storage.getLocal('quizModeTTDismissed');
     this._storage.clearLocalStorage();
 
     // if quizModeTTDismissed is set make sure it's set after logout as well.
     if (quizModeTTDismissed) {
-      this._storage.setLocal("quizModeTTDismissed", quizModeTTDismissed);
+      this._storage.setLocal('quizModeTTDismissed', quizModeTTDismissed);
     }
 
     // Clear observables
@@ -375,7 +375,7 @@ export class AuthService implements CanActivate {
     this.reinitializePostLoginBannerSource.next(false);
 
     return this.http
-      .post(environment.API_URL + "/api/secure/logout", {}, options)
+      .post(environment.API_URL + '/api/secure/logout', {}, options)
       .toPromise()
       .catch(function (err) {
         // error handling
@@ -388,14 +388,14 @@ export class AuthService implements CanActivate {
    * @param obj The object to be encoded
    */
   public formEncode(obj: Object): string {
-    let encodedString = "";
+    let encodedString = '';
     for (let key in obj) {
       if (encodedString.length !== 0) {
-        encodedString += "&";
+        encodedString += '&';
       }
-      encodedString += key + "=" + encodeURIComponent(obj[key]);
+      encodedString += key + '=' + encodeURIComponent(obj[key]);
     }
-    return encodedString.replace(/%20/g, "+");
+    return encodedString.replace(/%20/g, '+');
   }
 
   public getInstitution(): Observable<any> {
@@ -416,7 +416,7 @@ export class AuthService implements CanActivate {
 
   public setInstitution(institutionObj: any): void {
     // Save to local storage
-    this._storage.setLocal("institution", institutionObj);
+    this._storage.setLocal('institution', institutionObj);
     // Update Observable
     this.institutionObjValue = institutionObj;
     this.institutionObjSource.next(this.institutionObjValue);
@@ -429,12 +429,12 @@ export class AuthService implements CanActivate {
     /**
      * Requestor Role
      * We currently default role, since other cases do not yet apply
-     * - Options: "self" "admin" "staff"
+     * - Options: 'self' 'admin' 'staff'
      */
-    let role = "self";
+    let role = 'self';
     /**
      * Requestor Origin
-     * Origins from AIW will either be "artstor" or "sahara"
+     * Origins from AIW will either be 'artstor' or 'sahara'
      * - Options: “jstor,plants,struggles,heritage,artstor,forum,sahara,bolt”
      */
     let origin = this._app.config.siteID.toLowerCase();
@@ -448,9 +448,9 @@ export class AuthService implements CanActivate {
    */
   public shouldPromptForRole(): boolean {
     let user = this.getUser();
-    let userHasRole = user.hasOwnProperty("role") && user.role;
+    let userHasRole = user.hasOwnProperty('role') && user.role;
     let userHasBeenPrompted =
-      user.hasOwnProperty("promptedForRole") && user.promptedForRole;
+      user.hasOwnProperty('promptedForRole') && user.promptedForRole;
     return user && user.isLoggedIn && !userHasRole && !userHasBeenPrompted;
   }
 
@@ -461,10 +461,10 @@ export class AuthService implements CanActivate {
   public showAJIIntercept(): boolean {
     let user = this.getUser();
     let showModal =
-      user.showAJIModalOrBanner == "both" ||
-      user.showAJIModalOrBanner == "remind_later";
+      user.showAJIModalOrBanner == 'both' ||
+      user.showAJIModalOrBanner == 'remind_later';
     // let institution = this.institutionObjSource.value
-    if (this.getFromStorage("AJIInterceptClosed")) {
+    if (this.getFromStorage('AJIInterceptClosed')) {
       return false;
     }
     return user && user.isLoggedIn && showModal;
@@ -476,13 +476,13 @@ export class AuthService implements CanActivate {
    */
   public showPostLoginBanner(): boolean {
     let user = this.getUser();
-    console.log("userObj", user);
+    console.log('userObj', user);
     let showBanner =
-      user.showAJIModalOrBanner == "banner_only" ||
-      user.showAJIModalOrBanner == "remind_later";
+      user.showAJIModalOrBanner == 'banner_only' ||
+      user.showAJIModalOrBanner == 'remind_later';
     // let institution = this.institutionObjSource.value
     let ajiInterceptWasClosed =
-      this.getFromStorage("AJIInterceptClosed") == true;
+      this.getFromStorage('AJIInterceptClosed') == true;
     // let userIsLoggedInJstorUser = user && user.isLoggedIn && institution.institutionName && institution.institutionName == 'JSTOR'
 
     return user && user.isLoggedIn && showBanner;
@@ -493,24 +493,24 @@ export class AuthService implements CanActivate {
    * @returns Observable resolved with object containing: roleArray, deptArray
    */
   public getUserRoles(): Observable<any> {
-    return this.http.get(this.getUrl(true) + "/user?_method=deptRoles");
+    return this.http.get(this.getUrl(true) + '/user?_method=deptRoles');
   }
 
   /** Calls service to register a user
-   * @param registration should have properties: _method="update", username, password, role, dept, info<boolean>, survey<boolean>
+   * @param registration should have properties: _method='update', username, password, role, dept, info<boolean>, survey<boolean>
    * - Modifies Account: should include Auth logging params
    **/
   public registerUser(registration: any): Observable<any> {
     let data = this.formEncode(registration);
 
     let header = new HttpHeaders().set(
-      "Content-Type",
-      "application/x-www-form-urlencoded"
+      'Content-Type',
+      'application/x-www-form-urlencoded'
     ); // form encode it
     let options = { headers: header, withCredentials: true }; // Create a request option
 
     return this.http.post(
-      environment.API_URL + "/api/secure/register" + this.getAuthLogParams(),
+      environment.API_URL + '/api/secure/register' + this.getAuthLogParams(),
       data,
       options
     );
@@ -518,19 +518,19 @@ export class AuthService implements CanActivate {
 
   /**
    * Shibboleth/Saml registration
-   * @param registration in addition to regular registration form, requires "samlTokenId" property
+   * @param registration in addition to regular registration form, requires 'samlTokenId' property
    * - Modifies Account: should include Auth logging params
    */
   public registerSamlUser(registration: any): Observable<any> {
     // Clear method used for regular registration
-    registration["_method"] = null;
+    registration['_method'] = null;
     // // Encode da
     // let dataStr = this.formEncode(registration)
-    let header = new HttpHeaders().set("Content-Type", "application/json");
+    let header = new HttpHeaders().set('Content-Type', 'application/json');
     let options = { headers: header, withCredentials: true };
 
     return this.http.post(
-      environment.API_URL + "/saml/user/create" + this.getAuthLogParams(),
+      environment.API_URL + '/saml/user/create' + this.getAuthLogParams(),
       registration,
       options
     );
@@ -538,16 +538,16 @@ export class AuthService implements CanActivate {
 
   /**
    * Shibboleth/Saml linking
-   * @param user Artstor login credentials requires "username", "password", and "samlTokenId"
+   * @param user Artstor login credentials requires 'username', 'password', and 'samlTokenId'
    * - Modifies Account: should include Auth logging params
    */
   public linkSamlUser(credentials: any): Promise<any> {
-    let header = new HttpHeaders().set("Content-Type", "application/json");
+    let header = new HttpHeaders().set('Content-Type', 'application/json');
     let options = { headers: header, withCredentials: true };
 
     return this.http
       .post(
-        environment.API_URL + "/saml/user/link" + this.getAuthLogParams(),
+        environment.API_URL + '/saml/user/link' + this.getAuthLogParams(),
         credentials,
         options
       )
@@ -561,18 +561,18 @@ export class AuthService implements CanActivate {
    */
   public changePassword(oldPass: string, newPass: string): Observable<any> {
     let header = new HttpHeaders().set(
-      "Content-Type",
-      "application/x-www-form-urlencoded"
+      'Content-Type',
+      'application/x-www-form-urlencoded'
     ); // form encode it
     let options = { headers: header, withCredentials: true }; // Create a request option
     let data = this.formEncode({
-      _method: "updatePassword",
+      _method: 'updatePassword',
       oldPassword: oldPass,
       password: newPass,
     });
 
     return this.http.post(
-      this.getUrl(true) + "/profile" + this.getAuthLogParams(),
+      this.getUrl(true) + '/profile' + this.getAuthLogParams(),
       data,
       options
     );
@@ -582,7 +582,7 @@ export class AuthService implements CanActivate {
     let url: string = this.baseUrl;
     // Append secure path
     if (secure) {
-      url += "/secure";
+      url += '/secure';
     }
     return url;
   }
@@ -620,7 +620,7 @@ export class AuthService implements CanActivate {
   /** Returns url used for downloading some media, such as documents */
   public getMediaUrl(): string {
     // This is a special case, and should always points to library.artstor or stage
-    return environment.API_URL + "/media";
+    return environment.API_URL + '/media';
   }
 
   /**
@@ -629,25 +629,25 @@ export class AuthService implements CanActivate {
    */
   public getHeaders(): HttpHeaders {
     let headers: HttpHeaders = new HttpHeaders().set(
-      "Content-Type",
-      "application/json"
+      'Content-Type',
+      'application/json'
     );
     if (!this.isBrowser) {
-      let req = this.injector.get("request");
-      let clientIp: string = "";
+      let req = this.injector.get('request');
+      let clientIp: string = '';
       // Server rendered app needs to pass along the fastly IP
-      if (req.headers["fastly-client-ip"]) {
-        clientIp = req.headers["fastly-client-ip"];
-        console.log("Fastly client ip: " + clientIp);
-      } else if (req.headers["forwarded"]) {
-        clientIp = req.headers["forwarded"];
-        console.log("Forwarded: " + clientIp);
+      if (req.headers['fastly-client-ip']) {
+        clientIp = req.headers['fastly-client-ip'];
+        console.log('Fastly client ip: ' + clientIp);
+      } else if (req.headers['forwarded']) {
+        clientIp = req.headers['forwarded'];
+        console.log('Forwarded: ' + clientIp);
       } else {
         clientIp = req.ip;
-        if (clientIp === "::1") {
+        if (clientIp === '::1') {
           // Local ipv6 requests
           // Assign a regular, non-vpn address for local dev
-          clientIp = "65.128.116.207"; // Minneapolis IP
+          clientIp = '65.128.116.207'; // Minneapolis IP
         }
       }
       // Set triplet headers if available
@@ -657,9 +657,9 @@ export class AuthService implements CanActivate {
         });
       }
       // Value specifically used within Artstor apps-gateway rules
-      headers = headers.append("CLIENTIP", clientIp);
+      headers = headers.append('CLIENTIP', clientIp);
       // Expected Fastly ip header used by most services
-      headers = headers.append("Fastly-Client-Ip", clientIp);
+      headers = headers.append('Fastly-Client-Ip', clientIp);
       return headers;
     } else {
       return headers;
@@ -673,7 +673,7 @@ export class AuthService implements CanActivate {
   public saveUser(user: any) {
     this.updateAnalyticUserProperties(user);
     // Preserve user via localstorage
-    this._storage.setLocal("user", user);
+    this._storage.setLocal('user', user);
     // only do these things if the user is ip auth'd or logged in and the user has changed
     let institution = this.institutionObjSource.getValue();
     if (
@@ -693,12 +693,12 @@ export class AuthService implements CanActivate {
    * Gets user object from local storage
    */
   public getUser(): any {
-    return this._storage.getLocal("user") ? this._storage.getLocal("user") : {};
+    return this._storage.getLocal('user') ? this._storage.getLocal('user') : {};
   }
 
   /** Stores an object in local storage for you */
   public store(key: string, value: any): void {
-    if (key != "user" && key != "token") {
+    if (key != 'user' && key != 'token') {
       this._storage.setLocal(key, value);
     }
   }
@@ -710,7 +710,7 @@ export class AuthService implements CanActivate {
 
   /** Deletes things (not user or token) from local storage */
   public deleteFromStorage(key: string): void {
-    if (key != "user" && key != "token") {
+    if (key != 'user' && key != 'token') {
       this._storage.removeLocalItem(key);
     }
   }
@@ -723,18 +723,18 @@ export class AuthService implements CanActivate {
     let institution = this.institutionObjSource.value;
     // Push user vars to data layer
     let authMethod = user.isLoggedIn
-      ? "personal"
+      ? 'personal'
       : user.institutionId
-      ? "institutional"
-      : "unaffiliated";
+      ? 'institutional'
+      : 'unaffiliated';
     let userGTMVars = {
       loggedIn: user.isLoggedIn,
       userAuthentication: authMethod,
-      userInstitution: institution.institutionName || "",
-      institutionID: user.institutionId || "",
-      userID: user.baseProfileId || "",
-      userRole: user.role || "",
-      userDepartment: user.dept || "",
+      userInstitution: institution.institutionName || '',
+      institutionID: user.institutionId || '',
+      userID: user.baseProfileId || '',
+      userRole: user.role || '',
+      userDepartment: user.dept || '',
     };
     // Push to GTM data layer
     this.angulartics.eventTrack.next({
@@ -746,9 +746,9 @@ export class AuthService implements CanActivate {
     });
     // user : {}
     // Set GA user properties
-    this.angulartics.setUsername.next(user.baseProfileId || "");
+    this.angulartics.setUsername.next(user.baseProfileId || '');
     this.angulartics.setUserProperties.next({
-      institutionId: user.institutionId || "",
+      institutionId: user.institutionId || '',
     });
     this.angulartics.setUserProperties.next({
       isLoggedIn: user.isLoggedIn || false,
@@ -756,7 +756,7 @@ export class AuthService implements CanActivate {
     this.angulartics.setUserProperties.next({
       shibbolethUser: user.shibbolethUser || false,
     });
-    this.angulartics.setUserProperties.next({ dept: user.dept || "" });
+    this.angulartics.setUserProperties.next({ dept: user.dept || '' });
     this.angulartics.setUserProperties.next({
       ssEnabled: user.ssEnabled || false,
     });
@@ -769,7 +769,7 @@ export class AuthService implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> {
-    console.log("Running canActivate for... " + state.url);
+    console.log('Running canActivate for... ' + state.url);
     let options = { headers: this.userInfoHeader, withCredentials: true };
     /**
      * @todo: Enable the server to call the user info call
@@ -781,8 +781,8 @@ export class AuthService implements CanActivate {
     }
     // Allow access to pages that don't require login/auth
     if (
-      (route.params.samlTokenId || route.params.type == "shibboleth") &&
-      state.url.includes("/register")
+      (route.params.samlTokenId || route.params.type == 'shibboleth') &&
+      state.url.includes('/register')
     ) {
       // Shibboleth workflow is unique, should allow access to the register page
       return new Observable((observer) => {
@@ -806,11 +806,11 @@ export class AuthService implements CanActivate {
         .get(this.genUserInfoUrl(), options)
         .pipe(
           map((data) => {
-            console.log("User info call returned!");
+            console.log('User info call returned!');
             // The Artstor Sotrage service will return a default user object for use on the Server
             let user = this.isBrowser
               ? this.decorateValidUser(data)
-              : this._storage.getLocal("user");
+              : this._storage.getLocal('user');
             // Track whether or not user object has been refreshed since app opened
             this.userSessionFresh = true;
 
@@ -823,13 +823,13 @@ export class AuthService implements CanActivate {
             } else {
               // We don't have a user here, and WLV is not open access, go to /login
               if (!this.isOpenAccess) {
-                console.log("Not open access - redirecting");
-                this._router.navigate(["/login"]);
+                console.log('Not open access - redirecting');
+                this._router.navigate(['/login']);
               } else {
-                console.log("fell through to this.logout");
+                console.log('fell through to this.logout');
                 this.logout();
                 // Store the route so that we know where to put them after login!
-                this.store("stashedRoute", this.location.path(false));
+                this.store('stashedRoute', this.location.path(false));
                 return false;
               }
             }
@@ -842,12 +842,12 @@ export class AuthService implements CanActivate {
               // CanActivate is not handling the Observable value properly,
               // ... so we do an extra redirect in here
               if (res === false) {
-                this._router.navigate(["/login"]);
+                this._router.navigate(['/login']);
               }
               observer.next(res);
             },
             (err) => {
-              this._router.navigate(["/login"]);
+              this._router.navigate(['/login']);
               observer.next(false);
             }
           )
@@ -863,7 +863,7 @@ export class AuthService implements CanActivate {
   public getUserInfo(triggerSessionExpModal?: boolean): Observable<any> {
     return this.http
       .get(this.genUserInfoUrl(), {
-        observe: "response",
+        observe: 'response',
         headers: this.getHeaders(),
         withCredentials: true,
       })
@@ -885,14 +885,14 @@ export class AuthService implements CanActivate {
             this.logout();
           }
           // Save session auth header values for attaching to subsequent requests
-          if (headers.get("x-jstor-access-session")) {
+          if (headers.get('x-jstor-access-session')) {
             this.currentAuthHeaders = {
-              "x-jstor-access-session": headers.get("x-jstor-access-session"),
-              "x-jstor-access-session-signature": headers.get(
-                "x-jstor-access-session-signature"
+              'x-jstor-access-session': headers.get('x-jstor-access-session'),
+              'x-jstor-access-session-signature': headers.get(
+                'x-jstor-access-session-signature'
               ),
-              "x-jstor-access-session-timed-signature": headers.get(
-                "x-jstor-access-session-timed-signature"
+              'x-jstor-access-session-timed-signature': headers.get(
+                'x-jstor-access-session-timed-signature'
               ),
             };
           }
@@ -910,12 +910,12 @@ export class AuthService implements CanActivate {
 
   /** Getter for downloadAuthorized parameter of local storage */
   public downloadAuthorized(): boolean {
-    return this._storage.getLocal("downloadAuthorized");
+    return this._storage.getLocal('downloadAuthorized');
   }
 
   /** Setter for downloadAuthorized parameter of local storage */
   public authorizeDownload(): void {
-    this._storage.setLocal("downloadAuthorized", true);
+    this._storage.setLocal('downloadAuthorized', true);
   }
 
   /**
@@ -924,8 +924,8 @@ export class AuthService implements CanActivate {
    */
   login(user: any): Promise<any> {
     let header = new HttpHeaders()
-      .set("Content-Type", "application/x-www-form-urlencoded")
-      .set("Cache-Control", "no-store, no-cache");
+      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .set('Cache-Control', 'no-store, no-cache');
     let options = {
       headers: header,
       withCredentials: true,
@@ -937,36 +937,36 @@ export class AuthService implements CanActivate {
     });
 
     return this.http
-      .post(environment.API_URL + "/api/secure/login", data, options)
+      .post(environment.API_URL + '/api/secure/login', data, options)
       .toPromise();
   }
 
   getLoginError(user: User) {
     let header = new HttpHeaders().set(
-      "Content-Type",
-      "application/x-www-form-urlencoded"
+      'Content-Type',
+      'application/x-www-form-urlencoded'
     );
     let options = { headers: header, withCredentials: true }; // Create a request option
 
     return this.http
       .get(
         this.getUrl(true) +
-          "/login?j_username=" +
+          '/login?j_username=' +
           encodeURIComponent(user.username) +
-          "&j_password=" +
+          '&j_password=' +
           encodeURIComponent(user.password)
       )
       .toPromise();
   }
 
   getInstitutions() {
-    let url = environment.API_URL + "/api/institutions?_method=shibbolethOnly";
+    let url = environment.API_URL + '/api/institutions?_method=shibbolethOnly';
 
     return this.http.get(url).toPromise();
   }
 
   pwdResetCheck(): Promise<any> {
-    let url = environment.API_URL + "/request-reset-password/check";
+    let url = environment.API_URL + '/request-reset-password/check';
     let options = {
       withCredentials: true
     };
@@ -975,7 +975,7 @@ export class AuthService implements CanActivate {
   }
 
   pwdReset(email: string): Promise<any> {
-    let url = environment.API_URL + "/request-reset-password/";
+    let url = environment.API_URL + '/request-reset-password/';
     let data = {
       email: email,
     };
@@ -992,11 +992,11 @@ export class AuthService implements CanActivate {
   ): Observable<SSLoginResponse> {
     let data = this.formEncode({ username: username, password: password });
     let headers = new HttpHeaders().set(
-      "Content-Type",
-      "application/x-www-form-urlencoded"
+      'Content-Type',
+      'application/x-www-form-urlencoded'
     );
     return this.http.post<SSLoginResponse>(
-      [this.hostname, "gust", "login"].join("/"),
+      [this.hostname, 'gust', 'login'].join('/'),
       data,
       { withCredentials: true, headers: headers }
     );
@@ -1010,7 +1010,7 @@ export class AuthService implements CanActivate {
 
   /**
    * Deprecated: User info is now tracked in the data layer
-   * Return "category" to report to Google Analytics
+   * Return 'category' to report to Google Analytics
    * - We use category to track the type of user the event is tied to
    */
   // public getGACategory(): string {
@@ -1027,17 +1027,17 @@ export class AuthService implements CanActivate {
   // }
 
   private genUserInfoUrl(): string {
-    let url = this.getUrl(true) + "/userinfo";
+    let url = this.getUrl(true) + '/userinfo';
     // We can cache public user object server-side (and for tests!)
     if (this.isBrowser) {
-      url += "?no-cache=" + new Date().valueOf();
+      url += '?no-cache=' + new Date().valueOf();
     }
     return url;
   }
 
   private expireSession(): void {
     this.logout().then(() => {
-      // We want the user to see the "Session Expired" modal triggered by this.refreshUserSession() & this.getUserInfo()
+      // We want the user to see the 'Session Expired' modal triggered by this.refreshUserSession() & this.getUserInfo()
       // Do not route user away
     });
   }
@@ -1047,13 +1047,13 @@ export class AuthService implements CanActivate {
    * @returns Chainable promise containing collection data
    */
   private refreshUserInstitution() {
-    let header = new HttpHeaders().set("Cache-Control", "no-store, no-cache");
+    let header = new HttpHeaders().set('Cache-Control', 'no-store, no-cache');
     let options = { headers: header, withCredentials: true };
 
     // Returns all of the collections names
     return this.http
       .get(
-        this.getUrl() + "/v2/institution?no-cache=" + new Date().valueOf(),
+        this.getUrl() + '/v2/institution?no-cache=' + new Date().valueOf(),
         options
       )
       .toPromise()
@@ -1077,18 +1077,18 @@ export class AuthService implements CanActivate {
    */
   private decorateValidUser(data: any): any {
     let user = this.userSource.value;
-    let currentUser = user.hasOwnProperty("status") ? user : this.getUser();
-    let newUser = data["user"] ? data["user"] : {};
+    let currentUser = user.hasOwnProperty('status') ? user : this.getUser();
+    let newUser = data['user'] ? data['user'] : {};
     let currentUsername = currentUser.username;
     let loggedInSessionLost = currentUser.isLoggedIn
       ? !newUser.username || currentUsername !== newUser.username
       : false;
 
-    if (data["status"] === true) {
+    if (data['status'] === true) {
       // User is authorized - if you want to check ipAuth then you can tell on the individual route by user.isLoggedIn = false
-      let user = data["user"];
-      user.status = data["status"];
-      if (data["isRememberMe"] || data.maxPeriod > 0 || data.dayRemain > 0) {
+      let user = data['user'];
+      user.status = data['status'];
+      if (data['isRememberMe'] || data.maxPeriod > 0 || data.dayRemain > 0) {
         user.isLoggedIn = true;
       }
 
@@ -1102,7 +1102,7 @@ export class AuthService implements CanActivate {
       } else {
         return null;
       }
-    } else if (data["status"] === false) {
+    } else if (data['status'] === false) {
       // Return generic user object for unaffiliated users
       let user = {
         status: false,
@@ -1111,7 +1111,7 @@ export class AuthService implements CanActivate {
       };
       return user;
     } else {
-      console.error("Did not receive a valid user object", data);
+      console.error('Did not receive a valid user object', data);
       return null;
     }
   }
@@ -1119,7 +1119,7 @@ export class AuthService implements CanActivate {
   private canUserAccess(user: any): boolean {
     return (
       user &&
-      user.hasOwnProperty("status") &&
+      user.hasOwnProperty('status') &&
       (this._app.config.disableIPAuth === true ? user.isLoggedIn : true)
     );
   }
@@ -1131,9 +1131,9 @@ export class User {
 }
 
 interface AuthTriplet {
-  "x-jstor-access-session": string;
-  "x-jstor-access-session-signature": string;
-  "x-jstor-access-session-timed-signature": string;
+  'x-jstor-access-session': string;
+  'x-jstor-access-session-signature': string;
+  'x-jstor-access-session-timed-signature': string;
 }
 
 interface SSLoginResponse {
