@@ -47,6 +47,7 @@
         //- Success Messaging
         .modal-body(*ngIf="successMsgPwdRst")
           p.modal-prompt {{ successMsgPwdRst | translate }}
+        //- Rate Limit Messaging
         .modal-body(*ngIf="rateLimitMsgPwdRst")
           p.modal-prompt {{ rateLimitMsgPwdRst | translate }}
         .modal-footer
