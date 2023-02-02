@@ -66,6 +66,7 @@ export class PwdResetModal implements OnInit, AfterViewInit {
         console.log(data);
         if (!data.allowed) {
           this.pwdResetDisabled = true;
+          this.copyKey = "MODAL.PASSWORD.PREVENTED";
           this.rateLimitMsgPwdRst = this.copyKey + ".MESSAGE";
         }
         else {
@@ -110,7 +111,7 @@ export class PwdResetModal implements OnInit, AfterViewInit {
     }
     this._auth.pwdReset(this.pwdResetForm.value.email).then(
       (data) => {
-        if (data.status === "true") {
+        if (data.success) {
           this.pwdReset = false;
           this.copyKey = "MODAL.PASSWORD.SUCCESS";
           this.successMsgPwdRst = this.copyKey + ".MESSAGE";
