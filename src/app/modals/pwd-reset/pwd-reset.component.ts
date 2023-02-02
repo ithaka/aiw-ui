@@ -66,6 +66,7 @@ export class PwdResetModal implements OnInit, AfterViewInit {
         console.log(data);
         if (!data.allowed) {
           this.pwdResetDisabled = true;
+          this.rateLimitMsgPwdRst = this.copyKey + ".MESSAGE";
         }
         else {
           this.pwdResetDisabled = false;
@@ -109,31 +110,23 @@ export class PwdResetModal implements OnInit, AfterViewInit {
     }
     this._auth.pwdReset(this.pwdResetForm.value.email).then(
       (data) => {
-        this.loadPwdRstRes(data);
+        if (data.status === "true") {
+          this.pwdReset = false;
+          this.copyKey = "MODAL.PASSWORD.SUCCESS";
+          this.successMsgPwdRst = this.copyKey + ".MESSAGE";
+        } else {
+          this.errorMsgPwdRst = "Sorry! An account for " + this.pwdResetForm.value.email + " was not found.";
+          this.pwdResetForm.controls["email"].setValue("");
+        }
       },
       (error) => {
+        if (error.status == 429) {
+          this.pwdReset = false;
+          this.copyKey = "MODAL.PASSWORD.PREVENTED";
+          this.rateLimitMsgPwdRst = this.copyKey + ".MESSAGE";
+        }
         this.errorMsgPwdRst = error.statusText;
       }
     );
-  }
-
-  loadPwdRstRes(res: any) {
-    if (!res.status || res.status === "false") {
-      this.errorMsgPwdRst =
-        "Sorry! An account for " +
-        this.pwdResetForm.value.email +
-        " was not found.";
-      this.pwdResetForm.controls["email"].setValue("");
-    } 
-    else if (res.status == 429) {
-      this.pwdReset = false;
-      this.copyKey = "MODAL.PASSWORD.PREVENTED";
-      this.rateLimitMsgPwdRst = this.copyKey + ".MESSAGE";
-    }
-    else {
-      this.pwdReset = false;
-      this.copyKey = "MODAL.PASSWORD.SUCCESS";
-      this.successMsgPwdRst = this.copyKey + ".MESSAGE";
-    }
   }
 }

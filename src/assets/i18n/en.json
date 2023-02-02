@@ -392,8 +392,8 @@
         "HEADING" : "Please check your inbox"
       },
       "PREVENTED" : {
-        "MESSAGE" : "Rate limited",
-        "HEADING" : "RATE LIMITED"
+        "MESSAGE" : "Maximum amount of password reset attempts exceeded. Password reset will remain disabled for 15 minutes.",
+        "HEADING" : "Please wait 15 minutes and try again"
       }
     }
   },
