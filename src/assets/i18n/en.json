@@ -390,6 +390,10 @@
       "SUCCESS" : {
         "MESSAGE" : "An email has been sent with a new password and instructions for changing your password.",
         "HEADING" : "Please check your inbox"
+      },
+      "PREVENTED" : {
+        "MESSAGE" : "Rate limited",
+        "HEADING" : "RATE LIMITED"
       }
     }
   },

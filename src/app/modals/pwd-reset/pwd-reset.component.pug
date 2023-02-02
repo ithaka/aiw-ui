@@ -46,6 +46,8 @@
         //- Success Messaging
         .modal-body(*ngIf="successMsgPwdRst")
           p.modal-prompt {{ successMsgPwdRst | translate }}
+        .modal-body(*ngIf="rateLimitMsgPwdRst")
+          p.modal-prompt {{ rateLimitMsgPwdRst | translate }}
         .modal-footer
           .form-group.mb-0(*ngIf="pwdReset")
             .btn-row
@@ -65,7 +67,8 @@
                 [class.loading]="isLoading",
                 tabindex="1",
                 (keydown.tab)="focusElement(cancelButton, $event)",
-                (keydown.shift.tab)="focusElement(pwdResetSupportLink, $event)"
+                (keydown.shift.tab)="focusElement(pwdResetSupportLink, $event)",
+                [disabled]="pwdResetDisabled"
               ) Submit
           .form-group.mb-0(*ngIf="!pwdReset")
             button.btn.btn-primary(
