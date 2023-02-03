@@ -63,7 +63,6 @@ export class PwdResetModal implements OnInit, AfterViewInit {
 
     this._auth.pwdResetCheck().then(
       (data) => {
-        console.log(data);
         if (!data.allowed) {
           this.pwdResetDisabled = true;
           this.copyKey = 'MODAL.PASSWORD.PREVENTED';
