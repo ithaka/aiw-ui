@@ -59,17 +59,6 @@ export class PwdResetModal implements OnInit, AfterViewInit {
         ],
       ],
     });
-
-    this._auth.pwdResetCheck().then(
-      (data) => {
-        if (!data.allowed) {
-          this.pwdReset = false;
-          this.copyKey = 'MODAL.PASSWORD.PREVENTED';
-          this.rateLimitMsgPwdRst = this.copyKey + '.MESSAGE';
-        }
-      },
-      (error) => {}
-    );
   }
 
   ngAfterViewInit() {
@@ -83,6 +72,17 @@ export class PwdResetModal implements OnInit, AfterViewInit {
     this.closeIcon = this.closeIcon.nativeElement;
     this.pwdResetEmailInput = this.pwdResetEmailInput.nativeElement;
     this.pwdResetSupportLink = this.pwdResetSupportLink.nativeElement;
+
+    this._auth.pwdResetCheck().then(
+      (data) => {
+        if (!data.allowed) {
+          this.pwdReset = false;
+          this.copyKey = 'MODAL.PASSWORD.PREVENTED';
+          this.rateLimitMsgPwdRst = this.copyKey + '.MESSAGE';
+        }
+      },
+      (error) => {}
+    );
   }
 
   /**
