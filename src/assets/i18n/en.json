@@ -392,8 +392,8 @@
         "HEADING" : "Please check your inbox"
       },
       "PREVENTED" : {
-        "MESSAGE" : "Maximum amount of password reset attempts exceeded. Password reset will remain disabled for 15 minutes.",
-        "HEADING" : "Please wait 15 minutes and try again"
+        "MESSAGE" : "Log in request limit reached. Please try again later or contact support@artstor.org if the problem persists.",
+        "HEADING" : "Please try again later."
       }
     }
   },

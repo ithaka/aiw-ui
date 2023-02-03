@@ -298,7 +298,7 @@ export class AuthService implements CanActivate {
 
     this.idle.onIdleStart.subscribe(() => {
       console.log('idle start!');
-      this.idleState = 'You've gone idle!';
+      this.idleState = "You've gone idle!";
       let currentDateTime = new Date().toUTCString();
       this._storage.setLocal('userGoneIdleAt', currentDateTime);
     });
