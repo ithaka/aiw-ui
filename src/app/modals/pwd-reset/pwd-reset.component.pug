@@ -70,7 +70,6 @@
                 tabindex="1",
                 (keydown.tab)="focusElement(cancelButton, $event)",
                 (keydown.shift.tab)="focusElement(pwdResetSupportLink, $event)",
-                [disabled]="pwdResetDisabled"
               ) Submit
           .form-group.mb-0(*ngIf="!pwdReset")
             button.btn.btn-primary(

@@ -35,7 +35,6 @@ export class PwdResetModal implements OnInit, AfterViewInit {
   public pwdResetForm: FormGroup;
 
   public pwdReset = true;
-  private pwdResetDisabled = false;
   private pwdRstEmail = '';
   public errorMsgPwdRst = '';
   public successMsgPwdRst = '';
@@ -64,12 +63,9 @@ export class PwdResetModal implements OnInit, AfterViewInit {
     this._auth.pwdResetCheck().then(
       (data) => {
         if (!data.allowed) {
-          this.pwdResetDisabled = true;
+          this.pwdReset = false;
           this.copyKey = 'MODAL.PASSWORD.PREVENTED';
           this.rateLimitMsgPwdRst = this.copyKey + '.MESSAGE';
-        }
-        else {
-          this.pwdResetDisabled = false;
         }
       },
       (error) => {}
@@ -125,7 +121,9 @@ export class PwdResetModal implements OnInit, AfterViewInit {
           this.copyKey = 'MODAL.PASSWORD.PREVENTED';
           this.rateLimitMsgPwdRst = this.copyKey + '.MESSAGE';
         }
-        this.errorMsgPwdRst = error.statusText;
+        else {
+          this.errorMsgPwdRst = error.statusText;
+        }
       }
     );
   }
