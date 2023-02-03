@@ -393,7 +393,7 @@
       },
       "PREVENTED" : {
         "MESSAGE" : "Log in request limit reached. Please try again later or contact support@artstor.org if the problem persists.",
-        "HEADING" : "Please try again later.",
+        "HEADING" : "Please try again later."
       }
     }
   },
