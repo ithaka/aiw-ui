@@ -34,7 +34,6 @@
               )
               .invalid-feedback(*ngIf="submitted && pwdResetForm.controls['email'].invalid && !errorMsgPwdRst && !successMsgPwdRst") Please enter an email address
               .invalid-feedback(*ngIf="errorMsgPwdRst") {{ errorMsgPwdRst }}
-              .invalid-feedback(*ngIf="rateLimitMsgPwdRst") {{ rateLimitMsgPwdRst | translate }}
           .form-group
             p.small
               ='Need further help? '
@@ -69,7 +68,7 @@
                 [class.loading]="isLoading",
                 tabindex="1",
                 (keydown.tab)="focusElement(cancelButton, $event)",
-                (keydown.shift.tab)="focusElement(pwdResetSupportLink, $event)",
+                (keydown.shift.tab)="focusElement(pwdResetSupportLink, $event)"
               ) Submit
           .form-group.mb-0(*ngIf="!pwdReset")
             button.btn.btn-primary(
