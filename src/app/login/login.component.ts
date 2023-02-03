@@ -31,6 +31,7 @@ export class Login implements OnInit, OnDestroy {
   public systemPwdReset = false
   public pwdRstEmail = ''
   public errorMsgPwdRst = ''
+  public rateLimitMsgPwdRst = ''
   public forcePwdRst = false
   public successMsgPwdRst = ''
   public loginInstitutions = [] /** Stores the institutions returned by the server */
