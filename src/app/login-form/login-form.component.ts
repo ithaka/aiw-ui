@@ -32,6 +32,7 @@ export class LoginFormComponent implements OnInit {
   public expirePwd = false
   public pwdRstEmail = ''
   public errorMsgPwdRst = ''
+  public rateLimitMsgPwdRst = ''
   public forcePwdRst = false
   public successMsgPwdRst = ''
   public loginInstitutions = [] /** Stores the institutions returned by the server */
