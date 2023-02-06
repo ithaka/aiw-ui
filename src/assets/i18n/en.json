@@ -390,6 +390,10 @@
       "SUCCESS" : {
         "MESSAGE" : "An email has been sent with a new password and instructions for changing your password.",
         "HEADING" : "Please check your inbox"
+      },
+      "PREVENTED" : {
+        "MESSAGE" : "Log in request limit reached. Please try again later or contact support@artstor.org if the problem persists.",
+        "HEADING" : "Please try again later."
       }
     }
   },

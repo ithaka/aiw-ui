@@ -38,6 +38,7 @@ export class PwdResetModal implements OnInit, AfterViewInit {
   private pwdRstEmail = '';
   public errorMsgPwdRst = '';
   public successMsgPwdRst = '';
+  public rateLimitMsgPwdRst = '';
   public submitted = false;
   public copyKey = 'MODAL.PASSWORD.RESET';
 
@@ -58,6 +59,17 @@ export class PwdResetModal implements OnInit, AfterViewInit {
         ],
       ],
     });
+
+    this._auth.pwdResetCheck().then(
+      (data) => {
+        if (!data.allowed) {
+          this.pwdReset = false;
+          this.copyKey = 'MODAL.PASSWORD.PREVENTED';
+          this.rateLimitMsgPwdRst = this.copyKey + '.MESSAGE';
+        }
+      },
+      (error) => {}
+    );
   }
 
   ngAfterViewInit() {
@@ -94,25 +106,25 @@ export class PwdResetModal implements OnInit, AfterViewInit {
     }
     this._auth.pwdReset(this.pwdResetForm.value.email).then(
       (data) => {
-        this.loadPwdRstRes(data);
+        if (data.success) {
+          this.pwdReset = false;
+          this.copyKey = 'MODAL.PASSWORD.SUCCESS';
+          this.successMsgPwdRst = this.copyKey + '.MESSAGE';
+        } else {
+          this.errorMsgPwdRst = 'Sorry! An account for ' + this.pwdResetForm.value.email + ' was not found.';
+          this.pwdResetForm.controls['email'].setValue('');
+        }
       },
       (error) => {
-        this.errorMsgPwdRst = <any>error;
+        if (error.status == 429) {
+          this.pwdReset = false;
+          this.copyKey = 'MODAL.PASSWORD.PREVENTED';
+          this.rateLimitMsgPwdRst = this.copyKey + '.MESSAGE';
+        }
+        else {
+          this.errorMsgPwdRst = error.statusText;
+        }
       }
     );
-  }
-
-  loadPwdRstRes(res: any) {
-    if (!res.status || res.status === 'false') {
-      this.errorMsgPwdRst =
-        'Sorry! An account for ' +
-        this.pwdResetForm.value.email +
-        ' was not found.';
-      this.pwdResetForm.controls['email'].setValue('');
-    } else {
-      this.pwdReset = false;
-      this.copyKey = 'MODAL.PASSWORD.SUCCESS';
-      this.successMsgPwdRst = this.copyKey + '.MESSAGE';
-    }
   }
 }

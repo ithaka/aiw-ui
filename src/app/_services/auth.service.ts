@@ -965,26 +965,25 @@ export class AuthService implements CanActivate {
     return this.http.get(url).toPromise();
   }
 
-  /**
-   * Service call for password reset
-   * @note This call actually changes the password to a random new one (2019-06-06)
-   * @param email account password should be reset on
-   * - Modifies Account: should include Auth logging params
-   */
-  pwdReset(email: string): Promise<any> {
+  pwdResetCheck(): Promise<any> {
+    let url = environment.API_URL + '/request-reset-password/check';
     let options = {
-      withCredentials: true,
-      params: {
-        email: email,
-        portal: this._app.config.pwResetPortal,
-      },
+      withCredentials: true
     };
-    return this.http
-      .get(
-        environment.API_URL + '/api/lostpw' + this.getAuthLogParams(),
-        options
-      )
-      .toPromise();
+
+    return this.http.get(url, options).toPromise();
+  }
+
+  pwdReset(email: string): Promise<any> {
+    let url = environment.API_URL + '/request-reset-password/';
+    let data = {
+      email: email,
+    };
+    let options = {
+      withCredentials: true
+    }
+
+    return this.http.post(url, data, options).toPromise();
   }
 
   public ssLogin(
