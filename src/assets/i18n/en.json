@@ -380,7 +380,8 @@
       "RESET" : {
         "HEADING" : "Forgot your password?",
         "PROMPT" : "We’re here to help! Provide your email address below and a new password will be sent to you.",
-        "LABEL" : "Enter the email address used when you registered"
+        "LABEL" : "Enter the email address used when you registered",
+        "DISABLED" : "This feature is temporarily unavailable. Please contact support for further assistance."
       },
       "SYSTEM_REQUEST" : {
         "HEADING" : "Please reset your password",
