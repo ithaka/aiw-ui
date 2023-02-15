@@ -30,8 +30,7 @@
     "EXPIRED" : "That login is expired. Please log in from campus to renew your account.",
     "REGISTER_PROMPT": "Not Registered?",
     "ACCESS_PROMPT": "How do I get access?",
-    "LINK_ERROR" : "There was an error linking your institutional account. The session may have expired, please try again.",
-    "PREVENTED" : "Log in request limit reached. Please try again later or contact support@artstor.org if the problem persists."
+    "LINK_ERROR" : "There was an error linking your institutional account. The session may have expired, please try again."
   },
   "LOGIN_FORM": {
     "PASSWORD_LABEL": "Password",

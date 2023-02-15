@@ -76,7 +76,7 @@ export class LoginFormComponent implements OnInit {
       (data) => {
         if (!data.allowed) {
           this.loginRateLimit = true;
-          this.errorMsg = 'LOGIN.PREVENTED';
+          this.errorMsg = 'Log in request limit reached. Please try again later or contact support@artstor.org if the problem persists.';
         }
         else {
           this.loginRateLimit = false;
@@ -213,10 +213,6 @@ export class LoginFormComponent implements OnInit {
         // Shibboleth linking error
         if (errObj && errObj.code) {
           this.errorMsg = 'SHIBBOLETH_ERRORS.' + errObj.code
-        }
-        if (err.status == 429) {
-          this.loginRateLimit = true;
-          this.errorMsg = 'LOGIN.PREVENTED';
         }
         // Check if old bad-case password
         this.isBadCasePassword(user)
