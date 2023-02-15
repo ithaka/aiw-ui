@@ -232,6 +232,10 @@ export class LoginFormComponent implements OnInit {
       this.resetPassword.emit(true)
       return 'LOGIN.LOST_PASSWORD'
     }
+    else if (err && (err.status === 429)) {
+      this.loginRateLimit = true;
+      return 'Log in request limit reached. Please try again later or contact support@artstor.org if the problem persists.'
+    }
     else if (serverMsg) {
       return this.keyForLoginError(serverMsg)
     }
