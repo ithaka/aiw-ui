@@ -63,7 +63,7 @@ export class LoginFormComponent implements OnInit {
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2,
-    public _app: AppConfig,
+    public _app: AppConfig
   ) {
   }
 
