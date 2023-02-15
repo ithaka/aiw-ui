@@ -932,12 +932,12 @@ export class AuthService implements CanActivate {
     };
     // Encode form data
     let data = this.formEncode({
-      j_username: user.username,
-      j_password: user.password,
+      username: user.username,
+      password: user.password,
     });
 
     return this.http
-      .post(environment.API_URL + '/api/secure/login', data, options)
+      .post(environment.API_URL + '/request-login/', data, options)
       .toPromise();
   }
 
@@ -967,6 +967,15 @@ export class AuthService implements CanActivate {
 
   pwdResetCheck(): Promise<any> {
     let url = environment.API_URL + '/request-reset-password/check';
+    let options = {
+      withCredentials: true
+    };
+
+    return this.http.get(url, options).toPromise();
+  }
+
+  loginCheck(): Promise<any> {
+    let url = environment.API_URL + '/request-login/check';
     let options = {
       withCredentials: true
     };

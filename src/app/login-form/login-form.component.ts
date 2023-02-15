@@ -33,6 +33,7 @@ export class LoginFormComponent implements OnInit {
   public pwdRstEmail = ''
   public errorMsgPwdRst = ''
   public rateLimitMsgPwdRst = ''
+  public loginRateLimit = false
   public forcePwdRst = false
   public successMsgPwdRst = ''
   public loginInstitutions = [] /** Stores the institutions returned by the server */
@@ -62,7 +63,7 @@ export class LoginFormComponent implements OnInit {
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2,
-    public _app: AppConfig
+    public _app: AppConfig,
   ) {
   }
 
@@ -70,6 +71,17 @@ export class LoginFormComponent implements OnInit {
     if (this._app.config.copyModifier) {
       this.copyBase = this._app.config.copyModifier + '.'
     }
+
+    this._auth.loginCheck().then(
+      (data) => {
+        if (!data.allowed) {
+          this.loginRateLimit = true;
+          this.errorMsg = 'Log in request limit reached. Please try again later or contact support@artstor.org if the problem persists.';
+        }
+      },
+      (error) => {}
+    );
+
   } // OnInit
 
   loadForUser(data: any) {
