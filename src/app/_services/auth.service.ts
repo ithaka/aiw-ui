@@ -931,10 +931,10 @@ export class AuthService implements CanActivate {
       withCredentials: true,
     };
     // Encode form data
-    let data = {
+    let data = this.formEncode({
       username: user.username,
       password: user.password,
-    };
+    });
 
     return this.http
       .post(environment.API_URL + '/request-login/', data, options)
