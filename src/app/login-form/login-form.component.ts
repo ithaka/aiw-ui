@@ -185,6 +185,7 @@ export class LoginFormComponent implements OnInit {
     this.loginCall(user)
       .then(
         (data)  => {
+          console.log(data);
           this.loginLoading = false;
           if (data.status === false) {
             if (data.message === 'loginFailed' || data.message === 'Invalid credentials'){
@@ -203,6 +204,7 @@ export class LoginFormComponent implements OnInit {
 
         }
       ).catch((err) => {
+        console.log(err);
         this.loginLoading = false;
         let errObj = err.error
         this.errorMsg = this.getLoginErrorMsg(err)
