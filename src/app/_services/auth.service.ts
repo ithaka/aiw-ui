@@ -924,7 +924,7 @@ export class AuthService implements CanActivate {
    */
   login(user: any): Promise<any> {
     let header = new HttpHeaders()
-      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .set('Content-Type', 'application/json')
       .set('Cache-Control', 'no-store, no-cache');
     let options = {
       headers: header,
