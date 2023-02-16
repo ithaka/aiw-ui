@@ -37,20 +37,15 @@ export class PasswordReset implements OnInit {
     }, { validator: this.passwordsEqual })
   }
 
-  public showPwdModal: boolean = false
-  private copyBase: string = 'SHIB_'
-
   ngOnInit() {
-    // // nav back to regular login if there is no samlTokenId
-    // if (!this.route.snapshot.params.signature) {
-    //   this._router.navigate(['/login'])
-    // }
+    if (!this.route.snapshot.queryParams.signature) {
+      this._router.navigate(['/login'])
+    }
 
     this.passwordResetParams = {
-      signature: this.route.snapshot.params.signature,
-      email: this.route.snapshot.params.email
+      signature: this.route.snapshot.queryParams.signature,
+      email: this.route.snapshot.queryParams.email
     }
-    console.log(this.route.snapshot.params)
   }
 
   submit() {
