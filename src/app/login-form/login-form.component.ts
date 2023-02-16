@@ -185,6 +185,8 @@ export class LoginFormComponent implements OnInit {
     this.loginCall(user)
       .then(
         (data)  => {
+          console.log("data: ")
+          console.log(data);
           this.loginLoading = false;
           if (data.status === false) {
             if (data.message === 'loginFailed' || data.message === 'Invalid credentials'){
@@ -203,6 +205,8 @@ export class LoginFormComponent implements OnInit {
 
         }
       ).catch((err) => {
+        console.log("error: ")
+        console.log(err)
         this.loginLoading = false;
         let errObj = err.error
         this.errorMsg = this.getLoginErrorMsg(err)
@@ -226,6 +230,8 @@ export class LoginFormComponent implements OnInit {
    */
   getLoginErrorMsg(err: HttpErrorResponse): string {
     let serverMsg = err.error && err.error.message
+    console.log("serverMsg: ")
+    console.log(serverMsg)
     // Check for error code 422 for lost password
     if (err && (err.status === 422 || serverMsg.includes('password reset required'))) {
       // Display lost password modal

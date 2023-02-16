@@ -940,16 +940,11 @@ export class AuthService implements CanActivate {
       })
       .toPromise()
       .then((response) => {
-        console.log("response: ");
-        console.log(response);
         for (const key of response.headers.keys()) {
           if (key.toLowerCase().includes('x-set-cookie')) {
             this._dom.setCookie(response.headers.get(key))
-            console.log("setting cookies:" + key)
           }
         }
-        console.log("response keys: ");
-        console.log(response.headers.keys())
         return response.body
       });
   }
