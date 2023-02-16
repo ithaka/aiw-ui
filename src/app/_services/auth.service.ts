@@ -928,7 +928,7 @@ export class AuthService implements CanActivate {
       .set('Cache-Control', 'no-store, no-cache');
     let options = {
       headers: header,
-      withCredentials: true,
+      withCredentials: false,
     };
     // Encode form data
     let data = {
