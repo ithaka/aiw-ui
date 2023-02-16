@@ -10,7 +10,6 @@ import {
 import { Observable, BehaviorSubject, Subject, from } from 'rxjs';
 import { map, take, catchError } from 'rxjs/operators';
 import { DomUtilityService } from './dom-utility.service';
-import axios from 'axios';
 // Project dependencies
 import { AppConfig } from '../app.service';
 
@@ -928,27 +927,29 @@ export class AuthService implements CanActivate {
     let header = new HttpHeaders()
       .set('Content-Type', 'application/json')
       .set('Cache-Control', 'no-store, no-cache');
-    let options = {
-      headers: header,
-      withCredentials: false,
-    };
     let data = {
       username: user.username,
       password: user.password,
     };
 
     return this.http
-      .post(environment.API_URL + '/request-login/', data, options)
+      .post(environment.API_URL + "/request-login/", data, {
+        headers: header,
+        observe: "response",
+        withCredentials: false,
+      })
       .toPromise()
-      .then((data) => {
-        for (const [name, value] of Object.entries(data.response.headers)) {
+      .then((response) => {
+        console.log("response: ");
+        console.log(response);
+        for (const [name, value] of Object.entries(response.headers)) {
           if (name.toLowerCase().includes('x-set-cookie')) {
             this._dom.setCookie(value)
             console.log("setting cookies:" + value)
           }
         }
-      }
-    );
+        return response.body
+      });
   }
 
   getLoginError(user: User) {
