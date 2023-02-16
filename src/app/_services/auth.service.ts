@@ -937,16 +937,16 @@ export class AuthService implements CanActivate {
       password: user.password,
     };
 
-    return axios
+    return this.http
       .post(environment.API_URL + '/request-login/', data, options)
-      .then((response) => {
-        for (const [name, value] of Object.entries(response.headers)) {
+      .toPromise()
+      .then((data) => {
+        for (const [name, value] of Object.entries(data.response.headers)) {
           if (name.toLowerCase().includes('x-set-cookie')) {
             this._dom.setCookie(value)
             console.log("setting cookies:" + value)
           }
         }
-        return response.data
       }
     );
   }
