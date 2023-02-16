@@ -34,7 +34,7 @@ export class PwdResetModal implements OnInit, AfterViewInit {
 
   public pwdResetForm: FormGroup;
 
-  public pwdReset = false;
+  public pwdReset = true;
   private pwdRstEmail = '';
   public errorMsgPwdRst = '';
   public successMsgPwdRst = '';

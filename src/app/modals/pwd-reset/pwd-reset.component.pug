@@ -15,9 +15,7 @@
           span(aria-hidden="true") &times;
       form#pwdResetForm([formGroup]="pwdResetForm", (ngSubmit)="sendResetPwdRequest()")
         .modal-body(*ngIf="!successMsgPwdRst && !rateLimitMsgPwdRst")
-          div(*ngIf="!pwdReset")
-            p.modal-prompt([innerHtml]="copyKey + '.DISABLED' | translate")
-          div(*ngIf="pwdReset")
+          div
             p.modal-prompt {{ copyKey + '.PROMPT' | translate }}
             .form-group
               label(for="pwdResetEmailInput") {{ copyKey+'.LABEL' | translate }}
