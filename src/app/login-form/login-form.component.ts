@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs'
 
 // Project Dependencies
 import { AppConfig } from '../app.service'
-import { AuthService, User, AssetService, DomUtilityService } from '_services'
+import { AuthService, User, AssetService } from '_services'
 import { HttpErrorResponse } from '@angular/common/http'
 
 @Component({
@@ -63,8 +63,7 @@ export class LoginFormComponent implements OnInit {
     private router: Router,
     private location: Location,
     private angulartics: Angulartics2,
-    public _app: AppConfig,
-    private _dom: DomUtilityService,
+    public _app: AppConfig
   ) {
   }
 
@@ -186,13 +185,6 @@ export class LoginFormComponent implements OnInit {
     this.loginCall(user)
       .then(
         (data)  => {
-          for (const [name, value] of Object.entries(data.headers)) {
-            if (name.toLowerCase().includes('x-set-cookie')) {
-              this._dom.setCookie(value)
-              console.log("setting cookies:" + value)
-            }
-          }
-
           this.loginLoading = false;
           if (data.status === false) {
             if (data.message === 'loginFailed' || data.message === 'Invalid credentials'){

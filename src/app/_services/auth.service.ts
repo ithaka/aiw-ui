@@ -9,7 +9,8 @@ import {
 } from '@angular/router';
 import { Observable, BehaviorSubject, Subject, from } from 'rxjs';
 import { map, take, catchError } from 'rxjs/operators';
-
+import { DomUtilityService } from './dom-utility.service';
+import axios from 'axios';
 // Project dependencies
 import { AppConfig } from '../app.service';
 
@@ -99,6 +100,7 @@ export class AuthService implements CanActivate {
     private http: HttpClient,
     private location: Location,
     private _app: AppConfig,
+    private _dom: DomUtilityService,
     private idle: Idle,
     private injector: Injector,
     private angulartics: Angulartics2
@@ -930,15 +932,23 @@ export class AuthService implements CanActivate {
       headers: header,
       withCredentials: false,
     };
-    // Encode form data
     let data = {
       username: user.username,
       password: user.password,
     };
 
-    return this.http
+    return axios
       .post(environment.API_URL + '/request-login/', data, options)
-      .toPromise();
+      .then((response) => {
+        for (const [name, value] of Object.entries(response.headers)) {
+          if (name.toLowerCase().includes('x-set-cookie')) {
+            this._dom.setCookie(value)
+            console.log("setting cookies:" + value)
+          }
+        }
+        return response.data
+      }
+    );
   }
 
   getLoginError(user: User) {
