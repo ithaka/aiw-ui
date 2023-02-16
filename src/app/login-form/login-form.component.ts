@@ -230,8 +230,6 @@ export class LoginFormComponent implements OnInit {
    */
   getLoginErrorMsg(err: HttpErrorResponse): string {
     let serverMsg = err.error && err.error.message
-    console.log("serverMsg: ")
-    console.log(serverMsg)
     if (err.error == "Too many requests") {
       this.loginRateLimit = true;
       return 'Log in request limit reached. Please try again later or contact support@artstor.org if the problem persists.'
@@ -239,16 +237,13 @@ export class LoginFormComponent implements OnInit {
     // Check for error code 422 for lost password
     else if (err && (err.status === 422 || serverMsg.includes('password reset required'))) {
       // Display lost password modal
-      console.log("err2")
       this.resetPassword.emit(true)
       return 'LOGIN.LOST_PASSWORD'
     }
     else if (serverMsg) {
-      console.log("err3")
       return this.keyForLoginError(serverMsg)
     }
     else {
-      console.log("err4")
       return 'LOGIN.SERVER_ERROR'
     }
   }
