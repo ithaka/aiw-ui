@@ -936,18 +936,20 @@ export class AuthService implements CanActivate {
       .post(environment.API_URL + "/request-login/", data, {
         headers: header,
         observe: "response",
-        withCredentials: false,
+        withCredentials: true,
       })
       .toPromise()
       .then((response) => {
         console.log("response: ");
         console.log(response);
-        for (const [name, value] of Object.entries(response.headers)) {
-          if (name.toLowerCase().includes('x-set-cookie')) {
-            this._dom.setCookie(value)
-            console.log("setting cookies:" + value)
+        for (const key of response.headers.keys()) {
+          if (key.toLowerCase().includes('x-set-cookie')) {
+            this._dom.setCookie(response.headers.get(key))
+            console.log("setting cookies:" + key)
           }
         }
+        console.log("response keys: ");
+        console.log(response.headers.keys())
         return response.body
       });
   }
