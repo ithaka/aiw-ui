@@ -50,7 +50,7 @@ export class PasswordReset implements OnInit {
     }
 
     this._auth.validateSignature(this.passwordResetParams.email, this.passwordResetParams.signature).then( res => {
-      if (res.body !== true) {
+      if (res !== true) {
         this.invalidSignature = true
       }
     })
