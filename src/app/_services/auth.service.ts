@@ -1024,7 +1024,8 @@ export class AuthService implements CanActivate {
       "&signature=" +
       encodeURIComponent(signature) +
       "&password=" +
-      encodeURIComponent(newPassword);
+      encodeURIComponent(newPassword) +
+      "&requestOrigin=artstor";
     let options = {
       withCredentials: true
     }
