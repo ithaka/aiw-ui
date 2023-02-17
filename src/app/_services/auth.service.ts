@@ -989,7 +989,7 @@ export class AuthService implements CanActivate {
   validateSignature(email: string, signature: string): Promise<any> {
     let url =
       environment.API_URL +
-      "/password/reset?email=" +
+      "/password/reset/request?email=" +
       encodeURIComponent(email) +
       "&signature=" +
       encodeURIComponent(signature);
