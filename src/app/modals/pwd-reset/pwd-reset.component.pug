@@ -22,7 +22,7 @@
               input.form-control#pwdResetEmailInput(#pwdResetEmailInput,
                 [class.is-invalid]="submitted && (pwdResetForm.controls['email'].invalid || errorMsgPwdRst)",
                 [class.is-valid]="pwdResetForm.controls['email'].valid && !errorMsgPwdRst",
-                type="tq",
+                type="text",
                 [formControl]="pwdResetForm.controls['email']",
                 (value)="username",
                 (keydown.tab)="focusElement(pwdResetSupportLink, $event)",

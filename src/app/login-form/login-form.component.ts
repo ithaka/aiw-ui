@@ -33,6 +33,7 @@ export class LoginFormComponent implements OnInit {
   public pwdRstEmail = ''
   public errorMsgPwdRst = ''
   public rateLimitMsgPwdRst = ''
+  public loginRateLimit = false
   public forcePwdRst = false
   public successMsgPwdRst = ''
   public loginInstitutions = [] /** Stores the institutions returned by the server */
@@ -70,6 +71,21 @@ export class LoginFormComponent implements OnInit {
     if (this._app.config.copyModifier) {
       this.copyBase = this._app.config.copyModifier + '.'
     }
+
+    this._auth.loginCheck().then(
+      (data) => {
+        if (!data.allowed) {
+          this.loginRateLimit = true;
+          this.errorMsg = 'Log in request limit reached. Please try again later or contact support@artstor.org if the problem persists.';
+        }
+        else {
+          this.loginRateLimit = false;
+          this.errorMsg = '';
+        }
+      },
+      (error) => {}
+    );
+
   } // OnInit
 
   loadForUser(data: any) {
@@ -210,8 +226,12 @@ export class LoginFormComponent implements OnInit {
    */
   getLoginErrorMsg(err: HttpErrorResponse): string {
     let serverMsg = err.error && err.error.message
+    if (err.error == "Too many requests") {
+      this.loginRateLimit = true;
+      return 'Log in request limit reached. Please try again later or contact support@artstor.org if the problem persists.'
+    }
     // Check for error code 422 for lost password
-    if (err && (err.status === 422 || serverMsg.includes('password reset required'))) {
+    else if (err && (err.status === 422 || serverMsg.includes('password reset required'))) {
       // Display lost password modal
       this.resetPassword.emit(true)
       return 'LOGIN.LOST_PASSWORD'

@@ -392,7 +392,7 @@
         "HEADING" : "Please check your inbox"
       },
       "PREVENTED" : {
-        "MESSAGE" : "Log in request limit reached. Please try again later or contact support@artstor.org if the problem persists.",
+        "MESSAGE" : "Password reset request limit reached. Please try again later or contact support@artstor.org if the problem persists.",
         "HEADING" : "Please try again later."
       }
     }
