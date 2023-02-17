@@ -39,13 +39,14 @@ export class PasswordReset implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.route.snapshot.queryParams.signature) {
+    if (!this.route.snapshot.params.signature) {
       this._router.navigate(['/login'])
     }
 
+    console.log(this.route.snapshot)
     this.passwordResetParams = {
-      signature: this.route.snapshot.queryParams.signature,
-      email: this.route.snapshot.queryParams.email
+      signature: this.route.snapshot.params.signature,
+      email: this.route.snapshot.params.email
     }
 
     this._auth.validateSignature(this.passwordResetParams.email, this.passwordResetParams.signature).then( res => {

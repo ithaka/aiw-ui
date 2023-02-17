@@ -68,7 +68,7 @@ export const ROUTES: Routes = [
   { path: 'register', component: RegisterComponent, canActivate: [AuthService] },
   { path: 'support', component: SupportPageComponent },
   { path: 'link', component: LinkPage },
-  { path: 'password/reset', component: PasswordReset},
+  { path: 'password/reset/:email/:signature', component: PasswordReset},
   { path: 'library', children: [
     { path: '**', component: NoContent, resolve: [LegacyRouteResolver] }
   ] },
