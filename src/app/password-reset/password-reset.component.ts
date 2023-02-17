@@ -24,6 +24,7 @@ export class PasswordReset implements OnInit {
   } = {};
   public submitted: boolean = false
   public resetPassLoading: boolean = false
+  public invalidSignature: boolean = false
 
   constructor(
     _fb: FormBuilder,
@@ -46,6 +47,12 @@ export class PasswordReset implements OnInit {
       signature: this.route.snapshot.queryParams.signature,
       email: this.route.snapshot.queryParams.email
     }
+
+    this._auth.validateSignature(this.passwordResetParams.email, this.passwordResetParams.signature).then( res => {
+      if (res.body !== true) {
+        this.invalidSignature = true
+      }
+    })
   }
 
   submit() {
