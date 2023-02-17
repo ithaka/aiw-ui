@@ -9,7 +9,7 @@ import {
 } from '@angular/router';
 import { Observable, BehaviorSubject, Subject, from } from 'rxjs';
 import { map, take, catchError } from 'rxjs/operators';
-
+import { DomUtilityService } from './dom-utility.service';
 // Project dependencies
 import { AppConfig } from '../app.service';
 
@@ -99,6 +99,7 @@ export class AuthService implements CanActivate {
     private http: HttpClient,
     private location: Location,
     private _app: AppConfig,
+    private _dom: DomUtilityService,
     private idle: Idle,
     private injector: Injector,
     private angulartics: Angulartics2
@@ -924,21 +925,28 @@ export class AuthService implements CanActivate {
    */
   login(user: any): Promise<any> {
     let header = new HttpHeaders()
-      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .set('Content-Type', 'application/json')
       .set('Cache-Control', 'no-store, no-cache');
-    let options = {
-      headers: header,
-      withCredentials: true,
+    let data = {
+      username: user.username,
+      password: user.password,
     };
-    // Encode form data
-    let data = this.formEncode({
-      j_username: user.username,
-      j_password: user.password,
-    });
 
     return this.http
-      .post(environment.API_URL + '/api/secure/login', data, options)
-      .toPromise();
+      .post(environment.API_URL + "/request-login/", data, {
+        headers: header,
+        observe: "response",
+        withCredentials: true,
+      })
+      .toPromise()
+      .then((response) => {
+        for (const key of response.headers.keys()) {
+          if (key.toLowerCase().includes('x-set-cookie')) {
+            this._dom.setCookie(response.headers.get(key))
+          }
+        }
+        return response.body
+      });
   }
 
   getLoginError(user: User) {
@@ -967,6 +975,15 @@ export class AuthService implements CanActivate {
 
   pwdResetCheck(): Promise<any> {
     let url = environment.API_URL + '/request-reset-password/check';
+    let options = {
+      withCredentials: true
+    };
+
+    return this.http.get(url, options).toPromise();
+  }
+
+  loginCheck(): Promise<any> {
+    let url = environment.API_URL + '/request-login/check';
     let options = {
       withCredentials: true
     };
