@@ -64,6 +64,7 @@ import { ImageGroupPage, TermsAndConditionsComponent } from './image-group-page'
 import { Login } from './login'
 import { NoContent } from './no-content'
 import { LinkPage } from './link-page'
+import { PasswordReset } from './password-reset';
 import { RegisterComponent } from './register/register.component'
 import { LoginFormComponent } from './login-form'
 import {
@@ -266,6 +267,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AdlCollectionFilterPipe,
     LinkifyPipe,
     LinkPage,
+    PasswordReset,
     Login,
     LoginFormComponent,
     LoginHelpModal,

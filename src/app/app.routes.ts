@@ -23,6 +23,7 @@ import { BrowseRoutes } from './browse-page/browse-page.routes'
 import { AccountPage } from './account-page/account-page.component'
 import { LegacyRouteResolver } from './legacy.service'
 import { LinkPage } from './link-page'
+import { PasswordReset } from './password-reset';
 import { SupportPageComponent } from './support-page/support-page.component'
 
 
@@ -67,6 +68,7 @@ export const ROUTES: Routes = [
   { path: 'register', component: RegisterComponent, canActivate: [AuthService] },
   { path: 'support', component: SupportPageComponent },
   { path: 'link', component: LinkPage },
+  { path: 'password/reset/:email/:signature', component: PasswordReset},
   { path: 'library', children: [
     { path: '**', component: NoContent, resolve: [LegacyRouteResolver] }
   ] },

@@ -379,9 +379,8 @@
     "PASSWORD" : {
       "RESET" : {
         "HEADING" : "Forgot your password?",
-        "PROMPT" : "We’re here to help! Provide your email address below and a new password will be sent to you.",
-        "LABEL" : "Enter the email address used when you registered",
-        "DISABLED" : "This feature is temporarily unavailable. Please <a class='link' href='mailto:support@artstor.org'>contact Artstor support</a> for further assistance."
+        "PROMPT" : "Enter your email address below to reset your password. Your link to reset your password will be sent to your email address. This link will expire in 48 hours.",
+        "LABEL" : "Enter the email address used when you registered"
       },
       "SYSTEM_REQUEST" : {
         "HEADING" : "Please reset your password",
@@ -389,7 +388,7 @@
         "LABEL" : "Enter the email address used when you registered"
       },
       "SUCCESS" : {
-        "MESSAGE" : "An email has been sent with a new password and instructions for changing your password.",
+        "MESSAGE" : "If this email address matches one of our accounts, a reset email will be sent. If this email does not arrive within a few minutes, try entering your email address again or contact Artstor support.",
         "HEADING" : "Please check your inbox"
       },
       "PREVENTED" : {

@@ -1003,6 +1003,36 @@ export class AuthService implements CanActivate {
     return this.http.post(url, data, options).toPromise();
   }
 
+  validateSignature(email: string, signature: string): Promise<any> {
+    let url =
+      environment.API_URL +
+      "/password/reset/request?email=" +
+      encodeURIComponent(email) +
+      "&signature=" +
+      encodeURIComponent(signature);
+    let options = {
+      withCredentials: true
+    }
+    return this.http.get(url, options).toPromise();
+  }
+  
+  resetPassword(email: string, newPassword: string, signature: string): Promise<any> {
+    let url =
+      environment.API_URL +
+      "/password/reset?email=" +
+      encodeURIComponent(email) +
+      "&signature=" +
+      encodeURIComponent(signature) +
+      "&password=" +
+      encodeURIComponent(newPassword) +
+      "&requestOrigin=artstor";
+    let options = {
+      withCredentials: true
+    }
+
+    return this.http.post(url, {}, options).toPromise();
+  }
+
   public ssLogin(
     username: string,
     password: string
