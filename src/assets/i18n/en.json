@@ -566,31 +566,31 @@
       },
       "COLLECTIONS": [
         {
-          "SUBHEADING": "Black self-taught artists",
+          "SUBHEADING": "Open collections for women’s history",
           "DESCRIPTION": "",
-          "CAPTION": "James Hampton. The Throne of the Third Heaven of the Nations' Millennium General Assembly, detail. c.1950-1964, mixed media. Smithsonian American Art Museum. Image and data from the Society of Architectural Historians. Photograph © Dell Upton.",
-          "LINK": "https://www.artstor.org/2023/01/30/drawing-outside-the-lines-black-self-taught-artists/",
-          "IMG_SOURCE": "/assets/img/featured-collections/sahara_throne.jpg",
-          "LINK_TITLE": "Black self-taught artists",
-          "ALT_TEXT": "Black self-taught artists"
+          "CAPTION": "Tee Corinne, cover of WOMANSPIRIT, detail, Volume 5, Issue 19, 1979. From the Reveal Digital Independent Voices collection.",
+          "LINK": "https://www.artstor.org/2023/02/27/22-open-collections-for-womens-history-month/",
+          "IMG_SOURCE": "/assets/img/featured-collections/reveal_digital_womanspirit.jpg",
+          "LINK_TITLE": "Open collections for women’s history",
+          "ALT_TEXT": "Open collections for women’s history"
         },
         {
-          "SUBHEADING": "Black History with Artstor & JSTOR",
+          "SUBHEADING": "Women behind the lens",
           "DESCRIPTION": "",
-          "CAPTION": "Hands Up United. T-shirt worn by Rahiel Tesfamariam at a protest for Michael Brown. 1915. Ink on cotton. Image and data from the National Museum of African American History and Culture. Free Reuse (CC0).",
-          "LINK": "https://www.artstor.org/2022/01/24/discover-black-history-with-artstor-and-jstor-collections/",
-          "IMG_SOURCE": "/assets/img/featured-collections/smithsonian_tshirt.jpg",
-          "LINK_TITLE": "Black History with Artstor & JSTOR",
-          "ALT_TEXT": "Black History with Artstor & JSTOR"
+          "CAPTION": "Eve Arnold on the set of Becket. 1963. Photograph by Robert Penn. © Eve Arnold / Magnum Photos.",
+          "LINK": "https://www.artstor.org/2023/02/24/women-behind-the-lens-photographers-in-the-field/",
+          "IMG_SOURCE": "/assets/img/featured-collections/magnum_behind_lens.jpg",
+          "LINK_TITLE": "Women behind the lens",
+          "ALT_TEXT": "Women behind the lens"
         },
         {
-          "SUBHEADING": "Jacob Lawrence",
+          "SUBHEADING": "Käthe Kollwitz",
           "DESCRIPTION": "",
-          "CAPTION": "Jacob Lawrence. The Migration of the Negro Panel no. 5. 1940-1941. Tempera on board. Image and data from The Phillips Collection. © 2005 Estate of Gwendolyn Knight Lawrence / Artists Rights Society (ARS)",
-          "LINK": "https://library.artstor.org/group/735182",
-          "IMG_SOURCE": "/assets/img/featured-collections/phillips_migration.jpg",
-          "LINK_TITLE": "Jacob Lawrence",
-          "ALT_TEXT": "Jacob Lawrence"
+          "CAPTION": "Käthe Kollwitz. Pietà. 1903. Lithograph. Image and data from Kupferstichkabinett, Staatliche Museen zu Berlin.",
+          "LINK": "https://library.artstor.org/group/840110",
+          "IMG_SOURCE": "/assets/img/featured-collections/berlin_memorial.jpg",
+          "LINK_TITLE": "Käthe Kollwitz",
+          "ALT_TEXT": "Käthe Kollwitz"
         }
       ]
     },
