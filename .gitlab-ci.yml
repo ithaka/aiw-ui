@@ -25,12 +25,9 @@ variables:
 build-app:
   stage: build-app
   image: docker-virtual.artifactory.acorn.cirrostratus.org/node:11.0.0
-  before_script:
-    - chmod +x $CI_PROJECT_DIR/build.sh
-  variables:
-    BUILD_SCRIPT_PATH: $CI_PROJECT_DIR/build.sh
-    BUILD_OUTPUT_PATH: $CI_PROJECT_DIR/dist/
-    OTHER_ARGS: $ENVIRONMENT
+  script:
+    - yarn install
+    - yarn build:ssr:$ENVIRONMENT
   rules:
     - if: $PIPELINE == 'deploy'
       when: always
