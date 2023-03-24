@@ -33,3 +33,16 @@ build:
     rules:
         - if: $PIPELINE == 'deploy'
           when: always
+
+deploy:
+    stage: deploy
+    extends: .deploy-static-app
+    variables:
+        BUILD_OUTPUT_PATH: $CI_PROJECT_DIR/dist/
+        ENVIRONMENT: $ENVIRONMENT
+    environment:
+        name: $ENVIRONMENT
+        url: http://stage.library.org
+    rules:
+        - if: $PIPELINE == 'deploy'
+          when: always
