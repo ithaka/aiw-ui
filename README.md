@@ -128,7 +128,6 @@ aiw-ui/
  │   └──package.json           * used to list packages that should be installed on SSR Docker image
  │
  ├──angular.json               * Angular configuration file
- ├──build.sh                   * (OLD) static app build script for deployment to Sagoku
  ├──Dockerfile                 * Node.js server Dockerfile configuration
  ├──deploy-ssr.sh              * Script for triggering deployment on Sagoku (used in deploy commands)
  ├──docker-build-image.sh      * Script for building docker image and uploading for use

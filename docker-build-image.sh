@@ -27,8 +27,8 @@ rm -f temp.yml
 yarn install
 # Build static app (locally, to be copied into image)
 yarn build:ssr:${ENVIRONMENT}
-# Build docker image
-docker build --build-arg SAGOKU_ENV=${ENVIRONMENT} -t ${IMAGE} .
+# # Build docker image
+# docker build --build-arg SAGOKU_ENV=${ENVIRONMENT} -t ${IMAGE} .
 
-# Push image to Ithaka repository/Artifactory http://artifactory.acorn.cirrostratus.org/
-docker push ${IMAGE}
+# # Push image to Ithaka repository/Artifactory http://artifactory.acorn.cirrostratus.org/
+# docker push ${IMAGE}
