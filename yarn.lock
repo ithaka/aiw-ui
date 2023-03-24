@@ -2193,45 +2193,37 @@ app-root-path@^2.1.0:
   version "2.2.1"
   resolved "https://registry.npmjs.org/app-root-path/-/app-root-path-2.2.1.tgz"
 
-"appdynamics-jre@https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-jre.tgz":
-  version "4.5.13"
-  resolved "https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-jre.tgz#addff96b74d9454df8bf2963d65440950d27d288"
-
-"appdynamics-libagent@https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-libagent-node.tgz":
-  version "4.5.13"
-  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-libagent-node.tgz#8f5076d4149e2e0f006969300d427e4cadb6d921"
+"appdynamics-libagent@https://cdn.appdynamics.com/packages/nodejs/4.5.16.0/appdynamics-libagent-node.tgz":
+  version "4.5.16"
+  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.16.0/appdynamics-libagent-node.tgz#db683d79b891c1e39d6751b280389211017fae03"
   optionalDependencies:
     request "2.88.0"
 
-"appdynamics-native@https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-native-node.tgz":
-  version "4.5.13"
-  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-native-node.tgz#058d86fee13d06e9490f9fbbbd9a32b2a98f87ce"
+"appdynamics-native@https://cdn.appdynamics.com/packages/nodejs/4.5.16.0/appdynamics-native-node.tgz":
+  version "4.5.16"
+  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.16.0/appdynamics-native-node.tgz#a34a276616c632ebf9245c14013174985779c92c"
 
-"appdynamics-protobuf@https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-protobuf-node.tgz":
-  version "4.5.13"
-  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-protobuf-node.tgz#2f19a94baaa2ddf1a08a6a05b6c5284d64d32cf3"
+"appdynamics-protobuf@https://cdn.appdynamics.com/packages/nodejs/4.5.16.0/appdynamics-protobuf-node.tgz":
+  version "4.5.16"
+  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.16.0/appdynamics-protobuf-node.tgz#1dd9d6e7a9779315976cb0147767b3fe6577021b"
 
-"appdynamics-proxy@https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-proxy.tgz":
-  version "4.5.13"
-  resolved "https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-proxy.tgz#a56c17f6ec67474b61ef3b856934747d91dbefd6"
+"appdynamics-zmq@https://cdn.appdynamics.com/packages/nodejs/4.5.16.0/appdynamics-zmq-node.tgz":
+  version "4.5.16"
+  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.16.0/appdynamics-zmq-node.tgz#a17dc12981bdba281294ede3b5a013bf2e357c03"
 
-"appdynamics-zmq@https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-zmq-node.tgz":
-  version "4.5.13"
-  resolved "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-zmq-node.tgz#9054b840e6b13467506a22e93f44868d42e97455"
-
-appdynamics@4.5.13:
-  version "4.5.13"
-  resolved "https://registry.npmjs.org/appdynamics/-/appdynamics-4.5.13.tgz"
+appdynamics@4.5.16:
+  version "4.5.16"
+  resolved "https://artifactory.acorn.cirrostratus.org/artifactory/api/npm/npms/appdynamics/-/appdynamics-4.5.16.tgz#093ef93be3b9371138faa6af9430ca9b8e02a76b"
+  integrity sha512-TeTjJ79e4GZNjGiJW8UBUGPXqDAQ1mSl4jnU/M+B2mBacQcBw3y4yLvZNASGircyANSQ0ChUlZwhpDAjXwTs0Q==
   dependencies:
-    appdynamics-jre "https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-jre.tgz"
-    appdynamics-libagent "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-libagent-node.tgz"
-    appdynamics-native "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-native-node.tgz"
-    appdynamics-protobuf "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-protobuf-node.tgz"
-    appdynamics-proxy "https://packages.appdynamics.com/nodejs/4.5.13.0/appdynamics-proxy.tgz"
-    appdynamics-zmq "https://cdn.appdynamics.com/packages/nodejs/4.5.13.0/appdynamics-zmq-node.tgz"
+    appdynamics-libagent "https://cdn.appdynamics.com/packages/nodejs/4.5.16.0/appdynamics-libagent-node.tgz"
+    appdynamics-native "https://cdn.appdynamics.com/packages/nodejs/4.5.16.0/appdynamics-native-node.tgz"
+    appdynamics-protobuf "https://cdn.appdynamics.com/packages/nodejs/4.5.16.0/appdynamics-protobuf-node.tgz"
+    appdynamics-zmq "https://cdn.appdynamics.com/packages/nodejs/4.5.16.0/appdynamics-zmq-node.tgz"
     cls-hooked "^4.2.2"
     log4js "0.6.38"
     set-immediate "0.1.1"
+    shelljs "^0.7.8"
     uuid "3.1.0"
   optionalDependencies:
     n "^2.1.8"
@@ -2396,7 +2388,8 @@ async-foreach@^0.1.3:
 
 async-hook-jl@^1.7.6:
   version "1.7.6"
-  resolved "https://registry.npmjs.org/async-hook-jl/-/async-hook-jl-1.7.6.tgz"
+  resolved "https://artifactory.acorn.cirrostratus.org/artifactory/api/npm/npms/async-hook-jl/-/async-hook-jl-1.7.6.tgz#4fd25c2f864dbaf279c610d73bf97b1b28595e68"
+  integrity sha512-gFaHkFfSxTjvoxDMYqDuGHlcRyUuamF8s+ZTtJdDzqjws4mCt7v0vuV79/E2Wr2/riMQgtG4/yUtXWs1gZ7JMg==
   dependencies:
     stack-chain "^1.3.7"
 
@@ -3296,7 +3289,8 @@ clone@^2.1.1, clone@^2.1.2:
 
 cls-hooked@^4.2.2:
   version "4.2.2"
-  resolved "https://registry.npmjs.org/cls-hooked/-/cls-hooked-4.2.2.tgz"
+  resolved "https://artifactory.acorn.cirrostratus.org/artifactory/api/npm/npms/cls-hooked/-/cls-hooked-4.2.2.tgz#ad2e9a4092680cdaffeb2d3551da0e225eae1908"
+  integrity sha512-J4Xj5f5wq/4jAvcdgoGsL3G103BtWpZrMo8NEinRltN+xpTZdI+M38pyQqhuFU/P792xkMFvnKSf+Lm81U1bxw==
   dependencies:
     async-hook-jl "^1.7.6"
     emitter-listener "^1.0.1"
@@ -6845,7 +6839,8 @@ log-symbols@^2.1.0:
 
 log4js@0.6.38:
   version "0.6.38"
-  resolved "https://registry.npmjs.org/log4js/-/log4js-0.6.38.tgz"
+  resolved "https://artifactory.acorn.cirrostratus.org/artifactory/api/npm/npms/log4js/-/log4js-0.6.38.tgz#2c494116695d6fb25480943d3fc872e662a522fd"
+  integrity sha512-Cd+klbx7lkiaamEId9/0odHxv/PFHDz2E12kEfd6/CzIOZD084DzysASR/Dot4i1dYPBQKC3r2XIER+dfbLOmw==
   dependencies:
     readable-stream "~1.0.2"
     semver "~4.3.3"
@@ -7302,7 +7297,8 @@ mv@~2:
 
 n@^2.1.8:
   version "2.1.12"
-  resolved "https://registry.npmjs.org/n/-/n-2.1.12.tgz"
+  resolved "https://artifactory.acorn.cirrostratus.org/artifactory/api/npm/npms/n/-/n-2.1.12.tgz#7bca5e103bfe3632d4c1a70dfaf9ecf774c18aed"
+  integrity sha512-LbdmVo3utWB0njvNAsEHZxMesZmUBOH54VOzGpywqi03huCmi0bsSyigKCLrBxlnvlcz4Nahwt342f6w9YU3Cg==
 
 nan@^2.10.0:
   version "2.13.2"
@@ -8875,7 +8871,8 @@ readable-stream@^3.0.6:
 
 readable-stream@~1.0.2:
   version "1.0.34"
-  resolved "https://registry.npmjs.org/readable-stream/-/readable-stream-1.0.34.tgz"
+  resolved "https://artifactory.acorn.cirrostratus.org/artifactory/api/npm/npms/readable-stream/-/readable-stream-1.0.34.tgz#125820e34bc842d2f2aaafafe4c2916ee32c157c"
+  integrity sha512-ok1qVCJuRkNmvebYikljxJA/UEsKwLl2nI1OmaqAu4/UE+h0wKCHok4XkL/gvi39OacXvw59RJUOFUkDib2rHg==
   dependencies:
     core-util-is "~1.0.0"
     inherits "~2.0.1"
@@ -9491,7 +9488,8 @@ semver@^6.0.0:
 
 semver@~4.3.3:
   version "4.3.6"
-  resolved "https://registry.npmjs.org/semver/-/semver-4.3.6.tgz"
+  resolved "https://artifactory.acorn.cirrostratus.org/artifactory/api/npm/npms/semver/-/semver-4.3.6.tgz#300bc6e0e86374f7ba61068b5b1ecd57fc6532da"
+  integrity sha512-IrpJ+yoG4EOH8DFWuVg+8H1kW1Oaof0Wxe7cPcXW3x9BjkN/eVo54F15LyqemnDIUYskQWr9qvl/RihmSy6+xQ==
 
 semver@~5.3.0:
   version "5.3.0"
@@ -9550,7 +9548,8 @@ set-immediate-shim@~1.0.1:
 
 set-immediate@0.1.1:
   version "0.1.1"
-  resolved "https://registry.npmjs.org/set-immediate/-/set-immediate-0.1.1.tgz"
+  resolved "https://artifactory.acorn.cirrostratus.org/artifactory/api/npm/npms/set-immediate/-/set-immediate-0.1.1.tgz#8986e4a773bf8ec165f24d579107673bfac141de"
+  integrity sha512-uiVRRpTgmfYqCII0NH34bX2o/ZHbT+XMTR5SAIWkrP4qvIPRFgnugfOBn5syzj+aM6Hb0dl62Q3v0tLgBD2+DQ==
 
 set-value@^0.4.3:
   version "0.4.3"
@@ -9607,7 +9606,7 @@ shebang-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/shebang-regex/-/shebang-regex-1.0.0.tgz"
 
-shelljs@^0.7.0:
+shelljs@^0.7.0, shelljs@^0.7.8:
   version "0.7.8"
   resolved "https://registry.npmjs.org/shelljs/-/shelljs-0.7.8.tgz"
   dependencies:
@@ -9944,7 +9943,8 @@ ssri@^6.0.0, ssri@^6.0.1:
 
 stack-chain@^1.3.7:
   version "1.3.7"
-  resolved "https://registry.npmjs.org/stack-chain/-/stack-chain-1.3.7.tgz"
+  resolved "https://artifactory.acorn.cirrostratus.org/artifactory/api/npm/npms/stack-chain/-/stack-chain-1.3.7.tgz#d192c9ff4ea6a22c94c4dd459171e3f00cea1285"
+  integrity sha512-D8cWtWVdIe/jBA7v5p5Hwl5yOSOrmZPWDPe2KxQ5UAGD+nxbxU0lKXA4h85Ta6+qgdKVL3vUxsbIZjc1kBG7ug==
 
 stack-trace@0.0.x, stack-trace@~0.0.9:
   version "0.0.10"
@@ -10865,7 +10865,8 @@ utils-merge@1.0.1:
 
 uuid@3.1.0:
   version "3.1.0"
-  resolved "https://registry.npmjs.org/uuid/-/uuid-3.1.0.tgz"
+  resolved "https://artifactory.acorn.cirrostratus.org/artifactory/api/npm/npms/uuid/-/uuid-3.1.0.tgz#3dd3d3e790abc24d7b0d3a034ffababe28ebbc04"
+  integrity sha512-DIWtzUkw04M4k3bf1IcpS2tngXEL26YUD2M0tMDUpnUrz2hgzUBlD55a4FjdLGPvfHxS6uluGWvaVEqgBcVa+g==
 
 uuid@^3.0.1, uuid@^3.1.0, uuid@^3.2.1, uuid@^3.3.2:
   version "3.3.2"
