@@ -8,9 +8,6 @@ default:
     - ${ENVIRONMENT}-runner
 
 include:
-  - project: capstan/pow/gitlab-templates
-    file: /static-app-deployer/template.yml
-    ref: static-app-deployer-v1
   - file: /build-image/template.yml
     project: capstan/pow/gitlab-templates
     ref: build-image-v3.0.4
@@ -27,7 +24,6 @@ variables:
 
 build-app:
   stage: build-app
-  extends: .build-static-app
   image: docker-virtual.artifactory.acorn.cirrostratus.org/node:11.0.0
   before_script:
     - chmod +x $CI_PROJECT_DIR/build.sh
