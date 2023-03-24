@@ -41,7 +41,7 @@
     "typedoc": "typedoc --options typedoc.json --exclude '**/*.spec.ts' ./src/ && npm run open:typedoc",
     "open:typedoc": "open ./doc/index.html",
     "build:ssr": "npm run build:client-and-server-bundles && npm run webpack:server",
-    "build:ssr:test": "npm run build:client-and-server-bundles:test && npm run webpack:server -- --env=test",
+    "build:ssr:test": "yarn run build:client-and-server-bundles:test && yarn run webpack:server -- --env=test",
     "build:ssr:prod": "npm run build:client-and-server-bundles:prod && npm run webpack:server -- --env=prod",
     "serve:ssr": "node dist/server.js",
     "serve:ssr:start": "pm2 start dist/server.js",
@@ -50,7 +50,7 @@
     "build:client-and-server-bundles:test": "ng build --configuration=stage && ng run avatar:server",
     "build:client-and-server-bundles:prod": "ng build --configuration=production && ng run avatar:server",
     "webpack:server": "webpack --config ./webpack.server.config.js --progress --colors",
-    "webpack:server:test": "npm run webpack:server -- --env=test",
+    "webpack:server:test": "yarn run webpack:server -- --env=test",
     "webpack:server:prod": "npm run webpack:server -- --env=prod"
   },
   "dependencies": {
