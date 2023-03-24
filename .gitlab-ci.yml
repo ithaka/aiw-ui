@@ -1,6 +1,7 @@
 stages:
   - build-app
   - build-image
+  - deploy
 
 default:
   tags:
@@ -23,6 +24,7 @@ variables:
     options:
       - "test"
       - "prod"
+  IMAGE_TAG: artifactory.acorn.cirrostratus.org/artstor-air-node:$CI_COMMIT_SHORT_SHA
 
 build-app:
   stage: build-app
@@ -50,5 +52,13 @@ build-image:
   variables:
     CONTEXT: .
     DOCKERFILE: Dockerfile
-    IMAGE_TAG: artifactory.acorn.cirrostratus.org/artstor-air-node:$CI_COMMIT_SHORT_SHA
+    IMAGE_TAG: $IMAGE_TAG
     EXTRA_ARGS: --build-arg SAGOKU_ENV=$ENVIRONMENT
+
+deploy:
+  stage: deploy
+  image: docker-virtual.artifactory.acorn.cirrostratus.org/curlimages/curl:8.00.1
+  needs:
+    - job: build-image
+  script:
+    - ./deploy-ssr.sh $ENVIRONMENT $IMAGE_TAG

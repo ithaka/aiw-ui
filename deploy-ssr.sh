@@ -5,13 +5,11 @@ else
     ENVIRONMENT="test"
 fi
 APP_NAME="artstor-ui"
-SAGOKU_BUILD_USER="cody.pumper@ithaka.org"
-GIT_SHA=$(git rev-parse HEAD)
-IMAGE="artifactory.acorn.cirrostratus.org/artstor-air-node:${GIT_SHA:0:8}"
+SAGOKU_BUILD_USER="armaan.dandavati@ithaka.org"
 
 uuid=$(uuidgen | tr -d \'\n\' | tr \'[:upper:]\' \'[:lower:]\')
 sagokuURL="http://sagoku.${ENVIRONMENT}.cirrostratus.org/api/docker/${APP_NAME}/deploy"
-sagokuTeam="user=${SAGOKU_BUILD_USER}" # e.g. steve.coffman@ithaka.org
+sagokuTeam="user=${SAGOKU_BUILD_USER}"
 
 
-curl -sSk --cookie-jar /tmp/cookie -L -F ${sagokuTeam} -F deployId=${uuid} -F image=${IMAGE} ${sagokuURL}
+curl -sSk --cookie-jar /tmp/cookie -L -F ${sagokuTeam} -F deployId=${uuid} -F image=$2 ${sagokuURL}
