@@ -180,7 +180,7 @@
     "ng-packagr": "^4.2.0",
     "node-sass": "^4.9.0",
     "parse5": "^1.5.1",
-    "phantomjs-prebuilt": "2.1.7",
+    "phantomjs-prebuilt": "^2.1.7",
     "pm2": "^3.5.0",
     "protractor": "~5.4.0",
     "protractor-cucumber-framework": "^0.6.0",
