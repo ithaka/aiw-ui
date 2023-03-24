@@ -193,7 +193,7 @@
     "typedoc": "^0.5.1"
   },
   "optionalDependencies": {
-    "appdynamics": "4.5.13"
+    "appdynamics": "https://registry.npmjs.org/appdynamics/-/appdynamics-4.5.13.tgz"
   },
   "repository": {
     "type": "git",
