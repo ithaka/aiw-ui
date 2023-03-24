@@ -1,7 +1,7 @@
 stages:
   - build-app
   - build-image
-  - deploy
+#   - deploy
 
 default:
   tags:
@@ -11,9 +11,9 @@ include:
   - project: capstan/pow/gitlab-templates
     file: /static-app-deployer/template.yml
     ref: static-app-deployer-v1
-  - file: /build-image/template.yml
-    project: capstan/pow/gitlab-templates
-    ref: build-image-v3.0.4
+#   - file: /build-image/template.yml
+#     project: capstan/pow/gitlab-templates
+#     ref: build-image-v3.0.4
 
 variables:
   APP_NAME: artstor-ui
@@ -54,10 +54,10 @@ build-image:
     IMAGE_TAG: artifactory.acorn.cirrostratus.org/artstor-air-node:$CI_COMMIT_SHORT_SHA
     EXTRA_ARGS: --build-arg SAGOKU_ENV=$ENVIRONMENT
 
-deploy:
-  stage: deploy
-  image: docker-virtual.artifactory.acorn.cirrostratus.org/curlimages/curl:8.00.1
-  needs:
-    - job: build-image
-  script:
-    - ./deploy-ssr.sh $ENVIRONMENT artifactory.acorn.cirrostratus.org/artstor-air-node:$CI_COMMIT_SHORT_SHA
+# deploy:
+#   stage: deploy
+#   image: docker-virtual.artifactory.acorn.cirrostratus.org/curlimages/curl:8.00.1
+#   needs:
+#     - job: build-image
+#   script:
+#     - ./deploy-ssr.sh $ENVIRONMENT artifactory.acorn.cirrostratus.org/artstor-air-node:$CI_COMMIT_SHORT_SHA
