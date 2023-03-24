@@ -1,48 +1,54 @@
 stages:
-    - build
-    - deploy
+  - build-app
+  - build-image
 
 default:
-    tags:
-        - ${ENVIRONMENT}-runner
+  tags:
+    - ${ENVIRONMENT}-runner
 
 include:
-    - project: capstan/pow/gitlab-templates
-      file: /static-app-deployer/template.yml
-      ref: static-app-deployer-v1
+  - project: capstan/pow/gitlab-templates
+    file: /static-app-deployer/template.yml
+    ref: static-app-deployer-v1
+  - file: /build-image/template.yml
+    project: capstan/pow/gitlab-templates
+    ref: build-image-v3.0.4
 
 variables:
-    APP_NAME: artstor-ui
-    ENVIRONMENT:
-      description: "Choose environment"
-      value: "test"
-      options:
-        - "test"
-        - "prod"
+  APP_NAME: artstor-ui
+  PIPELINE: "deploy"
+  ENVIRONMENT:
+    description: "Choose environment"
+    value: "test"
+    options:
+      - "test"
+      - "prod"
 
-build:
-    stage: build
-    extends: .build-static-app
-    image: docker-virtual.artifactory.acorn.cirrostratus.org/node:11.0.0
-    before_script:
-        - chmod +x $CI_PROJECT_DIR/build.sh
-    variables:
-        BUILD_SCRIPT_PATH: $CI_PROJECT_DIR/build.sh
-        BUILD_OUTPUT_PATH: $CI_PROJECT_DIR/dist/
-        OTHER_ARGS: $ENVIRONMENT
-    rules:
-        - if: $PIPELINE == 'deploy'
-          when: always
+build-app:
+  stage: build-app
+  extends: .build-static-app
+  image: docker-virtual.artifactory.acorn.cirrostratus.org/node:11.0.0
+  before_script:
+    - chmod +x $CI_PROJECT_DIR/build.sh
+  variables:
+    BUILD_SCRIPT_PATH: $CI_PROJECT_DIR/build.sh
+    BUILD_OUTPUT_PATH: $CI_PROJECT_DIR/dist/
+    OTHER_ARGS: $ENVIRONMENT
+  rules:
+    - if: $PIPELINE == 'deploy'
+      when: always
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/dist/
 
-deploy:
-    stage: deploy
-    extends: .deploy-static-app
-    variables:
-        BUILD_OUTPUT_PATH: $CI_PROJECT_DIR/dist/
-        ENVIRONMENT: $ENVIRONMENT
-    environment:
-        name: $ENVIRONMENT
-        url: http://stage.library.org
-    rules:
-        - if: $PIPELINE == 'deploy'
-          when: always
+build-image:
+  stage: build-image
+  extends: .build-image
+  needs:
+    - job: build-app
+      artifacts: true
+  variables:
+    CONTEXT: .
+    DOCKERFILE: Dockerfile
+    IMAGE_TAG: artifactory.acorn.cirrostratus.org/artstor-air-node:$CI_COMMIT_SHORT_SHA
+    EXTRA_ARGS: --build-arg SAGOKU_ENV=${ENVIRONMENT}
