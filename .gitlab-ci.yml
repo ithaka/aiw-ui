@@ -60,4 +60,4 @@ deploy:
   needs:
     - job: build-image
   script:
-    - ./deploy-ssr.sh $ENVIRONMENT $IMAGE_TAG $CI_COMMIT_SHORT_SHA $GITLAB_USER_LOGIN
+    - curl -sSk --cookie-jar /tmp/cookie -L -F "user=$GITLAB_USER_LOGIN" -F deployId=$CI_COMMIT_SHORT_SHA -F image=$IMAGE_TAG "http://sagoku.$ENVIRONMENT.cirrostratus.org/api/docker/artstor-ui/deploy"
