@@ -56,7 +56,7 @@ deploy:
     - job: build-image
   script:
     - printenv | sort
-    - curl -sSk --cookie-jar /tmp/cookie -L -F "user=$GITLAB_USER_EMAIL_ADDRESS" -F deployId=$CI_COMMIT_SHORT_SHA -F image=$IMAGE_TAG "http://sagoku.$ENVIRONMENT.cirrostratus.org/api/docker/artstor-ui/deploy"
+    - curl -sSk --cookie-jar /tmp/cookie -L -F "user=$GITLAB_USER_EMAIL" -F deployId=$CI_COMMIT_SHORT_SHA -F image=$IMAGE_TAG "http://sagoku.$ENVIRONMENT.cirrostratus.org/api/docker/artstor-ui/deploy"
   rules:
     - if: $PIPELINE == 'deploy'
       when: always
