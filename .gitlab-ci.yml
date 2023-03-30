@@ -94,7 +94,8 @@ deploy:
 sync:
   stage: deploy
   extends: .argocd-sync
-  needs: deploy
+  needs:
+    - deploy
   rules:
     - if: $PIPELINE == 'deploy'
       when: on_success
