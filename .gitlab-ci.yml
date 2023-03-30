@@ -19,6 +19,7 @@ variables:
     value: ""
     options:
       - "deploy"
+      - ""
   ENVIRONMENT:
     description: "Choose environment"
     value: "test"
