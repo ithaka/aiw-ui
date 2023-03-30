@@ -1,7 +1,7 @@
 stages:
-  - render-charts
   - build-app
   - build-image
+  - render-charts
 
 default:
   tags:
@@ -61,9 +61,12 @@ build-image:
   variables:
     CONTEXT: .
     DOCKERFILE: Dockerfile
-    IMAGE_TAG: artifactory.acorn.cirrostratus.org/artstor-air-node:$CI_COMMIT_SHORT_SHA
+    IMAGE_TAG: $APP_IMAGE
     EXTRA_ARGS: --build-arg SAGOKU_ENV=$ENVIRONMENT
 
 render-charts:
   stage: render-charts
   extends: .render-charts
+  rules:
+  - if: $PIPELINE == 'deploy'
+    when: on_success
