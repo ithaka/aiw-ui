@@ -14,7 +14,6 @@ include:
 
 variables:
   APP_NAME: artstor-ui
-  PIPELINE: "deploy"
   ENVIRONMENT:
     description: "Choose environment"
     value: "test"
