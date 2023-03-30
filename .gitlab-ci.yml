@@ -1,7 +1,6 @@
 stages:
-  - build-app
-  - build-image
-  - render-charts
+  - build
+  - deploy
 
 default:
   tags:
@@ -10,11 +9,15 @@ default:
 include:
   - file: /build-image/template.yml
     project: capstan/pow/gitlab-templates
-    ref: build-image-v3.0.4
+    ref: build-image-v3
 
   - file: /render-charts/template.yml
     project: capstan/pow/gitlab-templates
     ref: render-charts-v3
+
+  - file: /run-argo-deployer/template.yml
+    project: capstan/pow/gitlab-templates
+    ref: run-argo-deployer-v3
 
 variables:
   APP_NAME: artstor-ui
@@ -37,7 +40,7 @@ variables:
   MANIFEST_OUTPUT_DIRECTORY: $CI_PROJECT_DIR/manifests
 
 build-app:
-  stage: build-app
+  stage: build
   image: docker-virtual.artifactory.acorn.cirrostratus.org/node:11.0.0
   script:
     - yarn install
@@ -50,7 +53,7 @@ build-app:
       - $CI_PROJECT_DIR/dist/
 
 build-image:
-  stage: build-image
+  stage: build
   extends: .build-image
   needs:
     - job: build-app
@@ -65,8 +68,21 @@ build-image:
     EXTRA_ARGS: --build-arg SAGOKU_ENV=$ENVIRONMENT
 
 render-charts:
-  stage: render-charts
+  stage: build
   extends: .render-charts
   rules:
-  - if: $PIPELINE == 'deploy'
-    when: on_success
+    - if: $PIPELINE == 'deploy'
+      when: on_success
+
+deploy:
+  stage: deploy
+  extends: .run-argo-deployer
+  rules:
+    - if: $PIPELINE == 'deploy'
+      when: on_success
+  variables:
+    ACTION: deploy
+    APP_NAME: $APP_NAME
+    ENVIRONMENT: $ENVIRONMENT
+    GROUP_NAME: $ITHAKA_OWNER
+    INPUT_FILES_LOCATION: manifests
