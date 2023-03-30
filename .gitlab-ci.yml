@@ -42,6 +42,7 @@ variables:
   APP_IMAGE: docker-virtual.artifactory.acorn.cirrostratus.org/$CI_PROJECT_PATH:$CI_COMMIT_SHA
   HELM_CHART_PATH: "https://artifactory.acorn.cirrostratus.org/artifactory/helm-local/capstan-app/capstan-app.tgz:1.9.1"
   MANIFEST_OUTPUT_DIRECTORY: $CI_PROJECT_DIR/manifests
+  EXTRA_HELM_TEMPLATE_OPTIONS: --set healthcheckPath=/
 
 build-app:
   stage: build
