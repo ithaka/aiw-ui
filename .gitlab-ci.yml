@@ -29,7 +29,7 @@ variables:
   EUREKA_SERVICE_NAME: artstor-ui
   PIPELINE:
     description: "Choose pipeline"
-    value: ""
+    value: "deploy"
     options:
       - "deploy"
       - ""
@@ -73,6 +73,8 @@ build-image:
 
 render-charts:
   stage: build
+  before_script:
+    - printenv | sort
   extends: .render-charts
   rules:
     - if: $PIPELINE == 'deploy'
@@ -80,10 +82,14 @@ render-charts:
 
 deploy:
   stage: deploy
+  before_script:
+    - printenv | sort
   extends: .run-argo-deployer
   rules:
     - if: $PIPELINE == 'deploy'
       when: on_success
+  inherit:
+    variables: true
   variables:
     ACTION: deploy
     APP_NAME: $APP_NAME
@@ -99,5 +105,7 @@ sync:
   rules:
     - if: $PIPELINE == 'deploy'
       when: on_success
+  inherit:
+    variables: true
   variables:
     APP_NAME: $APP_NAME
