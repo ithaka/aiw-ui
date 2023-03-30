@@ -42,7 +42,7 @@
     "open:typedoc": "open ./doc/index.html",
     "build:ssr": "npm run build:client-and-server-bundles && npm run webpack:server",
     "build:ssr:test": "yarn run build:client-and-server-bundles:test && yarn run webpack:server -- --env=test",
-    "build:ssr:prod": "npm run build:client-and-server-bundles:prod && npm run webpack:server -- --env=prod",
+    "build:ssr:prod": "yarn run build:client-and-server-bundles:prod && yarn run webpack:server -- --env=prod",
     "serve:ssr": "node dist/server.js",
     "serve:ssr:start": "pm2 start dist/server.js",
     "serve:ssr:stop": "pm2 stop dist/server.js",
@@ -51,7 +51,7 @@
     "build:client-and-server-bundles:prod": "ng build --configuration=production && ng run avatar:server",
     "webpack:server": "webpack --config ./webpack.server.config.js --progress --colors",
     "webpack:server:test": "yarn run webpack:server -- --env=test",
-    "webpack:server:prod": "npm run webpack:server -- --env=prod"
+    "webpack:server:prod": "yarn run webpack:server -- --env=prod"
   },
   "dependencies": {
     "@angular-builders/custom-webpack": "^7.5.2",
