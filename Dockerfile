@@ -13,5 +13,6 @@ COPY server/package.json ./
 RUN yarn install --production
 # Host on good ol' 80
 EXPOSE 80
+EXPOSE 8080
 
 CMD [ "yarn", "run", "serve:ssr" ]
