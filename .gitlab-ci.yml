@@ -19,6 +19,10 @@ include:
     project: capstan/pow/gitlab-templates
     ref: run-argo-deployer-v3
 
+  - project: capstan/pow/gitlab-templates
+    file: argocd-sync/template.yml
+    ref: argocd-sync-v3
+
 variables:
   APP_NAME: artstor-ui
   APP_SERVICE_NAME: artstor-ui
@@ -86,3 +90,13 @@ deploy:
     ENVIRONMENT: $ENVIRONMENT
     GROUP_NAME: $ITHAKA_OWNER
     INPUT_FILES_LOCATION: manifests
+
+sync:
+  stage: deploy
+  extends: .argocd-sync
+  needs: deploy
+  rules:
+    - if: $PIPELINE == 'deploy'
+      when: on_success
+  variables:
+    APP_NAME: $APP_NAME
