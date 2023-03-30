@@ -40,6 +40,9 @@ build-image:
   needs:
     - job: build-app
       artifacts: true
+  rules:
+    - if: $PIPELINE == 'deploy'
+      when: always
   variables:
     CONTEXT: .
     DOCKERFILE: Dockerfile
@@ -53,7 +56,10 @@ deploy:
     - job: build-image
   script:
     - printenv | sort
-    - curl -sSk --cookie-jar /tmp/cookie -L -F "user=$GITLAB_USER_LOGIN" -F deployId=$CI_COMMIT_SHORT_SHA -F image=$IMAGE_TAG "http://sagoku.$ENVIRONMENT.cirrostratus.org/api/docker/artstor-ui/deploy"
+    - curl -sSk --cookie-jar /tmp/cookie -L -F "user=$GITLAB_USER_EMAIL_ADDRESS" -F deployId=$CI_COMMIT_SHORT_SHA -F image=$IMAGE_TAG "http://sagoku.$ENVIRONMENT.cirrostratus.org/api/docker/artstor-ui/deploy"
+  rules:
+    - if: $PIPELINE == 'deploy'
+      when: always
   variables:
     IMAGE_TAG: artifactory.acorn.cirrostratus.org/artstor-air-node:$CI_COMMIT_SHORT_SHA
   
