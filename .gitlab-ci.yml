@@ -91,7 +91,6 @@ deploy:
   variables:
     ACTION: deploy
     APP_NAME: artstor-ui
-    ENVIRONMENT: $ENVIRONMENT
     GROUP_NAME: $ITHAKA_OWNER
     INPUT_FILES_LOCATION: manifests
 
