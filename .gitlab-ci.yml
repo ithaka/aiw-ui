@@ -1,7 +1,7 @@
 stages:
+  - render-charts
   - build-app
   - build-image
-  - render-charts
 
 default:
   tags:
