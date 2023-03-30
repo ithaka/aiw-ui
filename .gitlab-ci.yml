@@ -1,7 +1,7 @@
 stages:
   - build-app
   - build-image
-  - deploy
+  - render-charts
 
 default:
   tags:
@@ -12,8 +12,14 @@ include:
     project: capstan/pow/gitlab-templates
     ref: build-image-v3.0.4
 
+  - file: /render-charts/template.yml
+    project: capstan/pow/gitlab-templates
+    ref: render-charts-v3
+
 variables:
   APP_NAME: artstor-ui
+  APP_SERVICE_NAME: artstor-ui
+  EUREKA_SERVICE_NAME: artstor-ui
   PIPELINE:
     description: "Choose pipeline"
     value: ""
@@ -26,6 +32,9 @@ variables:
     options:
       - "test"
       - "prod"
+  APP_IMAGE: docker-virtual.artifactory.acorn.cirrostratus.org/$CI_PROJECT_PATH:$CI_COMMIT_SHA
+  HELM_CHART_PATH: $CI_PROJECT_DIR/k8s/chart
+  MANIFEST_OUTPUT_DIRECTORY: $CI_PROJECT_DIR/manifests
 
 build-app:
   stage: build-app
@@ -55,17 +64,6 @@ build-image:
     IMAGE_TAG: artifactory.acorn.cirrostratus.org/artstor-air-node:$CI_COMMIT_SHORT_SHA
     EXTRA_ARGS: --build-arg SAGOKU_ENV=$ENVIRONMENT
 
-deploy:
-  stage: deploy
-  image: docker-virtual.artifactory.acorn.cirrostratus.org/curlimages/curl:8.00.1
-  needs:
-    - job: build-image
-  script:
-    - printenv | sort
-    - curl -sSk --cookie-jar /tmp/cookie -L -F "user=$GITLAB_USER_LOGIN" -F deployId=$CI_COMMIT_SHORT_SHA -F image=$IMAGE_TAG "http://sagoku.$ENVIRONMENT.cirrostratus.org/api/docker/artstor-ui/deploy"
-  rules:
-    - if: $PIPELINE == 'deploy'
-      when: on_success
-  variables:
-    IMAGE_TAG: artifactory.acorn.cirrostratus.org/artstor-air-node:$CI_COMMIT_SHORT_SHA
-  
+render-charts:
+  stage: render-charts
+  extends: .render-charts
