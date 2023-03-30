@@ -88,11 +88,9 @@ deploy:
   rules:
     - if: $PIPELINE == 'deploy'
       when: on_success
-  inherit:
-    variables: true
   variables:
     ACTION: deploy
-    APP_NAME: $APP_NAME
+    APP_NAME: artstor-ui
     ENVIRONMENT: $ENVIRONMENT
     GROUP_NAME: $ITHAKA_OWNER
     INPUT_FILES_LOCATION: manifests
@@ -105,7 +103,5 @@ sync:
   rules:
     - if: $PIPELINE == 'deploy'
       when: on_success
-  inherit:
-    variables: true
   variables:
-    APP_NAME: $APP_NAME
+    APP_NAME: artstor-ui
