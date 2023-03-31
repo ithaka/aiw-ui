@@ -29,7 +29,7 @@ variables:
   EUREKA_SERVICE_NAME: artstor-ui
   PIPELINE:
     description: "Choose pipeline"
-    value: "deploy"
+    value: ""
     options:
       - "deploy"
       - ""
@@ -77,6 +77,10 @@ render-charts:
     - printenv | sort
   extends: .render-charts
   rules:
+    - if: $PIPELINE == "deploy" && $ENVIRONMENT == "prod"
+      when: always
+      variables:
+        EXTRA_HELM_TEMPLATE_OPTIONS: --set healthcheckPath=/ --set autoscaling.minReplicas=3 --set autoscaling.maxReplicas=5
     - if: $PIPELINE == "deploy" && $ENVIRONMENT == "test"
       when: always
       variables:
