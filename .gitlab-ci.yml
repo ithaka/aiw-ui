@@ -78,7 +78,7 @@ render-charts:
   extends: .render-charts
   rules:
     - if: $PIPELINE == "deploy" && $ENVIRONMENT == "test"
-      when: on_success
+      when: always
       variables:
         EXTRA_HELM_TEMPLATE_OPTIONS: --set healthcheckPath=/ --set minReplicas=1 --set maxReplicas=1
 
