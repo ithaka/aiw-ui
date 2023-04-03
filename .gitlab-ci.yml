@@ -46,9 +46,8 @@ variables:
 build-app:
   stage: build
   image: $DOCKER_VIRTUAL/node:11.0.0
-  before_script:
-    - printenv | sort
   script:
+    - printenv | sort
     - yarn config set npmRegistryServer $NPM_REGISTRY
     - yarn install
     - yarn build:ssr:$ENVIRONMENT
@@ -76,11 +75,7 @@ build-image:
 
 render-charts:
   stage: build
-  before_script:
-    - printenv | sort
   extends: .render-charts
-  before_script:
-    - printenv | sort
   rules:
     - if: $PIPELINE == "deploy" && $ENVIRONMENT == "prod"
       when: always
@@ -93,8 +88,6 @@ render-charts:
 
 deploy:
   stage: deploy
-  before_script:
-    - printenv | sort
   extends: .run-argo-deployer
   rules:
     - if: $PIPELINE == 'deploy'
