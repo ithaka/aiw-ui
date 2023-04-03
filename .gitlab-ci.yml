@@ -47,6 +47,7 @@ build-app:
   stage: build
   image: $DOCKER_VIRTUAL/node:11.0.0
   script:
+    - yarn config set npmRegistryServer $NPM_REGISTRY
     - yarn install
     - yarn build:ssr:$ENVIRONMENT
   rules:
