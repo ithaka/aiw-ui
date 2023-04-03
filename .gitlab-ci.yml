@@ -50,7 +50,7 @@ build-app:
   script:
     - printenv | sort
     - yarn config set npmRegistryServer $AIW_NPM_REGISTRY
-    - yarn install
+    - yarn install --production
     - yarn build:ssr:$ENVIRONMENT
   rules:
     - if: $PIPELINE == 'deploy'
