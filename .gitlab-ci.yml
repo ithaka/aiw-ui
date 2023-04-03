@@ -39,13 +39,13 @@ variables:
     options:
       - "test"
       - "prod"
-  APP_IMAGE: docker-virtual.artifactory.acorn.cirrostratus.org/$CI_PROJECT_PATH:$CI_COMMIT_SHORT_SHA
-  HELM_CHART_PATH: "https://artifactory.acorn.cirrostratus.org/artifactory/helm-local/capstan-app/capstan-app.tgz:1.9.1"
+  APP_IMAGE: $DOCKER_VIRTUAL/$CI_PROJECT_PATH:$CI_COMMIT_SHORT_SHA
+  HELM_CHART_PATH: $HELM_CHART_PATH
   MANIFEST_OUTPUT_DIRECTORY: $CI_PROJECT_DIR/manifests
 
 build-app:
   stage: build
-  image: docker-virtual.artifactory.acorn.cirrostratus.org/node:11.0.0
+  image: $DOCKER_VIRTUAL/node:11.0.0
   script:
     - yarn install
     - yarn build:ssr:$ENVIRONMENT
