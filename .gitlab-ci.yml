@@ -86,11 +86,11 @@ render-charts:
     - if: $PIPELINE == "deploy" && $ENVIRONMENT == "prod"
       when: always
       variables:
-        EXTRA_HELM_TEMPLATE_OPTIONS: -f k8s/values_prod.yaml
+        EXTRA_HELM_TEMPLATE_OPTIONS: -f $CI_PROJECT_DIR/k8s/values_prod.yaml
     - if: $PIPELINE == "deploy" && $ENVIRONMENT == "test"
       when: always
       variables:
-        EXTRA_HELM_TEMPLATE_OPTIONS: -f k8s/values_test.yaml
+        EXTRA_HELM_TEMPLATE_OPTIONS: -f $CI_PROJECT_DIR/k8s/values_test.yaml
 
 deploy:
   stage: deploy
