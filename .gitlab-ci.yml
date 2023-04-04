@@ -53,7 +53,7 @@ build-app:
     - yarn install
     - yarn build:ssr:$ENVIRONMENT
   rules:
-    - if: $PIPELINE == 'deploy'
+    - if: $PIPELINE == "deploy"
       when: always
   artifacts:
     paths:
@@ -66,7 +66,7 @@ build-image:
     - job: build-app
       artifacts: true
   rules:
-    - if: $PIPELINE == 'deploy'
+    - if: $PIPELINE == "deploy"
       when: on_success
   variables:
     CONTEXT: .
@@ -91,8 +91,17 @@ deploy:
   stage: deploy
   extends: .run-argo-deployer
   rules:
-    - if: $PIPELINE == 'deploy'
+    - if: $PIPELINE == "deploy" && $ENVIRONMENT == "prod"
       when: on_success
+      variables:
+        ENVIRONMENT_URL: https://library.artstor.org/
+    - if: $PIPELINE == "deploy" && $ENVIRONMENT == "test"
+      when: on_success
+      variables:
+        ENVIRONMENT_URL: https://stage.artstor.org/
+  environment:
+    name: $ENVIRONMENT
+    url: ENVIRONMENT_URL
   variables:
     ACTION: deploy
     APP_NAME: artstor-ui
@@ -105,7 +114,7 @@ sync:
   needs:
     - deploy
   rules:
-    - if: $PIPELINE == 'deploy'
+    - if: $PIPELINE == "deploy"
       when: on_success
   variables:
     APP_NAME: artstor-ui
