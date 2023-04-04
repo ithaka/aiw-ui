@@ -10,8 +10,9 @@ COPY dist ./dist
 # Copy server package.json for commands and dependencies
 COPY server/package.json ./
 # Install runtime dependencies
-RUN npm install --production
+RUN yarn install --production
 # Host on good ol' 80
 EXPOSE 80
+EXPOSE 8080
 
-CMD [ "npm", "run", "serve:ssr" ]
+CMD [ "yarn", "run", "serve:ssr" ]
