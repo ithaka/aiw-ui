@@ -85,7 +85,14 @@ render-charts:
     - if: $PIPELINE == "deploy" && $ENVIRONMENT == "test"
       when: always
       variables:
-        EXTRA_HELM_TEMPLATE_OPTIONS: --set healthcheckPath=/,autoscaling.minReplicas=1,autoscaling.maxReplicas=1,resources.limits.memory=3Gi,resources.requests.memory=1.5Gi,resources.limits.cpu=300m,resources.requests.cpu=20m
+        EXTRA_HELM_TEMPLATE_OPTIONS: >
+          --set healthcheckPath=/
+          --set autoscaling.minReplicas=1
+          --set autoscaling.maxReplicas=1
+          --set resources.limits.cpu=300m
+          --set resources.requests.cpu=20m
+          --set resources.limits.memory=3Gi
+          --set resources.requests.memory=1.5Gi
 
 deploy:
   stage: deploy
