@@ -135,7 +135,7 @@ healthcheck:
   stage: healthcheck
   extends: .check-healthy-deployment
   needs:
-    - argo-sync
+    - deploy
   variables:
     APP_TYPE: "nodejs"
     HEALTHCHECK_MAX_ITER: 200 # number of times to check
