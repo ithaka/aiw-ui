@@ -1,6 +1,7 @@
 stages:
   - build
   - deploy
+  - healthcheck
 
 default:
   tags:
@@ -22,6 +23,10 @@ include:
   - project: capstan/pow/gitlab-templates
     file: argocd-sync/template.yml
     ref: argocd-sync-v3
+
+  - project: capstan/pow/gitlab-templates
+    file: check-healthy-deployment/template.yml
+    ref: check-healthy-deployment-v3
 
 # Variables that are defined in the project: AIW_ART_PATH, AIW_HELM_CHART, AIW_NPM_REGISTRY
 variables:
@@ -115,7 +120,7 @@ deploy:
     GROUP_NAME: $ITHAKA_OWNER
     INPUT_FILES_LOCATION: manifests
 
-sync:
+argo-sync:
   stage: deploy
   extends: .argocd-sync
   needs:
@@ -125,3 +130,17 @@ sync:
       when: on_success
   variables:
     APP_NAME: artstor-ui
+
+healthcheck:
+  stage: healthcheck
+  extends: .check-healthy-deployment
+  needs:
+    - argo-sync
+  variables:
+    APP_TYPE: "nodejs"
+    HEALTHCHECK_MAX_ITER: 200 # number of times to check
+    HEALTHCHECK_MAX_WAIT: 5 # in seconds
+  inherit:
+    variables: true
+  retry: 1
+  timeout: 30 minutes
