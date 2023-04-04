@@ -1,7 +1,7 @@
 stages:
   - build
   - deploy
-  - healthcheck
+  - check-deployment
 
 default:
   tags:
@@ -131,8 +131,8 @@ argo-sync:
   variables:
     APP_NAME: artstor-ui
 
-healthcheck:
-  stage: healthcheck
+check-healthy-deployment:
+  stage: check-deployment
   extends: .check-healthy-deployment
   rules:
       - !reference [argo-sync, rules]
