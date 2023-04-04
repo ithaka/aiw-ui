@@ -86,18 +86,11 @@ render-charts:
     - if: $PIPELINE == "deploy" && $ENVIRONMENT == "prod"
       when: always
       variables:
-        EXTRA_HELM_TEMPLATE_OPTIONS: --set healthcheckPath=/ --set autoscaling.minReplicas=3 --set autoscaling.maxReplicas=5
+        EXTRA_HELM_TEMPLATE_OPTIONS: -f k8s/values_prod.yaml
     - if: $PIPELINE == "deploy" && $ENVIRONMENT == "test"
       when: always
       variables:
-        EXTRA_HELM_TEMPLATE_OPTIONS: >
-          --set healthcheckPath=/
-          --set autoscaling.minReplicas=1
-          --set autoscaling.maxReplicas=1
-          --set-string resources.limits.cpu=300m
-          --set-string resources.requests.cpu=20m
-          --set-string resources.limits.memory=3Gi
-          --set-string resources.requests.memory=1.5Gi
+        EXTRA_HELM_TEMPLATE_OPTIONS: -f k8s/values_test.yaml
 
 deploy:
   stage: deploy

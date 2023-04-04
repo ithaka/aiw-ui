@@ -1,0 +1,24 @@
+healthcheckPath: /
+
+resources:
+  limits:
+    cpu: 300m
+    memory: 3Gi
+  requests:
+    cpu: 20m
+    memory: 1Gi
+
+rollingUpdate:
+  maxSurge: 100%
+  maxUnavailable: 0
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 1
+  cpuScaling:
+    enabled: false
+    targetCPUUtilizationPercentage: 50
+  memoryScaling:
+    enabled: false
+    targetMemUtilizationPercentage: 50
