@@ -566,31 +566,31 @@
       },
       "COLLECTIONS": [
         {
-          "SUBHEADING": "Celebrate the earth: Open content",
+          "SUBHEADING": "5,000 new images of recent events from Magnum Photos",
           "DESCRIPTION": "",
-          "CAPTION": "Herbert Keightley Job, Gray Fox, Face Study. 1902. Lantern slide. Image and data from Trinity College.",
-          "LINK": "https://www.artstor.org/2023/04/17/our-awe-inspiring-earth-26-open-collections-on-jstor/",
-          "IMG_SOURCE": "/assets/img/featured-collections/gray_fox.jpg",
-          "LINK_TITLE": "Our awe-inspiring earth: 26 open collections on JSTOR",
-          "ALT_TEXT": "Our awe-inspiring earth: 26 open collections on JSTOR"
+          "CAPTION": "Alex Majoli. Extract from “Duque de Caxias I”. Brazil. São Paulo. Avenue Duque de Caxias. 2022… Image and original data provided by Magnum Photos. © Alex Majoli / Magnum Photos; © 2022 Alex Majoli / Artists Rights Society (ARS), New York / SAIF, Paris",
+          "LINK": "https://about.jstor.org/blog/new-on-artstor-magnum-photos",
+          "IMG_SOURCE": "/assets/img/featured-collections/magnum_avenue.jpg",
+          "LINK_TITLE": "5,000 new images of recent events from Magnum Photos",
+          "ALT_TEXT": "5,000 new images of recent events from Magnum Photos"
         },
         {
-          "SUBHEADING": "For the birds",
+          "SUBHEADING": "There’s much more to Artstor than art",
           "DESCRIPTION": "",
-          "CAPTION": "Louis Agassiz Fuertes. Ruff Sketches. c. 1895. Watercolor on paper. Image and data from Cornell University Lab of Ornithology Art Collection.",
-          "LINK": "https://www.artstor.org/2023/04/10/earth-day-for-the-birds/",
-          "IMG_SOURCE": "/assets/img/featured-collections/ruff_sketches.jpg",
-          "LINK_TITLE": "Earth Day: For the birds",
-          "ALT_TEXT": "Earth Day: For the birds"
+          "CAPTION": "Science Museum Group. London Midland & Scottish Railway Collection. The “Coronation Scot” train at Penrith. 1938. 1997-7409. From a set of glass and film negatives. Science Museum Group Collection Online. Accessed October 17, 2019. collection.sciencemuseumgroup.org.uk/objects/co423016. CC BY 4.0.",
+          "LINK": "https://about.jstor.org/blog/theres-much-more-to-artstor-than-art",
+          "IMG_SOURCE": "/assets/img/featured-collections/smg_train.jpg",
+          "LINK_TITLE": "There’s much more to Artstor than art",
+          "ALT_TEXT": "There’s much more to Artstor than art"
         },
         {
-          "SUBHEADING": "Women botanists",
+          "SUBHEADING": "Try the new Artstor experience on JSTOR",
           "DESCRIPTION": "",
-          "CAPTION": "Nancy Adams. Stylidiaceae - Forstera bidwillii var. Densifolia. 25 November 1967. Image and data from the Museum of New Zealand - Te Papa Tongarewa. CC BY-NC-ND 4.0.",
-          "LINK": "https://www.artstor.org/2023/04/14/5-open-collections-devoted-to-the-art-of-women-botanists/",
-          "IMG_SOURCE": "/assets/img/featured-collections/stylidiaceae.jpg",
-          "LINK_TITLE": "5 open collections devoted to the art of women botanists",
-          "ALT_TEXT": "5 open collections devoted to the art of women botanists"
+          "CAPTION": "Persian. Horoscope of Prince Iskandar,1411. Credit: Wellcome Collection. CC BY 4.0.",
+          "LINK": "https://www.jstor.org/artstor",
+          "IMG_SOURCE": "/assets/img/featured-collections/wellcome_horoscope.jpg",
+          "LINK_TITLE": "Try the new Artstor experience on JSTOR",
+          "ALT_TEXT": "Try the new Artstor experience on JSTOR"
         }
       ]
     },
