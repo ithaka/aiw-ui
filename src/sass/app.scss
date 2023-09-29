@@ -251,34 +251,6 @@ nav-menu {
   overflow-y: auto !important;
 }
 
-/**
- * Google Translate override style
- **/
-.translate-flyout {
-    display: inline-block;
-
-    & .goog-te-gadget-simple {
-      @extend %SansRegular;
-      border: none;
-      background: rgba(255,255,255,0.75);
-      font-size: 11px;
-      line-height: 24px;
-    }
-
-    & img.goog-te-gadget-icon {
-      margin-right: 0;
-    }
-
-    & a, & a.goog-te-menu-value {
-      @extend a;
-      // & span { display: none; }
-    }
-
-    // & span[style*=""] {
-    //   display: none;
-    // }
-}
-
 // Style for cookie banner
 body body{
   height: unset;
