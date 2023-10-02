@@ -432,24 +432,15 @@ export class AppComponent {
   private initializeWidgets(withOneTrust: boolean) {
     if (withOneTrust) {
         window['OptanonWrapper'] = () => {
-            window['OneTrust'].InsertScript("//translate.google.com/translate_a/element.js?cb=googleTranslateInit", "body", null, null, "C0003");
             window['OneTrust'].InsertScript("/assets/js/zendesk.js", "body", null, null, "C0003");
             this.initializeChatWidget();
         }
     } else {
-        let googleTranslateScript = document.createElement('script');
-        googleTranslateScript.setAttribute('src','//translate.google.com/translate_a/element.js?cb=googleTranslateInit');
-        document.head.appendChild(googleTranslateScript);
-
         let zendDeskScript = document.createElement('script');
         zendDeskScript.setAttribute('src','/assets/js/zendesk.js');
         document.head.appendChild(zendDeskScript);
 
         this.initializeChatWidget();
-    }
-
-    window['googleTranslateInit'] = () => {
-        this.initializeGoogleTranslate();
     }
   }
 
@@ -467,22 +458,5 @@ export class AppComponent {
             });
         });
     }, 1000);
-  }
-
-  private initializeGoogleTranslate() {
-    if (isPlatformBrowser(this.platformId)) {
-        setTimeout(() => {
-            if (google && google.translate && typeof(google.translate.TranslateElement) == 'function' ) {
-                new google.translate.TranslateElement(
-                    {
-                        pageLanguage: 'en',
-                        layout: google.translate.TranslateElement && google.translate.TranslateElement.InlineLayout.SIMPLE,
-                        autoDisplay: false
-                    },
-                    'google_translate_element'
-                )
-            }
-        }, 1000)
-    }
   }
 }

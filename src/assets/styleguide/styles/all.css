@@ -9188,19 +9188,6 @@ a.blog-post, .translate-flyout a.blog-post.goog-te-menu-value {
   max-height: calc(95vh - 200px) !important;
   overflow-y: auto !important; }
 
-/**
- * Google Translate override style
- **/
-.translate-flyout {
-  display: inline-block; }
-  .translate-flyout .goog-te-gadget-simple {
-    border: none;
-    background: rgba(255, 255, 255, 0.75);
-    font-size: 11px;
-    line-height: 24px; }
-  .translate-flyout img.goog-te-gadget-icon {
-    margin-right: 0; }
-
 body body {
   height: unset; }
 
