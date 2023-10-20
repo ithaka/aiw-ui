@@ -39,7 +39,3 @@ Gruntfile.js
 
 # misc
 *.gz
-
-# Files to preserve
-!istanbul-reports/lib/html/assets
-!istanbul/lib/assets
