@@ -288,7 +288,6 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    // Ethnio survey 10-31-22
     this._script.loadScript('ethnio-survey')
 
     if (isPlatformBrowser(this.platformId)) {
