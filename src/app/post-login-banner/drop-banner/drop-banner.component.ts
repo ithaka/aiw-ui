@@ -33,9 +33,9 @@ export class dropBannerComponent implements OnInit {
   ngOnInit() { }
 
   public bannerCopyGroup(): void {
-    window.open("https://www.jstor.org/copygroups", '_blank')
+    window.open("https://www.jstor.org/workspace", '_blank')
     //{ event: 'aji modal banner', category: 'onboarding', label: "post-login-banner-shown"}
-    this._angulartics.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "drop-banner-copy-groups-link"} });
+    this._angulartics.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "drop-banner-workspace-link"} });
   }
   public readMore(): void {
     window.open("https://www.jstor.org/artstor", '_blank')
