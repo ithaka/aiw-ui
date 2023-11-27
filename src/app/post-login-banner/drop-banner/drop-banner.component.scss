@@ -48,7 +48,10 @@ $pharos-color-text-base: #000000;
        @media(max-width: $phone){
          font-size: 25px;
         }
+     }
 
+     & a {
+      font-family: Arial, Helvetica, sans-serif;
      }
    }
 
