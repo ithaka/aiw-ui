@@ -52,6 +52,11 @@ $pharos-font-family-sans-serif: GT America Standard,Helvetica,Helvetica Neue,Ari
     letter-spacing: -0.01em;
 
     color: #000000;
+
+    .first-callout {
+      white-space: nowrap;
+      font-weight: 700;
+    }
 }
 
 .modal-footer {

@@ -315,7 +315,8 @@ export class AppComponent {
    * Determines whether to display the AJI Intercept
    */
     private initializeAJIIntercept(showAJIIntercept: boolean): void {
-      this.showAJIIntercept = this.showAJIInterceptFlag && this._auth.showAJIIntercept()
+      // this.showAJIIntercept = this.showAJIInterceptFlag && this._auth.showAJIIntercept()
+      this.showAJIIntercept = true;
     }
 
    /**
