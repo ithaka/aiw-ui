@@ -33,7 +33,7 @@ export class dropBannerComponent implements OnInit {
   ngOnInit() { }
 
   public bannerCopyGroup(): void {
-    window.open("https://www.jstor.org/workspace", '_blank')
+    window.open("https://support.jstor.org/hc/en-us/articles/360007226454-Workspace-Introduction-to-Workspace", '_blank')
     //{ event: 'aji modal banner', category: 'onboarding', label: "post-login-banner-shown"}
     this._angulartics.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "drop-banner-workspace-link"} });
   }
