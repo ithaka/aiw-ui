@@ -128,7 +128,7 @@ export class AppComponent {
         this.showRolePromptFlag = flags.shouldPromptForRole
         this.initializeRolePrompt(this.showRolePromptFlag)
         this.showAJIInterceptFlag = flags.showAJIInterceptFlag
-        this.initializeAJIIntercept(this.showAJIInterceptFlag)
+        this.initializeAJIIntercept()
         this.initializePostLoginBanner()
       }, (err) => {
         console.error(err)
@@ -142,7 +142,7 @@ export class AppComponent {
 
     this._auth.reinitializeAJIIntercept().pipe(map(reinitializeAJIIntercept => {
       if (reinitializeAJIIntercept) {
-        this.initializeAJIIntercept(this.showAJIInterceptFlag)
+        this.initializeAJIIntercept()
       }
     })).subscribe()
 
@@ -314,7 +314,7 @@ export class AppComponent {
    /**
    * Determines whether to display the AJI Intercept
    */
-    private initializeAJIIntercept(showAJIIntercept: boolean): void {
+    private initializeAJIIntercept(): void {
       this.showAJIIntercept = this.showAJIInterceptFlag && this._auth.showAJIIntercept()
     }
 
