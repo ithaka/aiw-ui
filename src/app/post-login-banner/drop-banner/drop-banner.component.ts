@@ -43,7 +43,7 @@ export class dropBannerComponent implements OnInit {
   }
 
   public searchNow(): void {
-    window.open("https://www.jstor.org/images", '_blank')
+    window.open("https://www.jstor.org/artstor", '_blank')
     this._angulartics.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "drop-banner-search-btn"} });
 
   }

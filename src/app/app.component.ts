@@ -62,7 +62,7 @@ export class AppComponent {
   public showAJIInterceptFlag: boolean = false;
   public showPostLoginBanner: boolean = false;
   public showDropDownBanner: boolean = false;
-  public bannerButtonText: string = "Learn more about Artstor moving to JSTOR";
+  public bannerButtonText: string = "Learn more about Artstor on JSTOR";
   public skyBannerCopy: string = "";
   public test: any = {};
 
@@ -315,7 +315,8 @@ export class AppComponent {
    * Determines whether to display the AJI Intercept
    */
     private initializeAJIIntercept(): void {
-      this.showAJIIntercept = this.showAJIInterceptFlag && this._auth.showAJIIntercept()
+      // this.showAJIIntercept = this.showAJIInterceptFlag && this._auth.showAJIIntercept()
+      this.showAJIIntercept = true
     }
 
    /**
@@ -366,7 +367,7 @@ export class AppComponent {
       this._ga.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "post-login-banner-open-btn"} });
     }
     else{
-      this.bannerButtonText = "Learn more about Artstor moving to JSTOR";
+      this.bannerButtonText = "Learn more about Artstor on JSTOR";
       this._ga.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: 'post-login-banner-close-btn'} });
     }
     chevron.classList.toggle("rotate");
