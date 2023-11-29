@@ -6,14 +6,12 @@ div.drop-tray(@trayAnimation)
             div.banner-separator-top
             div.banner-separator-bottom
       div.mainContent
-        h1([innerHtml]="'Artstor is moving to JSTOR' | translate")
+        h1([innerHtml]="'The Artstor website will be retired on August 1, 2024.' | translate")
         div.copy
-        span([innerHtml]="'Artstor images and resources are now ready to use so get started by ' | translate")
-        a.link(id="banner-copy-group-link", (click)="bannerCopyGroup()", [innerHtml]="'copying your image groups' | translate")
-        span([innerHtml]="' or searching for images on JSTOR. ' | translate")
-        a.link(id="banner-read-more",(click)="readMore()", [innerHtml]="'Read more' | translate")
-        span([innerHtml]="'.' | translate")
+        span([innerHtml]="'Artstor&apos;s high-quality collections and key functionality are now on JSTOR. If you have image groups on Artstor, they will be automatically copied over to your ' | translate")
+        a.link(id="banner-copy-group-link", (click)="bannerCopyGroup()", [innerHtml]="'JSTOR Workspace' | translate")
+        span([innerHtml]="' starting February 1, 2024. ' | translate")
       button.try-now((click)="searchNow()",
-      [innerHtml]="'Try searching now' | translate",
+      [innerHtml]="'Learn more about Artstor on JSTOR' | translate",
       id="drop-down-try-now",
       data-sc="post-login-drop-down")

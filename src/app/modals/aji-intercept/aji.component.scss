@@ -23,7 +23,7 @@ $pharos-font-family-sans-serif: GT America Standard,Helvetica,Helvetica Neue,Ari
 .modal-body {
     .artstor-jstor-logo {
         padding-bottom: 1rem;
-      margin-right: 1.5rem;
+        margin-right: 1.5rem;
         height: 50%;
         width: 50%;
     }
@@ -50,8 +50,14 @@ $pharos-font-family-sans-serif: GT America Standard,Helvetica,Helvetica Neue,Ari
 
     text-align: center;
     letter-spacing: -0.01em;
+    text-wrap: balance;
 
     color: #000000;
+
+    .first-callout {
+      white-space: nowrap;
+      font-weight: 700;
+    }
 }
 
 .modal-footer {
@@ -133,7 +139,6 @@ $pharos-font-family-sans-serif: GT America Standard,Helvetica,Helvetica Neue,Ari
 }
 
 .main-text {
-  max-width: 350px;
   text-align: center;
   margin: 0 auto;
 }

@@ -13,23 +13,15 @@
         div.separator-container
           div(class="aji-separator-left")
           div(class="aji-separator-right")
-        div([innerHtml]="'Artstor is moving to JSTOR' | translate", tabindex="0", class="main-callout")
+        div([innerHtml]="'Artstor is now on JSTOR' | translate", tabindex="0", class="main-callout")
         div.main-text
-          span([innerHtml]="'Teach with images by ' | translate")
-          a.link(id="modal-copy-group-link",(click)="copyGroups()", [innerHtml]="'copying your image groups' | translate")
-          span([innerHtml]="' or start a search on JSTOR.' | translate")
+          span([innerHtml]="'The Artstor website will be retired on August 1, 2024.' | translate").first-callout
+          span([innerHtml]="' Artstor&apos;s high-quality collections and key functionality are now on JSTOR.' | translate")
       .modal-footer.flex-column
         button.primary(
           (click)="tryItNow()", type="button",
-          [attr.aria-label]="'Try searching now' | translate",
-          [innerHtml]="'Try searching now' | translate",
+          [attr.aria-label]="'Learn more about Artstor on JSTOR' | translate",
+          [innerHtml]="'Learn more about Artstor on JSTOR' | translate",
           id="aji-try-now",
           data-sc="aji-intercept-try-now"
-        )
-        button.secondary(
-          (click)="remindMeLater()", type="button",
-          [attr.aria-label]="'Remind me later' | translate",
-          [innerHtml]="'Remind me later' | translate",
-          id="aji-remind-me-later",
-          data-sc="aji-intercept-remind-me-later"
         )

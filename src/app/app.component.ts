@@ -62,7 +62,7 @@ export class AppComponent {
   public showAJIInterceptFlag: boolean = false;
   public showPostLoginBanner: boolean = false;
   public showDropDownBanner: boolean = false;
-  public bannerButtonText: string = "Learn more";
+  public bannerButtonText: string = "Learn more about Artstor on JSTOR";
   public skyBannerCopy: string = "";
   public test: any = {};
 
@@ -128,7 +128,7 @@ export class AppComponent {
         this.showRolePromptFlag = flags.shouldPromptForRole
         this.initializeRolePrompt(this.showRolePromptFlag)
         this.showAJIInterceptFlag = flags.showAJIInterceptFlag
-        this.initializeAJIIntercept(this.showAJIInterceptFlag)
+        this.initializeAJIIntercept()
         this.initializePostLoginBanner()
       }, (err) => {
         console.error(err)
@@ -142,7 +142,7 @@ export class AppComponent {
 
     this._auth.reinitializeAJIIntercept().pipe(map(reinitializeAJIIntercept => {
       if (reinitializeAJIIntercept) {
-        this.initializeAJIIntercept(this.showAJIInterceptFlag)
+        this.initializeAJIIntercept()
       }
     })).subscribe()
 
@@ -314,7 +314,7 @@ export class AppComponent {
    /**
    * Determines whether to display the AJI Intercept
    */
-    private initializeAJIIntercept(showAJIIntercept: boolean): void {
+    private initializeAJIIntercept(): void {
       this.showAJIIntercept = this.showAJIInterceptFlag && this._auth.showAJIIntercept()
     }
 
@@ -366,7 +366,7 @@ export class AppComponent {
       this._ga.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "post-login-banner-open-btn"} });
     }
     else{
-      this.bannerButtonText = "Learn more";
+      this.bannerButtonText = "Learn more about Artstor on JSTOR";
       this._ga.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: 'post-login-banner-close-btn'} });
     }
     chevron.classList.toggle("rotate");

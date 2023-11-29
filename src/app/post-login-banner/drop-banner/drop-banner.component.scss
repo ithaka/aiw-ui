@@ -30,7 +30,7 @@ $pharos-color-text-base: #000000;
   padding: 10px 0px;
   justify-content: space-between;
   flex-direction: row;
-   vertical-align: middle;
+  vertical-align: middle;
   align-items: center;
 
    & .mainContent {
@@ -40,7 +40,7 @@ $pharos-color-text-base: #000000;
 
      & h1 {
        font-family: 'Ivar Display';
-       font-size: 30px;
+       font-size: 25px;
        font-weight: bold;
        color: black;
        margin-bottom: 0.5rem;
@@ -48,7 +48,10 @@ $pharos-color-text-base: #000000;
        @media(max-width: $phone){
          font-size: 25px;
         }
+     }
 
+     & a {
+      font-family: Arial, Helvetica, sans-serif;
      }
    }
 

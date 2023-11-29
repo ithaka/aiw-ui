@@ -2,11 +2,11 @@
     div.container
       div.headings
         img.info-icon(src="/assets/img/exclamation-inverse.png", alt="info")
-        div([innerHtml]="'Artstor is moving to JSTOR.' | translate")
+        div([innerHtml]="'The Artstor website will be retired on August 1, 2024.' | translate")
       button.expand((click)="dropBanner.emit()",
       aria-label="Close",
       id="login-banner-expand-collapse",
-      data-sc="login-banner")
+      data-sc="login-banner").button-font
         div(id="button-text", [innerHtml]=" bannerButtonText | translate" )
         img.chevron(id="chevron", src="/assets/img/chevron-down.svg", alt="chevron-down")
 
