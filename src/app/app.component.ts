@@ -315,14 +315,14 @@ export class AppComponent {
    * Determines whether to display the AJI Intercept
    */
     private initializeAJIIntercept(): void {
-      this.showAJIIntercept = this.showAJIInterceptFlag && this._auth.showAJIIntercept()
+      this.showAJIIntercept = this.showAJIInterceptFlag && this._auth.showAJIIntercept();
     }
 
    /**
    * Determines whether to display the post login banner
    */
    private initializePostLoginBanner(): void{
-     this.showPostLoginBanner = this.showAJIInterceptFlag && !this.showAJIIntercept && this._auth.showPostLoginBanner()
+     this.showPostLoginBanner = this.showAJIInterceptFlag && !this.showAJIIntercept;
    }
 
     /**
