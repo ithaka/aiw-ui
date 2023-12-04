@@ -460,21 +460,7 @@ export class AuthService implements CanActivate {
    * @returns boolean showAJIIntercept
    */
   public showAJIIntercept(): boolean {
-    let user = this.getUser();
-
-    if (this.getFromStorage('AJIInterceptClosed')) {
-      return false;
-    }
-    return user && user.isLoggedIn;
-  }
-
-  /**
-   *  Determines whether to display post-login banner to the user
-   *  @returns boolean showPostLoginBanner
-   */
-  public showPostLoginBanner(): boolean {
-    let user = this.getUser();
-    return user && user.isLoggedIn;
+    return !this.getFromStorage('AJIInterceptClosed');
   }
 
   /**
