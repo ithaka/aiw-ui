@@ -45,7 +45,7 @@ export const WLV_ARTSTOR = {
     featuredCollection: "HOME.FEATURED",
     showHomeBlog: true,
     showHomeSSC: true,
-    showHomeAd: true,
+    showHomeAd: false,
     showArtstorCurated: true,
     showInstitutionalLogin: true,
     pwResetPortal: "artstor"

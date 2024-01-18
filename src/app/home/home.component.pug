@@ -30,6 +30,7 @@
             a.blog-post(*ngFor="let post of blogPosts | slice:0:3", [href]="post['link']", target="_blank", tabindex="4", [attr.aria-label]="post['title']['rendered']")
               h3.blog-post__title([innerHtml]="post['title']['rendered']", aria-hidden="true")
               p.blog-post__preview([innerHtml]="post['excerpt']['rendered']", aria-hidden="true")
+      .col-sm-3(*ngIf="!showHomePromo")
       div([ngClass]="showBlog ? 'col-sm-3' : 'row'")
         //- Institution Shared Shelf Collections
         .card(*ngIf="institution && instCollections.length > 0", [class.col-sm-4]="!showBlog")
