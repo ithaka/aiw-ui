@@ -434,7 +434,9 @@
     },
     "WARNINGS": {
       "ADDITIONAL_RESULTS": "Sorry, additional results cannot be displayed. In order to keep things quick, Artstor does not show more than 5000 results for any search. If you haven't found what you are looking for, try using advanced search.",
-      "RSTD_IMGS": "This group contains restricted images or images that have been deleted by the creator."
+      "RSTD_IMGS": "This group contains restricted images or images that have been deleted by the creator.",
+      "ARTSTOR_IMAGE_GROUP_MIGRATION": "<strong>Note</strong>: Use the <a href='https://www.jstor.org/copygroups/' class='link'>copy image groups tool</a> to copy any groups you create or modify on Artstor after January 31, 2024 to JSTOR. You can find your image groups on your <a href='https://www.jstor.org/workspace/' class='link'>JSTOR Workspace</a>.",
+      "ARTSTOR_IMAGE_GROUPS_ON_JSTOR": "<a href='https://support.artstor.org/hc/en-us/articles/18952936497047' class='link'>Learn more about your Artstor Image Groups on JSTOR</a>"
     }
   },
   "PERSONAL_COLLECTION_PAGE": {
