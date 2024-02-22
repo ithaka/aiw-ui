@@ -34,6 +34,10 @@
         //- Further functionality will go here
     h1.sr-only(*ngIf="selectedFilter", [innerHTML]="selectedFilter.label")
     h1.pb-1.px-2.numResult([innerHTML]="isSearch ? numResultMsg : selectedFilter.label")
+    .alert.alert-warning(*ngIf="true")
+      div([innerHtml]="'BROWSE.WARNINGS.ARTSTOR_IMAGE_GROUP_MIGRATION' | translate")
+      br
+      div([innerHtml]="'BROWSE.WARNINGS.ARTSTOR_IMAGE_GROUPS_ON_JSTOR' | translate")
     .row.mb-3
       .col-sm-7.col-md-7.col-lg-8.pd-left
         //- This is where the sort method, number of group per page selection and toggle between cardview and listview go
