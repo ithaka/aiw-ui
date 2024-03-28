@@ -8,10 +8,15 @@ div.drop-tray(@trayAnimation)
       div.mainContent
         h1([innerHtml]="'The Artstor website will be retired on August 1, 2024.' | translate")
         div.copy
-        span([innerHtml]="'Artstor&apos;s high-quality collections and key functionality are now on JSTOR. If you have image groups on Artstor, they will be automatically copied over to your ' | translate")
-        a.link(id="banner-copy-group-link", (click)="bannerCopyGroup()", [innerHtml]="'JSTOR Workspace' | translate")
-        span([innerHtml]="' starting February 1, 2024. ' | translate")
+        span([innerHtml]="'Artstor&apos;s high-quality collections and key functionality are now on JSTOR. If you have image groups on Artstor, they were ' | translate")
+        a.link(id="banner-copy-group-link", (click)="bannerCopyGroup()", [innerHtml]="'copied to your JSTOR Workspace in February 2024' | translate")
+        span([innerHtml]="'. ' | translate")
+        br
+        br
+        span([innerHtml]="'Learn how to work with images on JSTOR: ' | translate")
+        a.link(id="webinar-link", (click)="webinarLink()", [innerHtml]="' Register for a training webinar on April 25' | translate")
+        span([innerHtml]="'. ' | translate")
       button.try-now((click)="searchNow()",
-      [innerHtml]="'Learn more about Artstor on JSTOR' | translate",
+      [innerHtml]="'Get started with Artstor on JSTOR' | translate",
       id="drop-down-try-now",
       data-sc="post-login-drop-down")
