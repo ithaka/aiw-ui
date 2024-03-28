@@ -37,7 +37,7 @@ export class dropBannerComponent implements OnInit {
     //{ event: 'aji modal banner', category: 'onboarding', label: "post-login-banner-shown"}
     this._angulartics.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "drop-banner-workspace-link"} });
   }
-  public webinarLInk(): void {
+  public webinarLink(): void {
     window.open("https://attendee.gotowebinar.com/register/520699455583316310?source=banner", '_blank')
     this._angulartics.eventTrack.next({ properties: { event: 'aji modal banner', category: 'onboarding', label: "register-webinar-link"} });
   }
