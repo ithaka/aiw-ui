@@ -9,7 +9,7 @@
       if (window.location.hash) {
         // Extract path from hash, assuming the hash contains the path
         const path = window.location.hash.slice(1); // Remove the '#' part
-        window.location.replace(`/${path}`); // Redirect to the path-based URL
+        window.location.replace(path); // Redirect to the path-based URL
       }
     </script>
 
