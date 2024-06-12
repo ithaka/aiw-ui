@@ -4,6 +4,15 @@
   <!-- Run the app from the root directory -->
   <base href="/">
 
+    <!-- Strip the hash to enable Artstor to JSTOR redirects to happen -->
+    <script type="text/javascript">
+      if (window.location.hash) {
+        // Extract path from hash, assuming the hash contains the path
+        const path = window.location.hash.slice(1); // Remove the '#' part
+        window.location.replace(`/${path}`); // Redirect to the path-based URL
+      }
+    </script>
+
   <!--Track initial URL in cases where we need to re-route legacy links-->
   <script type="text/javascript">
     var initPath = window.location.href;
