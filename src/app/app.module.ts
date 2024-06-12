@@ -321,7 +321,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     InfiniteScrollModule,
     FileUploadModule,
     RouterModule.forRoot(ROUTES, {
-        useHash: true,
+        // useHash: true,
         preloadingStrategy: PreloadAllModules,
         initialNavigation: 'enabled'
       }),
