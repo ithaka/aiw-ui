@@ -28,7 +28,8 @@ import { SupportPageComponent } from './support-page/support-page.component'
 
 
 export const ROUTES: Routes = [
-  { path: '', component: Home, canActivate: [JSTORRedirect,AuthService], pathMatch: 'full' },
+  { path: '', canActivateChild: [JSTORRedirect], children: [
+  { path: '', component: Home, canActivate: [AuthService], pathMatch: 'full' },
   // Simple legacy redirects
   { path: '1', redirectTo: '', canActivate: [AuthService], pathMatch: 'full'},
   // "Hashbang" support for sitemap
@@ -73,4 +74,5 @@ export const ROUTES: Routes = [
     { path: '**', component: NoContent, resolve: [LegacyRouteResolver] }
   ] },
   { path: '**', component: NoContent, resolve: [LegacyRouteResolver] }
+]}
 ]
