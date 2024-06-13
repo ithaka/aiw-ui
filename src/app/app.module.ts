@@ -101,6 +101,7 @@ import { dropBannerComponent } from "./post-login-banner/drop-banner/drop-banner
 
 // Application wide providers
 import {
+  JSTORRedirect,
   AccountService,
   AssetSearchService,
   AssetService,
@@ -175,6 +176,7 @@ export class SentryErrorHandler implements ErrorHandler {
 
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
+  JSTORRedirect,
   AccountService,
   AppConfig,
   AssetService,
