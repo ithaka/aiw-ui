@@ -17,7 +17,7 @@ import { AssetPage } from './asset-page'
 import { Login } from './login'
 import { RegisterComponent } from './register/register.component'
 import { NoContent } from './no-content'
-import { AuthService } from '_services'
+import { AuthService, JSTORRedirect } from '_services'
 // import { DataResolver } from './app.resolver'
 import { BrowseRoutes } from './browse-page/browse-page.routes'
 import { AccountPage } from './account-page/account-page.component'
@@ -28,6 +28,7 @@ import { SupportPageComponent } from './support-page/support-page.component'
 
 
 export const ROUTES: Routes = [
+  { path: '', canActivateChild: [JSTORRedirect], children: [
   { path: '', component: Home, canActivate: [AuthService], pathMatch: 'full' },
   // Simple legacy redirects
   { path: '1', redirectTo: '', canActivate: [AuthService], pathMatch: 'full'},
@@ -73,4 +74,5 @@ export const ROUTES: Routes = [
     { path: '**', component: NoContent, resolve: [LegacyRouteResolver] }
   ] },
   { path: '**', component: NoContent, resolve: [LegacyRouteResolver] }
+]}
 ]
