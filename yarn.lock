@@ -5686,6 +5686,11 @@ graphql@^0.13.2:
   dependencies:
     iterall "^1.2.1"
 
+graphql@^15.9.0:
+  version "15.9.0"
+  resolved "https://artifactory.acorn.cirrostratus.org/artifactory/api/npm/npms/graphql/-/graphql-15.9.0.tgz#4e8ca830cfd30b03d44d3edd9cac2b0690304b53"
+  integrity sha512-GCOQdvm7XxV1S4U4CGrsdlEN37245eC8P9zaYCMr6K1BG0IPGy5lUwmJsEOGyl1GD6HXjOtl2keCP9asRBwNvA==
+
 grunt-cli@~1.2.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/grunt-cli/-/grunt-cli-1.2.0.tgz"
