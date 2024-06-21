@@ -1,9 +1,11 @@
-import { gql } from '@apollo/client/core';
+
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateChild } from "@angular/router";
-import { ApolloClient, InMemoryCache } from "@apollo/client/core";
+import { ApolloClient } from "apollo-client";
+import { createHttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
-const FLAGS_QUERY = gql`
+const FLAGS_QUERY = `
   query AiwFlagList($flagsFlagList: [String]) {
     flags(flagList: $flagsFlagList) {
       enabled
@@ -12,15 +14,15 @@ const FLAGS_QUERY = gql`
 `;
 
 const APOLLO = new ApolloClient({
-  uri: "/ui/data-fetch/gateway",
-  headers: { authorization: "aiw-ui" },
+  link: createHttpLink({uri: "/ui/data-fetch/gateway", headers: { authorization: "aiw-ui" }}),
+  cache: new InMemoryCache(),
 });
 
 const REDIRECT_FLAG = "artstor_client_redirect";
 
 @Injectable()
 export class JSTORRedirect implements CanActivateChild {
-   canActivateChild(route: ActivatedRouteSnapshot) {
+   async canActivateChild(route: ActivatedRouteSnapshot) {
 
     const options = {
       query: FLAGS_QUERY,
@@ -29,7 +31,7 @@ export class JSTORRedirect implements CanActivateChild {
       },
     } as any;
     const flags = await APOLLO.query(options);
-    const data = flags.response ? flags.response.data : null;
+    const data = flags.data ? flags.data : null;
     const enabledFlags = data ? data.flags.enabled : [];
     const doRedirect = enabledFlags.includes(REDIRECT_FLAG);
 
