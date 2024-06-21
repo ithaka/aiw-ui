@@ -22,7 +22,7 @@ const REDIRECT_FLAG = "artstor_client_redirect";
 
 @Injectable()
 export class JSTORRedirect implements CanActivateChild {
-   async canActivateChild(route: ActivatedRouteSnapshot) {
+   canActivateChild(route: ActivatedRouteSnapshot) {
 
     const options = {
       query: FLAGS_QUERY,
@@ -30,28 +30,33 @@ export class JSTORRedirect implements CanActivateChild {
         flagsFlagList: [REDIRECT_FLAG],
       },
     } as any;
-    const flags = await APOLLO.query(options);
-    const data = flags.data ? flags.data : null;
-    const enabledFlags = data ? data.flags.enabled : [];
-    const doRedirect = enabledFlags.includes(REDIRECT_FLAG);
 
-    const currentRequest = window.location.href;
+    APOLLO.query(options).then(response => {
+      const data = response.data ? response.data : null;
+      const enabledFlags = data ? data.flags.enabled : [];
+      const doRedirect = enabledFlags.includes(REDIRECT_FLAG);
 
-    if (currentRequest.includes('/#/')) {
-      const params = new URLSearchParams({artstorPath: currentRequest }).toString();
-      fetch(`/get-the-redirect-please/?${params}`).then(async resp => {
-        const data = await resp.json();
-        if (data.location) {
-          if (doRedirect) {
-            console.log('Will redirect to:', data.location);
-            window.location.replace(data.location);
-          } else {
-            console.log('Will redirect to:', data.location);
+      const currentRequest = window.location.href;
+
+      if (currentRequest.includes('/#/')) {
+        const params = new URLSearchParams({artstorPath: currentRequest }).toString();
+        fetch(`/get-the-redirect-please/?${params}`).then(async resp => {
+          const data = await resp.json();
+          if (data.location) {
+            if (doRedirect) {
+              console.log('Will redirect to:', data.location);
+              window.location.replace(data.location);
+            } else {
+              console.log('Will redirect to:', data.location);
+            }
           }
-        }
 
-      });
-    }
+        });
+      }
+    }).catch(error => {
+      console.error('Error fetching flags:', error);
+    });
+
     // Allow Angular to continue routing
     return true;
   }
