@@ -26,7 +26,8 @@ export class JSTORRedirect implements CanActivateChild {
     fetch('/ui/data-fetch/gateway', {
       method: 'POST',
       headers: {
-        'authorization': 'aiw-ui'
+        'authorization': 'aiw-ui',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(options)
     }).then(async rawResp => {
