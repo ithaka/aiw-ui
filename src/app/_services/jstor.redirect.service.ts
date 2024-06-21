@@ -1,4 +1,4 @@
-
+import 'unfetch/polyfill';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateChild } from "@angular/router";
 import { ApolloClient } from "apollo-client";
