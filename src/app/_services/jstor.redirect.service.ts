@@ -1,4 +1,4 @@
-import 'unfetch/polyfill';
+import fetch from 'unfetch';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateChild } from "@angular/router";
 import { ApolloClient } from "apollo-client";
@@ -14,7 +14,7 @@ const FLAGS_QUERY = `
 `;
 
 const APOLLO = new ApolloClient({
-  link: createHttpLink({uri: "/ui/data-fetch/gateway", headers: { authorization: "aiw-ui" }}),
+  link: createHttpLink({uri: "/ui/data-fetch/gateway", fetch: fetch, headers: { authorization: "aiw-ui" }}),
   cache: new InMemoryCache(),
 });
 
