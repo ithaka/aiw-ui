@@ -28,7 +28,9 @@ import { SupportPageComponent } from './support-page/support-page.component'
 
 
 export const ROUTES: Routes = [
-  { path: '', canActivateChild: [AuthService, JSTORRedirect], children: [
+  // TODO: Add another _services to initiate a session & UUID before the jstor redirect, the GQL 
+  // service requires a session to be active in order to fetch flags.
+  { path: '', canActivateChild: [JSTORRedirect], children: [
   { path: '', component: Home, canActivate: [AuthService], pathMatch: 'full' },
   // Simple legacy redirects
   { path: '1', redirectTo: '', canActivate: [AuthService], pathMatch: 'full'},
