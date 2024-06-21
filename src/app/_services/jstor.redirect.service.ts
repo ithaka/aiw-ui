@@ -1,9 +1,5 @@
-import fetch from 'unfetch';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateChild } from "@angular/router";
-import { ApolloClient } from "apollo-client";
-import { createHttpLink } from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
 
 const FLAGS_QUERY = `
   query AiwFlagList($flagsFlagList: [String]) {
@@ -13,11 +9,6 @@ const FLAGS_QUERY = `
   }
 `;
 
-const APOLLO = new ApolloClient({
-  link: createHttpLink({uri: "/ui/data-fetch/gateway", fetch: fetch, headers: { authorization: "aiw-ui" }}),
-  cache: new InMemoryCache(),
-});
-
 const REDIRECT_FLAG = "artstor_client_redirect";
 
 @Injectable()
@@ -25,13 +16,21 @@ export class JSTORRedirect implements CanActivateChild {
    canActivateChild(route: ActivatedRouteSnapshot) {
 
     const options = {
+      operationName: 'AiwFlagList',
       query: FLAGS_QUERY,
       variables: {
         flagsFlagList: [REDIRECT_FLAG],
       },
     } as any;
 
-    APOLLO.query(options).then(response => {
+    fetch('/ui/data-fetch/gateway', {
+      method: 'POST',
+      headers: {
+        'authorization': 'aiw-ui'
+      },
+      body: JSON.stringify(options)
+    }).then(async rawResp => {
+      const response = await rawResp.json();
       const data = response.data ? response.data : null;
       const enabledFlags = data ? data.flags.enabled : [];
       const doRedirect = enabledFlags.includes(REDIRECT_FLAG);
@@ -40,6 +39,7 @@ export class JSTORRedirect implements CanActivateChild {
 
       if (currentRequest.includes('/#/')) {
         const params = new URLSearchParams({artstorPath: currentRequest }).toString();
+        
         fetch(`/get-the-redirect-please/?${params}`).then(async resp => {
           const data = await resp.json();
           if (data.location) {
@@ -53,9 +53,7 @@ export class JSTORRedirect implements CanActivateChild {
 
         });
       }
-    }).catch(error => {
-      console.error('Error fetching flags:', error);
-    });
+    })
 
     // Allow Angular to continue routing
     return true;
