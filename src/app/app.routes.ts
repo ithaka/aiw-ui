@@ -28,7 +28,7 @@ import { SupportPageComponent } from './support-page/support-page.component'
 
 
 export const ROUTES: Routes = [
-  { path: '', canActivateChild: [JSTORRedirect], children: [
+  { path: '', canActivateChild: [AuthService, JSTORRedirect], children: [
   { path: '', component: Home, canActivate: [AuthService], pathMatch: 'full' },
   // Simple legacy redirects
   { path: '1', redirectTo: '', canActivate: [AuthService], pathMatch: 'full'},
