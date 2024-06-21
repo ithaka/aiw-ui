@@ -10,6 +10,7 @@
     "sourceMap": true,
     "noEmitHelpers": true,
     "strictNullChecks": false,
+    "skipLibCheck": true,
     "baseUrl": "./src",
     "paths": {
       "@angular/*": [
