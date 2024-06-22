@@ -30,31 +30,32 @@ export class JSTORRedirect implements CanActivateChild {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(options)
-    }).then(async rawResp => {
-      const response = await rawResp.json();
-      const data = response.data ? response.data : null;
-      const enabledFlags = data ? data.flags.enabled : [];
-      const doRedirect = enabledFlags.includes(REDIRECT_FLAG);
-
-      const currentRequest = window.location.href;
-
-      if (currentRequest.includes('/#/')) {
-        const params = new URLSearchParams({artstorPath: currentRequest }).toString();
-
-        fetch(`/get-the-redirect-please/?${params}`).then(async resp => {
-          const data = await resp.json();
-          if (data.location) {
-            if (doRedirect) {
-              console.log('Will redirect to:', data.location);
-              window.location.replace(data.location);
-            } else {
-              console.log('Will redirect to:', data.location);
-            }
-          }
-
-        });
-      }
     })
+      .then((response) => response.json())
+      .then((data) => {
+        const flagData = data.data ? data.data : null;
+        const enabledFlags = flagData ? flagData.flags.enabled : [];
+        const doRedirect = enabledFlags.includes(REDIRECT_FLAG);
+
+        const currentRequest = window.location.href;
+
+        if (currentRequest.includes('/#/')) {
+          const params = new URLSearchParams({artstorPath: currentRequest }).toString();
+
+          fetch(`/get-the-redirect-please/?${params}`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.location) {
+                if (doRedirect) {
+                  console.log('Redirecting to:', data.location);
+                  window.location.replace(data.location);
+                } else {
+                  console.log('Will redirect to:', data.location);
+                }
+              }
+            });
+        }
+      });
 
     // Allow Angular to continue routing
     return true;
