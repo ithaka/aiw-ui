@@ -14,7 +14,6 @@ const REDIRECT_FLAG = "artstor_client_redirection";
 @Injectable()
 export class JSTORRedirect implements CanActivateChild {
    canActivateChild(route: ActivatedRouteSnapshot) {
-
     const options = {
       operationName: 'AiwFlagList',
       query: FLAGS_QUERY,
@@ -52,13 +51,15 @@ export class JSTORRedirect implements CanActivateChild {
                   return false;
                 } else {
                   console.log('Will redirect to:', data.location);
+                  return true;
                 }
+              } else {
+                return true;
               }
             });
+        } else {
+          return true;
         }
       });
-
-    // Allow Angular to continue routing
-    return true;
   }
 }
