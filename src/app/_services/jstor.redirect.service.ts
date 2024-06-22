@@ -9,7 +9,7 @@ const FLAGS_QUERY = `
   }
 `;
 
-const REDIRECT_FLAG = "artstor_client_redirect";
+const REDIRECT_FLAG = "artstor_client_redirection";
 
 @Injectable()
 export class JSTORRedirect implements CanActivateChild {
@@ -40,7 +40,7 @@ export class JSTORRedirect implements CanActivateChild {
 
       if (currentRequest.includes('/#/')) {
         const params = new URLSearchParams({artstorPath: currentRequest }).toString();
-        
+
         fetch(`/get-the-redirect-please/?${params}`).then(async resp => {
           const data = await resp.json();
           if (data.location) {
