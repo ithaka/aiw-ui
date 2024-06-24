@@ -49,6 +49,15 @@ const OPTIONS = {
   },
 };
 
+const initializeApp = () => {
+  if (environment.production) {
+    enableProdMode();
+  }
+
+  platformBrowserDynamic().bootstrapModule(AppModule)
+    .catch(err => console.log(err));
+}
+
 fetch('/ui/data-fetch/gateway', {
   method: 'POST',
   headers: {
@@ -77,14 +86,10 @@ fetch('/ui/data-fetch/gateway', {
               window.location.replace(redirectData.location);
             } else {
               console.log('Will eventually redirect to:', redirectData.location);
-
-              if (environment.production) {
-                enableProdMode();
-              }
-
-              platformBrowserDynamic().bootstrapModule(AppModule)
-                .catch(err => console.log(err));
+              initializeApp();
             }
+          } else {
+            initializeApp();
           }
         });
     }
