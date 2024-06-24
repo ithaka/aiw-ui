@@ -42,7 +42,7 @@ export class JSTORRedirect implements CanActivateChild {
         if (currentRequest.includes('/#/')) {
           const params = new URLSearchParams({artstorPath: currentRequest }).toString();
 
-          fetch(`/get-the-redirect-please/?${params}`)
+          return fetch(`/get-the-redirect-please/?${params}`)
             .then((response) => response.json())
             .then((data) => {
               if (data.location) {
