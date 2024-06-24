@@ -23,7 +23,7 @@ export class JSTORRedirect implements CanActivateChild {
       },
     } as any;
 
-    fetch('/ui/data-fetch/gateway', {
+    return fetch('/ui/data-fetch/gateway', {
       method: 'POST',
       headers: {
         'authorization': 'aiw-ui',
@@ -49,15 +49,16 @@ export class JSTORRedirect implements CanActivateChild {
                 if (doRedirect) {
                   console.log('Redirecting to:', data.location);
                   window.location.replace(data.location);
+                  return false;
                 } else {
-                  console.log('Will redirect to:', data.location);
+                  console.log('Will eventually redirect to:', data.location);
+                  return true;
                 }
               }
             });
+        } else {
+          return true;
         }
       });
-
-    // Allow Angular to continue routing
-    return true;
   }
 }
