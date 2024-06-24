@@ -92,5 +92,7 @@ fetch('/ui/data-fetch/gateway', {
             initializeApp();
           }
         });
+    } else {
+      initializeApp();
     }
   });
