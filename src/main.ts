@@ -33,9 +33,59 @@ import { environment } from './environments/environment';
 
 import '@pharos/core/web-components/pharos-tooltip';
 
-if (environment.production) {
-  enableProdMode();
-}
+const FLAGS_QUERY = `
+  query AiwFlagList($flagsFlagList: [String]) {
+    flags(flagList: $flagsFlagList) {
+      enabled
+    }
+  }
+`;
+const REDIRECT_FLAG = "artstor_client_redirection";
+const OPTIONS = {
+  operationName: 'AiwFlagList',
+  query: FLAGS_QUERY,
+  variables: {
+    flagsFlagList: [REDIRECT_FLAG],
+  },
+};
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.log(err));
+fetch('/ui/data-fetch/gateway', {
+  method: 'POST',
+  headers: {
+    'authorization': 'aiw-ui',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(OPTIONS),
+})
+  .then(response => response.json())
+  .then(flagData => {
+    const flagStates = flagData.data ? flagData.data : null;
+    const enabledFlags = flagStates ? flagStates.flags.enabled : [];
+    const doRedirect = enabledFlags.includes(REDIRECT_FLAG);
+
+    const currentRequest = window.location.href;
+
+    if (currentRequest.includes('/#/')) {
+      const params = new URLSearchParams({ artstorPath: currentRequest }).toString();
+
+      fetch(`/get-the-redirect-please/?${params}`)
+        .then(redirectResponse => redirectResponse.json())
+        .then(redirectData => {
+          if (redirectData.location) {
+            if (doRedirect) {
+              console.log('Redirecting to:', redirectData.location);
+              window.location.replace(redirectData.location);
+            } else {
+              console.log('Will eventually redirect to:', redirectData.location);
+
+              if (environment.production) {
+                enableProdMode();
+              }
+
+              platformBrowserDynamic().bootstrapModule(AppModule)
+                .catch(err => console.log(err));
+            }
+          }
+        });
+    }
+  });
