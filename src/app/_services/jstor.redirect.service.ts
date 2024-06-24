@@ -19,7 +19,7 @@ const OPTIONS = {
 
 @Injectable()
 export class JSTORRedirect implements CanActivateChild {
-  canActivateChild(route: ActivatedRouteSnapshot): Promise<boolean> {
+  canActivateChild(route: ActivatedRouteSnapshot): Promise<boolean> | boolean {
     return this.checkRedirect();
   }
 
@@ -54,14 +54,10 @@ export class JSTORRedirect implements CanActivateChild {
           return true;  // Eventually redirecting, but for now show the page
         }
       } else {
-        return new Promise((resolve, reject) => {
-          resolve(true);  // No redirect set yet, will need to create
-        });
+        return true;  // No redirect set yet, will need to create
       }
     } else {
-      return new Promise((resolve, reject) => {
-        resolve(true);  // Not a client-redirectable URL
-      }
+      return true;  // Not a client-redirectable URL
     }
   }
 }
