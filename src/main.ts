@@ -69,12 +69,19 @@ const initializeApp = () => {
     .catch(err => console.log(err));
 }
 
+let uuid = document.cookie.split('; ').find(row => row.startsWith('UUID=')).split('=')[1];
+if (!uuid) {
+  let uuid = crypto.randomUUID();
+  document.cookie = `UUID=${uuid}; path=/; max-age=31536000`;
+}
+
 fetch('/ui/data-fetch/query', {
   method: 'POST',
   headers: {
     'authorization': 'aiw-ui',
     'Content-Type': 'application/json',
     'uuid-session': 'true',
+    'Cookie': 'UUID=',
   },
   body: JSON.stringify(SESSION_OPTIONS),
 })
