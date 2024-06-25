@@ -84,7 +84,7 @@ if (!uuid) {
   document.cookie = `UUID=${uuid}; path=/; max-age=31536000`;
 }
 
-fetch('/ui/data-fetch/query', {
+fetch('/unfederated-session-service/query`, {
   method: 'POST',
   headers: {
     'authorization': 'aiw-ui',
