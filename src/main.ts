@@ -71,7 +71,7 @@ const initializeApp = () => {
 
 let uuid = document.cookie.split('; ').find(row => row.startsWith('UUID=')).split('=')[1];
 if (!uuid) {
-  let uuid = crypto.randomUUID();
+  let uuid = (crypto as any).randomUUID();
   document.cookie = `UUID=${uuid}; path=/; max-age=31536000`;
 }
 
