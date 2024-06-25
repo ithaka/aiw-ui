@@ -69,11 +69,12 @@ const initializeApp = () => {
     .catch(err => console.log(err));
 }
 
-fetch('/unfederated-session-service/query', {
+fetch('/ui/data-fetch/query', {
   method: 'POST',
   headers: {
     'authorization': 'aiw-ui',
     'Content-Type': 'application/json',
+    'uuid-session': 'true',
   },
   body: JSON.stringify(SESSION_OPTIONS),
 })
