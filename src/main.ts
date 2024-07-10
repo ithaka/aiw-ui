@@ -112,26 +112,22 @@ fetch('/unfederated-session-service/query', {
 
         const currentRequest = window.location.href;
 
-        if (currentRequest.includes('/#/')) {
-          const params = new URLSearchParams({ artstorPath: currentRequest }).toString();
+        const params = new URLSearchParams({ artstorPath: currentRequest }).toString();
 
-          fetch(`/get-the-redirect-please/?${params}`)
-            .then(redirectResponse => redirectResponse.json())
-            .then(redirectData => {
-              if (redirectData.location) {
-                if (doRedirect) {
-                  console.log('Redirecting to:', redirectData.location);
-                  window.location.replace(redirectData.location);
-                } else {
-                  console.log('Will eventually redirect to:', redirectData.location);
-                  initializeApp();
-                }
+        fetch(`/get-the-redirect-please/?${params}`)
+          .then(redirectResponse => redirectResponse.json())
+          .then(redirectData => {
+            if (redirectData.location) {
+              if (doRedirect) {
+                console.log('Redirecting to:', redirectData.location);
+                window.location.replace(redirectData.location);
               } else {
+                console.log('Will eventually redirect to:', redirectData.location);
                 initializeApp();
               }
-            });
-        } else {
-          initializeApp();
-        }
+            } else {
+              initializeApp();
+            }
+          });
       });
   });
